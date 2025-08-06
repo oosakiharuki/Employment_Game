@@ -4,18 +4,19 @@ using namespace MyMath;
 
 void GameScene::Initialize() {
 
-	ModelManager::GetInstance()->LoadModel("terrain",".obj");
-	ModelManager::GetInstance()->LoadModel("sphere",".obj");
-	ModelManager::GetInstance()->LoadModel("playerHead", ".obj");
-	ModelManager::GetInstance()->LoadModel("enemy", ".obj");
-	ModelManager::GetInstance()->LoadModel("stage_proto", ".obj");
-	ModelManager::GetInstance()->LoadModel("sneakWalk", ".gltf");
-
+	modelManager = ModelManager::GetInstance();
+	modelManager->LoadModel("terrain",".obj");
+	modelManager->LoadModel("sphere",".obj");
+	modelManager->LoadModel("playerHead", ".obj");
+	modelManager->LoadModel("enemy", ".obj");
+	modelManager->LoadModel("stage_proto", ".obj");
+	modelManager->LoadModel("sneakWalk", ".gltf");
+	modelManager->LoadModel("PlayerBullet", ".obj");
 
 	camera = new Camera();
 
 	//levelediter = new Levelediter();
-	levelediter.LoadLevelediter("resource/Levelediter/scene_stage02.json");
+	levelediter.LoadLevelediter("resource/Levelediter/myEngine_stageProto.json");
 
 	cameraRotate = levelediter.GetLevelData()->cameraInit.rotation;
 	cameraTranslate = levelediter.GetLevelData()->cameraInit.translation;
@@ -67,7 +68,6 @@ void GameScene::Initialize() {
 
 	worldTransformCamera_.Initialize();
 	camera->SetParent(&worldTransformCamera_);
-	worldTransformCamera_.parent_ = &player_->GetWorldTransform();
 
 	stageobj = new Object3d();
 	stageobj->Initialize();
@@ -154,6 +154,9 @@ void GameScene::Update() {
 	}	
 	
 	gltfOBJ->Update(wt);
+
+
+	worldTransformCamera_.translation_ = player_->GetTranslate();
 
 	wt.UpdateMatrix();
 	worldTransformCamera_.UpdateMatrix();

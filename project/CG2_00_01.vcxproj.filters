@@ -216,6 +216,9 @@
     <ClCompile Include="Engine\3d\DebugWireframes.cpp">
       <Filter>ソース ファイル\Engine\3d</Filter>
     </ClCompile>
+    <ClCompile Include="GameProgram\PlayerBullet.cpp">
+      <Filter>ソース ファイル\GameProgram</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -388,6 +391,9 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\Cubemap.h">
       <Filter>ソース ファイル\Engine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\PlayerBullet.h">
+      <Filter>ソース ファイル\GameProgram</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

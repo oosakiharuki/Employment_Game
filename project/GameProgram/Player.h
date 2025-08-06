@@ -1,7 +1,7 @@
 #pragma once
 #include "MyMath.h"
 #include "Object3d.h"
-
+#include "PlayerBullet.h"
 
 class Player {
 public:
@@ -23,9 +23,15 @@ public:
 	void IsWall(bool result) { isWall = result; }
 	void IsGround(bool result) { isGround = result; }
 
-	void OverReturn(const Vector3& over);
-
 	const WorldTransform& GetWorldTransform() { return worldTransform; }
+
+	void ShootBullet();
+
+	enum Direction {
+		right,
+		left
+	};
+
 
 private:
 	Object3d* object;
@@ -39,4 +45,9 @@ private:
 	bool isGround = false;
 
 	float grabity = 0.0f;
+
+	std::list<PlayerBullet*> bullets_;
+
+	Direction direction = Direction::right;
+	bool isChangeDirection = false;
 };

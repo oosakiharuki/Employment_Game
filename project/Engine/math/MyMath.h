@@ -229,6 +229,8 @@ namespace MyMath {
 	Vector3 OverAABB(const AABB& aabb1, const AABB& aabb2);
 	void ReturnBack(const AABB& aabb1, const AABB& aabb2, Vector3 position);
 
+	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
+
 #pragma region Affine
 
 	Matrix4x4 Multiply(Matrix4x4 m1, Matrix4x4 m2);

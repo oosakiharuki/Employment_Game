@@ -22,7 +22,8 @@ public:
 	void Draw() override;
 	void Finalize() override;
 private:
-	
+	ModelManager* modelManager;
+
 	XINPUT_STATE state,preState;
 
 	Camera* camera = nullptr;

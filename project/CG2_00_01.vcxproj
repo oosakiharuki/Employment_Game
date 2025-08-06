@@ -167,6 +167,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\Enemy.cpp" />
     <ClCompile Include="GameProgram\Player.cpp" />
     <ClCompile Include="Engine\3d\Primitive\SphereModel.cpp" />
+    <ClCompile Include="GameProgram\PlayerBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\3d\Primitive\BoxModel.h" />
@@ -226,6 +227,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\Enemy.h" />
     <ClInclude Include="GameProgram\Player.h" />
     <ClInclude Include="Engine\3d\Primitive\SphereModel.h" />
+    <ClInclude Include="GameProgram\PlayerBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

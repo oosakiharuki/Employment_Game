@@ -8,6 +8,10 @@ Player::Player(){}
 
 Player::~Player() {
 	delete object;
+
+	for (auto* bullet : bullets_) {
+		delete bullet;
+	}
 }
 
 void Player::Initialize() {
@@ -19,11 +23,31 @@ void Player::Initialize() {
 }
 
 void Player::Update() {
+
+
 	if (Input::GetInstance()->PushKey(DIK_A)) {
 		worldTransform.translation_.x -= 0.1f;
+		direction = left;
+		isChangeDirection = true;
 	}
 	else if (Input::GetInstance()->PushKey(DIK_D)) {
 		worldTransform.translation_.x += 0.1f;
+		direction = right;
+		isChangeDirection = true;
+	}
+
+	if (isChangeDirection) {
+		switch (direction)
+		{
+		case Player::right:
+			worldTransform.rotation_.y = -90.0f;
+			break;
+		case Player::left:
+			worldTransform.rotation_.y = 90.0f;
+			break;
+		default:
+			break;
+		}
 	}
 
 	if (isGround) {
@@ -39,6 +63,23 @@ void Player::Update() {
 		isJump = true;
 	}
 
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		ShootBullet();
+	}
+
+	for (auto* bullet : bullets_) {
+		bullet->Update();
+	}
+
+	bullets_.remove_if([](PlayerBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
+
+
 	if (isJump) {
 		worldTransform.translation_.y += 0.2f;
 	}
@@ -50,7 +91,6 @@ void Player::Update() {
 
 	ImGui::Begin("player");
 
-	//カメラ
 	ImGui::InputFloat3("worldTransform.translate", &worldTransform.translation_.x);
 	ImGui::SliderFloat3("worldTransform.translateSlider", &worldTransform.translation_.x, -30.0f, 30.0f);
 
@@ -68,6 +108,9 @@ void Player::Update() {
 
 void Player::Draw() {
 	object->Draw(worldTransform);
+	for (auto* bullet : bullets_) {
+		bullet->Draw();
+	}
 }
 
 AABB Player::GetAABB() {
@@ -81,6 +124,20 @@ void Player::SetModelFile(std::string filename) {
 
 }
 
-void Player::OverReturn(const Vector3& over) {
-	worldTransform.translation_.y -= 0.0f;
+void Player::ShootBullet() {	
+
+	Vector3 translate = {
+		worldTransform.translation_.x,
+		worldTransform.translation_.y + 1.0f,
+		worldTransform.translation_.z
+	};
+
+	Vector3 velocity = { 0.0f,0.0f,0.2f };
+	velocity = TransformNormal(velocity,worldTransform.matWorld_);
+
+	PlayerBullet* bullet = new PlayerBullet();
+	bullet->Initialize();	
+	bullet->SetTranslate(translate);
+	bullet->SetVelocty(velocity);
+	bullets_.push_back(bullet);
 }
