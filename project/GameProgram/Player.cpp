@@ -132,12 +132,16 @@ void Player::ShootBullet() {
 		worldTransform.translation_.z
 	};
 
-	Vector3 velocity = { 0.0f,0.0f,0.2f };
-	velocity = TransformNormal(velocity,worldTransform.matWorld_);
+	float halfCount = (float(bulletCount) - 1) / 2;
 
-	PlayerBullet* bullet = new PlayerBullet();
-	bullet->Initialize();	
-	bullet->SetTranslate(translate);
-	bullet->SetVelocty(velocity);
-	bullets_.push_back(bullet);
+	for (float i = -(halfCount); i <= halfCount; ++i) {
+		Vector3 velocity = { 0.0f,float(i) * 0.1f,0.5f};
+		velocity = TransformNormal(velocity, worldTransform.matWorld_);
+
+		PlayerBullet* bullet = new PlayerBullet();
+		bullet->Initialize();
+		bullet->SetTranslate(translate);
+		bullet->SetVelocty(velocity);
+		bullets_.push_back(bullet);
+	}
 }

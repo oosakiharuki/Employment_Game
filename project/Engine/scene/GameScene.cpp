@@ -120,7 +120,14 @@ void GameScene::Update() {
 		enemy->Update();
 
 		if (IsCollisionAABB(player_->GetAABB(), enemy->GetAABB())) {
-			enemy->IsHit();
+			enemy->IsDamage();
+		}
+
+		for (PlayerBullet* bullet : player_->GetBullets()) {
+			if (IsCollisionAABB(bullet->GetAABB(), enemy->GetAABB()) && !enemy->IsDead()) {
+				enemy->IsDamage();
+				bullet->IsHit();
+			}
 		}
 	}
 

@@ -16,12 +16,14 @@ public:
 	void SetAABB(AABB aabb) { enemyAABB = aabb; }
 	AABB GetAABB();
 
-	void IsHit() { isHit = true; }
-
+	void IsDamage();
+	bool IsDead() { return isDead; }
 private:
 	Object3d* object;
 	WorldTransform worldTransform;
 	AABB enemyAABB;
 	
-	bool isHit = false;
+	bool isDead = false;
+	uint32_t maxHp = 33;
+	uint32_t hp = maxHp;
 };

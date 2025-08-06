@@ -32,6 +32,7 @@ public:
 		left
 	};
 
+	std::list<PlayerBullet*> GetBullets() { return bullets_; }
 
 private:
 	Object3d* object;
@@ -50,4 +51,6 @@ private:
 
 	Direction direction = Direction::right;
 	bool isChangeDirection = false;
+
+	uint32_t bulletCount = 3;
 };

@@ -19,12 +19,17 @@ void Enemy::Initialize() {
 
 void Enemy::Update() {
 
-	if (isHit) {
+	if (hp == 0) {
+		isDead = true;
+	}
+
+	if (isDead) {
 		worldTransform.translation_.y += 0.1f;
 	}
 
 	if (worldTransform.translation_.y >= 10.0f) {
-		isHit = false;
+		isDead = false;
+		hp = maxHp;
 		worldTransform.translation_.y = 0.0f;
 	}
 
@@ -42,4 +47,11 @@ AABB Enemy::GetAABB() {
 	aabb.min = worldTransform.translation_ + enemyAABB.min;
 	aabb.max = worldTransform.translation_ + enemyAABB.max;
 	return aabb;
+}
+
+void Enemy::IsDamage() { 
+	if (hp == 0) {
+		return;
+	}
+	hp -= 1;
 }

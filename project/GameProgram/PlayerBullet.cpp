@@ -13,6 +13,9 @@ void PlayerBullet::Initialize() {
 	object->SetModelFile("PlayerBullet.obj");
 
 	worldTransform_.Initialize();
+
+	bulletAABB.min = { -1,-1,-1 };
+	bulletAABB.max = { 1,1,1 };
 }
 
 void PlayerBullet::Update() {
@@ -30,4 +33,11 @@ void PlayerBullet::Update() {
 
 void PlayerBullet::Draw() {
 	object->Draw(worldTransform_);
+}
+
+AABB PlayerBullet::GetAABB() {
+	AABB aabb;
+	aabb.min = worldTransform_.translation_ + bulletAABB.min;
+	aabb.max = worldTransform_.translation_ + bulletAABB.max;
+	return aabb;
 }
