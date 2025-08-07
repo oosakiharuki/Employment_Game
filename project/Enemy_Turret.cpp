@@ -69,14 +69,25 @@ void Enemy_Turret::IsDamage() {
 void Enemy_Turret::Attack() {
 
 	coolTime += 1.0f / 60.0f;
-	if (coolTime >= 2.0f) {
-		ShootBullet();
-		coolTime = 0;
+	if (coolTime >= 5.0f) {
+
+		rapidFireTime += 1.0f / 60.0f;
+
+		if (rapidFireTime >= 0.1f) {
+			Fire();
+			rapidCount++;
+			rapidFireTime = 0;
+		}
+
+		if (rapidCount == rapidFireMax) {
+			rapidCount = 0;
+			coolTime = 0;
+		}
 	}
 
 }
 
-void Enemy_Turret::ShootBullet() {
+void Enemy_Turret::Fire() {
 	Vector3 translate = {
 	worldTransform.translation_.x,
 	worldTransform.translation_.y + 1.0f,

@@ -231,6 +231,9 @@ namespace MyMath {
 
 	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
+	Vector3 EaseIn(const Vector3& v, const float t, const float endt);
+	Vector3 EaseOut(const Vector3& v, const float t);
+
 #pragma region Affine
 
 	Matrix4x4 Multiply(Matrix4x4 m1, Matrix4x4 m2);

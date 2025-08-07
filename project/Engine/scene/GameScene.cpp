@@ -137,6 +137,12 @@ void GameScene::Update() {
 				bullet->IsHit();
 			}
 		}
+
+		for (EnemyBullet* bulletE : enemy->GetBullets()) {
+			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetAABB())) {
+				bulletE->IsHit();
+			}
+		}
 	}
 
 	for (auto& stage : stagesAABB) {
@@ -167,6 +173,29 @@ void GameScene::Update() {
 		}
 
 	}	
+
+	for (auto& stage : stagesAABB) {
+		for (PlayerBullet* bullet : player_->GetBullets()) {
+			if (IsCollisionAABB(bullet->GetAABB(), stage)) {
+				bullet->IsHit();
+			}
+		}
+
+		for (IEnemy* enemy : enemies) {
+			for (EnemyBullet* bulletE : enemy->GetBullets()) {
+				if (IsCollisionAABB(bulletE->GetAABB(), stage)) {
+					bulletE->IsHit();
+				}
+			}
+		}
+	
+	}
+
+
+
+
+
+
 	
 	gltfOBJ->Update(wt);
 

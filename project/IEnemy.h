@@ -1,6 +1,7 @@
 #pragma once
 #include "MyMath.h"
 #include "Object3d.h"
+#include "EnemyBullet.h"
 
 class IEnemy {
 public:
@@ -21,10 +22,14 @@ public:
 	void SetAABB(AABB aabb) { enemyAABB = aabb; }
 	bool IsDead() { return isDead; }
 
+	std::list<EnemyBullet*> GetBullets() { return bullets_; }
+
 protected:
 	Object3d* object;
 	WorldTransform worldTransform;
 	AABB enemyAABB;
 	bool isDead = false;
+
+	std::list<EnemyBullet*> bullets_;
 };
 

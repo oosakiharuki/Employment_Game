@@ -19,10 +19,14 @@ void PlayerBullet::Initialize() {
 }
 
 void PlayerBullet::Update() {
-	worldTransform_.translation_ += velocity_;
 
 	deathTimer += 1.0f / 60.0f;
 	
+	Vector3 speed;
+	speed = EaseIn(velocity_,deathTimer,endTime);
+
+	worldTransform_.translation_ += speed;
+
 	if (deathTimer >= endTime) {
 		isDead = true;
 	}

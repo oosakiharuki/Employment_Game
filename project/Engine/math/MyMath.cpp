@@ -318,6 +318,22 @@ namespace MyMath {
 	}
 
 
+	Vector3 EaseIn(const Vector3& v, const float t, const float endt) {
+		Vector3 result;
+		result.x = (endt - t) * v.x;
+		result.y = (endt - t) * v.y;
+		result.z = (endt - t) * v.z;
+		return result;
+	}
+
+	Vector3 EaseOut(const Vector3& v,const float t) {
+		Vector3 result;
+		result.x = t * v.x;
+		result.y = t * v.y;
+		result.z = t * v.z;
+		return result;
+	}
+
 #pragma region Affine
 
 	Matrix4x4 Multiply(Matrix4x4 m1, Matrix4x4 m2) {

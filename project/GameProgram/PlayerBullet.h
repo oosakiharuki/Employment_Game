@@ -25,7 +25,7 @@ private:
 	Vector3 velocity_;
 
 	float deathTimer = 0.0f;
-	const float endTime = 0.3f;
+	const float endTime = 0.7f;
 	bool isDead = false;
 	
 	AABB bulletAABB;
