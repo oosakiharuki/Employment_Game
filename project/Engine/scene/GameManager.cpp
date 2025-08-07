@@ -1,10 +1,10 @@
 #include "GameManager.h"
 
 GameManager::GameManager() {
-	sceneArr_[Game] = new GameScene();
+	sceneArr_[Title] = new TitleScene();
 
 	prevSceneNo_ = 0;
-	currentSceneNo_ = Game;
+	currentSceneNo_ = Title;
 }
 
 GameManager::~GameManager() {
