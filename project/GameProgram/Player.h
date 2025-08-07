@@ -2,6 +2,7 @@
 #include "MyMath.h"
 #include "Object3d.h"
 #include "PlayerBullet.h"
+#include "Umbrella.h"
 
 class Player {
 public:
@@ -33,6 +34,11 @@ public:
 	};
 
 	std::list<PlayerBullet*> GetBullets() { return bullets_; }
+	
+	Umbrella* GetUmbrella() { return umbrella; }
+	bool GetIsShield() { return isShield; }
+
+	void IsDamage();
 
 private:
 	Object3d* object;
@@ -41,16 +47,26 @@ private:
 
 	bool isJump = false;
 
-	//stageの当たり判定で使う
+	/// stageの当たり判定で使う
 	bool isWall = false;
 	bool isGround = false;
 
 	float grabity = 0.0f;
 
+	/// 弾丸
 	std::list<PlayerBullet*> bullets_;
 
 	Direction direction = Direction::right;
 	bool isChangeDirection = false;
 
+	float coolTimer = 0.0f;
+	float coolMax = 0.5f;
 	uint32_t bulletCount = 3;
+
+	/// 傘のシールド
+	bool isShield = false;
+	Umbrella* umbrella = nullptr;
+
+	/// Hp
+	uint32_t Hp = 10;
 };

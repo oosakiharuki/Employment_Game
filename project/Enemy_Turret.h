@@ -16,7 +16,7 @@ public:
 	void Fire();
 
 private:
-	uint32_t maxHp = 30;
+	uint32_t maxHp = 6;
 	uint32_t hp = maxHp;
 
 	float coolTime = 0.0f;

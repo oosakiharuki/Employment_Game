@@ -12,6 +12,7 @@ Player::~Player() {
 	for (auto* bullet : bullets_) {
 		delete bullet;
 	}
+	delete umbrella;
 }
 
 void Player::Initialize() {
@@ -20,17 +21,21 @@ void Player::Initialize() {
 	object = new Object3d();
 	object->Initialize();
 	object->SetModelFile("playerHead.obj");
+
+	umbrella = new Umbrella();
+	umbrella->Initialize();
+
 }
 
 void Player::Update() {
 
 
-	if (Input::GetInstance()->PushKey(DIK_A)) {
+	if (Input::GetInstance()->PushKey(DIK_A) && !isShield) {
 		worldTransform.translation_.x -= 0.1f;
 		direction = left;
 		isChangeDirection = true;
 	}
-	else if (Input::GetInstance()->PushKey(DIK_D)) {
+	else if (Input::GetInstance()->PushKey(DIK_D) && !isShield) {
 		worldTransform.translation_.x += 0.1f;
 		direction = right;
 		isChangeDirection = true;
@@ -63,8 +68,22 @@ void Player::Update() {
 		isJump = true;
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		ShootBullet();
+	//傘シールド
+	if (Input::GetInstance()->PushKey(DIK_S)) {
+		isShield = true;
+		umbrella->SetTranslate(worldTransform.translation_ + TransformNormal(Vector3(0, 0, 2),worldTransform.matWorld_));
+		umbrella->SetRotate(worldTransform.rotation_);
+	}
+	else {
+		isShield = false;
+	}
+
+	coolTimer += 1.0f / 60.0f;
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && !isShield) {
+		if (coolTimer >= coolMax) {
+			ShootBullet();
+			coolTimer = 0;
+		}
 	}
 
 	for (auto* bullet : bullets_) {
@@ -99,11 +118,15 @@ void Player::Update() {
 	ImGui::SliderFloat("RotateY", &worldTransform.rotation_.y, -360.0f, 360.0f);
 	ImGui::SliderFloat("RotateZ", &worldTransform.rotation_.z, -360.0f, 360.0f);
 
+	ImGui::Text("体力:%d", Hp);
+
 	ImGui::End();
 
 #endif //  USE_IMGUI
 
 	worldTransform.UpdateMatrix();
+	umbrella->Update();
+
 }
 
 void Player::Draw() {
@@ -111,6 +134,11 @@ void Player::Draw() {
 	for (auto* bullet : bullets_) {
 		bullet->Draw();
 	}
+
+	if (isShield) {
+		umbrella->Draw();
+	}
+
 }
 
 AABB Player::GetAABB() {
@@ -144,4 +172,11 @@ void Player::ShootBullet() {
 		bullet->SetVelocty(velocity);
 		bullets_.push_back(bullet);
 	}
+}
+
+void Player::IsDamage() {
+	if (Hp == 0) {
+		return;
+	}
+	Hp--;
 }

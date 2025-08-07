@@ -11,6 +11,7 @@ void GameScene::Initialize() {
 	modelManager->LoadModel("stage_proto", ".obj");
 	modelManager->LoadModel("sneakWalk", ".gltf");
 	modelManager->LoadModel("PlayerBullet", ".obj");
+	modelManager->LoadModel("umbrella", ".obj");
 
 	camera = new Camera();
 
@@ -127,10 +128,6 @@ void GameScene::Update() {
 	for (auto& enemy : enemies) {
 		enemy->Update();
 
-		if (IsCollisionAABB(player_->GetAABB(), enemy->GetAABB())) {
-			enemy->IsDamage();
-		}
-
 		for (PlayerBullet* bullet : player_->GetBullets()) {
 			if (IsCollisionAABB(bullet->GetAABB(), enemy->GetAABB()) && !enemy->IsDead()) {
 				enemy->IsDamage();
@@ -139,8 +136,14 @@ void GameScene::Update() {
 		}
 
 		for (EnemyBullet* bulletE : enemy->GetBullets()) {
+
+			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetUmbrella()->GetAABB()) && player_->GetIsShield()) {
+				bulletE->IsHit();
+			}
+
 			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetAABB())) {
 				bulletE->IsHit();
+				player_->IsDamage();
 			}
 		}
 	}

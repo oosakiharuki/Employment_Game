@@ -12,6 +12,6 @@ public:
 	bool IsDead() { return isDead; }
 
 private:
-	uint32_t maxHp = 33;
+	uint32_t maxHp = 3;
 	uint32_t hp = maxHp;
 };
