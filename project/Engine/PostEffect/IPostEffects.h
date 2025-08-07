@@ -10,7 +10,7 @@ enum EFFECT {
 	Mode_Vignette,
 	Mode_BoxFillter,
 	Mode_GaussianFillter,
-	Mode_LuminanceBacedOutline,
+	Mode_LuminanceBasedOutline,
 	Mode_DepthBasedOutline,
 	Mode_RadialBlur,
 	Mode_Dissolve,

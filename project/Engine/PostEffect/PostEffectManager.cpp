@@ -48,7 +48,7 @@ void PostEffectManager::Change(int prev, int current) {
 	case Mode_Grayscale:
 		effectArr_[current] = new Grayscale();
 		break;
-	case Mode_LuminanceBacedOutline:
+	case Mode_LuminanceBasedOutline:
 		effectArr_[current] = new LuminanceBasedOutline();
 		break;
 	case Mode_RadialBlur:
