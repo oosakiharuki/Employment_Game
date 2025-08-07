@@ -30,13 +30,14 @@ void Player::Initialize() {
 void Player::Update() {
 
 
-	if (Input::GetInstance()->PushKey(DIK_A) && !isShield) {
-		worldTransform.translation_.x -= 0.1f;
+
+	if (Input::GetInstance()->PushKey(DIK_A)) {
+		worldTransform.translation_.x -= speed;
 		direction = left;
 		isChangeDirection = true;
 	}
-	else if (Input::GetInstance()->PushKey(DIK_D) && !isShield) {
-		worldTransform.translation_.x += 0.1f;
+	else if (Input::GetInstance()->PushKey(DIK_D)) {
+		worldTransform.translation_.x += speed;
 		direction = right;
 		isChangeDirection = true;
 	}
@@ -105,6 +106,22 @@ void Player::Update() {
 
 
 	worldTransform.translation_.y += grabity;
+
+	if (isNockback) {
+
+		//やり方が微妙
+		switch (direction)
+		{
+		case Player::right:
+			worldTransform.translation_.x -= backDistance;
+			break;
+		case Player::left:
+			worldTransform.translation_.x += backDistance;
+			break;
+		}
+		backDistance = 0;
+		isNockback = false;
+	}
 
 #ifdef  USE_IMGUI
 
@@ -179,4 +196,9 @@ void Player::IsDamage() {
 		return;
 	}
 	Hp--;
+}
+
+void Player::UmbrellaHit(const float back) {
+	backDistance = back;
+	isNockback = true;
 }

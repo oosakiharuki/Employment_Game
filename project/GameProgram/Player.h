@@ -40,10 +40,14 @@ public:
 
 	void IsDamage();
 
+	void UmbrellaHit(const float back);
+
 private:
 	Object3d* object;
 	WorldTransform worldTransform;
 	AABB playerAABB;
+
+	float speed = 0.1f;
 
 	bool isJump = false;
 
@@ -66,6 +70,10 @@ private:
 	/// 傘のシールド
 	bool isShield = false;
 	Umbrella* umbrella = nullptr;
+
+	bool isNockback = false;
+	float backDistance = 0.0f;
+
 
 	/// Hp
 	uint32_t Hp = 10;

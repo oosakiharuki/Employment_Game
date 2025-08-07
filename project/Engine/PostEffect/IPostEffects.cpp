@@ -1,6 +1,6 @@
 #include "IPostEffects.h"
 
-int IPostEffects::effectNo = Mode_Normal_Image;
+int IPostEffects::effectNo = Mode_DepthBasedOutline;
 
 IPostEffects::~IPostEffects() {}
 

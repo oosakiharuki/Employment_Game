@@ -139,6 +139,7 @@ void GameScene::Update() {
 
 			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetUmbrella()->GetAABB()) && player_->GetIsShield()) {
 				bulletE->IsHit();
+				player_->UmbrellaHit(0.2f);
 			}
 
 			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetAABB())) {

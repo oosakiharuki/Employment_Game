@@ -68,10 +68,10 @@ void PostEffectManager::Change(int prev, int current) {
 void PostEffectManager::Initialize(DirectXCommon* dxCommon) {
 	
 	
-	effectArr_[Mode_Normal_Image] = new Normal_Image();
+	effectArr_[Mode_DepthBasedOutline] = new DepthBasedOutline();
 
 	prevNo_ = 0;
-	currentNo_ = Mode_Normal_Image;
+	currentNo_ = Mode_DepthBasedOutline;
 	
 
 	dxCommon_ = dxCommon;
