@@ -178,7 +178,7 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 			cameraInitData.translation.y = (float)transform["translation"][2];
 			cameraInitData.translation.z = (float)transform["translation"][1];
 			//回転
-			cameraInitData.rotation.x = (float)transform["rotation"][0] - 90.0f;//blenderだと0度で真下を向くため
+			cameraInitData.rotation.x = -((float)transform["rotation"][0] - 90.0f);//blenderだと0度で真下を向くため
 			cameraInitData.rotation.y = (float)transform["rotation"][2];
 			cameraInitData.rotation.z = (float)transform["rotation"][1];
 

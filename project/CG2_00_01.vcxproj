@@ -107,6 +107,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EnemyBullet.cpp" />
+    <ClCompile Include="Enemy_Turret.cpp" />
     <ClCompile Include="Engine\3d\Primitive\BoxModel.cpp" />
     <ClCompile Include="Engine\3d\Cubemap.cpp" />
     <ClCompile Include="Engine\3d\DebugWireframes.cpp" />
@@ -168,8 +170,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\Player.cpp" />
     <ClCompile Include="Engine\3d\Primitive\SphereModel.cpp" />
     <ClCompile Include="GameProgram\PlayerBullet.cpp" />
+    <ClCompile Include="IEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EnemyBullet.h" />
+    <ClInclude Include="Enemy_Turret.h" />
     <ClInclude Include="Engine\3d\Primitive\BoxModel.h" />
     <ClInclude Include="Engine\3d\Cubemap.h" />
     <ClInclude Include="Engine\3d\DebugWireframes.h" />
@@ -228,6 +233,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\Player.h" />
     <ClInclude Include="Engine\3d\Primitive\SphereModel.h" />
     <ClInclude Include="GameProgram\PlayerBullet.h" />
+    <ClInclude Include="IEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

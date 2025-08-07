@@ -40,10 +40,10 @@ void Player::Update() {
 		switch (direction)
 		{
 		case Player::right:
-			worldTransform.rotation_.y = -90.0f;
+			worldTransform.rotation_.y = 90.0f;
 			break;
 		case Player::left:
-			worldTransform.rotation_.y = 90.0f;
+			worldTransform.rotation_.y = -90.0f;
 			break;
 		default:
 			break;

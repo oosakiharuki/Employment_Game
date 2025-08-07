@@ -5,8 +5,7 @@ using namespace MyMath;
 void GameScene::Initialize() {
 
 	modelManager = ModelManager::GetInstance();
-	modelManager->LoadModel("terrain",".obj");
-	modelManager->LoadModel("sphere",".obj");
+	modelManager->LoadModel("cannon", ".obj");
 	modelManager->LoadModel("playerHead", ".obj");
 	modelManager->LoadModel("enemy", ".obj");
 	modelManager->LoadModel("stage_proto", ".obj");
@@ -44,7 +43,16 @@ void GameScene::Initialize() {
 
 	if (!levelediter.GetLevelData()->spawnEnemies.empty()) {
 		for (auto& enemyData : levelediter.GetLevelData()->spawnEnemies) {
-			Enemy* enemy = new Enemy();
+
+			IEnemy* enemy;
+			if (enemyData.fileName == "Turret") {
+				enemy = new Enemy_Turret();
+			}
+			else {
+				enemy = new Enemy();
+			}
+			
+			
 			enemy->Initialize();
 			enemy->SetTranslate(enemyData.translation);
 			enemy->SetRotate(enemyData.rotation);

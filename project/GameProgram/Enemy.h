@@ -1,29 +1,17 @@
 #pragma once
-#include "MyMath.h"
-#include "Object3d.h"
+#include "IEnemy.h"
 
-class Enemy {
+class Enemy : public IEnemy{
 public:
-	Enemy();
-	~Enemy();
-	void Initialize();
-	void Update();
-	void Draw();
+	void Initialize() override;
+	void Update() override;
+	void Draw() override;
+	void Attack() override;
 
-	void SetTranslate(Vector3 translate) { worldTransform.translation_ = translate; }
-	void SetRotate(Vector3 rotate) { worldTransform.rotation_ = rotate; }
-	
-	void SetAABB(AABB aabb) { enemyAABB = aabb; }
-	AABB GetAABB();
-
-	void IsDamage();
+	void IsDamage() override;
 	bool IsDead() { return isDead; }
+
 private:
-	Object3d* object;
-	WorldTransform worldTransform;
-	AABB enemyAABB;
-	
-	bool isDead = false;
 	uint32_t maxHp = 33;
 	uint32_t hp = maxHp;
 };
