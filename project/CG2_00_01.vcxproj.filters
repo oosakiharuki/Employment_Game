@@ -55,6 +55,12 @@
     <Filter Include="ソース ファイル\Engine\3d\Primitive">
       <UniqueIdentifier>{fe0ca8ca-e9ff-405f-a10f-d7bf3d7f1fdd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameProgram\Enemies">
+      <UniqueIdentifier>{7e338690-e00c-4118-9659-23b6267dfd90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\Player">
+      <UniqueIdentifier>{7eb339fe-1b8a-46e2-9eb2-77c1a78494da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\Sprite.cpp">
@@ -168,12 +174,6 @@
     <ClCompile Include="Engine\Levelediter.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Enemy.cpp">
-      <Filter>ソース ファイル\GameProgram</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\Player.cpp">
-      <Filter>ソース ファイル\GameProgram</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\3d\_gltf\GLTFCommon.cpp">
       <Filter>ソース ファイル\Engine\3d\_gltf</Filter>
     </ClCompile>
@@ -216,20 +216,26 @@
     <ClCompile Include="Engine\3d\DebugWireframes.cpp">
       <Filter>ソース ファイル\Engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\PlayerBullet.cpp">
-      <Filter>ソース ファイル\GameProgram</Filter>
+    <ClCompile Include="GameProgram\Enemies\Enemy.cpp">
+      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="IEnemy.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\Enemies\Enemy_Turret.cpp">
+      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy_Turret.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\Enemies\EnemyBullet.cpp">
+      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyBullet.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\Enemies\IEnemy.cpp">
+      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="Umbrella.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\Player\Player.cpp">
+      <Filter>ソース ファイル\GameProgram\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Player\PlayerBullet.cpp">
+      <Filter>ソース ファイル\GameProgram\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Player\Umbrella.cpp">
+      <Filter>ソース ファイル\GameProgram\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -356,12 +362,6 @@
     <ClInclude Include="Engine\Levelediter.h">
       <Filter>ソース ファイル\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Enemy.h">
-      <Filter>ソース ファイル\GameProgram</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\Player.h">
-      <Filter>ソース ファイル\GameProgram</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\3d\_gltf\GLTFCommon.h">
       <Filter>ソース ファイル\Engine\3d\_gltf</Filter>
     </ClInclude>
@@ -404,20 +404,26 @@
     <ClInclude Include="Engine\3d\Cubemap.h">
       <Filter>ソース ファイル\Engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\PlayerBullet.h">
-      <Filter>ソース ファイル\GameProgram</Filter>
+    <ClInclude Include="GameProgram\Enemies\Enemy.h">
+      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="IEnemy.h">
-      <Filter>ソース ファイル</Filter>
+    <ClInclude Include="GameProgram\Enemies\Enemy_Turret.h">
+      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy_Turret.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\Enemies\EnemyBullet.h">
+      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyBullet.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\Enemies\IEnemy.h">
+      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Umbrella.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\Player\Player.h">
+      <Filter>ソース ファイル\GameProgram\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Player\PlayerBullet.h">
+      <Filter>ソース ファイル\GameProgram\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Player\Umbrella.h">
+      <Filter>ソース ファイル\GameProgram\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

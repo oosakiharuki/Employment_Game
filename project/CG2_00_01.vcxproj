@@ -65,7 +65,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)Engine\PostEffect;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)Engine\PostEffect;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -91,7 +91,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)Engine\PostEffect;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)Engine\PostEffect;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -107,8 +107,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EnemyBullet.cpp" />
-    <ClCompile Include="Enemy_Turret.cpp" />
+    <ClCompile Include="GameProgram\Enemies\EnemyBullet.cpp" />
+    <ClCompile Include="GameProgram\Enemies\Enemy_Turret.cpp" />
     <ClCompile Include="Engine\3d\Primitive\BoxModel.cpp" />
     <ClCompile Include="Engine\3d\Cubemap.cpp" />
     <ClCompile Include="Engine\3d\DebugWireframes.cpp" />
@@ -166,16 +166,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\scene\TitleScene.cpp" />
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\PostEffect\IPostEffects.cpp" />
-    <ClCompile Include="GameProgram\Enemy.cpp" />
-    <ClCompile Include="GameProgram\Player.cpp" />
+    <ClCompile Include="GameProgram\Enemies\Enemy.cpp" />
+    <ClCompile Include="GameProgram\Player\Player.cpp" />
     <ClCompile Include="Engine\3d\Primitive\SphereModel.cpp" />
-    <ClCompile Include="GameProgram\PlayerBullet.cpp" />
-    <ClCompile Include="IEnemy.cpp" />
-    <ClCompile Include="Umbrella.cpp" />
+    <ClCompile Include="GameProgram\Player\PlayerBullet.cpp" />
+    <ClCompile Include="GameProgram\Enemies\IEnemy.cpp" />
+    <ClCompile Include="GameProgram\Player\Umbrella.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EnemyBullet.h" />
-    <ClInclude Include="Enemy_Turret.h" />
+    <ClInclude Include="GameProgram\Enemies\EnemyBullet.h" />
+    <ClInclude Include="GameProgram\Enemies\Enemy_Turret.h" />
     <ClInclude Include="Engine\3d\Primitive\BoxModel.h" />
     <ClInclude Include="Engine\3d\Cubemap.h" />
     <ClInclude Include="Engine\3d\DebugWireframes.h" />
@@ -230,12 +230,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\scene\TitleScene.h" />
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\PostEffect\IPostEffects.h" />
-    <ClInclude Include="GameProgram\Enemy.h" />
-    <ClInclude Include="GameProgram\Player.h" />
+    <ClInclude Include="GameProgram\Enemies\Enemy.h" />
+    <ClInclude Include="GameProgram\Player\Player.h" />
     <ClInclude Include="Engine\3d\Primitive\SphereModel.h" />
-    <ClInclude Include="GameProgram\PlayerBullet.h" />
-    <ClInclude Include="IEnemy.h" />
-    <ClInclude Include="Umbrella.h" />
+    <ClInclude Include="GameProgram\Player\PlayerBullet.h" />
+    <ClInclude Include="GameProgram\Enemies\IEnemy.h" />
+    <ClInclude Include="GameProgram\Player\Umbrella.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
