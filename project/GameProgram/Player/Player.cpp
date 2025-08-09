@@ -53,6 +53,13 @@ void Player::Update() {
 		pushS = true;
 	}
 	
+	if (isShield) {
+		speed = 0.05f;
+	}
+	else {
+		speed = 0.1f;
+	}
+
 	if (pushA) {
 		worldTransform.translation_.x -= speed;
 		direction = left;
@@ -135,10 +142,16 @@ void Player::Update() {
 	if (isGround) {
 		grabity = 0.0f;
 		isJump = false;
+
+		//離した時
+		if (!Input::GetInstance()->PushKey(DIK_L)) {
+			//ブリンクのタイマーリセット
+			brinkTimer = 0.0f;
+		}
 	}
 	else {
 		grabity -= 0.01f;
-	}	
+	}
 
 	//ジャンプ
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && !isJump) {
@@ -147,6 +160,18 @@ void Player::Update() {
 
 	//傘シールド
 	if (Input::GetInstance()->PushKey(DIK_L)) {
+
+		if (isGround && (range == Down || range == DownLeft || range == DownRight)) {
+			brinkTimer = brinkTimeMax;
+		}
+
+		if (brinkTimer < brinkTimeMax) {
+			brinkTimer += deltaTime;
+			worldTransform.translation_ += EaseIn(TransformNormal({ 0.0f,0.0f,1.5f },wtGun.matWorld_), brinkTimer, brinkTimeMax);
+		}
+
+
+
 		isShield = true;
 	}
 	else {
@@ -178,8 +203,18 @@ void Player::Update() {
 		worldTransform.translation_.y += 0.2f;
 	}
 
+	//重力
+	if (range == Up && isShield) {
+		if (isJump) {
+			isJump = false;
+		}
+		grabity = 0.0f;
+		worldTransform.translation_.y -= 0.05f;
+	}
+	else {
+		worldTransform.translation_.y += grabity;
+	}
 
-	worldTransform.translation_.y += grabity;
 
 	//ノックバック発動
 	if (isKnockback) {

@@ -95,6 +95,12 @@ private:
 	float KnockBackTimer = 0.0f;
 	float KnockBackTimeMax = 0.5f;
 
+	///ブリンク
+	float brinkTimer = 0.0f;
+	const float brinkTimeMax = 0.5f;
+
+	bool isUmbrellaFall = false;
+
 	/// Hp
 	uint32_t Hp = 10;
 };
