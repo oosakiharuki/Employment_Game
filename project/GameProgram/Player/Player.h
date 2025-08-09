@@ -84,8 +84,6 @@ private:
 	float coolMax = 0.5f;
 	uint32_t bulletCount = 3;
 
-	Object3d* object_umbrella;
-
 	/// 傘のシールド
 	bool isShield = false;
 	Umbrella* umbrella = nullptr;

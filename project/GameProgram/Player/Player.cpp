@@ -13,7 +13,6 @@ Player::~Player() {
 		delete bullet;
 	}
 	delete umbrella;
-	delete object_umbrella;
 }
 
 void Player::Initialize() {
@@ -29,9 +28,7 @@ void Player::Initialize() {
 	wtGun.Initialize();
 	wtGun.rotation_.y = 90.0f;
 
-	object_umbrella = new Object3d();
-	object_umbrella->Initialize();
-	object_umbrella->SetModelFile("umbrella_Normal.obj");
+
 
 }
 
@@ -151,8 +148,6 @@ void Player::Update() {
 	//傘シールド
 	if (Input::GetInstance()->PushKey(DIK_L)) {
 		isShield = true;
-		umbrella->SetTranslate(worldTransform.translation_ + TransformNormal(Vector3(0, 0, 2),worldTransform.matWorld_));
-		umbrella->SetRotate(wtGun.rotation_);
 	}
 	else {
 		isShield = false;
@@ -232,6 +227,15 @@ void Player::Update() {
 	worldTransform.UpdateMatrix();
 	wtGun.translation_ = worldTransform.translation_;
 	wtGun.UpdateMatrix();
+
+	///傘の銃
+	umbrella->SetTranslate(worldTransform.translation_ + 
+		TransformNormal(Vector3(0, 1, 0), worldTransform.matWorld_) +
+		TransformNormal(Vector3(0, 0, 1.25f), wtGun.matWorld_));
+
+	umbrella->SetRotate(wtGun.rotation_);
+	umbrella->ShieldMode(isShield);
+
 	umbrella->Update();
 
 }
@@ -242,10 +246,7 @@ void Player::Draw() {
 		bullet->Draw();
 	}
 
-	if (isShield) {
-		umbrella->Draw();
-	}
-	object_umbrella->Draw(wtGun);
+	umbrella->Draw();
 }
 
 AABB Player::GetAABB() {
@@ -261,11 +262,7 @@ void Player::SetModelFile(std::string filename) {
 
 void Player::ShootBullet() {	
 
-	Vector3 translate = {
-		worldTransform.translation_.x,
-		worldTransform.translation_.y + 1.0f,
-		worldTransform.translation_.z
-	};
+	Vector3 translate = umbrella->GetTranslate();
 
 	float halfCount = (float(bulletCount) - 1) / 2;
 

@@ -11,8 +11,8 @@ void GameScene::Initialize() {
 	modelManager->LoadModel("stage_proto", ".obj");
 	modelManager->LoadModel("sneakWalk", ".gltf");
 	modelManager->LoadModel("PlayerBullet", ".obj");
-	modelManager->LoadModel("umbrella", ".obj");
-	modelManager->LoadModel("umbrella_Normal", ".obj");
+	modelManager->LoadModel("umbrella_Open", ".obj");
+	modelManager->LoadModel("umbrella_Close", ".obj");
 
 	camera = new Camera();
 

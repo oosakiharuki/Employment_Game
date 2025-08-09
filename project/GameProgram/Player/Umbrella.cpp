@@ -4,17 +4,22 @@
 using namespace MyMath;
 
 Umbrella::~Umbrella() {
-	delete object_;
+	delete object_Open;
+	delete object_Close;
 }
 
 void Umbrella::Initialize() {
 	wt.Initialize();
-	object_ = new Object3d();
-	object_->Initialize();
-	object_->SetModelFile("umbrella.obj");
+	object_Open = new Object3d();
+	object_Open->Initialize();
+	object_Open->SetModelFile("umbrella_Open.obj");
 
-	umbrellaAABB.min = { -1,-1,-1 };
-	umbrellaAABB.max = { 1,1,1 };
+	object_Close = new Object3d();
+	object_Close->Initialize();
+	object_Close->SetModelFile("umbrella_Close.obj");
+
+	umbrellaAABB.min = { -0.5f,-1,-0.5f };
+	umbrellaAABB.max = { 0.5f,1,0.5f };
 }
 
 void Umbrella::Update() {
@@ -36,7 +41,12 @@ void Umbrella::Update() {
 
 
 void Umbrella::Draw() {
-	object_->Draw(wt);
+	if (isShieldMode) {
+		object_Open->Draw(wt);
+	}
+	else {
+		object_Close->Draw(wt);
+	}
 }
 
 
