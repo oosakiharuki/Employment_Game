@@ -12,6 +12,7 @@ void GameScene::Initialize() {
 	modelManager->LoadModel("sneakWalk", ".gltf");
 	modelManager->LoadModel("PlayerBullet", ".obj");
 	modelManager->LoadModel("umbrella", ".obj");
+	modelManager->LoadModel("umbrella_Normal", ".obj");
 
 	camera = new Camera();
 
@@ -139,7 +140,7 @@ void GameScene::Update() {
 
 			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetUmbrella()->GetAABB()) && player_->GetIsShield()) {
 				bulletE->IsHit();
-				player_->UmbrellaHit(0.2f);
+				player_->KnockBackPlayer(Vector3(0.0f,0.0f,0.3f),0.0f);
 			}
 
 			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetAABB())) {
@@ -187,7 +188,7 @@ void GameScene::Update() {
 
 				position.z -= overlap.z;
 			}
-			
+
 			player_->SetTranslate(position);
 
 			break;
@@ -195,7 +196,7 @@ void GameScene::Update() {
 		else {
 			player_->IsGround(false);
 		}
-	}	
+	}
 
 	for (auto& stage : stagesAABB) {
 		for (PlayerBullet* bullet : player_->GetBullets()) {

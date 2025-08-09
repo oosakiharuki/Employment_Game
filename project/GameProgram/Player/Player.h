@@ -33,6 +33,18 @@ public:
 		left
 	};
 
+	///射程範囲 8方向(順番は上から時計回り)
+	enum Range {
+		Up,
+		UpRight,
+		Right,
+		DownRight,
+		Down,
+		DownLeft,
+		Left,
+		UpLeft,
+	};
+
 	std::list<PlayerBullet*> GetBullets() { return bullets_; }
 	
 	Umbrella* GetUmbrella() { return umbrella; }
@@ -40,7 +52,7 @@ public:
 
 	void IsDamage();
 
-	void UmbrellaHit(const float back);
+	void KnockBackPlayer(const Vector3 Power,const float TimerMax);
 
 private:
 	Object3d* object;
@@ -55,25 +67,35 @@ private:
 	bool isWall = false;
 	bool isGround = false;
 
+
 	float grabity = 0.0f;
+	const float deltaTime = 1.0f / 60.0f;
 
 	/// 弾丸
 	std::list<PlayerBullet*> bullets_;
 
 	Direction direction = Direction::right;
+	Range range = Range::Right;
+	WorldTransform wtGun;
+
 	bool isChangeDirection = false;
 
 	float coolTimer = 0.0f;
 	float coolMax = 0.5f;
 	uint32_t bulletCount = 3;
 
+	Object3d* object_umbrella;
+
 	/// 傘のシールド
 	bool isShield = false;
 	Umbrella* umbrella = nullptr;
 
-	bool isNockback = false;
-	float backDistance = 0.0f;
+	/// ノックバック
+	bool isKnockback = false;
+	Vector3 backPower = { 0,0,0 };
 
+	float KnockBackTimer = 0.0f;
+	float KnockBackTimeMax = 0.5f;
 
 	/// Hp
 	uint32_t Hp = 10;

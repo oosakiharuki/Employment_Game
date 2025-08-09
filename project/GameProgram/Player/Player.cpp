@@ -13,6 +13,7 @@ Player::~Player() {
 		delete bullet;
 	}
 	delete umbrella;
+	delete object_umbrella;
 }
 
 void Player::Initialize() {
@@ -25,22 +26,70 @@ void Player::Initialize() {
 	umbrella = new Umbrella();
 	umbrella->Initialize();
 
+	wtGun.Initialize();
+	wtGun.rotation_.y = 90.0f;
+
+	object_umbrella = new Object3d();
+	object_umbrella->Initialize();
+	object_umbrella->SetModelFile("umbrella_Normal.obj");
+
 }
 
 void Player::Update() {
 
 
+	bool pushA = false;
+	bool pushD = false;
+	bool pushW = false;
+	bool pushS = false;
 
 	if (Input::GetInstance()->PushKey(DIK_A)) {
+		pushA = true;
+	}
+	if (Input::GetInstance()->PushKey(DIK_D)) {
+		pushD = true;
+	}
+	if (Input::GetInstance()->PushKey(DIK_W)) {
+		pushW = true;
+	}	
+	if (Input::GetInstance()->PushKey(DIK_S)) {
+		pushS = true;
+	}
+	
+	if (pushA) {
 		worldTransform.translation_.x -= speed;
 		direction = left;
+		range = Left;
 		isChangeDirection = true;
+
+		if (pushW) {
+			range = UpLeft;
+		}
+		else if (pushS) {
+			range = DownLeft;
+		}
+
 	}
-	else if (Input::GetInstance()->PushKey(DIK_D)) {
+	else if (pushD) {
 		worldTransform.translation_.x += speed;
 		direction = right;
+		range = Right;
 		isChangeDirection = true;
+
+		if (pushW) {
+			range = UpRight;
+		}
+		else if (pushS) {
+			range = DownRight;
+		}
 	}
+	else if (pushW) {
+		range = Up;
+	}
+	else if (pushS) {
+		range = Down;
+	}
+	
 
 	if (isChangeDirection) {
 		switch (direction)
@@ -56,6 +105,36 @@ void Player::Update() {
 		}
 	}
 
+	switch (range)
+	{
+	case Player::Up:
+		wtGun.rotation_.x = -90.0f;
+		break;
+	case Player::UpRight:
+		wtGun.rotation_.x = -45.0f;
+		break;
+	case Player::Right:
+		wtGun.rotation_.x = 0.0f;
+		break;
+	case Player::DownRight:
+		wtGun.rotation_.x = 45.0f;
+		break;
+	case Player::Down:
+		wtGun.rotation_.x = 90.0f;
+		break;
+	case Player::DownLeft:
+		wtGun.rotation_.x = 135.0f;
+		break;
+	case Player::Left:
+		wtGun.rotation_.x = 180.0f;
+		break;
+	case Player::UpLeft:
+		wtGun.rotation_.x = 225.0f;
+		break;
+	default:
+		break;
+	}
+
 	if (isGround) {
 		grabity = 0.0f;
 		isJump = false;
@@ -65,22 +144,22 @@ void Player::Update() {
 	}	
 
 	//ジャンプ
-	if (Input::GetInstance()->TriggerKey(DIK_W) && !isJump) {
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && !isJump) {
 		isJump = true;
 	}
 
 	//傘シールド
-	if (Input::GetInstance()->PushKey(DIK_S)) {
+	if (Input::GetInstance()->PushKey(DIK_L)) {
 		isShield = true;
 		umbrella->SetTranslate(worldTransform.translation_ + TransformNormal(Vector3(0, 0, 2),worldTransform.matWorld_));
-		umbrella->SetRotate(worldTransform.rotation_);
+		umbrella->SetRotate(wtGun.rotation_);
 	}
 	else {
 		isShield = false;
 	}
 
-	coolTimer += 1.0f / 60.0f;
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && !isShield) {
+	coolTimer += deltaTime;
+	if (Input::GetInstance()->TriggerKey(DIK_K) && !isShield) {
 		if (coolTimer >= coolMax) {
 			ShootBullet();
 			coolTimer = 0;
@@ -107,20 +186,24 @@ void Player::Update() {
 
 	worldTransform.translation_.y += grabity;
 
-	if (isNockback) {
+	//ノックバック発動
+	if (isKnockback) {
 
-		//やり方が微妙
-		switch (direction)
-		{
-		case Player::right:
-			worldTransform.translation_.x -= backDistance;
-			break;
-		case Player::left:
-			worldTransform.translation_.x += backDistance;
-			break;
+		//ゼロならイーズインされない
+		if (KnockBackTimeMax == 0.0f) {
+			worldTransform.translation_ -= backPower;
+			isKnockback = false;
 		}
-		backDistance = 0;
-		isNockback = false;
+		else {
+			KnockBackTimer += deltaTime;
+
+			worldTransform.translation_ -= EaseIn(backPower, KnockBackTimer, KnockBackTimeMax);
+			if (KnockBackTimer >= KnockBackTimeMax) {
+				isKnockback = false;
+				KnockBackTimer = 0.0f;
+			}
+		}
+
 	}
 
 #ifdef  USE_IMGUI
@@ -137,11 +220,18 @@ void Player::Update() {
 
 	ImGui::Text("体力:%d", Hp);
 
+	ImGui::InputFloat3("Rotate", &wtGun.rotation_.x);
+	ImGui::SliderFloat("RotateX", &wtGun.rotation_.x, -360.0f, 360.0f);
+	ImGui::SliderFloat("RotateY", &wtGun.rotation_.y, -360.0f, 360.0f);
+	ImGui::SliderFloat("RotateZ", &wtGun.rotation_.z, -360.0f, 360.0f);
+
 	ImGui::End();
 
 #endif //  USE_IMGUI
 
 	worldTransform.UpdateMatrix();
+	wtGun.translation_ = worldTransform.translation_;
+	wtGun.UpdateMatrix();
 	umbrella->Update();
 
 }
@@ -155,7 +245,7 @@ void Player::Draw() {
 	if (isShield) {
 		umbrella->Draw();
 	}
-
+	object_umbrella->Draw(wtGun);
 }
 
 AABB Player::GetAABB() {
@@ -181,7 +271,7 @@ void Player::ShootBullet() {
 
 	for (float i = -(halfCount); i <= halfCount; ++i) {
 		Vector3 velocity = { 0.0f,float(i) * 0.1f,0.5f};
-		velocity = TransformNormal(velocity, worldTransform.matWorld_);
+		velocity = TransformNormal(velocity, wtGun.matWorld_);
 
 		PlayerBullet* bullet = new PlayerBullet();
 		bullet->Initialize();
@@ -189,6 +279,10 @@ void Player::ShootBullet() {
 		bullet->SetVelocty(velocity);
 		bullets_.push_back(bullet);
 	}
+
+	///ノックバック
+	Vector3 playerknockback = { 0.0f,0.0f,0.25f };
+	KnockBackPlayer(playerknockback,0.5f);
 }
 
 void Player::IsDamage() {
@@ -198,7 +292,8 @@ void Player::IsDamage() {
 	Hp--;
 }
 
-void Player::UmbrellaHit(const float back) {
-	backDistance = back;
-	isNockback = true;
+void Player::KnockBackPlayer(const Vector3 Power, const float TimerMax) {
+	backPower = TransformNormal(Power, wtGun.matWorld_);
+	isKnockback = true;
+	KnockBackTimeMax = TimerMax;
 }
