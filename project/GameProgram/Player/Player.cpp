@@ -250,11 +250,6 @@ void Player::Update() {
 
 	ImGui::Text("体力:%d", Hp);
 
-	ImGui::InputFloat3("Rotate", &wtGun.rotation_.x);
-	ImGui::SliderFloat("RotateX", &wtGun.rotation_.x, -360.0f, 360.0f);
-	ImGui::SliderFloat("RotateY", &wtGun.rotation_.y, -360.0f, 360.0f);
-	ImGui::SliderFloat("RotateZ", &wtGun.rotation_.z, -360.0f, 360.0f);
-
 	ImGui::End();
 
 #endif //  USE_IMGUI
@@ -328,4 +323,15 @@ void Player::KnockBackPlayer(const Vector3 Power, const float TimerMax) {
 	backPower = TransformNormal(Power, wtGun.matWorld_);
 	isKnockback = true;
 	KnockBackTimeMax = TimerMax;
+}
+
+
+Vector3 Player::GetWorldPosition() {
+	Vector3 worldPos;
+
+	worldPos.x = worldTransform.matWorld_.m[3][0];
+	worldPos.y = worldTransform.matWorld_.m[3][1];
+	worldPos.z = worldTransform.matWorld_.m[3][2];
+
+	return worldPos;
 }

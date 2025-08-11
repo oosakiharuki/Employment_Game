@@ -56,6 +56,10 @@ public:
 
 	void KnockBackPlayer(const Vector3 Power,const float TimerMax);
 
+
+	Vector3 GetWorldPosition();
+
+
 private:
 	Object3d* object;
 	WorldTransform worldTransform;

@@ -14,17 +14,23 @@ public:
 
 	void Fire();
 
+
 private:
 	uint32_t maxHp = 3;
 	uint32_t hp = maxHp;
 
 	float coolTime = 0.0f;
-	const float coolTimeMax = 2.0f;
+	const float coolTimeMax = 1.0f;
 
 	float rapidFireTime = 0.0f;
 	const float rapidFireTimeMax = 0.1f;
 
 	uint32_t rapidCount = 0;
 	const uint32_t rapidFireMax = 3;
+	Vector3 velocity;
+
+	
+	float rotateTimer = 0.0f;
+	const float rotateTimeMax = 3.0f;
 
 };

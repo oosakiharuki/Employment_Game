@@ -1,4 +1,5 @@
 #include "Enemy_Turret.h"
+#include "ImGuiManager.h"
 
 using namespace MyMath;
 
@@ -25,9 +26,20 @@ void Enemy_Turret::Update() {
 
 	DeadUpdate();
 
+	DirectionDegree();
 
-	eyeAABB.min = worldTransform.translation_ + Vector3(-12, -0.5f, -1);
-	eyeAABB.max = worldTransform.translation_ + Vector3(0, 0.5f, 1);
+
+	switch (direction)
+	{
+	case right:
+		eyeAABB.min = worldTransform.translation_ + Vector3(0, -2, -1);
+		eyeAABB.max = worldTransform.translation_ + Vector3(15, 2, 1);
+		break;
+	case left:
+		eyeAABB.min = worldTransform.translation_ + Vector3(-15, -2, -1);
+		eyeAABB.max = worldTransform.translation_ + Vector3(0, 2, 1);
+		break;
+	}
 
 	PlayerTarget();
 
@@ -51,6 +63,18 @@ void Enemy_Turret::Update() {
 		}
 		return false;
 	});
+
+
+	ImGui::Begin("Enemy_Turret");
+
+	ImGui::Text("translate : %f,%f,%f", worldTransform.translation_.x, worldTransform.translation_.y, worldTransform.translation_.z);
+	
+	ImGui::Text("Eye_Min : %f,%f,%f", eyeAABB.min.x, eyeAABB.min.y, eyeAABB.min.z);
+	ImGui::Text("Eye_Max : %f,%f,%f", eyeAABB.max.x, eyeAABB.max.y, eyeAABB.max.z);
+
+
+
+	ImGui::End();
 
 	worldTransform.UpdateMatrix();
 }

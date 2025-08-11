@@ -1,6 +1,8 @@
 #include "Enemy_Soldier.h"
 #include "Input.h"
 
+#include "ImGuiManager.h"
+
 using namespace MyMath;
 
 Enemy_Soldier::~Enemy_Soldier() {
@@ -26,9 +28,33 @@ void Enemy_Soldier::Update() {
 	DeadUpdate();
 	
 
-	eyeAABB.min = worldTransform.translation_ + Vector3(-6, -2, -1);
-	eyeAABB.max = worldTransform.translation_ + Vector3(0, 2, 1);
+	if (!isFoundTarget) {
+		rotateTimer += 1.0f / 60.0f;
+	}
+	else {
+		rotateTimer = 0.0f;
+	}
 	
+	if (rotateTimer >= rotateTimeMax) {
+		//右左を変更
+		worldTransform.rotation_.y += 180.0f;
+		rotateTimer = 0.0f;
+	}
+
+	DirectionDegree();
+
+	switch (direction)
+	{
+	case right:		
+		eyeAABB.min = worldTransform.translation_ + Vector3(0, -2, -1);
+		eyeAABB.max = worldTransform.translation_ + Vector3(15, 2, 1);
+		break;
+	case left:
+		eyeAABB.min = worldTransform.translation_ + Vector3(-15, -2, -1);
+		eyeAABB.max = worldTransform.translation_ + Vector3(0, 2, 1);
+		break;
+	}
+
 	PlayerTarget();
 
 	if (isFoundTarget) {
@@ -46,6 +72,16 @@ void Enemy_Soldier::Update() {
 		}
 		return false;
 		});
+
+
+	ImGui::Begin("Enemy_soldier");
+
+
+	ImGui::Text("Eye_Max : %f,%f,%f", eyeAABB.max.x, eyeAABB.max.y, eyeAABB.max.z);
+	ImGui::Text("Eye_Min : %f,%f,%f", eyeAABB.min.x, eyeAABB.min.y, eyeAABB.min.z);
+
+
+	ImGui::End();
 
 	worldTransform.UpdateMatrix();
 }
@@ -89,18 +125,28 @@ void Enemy_Soldier::Attack() {
 }
 
 void Enemy_Soldier::Fire() {
-	Vector3 translate = {
-	worldTransform.translation_.x,
-	worldTransform.translation_.y,
-	worldTransform.translation_.z
-	};
+	
+	Vector3 enemyPosition;
 
-	Vector3 velocity =  Vector3(0.0f,0.0f,0.5f);
-	velocity = TransformNormal(velocity, worldTransform.matWorld_);
+	enemyPosition.x = worldTransform.matWorld_.m[3][0];
+	enemyPosition.y = worldTransform.matWorld_.m[3][1];
+	enemyPosition.z = worldTransform.matWorld_.m[3][2];
+
+	//プレイヤーの方向に向かう(最初に打つ弾にそって進む)
+	if (rapidCount == 0) {
+
+		Vector3 playerPosition = player_->GetWorldPosition();
+
+		Vector3 distance = playerPosition - enemyPosition;
+
+		Normalize(distance);
+
+		velocity = Vector3(0.02f, 0.02f, 0.02f) * distance;
+	}
 
 	EnemyBullet* bullet = new EnemyBullet();
 	bullet->Initialize();
-	bullet->SetTranslate(translate);
+	bullet->SetTranslate(enemyPosition);
 	bullet->SetVelocty(velocity);
 	bullets_.push_back(bullet);
 }

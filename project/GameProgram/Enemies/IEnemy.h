@@ -50,6 +50,15 @@ protected:
 	void DeadUpdate();
 
 
+	///向き左右
+	enum Direction {
+		right,
+		left
+	};
+	Direction direction;
+
+	//角度で向きを変更
+	void DirectionDegree();
 
 private:
 	bool deleteEnemy = false;
