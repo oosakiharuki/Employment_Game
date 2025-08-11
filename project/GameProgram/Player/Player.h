@@ -21,8 +21,10 @@ public:
 
 	void SetModelFile(std::string filename);
 
-	void IsWall(bool result) { isWall = result; }
 	void IsGround(bool result) { isGround = result; }
+
+	bool GetIsGround() { return isGround; }
+	void GrabityZero() { grabity = 0.0f; }
 
 	const WorldTransform& GetWorldTransform() { return worldTransform; }
 
@@ -64,7 +66,6 @@ private:
 	bool isJump = false;
 
 	/// stageの当たり判定で使う
-	bool isWall = false;
 	bool isGround = false;
 
 

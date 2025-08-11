@@ -11,7 +11,7 @@
 
 #include "Levelediter.h"
 #include "Player.h"
-#include "Enemy.h"
+#include "Enemy_Soldier.h"
 #include "Enemy_Turret.h"
 
 #include "BoxModel.h"
@@ -34,7 +34,7 @@ private:
 
 	Levelediter levelediter;
 	Player* player_ = nullptr;
-	std::vector<IEnemy*> enemies;
+	std::list<IEnemy*> enemies;
 
 	Object3d* stageobj;
 	WorldTransform wt;

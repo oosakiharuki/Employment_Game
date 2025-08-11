@@ -139,24 +139,22 @@ void Player::Update() {
 		break;
 	}
 
-	if (isGround) {
-		grabity = 0.0f;
-		isJump = false;
+	//ジャンプ
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && !isJump) {
+		isJump = true;
+		isGround = false;
+	}
 
+	grabity -= 0.01f;
+	if (isGround) {
+		isJump = false;
 		//離した時
 		if (!Input::GetInstance()->PushKey(DIK_L)) {
 			//ブリンクのタイマーリセット
 			brinkTimer = 0.0f;
 		}
 	}
-	else {
-		grabity -= 0.01f;
-	}
 
-	//ジャンプ
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && !isJump) {
-		isJump = true;
-	}
 
 	//傘シールド
 	if (Input::GetInstance()->PushKey(DIK_L)) {
@@ -166,6 +164,8 @@ void Player::Update() {
 		}
 
 		if (brinkTimer < brinkTimeMax) {
+			isGround = false;
+
 			brinkTimer += deltaTime;
 			worldTransform.translation_ += EaseIn(TransformNormal({ 0.0f,0.0f,1.5f },wtGun.matWorld_), brinkTimer, brinkTimeMax);
 		}

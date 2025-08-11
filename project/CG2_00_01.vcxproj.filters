@@ -216,7 +216,7 @@
     <ClCompile Include="Engine\3d\DebugWireframes.cpp">
       <Filter>ソース ファイル\Engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Enemies\Enemy.cpp">
+    <ClCompile Include="GameProgram\Enemies\Enemy_Soldier.cpp">
       <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Enemies\Enemy_Turret.cpp">
@@ -404,7 +404,7 @@
     <ClInclude Include="Engine\3d\Cubemap.h">
       <Filter>ソース ファイル\Engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Enemies\Enemy.h">
+    <ClInclude Include="GameProgram\Enemies\Enemy_Soldier.h">
       <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\Enemies\Enemy_Turret.h">

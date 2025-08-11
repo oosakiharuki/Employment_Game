@@ -166,7 +166,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\scene\TitleScene.cpp" />
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\PostEffect\IPostEffects.cpp" />
-    <ClCompile Include="GameProgram\Enemies\Enemy.cpp" />
+    <ClCompile Include="GameProgram\Enemies\Enemy_Soldier.cpp" />
     <ClCompile Include="GameProgram\Player\Player.cpp" />
     <ClCompile Include="Engine\3d\Primitive\SphereModel.cpp" />
     <ClCompile Include="GameProgram\Player\PlayerBullet.cpp" />
@@ -230,7 +230,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\scene\TitleScene.h" />
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\PostEffect\IPostEffects.h" />
-    <ClInclude Include="GameProgram\Enemies\Enemy.h" />
+    <ClInclude Include="GameProgram\Enemies\Enemy_Soldier.h" />
     <ClInclude Include="GameProgram\Player\Player.h" />
     <ClInclude Include="Engine\3d\Primitive\SphereModel.h" />
     <ClInclude Include="GameProgram\Player\PlayerBullet.h" />

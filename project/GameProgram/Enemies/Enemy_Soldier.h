@@ -1,10 +1,9 @@
 #pragma once
 #include "IEnemy.h"
 
-class Enemy_Turret : public IEnemy {
+class Enemy_Soldier : public IEnemy{
 public:
-
-	~Enemy_Turret() override;
+	~Enemy_Soldier() override;
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
@@ -16,16 +15,16 @@ public:
 	void Fire();
 
 private:
-	uint32_t maxHp = 6;
+	uint32_t maxHp = 3;
 	uint32_t hp = maxHp;
 
 	float coolTime = 0.0f;
-	const float coolTimeMax = 1.0f;
+	const float coolTimeMax = 2.0f;
 
 	float rapidFireTime = 0.0f;
 	const float rapidFireTimeMax = 0.1f;
 
 	uint32_t rapidCount = 0;
-	const uint32_t rapidFireMax = 5;
-};
+	const uint32_t rapidFireMax = 3;
 
+};

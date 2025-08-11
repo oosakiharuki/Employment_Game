@@ -2,6 +2,7 @@
 #include "MyMath.h"
 #include "Object3d.h"
 #include "EnemyBullet.h"
+#include "Player.h"
 
 class IEnemy {
 public:
@@ -24,6 +25,11 @@ public:
 
 	std::list<EnemyBullet*> GetBullets() { return bullets_; }
 
+
+	void SetPlayer(Player* player) { player_ = player; }
+
+	bool GetDeleteEnemy() { return deleteEnemy; }
+
 protected:
 	Object3d* object;
 	WorldTransform worldTransform;
@@ -31,5 +37,21 @@ protected:
 	bool isDead = false;
 
 	std::list<EnemyBullet*> bullets_;
+
+	//
+	Player* player_ = nullptr;
+	
+	//playerを見つけたとき
+	void PlayerTarget();
+	AABB eyeAABB;//見える範囲
+	bool isFoundTarget = false;
+
+	//敵を倒した時のUpdate関数
+	void DeadUpdate();
+
+
+
+private:
+	bool deleteEnemy = false;
 };
 

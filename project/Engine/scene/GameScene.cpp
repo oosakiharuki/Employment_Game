@@ -51,7 +51,7 @@ void GameScene::Initialize() {
 				enemy = new Enemy_Turret();
 			}
 			else {
-				enemy = new Enemy();
+				enemy = new Enemy_Soldier();
 			}
 			
 			
@@ -124,9 +124,8 @@ void GameScene::Update() {
 
 	player_->Update();
 
-	stageobj->Update();
-
 	for (auto& enemy : enemies) {
+		enemy->SetPlayer(player_);
 		enemy->Update();
 
 		for (PlayerBullet* bullet : player_->GetBullets()) {
@@ -150,6 +149,13 @@ void GameScene::Update() {
 		}
 	}
 
+	///当たり判定
+
+	bool isWall = false;
+	bool isGround = false;
+	player_->IsGround(false);
+
+
 	for (auto& stage : stagesAABB) {
 		AABB playerAABB = player_->GetAABB();
 
@@ -158,8 +164,8 @@ void GameScene::Update() {
 			Vector3 position = player_->GetTranslate();
 			Vector3 overlap = OverAABB(player_->GetAABB(), stage);
 
-			// 重なりが最小の軸で押し戻しを行う
-			if (overlap.x <= overlap.y && overlap.x < overlap.z) {
+			// 重なりが最小の軸で押し戻しを行う	
+			if (overlap.x < overlap.y) {
 				//真ん中の座標を代入
 				float playerCenterX = (playerAABB.min.x + playerAABB.max.x) * 0.5f;
 				float obstacleCenterX = (stage.min.x + stage.max.x) * 0.5f;
@@ -167,34 +173,34 @@ void GameScene::Update() {
 				float push = (playerCenterX < obstacleCenterX) ? -overlap.x : overlap.x;
 
 				position.x += push;
+				isWall = true;
 			}
-			else if (overlap.y < overlap.x && overlap.y < overlap.z) {
+			else if (overlap.y < overlap.x) {
 				// 真ん中の座標を代入
 				float playerCenterY = (playerAABB.min.y + playerAABB.max.y) * 0.5f;
 				float obstacleCenterY = (stage.min.y + stage.max.y) * 0.5f;
 				//真ん中から 右の場合 - / 左の場合 +
 				float push = (playerCenterY < obstacleCenterY) ? -overlap.y : overlap.y;
 
-				position.y += push + 0.00001f;//少し浮かせるため
-				// 上向きの押し戻しなら着地判定を立てる
-				player_->IsGround(true);
+				//床 or 天井 (0以上は床、0未満は天井)
+				if (push >= 0.0f) {
+					position.y += push;
+					// 着地判定を立てる
+					player_->IsGround(true);
+					player_->GrabityZero();
+				} else if (push < 0.0f) {
+					position.y += push;
+				}
+				isGround = true;
 			}
-			else if (overlap.z < overlap.x && overlap.z < overlap.y) {
-				//真ん中の座標を代入
-				float playerCenterZ = (playerAABB.min.z + playerAABB.max.z) * 0.5f;
-				float obstacleCenterZ = (stage.min.z + stage.max.z) * 0.5f;
-				//真ん中から 右の場合 - / 左の場合 +
-				float push = (playerCenterZ < obstacleCenterZ) ? -overlap.z : overlap.z;
-
-				position.z -= overlap.z;
-			}
+			//z軸はいらないかも
 
 			player_->SetTranslate(position);
 
-			break;
-		}
-		else {
-			player_->IsGround(false);
+			//両方ともtrueの時
+			if (isWall && isGround) {
+				break;
+			}
 		}
 	}
 
@@ -216,8 +222,14 @@ void GameScene::Update() {
 	}
 
 
-
-
+	//敵を倒したら削除
+	enemies.remove_if([](IEnemy* enemy) {
+		if (enemy->GetDeleteEnemy()) {
+			delete enemy;
+			return true;
+		}
+		return false;
+	});
 	
 
 	
