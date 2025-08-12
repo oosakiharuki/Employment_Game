@@ -43,6 +43,9 @@ void IEnemy::DeadUpdate() {
 	if (isDead) {
 		worldTransform.rotation_.z += 3.0f;
 	}
+	else {
+		worldTransform.rotation_.z = 0.0f;
+	}
 
 	if (worldTransform.rotation_.z > 90.0f) {
 		deleteEnemy = true;
@@ -65,4 +68,10 @@ void IEnemy::DirectionDegree() {
 	else if (worldTransform.rotation_.y <= 360.0f) {
 		direction = left;
 	}
+}
+
+void IEnemy::RespownEnemy() { 
+	isDead = false;
+	deleteEnemy = false;
+	hp = maxHp;
 }

@@ -34,17 +34,11 @@ void Player::Initialize() {
 
 void Player::Update() {
 
+	DeadPlayer();
 
 	if (Hp == 0) {
-		deadTimer += deltaTime;
-		if (deadTimer >= deadTimeMax) {
-			Hp = 10;
-			worldTransform.translation_ = respownPosition;
-			deadTimer = 0.0f;
-		}
 		return;
 	}
-
 
 	bool pushA = false;
 	bool pushD = false;
@@ -349,4 +343,18 @@ Vector3 Player::GetWorldPosition() {
 	worldPos.z = worldTransform.matWorld_.m[3][2];
 
 	return worldPos;
+}
+
+void Player::DeadPlayer() {
+	if (Hp == 0) {
+		deadTimer += deltaTime;
+
+
+		if (deadTimer >= deadTimeMax) {
+			Hp = 10;
+			worldTransform.translation_ = respownPosition;
+			isPlayerDown = true;
+			deadTimer = 0.0f;
+		}
+	}
 }

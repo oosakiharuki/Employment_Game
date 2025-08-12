@@ -16,9 +16,16 @@ void Enemy_Turret::Initialize() {
 	object = new Object3d();
 	object->Initialize();
 	object->SetModelFile("cannon.obj");
+
+	maxHp = 6;
+	hp = maxHp;
 }
 
 void Enemy_Turret::Update() {
+
+	if (deleteEnemy) {
+		return;
+	}
 
 	if (hp == 0) {
 		isDead = true;
@@ -80,6 +87,11 @@ void Enemy_Turret::Update() {
 }
 
 void Enemy_Turret::Draw() {
+
+	if (deleteEnemy) {
+		return;
+	}
+
 	object->Draw(worldTransform);
 	for (auto* bullet : bullets_) {
 		bullet->Draw();

@@ -29,12 +29,12 @@ public:
 	void SetPlayer(Player* player) { player_ = player; }
 
 	bool GetDeleteEnemy() { return deleteEnemy; }
+	void RespownEnemy();
 
 protected:
 	Object3d* object;
 	WorldTransform worldTransform;
 	AABB enemyAABB;
-	bool isDead = false;
 
 	std::list<EnemyBullet*> bullets_;
 
@@ -60,7 +60,10 @@ protected:
 	//角度で向きを変更
 	void DirectionDegree();
 
-private:
+	uint32_t maxHp;
+	uint32_t hp;
+
+	bool isDead = false;
 	bool deleteEnemy = false;
 };
 

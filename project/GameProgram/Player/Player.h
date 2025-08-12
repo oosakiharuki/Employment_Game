@@ -60,6 +60,12 @@ public:
 	Vector3 GetWorldPosition();
 
 	void SetRespownPosition(Vector3 translate) { respownPosition = translate; }
+	
+	//死んだときの処理
+	void DeadPlayer();
+	bool GetIsPlayerDown() { return isPlayerDown; }
+	//復活
+	void IsRespown() { isPlayerDown = false; }
 
 private:
 	Object3d* object;
@@ -113,4 +119,5 @@ private:
 	float deadTimeMax = 2.0f;
 
 	Vector3 respownPosition;
+	bool isPlayerDown = false;
 };

@@ -16,8 +16,6 @@ public:
 
 
 private:
-	uint32_t maxHp = 3;
-	uint32_t hp = maxHp;
 
 	float coolTime = 0.0f;
 	const float coolTimeMax = 1.0f;

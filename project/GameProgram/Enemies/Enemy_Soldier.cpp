@@ -17,9 +17,16 @@ void Enemy_Soldier::Initialize() {
 	object = new Object3d();
 	object->Initialize();
 	object->SetModelFile("enemy.obj");
+
+	maxHp = 3;
+	hp = maxHp;
 }
 
 void Enemy_Soldier::Update() {
+
+	if (deleteEnemy) {
+		return;
+	}
 
 	if (hp == 0) {
 		isDead = true;
@@ -87,6 +94,10 @@ void Enemy_Soldier::Update() {
 }
 
 void Enemy_Soldier::Draw() {
+	if (deleteEnemy) {
+		return;
+	}
+
 	object->Draw(worldTransform);
 	for (auto* bullet : bullets_) {
 		bullet->Draw();

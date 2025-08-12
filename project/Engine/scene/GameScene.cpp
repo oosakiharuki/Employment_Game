@@ -115,10 +115,10 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-	
-	
+
+
 	if (Input::GetInstance()->TriggerKey(DIK_2)) {
-		Audio::GetInstance()->SoundPlayWave(soundData_, 0.3f,false);
+		Audio::GetInstance()->SoundPlayWave(soundData_, 0.3f, false);
 	}
 
 	if (Input::GetInstance()->PushKey(DIK_0)) {
@@ -154,7 +154,7 @@ void GameScene::Update() {
 
 			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetUmbrella()->GetAABB()) && player_->GetIsShield()) {
 				bulletE->IsHit();
-				player_->KnockBackPlayer(Vector3(0.0f,0.0f,0.3f),0.0f);
+				player_->KnockBackPlayer(Vector3(0.0f, 0.0f, 0.3f), 0.0f);
 			}
 
 			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetAABB())) {
@@ -203,7 +203,8 @@ void GameScene::Update() {
 					// 着地判定を立てる
 					player_->IsGround(true);
 					player_->GrabityZero();
-				} else if (push < 0.0f) {
+				}
+				else if (push < 0.0f) {
 					position.y += push;
 				}
 				isGround = true;
@@ -233,27 +234,43 @@ void GameScene::Update() {
 				}
 			}
 		}
-	
+
 	}
 
 
-	//敵を倒したら削除
-	enemies.remove_if([](IEnemy* enemy) {
-		if (enemy->GetDeleteEnemy()) {
-			delete enemy;
-			return true;
-		}
-		return false;
-	});
-	
-
+	bool isChangeRespown = false;
+	//リスポーン変更した時
 	for (auto& checkPoint : checkPoints) {
 		checkPoint->Update();
 
 		if (IsCollisionAABB(player_->GetAABB(), checkPoint->GetAABB())) {
 			player_->SetRespownPosition(checkPoint->GetPosition());
+			isChangeRespown = true;
 		}
 	}
+
+	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
+	if (player_->GetIsPlayerDown()) {
+		for (auto& enemy : enemies) {
+			enemy->RespownEnemy();
+		}
+		player_->IsRespown();
+	}
+	
+	//リスポーン地点を変更前に倒した敵は復活しない
+	if (isChangeRespown) {
+		//敵を倒したら削除
+		enemies.remove_if([](IEnemy* enemy) {
+			if (enemy->GetDeleteEnemy()) {
+				delete enemy;
+				return true;
+			}
+			return false;
+			});
+		isChangeRespown = false;
+	}
+
+
 
 	gltfOBJ->Update(wt);
 
