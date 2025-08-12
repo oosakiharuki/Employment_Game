@@ -23,40 +23,39 @@ void Enemy_Turret::Initialize() {
 
 void Enemy_Turret::Update() {
 
-	if (deleteEnemy) {
-		return;
-	}
+	if (!deleteEnemy) {
 
-	if (hp == 0) {
-		isDead = true;
-	}
+		if (hp == 0) {
+			isDead = true;
+		}
 
-	DeadUpdate();
+		DeadUpdate();
 
-	DirectionDegree();
+		DirectionDegree();
 
 
-	switch (direction)
-	{
-	case right:
-		eyeAABB.min = worldTransform.translation_ + Vector3(0, -2, -1);
-		eyeAABB.max = worldTransform.translation_ + Vector3(15, 2, 1);
-		break;
-	case left:
-		eyeAABB.min = worldTransform.translation_ + Vector3(-15, -2, -1);
-		eyeAABB.max = worldTransform.translation_ + Vector3(0, 2, 1);
-		break;
-	}
+		switch (direction)
+		{
+		case right:
+			eyeAABB.min = worldTransform.translation_ + Vector3(0, -2, -1);
+			eyeAABB.max = worldTransform.translation_ + Vector3(15, 2, 1);
+			break;
+		case left:
+			eyeAABB.min = worldTransform.translation_ + Vector3(-15, -2, -1);
+			eyeAABB.max = worldTransform.translation_ + Vector3(0, 2, 1);
+			break;
+		}
 
-	PlayerTarget();
+		PlayerTarget();
 
-	if (isFoundTarget) {
-		Attack();
-	}
-	else {
-		rapidCount = 0;
-		rapidFireTime = 0;
-		coolTime = 0;
+		if (isFoundTarget) {
+			Attack();
+		}
+		else {
+			rapidCount = 0;
+			rapidFireTime = 0;
+			coolTime = 0;
+		}
 	}
 
 	for (auto* bullet : bullets_) {
@@ -88,11 +87,10 @@ void Enemy_Turret::Update() {
 
 void Enemy_Turret::Draw() {
 
-	if (deleteEnemy) {
-		return;
+	if (!deleteEnemy) {
+		object->Draw(worldTransform);
 	}
 
-	object->Draw(worldTransform);
 	for (auto* bullet : bullets_) {
 		bullet->Draw();
 	}

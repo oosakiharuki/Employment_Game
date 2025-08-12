@@ -24,50 +24,49 @@ void Enemy_Soldier::Initialize() {
 
 void Enemy_Soldier::Update() {
 
-	if (deleteEnemy) {
-		return;
+	if (!deleteEnemy) {
+
+		if (hp == 0) {
+			isDead = true;
+		}
+
+		DeadUpdate();
+
+
+		if (!isFoundTarget) {
+			rotateTimer += 1.0f / 60.0f;
+		}
+		else {
+			rotateTimer = 0.0f;
+		}
+
+		if (rotateTimer >= rotateTimeMax) {
+			//右左を変更
+			worldTransform.rotation_.y += 180.0f;
+			rotateTimer = 0.0f;
+		}
+
+		DirectionDegree();
+
+		switch (direction)
+		{
+		case right:
+			eyeAABB.min = worldTransform.translation_ + Vector3(0, -2, -1);
+			eyeAABB.max = worldTransform.translation_ + Vector3(15, 2, 1);
+			break;
+		case left:
+			eyeAABB.min = worldTransform.translation_ + Vector3(-15, -2, -1);
+			eyeAABB.max = worldTransform.translation_ + Vector3(0, 2, 1);
+			break;
+		}
+
+		PlayerTarget();
+
+		if (isFoundTarget) {
+			Attack();
+		}
 	}
 
-	if (hp == 0) {
-		isDead = true;
-	}
-
-	DeadUpdate();
-	
-
-	if (!isFoundTarget) {
-		rotateTimer += 1.0f / 60.0f;
-	}
-	else {
-		rotateTimer = 0.0f;
-	}
-	
-	if (rotateTimer >= rotateTimeMax) {
-		//右左を変更
-		worldTransform.rotation_.y += 180.0f;
-		rotateTimer = 0.0f;
-	}
-
-	DirectionDegree();
-
-	switch (direction)
-	{
-	case right:		
-		eyeAABB.min = worldTransform.translation_ + Vector3(0, -2, -1);
-		eyeAABB.max = worldTransform.translation_ + Vector3(15, 2, 1);
-		break;
-	case left:
-		eyeAABB.min = worldTransform.translation_ + Vector3(-15, -2, -1);
-		eyeAABB.max = worldTransform.translation_ + Vector3(0, 2, 1);
-		break;
-	}
-
-	PlayerTarget();
-
-	if (isFoundTarget) {
-		Attack();
-	}
-	
 	for (auto* bullet : bullets_) {
 		bullet->Update();
 	}
@@ -94,11 +93,9 @@ void Enemy_Soldier::Update() {
 }
 
 void Enemy_Soldier::Draw() {
-	if (deleteEnemy) {
-		return;
+	if (!deleteEnemy) {	
+		object->Draw(worldTransform);
 	}
-
-	object->Draw(worldTransform);
 	for (auto* bullet : bullets_) {
 		bullet->Draw();
 	}
