@@ -35,6 +35,17 @@ void Player::Initialize() {
 void Player::Update() {
 
 
+	if (Hp == 0) {
+		deadTimer += deltaTime;
+		if (deadTimer >= deadTimeMax) {
+			Hp = 10;
+			worldTransform.translation_ = respownPosition;
+			deadTimer = 0.0f;
+		}
+		return;
+	}
+
+
 	bool pushA = false;
 	bool pushD = false;
 	bool pushW = false;
@@ -271,6 +282,10 @@ void Player::Update() {
 }
 
 void Player::Draw() {
+	if (Hp == 0) {
+		return;
+	}
+
 	object->Draw(worldTransform);
 	for (auto* bullet : bullets_) {
 		bullet->Draw();

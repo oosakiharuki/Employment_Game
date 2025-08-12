@@ -40,6 +40,19 @@ void GameScene::Initialize() {
 		player_->SetTranslate(playerData.translation);
 		player_->SetRotate(playerData.rotation);
 		player_->SetAABB(playerData.colliderAABB);
+
+		player_->SetRespownPosition(playerData.translation);
+		
+		//スタート地点以外はチェックポイントとして使う
+		for (uint32_t i = 1; i < levelediter.GetLevelData()->players.size(); i++) {
+			auto& playerData = levelediter.GetLevelData()->players[i];
+			CheckPoint* checkPoint = new CheckPoint();
+			checkPoint->Initialize();
+			checkPoint->SetPosition(playerData.translation);
+			checkPoint->SetAABB(playerData.colliderAABB);
+			checkPoints.push_back(checkPoint);
+		}
+
 	}
 
 
@@ -232,7 +245,14 @@ void GameScene::Update() {
 	});
 	
 
-	
+	for (auto& checkPoint : checkPoints) {
+		checkPoint->Update();
+
+		if (IsCollisionAABB(player_->GetAABB(), checkPoint->GetAABB())) {
+			player_->SetRespownPosition(checkPoint->GetPosition());
+		}
+	}
+
 	gltfOBJ->Update(wt);
 
 
@@ -289,6 +309,9 @@ void GameScene::Draw() {
 		enemy->Draw();
 	}
 
+	for (auto& checkPoint : checkPoints) {
+		checkPoint->Draw();
+	}
 	//パーティクル描画処理
 	ParticleCommon::GetInstance()->Command();
 
@@ -307,4 +330,8 @@ void GameScene::Finalize() {
 	delete stageobj;
 	delete skyBox;
 	delete gltfOBJ;
+
+	for (auto& checkPoint : checkPoints) {
+		delete checkPoint;
+	}
 }

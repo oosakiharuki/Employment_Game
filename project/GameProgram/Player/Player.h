@@ -59,6 +59,7 @@ public:
 
 	Vector3 GetWorldPosition();
 
+	void SetRespownPosition(Vector3 translate) { respownPosition = translate; }
 
 private:
 	Object3d* object;
@@ -108,4 +109,8 @@ private:
 
 	/// Hp
 	uint32_t Hp = 10;
+	float deadTimer = 0.0f;
+	float deadTimeMax = 2.0f;
+
+	Vector3 respownPosition;
 };
