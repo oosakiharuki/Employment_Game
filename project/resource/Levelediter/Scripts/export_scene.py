@@ -105,14 +105,6 @@ class MYADDON_OT_export_scene(bpy.types.Operator,bpy_extras.io_utils.ExportHelpe
 
 
 
-
-
-
-
-
-
-
-
     def write_and_print(self,file,str):
         print(str)
 

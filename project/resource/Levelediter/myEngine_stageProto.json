@@ -72,7 +72,7 @@
         },
         {
             "type": "PlayerSpawn",
-            "name": "PlayerSpawn.001",
+            "name": "PlayerSpawn",
             "transform": {
                 "translation": [
                     0.0,
@@ -345,6 +345,41 @@
             }
         },
         {
+            "type": "EnemySpawn",
+            "name": "EnemySpawn.003",
+            "transform": {
+                "translation": [
+                    109.0,
+                    0.0,
+                    5.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "Turret",
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
             "type": "MESH",
             "name": "立方体.001",
             "transform": {
@@ -379,13 +414,13 @@
             }
         },
         {
-            "type": "PlayerSpawn",
-            "name": "PlayerSpawn",
+            "type": "Checkpoint",
+            "name": "Checkpoint",
             "transform": {
                 "translation": [
-                    109.21757507324219,
+                    48.0,
                     0.0,
-                    5.0
+                    1.0
                 ],
                 "rotation": [
                     0.0,
@@ -398,7 +433,53 @@
                     1.0
                 ]
             },
-            "file_name": "savePoint"
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    4.0
+                ]
+            }
+        },
+        {
+            "type": "Checkpoint",
+            "name": "Checkpoint.001",
+            "transform": {
+                "translation": [
+                    106.0,
+                    0.0,
+                    6.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    4.0
+                ]
+            }
         }
     ]
 }

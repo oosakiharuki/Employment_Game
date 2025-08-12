@@ -13,6 +13,7 @@ void GameScene::Initialize() {
 	modelManager->LoadModel("PlayerBullet", ".obj");
 	modelManager->LoadModel("umbrella_Open", ".obj");
 	modelManager->LoadModel("umbrella_Close", ".obj");
+	modelManager->LoadModel("checkpoint", ".obj");
 
 	camera = new Camera();
 
@@ -42,17 +43,6 @@ void GameScene::Initialize() {
 		player_->SetAABB(playerData.colliderAABB);
 
 		player_->SetRespownPosition(playerData.translation);
-		
-		//スタート地点以外はチェックポイントとして使う
-		for (uint32_t i = 1; i < levelediter.GetLevelData()->players.size(); i++) {
-			auto& playerData = levelediter.GetLevelData()->players[i];
-			CheckPoint* checkPoint = new CheckPoint();
-			checkPoint->Initialize();
-			checkPoint->SetPosition(playerData.translation);
-			checkPoint->SetAABB(playerData.colliderAABB);
-			checkPoints.push_back(checkPoint);
-		}
-
 	}
 
 
@@ -88,6 +78,18 @@ void GameScene::Initialize() {
 			stagesAABB.push_back(aabb);
 		}
 	}
+
+	//チェックポイント地点
+	if (!levelediter.GetLevelData()->objects.empty()) {
+		for (auto& checkPointData : levelediter.GetLevelData()->checkpoints) {
+			CheckPoint* checkPoint = new CheckPoint();
+			checkPoint->Initialize();
+			checkPoint->SetPosition(checkPointData.translation);
+			checkPoint->SetAABB(checkPointData.colliderAABB);
+			checkPoints.push_back(checkPoint);
+		}
+	}
+
 
 	worldTransformCamera_.Initialize();
 	camera->SetParent(&worldTransformCamera_);

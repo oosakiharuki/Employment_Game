@@ -10,7 +10,7 @@ void CheckPoint::Initialize() {
 	wt.Initialize();
 	object_ = new Object3d();
 	object_->Initialize();
-	object_->SetModelFile("playerHead.obj");
+	object_->SetModelFile("checkpoint.obj");
 }
 
 void CheckPoint::Update() {

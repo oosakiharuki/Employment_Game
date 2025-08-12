@@ -34,16 +34,19 @@ public:
 			Vector3 translation;
 			Vector3 rotation;
 		};
-		////コライダー
-		//struct ColliderData {
-		//	AABB colliderAABB;
-		//};
+		//チェックポイントの場所
+		struct CheckpointData {
+			std::string fileName;
+			Vector3 translation;
+			//Vector3 rotation;
+			AABB colliderAABB;
+		};
 
 		std::vector<ObjectData> objects;
 		std::vector<PlayerSpawnData> players;
 		std::vector<EnemySpawnData> spawnEnemies;
 		CameraInitData cameraInit;
-		//std::vector<ColliderData> colliders;
+		std::vector<CheckpointData> checkpoints;
 	};
 
 	LevelData* GetLevelData() { return levelData; }

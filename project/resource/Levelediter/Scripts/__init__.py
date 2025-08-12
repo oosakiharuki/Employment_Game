@@ -68,6 +68,8 @@ from .spawn import MYADDON_OT_create_player_spawn
 
 from .spawn import MYADDON_OT_create_enemy_spawn
 
+from .spawn import MYADDON_OT_create_check_point
+
 classes = (
     MYADDON_OT_export_scene,
     MYADDON_OT_create_ico_sphere, 
@@ -82,7 +84,8 @@ classes = (
     MYADDON_OT_spawn_import_symbol,
     MYADDON_OT_make_spawn_point,
     MYADDON_OT_create_player_spawn,
-    MYADDON_OT_create_enemy_spawn
+    MYADDON_OT_create_enemy_spawn,
+    MYADDON_OT_create_check_point,
 )
 
 def register():

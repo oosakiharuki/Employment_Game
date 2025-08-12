@@ -51,6 +51,8 @@ class MYADDON_OT_spawn_import_symbol(bpy.types.Operator):
         self.load_obj("Enemy")
         # Playerオブジェクト読み込み
         self.load_obj("Player")
+        # Checkpointオブジェクト読み込み
+        self.load_obj("Checkpoint")
         
         return {'FINISHED'}
 
@@ -103,9 +105,8 @@ class SpawnNames():
 
     names["Enemy"] = ("PrototypeEnemySpawn","EnemySpawn","enemy/enemy.obj")
     names["Player"] = ("PrototypePlayerSpawn","PlayerSpawn","player/player.obj")
+    names["Checkpoint"] = ("PrototypeCheckpoint","Checkpoint","checkpoint/checkpoint.obj")
 
-
-##ここから下が怪しい
 
 class MYADDON_OT_create_player_spawn(bpy.types.Operator):
     bl_idname = "myaddon.myaddon_ot_create_player_spawn"
@@ -129,5 +130,17 @@ class MYADDON_OT_create_enemy_spawn(bpy.types.Operator):
     def execute(self, context):
         
         bpy.ops.myaddon.myaddon_ot_make_spawn_point('EXEC_DEFAULT',type="Enemy")
+
+        return {'FINISHED'}
+    
+class MYADDON_OT_create_check_point(bpy.types.Operator):
+    bl_idname = "myaddon.myaddon_ot_create_check_point"
+    bl_label = "チェックポイントシンボルの作成"
+    bl_description = "チェックポイントのシンボルを作成します"
+    bl_options = {'REGISTER','UNDO'} 
+
+    def execute(self, context):
+        
+        bpy.ops.myaddon.myaddon_ot_make_spawn_point('EXEC_DEFAULT',type="Checkpoint")
 
         return {'FINISHED'}

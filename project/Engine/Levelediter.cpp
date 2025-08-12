@@ -183,6 +183,43 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 			cameraInitData.rotation.z = (float)transform["rotation"][1];
 
 		}
+		else if (type.compare("Checkpoint") == 0) {
+			//要素追加
+			levelData->checkpoints.emplace_back(LevelData::CheckpointData{});
+			//
+			LevelData::CheckpointData& checkpointData = levelData->checkpoints.back();
+
+			if (object.contains("file_name")) {
+				//ファイル名
+				checkpointData.fileName = object["file_name"];
+			}
+			//トランスフォームのパラメータ読み込み
+			nlohmann::json& transform = object["transform"];
+			//BlenderのY軸とZ軸と違うため y = [2],z = [1]
+			//移動
+			checkpointData.translation.x = (float)transform["translation"][0];
+			checkpointData.translation.y = (float)transform["translation"][2];
+			checkpointData.translation.z = (float)transform["translation"][1];
+			
+			//回転　必要じゃなさそう
+			//checkpointData.rotation.x = (float)transform["rotation"][0];
+			//checkpointData.rotation.y = (float)transform["rotation"][2];
+			//checkpointData.rotation.z = (float)transform["rotation"][1];
+
+			//コライダー
+			nlohmann::json& collider = object["collider"];
+
+			if (collider != nullptr) {
+				//Vectorに変換
+				Vector3 center = { (float)collider["center"][0],(float)collider["center"][2], (float)collider["center"][1] };
+				Vector3 size = { (float)collider["size"][0],(float)collider["size"][2], (float)collider["size"][1] };
+
+				//AABBに追加
+				checkpointData.colliderAABB.min = center - (size / 2.0f);
+				checkpointData.colliderAABB.max = center + (size / 2.0f);
+			}
+		}
+
 
 		//子ノード
 		if (object.contains("children")) {
