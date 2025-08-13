@@ -33,6 +33,9 @@ public:
 		struct CameraInitData {
 			Vector3 translation;
 			Vector3 rotation;
+			//移動ルート
+			Vector3 Point1;
+			Vector3 Point2;
 		};
 		//チェックポイントの場所
 		struct CheckpointData {

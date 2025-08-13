@@ -182,6 +182,18 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 			cameraInitData.rotation.y = (float)transform["rotation"][2];
 			cameraInitData.rotation.z = (float)transform["rotation"][1];
 
+			nlohmann::json& travelRoute = object["travel_route"];
+
+			if (travelRoute != nullptr) {
+				cameraInitData.Point1.x = (float)travelRoute["start"][0];
+				cameraInitData.Point1.y = (float)travelRoute["start"][2];
+				cameraInitData.Point1.z = (float)travelRoute["start"][1];
+
+				cameraInitData.Point2.x = (float)travelRoute["end"][0];
+				cameraInitData.Point2.y = (float)travelRoute["end"][2];
+				cameraInitData.Point2.z = (float)travelRoute["end"][1];
+			}
+
 		}
 		else if (type.compare("Checkpoint") == 0) {
 			//要素追加

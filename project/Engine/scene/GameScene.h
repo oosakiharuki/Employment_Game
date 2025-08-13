@@ -29,8 +29,10 @@ private:
 	XINPUT_STATE state,preState;
 
 	Camera* camera = nullptr;
-	Vector3 cameraRotate = { 0.0f,0.0f,0.0f };
-	Vector3 cameraTranslate = { 0.0f,0.0f,-15.0f };
+	Vector3 cameraRotate;//回転
+	Vector3 cameraTranslate;//座標
+	Vector3 cameraPoint1;//幅1
+	Vector3 cameraPoint2;//幅2
 	WorldTransform worldTransformCamera_;
 
 	Levelediter levelediter;

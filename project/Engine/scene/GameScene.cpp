@@ -23,6 +23,9 @@ void GameScene::Initialize() {
 	cameraRotate = levelediter.GetLevelData()->cameraInit.rotation;
 	cameraTranslate = levelediter.GetLevelData()->cameraInit.translation;
 
+	cameraPoint1 = levelediter.GetLevelData()->cameraInit.Point1;
+	cameraPoint2 = levelediter.GetLevelData()->cameraInit.Point2;
+
 	camera->SetRotate(cameraRotate);
 	camera->SetTranslate(cameraTranslate);
 
@@ -92,7 +95,10 @@ void GameScene::Initialize() {
 
 
 	worldTransformCamera_.Initialize();
-	camera->SetParent(&worldTransformCamera_);
+	worldTransformCamera_.translation_ = cameraTranslate;
+	worldTransformCamera_.rotation_ = cameraRotate;
+
+	//camera->SetParent(&worldTransformCamera_);
 
 	stageobj = new Object3d();
 	stageobj->Initialize();
@@ -275,7 +281,11 @@ void GameScene::Update() {
 	gltfOBJ->Update(wt);
 
 
-	worldTransformCamera_.translation_ = player_->GetTranslate();
+	if (cameraTranslate.x + cameraPoint1.x < player_->GetTranslate().x && cameraTranslate.x + cameraPoint2.x > player_->GetTranslate().x) {
+		worldTransformCamera_.translation_.x = player_->GetTranslate().x;
+
+		camera->SetTranslate(worldTransformCamera_.translation_);
+	}
 
 	wt.UpdateMatrix();
 	worldTransformCamera_.UpdateMatrix();
@@ -287,15 +297,19 @@ void GameScene::Update() {
 	ImGui::Text("ImGuiText");
 
 	//カメラ
-	ImGui::InputFloat3("cameraTranslate", &cameraTranslate.x);
-	ImGui::SliderFloat3("cameraTranslateSlider", &cameraTranslate.x, -30.0f, 30.0f);
+	ImGui::InputFloat3("cameraTranslate", &worldTransformCamera_.translation_.x);
+	ImGui::SliderFloat3("cameraTranslateSlider", &worldTransformCamera_.translation_.x, -30.0f, 30.0f);
 
-	ImGui::InputFloat3("cameraRotate", &cameraRotate.x);
-	ImGui::SliderFloat("cameraRotateX", &cameraRotate.x, -360.0f, 360.0f);
-	ImGui::SliderFloat("cameraRotateY", &cameraRotate.y, -360.0f, 360.0f);
-	ImGui::SliderFloat("cameraRotateZ", &cameraRotate.z, -360.0f, 360.0f);
-	camera->SetRotate(cameraRotate);
-	camera->SetTranslate(cameraTranslate);
+	ImGui::InputFloat3("cameraRotate", &worldTransformCamera_.rotation_.x);
+	ImGui::SliderFloat("cameraRotateX", &worldTransformCamera_.rotation_.x, -360.0f, 360.0f);
+	ImGui::SliderFloat("cameraRotateY", &worldTransformCamera_.rotation_.y, -360.0f, 360.0f);
+	ImGui::SliderFloat("cameraRotateZ", &worldTransformCamera_.rotation_.z, -360.0f, 360.0f);
+
+	ImGui::Text("p1 : %f %f %f", cameraPoint1.x, cameraPoint1.y, cameraPoint1.z);
+	ImGui::Text("p2 : %f %f %f", cameraPoint2.x, cameraPoint2.y, cameraPoint2.z);
+
+	camera->SetRotate(worldTransformCamera_.rotation_);
+	camera->SetTranslate(worldTransformCamera_.translation_);
 
 	ImGui::SliderFloat("volume", &volume, 0.0f, 1.0f);
 
@@ -303,6 +317,7 @@ void GameScene::Update() {
 	ImGui::End();
 
 #endif //  USE_IMGUI
+
 
 	Audio::GetInstance()->ControlVolume(BGMData_, volume);
 }

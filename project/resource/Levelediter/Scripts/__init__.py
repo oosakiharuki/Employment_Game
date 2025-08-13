@@ -70,6 +70,11 @@ from .spawn import MYADDON_OT_create_enemy_spawn
 
 from .spawn import MYADDON_OT_create_check_point
 
+from .add_travel_route import MYADDON_OT_add_travel_route
+
+from .travel_route import OBJECT_PT_travel_route
+
+
 classes = (
     MYADDON_OT_export_scene,
     MYADDON_OT_create_ico_sphere, 
@@ -81,6 +86,8 @@ classes = (
     OBJECT_PT_collider,
     MYADDON_OT_add_disabled,
     OBJECT_PT_disabled,
+    MYADDON_OT_add_travel_route,
+    OBJECT_PT_travel_route,
     MYADDON_OT_spawn_import_symbol,
     MYADDON_OT_make_spawn_point,
     MYADDON_OT_create_player_spawn,

@@ -91,6 +91,14 @@ class MYADDON_OT_export_scene(bpy.types.Operator,bpy_extras.io_utils.ExportHelpe
             collider["size"] = object["collider_size"].to_list()
             json_object["collider"] = collider
 
+        # 移動ルート
+        if "travel_route" in object:
+            travel_route = dict()
+            travel_route["start"] = object["start"].to_list()
+            travel_route["end"] = object["end"].to_list()
+            json_object["travel_route"] = collider
+
+
         #1個分のjsonオブジェクトを親オブジェクトに
         data_parent.append(json_object)
 
@@ -144,6 +152,15 @@ class MYADDON_OT_export_scene(bpy.types.Operator,bpy_extras.io_utils.ExportHelpe
             temp_str %= (object["collider_size"][0],object["collider_size"][1],object["collider_size"][2]) 
             self.write_and_print(file, temp_str)
         
+        if "travel_route" in object:
+            self.write_and_print(file, indent + "C %s" % object["travel_route"])
+            temp_str = indent + "CC %f %f %f"
+            temp_str %= (object["start"][0],object["start"][1],object["start"][2])
+            self.write_and_print(file, temp_str)
+            temp_str = indent + "CC %f %f %f"
+            temp_str %= (object["end"][0],object["end"][1],object["end"][2])
+            self.write_and_print(file, temp_str)
+
         self.write_and_print(file,indent + 'END')
         self.write_and_print(file,'')
 
