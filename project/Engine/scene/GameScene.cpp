@@ -280,10 +280,17 @@ void GameScene::Update() {
 
 	gltfOBJ->Update(wt);
 
-
+	//カメラの移動範囲
 	if (cameraTranslate.x + cameraPoint1.x < player_->GetTranslate().x && cameraTranslate.x + cameraPoint2.x > player_->GetTranslate().x) {
 		worldTransformCamera_.translation_.x = player_->GetTranslate().x;
-
+		camera->SetTranslate(worldTransformCamera_.translation_);
+	}
+	else if(cameraTranslate.x + cameraPoint1.x >= player_->GetTranslate().x){
+		worldTransformCamera_.translation_.x = cameraTranslate.x + cameraPoint1.x;
+		camera->SetTranslate(worldTransformCamera_.translation_);
+	}
+	else if (cameraTranslate.x + cameraPoint2.x <= player_->GetTranslate().x) {
+		worldTransformCamera_.translation_.x = cameraTranslate.x + cameraPoint2.x;
 		camera->SetTranslate(worldTransformCamera_.translation_);
 	}
 

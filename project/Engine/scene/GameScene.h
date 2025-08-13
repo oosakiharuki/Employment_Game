@@ -31,6 +31,7 @@ private:
 	Camera* camera = nullptr;
 	Vector3 cameraRotate;//回転
 	Vector3 cameraTranslate;//座標
+	//カメラ移動範囲
 	Vector3 cameraPoint1;//幅1
 	Vector3 cameraPoint2;//幅2
 	WorldTransform worldTransformCamera_;
