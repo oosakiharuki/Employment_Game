@@ -287,6 +287,11 @@ void GameScene::Update() {
 		camera->SetTranslate(worldTransformCamera_.translation_);
 	}
 
+	if (player_->GetTranslate().y < -10.0f) {
+		player_->IsDamage();
+	}
+
+
 	wt.UpdateMatrix();
 	worldTransformCamera_.UpdateMatrix();
 
