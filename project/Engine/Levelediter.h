@@ -28,6 +28,9 @@ public:
 			Vector3 translation;
 			Vector3 rotation;
 			AABB colliderAABB;
+			//移動ルート
+			Vector3 Point1;
+			Vector3 Point2;
 		};
 		//カメラの初期位置
 		struct CameraInitData {

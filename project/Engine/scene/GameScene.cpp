@@ -65,6 +65,11 @@ void GameScene::Initialize() {
 			enemy->SetTranslate(enemyData.translation);
 			enemy->SetRotate(enemyData.rotation);
 			enemy->SetAABB(enemyData.colliderAABB);
+			enemy->SetRoutePoint1(enemyData.Point1);
+			enemy->SetRoutePoint2(enemyData.Point2);
+
+			enemy->DirectionDegree();
+
 			enemies.push_back(enemy);
 		}
 	}

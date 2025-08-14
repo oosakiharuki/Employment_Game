@@ -165,6 +165,19 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				enemySpawnData.colliderAABB.min = center - (size / 2.0f);
 				enemySpawnData.colliderAABB.max = center + (size / 2.0f);
 			}
+
+			//移動ルート
+			nlohmann::json& travelRoute = object["travel_route"];
+
+			if (travelRoute != nullptr) {
+				enemySpawnData.Point1.x = (float)travelRoute["start"][0];
+				enemySpawnData.Point1.y = (float)travelRoute["start"][2];
+				enemySpawnData.Point1.z = (float)travelRoute["start"][1];
+
+				enemySpawnData.Point2.x = (float)travelRoute["end"][0];
+				enemySpawnData.Point2.y = (float)travelRoute["end"][2];
+				enemySpawnData.Point2.z = (float)travelRoute["end"][1];
+			}
 		}
 		else if (type.compare("CAMERA") == 0) {
 			//要素追加
@@ -182,6 +195,7 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 			cameraInitData.rotation.y = (float)transform["rotation"][2];
 			cameraInitData.rotation.z = (float)transform["rotation"][1];
 
+			//移動ルート
 			nlohmann::json& travelRoute = object["travel_route"];
 
 			if (travelRoute != nullptr) {

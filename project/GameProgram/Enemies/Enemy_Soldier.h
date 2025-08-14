@@ -31,4 +31,8 @@ private:
 	float rotateTimer = 0.0f;
 	const float rotateTimeMax = 3.0f;
 
+	bool ChangeDirection = false;
+
+	Vector3 speed = { 0.03f,0.0f,0.0f };
+	Vector3 move = { 0,0,0 };
 };

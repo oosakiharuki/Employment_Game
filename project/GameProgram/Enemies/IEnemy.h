@@ -16,7 +16,10 @@ public:
 	virtual void Attack() = 0;
 
 
-	void SetTranslate(Vector3 translate) { worldTransform.translation_ = translate; }
+	void SetTranslate(Vector3 translate) { 
+		worldTransform.translation_ = translate;
+		init_point= translate;
+	}
 	void SetRotate(Vector3 rotate) { worldTransform.rotation_ = rotate; }
 
 	AABB GetAABB();
@@ -30,6 +33,13 @@ public:
 
 	bool GetDeleteEnemy() { return deleteEnemy; }
 	void RespownEnemy();
+
+	void SetRoutePoint1(Vector3 point1) { route_point1 = point1; }
+	void SetRoutePoint2(Vector3 point2) { route_point2 = point2; }
+
+
+	//角度で向きを変更
+	void DirectionDegree();
 
 protected:
 	Object3d* object;
@@ -57,13 +67,14 @@ protected:
 	};
 	Direction direction;
 
-	//角度で向きを変更
-	void DirectionDegree();
-
 	uint32_t maxHp;
 	uint32_t hp;
 
 	bool isDead = false;
 	bool deleteEnemy = false;
+
+	Vector3 init_point;
+	Vector3 route_point1;
+	Vector3 route_point2;
 };
 
