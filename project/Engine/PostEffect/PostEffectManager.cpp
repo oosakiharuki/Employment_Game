@@ -16,6 +16,9 @@ void PostEffectManager::Finalize() {
 	effectArr_[currentNo_]->Finalize();
 	delete effectArr_[currentNo_];
 
+	effectArr_DepthOutline->Finalize();
+	delete effectArr_DepthOutline;
+
 	delete instance;
 	instance = nullptr;
 }
@@ -68,7 +71,7 @@ void PostEffectManager::Change(int prev, int current) {
 void PostEffectManager::Initialize(DirectXCommon* dxCommon) {
 	
 	
-	effectArr_[Mode_DepthBasedOutline] = new DepthBasedOutline();
+	effectArr_[Mode_DepthBasedOutline] = new Grayscale();
 
 	prevNo_ = 0;
 	currentNo_ = Mode_DepthBasedOutline;
@@ -76,6 +79,10 @@ void PostEffectManager::Initialize(DirectXCommon* dxCommon) {
 
 	dxCommon_ = dxCommon;
 	effectArr_[currentNo_]->Initialize(dxCommon_);	
+
+	effectArr_DepthOutline = new RadialBlur();
+	effectArr_DepthOutline->Initialize(dxCommon_);
+
 }
 
 void PostEffectManager::Update() {
@@ -95,6 +102,8 @@ void PostEffectManager::Update() {
 	effectArr_[currentNo_]->EffectUpdate();//更新処理
 	effectArr_[currentNo_]->ChangeNumber();//ポストエフェクト変更処理
 
+	effectArr_DepthOutline->EffectUpdate();
+
 #ifdef _DEBUG
 	ImGui::End();
 #endif	
@@ -102,5 +111,6 @@ void PostEffectManager::Update() {
 }
 
 void PostEffectManager::Command() {
+	effectArr_DepthOutline->Command();
 	effectArr_[currentNo_]->Command();
 }

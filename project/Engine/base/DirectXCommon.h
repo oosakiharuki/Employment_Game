@@ -132,7 +132,6 @@ private:
 
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[MaxResource];
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandlesRT;
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandlesOutline;
 
 	//ビューポート
 	D3D12_VIEWPORT viewport;
