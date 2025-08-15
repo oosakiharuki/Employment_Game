@@ -29,7 +29,7 @@ private:
 	static const uint32_t effectNum = Max;
 
 	IPostEffects* effectArr_[effectNum];
-	IPostEffects* effectArr_DepthOutline;
+	//IPostEffects* effectArr_DepthOutline;
 
 	int currentNo_;//現在シーン
 	int prevNo_;//前シーン

@@ -3,6 +3,7 @@
 #include "Object3d.h"
 #include "PlayerBullet.h"
 #include "Umbrella.h"
+#include "Audio.h"
 
 class Player {
 public:
@@ -53,6 +54,7 @@ public:
 	bool GetIsShield() { return isShield; }
 
 	void IsDamage();
+	void IsFall();//落ちたときの処理
 
 	void KnockBackPlayer(const Vector3 Power,const float TimerMax);
 
@@ -65,7 +67,12 @@ public:
 	void DeadPlayer();
 	bool GetIsPlayerDown() { return isPlayerDown; }
 	//復活
-	void IsRespown() { isPlayerDown = false; }
+	bool GetIsRespown() { return isRespown; }
+	//全ての敵が初期地に戻った時
+	void AllRespownEnd() { 
+		isRespown = false;
+		isPlayerDown = false;
+	}
 
 private:
 	Object3d* object;
@@ -86,15 +93,15 @@ private:
 	/// 弾丸
 	std::list<PlayerBullet*> bullets_;
 
-	Direction direction = Direction::right;
-	Range range = Range::Right;
-	WorldTransform wtGun;
-
-	bool isChangeDirection = false;
-
 	float coolTimer = 0.0f;
 	float coolMax = 0.5f;
 	uint32_t bulletCount = 3;
+	WorldTransform wtGun;
+	//プレイヤーの向き
+	Direction direction = Direction::right;
+	Range range = Range::Right;
+
+	bool isChangeDirection = false;
 
 	/// 傘のシールド
 	bool isShield = false;
@@ -114,10 +121,21 @@ private:
 	bool isUmbrellaFall = false;
 
 	/// Hp
-	uint32_t Hp = 10;
+	uint32_t MaxHp = 3;
+	uint32_t Hp = MaxHp;
+	//ダメージを食らった後の無敵時間
+	float infinityTimer = 0.0f;
+	const float infinityTimeMax = 1.0f;
+
+
 	float deadTimer = 0.0f;
 	float deadTimeMax = 2.0f;
 
 	Vector3 respownPosition;
 	bool isPlayerDown = false;
+
+	bool isRespown = false;
+
+	//サウンド
+	SoundData hitSound;
 };

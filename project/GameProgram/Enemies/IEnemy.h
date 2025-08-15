@@ -20,7 +20,10 @@ public:
 		worldTransform.translation_ = translate;
 		init_point= translate;
 	}
-	void SetRotate(Vector3 rotate) { worldTransform.rotation_ = rotate; }
+	void SetRotate(Vector3 rotate) { 
+		worldTransform.rotation_ = rotate;
+		init_rotate = rotate;
+	}
 
 	AABB GetAABB();
 	void SetAABB(AABB aabb) { enemyAABB = aabb; }
@@ -32,7 +35,7 @@ public:
 	void SetPlayer(Player* player) { player_ = player; }
 
 	bool GetDeleteEnemy() { return deleteEnemy; }
-	void RespownEnemy();
+	virtual void RespownEnemy() = 0;
 
 	void SetRoutePoint1(Vector3 point1) { route_point1 = point1; }
 	void SetRoutePoint2(Vector3 point2) { route_point2 = point2; }
@@ -73,7 +76,11 @@ protected:
 	bool isDead = false;
 	bool deleteEnemy = false;
 
+	//初期位置保管
 	Vector3 init_point;
+	Vector3 init_rotate;
+
+	//動く範囲
 	Vector3 route_point1;
 	Vector3 route_point2;
 };

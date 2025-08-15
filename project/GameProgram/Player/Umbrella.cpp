@@ -24,6 +24,8 @@ void Umbrella::Initialize() {
 
 void Umbrella::Update() {
 	
+#ifdef _DEBUG
+
 	ImGui::Begin("um");
 
 	ImGui::InputFloat3("worldTransform.translate", &wt.translation_.x);
@@ -35,6 +37,8 @@ void Umbrella::Update() {
 	ImGui::SliderFloat("RotateZ", &wt.rotation_.z, -360.0f, 360.0f);
 
 	ImGui::End();
+
+#endif // _DEBUG
 
 	wt.UpdateMatrix();
 }

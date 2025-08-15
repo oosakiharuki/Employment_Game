@@ -15,6 +15,8 @@ public:
 
 	void Fire();
 
+	void RespownEnemy() override;
+
 private:
 
 	float coolTime = 0.0f;

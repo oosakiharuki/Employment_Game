@@ -29,7 +29,7 @@ void IEnemy::PlayerTarget() {
 		direction = right;
 	}
 
-	if (IsCollisionAABB(player_->GetAABB(), eyeAABB)) {
+	if (IsCollisionAABB(player_->GetAABB(), eyeAABB) && !player_->GetIsPlayerDown()) {
 		isFoundTarget = true;
 	}
 	else {
@@ -68,10 +68,4 @@ void IEnemy::DirectionDegree() {
 	else if (worldTransform.rotation_.y <= 360.0f) {
 		direction = left;
 	}
-}
-
-void IEnemy::RespownEnemy() { 
-	isDead = false;
-	deleteEnemy = false;
-	hp = maxHp;
 }

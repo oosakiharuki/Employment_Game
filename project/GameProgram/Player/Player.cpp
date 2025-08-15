@@ -28,7 +28,7 @@ void Player::Initialize() {
 	wtGun.Initialize();
 	wtGun.rotation_.y = 90.0f;
 
-
+	hitSound = Audio::GetInstance()->LoadWave("resource/Sound/damage.wav");
 
 }
 
@@ -241,6 +241,13 @@ void Player::Update() {
 
 	}
 
+	if (infinityTimer >= infinityTimeMax) {
+		infinityTimer = infinityTimeMax;
+	}
+	else {
+		infinityTimer += deltaTime;
+	}
+
 #ifdef  USE_IMGUI
 
 	ImGui::Begin("player");
@@ -322,10 +329,22 @@ void Player::ShootBullet() {
 }
 
 void Player::IsDamage() {
+	if (infinityTimer >= infinityTimeMax) {
+		if (Hp == 0) {
+			return;
+		}
+		Hp--;
+		Audio::GetInstance()->SoundPlayWave(hitSound, 0.4f);
+		infinityTimer = 0.0f;
+	}
+}
+
+void Player::IsFall() {
 	if (Hp == 0) {
 		return;
 	}
 	Hp--;
+	Audio::GetInstance()->SoundPlayWave(hitSound, 0.4f);
 }
 
 void Player::KnockBackPlayer(const Vector3 Power, const float TimerMax) {
@@ -348,12 +367,11 @@ Vector3 Player::GetWorldPosition() {
 void Player::DeadPlayer() {
 	if (Hp == 0) {
 		deadTimer += deltaTime;
-
-
+		isPlayerDown = true;
 		if (deadTimer >= deadTimeMax) {
-			Hp = 10;
+			Hp = MaxHp;
 			worldTransform.translation_ = respownPosition;
-			isPlayerDown = true;
+			isRespown = true;
 			deadTimer = 0.0f;
 		}
 	}

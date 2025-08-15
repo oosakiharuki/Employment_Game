@@ -70,6 +70,7 @@ void Enemy_Turret::Update() {
 		return false;
 	});
 
+#ifdef _DEBUG
 
 	ImGui::Begin("Enemy_Turret");
 
@@ -81,6 +82,8 @@ void Enemy_Turret::Update() {
 
 
 	ImGui::End();
+
+#endif // _DEBUG
 
 	worldTransform.UpdateMatrix();
 }
@@ -141,4 +144,10 @@ void Enemy_Turret::Fire() {
 	bullet->SetTranslate(translate);
 	bullet->SetVelocty(velocity);
 	bullets_.push_back(bullet);
+}
+
+void Enemy_Turret::RespownEnemy() {
+	isDead = false;
+	deleteEnemy = false;
+	hp = maxHp;
 }

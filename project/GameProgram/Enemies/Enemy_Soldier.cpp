@@ -65,6 +65,9 @@ void Enemy_Soldier::Update() {
 
 		if (isFoundTarget) {
 			Attack();
+		}else{
+			rapidCount = 0;
+			coolTime = 0;
 		}
 	}
 
@@ -80,6 +83,7 @@ void Enemy_Soldier::Update() {
 		return false;
 		});
 
+#ifdef _DEBUG
 
 	ImGui::Begin("Enemy_soldier");
 	
@@ -94,6 +98,8 @@ void Enemy_Soldier::Update() {
 	ImGui::Text("route_point2 : %f,%f,%f", route_point2.x, route_point2.y, route_point2.z);
 
 	ImGui::End();
+
+#endif // _DEBUG
 
 	worldTransform.UpdateMatrix();
 }
@@ -163,4 +169,15 @@ void Enemy_Soldier::Fire() {
 	bullet->SetTranslate(enemyPosition);
 	bullet->SetVelocty(velocity);
 	bullets_.push_back(bullet);
+}
+
+void Enemy_Soldier::RespownEnemy() {
+	isDead = false;
+	deleteEnemy = false;
+	hp = maxHp;
+	//blenderで配置した初期位置に戻る
+	worldTransform.translation_ = init_point;
+	worldTransform.rotation_ = init_rotate;
+
+	move = { 0,0,0 };
 }

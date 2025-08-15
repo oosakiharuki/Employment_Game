@@ -168,7 +168,7 @@ void GameScene::Update() {
 				player_->KnockBackPlayer(Vector3(0.0f, 0.0f, 0.3f), 0.0f);
 			}
 
-			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetAABB())) {
+			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetAABB()) && !player_->GetIsPlayerDown()) {
 				bulletE->IsHit();
 				player_->IsDamage();
 			}
@@ -261,11 +261,11 @@ void GameScene::Update() {
 	}
 
 	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
-	if (player_->GetIsPlayerDown()) {
+	if (player_->GetIsPlayerDown() && player_->GetIsRespown()) {
 		for (auto& enemy : enemies) {
 			enemy->RespownEnemy();
 		}
-		player_->IsRespown();
+		player_->AllRespownEnd();
 	}
 	
 	//リスポーン地点を変更前に倒した敵は復活しない
@@ -300,7 +300,7 @@ void GameScene::Update() {
 	}
 
 	if (player_->GetTranslate().y < -10.0f) {
-		player_->IsDamage();
+		player_->IsFall();
 	}
 
 

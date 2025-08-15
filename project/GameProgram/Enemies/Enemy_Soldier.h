@@ -14,6 +14,7 @@ public:
 
 	void Fire();
 
+	void RespownEnemy() override;
 
 private:
 
