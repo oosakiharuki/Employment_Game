@@ -21,11 +21,9 @@ ParticleManager* ParticleManager::GetInstance() {
 void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager) {
 	particleCommon = ParticleCommon::GetInstance(); 
 	this->srvManager = srvManager;
-	particleCommon->Initialize(dxCommon);
 }
 
 void ParticleManager::Finalize() {
-	particleCommon->Finalize();
 	delete instance;
 	instance = nullptr;
 }
@@ -90,7 +88,7 @@ void ParticleManager::CreateParticleGroup(const std::string name, const std::str
 		vertexData5.position = { -sinNext * kTopRadius,kHeight, cosNext * kTopRadius,1.0f };
 		vertexData5.texcoord = { uNext,0.0f };
 		vertexData5.normal = { -sinNext,0.0f,cosNext };
-		
+
 		vertexData6.position = { -sinNext * kBottomRadius,0.0f, cosNext * kBottomRadius,1.0f };
 		vertexData6.texcoord = { uNext,1.0f };
 		vertexData6.normal = { -sinNext,0.0f,cosNext };
@@ -107,10 +105,10 @@ void ParticleManager::CreateParticleGroup(const std::string name, const std::str
 	}
 
 	particleG.modelData.material.textureFilePath = textureFilePath;
-
+	
 
 	particleG.resource = particleCommon->GetDxCommon()->CreateBufferResource(sizeof(ParticleForGPU) * particleG.kNumInstance);
-
+	
 
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
@@ -125,7 +123,7 @@ void ParticleManager::CreateParticleGroup(const std::string name, const std::str
 	particleG.srvIndex = srvManager->Allocate();
 	particleG.srvHandleCPU = srvManager->GetCPUDescriptorHandle(particleG.srvIndex);
 	particleG.srvHandleGPU = srvManager->GetGPUDescriptorHandle(particleG.srvIndex);
-
+	
 
 	//SRVの生成
 	particleCommon->GetDxCommon()->GetDevice()->CreateShaderResourceView(particleG.resource.Get(), &srvDesc, particleG.srvHandleCPU);
@@ -174,20 +172,3 @@ std::list<Particles> ParticleManager::GetParticle(const std::string filePath) {
 	return particleG.particles;
 }
 
-
-
-void ParticleManager::Emit(const std::string name, const Vector3& position, uint32_t count, ParticleType type) {
-	ParticleGroup& particleG = particleGroups[name];
-
-
-	emitter.transform.translate = position;
-	emitter.count = count;
-
-	//
-	std::random_device seedGenerator;
-	std::mt19937 randomEngine(seedGenerator());
-
-	particleG.particles = particleEmit.MakeEmit(emitter, randomEngine,type);
-	//emitter.frequencyTime -= emitter.frequency;
-	
-}

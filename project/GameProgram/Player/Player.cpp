@@ -13,6 +13,7 @@ Player::~Player() {
 		delete bullet;
 	}
 	delete umbrella;
+	delete particle_walk;
 }
 
 void Player::Initialize() {
@@ -30,6 +31,10 @@ void Player::Initialize() {
 
 	hitSound = Audio::GetInstance()->LoadWave("resource/Sound/damage.wav");
 
+
+	particle_walk = new Particle();
+	particle_walk->Initialize("resource/Sprite/gradationLine.png",ParticleType::Cylinder);
+	particle_walk->ChangeMode(BornParticle::Stop);
 }
 
 void Player::Update() {
@@ -248,6 +253,25 @@ void Player::Update() {
 		infinityTimer += deltaTime;
 	}
 
+	particle_walk->Update();
+
+
+	//移動しているとパーティクルを発生
+	if (pushA || pushW || pushS || pushD) {
+		// 通常のパーティクル
+		particle_walk->SetParticleCount(2);
+		particle_walk->SetFrequency(0.25f);
+		particle_walk->ChangeMode(BornParticle::TimerMode);
+		particle_walk->SetTranslate(worldTransform.translation_);
+	}
+	else {
+		particle_walk->ChangeMode(BornParticle::Stop);
+	}
+
+
+
+
+
 #ifdef  USE_IMGUI
 
 	ImGui::Begin("player");
@@ -294,6 +318,11 @@ void Player::Draw() {
 
 	umbrella->Draw();
 }
+
+void Player::DrawP() {
+	particle_walk->Draw();
+}
+
 
 AABB Player::GetAABB() {
 	AABB aabb;

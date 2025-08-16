@@ -4,6 +4,7 @@
 #include "PlayerBullet.h"
 #include "Umbrella.h"
 #include "Audio.h"
+#include "Particle.h"
 
 class Player {
 public:
@@ -12,6 +13,7 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
+	void DrawP();
 
 	Vector3 GetTranslate() { return worldTransform.translation_; }
 	void SetTranslate(Vector3 translate) { worldTransform.translation_ = translate; }
@@ -138,4 +140,8 @@ private:
 
 	//サウンド
 	SoundData hitSound;
+
+	//パーティクル
+	Particle* particle_walk;
+	//Particle* particle_fire;
 };

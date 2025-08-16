@@ -365,7 +365,7 @@ void GameScene::Draw() {
 	}
 	//パーティクル描画処理
 	ParticleCommon::GetInstance()->Command();
-
+	player_->DrawP();
 
 	//スプライト描画処理(UI用)
 	SpriteCommon::GetInstance()->Command();

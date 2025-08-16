@@ -431,6 +431,9 @@
     <ClInclude Include="CheckPoint.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\3d\_Particle\ParticleNumber.h">
+      <Filter>ソース ファイル\Engine\3d\_Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resource\shaders\Particle.hlsli">

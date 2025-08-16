@@ -30,6 +30,12 @@ struct AccelerationField {
 	AABB area;
 };
 
+enum class BornParticle {
+	TimerMode, //タイマーで出てくる
+	MomentMode,//瞬間的に出てくる
+	Stop,
+};
+
 enum class ParticleType {
 	Normal,
 	Plane,
@@ -37,23 +43,15 @@ enum class ParticleType {
 	Cylinder
 };
 
-
-
 class Particle{
 public:
-	void Initialize(ParticleCommon* particleCommon, const std::string& fileName);
+	~Particle(); // デストラクタを追加
+	void Initialize(std::string textureFile, ParticleType type);
 	void Update();
 	void Draw();
 
-	//void SetModel(Model* model) { this->model = model; }
-	//void SetModelFile(const std::string& filePath);
-
 	void SetScale(const Vector3& scale) { emitter.transform.scale = scale; }
 	const Vector3& GetScale() const { return emitter.transform.scale; }
-
-	//未完
-	//void SetRotate(const Vector3& rotate) { transform.rotate = rotate; }
-	//const Vector3& GetRotate() const { return transform.rotate; }
 
 	const Vector3& GetTranslate()const { return emitter.transform.translate; }
 	void SetTranslate(const Vector3& translate) { emitter.transform.translate = translate; }
@@ -63,19 +61,20 @@ public:
 	void SetCamera(Camera* camera) { this->camera = camera; }
 
 
-	//static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
-	//static ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 
-	//Particles MakeNewParticle(std::mt19937& randomEngine,const Vector3& translate);
-	//std::list<Particles> MakeEmit(const Emitter& emitter, std::mt19937& randomEngine);
 
 	bool IsCollision(const AABB& aabb, const Vector3& point);
+
+	void ChangeMode(BornParticle mode) { bornP = mode; }
+	void SetParticleCount(uint32_t countnum) { emitter.count = countnum; }
+	void Emit();
 
 private:
 	ParticleCommon* particleCommon = nullptr;
 
 	
 	std::string fileName;
+	std::string textureFile;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
@@ -102,20 +101,21 @@ private:
 
 	static const uint32_t kNumMaxInstance = 100;
 
-	//Transform transform[kNumMaxInstance];
-
-	//Particles particles[kNumMaxInstance];
 	std::list<Particles> particles;
 	uint32_t numInstance = 0;
+
+	Transform transformL;
 
 	Camera* camera = nullptr;
 
 	ModelData modelData;
-
-	//エミッタ　
 	Emitter emitter{};
 
-	//std::list<Particles> MakeEmit(const Emitter& emitter, std::mt19937& randomEngine);
 
 	AccelerationField accelerationField;
+
+	BornParticle bornP = BornParticle::TimerMode;
+	ParticleType particleType = ParticleType::Normal;
+
+	uint32_t number = 0;
 };

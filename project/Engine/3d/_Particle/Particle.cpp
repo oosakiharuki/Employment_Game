@@ -4,19 +4,63 @@
 #include "Camera.h"
 #include <fstream>
 #include <sstream>
+#include <mutex>
 
 #include <numbers>
 #include "ModelManager.h"
 
+#include <string>
+#include "ParticleNumber.h"
+
 using namespace MyMath;
 
-void Particle::Initialize(ParticleCommon* ParticleCommon, const std::string& fileName) {
-	this->particleCommon = ParticleCommon;
+Particle::~Particle() {
+	// リソースのアンマップ
+	if (vertexResource && vertexData) {
+		vertexResource->Unmap(0, nullptr);
+		vertexData = nullptr;
+	}
+	if (materialResource && materialData) {
+		materialResource->Unmap(0, nullptr);
+		materialData = nullptr;
+	}
+	if (wvpResource && wvpData) {
+		wvpResource->Unmap(0, nullptr);
+		wvpData = nullptr;
+	}
+	if (directionalLightSphereResource && directionalLightSphereData) {
+		directionalLightSphereResource->Unmap(0, nullptr);
+		directionalLightSphereData = nullptr;
+	}
+}
+
+void Particle::Initialize(std::string textureFile , ParticleType type) {
+	this->particleCommon = ParticleCommon::GetInstance();
 	this->camera = particleCommon->GetDefaultCamera();
-	this->fileName = fileName;
+	
+	//パーティクルの発生源数を増やす
+	const uint32_t MAX_PARTICLE_GROUPS = 100; // パーティクルグループの最大数
+	
+	// スレッドセーフなインクリメント
+	static std::mutex particleNumMutex;
+	{
+		std::lock_guard<std::mutex> lock(particleNumMutex);
+		
+		// パーティクル番号が上限に達した場合はリセット
+		if (ParticleNum::number <= MAX_PARTICLE_GROUPS) {
+			ParticleNum::number++;
+		}
+		number = ParticleNum::number;
+	}
+
+	ParticleManager::GetInstance()->CreateParticleGroup(std::to_string(number),textureFile);
+
+	this->fileName = std::to_string(number);
+
+	this->textureFile = textureFile;
 
 	modelData = ParticleManager::GetInstance()->GetModelData(fileName);
-
+	
 	vertexResource = particleCommon->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
 
 	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
@@ -63,7 +107,7 @@ void Particle::Initialize(ParticleCommon* ParticleCommon, const std::string& fil
 	directionalLightSphereData->intensity = 1.0f;
 
 	//エミッター
-	emitter.transform.translate = { 0.0f,0.0f,0.0f };
+	emitter.transform.translate = { 0.0f,0.0f,-3.0f };
 	emitter.transform.rotate = { 0.0f,0.0f,0.0f };
 	emitter.transform.scale = { 1.0f,1.0f,1.0f };
 	emitter.count = 3;
@@ -75,24 +119,69 @@ void Particle::Initialize(ParticleCommon* ParticleCommon, const std::string& fil
 	accelerationField.area.min = { -1.0f,-1.0f,-1.0f };
 	accelerationField.area.max = { 1.0f,1.0f,1.0f };
 
-	ParticleManager::GetInstance()->Emit(fileName, emitter.transform.translate, emitter.count, ParticleType::Cylinder);
-	particles.splice(particles.end(), ParticleManager::GetInstance()->GetParticle(fileName));
+	particleType = type;
 }
 
 void Particle::Update() {
 
-
 	const float kDeltaTime = 1.0f / 60.0f;
+
+	switch (bornP)
+	{
+	case BornParticle::TimerMode:
+
+		emitter.frequencyTime += kDeltaTime;
+
+		if (emitter.frequency <= emitter.frequencyTime) {
+			//発生処理
+			Emit();
+			//particles.splice(particles.end(), ParticleManager::GetInstance()->GetParticle(fileName));
+			emitter.frequencyTime -= emitter.frequency;
+		}
+		break;
+	case BornParticle::MomentMode:
+
+		//発生処理
+		Emit();
+		//particles.splice(particles.end(), ParticleManager::GetInstance()->GetParticle(fileName));
+		bornP = BornParticle::Stop;
+
+		break;
+	case BornParticle::Stop:
+		break;
+	}
 
 	numInstance = 0;
 	for (std::list<Particles>::iterator particleIterator = particles.begin();
 		particleIterator != particles.end(); ) {
 
-		if (IsCollision(accelerationField.area, (*particleIterator).transform.translate)) {
-			//(*particleIterator).velocity += accelerationField.acceleration * kDeltaTime;
+		if ((*particleIterator).lifeTime <= (*particleIterator).currentTime) {
+			particleIterator = particles.erase(particleIterator);
+			continue;
 		}
 
-		(*particleIterator).transform.rotate += (*particleIterator).velocity * kDeltaTime;
+
+
+
+		float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
+
+		if (IsCollision(accelerationField.area, (*particleIterator).transform.translate)) {
+			(*particleIterator).velocity += accelerationField.acceleration * kDeltaTime;
+		}
+
+		(*particleIterator).transform.translate += (*particleIterator).velocity * kDeltaTime;
+	
+		if (particleType == ParticleType::Normal) {
+			if ((*particleIterator).transform.scale.x > 0) {
+				(*particleIterator).transform.scale.x -= 0.5f * kDeltaTime;
+			}
+			if ((*particleIterator).transform.scale.y > 0) {
+				(*particleIterator).transform.scale.y -= 0.5f * kDeltaTime;
+			}
+			if ((*particleIterator).transform.scale.z > 0) {
+				(*particleIterator).transform.scale.z -= 0.5f * kDeltaTime;
+			}
+		}
 
 		(*particleIterator).currentTime += kDeltaTime;
 
@@ -104,19 +193,20 @@ void Particle::Update() {
 		Matrix4x4 rotateY = MakeRotateYMatrix((*particleIterator).transform.rotate.y);
 		Matrix4x4 rotateZ = MakeRotateZMatrix((*particleIterator).transform.rotate.z);
 		//全てまとめた
-		Matrix4x4 rotateXYZ = Multiply(Multiply(rotateX,rotateY), rotateZ);
+		Matrix4x4 rotateXYZ = Multiply(Multiply(rotateX, rotateY), rotateZ);
 
 		//ビルボード
 		Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
-		
-		Matrix4x4 billboardMatrix = Multiply(Multiply(backToFrontMatrix,rotateXYZ), camera->GetWorldMatrix());
+
+		Matrix4x4 billboardMatrix = Multiply(Multiply(backToFrontMatrix, rotateXYZ), camera->GetWorldMatrix());
 		billboardMatrix.m[3][0] = 0.0f;
 		billboardMatrix.m[3][1] = 0.0f;
 		billboardMatrix.m[3][2] = 0.0f;
 
-
-		Matrix4x4 worldMatrix = Multiply(scaleMatrix, Multiply(rotateXYZ, translateMatrix));
+		Matrix4x4 worldMatrix = Multiply(scaleMatrix, Multiply(billboardMatrix, translateMatrix));
 		//Matrix4x4 worldMatrix = Multiply(billboardMatrix, MakeAffineMatrix((*particleIterator).transform.scale, (*particleIterator).transform.rotate, (*particleIterator).transform.translate));
+		//通常
+		worldMatrix = MakeAffineMatrix((*particleIterator).transform.scale, (*particleIterator).transform.rotate, (*particleIterator).transform.translate);
 
 
 		Matrix4x4 WorldViewProjectionMatrix;
@@ -129,19 +219,25 @@ void Particle::Update() {
 			WorldViewProjectionMatrix = worldMatrix;
 		}
 
-		wvpData[numInstance].World = worldMatrix;
+		// wvpDataのnullチェック
+		if (wvpData) {
+			wvpData[numInstance].World = worldMatrix;
 
-		wvpData[numInstance].color = (*particleIterator).color;
-		//wvpData[numInstance].color.s = alpha;
+			wvpData[numInstance].color = (*particleIterator).color;
+			wvpData[numInstance].color.s = alpha;
 
-		if (numInstance < kNumMaxInstance) {
-			wvpData[numInstance].WVP = WorldViewProjectionMatrix;
-			++numInstance;
+			if (numInstance < kNumMaxInstance) {
+				wvpData[numInstance].WVP = WorldViewProjectionMatrix;
+				++numInstance;
+			}
 		}
 		++particleIterator;
 	}
 
-	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
+	// directionalLightSphereDataのnullチェック
+	if (directionalLightSphereData) {
+		directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
+	}
 
 }
 
@@ -150,7 +246,7 @@ void Particle::Draw() {
 	particleCommon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 	particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
 	particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
-	particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData.material.textureFilePath));
+	particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureFile));
 	particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource->GetGPUVirtualAddress());
 
 	//4のやつ particle専用
@@ -170,3 +266,13 @@ bool Particle::IsCollision(const AABB& aabb, const Vector3& point) {
 	return false;
 }
 
+
+void Particle::Emit() {
+
+	//
+	std::random_device seedGenerator;
+	std::mt19937 randomEngine(seedGenerator());
+
+ 	particles.splice(particles.end(), ParticleEmitter::GetInstance()->MakeEmit(emitter, randomEngine, particleType));
+
+}
