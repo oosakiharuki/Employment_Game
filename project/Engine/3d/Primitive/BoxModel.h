@@ -3,6 +3,7 @@
 #include "DirectXCommon.h"
 #include "Camera.h"
 #include "Cubemap.h"
+#include "Primitive.h"
 
 class BoxModel {
 public:
@@ -16,9 +17,6 @@ public:
 		Vector3 center;
 		float radius;
 	};
-
-
-	void CreateBox();
 
 	void SetColor(Vector4 color) { color_ = color; }
 

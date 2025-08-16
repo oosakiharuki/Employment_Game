@@ -1,7 +1,4 @@
 #include "MyMath.h"
-#include <cassert>
-#include <cmath>
-#include <numbers>
 
 namespace MyMath {
 

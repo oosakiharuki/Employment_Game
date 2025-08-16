@@ -1,8 +1,10 @@
 #include "Player.h"
 #include "Input.h"
 #include "ImGuiManager.h"
+#include "Primitive.h"
 
 using namespace MyMath;
+using namespace Primitive;
 
 Player::Player(){}
 
@@ -33,7 +35,7 @@ void Player::Initialize() {
 
 
 	particle_walk = new Particle();
-	particle_walk->Initialize("resource/Sprite/gradationLine.png",ParticleType::Cylinder);
+	particle_walk->Initialize("resource/Sprite/gradationLine.png",PrimitiveType::ring);
 	particle_walk->ChangeMode(BornParticle::Stop);
 }
 

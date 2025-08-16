@@ -5,6 +5,7 @@
 #include "Particle.h"
 #include "SrvManager.h"
 #include "ParticleEmitter.h"
+#include "Primitive.h"
 
 class ParticleManager {
 public:
@@ -12,7 +13,7 @@ public:
 	void Finalize();
 	void Initialize(DirectXCommon* dxCommon, SrvManager* srvManager);
 
-	void CreateParticleGroup(const std::string name, const std::string textureFilePath);
+	void CreateParticleGroup(const std::string name, const std::string textureFilePath, PrimitiveType primitiveType);
 
 	D3D12_GPU_DESCRIPTOR_HANDLE  GetSrvHandleGPU(const std::string filePath);
 	ModelData GetModelData(const std::string filePath);

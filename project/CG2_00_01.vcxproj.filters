@@ -240,6 +240,9 @@
     <ClCompile Include="CheckPoint.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\Primitive\Primitive.cpp">
+      <Filter>ソース ファイル\Engine\3d\Primitive</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -433,6 +436,9 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\_Particle\ParticleNumber.h">
       <Filter>ソース ファイル\Engine\3d\_Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\Primitive\Primitive.h">
+      <Filter>ソース ファイル\Engine\3d\Primitive</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

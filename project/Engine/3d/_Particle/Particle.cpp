@@ -13,6 +13,7 @@
 #include "ParticleNumber.h"
 
 using namespace MyMath;
+using namespace Primitive;
 
 Particle::~Particle() {
 	// リソースのアンマップ
@@ -34,7 +35,7 @@ Particle::~Particle() {
 	}
 }
 
-void Particle::Initialize(std::string textureFile , ParticleType type) {
+void Particle::Initialize(std::string textureFile , PrimitiveType type) {
 	this->particleCommon = ParticleCommon::GetInstance();
 	this->camera = particleCommon->GetDefaultCamera();
 	
@@ -53,7 +54,8 @@ void Particle::Initialize(std::string textureFile , ParticleType type) {
 		number = ParticleNum::number;
 	}
 
-	ParticleManager::GetInstance()->CreateParticleGroup(std::to_string(number),textureFile);
+	//particleの設定
+	ParticleManager::GetInstance()->CreateParticleGroup(std::to_string(number), textureFile, type);
 
 	this->fileName = std::to_string(number);
 
@@ -119,7 +121,6 @@ void Particle::Initialize(std::string textureFile , ParticleType type) {
 	accelerationField.area.min = { -1.0f,-1.0f,-1.0f };
 	accelerationField.area.max = { 1.0f,1.0f,1.0f };
 
-	particleType = type;
 }
 
 void Particle::Update() {
@@ -135,7 +136,6 @@ void Particle::Update() {
 		if (emitter.frequency <= emitter.frequencyTime) {
 			//発生処理
 			Emit();
-			//particles.splice(particles.end(), ParticleManager::GetInstance()->GetParticle(fileName));
 			emitter.frequencyTime -= emitter.frequency;
 		}
 		break;
@@ -143,7 +143,6 @@ void Particle::Update() {
 
 		//発生処理
 		Emit();
-		//particles.splice(particles.end(), ParticleManager::GetInstance()->GetParticle(fileName));
 		bornP = BornParticle::Stop;
 
 		break;

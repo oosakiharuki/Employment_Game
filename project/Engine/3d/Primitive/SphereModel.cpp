@@ -2,11 +2,17 @@
 #include <TextureManager.h>
 
 using namespace MyMath;
+using namespace Primitive;
 
 void SphereModel::Initialize() {
 	this->debugWireframes = DebugWireframes::GetInstance();
 
-	CreateSphere();
+	modelData = CreateSphere();
+	modelData.material.textureFilePath = "resource/Sprite/white.png";
+	//テクスチャ読み込み
+	TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
+	modelData.material.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData.material.textureFilePath);
+
 
 	vertexResource = debugWireframes->GetDirectXCommon()->CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
 	
@@ -76,135 +82,4 @@ void SphereModel::Draw() {
 	debugWireframes->GetDirectXCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData.material.textureFilePath));	
 	debugWireframes->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource->GetGPUVirtualAddress());
 	debugWireframes->GetDirectXCommon()->GetCommandList()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
-}
-
-void SphereModel::CreateSphere() {
-
-	const uint32_t kSubdivision = 16;
-
-	float pi = float(M_PI);
-
-	const float kLonEvery = pi * 2.0f / float(kSubdivision);
-	const float kLatEvery = pi / float(kSubdivision);
-
-
-	VertexData vertexDataBkaraA[kSubdivision]{};
-
-	VertexData vertexDataCkaraA[kSubdivision]{};
-
-	VertexData vertexDataDkaraA[kSubdivision][kSubdivision]{};
-
-	VertexData vertexDataDkaraC[kSubdivision]{};
-	VertexData vertexDataDkaraB[kSubdivision]{};
-
-
-	for (uint32_t latIndex = 0; latIndex < kSubdivision; ++latIndex) {
-		float lat = -pi / 2.0f + kLatEvery * latIndex;//緯度 シ－タ
-
-		for (uint32_t lonIndex = 0; lonIndex < kSubdivision; ++lonIndex) {
-
-			uint32_t start = (latIndex * kSubdivision + lonIndex) * 6;
-			float lon = lonIndex * kLonEvery;//経度　ファイ
-
-
-			VertexData vertA{};
-			vertA.position =
-			{
-				std::cos(lat) * std::cos(lon),
-				std::sin(lat),
-				std::cos(lat) * std::sin(lon),
-				1.0f
-			};
-			vertA.texcoord =
-			{
-				float(lonIndex) / float(kSubdivision),
-				1.0f - float(latIndex) / float(kSubdivision)
-			};
-			vertA.normal = {
-				0.0f,0.0f,-1.0f
-			};
-
-
-			VertexData vertB{};
-			vertB.position =
-			{
-				std::cos(lat + kLatEvery) * std::cos(lon),
-				std::sin(lat + kLatEvery),
-				std::cos(lat + kLatEvery) * std::sin(lon)
-				,1.0f
-			};
-			vertB.texcoord =
-			{
-				float(lonIndex) / float(kSubdivision),
-				1.0f - float(latIndex + 1) / float(kSubdivision)
-			};
-			vertB.normal = {
-				0.0f,0.0f,-1.0f
-			};
-
-
-			VertexData vertC{};
-			vertC.position =
-			{
-				std::cos(lat) * std::cos(lon + kLonEvery),
-				std::sin(lat),
-				std::cos(lat) * std::sin(lon + kLonEvery),
-				1.0f
-			};
-			vertC.texcoord =
-			{
-				float(lonIndex + 1) / float(kSubdivision),
-				1.0f - float(latIndex) / float(kSubdivision)
-			};
-			vertC.normal = {
-				0.0f,0.0f,-1.0f
-			};
-
-
-			VertexData vertD{};
-			vertD.position =
-			{
-				std::cos(lat + kLatEvery) * std::cos(lon + kLonEvery),
-				std::sin(lat + kLatEvery),
-				std::cos(lat + kLatEvery) * std::sin(lon + kLonEvery),
-				1.0f
-			};
-			vertD.texcoord =
-			{
-				float(lonIndex + 1) / float(kSubdivision),
-				1.0f - float(latIndex + 1) / float(kSubdivision)
-			};
-			vertD.normal = {
-				0.0f,0.0f,-1.0f
-			};
-
-
-
-
-			//最初点
-			modelData.vertices.push_back(vertA);
-			modelData.vertices.push_back(vertB);
-			modelData.vertices.push_back(vertC);
-
-			modelData.vertices.push_back(vertC);
-			modelData.vertices.push_back(vertB);
-			modelData.vertices.push_back(vertD);
-
-		}
-
-	}
-
-
-	for (uint32_t index = 0; index < kSubdivision * kSubdivision * 6; index++) {
-		modelData.vertices[index].normal.x = modelData.vertices[index].position.x;
-		modelData.vertices[index].normal.y = modelData.vertices[index].position.y;
-		modelData.vertices[index].normal.z = modelData.vertices[index].position.z;
-	}
-
-
-	modelData.material.textureFilePath = "resource/Sprite/white.png";
-
-	//テクスチャ読み込み
-	TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
-	modelData.material.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData.material.textureFilePath);
 }

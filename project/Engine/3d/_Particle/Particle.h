@@ -2,7 +2,7 @@
 #include "MyMath.h"
 #include "ParticleCommon.h"
 #include <random>
-
+#include "Primitive.h"
 
 struct ParticleForGPU {
 	Matrix4x4 WVP;
@@ -46,7 +46,7 @@ enum class ParticleType {
 class Particle{
 public:
 	~Particle(); // デストラクタを追加
-	void Initialize(std::string textureFile, ParticleType type);
+	void Initialize(std::string textureFile, PrimitiveType type);
 	void Update();
 	void Draw();
 

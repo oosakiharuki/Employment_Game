@@ -2,11 +2,12 @@
 #include <TextureManager.h>
 
 using namespace MyMath;
+using namespace Primitive;
 
 void BoxModel::Initialize(std::string textureFile) {
 	this->cubemap = Cubemap::GetInstance();
 
-	CreateBox();
+	modelData = CreateBox();
 	modelData.material.textureFilePath = textureFile;
 
 	vertexResource = cubemap->GetDirectXCommon()->CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
@@ -77,94 +78,4 @@ void BoxModel::Draw() {
 	cubemap->GetDirectXCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData.material.textureFilePath));
 	//cubemap->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource->GetGPUVirtualAddress());
 	cubemap->GetDirectXCommon()->GetCommandList()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
-}
-
-void BoxModel::CreateBox() {
-	VertexData vertexs[24];
-
-	//右面
-	vertexs[0].position = { 1.0f,1.0f,1.0f,1.0f };
-	vertexs[1].position = { 1.0f,1.0f,-1.0f,1.0f };
-	vertexs[2].position = { 1.0f,-1.0f,1.0f,1.0f };
-	vertexs[3].position = { 1.0f,-1.0f,-1.0f,1.0f };
-
-	modelData.vertices.push_back(vertexs[0]);
-	modelData.vertices.push_back(vertexs[1]);
-	modelData.vertices.push_back(vertexs[2]);
-
-	modelData.vertices.push_back(vertexs[2]);
-	modelData.vertices.push_back(vertexs[1]);
-	modelData.vertices.push_back(vertexs[3]);
-	
-
-	//左面
-	vertexs[4].position = { -1.0f,1.0f,-1.0f,1.0f };
-	vertexs[5].position = { -1.0f,1.0f,1.0f,1.0f };
-	vertexs[6].position = { -1.0f,-1.0f,-1.0f,1.0f };
-	vertexs[7].position = { -1.0f,-1.0f,1.0f,1.0f };
-
-	modelData.vertices.push_back(vertexs[4]);
-	modelData.vertices.push_back(vertexs[5]);
-	modelData.vertices.push_back(vertexs[6]);
-
-	modelData.vertices.push_back(vertexs[6]);
-	modelData.vertices.push_back(vertexs[5]);
-	modelData.vertices.push_back(vertexs[7]);
-
-	//前面
-	vertexs[8].position = { -1.0f,1.0f,1.0f,1.0f };
-	vertexs[9].position = { 1.0f,1.0f,1.0f,1.0f };
-	vertexs[10].position = { -1.0f,-1.0f,1.0f,1.0f };
-	vertexs[11].position = { 1.0f,-1.0f,1.0f,1.0f };
-
-	modelData.vertices.push_back(vertexs[8]);
-	modelData.vertices.push_back(vertexs[9]);
-	modelData.vertices.push_back(vertexs[10]);
-
-	modelData.vertices.push_back(vertexs[10]);
-	modelData.vertices.push_back(vertexs[9]);
-	modelData.vertices.push_back(vertexs[11]);
-
-	//後ろ面
-	vertexs[12].position = { -1.0f,1.0f,-1.0f,1.0f };
-	vertexs[13].position = { 1.0f,1.0f,-1.0f,1.0f };
-	vertexs[14].position = { -1.0f,-1.0f,-1.0f,1.0f };
-	vertexs[15].position = { 1.0f,-1.0f,-1.0f,1.0f };
-
-	modelData.vertices.push_back(vertexs[12]);
-	modelData.vertices.push_back(vertexs[13]);
-	modelData.vertices.push_back(vertexs[14]);
-
-	modelData.vertices.push_back(vertexs[14]);
-	modelData.vertices.push_back(vertexs[13]);
-	modelData.vertices.push_back(vertexs[15]);
-
-	//上面
-	vertexs[16].position = { -1.0f,1.0f,-1.0f,1.0f };
-	vertexs[17].position = { -1.0f,1.0f,1.0f,1.0f };
-	vertexs[18].position = { 1.0f,1.0f,-1.0f,1.0f };
-	vertexs[19].position = { 1.0f,1.0f,1.0f,1.0f };
-
-	modelData.vertices.push_back(vertexs[16]);
-	modelData.vertices.push_back(vertexs[17]);
-	modelData.vertices.push_back(vertexs[18]);
-
-	modelData.vertices.push_back(vertexs[18]);
-	modelData.vertices.push_back(vertexs[17]);
-	modelData.vertices.push_back(vertexs[19]);
-
-	//下面
-	vertexs[20].position = { -1.0f,-1.0f,-1.0f,1.0f };
-	vertexs[21].position = { -1.0f,-1.0f,1.0f,1.0f };
-	vertexs[22].position = { 1.0f,-1.0f,-1.0f,1.0f };
-	vertexs[23].position = { 1.0f,-1.0f,1.0f,1.0f };
-
-	modelData.vertices.push_back(vertexs[20]);
-	modelData.vertices.push_back(vertexs[21]);
-	modelData.vertices.push_back(vertexs[22]);
-
-	modelData.vertices.push_back(vertexs[22]);
-	modelData.vertices.push_back(vertexs[21]);
-	modelData.vertices.push_back(vertexs[23]);
-
 }
