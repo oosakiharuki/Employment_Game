@@ -143,7 +143,8 @@ private:
 
 	//パーティクル
 	Particle* particle_walk;
-	//Particle* particle_fire;
+	Particle* particle_fire;
+	Particle* particle_brink;
 
 	Vector3 PrePosition;
 };

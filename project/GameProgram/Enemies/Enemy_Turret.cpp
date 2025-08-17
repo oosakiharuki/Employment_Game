@@ -88,8 +88,6 @@ void Enemy_Turret::Update() {
 
 
 	particle_fire->SetScale({2,2,2});
-
-	rotate += -1.0f;
 	particle_fire->SetRotate({0,0,-worldTransform.rotation_.y});
 
 

@@ -16,6 +16,8 @@ Player::~Player() {
 	}
 	delete umbrella;
 	delete particle_walk;
+	delete particle_fire;
+	delete particle_brink;
 }
 
 void Player::Initialize() {
@@ -38,6 +40,22 @@ void Player::Initialize() {
 	particle_walk->Initialize("resource/Sprite/gradationLine.png",PrimitiveType::ring);
 	particle_walk->ChangeMode(BornParticle::Stop);
 	particle_walk->SetParticleMosion(ParticleMosion::Smaller);
+
+	particle_brink = new Particle();
+	particle_brink->Initialize("resource/Sprite/cone.png", PrimitiveType::cone);
+	particle_brink->SetParticleCount(1);
+	particle_brink->ChangeMode(BornParticle::Stop);
+	particle_brink->SetParticleMosion(ParticleMosion::Fixed);
+	particle_brink->SetFrequency(1.0f);
+	particle_brink->SetScale({2,2,2});
+
+
+	particle_fire = new Particle();
+	particle_fire->Initialize("resource/Sprite/cone.png", PrimitiveType::cone);
+	particle_fire->SetParticleCount(1);
+	particle_fire->ChangeMode(BornParticle::Stop);
+	particle_fire->SetParticleMosion(ParticleMosion::Fixed);
+	particle_fire->SetFrequency(0.1f);
 }
 
 void Player::Update() {
@@ -180,8 +198,15 @@ void Player::Update() {
 				brinkTimer += deltaTime;
 				worldTransform.translation_ += EaseIn(TransformNormal({ 0.0f,0.0f,1.5f }, wtGun.matWorld_), brinkTimer, brinkTimeMax);
 			}
+			
 
-
+			//飛んだ瞬間パーティクルをだす
+			if (brinkTimer <= 1.0f / 60.0f) {
+				Vector3 translate = worldTransform.translation_ + TransformNormal({ 0.0f,0.0f,-1.5f }, wtGun.matWorld_);
+				particle_brink->SetTranslate(translate);
+				particle_brink->SetRotate({ wtGun.rotation_.x + 90.0f,wtGun.rotation_.y,wtGun.rotation_.z });
+				particle_brink->ChangeMode(BornParticle::MomentMode);
+			}
 
 			isShield = true;
 		}
@@ -267,8 +292,10 @@ void Player::Update() {
 		particle_walk->ChangeMode(BornParticle::Stop);
 	}
 
-
+	//パーティクル
 	particle_walk->Update();
+	particle_fire->Update();
+	particle_brink->Update();
 
 	PrePosition = worldTransform.translation_;
 
@@ -323,6 +350,9 @@ void Player::Draw() {
 
 void Player::DrawP() {
 	particle_walk->Draw();
+	particle_fire->Draw();
+	particle_brink->Draw();
+
 }
 
 
@@ -353,6 +383,10 @@ void Player::ShootBullet() {
 		bullet->SetVelocty(velocity);
 		bullets_.push_back(bullet);
 	}
+
+	particle_fire->SetTranslate(translate);
+	particle_fire->SetRotate({ wtGun.rotation_.x + 90.0f,wtGun.rotation_.y,wtGun.rotation_.z });
+	particle_fire->ChangeMode(BornParticle::MomentMode);
 
 	///ノックバック
 	Vector3 playerknockback = { 0.0f,0.0f,0.25f };

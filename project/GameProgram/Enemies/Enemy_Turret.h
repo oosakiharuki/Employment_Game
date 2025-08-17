@@ -31,6 +31,5 @@ private:
 	Particle* particle_dead;
 	Particle* particle_damage;
 	Particle* particle_fire;
-	float rotate = 0.0f;
 };
 
