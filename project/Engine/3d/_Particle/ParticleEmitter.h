@@ -18,11 +18,12 @@ public:
 	}
 
 	Particles MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter);
-	Particles MakeNewParticlePlane(std::mt19937& randomEngine, const Vector3& translate);
-	Particles MakeNewParticleRing(std::mt19937& randomEngine, const Vector3& translate);
-	Particles MakeNewParticleCylinder(std::mt19937& randomEngine, const Vector3& translate);
+	Particles MakeNewParticleFixed(const Emitter& emitter);
+	Particles MakeNewParticleSmaller(std::mt19937& randomEngine, const Emitter& emitter);
 
-	std::list<Particles> MakeEmit(const Emitter& emitter, std::mt19937& randomEngine, ParticleType Type);
+	Particles MakeNewParticleSpike(std::mt19937& randomEngine, const Vector3& translate);
+
+	std::list<Particles> MakeEmit(const Emitter& emitter, std::mt19937& randomEngine, ParticleMosion mosion);
 
 private:
 	static ParticleEmitter* instance;

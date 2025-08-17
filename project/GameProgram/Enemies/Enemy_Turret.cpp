@@ -1,5 +1,6 @@
 #include "Enemy_Turret.h"
 #include "ImGuiManager.h"
+#include "Object3dCommon.h"
 
 using namespace MyMath;
 
@@ -7,6 +8,9 @@ Enemy_Turret::~Enemy_Turret() {
 	for (auto* bullet : bullets_) {
 		delete bullet;
 	}
+	delete particle_damage;
+	delete particle_dead;
+	delete particle_fire;
 }
 
 
@@ -19,6 +23,18 @@ void Enemy_Turret::Initialize() {
 
 	maxHp = 6;
 	hp = maxHp;
+
+	particle_fire = new Particle();
+	particle_fire->Initialize("resource/Sprite/cone.png", PrimitiveType::cone);
+	particle_fire->SetParticleCount(1);
+	particle_fire->ChangeMode(BornParticle::Stop);
+	particle_fire->SetParticleMosion(ParticleMosion::Fixed);
+	particle_fire->SetFrequency(0.1f);
+
+
+	particle_dead = new Particle();
+	particle_dead->Initialize("resource/Sprite/enemy.png", PrimitiveType::ring);
+	particle_dead->ChangeMode(BornParticle::Stop);
 }
 
 void Enemy_Turret::Update() {
@@ -70,11 +86,23 @@ void Enemy_Turret::Update() {
 		return false;
 	});
 
+
+	particle_fire->SetScale({2,2,2});
+
+	rotate += -1.0f;
+	particle_fire->SetRotate({0,0,-worldTransform.rotation_.y});
+
+
+	particle_fire->Update();
+
+	particle_dead->Update();
+
 #ifdef _DEBUG
 
 	ImGui::Begin("Enemy_Turret");
 
 	ImGui::Text("translate : %f,%f,%f", worldTransform.translation_.x, worldTransform.translation_.y, worldTransform.translation_.z);
+	ImGui::Text("translate : %f,%f,%f", worldTransform.rotation_.x, worldTransform.rotation_.y, worldTransform.rotation_.z);
 	
 	ImGui::Text("Eye_Min : %f,%f,%f", eyeAABB.min.x, eyeAABB.min.y, eyeAABB.min.z);
 	ImGui::Text("Eye_Max : %f,%f,%f", eyeAABB.max.x, eyeAABB.max.y, eyeAABB.max.z);
@@ -97,6 +125,14 @@ void Enemy_Turret::Draw() {
 	for (auto* bullet : bullets_) {
 		bullet->Draw();
 	}
+
+	ParticleCommon::GetInstance()->Command();
+
+	particle_fire->Draw();
+	particle_dead->Draw();
+
+	Object3dCommon::GetInstance()->Command();
+
 }
 
 
@@ -117,6 +153,7 @@ void Enemy_Turret::Attack() {
 
 		if (rapidFireTime >= rapidFireTimeMax) {
 			Fire();
+			particle_fire->ChangeMode(BornParticle::MomentMode);
 			rapidCount++;
 			rapidFireTime = 0;
 		}
@@ -131,10 +168,14 @@ void Enemy_Turret::Attack() {
 
 void Enemy_Turret::Fire() {
 	Vector3 translate = {
-	worldTransform.translation_.x,
+	worldTransform.translation_.x - 1.0f,
 	worldTransform.translation_.y + 1.0f,
 	worldTransform.translation_.z
 	};
+
+
+	particle_fire->SetTranslate({ translate.x + 3.0f,translate.y,translate.z });
+
 
 	Vector3 velocity = { 0.0f,0.0f,0.5f };
 	velocity = TransformNormal(velocity, worldTransform.matWorld_);

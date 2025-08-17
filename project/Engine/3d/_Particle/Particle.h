@@ -36,11 +36,11 @@ enum class BornParticle {
 	Stop,
 };
 
-enum class ParticleType {
-	Normal,
-	Plane,
-	Ring,
-	Cylinder
+enum class ParticleMosion {
+	Normal,  //あちこち動く
+	Fixed,   //固定
+	Smaller, //小さくなって消える
+	Spike,   //とげとげ (HitEffect)
 };
 
 class Particle{
@@ -56,11 +56,14 @@ public:
 	const Vector3& GetTranslate()const { return emitter.transform.translate; }
 	void SetTranslate(const Vector3& translate) { emitter.transform.translate = translate; }
 
+	void SetRotate(const Vector3& rotate) { emitter.transform.rotate = rotate; }
+	const Vector3& GetRotate() const { return emitter.transform.rotate; }
+
 	void SetFrequency(const float time) { emitter.frequency = time; }
 
 	void SetCamera(Camera* camera) { this->camera = camera; }
 
-
+	void SetParticleMosion(ParticleMosion mosion) { particleMosion = mosion; }
 
 
 	bool IsCollision(const AABB& aabb, const Vector3& point);
@@ -115,7 +118,7 @@ private:
 	AccelerationField accelerationField;
 
 	BornParticle bornP = BornParticle::TimerMode;
-	ParticleType particleType = ParticleType::Normal;
+	ParticleMosion particleMosion = ParticleMosion::Normal;
 
 	uint32_t number = 0;
 };

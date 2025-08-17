@@ -49,13 +49,7 @@ private:
 		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;
 	};
 
-	Emitter emitter{};
 	const float kDeltaTime = 1.0f / 60.0f;
-
-
-	//uint32_t kNumInstance = 10;
-	//Microsoft::WRL::ComPtr<ID3D12Resource> instancingResource;
-
 	std::unordered_map<std::string, ParticleGroup> particleGroups;
 
 };

@@ -59,6 +59,9 @@ void ParticleManager::CreateParticleGroup(const std::string name, const std::str
 	case sphere:
 		particleG.modelData = CreateSphere();
 		break;
+	case cone:
+		particleG.modelData = CreateCone();
+		break;
 	default:
 		break;
 	}
@@ -89,13 +92,6 @@ void ParticleManager::CreateParticleGroup(const std::string name, const std::str
 	//SRVの生成
 	particleCommon->GetDxCommon()->GetDevice()->CreateShaderResourceView(particleG.resource.Get(), &srvDesc, particleG.srvHandleCPU);
 
-
-	//particleEmit->Emit();
-
-	emitter.transform.rotate = { 0.0f,0.0f,0.0f };
-	emitter.transform.scale = { 1.0f,1.0f,1.0f };
-	emitter.frequency = 0.5f;
-	emitter.frequencyTime = 0.0f;
 }
 
 D3D12_GPU_DESCRIPTOR_HANDLE  ParticleManager::GetSrvHandleGPU(const std::string filePath) {

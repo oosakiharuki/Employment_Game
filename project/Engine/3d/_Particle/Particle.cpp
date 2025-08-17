@@ -170,7 +170,7 @@ void Particle::Update() {
 
 		(*particleIterator).transform.translate += (*particleIterator).velocity * kDeltaTime;
 	
-		if (particleType == ParticleType::Normal) {
+		if (particleMosion == ParticleMosion::Smaller) {
 			if ((*particleIterator).transform.scale.x > 0) {
 				(*particleIterator).transform.scale.x -= 0.5f * kDeltaTime;
 			}
@@ -188,9 +188,9 @@ void Particle::Update() {
 		Matrix4x4 translateMatrix = MakeTranslateMatrix((*particleIterator).transform.translate);
 
 		//回転行列
-		Matrix4x4 rotateX = MakeRotateXMatrix((*particleIterator).transform.rotate.x);
-		Matrix4x4 rotateY = MakeRotateYMatrix((*particleIterator).transform.rotate.y);
-		Matrix4x4 rotateZ = MakeRotateZMatrix((*particleIterator).transform.rotate.z);
+		Matrix4x4 rotateX = MakeRotateXMatrix((*particleIterator).transform.rotate.x * (float(M_PI) / 180.0f));
+		Matrix4x4 rotateY = MakeRotateYMatrix((*particleIterator).transform.rotate.y * (float(M_PI) / 180.0f));
+		Matrix4x4 rotateZ = MakeRotateZMatrix((*particleIterator).transform.rotate.z * (float(M_PI) / 180.0f));
 		//全てまとめた
 		Matrix4x4 rotateXYZ = Multiply(Multiply(rotateX, rotateY), rotateZ);
 
@@ -203,6 +203,7 @@ void Particle::Update() {
 		billboardMatrix.m[3][2] = 0.0f;
 
 		Matrix4x4 worldMatrix = Multiply(scaleMatrix, Multiply(billboardMatrix, translateMatrix));
+		//worldMatrix = Multiply(scaleMatrix, Multiply(rotateXYZ, translateMatrix));
 		//Matrix4x4 worldMatrix = Multiply(billboardMatrix, MakeAffineMatrix((*particleIterator).transform.scale, (*particleIterator).transform.rotate, (*particleIterator).transform.translate));
 		//通常
 		worldMatrix = MakeAffineMatrix((*particleIterator).transform.scale, (*particleIterator).transform.rotate, (*particleIterator).transform.translate);
@@ -272,6 +273,6 @@ void Particle::Emit() {
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
 
- 	particles.splice(particles.end(), ParticleEmitter::GetInstance()->MakeEmit(emitter, randomEngine, particleType));
+ 	particles.splice(particles.end(), ParticleEmitter::GetInstance()->MakeEmit(emitter, randomEngine, particleMosion));
 
 }

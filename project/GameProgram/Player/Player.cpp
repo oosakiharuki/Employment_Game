@@ -37,164 +37,164 @@ void Player::Initialize() {
 	particle_walk = new Particle();
 	particle_walk->Initialize("resource/Sprite/gradationLine.png",PrimitiveType::ring);
 	particle_walk->ChangeMode(BornParticle::Stop);
+	particle_walk->SetParticleMosion(ParticleMosion::Smaller);
 }
 
 void Player::Update() {
 
 	DeadPlayer();
 
-	if (Hp == 0) {
-		return;
-	}
+	if (!isPlayerDown) {
 
-	bool pushA = false;
-	bool pushD = false;
-	bool pushW = false;
-	bool pushS = false;
+		bool pushA = false;
+		bool pushD = false;
+		bool pushW = false;
+		bool pushS = false;
 
-	if (Input::GetInstance()->PushKey(DIK_A)) {
-		pushA = true;
-	}
-	if (Input::GetInstance()->PushKey(DIK_D)) {
-		pushD = true;
-	}
-	if (Input::GetInstance()->PushKey(DIK_W)) {
-		pushW = true;
-	}	
-	if (Input::GetInstance()->PushKey(DIK_S)) {
-		pushS = true;
-	}
-	
-	if (isShield) {
-		speed = 0.05f;
-	}
-	else {
-		speed = 0.1f;
-	}
+		if (Input::GetInstance()->PushKey(DIK_A)) {
+			pushA = true;
+		}
+		if (Input::GetInstance()->PushKey(DIK_D)) {
+			pushD = true;
+		}
+		if (Input::GetInstance()->PushKey(DIK_W)) {
+			pushW = true;
+		}
+		if (Input::GetInstance()->PushKey(DIK_S)) {
+			pushS = true;
+		}
 
-	if (pushA) {
-		worldTransform.translation_.x -= speed;
-		direction = left;
-		range = Left;
-		isChangeDirection = true;
+		if (isShield) {
+			speed = 0.05f;
+		}
+		else {
+			speed = 0.1f;
+		}
 
-		if (pushW) {
-			range = UpLeft;
+		if (pushA) {
+			worldTransform.translation_.x -= speed;
+			direction = left;
+			range = Left;
+			isChangeDirection = true;
+
+			if (pushW) {
+				range = UpLeft;
+			}
+			else if (pushS) {
+				range = DownLeft;
+			}
+
+		}
+		else if (pushD) {
+			worldTransform.translation_.x += speed;
+			direction = right;
+			range = Right;
+			isChangeDirection = true;
+
+			if (pushW) {
+				range = UpRight;
+			}
+			else if (pushS) {
+				range = DownRight;
+			}
+		}
+		else if (pushW) {
+			range = Up;
 		}
 		else if (pushS) {
-			range = DownLeft;
+			range = Down;
 		}
 
-	}
-	else if (pushD) {
-		worldTransform.translation_.x += speed;
-		direction = right;
-		range = Right;
-		isChangeDirection = true;
 
-		if (pushW) {
-			range = UpRight;
+		if (isChangeDirection) {
+			switch (direction)
+			{
+			case Player::right:
+				worldTransform.rotation_.y = 90.0f;
+				break;
+			case Player::left:
+				worldTransform.rotation_.y = -90.0f;
+				break;
+			default:
+				break;
+			}
 		}
-		else if (pushS) {
-			range = DownRight;
-		}
-	}
-	else if (pushW) {
-		range = Up;
-	}
-	else if (pushS) {
-		range = Down;
-	}
-	
 
-	if (isChangeDirection) {
-		switch (direction)
+		switch (range)
 		{
-		case Player::right:
-			worldTransform.rotation_.y = 90.0f;
+		case Player::Up:
+			wtGun.rotation_.x = -90.0f;
 			break;
-		case Player::left:
-			worldTransform.rotation_.y = -90.0f;
+		case Player::UpRight:
+			wtGun.rotation_.x = -45.0f;
+			break;
+		case Player::Right:
+			wtGun.rotation_.x = 0.0f;
+			break;
+		case Player::DownRight:
+			wtGun.rotation_.x = 45.0f;
+			break;
+		case Player::Down:
+			wtGun.rotation_.x = 90.0f;
+			break;
+		case Player::DownLeft:
+			wtGun.rotation_.x = 135.0f;
+			break;
+		case Player::Left:
+			wtGun.rotation_.x = 180.0f;
+			break;
+		case Player::UpLeft:
+			wtGun.rotation_.x = 225.0f;
 			break;
 		default:
 			break;
 		}
-	}
 
-	switch (range)
-	{
-	case Player::Up:
-		wtGun.rotation_.x = -90.0f;
-		break;
-	case Player::UpRight:
-		wtGun.rotation_.x = -45.0f;
-		break;
-	case Player::Right:
-		wtGun.rotation_.x = 0.0f;
-		break;
-	case Player::DownRight:
-		wtGun.rotation_.x = 45.0f;
-		break;
-	case Player::Down:
-		wtGun.rotation_.x = 90.0f;
-		break;
-	case Player::DownLeft:
-		wtGun.rotation_.x = 135.0f;
-		break;
-	case Player::Left:
-		wtGun.rotation_.x = 180.0f;
-		break;
-	case Player::UpLeft:
-		wtGun.rotation_.x = 225.0f;
-		break;
-	default:
-		break;
-	}
-
-	//ジャンプ
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE) && !isJump) {
-		isJump = true;
-		isGround = false;
-	}
-
-	grabity -= 0.01f;
-	if (isGround) {
-		isJump = false;
-		//離した時
-		if (!Input::GetInstance()->PushKey(DIK_L)) {
-			//ブリンクのタイマーリセット
-			brinkTimer = 0.0f;
-		}
-	}
-
-
-	//傘シールド
-	if (Input::GetInstance()->PushKey(DIK_L)) {
-
-		if (isGround && (range == Down || range == DownLeft || range == DownRight)) {
-			brinkTimer = brinkTimeMax;
-		}
-
-		if (brinkTimer < brinkTimeMax) {
+		//ジャンプ
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE) && !isJump) {
+			isJump = true;
 			isGround = false;
+		}
 
-			brinkTimer += deltaTime;
-			worldTransform.translation_ += EaseIn(TransformNormal({ 0.0f,0.0f,1.5f },wtGun.matWorld_), brinkTimer, brinkTimeMax);
+		grabity -= 0.01f;
+		if (isGround) {
+			isJump = false;
+			//離した時
+			if (!Input::GetInstance()->PushKey(DIK_L)) {
+				//ブリンクのタイマーリセット
+				brinkTimer = 0.0f;
+			}
 		}
 
 
+		//傘シールド
+		if (Input::GetInstance()->PushKey(DIK_L)) {
 
-		isShield = true;
-	}
-	else {
-		isShield = false;
-	}
+			if (isGround && (range == Down || range == DownLeft || range == DownRight)) {
+				brinkTimer = brinkTimeMax;
+			}
 
-	coolTimer += deltaTime;
-	if (Input::GetInstance()->TriggerKey(DIK_K) && !isShield) {
-		if (coolTimer >= coolMax) {
-			ShootBullet();
-			coolTimer = 0;
+			if (brinkTimer < brinkTimeMax) {
+				isGround = false;
+
+				brinkTimer += deltaTime;
+				worldTransform.translation_ += EaseIn(TransformNormal({ 0.0f,0.0f,1.5f }, wtGun.matWorld_), brinkTimer, brinkTimeMax);
+			}
+
+
+
+			isShield = true;
+		}
+		else {
+			isShield = false;
+		}
+
+		coolTimer += deltaTime;
+		if (Input::GetInstance()->TriggerKey(DIK_K) && !isShield) {
+			if (coolTimer >= coolMax) {
+				ShootBullet();
+				coolTimer = 0;
+			}
 		}
 	}
 
@@ -255,11 +255,8 @@ void Player::Update() {
 		infinityTimer += deltaTime;
 	}
 
-	particle_walk->Update();
-
-
 	//移動しているとパーティクルを発生
-	if (pushA || pushW || pushS || pushD) {
+	if (worldTransform.translation_.x != PrePosition.x || worldTransform.translation_.y != PrePosition.y) {
 		// 通常のパーティクル
 		particle_walk->SetParticleCount(2);
 		particle_walk->SetFrequency(0.25f);
@@ -271,6 +268,9 @@ void Player::Update() {
 	}
 
 
+	particle_walk->Update();
+
+	PrePosition = worldTransform.translation_;
 
 
 
