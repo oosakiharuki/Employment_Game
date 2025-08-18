@@ -342,7 +342,7 @@ void GameScene::Update() {
 void GameScene::Draw() {
 	
 	Cubemap::GetInstance()->Command();
-	//skyBox->Draw();
+	skyBox->Draw();
 
 
 	//モデル描画処理

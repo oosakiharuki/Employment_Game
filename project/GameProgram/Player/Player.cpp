@@ -138,6 +138,10 @@ void Player::Update() {
 			}
 		}
 
+		if (isShield && !isGround && brinkTimer == 0.0f) {
+			range = Up;
+		}
+
 		switch (range)
 		{
 		case Player::Up:
@@ -169,7 +173,7 @@ void Player::Update() {
 		}
 
 		//ジャンプ
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE) && !isJump) {
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE) && isGround && !isShield) {
 			isJump = true;
 			isGround = false;
 		}
@@ -177,41 +181,48 @@ void Player::Update() {
 		grabity -= 0.01f;
 		if (isGround) {
 			isJump = false;
-			//離した時
-			if (!Input::GetInstance()->PushKey(DIK_L)) {
-				//ブリンクのタイマーリセット
-				brinkTimer = 0.0f;
-			}
+			isOneBrink = false;//ブリンク可能
 		}
 
 
 		//傘シールド
 		if (Input::GetInstance()->PushKey(DIK_L)) {
+			//押した瞬間に移動キーを押している場合ブリンクが発動+一度ブリンクしていないとき
+			if (Input::GetInstance()->TriggerKey(DIK_L) && (pushA || pushD || pushW || pushS) && !isOneBrink) {
+				isBrink = true;
+			}
+			isShield = true;
+		}
+		else {
+			isShield = false;
+		}
 
+		if (isBrink) {
+			//ブリンクの時は傘は開いたまま
+			isShield = true;
+			brinkTimer += deltaTime;
+
+			//地面についている場合、下向きのブリンクは発動しない
 			if (isGround && (range == Down || range == DownLeft || range == DownRight)) {
 				brinkTimer = brinkTimeMax;
 			}
 
-			if (brinkTimer < brinkTimeMax) {
-				isGround = false;
+			isOneBrink = true;
+			worldTransform.translation_ += EaseIn(TransformNormal({ 0.0f,0.0f,1.5f }, wtGun.matWorld_), brinkTimer, brinkTimeMax);
 
-				brinkTimer += deltaTime;
-				worldTransform.translation_ += EaseIn(TransformNormal({ 0.0f,0.0f,1.5f }, wtGun.matWorld_), brinkTimer, brinkTimeMax);
-			}
-			
 
 			//飛んだ瞬間パーティクルをだす
-			if (brinkTimer <= 1.0f / 60.0f) {
+			if (brinkTimer <= deltaTime) {
 				Vector3 translate = worldTransform.translation_ + TransformNormal({ 0.0f,0.0f,-1.5f }, wtGun.matWorld_);
 				particle_brink->SetTranslate(translate);
 				particle_brink->SetRotate({ wtGun.rotation_.x + 90.0f,wtGun.rotation_.y,wtGun.rotation_.z });
 				particle_brink->ChangeMode(BornParticle::MomentMode);
 			}
 
-			isShield = true;
-		}
-		else {
-			isShield = false;
+			if (brinkTimer >= brinkTimeMax) {
+				isBrink = false;
+				brinkTimer = 0.0f;
+			}
 		}
 
 		coolTimer += deltaTime;
@@ -241,7 +252,7 @@ void Player::Update() {
 	}
 
 	//重力
-	if (range == Up && isShield) {
+	if (isShield && !isGround) {
 		if (isJump) {
 			isJump = false;
 		}

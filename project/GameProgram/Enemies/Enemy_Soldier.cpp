@@ -2,6 +2,7 @@
 #include "Input.h"
 
 #include "ImGuiManager.h"
+#include "Object3dCommon.h"
 
 using namespace MyMath;
 
@@ -9,6 +10,7 @@ Enemy_Soldier::~Enemy_Soldier() {
 	for (auto* bullet : bullets_) {
 		delete bullet;
 	}
+	delete particle_fire;
 }
 
 void Enemy_Soldier::Initialize() {
@@ -20,6 +22,14 @@ void Enemy_Soldier::Initialize() {
 
 	maxHp = 3;
 	hp = maxHp;
+
+	particle_fire = new Particle();
+	particle_fire->Initialize("resource/Sprite/cone.png", PrimitiveType::cone);
+	particle_fire->SetParticleCount(1);
+	particle_fire->ChangeMode(BornParticle::Stop);
+	particle_fire->SetParticleMosion(ParticleMosion::Fixed);
+	particle_fire->SetFrequency(0.1f);
+
 }
 
 void Enemy_Soldier::Update() {
@@ -83,6 +93,10 @@ void Enemy_Soldier::Update() {
 		return false;
 		});
 
+
+	particle_fire->SetRotate({ 0,0,-worldTransform.rotation_.y });
+	particle_fire->Update();
+
 #ifdef _DEBUG
 
 	ImGui::Begin("Enemy_soldier");
@@ -111,6 +125,14 @@ void Enemy_Soldier::Draw() {
 	for (auto* bullet : bullets_) {
 		bullet->Draw();
 	}
+
+
+	ParticleCommon::GetInstance()->Command();
+
+	particle_fire->Draw();
+
+	Object3dCommon::GetInstance()->Command();
+
 }
 
 
@@ -131,6 +153,7 @@ void Enemy_Soldier::Attack() {
 
 		if (rapidFireTime >= rapidFireTimeMax) {
 			Fire();
+			particle_fire->ChangeMode(BornParticle::MomentMode);
 			rapidCount++;
 			rapidFireTime = 0;
 		}
@@ -163,6 +186,7 @@ void Enemy_Soldier::Fire() {
 
 		velocity = Vector3(0.02f, 0.02f, 0.02f) * distance;
 	}
+	particle_fire->SetTranslate(enemyPosition);
 
 	EnemyBullet* bullet = new EnemyBullet();
 	bullet->Initialize();

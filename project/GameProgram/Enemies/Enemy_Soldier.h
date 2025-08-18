@@ -36,4 +36,7 @@ private:
 
 	Vector3 speed = { 0.03f,0.0f,0.0f };
 	Vector3 move = { 0,0,0 };
+
+	//パーティクル
+	Particle* particle_fire;
 };

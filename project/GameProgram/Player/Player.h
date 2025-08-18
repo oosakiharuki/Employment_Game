@@ -117,6 +117,8 @@ private:
 	float KnockBackTimeMax = 0.5f;
 
 	///ブリンク
+	bool isBrink = false;
+	bool isOneBrink = false;
 	float brinkTimer = 0.0f;
 	const float brinkTimeMax = 0.5f;
 
