@@ -11,6 +11,7 @@ Enemy_Soldier::~Enemy_Soldier() {
 		delete bullet;
 	}
 	delete particle_fire;
+	delete particle_damage;
 }
 
 void Enemy_Soldier::Initialize() {
@@ -29,6 +30,14 @@ void Enemy_Soldier::Initialize() {
 	particle_fire->ChangeMode(BornParticle::Stop);
 	particle_fire->SetParticleMosion(ParticleMosion::Fixed);
 	particle_fire->SetFrequency(0.1f);
+
+
+	particle_damage = new Particle();
+	particle_damage->Initialize("resource/Sprite/circle.png", PrimitiveType::ring);
+	particle_damage->SetParticleCount(10);
+	particle_damage->ChangeMode(BornParticle::Stop);
+	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
+	particle_damage->SetFrequency(1.0f);
 
 }
 
@@ -97,6 +106,8 @@ void Enemy_Soldier::Update() {
 	particle_fire->SetRotate({ 0,0,-worldTransform.rotation_.y });
 	particle_fire->Update();
 
+	particle_damage->Update();
+
 #ifdef _DEBUG
 
 	ImGui::Begin("Enemy_soldier");
@@ -130,6 +141,7 @@ void Enemy_Soldier::Draw() {
 	ParticleCommon::GetInstance()->Command();
 
 	particle_fire->Draw();
+	particle_damage->Draw();
 
 	Object3dCommon::GetInstance()->Command();
 
@@ -138,6 +150,9 @@ void Enemy_Soldier::Draw() {
 
 
 void Enemy_Soldier::IsDamage() {
+	particle_damage->SetTranslate(worldTransform.translation_);
+	particle_damage->ChangeMode(BornParticle::MomentMode);
+
 	if (hp == 0) {
 		return;
 	}

@@ -202,9 +202,9 @@ void Particle::Update() {
 		billboardMatrix.m[3][1] = 0.0f;
 		billboardMatrix.m[3][2] = 0.0f;
 
-		Matrix4x4 worldMatrix = Multiply(scaleMatrix, Multiply(billboardMatrix, translateMatrix));
-		//worldMatrix = Multiply(scaleMatrix, Multiply(rotateXYZ, translateMatrix));
-		//Matrix4x4 worldMatrix = Multiply(billboardMatrix, MakeAffineMatrix((*particleIterator).transform.scale, (*particleIterator).transform.rotate, (*particleIterator).transform.translate));
+		Matrix4x4 worldMatrix;
+		//ビルボード
+		//worldMatrix = Multiply(scaleMatrix, Multiply(billboardMatrix, translateMatrix));
 		//通常
 		worldMatrix = MakeAffineMatrix((*particleIterator).transform.scale, (*particleIterator).transform.rotate, (*particleIterator).transform.translate);
 

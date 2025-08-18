@@ -41,6 +41,7 @@ enum class ParticleMosion {
 	Fixed,   //固定
 	Smaller, //小さくなって消える
 	Spike,   //とげとげ (HitEffect)
+	Exprosion//爆発っぽい感じ(ring)
 };
 
 class Particle{

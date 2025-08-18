@@ -18,6 +18,7 @@ Player::~Player() {
 	delete particle_walk;
 	delete particle_fire;
 	delete particle_brink;
+	delete particle_damage;
 }
 
 void Player::Initialize() {
@@ -56,6 +57,15 @@ void Player::Initialize() {
 	particle_fire->ChangeMode(BornParticle::Stop);
 	particle_fire->SetParticleMosion(ParticleMosion::Fixed);
 	particle_fire->SetFrequency(0.1f);
+
+
+	particle_damage = new Particle();
+	particle_damage->Initialize("resource/Sprite/circle.png", PrimitiveType::ring);
+	particle_damage->SetParticleCount(20);
+	particle_damage->ChangeMode(BornParticle::Stop);
+	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
+	particle_damage->SetFrequency(1.0f);
+
 }
 
 void Player::Update() {
@@ -307,6 +317,7 @@ void Player::Update() {
 	particle_walk->Update();
 	particle_fire->Update();
 	particle_brink->Update();
+	particle_damage->Update();
 
 	PrePosition = worldTransform.translation_;
 
@@ -363,6 +374,7 @@ void Player::DrawP() {
 	particle_walk->Draw();
 	particle_fire->Draw();
 	particle_brink->Draw();
+	particle_damage->Draw();
 
 }
 
@@ -410,6 +422,8 @@ void Player::IsDamage() {
 			return;
 		}
 		Hp--;
+		particle_damage->SetTranslate(worldTransform.translation_);
+		particle_damage->ChangeMode(BornParticle::MomentMode);
 		Audio::GetInstance()->SoundPlayWave(hitSound, 0.4f);
 		infinityTimer = 0.0f;
 	}

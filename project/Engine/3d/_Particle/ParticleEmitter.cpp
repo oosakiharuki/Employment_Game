@@ -75,11 +75,16 @@ Particles ParticleEmitter::MakeNewParticleSmaller(std::mt19937& randomEngine, co
 
 Particles ParticleEmitter::MakeNewParticleSpike(std::mt19937& randomEngine, const Vector3& translate) {
 	//random
-	std::uniform_real_distribution<float> distRotate(-std::numbers::pi_v<float>, std::numbers::pi_v<float>);
+	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);//position用
+	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);//color用
+	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
+
+	//0度 ～ 360度
+	std::uniform_real_distribution<float> distRotate(0.0f,360.0f);
 	std::uniform_real_distribution<float> distScale(4.5f, 6.5f);
 
 	Particles particle;
-	particle.transform.scale = { 0.1f,distScale(randomEngine),1.0f };
+	particle.transform.scale = { 0.05f,distScale(randomEngine),1.0f };
 	particle.transform.rotate = { 0.0f,0.0f,distRotate(randomEngine) };
 
 	particle.transform.translate = translate;
@@ -87,7 +92,32 @@ Particles ParticleEmitter::MakeNewParticleSpike(std::mt19937& randomEngine, cons
 	particle.velocity = { 0.0f,0.0f,0.0f };
 	particle.color = { 1.0f,1.0f,1.0f,1.0f };
 
-	particle.lifeTime = 0.5f;
+	particle.lifeTime = 1.0f;
+	particle.currentTime = 0;
+
+	return particle;
+}
+
+Particles ParticleEmitter::MakeNewParticleExprosion(std::mt19937& randomEngine, const Vector3& translate) {
+	//random
+	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);//position用
+	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);//color用
+	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
+
+
+	std::uniform_real_distribution<float> distRotate(0.0f,360.0f);
+	std::uniform_real_distribution<float> distScale(4.5f, 6.5f);
+
+	Particles particle;
+	particle.transform.scale = { 0.5f,distScale(randomEngine),0.5f };
+	particle.transform.rotate = { distRotate(randomEngine),distRotate(randomEngine),distRotate(randomEngine) };
+
+	particle.transform.translate = translate;
+
+	particle.velocity = { 0.0f,0.0f,0.0f };
+	particle.color = { 1.0f,1.0f,1.0f,1.0f };
+
+	particle.lifeTime = 1.0f;
 	particle.currentTime = 0;
 
 	return particle;
@@ -116,6 +146,11 @@ std::list<Particles> ParticleEmitter::MakeEmit(const Emitter& emitter, std::mt19
 	case ParticleMosion::Spike:
 		for (uint32_t count = 0; count < emitter.count; ++count) {
 			particles.push_back(MakeNewParticleSpike(randomEngine, emitter.transform.translate));
+		}
+		break;
+	case ParticleMosion::Exprosion:
+		for (uint32_t count = 0; count < emitter.count; ++count) {
+			particles.push_back(MakeNewParticleExprosion(randomEngine, emitter.transform.translate));
 		}
 		break;
 	default:

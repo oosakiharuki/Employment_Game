@@ -39,4 +39,6 @@ private:
 
 	//パーティクル
 	Particle* particle_fire;
+	Particle* particle_damage;
+
 };

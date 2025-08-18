@@ -33,8 +33,18 @@ void Enemy_Turret::Initialize() {
 
 
 	particle_dead = new Particle();
-	particle_dead->Initialize("resource/Sprite/enemy.png", PrimitiveType::ring);
+	particle_dead->Initialize("resource/Sprite/gradationLine.png", PrimitiveType::ring);
+	particle_dead->SetParticleCount(1);
+	particle_dead->SetParticleMosion(ParticleMosion::Normal);
 	particle_dead->ChangeMode(BornParticle::Stop);
+
+	particle_damage = new Particle();
+	particle_damage->Initialize("resource/Sprite/circle.png", PrimitiveType::ring);
+	particle_damage->SetParticleCount(10);
+	particle_damage->ChangeMode(BornParticle::Stop);
+	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
+	particle_damage->SetFrequency(1.0f);
+
 }
 
 void Enemy_Turret::Update() {
@@ -43,6 +53,8 @@ void Enemy_Turret::Update() {
 
 		if (hp == 0) {
 			isDead = true;
+			//particle_dead->SetTranslate(worldTransform.translation_);
+			//particle_dead->ChangeMode(BornParticle::MomentMode);
 		}
 
 		DeadUpdate();
@@ -93,6 +105,7 @@ void Enemy_Turret::Update() {
 
 	particle_fire->Update();
 
+	particle_damage->Update();
 	particle_dead->Update();
 
 #ifdef _DEBUG
@@ -128,6 +141,7 @@ void Enemy_Turret::Draw() {
 
 	particle_fire->Draw();
 	particle_dead->Draw();
+	particle_damage->Draw();
 
 	Object3dCommon::GetInstance()->Command();
 
@@ -136,6 +150,9 @@ void Enemy_Turret::Draw() {
 
 
 void Enemy_Turret::IsDamage() {
+	particle_damage->SetTranslate(worldTransform.translation_);
+	particle_damage->ChangeMode(BornParticle::MomentMode);
+
 	if (hp == 0) {
 		return;
 	}
