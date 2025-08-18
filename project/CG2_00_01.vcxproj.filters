@@ -243,6 +243,9 @@
     <ClCompile Include="Engine\3d\Primitive\Primitive.cpp">
       <Filter>ソース ファイル\Engine\3d\Primitive</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy_Bomb.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -439,6 +442,9 @@
     </ClInclude>
     <ClInclude Include="Engine\3d\Primitive\Primitive.h">
       <Filter>ソース ファイル\Engine\3d\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy_Bomb.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

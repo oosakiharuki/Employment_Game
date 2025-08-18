@@ -254,7 +254,7 @@ void Player::Update() {
 			return true;
 		}
 		return false;
-	});
+		});
 
 
 	if (isJump) {
@@ -346,7 +346,7 @@ void Player::Update() {
 	wtGun.UpdateMatrix();
 
 	///傘の銃
-	umbrella->SetTranslate(worldTransform.translation_ + 
+	umbrella->SetTranslate(worldTransform.translation_ +
 		TransformNormal(Vector3(0, 1, 0), worldTransform.matWorld_) +
 		TransformNormal(Vector3(0, 0, 1.25f), wtGun.matWorld_));
 

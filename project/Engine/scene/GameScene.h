@@ -13,6 +13,7 @@
 #include "Player.h"
 #include "Enemy_Soldier.h"
 #include "Enemy_Turret.h"
+#include "Enemy_Bomb.h"
 #include "CheckPoint.h"
 
 #include "BoxModel.h"

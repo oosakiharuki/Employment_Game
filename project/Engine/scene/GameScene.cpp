@@ -14,6 +14,7 @@ void GameScene::Initialize() {
 	modelManager->LoadModel("umbrella_Open", ".obj");
 	modelManager->LoadModel("umbrella_Close", ".obj");
 	modelManager->LoadModel("checkpoint", ".obj");
+	modelManager->LoadModel("sphere", ".obj");
 
 	camera = new Camera();
 
@@ -55,6 +56,8 @@ void GameScene::Initialize() {
 			IEnemy* enemy;
 			if (enemyData.fileName == "Turret") {
 				enemy = new Enemy_Turret();
+			}else if (enemyData.fileName == "Bomb") {
+				enemy = new Enemy_Bomb();
 			}
 			else {
 				enemy = new Enemy_Soldier();
@@ -172,6 +175,17 @@ void GameScene::Update() {
 				bulletE->IsHit();
 				player_->IsDamage();
 			}
+		}
+
+		//ダウンキャスト
+		//親から子(基盤クラスから派生クラス)に変換し派生クラスの関数を使えることができる
+		//if(enemyが<派生クラス>と同じ) = true
+		if (enemy == dynamic_cast<Enemy_Bomb*>(enemy)) {
+			Enemy_Bomb* enemy_Bomb = dynamic_cast<Enemy_Bomb*>(enemy);
+			if (IsCollisionAABB(enemy_Bomb->GetBombAABB(), player_->GetAABB()) && !enemy->IsDead()) {
+				player_->IsDamage();
+			}
+			//enemyから値を入れているためdeleteの必要はない
 		}
 	}
 
