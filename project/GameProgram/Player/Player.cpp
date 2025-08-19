@@ -258,7 +258,7 @@ void Player::Update() {
 
 
 	if (isJump) {
-		worldTransform.translation_.y += 0.2f;
+		worldTransform.translation_.y += 0.25f;
 	}
 
 	//重力

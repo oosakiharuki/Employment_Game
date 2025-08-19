@@ -26,7 +26,7 @@ private:
 
 	bool isStart = false;
 
-	const float bombTimeMax = 3.0f;
+	const float bombTimeMax = 5.0f;
 	float bombTimer = 0.0f;
 
 	const float deltaTime = 1.0f / 60.0f;

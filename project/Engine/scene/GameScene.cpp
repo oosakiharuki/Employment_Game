@@ -15,11 +15,12 @@ void GameScene::Initialize() {
 	modelManager->LoadModel("umbrella_Close", ".obj");
 	modelManager->LoadModel("checkpoint", ".obj");
 	modelManager->LoadModel("sphere", ".obj");
+	modelManager->LoadModel("stage_0", ".obj");
 
 	camera = new Camera();
 
 	//levelediter = new Levelediter();
-	levelediter.LoadLevelediter("resource/Levelediter/myEngine_stageProto.json");
+	levelediter.LoadLevelediter("resource/Levelediter/stage_0.json");
 
 	cameraRotate = levelediter.GetLevelData()->cameraInit.rotation;
 	cameraTranslate = levelediter.GetLevelData()->cameraInit.translation;
@@ -65,8 +66,11 @@ void GameScene::Initialize() {
 			
 			
 			enemy->Initialize();
+			
 			enemy->SetTranslate(enemyData.translation);
 			enemy->SetRotate(enemyData.rotation);
+			enemy->SetInit_Position(enemyData.translation, enemyData.rotation);
+
 			enemy->SetAABB(enemyData.colliderAABB);
 			enemy->SetRoutePoint1(enemyData.Point1);
 			enemy->SetRoutePoint2(enemyData.Point2);
@@ -110,7 +114,7 @@ void GameScene::Initialize() {
 
 	stageobj = new Object3d();
 	stageobj->Initialize();
-	stageobj->SetModelFile("stage_proto.obj");
+	stageobj->SetModelFile("stage_0.obj");
 
 	wt.Initialize();
 
@@ -242,6 +246,63 @@ void GameScene::Update() {
 			//両方ともtrueの時
 			if (isWall && isGround) {
 				break;
+			}
+		}
+	}
+
+
+	isWall = false;
+	isGround = false;
+
+	for (auto& enemy : enemies) {
+		enemy->IsGround(false);
+		for (auto& stage : stagesAABB) {
+
+			AABB enemyAABB = enemy->GetAABB();
+
+			if (IsCollisionAABB(enemyAABB, stage)) {
+
+				Vector3 position = enemy->GetTranslate();
+				Vector3 overlap = OverAABB(enemy->GetAABB(), stage);
+
+				// 重なりが最小の軸で押し戻しを行う	
+				if (overlap.x < overlap.y) {
+					//真ん中の座標を代入
+					float enemyCenterX = (enemyAABB.min.x + enemyAABB.max.x) * 0.5f;
+					float obstacleCenterX = (stage.min.x + stage.max.x) * 0.5f;
+					//真ん中から 右の場合 - / 左の場合 +
+					float push = (enemyCenterX < obstacleCenterX) ? -overlap.x : overlap.x;
+
+					position.x += push;
+					isWall = true;
+				}
+				else if (overlap.y < overlap.x) {
+					// 真ん中の座標を代入
+					float enemyCenterY = (enemyAABB.min.y + enemyAABB.max.y) * 0.5f;
+					float obstacleCenterY = (stage.min.y + stage.max.y) * 0.5f;
+					//真ん中から 右の場合 - / 左の場合 +
+					float push = (enemyCenterY < obstacleCenterY) ? -overlap.y : overlap.y;
+
+					//床 or 天井 (0以上は床、0未満は天井)
+					if (push >= 0.0f) {
+						position.y += push;
+						// 着地判定を立てる
+						enemy->IsGround(true);
+						enemy->GrabityZero();
+					}
+					else if (push < 0.0f) {
+						position.y += push;
+					}
+					isGround = true;
+				}
+				//z軸はいらないかも
+
+				enemy->SetTranslate(position);
+
+				//両方ともtrueの時
+				if (isWall && isGround) {
+					break;
+				}
 			}
 		}
 	}

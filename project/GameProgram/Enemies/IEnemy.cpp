@@ -7,6 +7,20 @@ IEnemy::~IEnemy(){
 	delete object;
 }
 
+
+void IEnemy::GrabityUpdate() {
+	
+	grabity -= 0.01f;
+	//重力
+	if (!isGround) {
+		worldTransform.translation_.y += grabity;
+	}
+	else {
+		grabity = 0.0f;
+	}
+
+}
+
 AABB IEnemy::GetAABB() {
 	AABB aabb;
 	aabb.min = worldTransform.translation_ + enemyAABB.min;
@@ -18,17 +32,6 @@ AABB IEnemy::GetAABB() {
 
 void IEnemy::PlayerTarget() {
 
-
-	worldTransform.rotation_.y = std::fmod(worldTransform.rotation_.y, 360.0f);
-
-
-	if (worldTransform.rotation_.y >= 0.0f && worldTransform.rotation_.y < 180.0f) {
-		direction = left;
-	}
-	else if (worldTransform.rotation_.y >= 180.0f && worldTransform.rotation_.y < 360.0f) {
-		direction = right;
-	}
-
 	if (IsCollisionAABB(player_->GetAABB(), eyeAABB) && !player_->GetIsPlayerDown()) {
 		isFoundTarget = true;
 	}
@@ -38,6 +41,15 @@ void IEnemy::PlayerTarget() {
 
 }
 
+void IEnemy::RespownEnemy_All() {
+	isDead = false;
+	deleteEnemy = false;
+	hp = maxHp;
+
+	//blenderで配置した初期位置に戻る
+	worldTransform.translation_ = init_point;
+	worldTransform.rotation_ = init_rotate;
+}
 
 void IEnemy::DeadUpdate() {
 	if (isDead) {
@@ -45,6 +57,7 @@ void IEnemy::DeadUpdate() {
 	}
 	else {
 		worldTransform.rotation_.z = 0.0f;
+		return;
 	}
 
 	if (worldTransform.rotation_.z > 90.0f) {

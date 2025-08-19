@@ -51,6 +51,9 @@ void Enemy_Soldier::Update() {
 
 	if (!isDead) {
 
+		//重力
+		GrabityUpdate();
+
 
 		if (move.x < route_point1.x) {
 			worldTransform.rotation_.y = 90.0f;
@@ -211,12 +214,6 @@ void Enemy_Soldier::Fire() {
 }
 
 void Enemy_Soldier::RespownEnemy() {
-	isDead = false;
-	deleteEnemy = false;
-	hp = maxHp;
-	//blenderで配置した初期位置に戻る
-	worldTransform.translation_ = init_point;
-	worldTransform.rotation_ = init_rotate;
-
+	RespownEnemy_All();
 	move = { 0,0,0 };
 }

@@ -39,6 +39,9 @@ void Enemy_Bomb::Update() {
 	DeadUpdate();
 
 	if (!isDead) {
+		
+		//重力
+		GrabityUpdate();
 
 		if (!isStart) {
 			if (move.x < route_point1.x) {
@@ -129,15 +132,10 @@ void Enemy_Bomb::IsDamage() {
 }
 
 void Enemy_Bomb::RespownEnemy() {
-	isDead = false;
-	deleteEnemy = false;
+	RespownEnemy_All();
+	
 	isStart = false;
 	bombTimer = 0.0f;
-	hp = maxHp;
-	//blenderで配置した初期位置に戻る
-	worldTransform.translation_ = init_point;
-	worldTransform.rotation_ = init_rotate;
-
 	move = { 0,0,0 };
 
 	bombAABB.min = { 0,-10,0 };

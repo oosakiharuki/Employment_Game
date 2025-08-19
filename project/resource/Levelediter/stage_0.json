@@ -2,16 +2,70 @@
     "name": "scene",
     "objects": [
         {
+            "type": "LIGHT",
+            "name": "Light",
+            "transform": {
+                "translation": [
+                    4.076245307922363,
+                    1.0054539442062378,
+                    5.903861999511719
+                ],
+                "rotation": [
+                    37.26104736328125,
+                    3.1637091636657715,
+                    106.93632507324219
+                ],
+                "scaling": [
+                    1.0,
+                    0.9999999403953552,
+                    1.0
+                ]
+            }
+        },
+        {
             "type": "CAMERA",
             "name": "Camera",
             "transform": {
                 "translation": [
-                    8.449999809265137,
-                    -60.0,
-                    9.0
+                    -54.0,
+                    -57.0,
+                    11.0
                 ],
                 "rotation": [
                     90.00000762939453,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "travel_route": {
+                "start": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "end": [
+                    108.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        {
+            "type": "PlayerSpawn",
+            "name": "PlayerSpawn",
+            "transform": {
+                "translation": [
+                    -63.0,
+                    0.0,
+                    2.0
+                ],
+                "rotation": [
+                    0.0,
                     -0.0,
                     0.0
                 ],
@@ -33,17 +87,175 @@
                     2.0,
                     2.0
                 ]
-            },
-            "travel_route": {
-                "start": [
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "立方体",
+            "transform": {
+                "translation": [
                     0.0,
                     0.0,
                     0.0
                 ],
-                "end": [
-                    100.8499984741211,
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    70.0,
+                    10.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
                     0.0,
                     0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "立方体.001",
+            "transform": {
+                "translation": [
+                    -71.0,
+                    -0.00441741943359375,
+                    14.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    10.0,
+                    15.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "立方体.002",
+            "transform": {
+                "translation": [
+                    70.9973373413086,
+                    0.0,
+                    13.98130989074707
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    10.0,
+                    15.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "立方体.003",
+            "transform": {
+                "translation": [
+                    -40.0,
+                    -0.25311279296875,
+                    2.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    10.0,
+                    10.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "立方体.004",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    6.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    10.0,
+                    10.0,
+                    5.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
                 ]
             }
         },
@@ -52,14 +264,14 @@
             "name": "EnemySpawn",
             "transform": {
                 "translation": [
-                    47.585533142089844,
+                    31.0,
                     0.0,
-                    22.458209991455078
+                    4.5
                 ],
                 "rotation": [
                     0.0,
-                    0.0,
-                    -89.99999237060547
+                    -0.0,
+                    -90.00000762939453
                 ],
                 "scaling": [
                     1.0,
@@ -83,30 +295,30 @@
             },
             "travel_route": {
                 "start": [
-                    -11.0,
+                    -4.0,
                     0.0,
                     0.0
                 ],
                 "end": [
-                    3.5,
+                    4.0,
                     0.0,
                     0.0
                 ]
             }
         },
         {
-            "type": "PlayerSpawn",
-            "name": "PlayerSpawn",
+            "type": "Checkpoint",
+            "name": "Checkpoint",
             "transform": {
                 "translation": [
                     0.0,
                     0.0,
-                    0.5
+                    13.0
                 ],
                 "rotation": [
                     0.0,
                     -0.0,
-                    89.99999237060547
+                    0.0
                 ],
                 "scaling": [
                     1.0,
@@ -119,91 +331,23 @@
                 "center": [
                     0.0,
                     0.0,
-                    0.0
+                    5.0
                 ],
                 "size": [
                     2.0,
                     2.0,
-                    3.0
+                    14.0
                 ]
             }
         },
         {
             "type": "MESH",
-            "name": "立方体.006",
+            "name": "立方体.005",
             "transform": {
                 "translation": [
-                    95.71430206298828,
+                    31.0,
                     0.0,
-                    0.3535633087158203
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    20.69999885559082,
-                    10.0,
-                    3.432079553604126
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
                     2.0
-                ]
-            }
-        },
-        {
-            "type": "MESH",
-            "name": "立方体.004",
-            "transform": {
-                "translation": [
-                    48.0,
-                    0.0,
-                    7.639312267303467
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    3.999999761581421,
-                    10.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
-        },
-        {
-            "type": "MESH",
-            "name": "立方体.003",
-            "transform": {
-                "translation": [
-                    40.0,
-                    0.0,
-                    3.847301721572876
                 ],
                 "rotation": [
                     0.0,
@@ -213,7 +357,7 @@
                 "scaling": [
                     5.0,
                     10.0,
-                    4.80000114440918
+                    1.0
                 ]
             },
             "collider": {
@@ -232,12 +376,12 @@
         },
         {
             "type": "MESH",
-            "name": "立方体.002",
+            "name": "立方体.006",
             "transform": {
                 "translation": [
-                    -3.0,
+                    31.0,
                     0.0,
-                    7.0
+                    21.0
                 ],
                 "rotation": [
                     0.0,
@@ -245,9 +389,9 @@
                     0.0
                 ],
                 "scaling": [
-                    1.0,
                     10.0,
-                    8.0
+                    10.0,
+                    10.0
                 ]
             },
             "collider": {
@@ -266,12 +410,12 @@
         },
         {
             "type": "MESH",
-            "name": "立方体",
+            "name": "立方体.007",
             "transform": {
                 "translation": [
-                    35.586822509765625,
+                    -37.0,
                     0.0,
-                    -2.0
+                    4.0
                 ],
                 "rotation": [
                     0.0,
@@ -279,7 +423,7 @@
                     0.0
                 ],
                 "scaling": [
-                    39.60000228881836,
+                    4.0,
                     10.0,
                     1.0
                 ]
@@ -300,12 +444,12 @@
         },
         {
             "type": "EnemySpawn",
-            "name": "EnemySpawn.002",
+            "name": "EnemySpawn.001",
             "transform": {
                 "translation": [
-                    102.0,
+                    60.0,
                     0.0,
-                    5.0
+                    2.0
                 ],
                 "rotation": [
                     0.0,
@@ -335,166 +479,17 @@
         },
         {
             "type": "EnemySpawn",
-            "name": "EnemySpawn.001",
+            "name": "EnemySpawn.002",
             "transform": {
                 "translation": [
-                    69.0,
-                    0.0,
-                    0.1780233383178711
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    90.00000762939453
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": "Soldier",
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    3.0
-                ]
-            },
-            "travel_route": {
-                "start": [
-                    -21.0,
-                    0.0,
-                    0.0
-                ],
-                "end": [
-                    4.5,
-                    0.0,
-                    0.0
-                ]
-            }
-        },
-        {
-            "type": "MESH",
-            "name": "立方体.001",
-            "transform": {
-                "translation": [
-                    16.0,
-                    0.0,
-                    -0.2811805307865143
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
                     5.0,
-                    10.0,
-                    0.9600001573562622
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
                     0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
-        },
-        {
-            "type": "Checkpoint",
-            "name": "Checkpoint",
-            "transform": {
-                "translation": [
-                    48.0,
-                    0.0,
-                    1.0
+                    13.0
                 ],
                 "rotation": [
                     0.0,
                     -0.0,
                     0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    4.0
-                ]
-            }
-        },
-        {
-            "type": "Checkpoint",
-            "name": "Checkpoint.001",
-            "transform": {
-                "translation": [
-                    106.0,
-                    0.0,
-                    6.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    4.0
-                ]
-            }
-        },
-        {
-            "type": "EnemySpawn",
-            "name": "EnemySpawn.003",
-            "transform": {
-                "translation": [
-                    31.867652893066406,
-                    0.0,
-                    0.3513927459716797
-                ],
-                "rotation": [
-                    0.0,
-                    0.0,
-                    -89.99999237060547
                 ],
                 "scaling": [
                     1.0,
@@ -513,12 +508,12 @@
                 "size": [
                     2.0,
                     2.0,
-                    3.0
+                    2.0
                 ]
             },
             "travel_route": {
                 "start": [
-                    -7.0,
+                    -2.0,
                     0.0,
                     0.0
                 ],

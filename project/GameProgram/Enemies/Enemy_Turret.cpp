@@ -51,6 +51,9 @@ void Enemy_Turret::Update() {
 
 	if (!deleteEnemy) {
 
+		//重力
+		GrabityUpdate();
+
 		if (hp == 0) {
 			isDead = true;
 			//particle_dead->SetTranslate(worldTransform.translation_);
@@ -203,7 +206,5 @@ void Enemy_Turret::Fire() {
 }
 
 void Enemy_Turret::RespownEnemy() {
-	isDead = false;
-	deleteEnemy = false;
-	hp = maxHp;
+	RespownEnemy_All();
 }

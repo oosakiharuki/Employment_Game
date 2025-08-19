@@ -15,13 +15,16 @@ public:
 	virtual void IsDamage() = 0;
 	virtual void Attack() = 0;
 
+	void GrabityUpdate();
+	
+	Vector3 GetTranslate() { return worldTransform.translation_; }
+	void SetTranslate(Vector3 translate) { worldTransform.translation_ = translate;}
 
-	void SetTranslate(Vector3 translate) { 
-		worldTransform.translation_ = translate;
-		init_point= translate;
-	}
-	void SetRotate(Vector3 rotate) { 
-		worldTransform.rotation_ = rotate;
+	Vector3 GetRotate() { return worldTransform.rotation_; }
+	void SetRotate(Vector3 rotate) { worldTransform.rotation_ = rotate;}
+
+	void SetInit_Position(Vector3 translate, Vector3 rotate) {
+		init_point = translate;
 		init_rotate = rotate;
 	}
 
@@ -36,6 +39,7 @@ public:
 
 	bool GetDeleteEnemy() { return deleteEnemy; }
 	virtual void RespownEnemy() = 0;
+	void RespownEnemy_All();
 
 	void SetRoutePoint1(Vector3 point1) { route_point1 = point1; }
 	void SetRoutePoint2(Vector3 point2) { route_point2 = point2; }
@@ -43,6 +47,12 @@ public:
 
 	//角度で向きを変更
 	void DirectionDegree();
+
+	//重力
+	void IsGround(bool result) { isGround = result; }
+
+	bool GetIsGround() { return isGround; }
+	void GrabityZero() { grabity = 0.0f; }
 
 protected:
 	Object3d* object;
@@ -83,5 +93,11 @@ protected:
 	//動く範囲
 	Vector3 route_point1;
 	Vector3 route_point2;
+
+
+	bool isGround = false;
+
+	float grabity = 0.0f;
+	const float deltaTime = 1.0f / 60.0f;
 };
 
