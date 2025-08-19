@@ -1,10 +1,14 @@
 #pragma once
 #include "MyMath.h"
 #include "Object3d.h"
+#include "Object_glTF.h"
 #include "PlayerBullet.h"
 #include "Umbrella.h"
 #include "Audio.h"
 #include "Particle.h"
+
+#include "GLTFCommon.h"
+#include "Object3dCommon.h"
 
 class Player {
 public:
@@ -79,8 +83,18 @@ public:
 		isPlayerDown = false;
 	}
 
+	enum class Animation_Mode {
+		mode_stop,
+		mode_move,
+		mode_sield,
+		mode_damage
+	};
+
+
+
 private:
-	Object3d* object;
+	//Object3d* object;
+	Object_glTF* object;
 	WorldTransform worldTransform;
 	AABB playerAABB;
 
@@ -153,4 +167,9 @@ private:
 	Particle* particle_damage;
 
 	Vector3 PrePosition;
+
+	//アニメーション
+	Animation_Mode animation_mode;
+	Animation_Mode PreAnimation_mode;
+	bool isChangeAnimation = false;
 };

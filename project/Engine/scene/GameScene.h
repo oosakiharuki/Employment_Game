@@ -56,7 +56,4 @@ private:
 
 	BoxModel* skyBox = nullptr;
 
-	Object_glTF* gltfOBJ = nullptr;
-
-	bool EnemyRespown();
 };

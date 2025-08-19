@@ -9,13 +9,19 @@ void GameScene::Initialize() {
 	modelManager->LoadModel("playerHead", ".obj");
 	modelManager->LoadModel("enemy", ".obj");
 	modelManager->LoadModel("stage_proto", ".obj");
-	modelManager->LoadModel("sneakWalk", ".gltf");
 	modelManager->LoadModel("PlayerBullet", ".obj");
 	modelManager->LoadModel("umbrella_Open", ".obj");
 	modelManager->LoadModel("umbrella_Close", ".obj");
 	modelManager->LoadModel("checkpoint", ".obj");
 	modelManager->LoadModel("sphere", ".obj");
 	modelManager->LoadModel("stage_0", ".obj");
+	
+	//glft
+	modelManager->LoadModel("walk", ".gltf");
+	modelManager->LoadModel("sneakWalk", ".gltf");
+	modelManager->LoadModel("stop", ".gltf");
+
+
 
 	camera = new Camera();
 
@@ -126,10 +132,6 @@ void GameScene::Initialize() {
 	skyBox = new BoxModel();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
 
-	gltfOBJ = new Object_glTF();
-	gltfOBJ->Initialize();
-	gltfOBJ->SetModelFile("sneakWalk.gltf");
-	gltfOBJ->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 }
 
 void GameScene::Update() {
@@ -357,10 +359,6 @@ void GameScene::Update() {
 		isChangeRespown = false;
 	}
 
-
-
-	gltfOBJ->Update(wt);
-
 	//カメラの移動範囲
 	if (cameraTranslate.x + cameraPoint1.x < player_->GetTranslate().x && cameraTranslate.x + cameraPoint2.x > player_->GetTranslate().x) {
 		worldTransformCamera_.translation_.x = player_->GetTranslate().x;
@@ -418,13 +416,11 @@ void GameScene::Update() {
 void GameScene::Draw() {
 	
 	Cubemap::GetInstance()->Command();
-	//skyBox->Draw();
+	skyBox->Draw();
 
 
 	//モデル描画処理
 	GLTFCommon::GetInstance()->Command();
-	
-	gltfOBJ->Draw();
 
 	//モデル描画処理
 	Object3dCommon::GetInstance()->Command();
@@ -456,7 +452,6 @@ void GameScene::Finalize() {
 	}
 	delete stageobj;
 	delete skyBox;
-	delete gltfOBJ;
 
 	for (auto& checkPoint : checkPoints) {
 		delete checkPoint;
