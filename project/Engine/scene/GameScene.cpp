@@ -168,7 +168,7 @@ void GameScene::Update() {
 
 			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetUmbrella()->GetAABB()) && player_->GetIsShield()) {
 				bulletE->IsHit();
-				player_->KnockBackPlayer(Vector3(0.0f, 0.0f, 0.3f), 0.0f);
+				player_->KnockBackUmbrella(Vector3(0.0f, 0.0f, 0.3f), 0.0f);
 			}
 
 			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetAABB()) && !player_->GetIsPlayerDown()) {
@@ -184,6 +184,7 @@ void GameScene::Update() {
 			Enemy_Bomb* enemy_Bomb = dynamic_cast<Enemy_Bomb*>(enemy);
 			if (IsCollisionAABB(enemy_Bomb->GetBombAABB(), player_->GetAABB()) && !enemy->IsDead()) {
 				player_->IsDamage();
+				player_->KnockBackPlayer(enemy_Bomb->GetDistance(), 0.8f);
 			}
 			//enemyから値を入れているためdeleteの必要はない
 		}

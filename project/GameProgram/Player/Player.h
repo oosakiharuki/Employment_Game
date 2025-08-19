@@ -58,7 +58,10 @@ public:
 	void IsDamage();
 	void IsFall();//落ちたときの処理
 
-	void KnockBackPlayer(const Vector3 Power,const float TimerMax);
+	//プレイヤーが当たったノックバック
+	void KnockBackPlayer(const Vector3 Power, const float TimerMax);
+	//傘/銃でのノックバック
+	void KnockBackUmbrella(const Vector3 Power,const float TimerMax);
 
 
 	Vector3 GetWorldPosition();

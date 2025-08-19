@@ -20,6 +20,8 @@ public:
 
 	AABB GetBombAABB() { return bombAABB; }
 
+	Vector3 GetDistance() { return distance; }
+
 private:
 
 	bool isStart = false;
@@ -35,5 +37,7 @@ private:
 	Particle* particle_Bom;
 	AABB bombAABB;
 	Vector3 hani = { 3,3,3 };
+
+	Vector3 distance;
 };
 

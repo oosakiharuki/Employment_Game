@@ -413,7 +413,7 @@ void Player::ShootBullet() {
 
 	///ノックバック
 	Vector3 playerknockback = { 0.0f,0.0f,0.25f };
-	KnockBackPlayer(playerknockback,0.5f);
+	KnockBackUmbrella(playerknockback,0.5f);
 }
 
 void Player::IsDamage() {
@@ -438,7 +438,14 @@ void Player::IsFall() {
 }
 
 void Player::KnockBackPlayer(const Vector3 Power, const float TimerMax) {
-	backPower = TransformNormal(Power, wtGun.matWorld_);
+	backPower = TransformNormal(Power, worldTransform.matWorld_);
+	backPower.z = 0.0f;
+	isKnockback = true;
+	KnockBackTimeMax = TimerMax;
+}
+
+void Player::KnockBackUmbrella(const Vector3 Power, const float TimerMax) {
+	backPower = TransformNormal(Power, wtGun.matWorld_); 
 	isKnockback = true;
 	KnockBackTimeMax = TimerMax;
 }

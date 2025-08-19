@@ -23,6 +23,9 @@ void Enemy_Bomb::Initialize() {
 	particle_Bom->ChangeMode(BornParticle::Stop);
 	particle_Bom->SetParticleMosion(ParticleMosion::Exprosion);
 	particle_Bom->SetFrequency(1.0f);
+
+	bombAABB.min = { 0,-10,0 };
+	bombAABB.max = { 0,-10,0 };
 }
 
 void Enemy_Bomb::Update() {
@@ -98,11 +101,11 @@ void Enemy_Bomb::Attack() {
 	Vector3 enemyPosition = GetWorldPosition();
 	Vector3 playerPosition = player_->GetWorldPosition();
 
-	Vector3 distance = enemyPosition - playerPosition;
+	distance = enemyPosition - playerPosition;
 
 	distance = Normalize(distance);
 
-	worldTransform.translation_ += distance * speed * 3;
+	worldTransform.translation_ += distance * Vector3{ -0.03f,0,0 }* 3;
 
 	if (distance.x < 0) {
 		worldTransform.rotation_.y = 90.0f;
