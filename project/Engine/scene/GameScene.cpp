@@ -132,6 +132,10 @@ void GameScene::Initialize() {
 	skyBox = new BoxModel();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
 
+	for (auto& enemy : enemies) {
+		enemy->SetStages(stagesAABB);
+	}
+
 }
 
 void GameScene::Update() {

@@ -199,6 +199,11 @@ struct AABB {
 	Vector3 max;
 };
 
+struct Segment {
+	Vector3 origin;
+	Vector3 diff;
+};
+
 namespace MyMath {
 
 	Vector3 operator+(const Vector3& v1, const Vector3& v2);
@@ -284,4 +289,6 @@ namespace MyMath {
 
 	VertexData AddVert(const VertexData& v1, const VertexData& v2);
 
+	bool IsCollisionAABB_Segment(const AABB& aabb, const Segment& segment);
+	bool Intersect(Vector2 a1, Vector2 a2,Vector2 b1, Vector2 b2);
 }

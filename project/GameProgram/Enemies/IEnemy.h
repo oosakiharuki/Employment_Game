@@ -54,6 +54,8 @@ public:
 	bool GetIsGround() { return isGround; }
 	void GrabityZero() { grabity = 0.0f; }
 
+	void SetStages(std::vector<AABB> aabb) { stages = aabb; }
+
 protected:
 	Object3d* object;
 	WorldTransform worldTransform;
@@ -99,5 +101,8 @@ protected:
 
 	float grabity = 0.0f;
 	const float deltaTime = 1.0f / 60.0f;
+
+private:
+	std::vector<AABB> stages;
 };
 

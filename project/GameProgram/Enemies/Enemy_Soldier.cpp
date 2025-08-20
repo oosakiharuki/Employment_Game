@@ -68,13 +68,13 @@ void Enemy_Soldier::Update() {
 			switch (direction)
 			{
 			case right:
-				eyeAABB.min = worldTransform.translation_ + Vector3(0, -2, -1);
-				eyeAABB.max = worldTransform.translation_ + Vector3(15, 2, 1);
+				eyeAABB.min = worldTransform.translation_ + Vector3(0, -10, -1);
+				eyeAABB.max = worldTransform.translation_ + Vector3(20, 10, 1);
 				speed = { 0.03f,0,0 };
 				break;
 			case left:
-				eyeAABB.min = worldTransform.translation_ + Vector3(-15, -2, -1);
-				eyeAABB.max = worldTransform.translation_ + Vector3(0, 2, 1);
+				eyeAABB.min = worldTransform.translation_ + Vector3(-20, -10, -1);
+				eyeAABB.max = worldTransform.translation_ + Vector3(0, 10, 1);
 				speed = { -0.03f,0,0 };
 				break;
 			}		
@@ -196,13 +196,19 @@ void Enemy_Soldier::Fire() {
 	//プレイヤーの方向に向かう(最初に打つ弾にそって進む)
 	if (rapidCount == 0) {
 
+		const float kSpeed = 0.4f;
+
 		Vector3 playerPosition = player_->GetWorldPosition();
 
 		Vector3 distance = playerPosition - enemyPosition;
 
-		Normalize(distance);
+		Vector3 normal = Normalize(distance);
 
-		velocity = Vector3(0.02f, 0.02f, 0.02f) * distance;
+		normal.x *= kSpeed;
+		normal.y *= kSpeed;
+		normal.z *= kSpeed;
+
+		velocity = normal;
 	}
 	particle_fire->SetTranslate(enemyPosition);
 

@@ -1,4 +1,5 @@
 #include "IEnemy.h"
+#include "ImGuiManager.h"
 
 using namespace MyMath;
 IEnemy::IEnemy() {}
@@ -34,6 +35,18 @@ void IEnemy::PlayerTarget() {
 
 	if (IsCollisionAABB(player_->GetAABB(), eyeAABB) && !player_->GetIsPlayerDown()) {
 		isFoundTarget = true;
+
+		Segment segment;
+		segment.origin = worldTransform.translation_;
+		segment.diff = player_->GetTranslate();
+
+		//playerと敵との間に壁があるならば
+		for (auto& stage : stages) {
+			if (IsCollisionAABB_Segment(stage, segment)) {
+				isFoundTarget = false;
+				break;
+			}
+		}
 	}
 	else {
 		isFoundTarget = false;
