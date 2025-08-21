@@ -19,6 +19,7 @@ Player::~Player() {
 	delete particle_fire;
 	delete particle_brink;
 	delete particle_damage;
+	delete particle_pari;
 }
 
 void Player::Initialize() {
@@ -41,6 +42,7 @@ void Player::Initialize() {
 
 	hitSound = Audio::GetInstance()->LoadWave("resource/Sound/damage.wav");
 
+	pariSound = Audio::GetInstance()->LoadWave("resource/Sound/bane.wav");
 
 	particle_walk = new Particle();
 	particle_walk->Initialize("resource/Sprite/gradationLine.png",PrimitiveType::ring);
@@ -71,6 +73,13 @@ void Player::Initialize() {
 	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
 	particle_damage->SetFrequency(1.0f);
 
+
+	particle_pari = new Particle();
+	particle_pari->Initialize("resource/Sprite/uvChecker.png", PrimitiveType::cone);
+	particle_pari->ChangeMode(BornParticle::Stop);
+	particle_pari->SetParticleMosion(ParticleMosion::Fixed);
+	particle_fire->SetFrequency(0.5f);
+
 }
 
 void Player::Update() {
@@ -98,10 +107,10 @@ void Player::Update() {
 		}
 
 		if (isShield) {
-			speed = 0.05f;
+			speed = standard_speed / 2.0f;
 		}
 		else {
-			speed = 0.1f;
+			speed = standard_speed;
 		}
 
 		if (pushA) {
@@ -155,6 +164,12 @@ void Player::Update() {
 
 		if (isShield && !isGround && brinkTimer == 0.0f) {
 			range = Up;
+			if (pushA) {
+				worldTransform.translation_.x -= speed;
+			}
+			else if (pushD) {
+				worldTransform.translation_.x += speed;
+			}
 		}
 
 		switch (range)
@@ -207,9 +222,25 @@ void Player::Update() {
 				isBrink = true;
 			}
 			isShield = true;
+
+			pariTime -= deltaTime;
+			//パリィ時間がすぎるとき+ダメージを食らうとパリィ失敗
+			if (pariTime > 0.0f && infinityTimer >= infinityTimeMax) {
+				isPari = true;
+			}
+			else {
+				isPari = false;
+			}
+
+			pariCoolTime = 0.0f;
 		}
 		else {
 			isShield = false;
+			pariCoolTime += deltaTime;
+		}			
+		//連打してもすぐにパリィできないようにする
+		if (pariCoolTime >= pariTimeMax) {
+			pariTime = pariTimeMax;
 		}
 
 		if (isBrink) {
@@ -267,7 +298,7 @@ void Player::Update() {
 	}
 
 	//重力
-	if (isShield && !isGround) {
+	if (isShield && !isGround && range == Up) {
 		if (isJump) {
 			isJump = false;
 		}
@@ -323,6 +354,7 @@ void Player::Update() {
 	particle_fire->Update();
 	particle_brink->Update();
 	particle_damage->Update();
+	particle_pari->Update();
 
 	///アニメーション
 
@@ -427,6 +459,7 @@ void Player::DrawP() {
 	particle_fire->Draw();
 	particle_brink->Draw();
 	particle_damage->Draw();
+	particle_pari->Draw();
 
 }
 
@@ -524,4 +557,22 @@ void Player::DeadPlayer() {
 			deadTimer = 0.0f;
 		}
 	}
+}
+
+//パリィ成功 = 連続弾も跳ね返す
+void Player::PariSuccess() {
+	//パリィ時間延長
+	pariTime = pariTimeMax;
+
+	Audio::GetInstance()->StopWave(pariSound);
+	Audio::GetInstance()->SoundPlayWave(pariSound, 0.3f);
+
+	Vector3 translate = umbrella->GetTranslate();
+	translate.x += TransformNormal({0,0,2}, wtGun.matWorld_).x;
+
+	particle_pari->SetTranslate(translate);
+	particle_pari->SetRotate({ wtGun.rotation_.x + 90.0f,wtGun.rotation_.y,wtGun.rotation_.z });
+	particle_pari->SetScale({2.0f,0.2f,2.0f});
+
+	particle_pari->ChangeMode(BornParticle::MomentMode);
 }

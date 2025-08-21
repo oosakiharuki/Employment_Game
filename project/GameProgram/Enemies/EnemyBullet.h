@@ -18,6 +18,9 @@ public:
 	void IsHit() { isDead = true; }
 	AABB GetAABB();
 
+	void Pari_Mode();
+	bool GetIsPari() { return isPari; }
+
 private:
 	Object3d* object = nullptr;
 	WorldTransform worldTransform_;
@@ -28,5 +31,8 @@ private:
 	bool isDead = false;
 
 	AABB bulletAABB;
+
+	//パリィされたら敵のほうにダメージになる
+	bool isPari = false;
 };
 

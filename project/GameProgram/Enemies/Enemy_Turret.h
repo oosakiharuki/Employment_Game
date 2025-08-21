@@ -27,7 +27,7 @@ private:
 	const float rapidFireTimeMax = 0.1f;
 
 	uint32_t rapidCount = 0;
-	const uint32_t rapidFireMax = 5;
+	const uint32_t rapidFireMax = 6;
 
 	Particle* particle_dead;
 	Particle* particle_damage;

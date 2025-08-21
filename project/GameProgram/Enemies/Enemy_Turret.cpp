@@ -49,18 +49,18 @@ void Enemy_Turret::Initialize() {
 
 void Enemy_Turret::Update() {
 
-	if (!deleteEnemy) {
+	if (hp == 0) {
+		isDead = true;
+		//particle_dead->SetTranslate(worldTransform.translation_);
+		//particle_dead->ChangeMode(BornParticle::MomentMode);
+	}
+
+	DeadUpdate();
+
+	if (!isDead) {
 
 		//重力
 		GrabityUpdate();
-
-		if (hp == 0) {
-			isDead = true;
-			//particle_dead->SetTranslate(worldTransform.translation_);
-			//particle_dead->ChangeMode(BornParticle::MomentMode);
-		}
-
-		DeadUpdate();
 
 		DirectionDegree();
 

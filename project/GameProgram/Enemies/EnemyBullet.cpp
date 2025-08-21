@@ -19,7 +19,14 @@ void EnemyBullet::Initialize() {
 }
 
 void EnemyBullet::Update() {
-	worldTransform_.translation_ += velocity_;
+	if (!isPari) {
+		worldTransform_.translation_ += velocity_;
+	}
+	else {
+		///パリィされた時
+		worldTransform_.translation_ -= velocity_;
+	}
+
 
 	deathTimer += 1.0f / 60.0f;
 
@@ -40,4 +47,8 @@ AABB EnemyBullet::GetAABB() {
 	aabb.min = worldTransform_.translation_ + bulletAABB.min;
 	aabb.max = worldTransform_.translation_ + bulletAABB.max;
 	return aabb;
+}
+
+void EnemyBullet::Pari_Mode() {
+	isPari = true;
 }

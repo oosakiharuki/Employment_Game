@@ -90,7 +90,10 @@ public:
 		mode_damage
 	};
 
-
+	bool GetIsPari() { return isPari; }
+	//パリィ成功 = 連続弾も跳ね返す
+	void PariSuccess();
+	void SetIsPari(bool result) { isPari = result; }
 
 private:
 	//Object3d* object;
@@ -98,7 +101,8 @@ private:
 	WorldTransform worldTransform;
 	AABB playerAABB;
 
-	float speed = 0.1f;
+	const float standard_speed = 0.14f;
+	float speed = standard_speed;
 
 	bool isJump = false;
 
@@ -125,6 +129,12 @@ private:
 	/// 傘のシールド
 	bool isShield = false;
 	Umbrella* umbrella = nullptr;
+
+	//パリィ
+	bool isPari = false;
+	float pariTimeMax = 0.1f;
+	float pariTime = pariTimeMax;
+	float pariCoolTime = 0.0f;
 
 	/// ノックバック
 	bool isKnockback = false;
@@ -159,12 +169,14 @@ private:
 
 	//サウンド
 	SoundData hitSound;
+	SoundData pariSound;
 
 	//パーティクル
 	Particle* particle_walk;
 	Particle* particle_fire;
 	Particle* particle_brink;
 	Particle* particle_damage;
+	Particle* particle_pari;
 
 	Vector3 PrePosition;
 

@@ -174,16 +174,32 @@ void GameScene::Update() {
 			}
 		}
 
+		//弾丸
 		for (EnemyBullet* bulletE : enemy->GetBullets()) {
 
+			//傘の当たり判定
 			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetUmbrella()->GetAABB()) && player_->GetIsShield()) {
-				bulletE->IsHit();
-				player_->KnockBackUmbrella(Vector3(0.0f, 0.0f, 0.3f), 0.0f);
+				
+				if (player_->GetIsPari()) {
+					bulletE->Pari_Mode();
+					player_->PariSuccess();
+				}
+				else {
+					bulletE->IsHit();
+					player_->KnockBackUmbrella(Vector3(0.0f, 0.0f, 0.3f), 0.0f);
+				}
 			}
 
+			//プレイヤーの当たり判定
 			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetAABB()) && !player_->GetIsPlayerDown()) {
 				bulletE->IsHit();
 				player_->IsDamage();
+			}
+
+			//跳ね返った弾の当たり判定
+			if (IsCollisionAABB(bulletE->GetAABB(), enemy->GetAABB()) && bulletE->GetIsPari()) {
+				bulletE->IsHit();
+				enemy->IsDamage();
 			}
 		}
 
@@ -199,7 +215,7 @@ void GameScene::Update() {
 			//enemyから値を入れているためdeleteの必要はない
 		}
 	}
-
+	
 	///当たり判定
 
 	bool isWall = false;
