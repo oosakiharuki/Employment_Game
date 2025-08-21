@@ -18,6 +18,7 @@ public:
 	void RespownEnemy() override;
 
 private:
+	bool isBulletStart = false;
 
 	float coolTime = 0.0f;
 	const float coolTimeMax = 1.0f;

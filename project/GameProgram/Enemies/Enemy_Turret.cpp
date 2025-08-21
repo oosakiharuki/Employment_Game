@@ -80,6 +80,10 @@ void Enemy_Turret::Update() {
 		PlayerTarget();
 
 		if (isFoundTarget) {
+			isBulletStart = true;
+		}
+
+		if (isBulletStart) {
 			Attack();
 		}
 		else {
@@ -179,6 +183,7 @@ void Enemy_Turret::Attack() {
 		if (rapidCount == rapidFireMax) {
 			rapidCount = 0;
 			coolTime = 0;
+			isBulletStart = false;
 		}
 	}
 

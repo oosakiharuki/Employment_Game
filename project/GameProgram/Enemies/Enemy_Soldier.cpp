@@ -64,7 +64,7 @@ void Enemy_Soldier::Update() {
 
 		DirectionDegree();
 
-		if (!isFoundTarget) {
+		if (!isFoundTarget && !isBulletStart) {
 			switch (direction)
 			{
 			case right:
@@ -86,9 +86,14 @@ void Enemy_Soldier::Update() {
 		PlayerTarget();
 
 		if (isFoundTarget) {
+			isBulletStart = true;
+		}
+		if (isBulletStart) {
 			Attack();
-		}else{
+		}
+		else {
 			rapidCount = 0;
+			rapidFireTime = 0;
 			coolTime = 0;
 		}
 	}
@@ -179,6 +184,7 @@ void Enemy_Soldier::Attack() {
 		if (rapidCount == rapidFireMax) {
 			rapidCount = 0;
 			coolTime = 0;
+			isBulletStart = false;
 		}
 	}
 
