@@ -48,20 +48,25 @@ public:
 			AABB colliderAABB;
 		};
 
+		struct WarpGateData {
+			std::string fileName;
+			Vector3 translation;
+			AABB colliderAABB;
+		};
+
 		std::vector<ObjectData> objects;
 		std::vector<PlayerSpawnData> players;
 		std::vector<EnemySpawnData> spawnEnemies;
 		CameraInitData cameraInit;
 		std::vector<CheckpointData> checkpoints;
+		std::vector<WarpGateData> warpGate;
 	};
 
 	LevelData* GetLevelData() { return levelData; }
+	//レベルエディタリセット
+	void ResetData();
 
 private:
 
 	LevelData* levelData;
-
-	//カメラ
-	Vector3 cameraRotate = { 0.0f,0.0f,0.0f };
-	Vector3 cameraTranslate = { 0.0f,0.0f,-15.0f };
 };

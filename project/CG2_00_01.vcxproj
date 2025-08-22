@@ -175,6 +175,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\Player\PlayerBullet.cpp" />
     <ClCompile Include="GameProgram\Enemies\IEnemy.cpp" />
     <ClCompile Include="GameProgram\Player\Umbrella.cpp" />
+    <ClCompile Include="WarpGate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CheckPoint.h" />
@@ -243,6 +244,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\Player\PlayerBullet.h" />
     <ClInclude Include="GameProgram\Enemies\IEnemy.h" />
     <ClInclude Include="GameProgram\Player\Umbrella.h" />
+    <ClInclude Include="WarpGate.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

@@ -14,8 +14,8 @@ void EnemyBullet::Initialize() {
 
 	worldTransform_.Initialize();
 
-	bulletAABB.min = { -1,-1,-1 };
-	bulletAABB.max = { 1,1,1 };
+	bulletAABB.min = { -0.5f,-0.5f,-0.5f };
+	bulletAABB.max = { 0.5f,0.5f,0.5f };
 }
 
 void EnemyBullet::Update() {

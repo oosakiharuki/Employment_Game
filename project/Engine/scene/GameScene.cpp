@@ -15,6 +15,8 @@ void GameScene::Initialize() {
 	modelManager->LoadModel("checkpoint", ".obj");
 	modelManager->LoadModel("sphere", ".obj");
 	modelManager->LoadModel("stage_0", ".obj");
+	modelManager->LoadModel("stage_1", ".obj");
+	modelManager->LoadModel("warpGate", ".obj");
 	
 	//glft
 	modelManager->LoadModel("walk", ".gltf");
@@ -22,105 +24,14 @@ void GameScene::Initialize() {
 	modelManager->LoadModel("stop", ".gltf");
 
 
-
-	camera = new Camera();
-
-	//levelediter = new Levelediter();
-	levelediter.LoadLevelediter("resource/Levelediter/stage_0.json");
-
-	cameraRotate = levelediter.GetLevelData()->cameraInit.rotation;
-	cameraTranslate = levelediter.GetLevelData()->cameraInit.translation;
-
-	cameraPoint1 = levelediter.GetLevelData()->cameraInit.Point1;
-	cameraPoint2 = levelediter.GetLevelData()->cameraInit.Point2;
-
-	camera->SetRotate(cameraRotate);
-	camera->SetTranslate(cameraTranslate);
-
-	Object3dCommon::GetInstance()->SetDefaultCamera(camera);
-	GLTFCommon::GetInstance()->SetDefaultCamera(camera);
-	ParticleCommon::GetInstance()->SetDefaultCamera(camera);
-	DebugWireframes::GetInstance()->SetDefaultCamera(camera);
-	Cubemap::GetInstance()->SetDefaultCamera(camera);
-
-	player_ = new Player();
-	player_->Initialize();
-
-	//プレイヤー配置データがあるときプレイヤーを配置
-	if (!levelediter.GetLevelData()->players.empty()) {
-		auto& playerData = levelediter.GetLevelData()->players[0];
-		player_->SetTranslate(playerData.translation);
-		player_->SetRotate(playerData.rotation);
-		player_->SetAABB(playerData.colliderAABB);
-
-		player_->SetRespownPosition(playerData.translation);
-	}
-
-
-	if (!levelediter.GetLevelData()->spawnEnemies.empty()) {
-		for (auto& enemyData : levelediter.GetLevelData()->spawnEnemies) {
-
-			IEnemy* enemy;
-			if (enemyData.fileName == "Turret") {
-				enemy = new Enemy_Turret();
-			}else if (enemyData.fileName == "Bomb") {
-				enemy = new Enemy_Bomb();
-			}
-			else {
-				enemy = new Enemy_Soldier();
-			}
-			
-			
-			enemy->Initialize();
-			
-			enemy->SetTranslate(enemyData.translation);
-			enemy->SetRotate(enemyData.rotation);
-			enemy->SetInit_Position(enemyData.translation, enemyData.rotation);
-
-			enemy->SetAABB(enemyData.colliderAABB);
-			enemy->SetRoutePoint1(enemyData.Point1);
-			enemy->SetRoutePoint2(enemyData.Point2);
-
-			enemy->DirectionDegree();
-
-			enemies.push_back(enemy);
-		}
-	}
-
-	if (!levelediter.GetLevelData()->objects.empty()) {
-		for (auto& object : levelediter.GetLevelData()->objects) {
-
-			Vector3 position = object.translation;
-
-			AABB aabb;
-			aabb.min = position + object.colliderAABB.min;
-			aabb.max = position + object.colliderAABB.max;
-
-			stagesAABB.push_back(aabb);
-		}
-	}
-
-	//チェックポイント地点
-	if (!levelediter.GetLevelData()->objects.empty()) {
-		for (auto& checkPointData : levelediter.GetLevelData()->checkpoints) {
-			CheckPoint* checkPoint = new CheckPoint();
-			checkPoint->Initialize();
-			checkPoint->SetPosition(checkPointData.translation);
-			checkPoint->SetAABB(checkPointData.colliderAABB);
-			checkPoints.push_back(checkPoint);
-		}
-	}
-
-
-	worldTransformCamera_.Initialize();
-	worldTransformCamera_.translation_ = cameraTranslate;
-	worldTransformCamera_.rotation_ = cameraRotate;
-
-	//camera->SetParent(&worldTransformCamera_);
+	LevelEditorObjectSetting("resource/Levelediter/stage_0.json");
 
 	stageobj = new Object3d();
 	stageobj->Initialize();
 	stageobj->SetModelFile("stage_0.obj");
+
+	skyBox = new BoxModel();
+	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
 
 	wt.Initialize();
 
@@ -129,12 +40,6 @@ void GameScene::Initialize() {
 
 	Audio::GetInstance()->SoundPlayWave(BGMData_, 0.3f, true);
 
-	skyBox = new BoxModel();
-	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
-
-	for (auto& enemy : enemies) {
-		enemy->SetStages(stagesAABB);
-	}
 
 }
 
@@ -401,6 +306,16 @@ void GameScene::Update() {
 	wt.UpdateMatrix();
 	worldTransformCamera_.UpdateMatrix();
 
+	for (auto& warpGate : warpGates) {
+		warpGate->Update();
+	}
+
+	for (auto& warpGate : warpGates) {
+		if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB())) {
+			StageMovement("resource/Levelediter/stage_1.json", "stage_1.obj");
+			break;
+		}
+	}
 
 #ifdef  USE_IMGUI
 
@@ -455,6 +370,9 @@ void GameScene::Draw() {
 	for (auto& checkPoint : checkPoints) {
 		checkPoint->Draw();
 	}
+	for (auto& warpGate : warpGates) {
+		warpGate->Draw();
+	}
 	//パーティクル描画処理
 	ParticleCommon::GetInstance()->Command();
 	player_->DrawP();
@@ -470,10 +388,148 @@ void GameScene::Finalize() {
 	for (auto& enemy : enemies) {
 		delete enemy;
 	}
+	enemies.clear();
 	delete stageobj;
 	delete skyBox;
 
 	for (auto& checkPoint : checkPoints) {
 		delete checkPoint;
+	}
+	checkPoints.clear();
+
+	stagesAABB.clear();
+
+	for (auto& warpGate : warpGates) {
+		delete warpGate;
+	}
+	warpGates.clear();
+}
+
+void GameScene::StageMovement(const std::string leveleditor_file, const std::string stageObj) {
+	Finalize();
+	levelediter.ResetData();
+	//パーティクルナンバー初期化
+	ParticleNum::number = 0;
+
+	LevelEditorObjectSetting(leveleditor_file);	
+	
+	stageobj = new Object3d();
+	stageobj->Initialize();
+	stageobj->SetModelFile(stageObj);
+
+	skyBox = new BoxModel();
+	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
+
+}
+
+void GameScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
+
+	levelediter.LoadLevelediter(leveleditor_file);
+
+	camera = new Camera();
+
+	cameraRotate = levelediter.GetLevelData()->cameraInit.rotation;
+	cameraTranslate = levelediter.GetLevelData()->cameraInit.translation;
+
+	//カメラの最小/最大地点
+	cameraPoint1 = levelediter.GetLevelData()->cameraInit.Point1;
+	cameraPoint2 = levelediter.GetLevelData()->cameraInit.Point2;
+
+	camera->SetRotate(cameraRotate);
+	camera->SetTranslate(cameraTranslate);
+
+	Object3dCommon::GetInstance()->SetDefaultCamera(camera);
+	GLTFCommon::GetInstance()->SetDefaultCamera(camera);
+	ParticleCommon::GetInstance()->SetDefaultCamera(camera);
+	DebugWireframes::GetInstance()->SetDefaultCamera(camera);
+	Cubemap::GetInstance()->SetDefaultCamera(camera);
+
+	player_ = new Player();
+	player_->Initialize();
+
+	//プレイヤー配置データがあるときプレイヤーを配置
+	if (!levelediter.GetLevelData()->players.empty()) {
+		auto& playerData = levelediter.GetLevelData()->players[0];
+		player_->SetTranslate(playerData.translation);
+		player_->SetRotate(playerData.rotation);
+		player_->SetAABB(playerData.colliderAABB);
+
+		player_->SetRespownPosition(playerData.translation);
+	}
+
+
+	if (!levelediter.GetLevelData()->spawnEnemies.empty()) {
+		for (auto& enemyData : levelediter.GetLevelData()->spawnEnemies) {
+
+			IEnemy* enemy;
+			if (enemyData.fileName == "Turret") {
+				enemy = new Enemy_Turret();
+			}
+			else if (enemyData.fileName == "Bomb") {
+				enemy = new Enemy_Bomb();
+			}
+			else {
+				enemy = new Enemy_Soldier();
+			}
+
+
+			enemy->Initialize();
+
+			enemy->SetTranslate(enemyData.translation);
+			enemy->SetRotate(enemyData.rotation);
+			enemy->SetInit_Position(enemyData.translation, enemyData.rotation);
+
+			enemy->SetAABB(enemyData.colliderAABB);
+			enemy->SetRoutePoint1(enemyData.Point1);
+			enemy->SetRoutePoint2(enemyData.Point2);
+
+			enemy->DirectionDegree();
+
+			enemies.push_back(enemy);
+		}
+	}
+
+	if (!levelediter.GetLevelData()->objects.empty()) {
+		for (auto& object : levelediter.GetLevelData()->objects) {
+
+			Vector3 position = object.translation;
+
+			AABB aabb;
+			aabb.min = position + object.colliderAABB.min;
+			aabb.max = position + object.colliderAABB.max;
+
+			stagesAABB.push_back(aabb);
+		}
+	}
+
+	//チェックポイント地点
+	if (!levelediter.GetLevelData()->objects.empty()) {
+		for (auto& checkPointData : levelediter.GetLevelData()->checkpoints) {
+			CheckPoint* checkPoint = new CheckPoint();
+			checkPoint->Initialize();
+			checkPoint->SetPosition(checkPointData.translation);
+			checkPoint->SetAABB(checkPointData.colliderAABB);
+			checkPoints.push_back(checkPoint);
+		}
+	}
+
+	worldTransformCamera_.Initialize();
+	worldTransformCamera_.translation_ = cameraTranslate;
+	worldTransformCamera_.rotation_ = cameraRotate;
+
+
+
+	for (auto& enemy : enemies) {
+		enemy->SetStages(stagesAABB);
+	}
+
+	if (!levelediter.GetLevelData()->warpGate.empty()) {
+		for (auto& warpGateData : levelediter.GetLevelData()->warpGate) {
+			WarpGate* warpGate = new WarpGate();
+			warpGate->Initialize();
+			warpGate->SetPosition(warpGateData.translation);
+			warpGate->SetAABB(warpGateData.colliderAABB);
+			warpGates.push_back(warpGate);
+		}
 	}
 }

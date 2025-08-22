@@ -245,7 +245,42 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				checkpointData.colliderAABB.max = center + (size / 2.0f);
 			}
 		}
+		else if (type.compare("WarpGate") == 0) {
+			//要素追加
+			levelData->warpGate.emplace_back(LevelData::WarpGateData{});
+			//
+			LevelData::WarpGateData& warpGateData = levelData->warpGate.back();
 
+			if (object.contains("file_name")) {
+				//ファイル名
+				warpGateData.fileName = object["file_name"];
+			}
+			//トランスフォームのパラメータ読み込み
+			nlohmann::json& transform = object["transform"];
+			//BlenderのY軸とZ軸と違うため y = [2],z = [1]
+			//移動
+			warpGateData.translation.x = (float)transform["translation"][0];
+			warpGateData.translation.y = (float)transform["translation"][2];
+			warpGateData.translation.z = (float)transform["translation"][1];
+
+			//回転　必要じゃなさそう
+			//checkpointData.rotation.x = (float)transform["rotation"][0];
+			//checkpointData.rotation.y = (float)transform["rotation"][2];
+			//checkpointData.rotation.z = (float)transform["rotation"][1];
+
+			//コライダー
+			nlohmann::json& collider = object["collider"];
+
+			if (collider != nullptr) {
+				//Vectorに変換
+				Vector3 center = { (float)collider["center"][0],(float)collider["center"][2], (float)collider["center"][1] };
+				Vector3 size = { (float)collider["size"][0],(float)collider["size"][2], (float)collider["size"][1] };
+
+				//AABBに追加
+				warpGateData.colliderAABB.min = center - (size / 2.0f);
+				warpGateData.colliderAABB.max = center + (size / 2.0f);
+			}
+		}
 
 		//子ノード
 		if (object.contains("children")) {
@@ -253,4 +288,9 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 		}
 	}
 
+}
+
+void Levelediter::ResetData() {
+	delete levelData;
+	levelData = nullptr;
 }

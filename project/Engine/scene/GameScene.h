@@ -15,8 +15,11 @@
 #include "Enemy_Turret.h"
 #include "Enemy_Bomb.h"
 #include "CheckPoint.h"
+#include "WarpGate.h"
 
 #include "BoxModel.h"
+
+#include "ParticleNumber.h"
 
 class GameScene : public IScene {
 public:
@@ -56,4 +59,11 @@ private:
 
 	BoxModel* skyBox = nullptr;
 
+
+	std::list<WarpGate*> warpGates;
+
+	void LevelEditorObjectSetting(const std::string leveleditor_file);
+
+	void StageMovement(const std::string leveleditor_file, const std::string stageObj);
+	bool isStageMove = false;
 };
