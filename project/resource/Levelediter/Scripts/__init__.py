@@ -70,10 +70,13 @@ from .spawn import MYADDON_OT_create_enemy_spawn
 
 from .spawn import MYADDON_OT_create_check_point
 
+from .spawn import MYADDON_OT_create_warp_gate
+
 from .add_travel_route import MYADDON_OT_add_travel_route
 
 from .travel_route import OBJECT_PT_travel_route
 
+from .draw_travel_route import DrawTravelRoute
 
 classes = (
     MYADDON_OT_export_scene,
@@ -93,6 +96,7 @@ classes = (
     MYADDON_OT_create_player_spawn,
     MYADDON_OT_create_enemy_spawn,
     MYADDON_OT_create_check_point,
+    MYADDON_OT_create_warp_gate,
 )
 
 def register():
@@ -104,6 +108,7 @@ def register():
     bpy.types.TOPBAR_MT_editor_menus.append(TOPBAR_MT_my_menu.submenu)
     # 3Dビューに描画関数を追加
     DrawCollider.handle = bpy.types.SpaceView3D.draw_handler_add(DrawCollider.draw_collider,(),"WINDOW","POST_VIEW")
+    DrawTravelRoute.handle = bpy.types.SpaceView3D.draw_handler_add(DrawTravelRoute.draw_travel_route,(),"WINDOW","POST_VIEW")
 
     print("レベルエディタが有効化されました")
 
@@ -112,6 +117,7 @@ def unregister():
     bpy.types.TOPBAR_MT_editor_menus.remove(TOPBAR_MT_my_menu.submenu)
     # 3Dビューに描画関数を削除
     bpy.types.SpaceView3D.draw_handler_remove(DrawCollider.handle,"WINDOW")
+    bpy.types.SpaceView3D.draw_handler_remove(DrawTravelRoute.handle,"WINDOW")
 
     #クラス登録
     for cls in classes:

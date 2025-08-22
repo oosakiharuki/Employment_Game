@@ -65,5 +65,7 @@ private:
 	void LevelEditorObjectSetting(const std::string leveleditor_file);
 
 	void StageMovement(const std::string leveleditor_file, const std::string stageObj);
-	bool isStageMove = false;
+	
+	//
+	uint32_t playerHp;
 };

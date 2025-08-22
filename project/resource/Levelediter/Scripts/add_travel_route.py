@@ -8,6 +8,7 @@ class MYADDON_OT_add_travel_route(bpy.types.Operator):
     bl_options = {"REGISTER","UNDO"}
 
     def execute(self,context):
+        context.object["travel_route"] = "travel_route"
         context.object["start"] = mathutils.Vector((-2,0,0))
         context.object["end"] = mathutils.Vector((2,0,0))
 

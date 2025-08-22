@@ -45,6 +45,12 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
+	for (auto& warpGate : warpGates) {
+		if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB())) {
+			StageMovement("resource/Levelediter/stage_1.json", "stage_1.obj");
+			break;
+		}
+	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_2)) {
 		Audio::GetInstance()->SoundPlayWave(soundData_, 0.3f, false);
@@ -310,12 +316,6 @@ void GameScene::Update() {
 		warpGate->Update();
 	}
 
-	for (auto& warpGate : warpGates) {
-		if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB())) {
-			StageMovement("resource/Levelediter/stage_1.json", "stage_1.obj");
-			break;
-		}
-	}
 
 #ifdef  USE_IMGUI
 
@@ -406,6 +406,7 @@ void GameScene::Finalize() {
 }
 
 void GameScene::StageMovement(const std::string leveleditor_file, const std::string stageObj) {
+	playerHp = player_->GetHp();
 	Finalize();
 	levelediter.ResetData();
 	//パーティクルナンバー初期化
@@ -413,6 +414,8 @@ void GameScene::StageMovement(const std::string leveleditor_file, const std::str
 
 	LevelEditorObjectSetting(leveleditor_file);	
 	
+	player_->SetHp(playerHp);
+
 	stageobj = new Object3d();
 	stageobj->Initialize();
 	stageobj->SetModelFile(stageObj);

@@ -96,7 +96,7 @@ class MYADDON_OT_export_scene(bpy.types.Operator,bpy_extras.io_utils.ExportHelpe
             travel_route = dict()
             travel_route["start"] = object["start"].to_list()
             travel_route["end"] = object["end"].to_list()
-            json_object["travel_route"] = collider
+            json_object["travel_route"] = travel_route
 
 
         #1個分のjsonオブジェクトを親オブジェクトに

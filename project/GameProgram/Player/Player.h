@@ -95,6 +95,9 @@ public:
 	void PariSuccess();
 	void SetIsPari(bool result) { isPari = result; }
 
+	uint32_t GetHp() { return Hp; }
+	void SetHp(uint32_t preHp) { Hp = preHp; }
+
 private:
 	//Object3d* object;
 	Object_glTF* object;

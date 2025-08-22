@@ -15,6 +15,8 @@ from .spawn import MYADDON_OT_create_enemy_spawn
 
 from .spawn import MYADDON_OT_create_check_point
 
+from .spawn import MYADDON_OT_create_warp_gate
+
 # ブレンダーに登録するアドオン情報
 bl_info = {
     "name": "05レベルエディタ",
@@ -67,6 +69,10 @@ class TOPBAR_MT_my_menu(bpy.types.Menu):
         #区切り線
         self.layout.separator()
         self.layout.operator(MYADDON_OT_create_check_point.bl_idname,text=MYADDON_OT_create_check_point.bl_label)
+
+        #区切り線
+        self.layout.separator()
+        self.layout.operator(MYADDON_OT_create_warp_gate.bl_idname,text=MYADDON_OT_create_warp_gate.bl_label)
         
 
     # 存じのメニューにサブメニュー追加
