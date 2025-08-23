@@ -61,6 +61,12 @@
     <Filter Include="ソース ファイル\GameProgram\Player">
       <UniqueIdentifier>{7eb339fe-1b8a-46e2-9eb2-77c1a78494da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameProgram\Scene">
+      <UniqueIdentifier>{c5623b3f-5406-4d21-a960-cfc3601e4865}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\System">
+      <UniqueIdentifier>{e7200600-3803-4831-a1a7-5b8eee728d58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\Sprite.cpp">
@@ -237,17 +243,29 @@
     <ClCompile Include="GameProgram\Player\Umbrella.cpp">
       <Filter>ソース ファイル\GameProgram\Player</Filter>
     </ClCompile>
-    <ClCompile Include="CheckPoint.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\3d\Primitive\Primitive.cpp">
       <Filter>ソース ファイル\Engine\3d\Primitive</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy_Bomb.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\System\CheckPoint.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="WarpGate.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\System\WarpGate.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Enemies\Enemy_Bomb.cpp">
+      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Scene\ClearScene.cpp">
+      <Filter>ソース ファイル\GameProgram\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Scene\GameOverScene.cpp">
+      <Filter>ソース ファイル\GameProgram\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Scene\SelectScene.cpp">
+      <Filter>ソース ファイル\GameProgram\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\LoadingModels.cpp">
+      <Filter>ソース ファイル\GameProgram</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -437,20 +455,32 @@
     <ClInclude Include="GameProgram\Player\Umbrella.h">
       <Filter>ソース ファイル\GameProgram\Player</Filter>
     </ClInclude>
-    <ClInclude Include="CheckPoint.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\3d\_Particle\ParticleNumber.h">
       <Filter>ソース ファイル\Engine\3d\_Particle</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\Primitive\Primitive.h">
       <Filter>ソース ファイル\Engine\3d\Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy_Bomb.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\System\WarpGate.h">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="WarpGate.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\System\CheckPoint.h">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Enemies\Enemy_Bomb.h">
+      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Scene\ClearScene.h">
+      <Filter>ソース ファイル\GameProgram\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Scene\GameOverScene.h">
+      <Filter>ソース ファイル\GameProgram\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Scene\SelectScene.h">
+      <Filter>ソース ファイル\GameProgram\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\LoadingModels.h">
+      <Filter>ソース ファイル\GameProgram</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

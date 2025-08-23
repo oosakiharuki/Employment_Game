@@ -65,7 +65,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)Engine\PostEffect;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)Engine\PostEffect;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\System</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -91,7 +91,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)Engine\PostEffect;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)Engine\PostEffect;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\System</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -107,8 +107,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CheckPoint.cpp" />
-    <ClCompile Include="Enemy_Bomb.cpp" />
+    <ClCompile Include="GameProgram\LoadingModels.cpp" />
+    <ClCompile Include="GameProgram\Scene\ClearScene.cpp" />
+    <ClCompile Include="GameProgram\Scene\GameOverScene.cpp" />
+    <ClCompile Include="GameProgram\Scene\SelectScene.cpp" />
+    <ClCompile Include="GameProgram\System\CheckPoint.cpp" />
+    <ClCompile Include="GameProgram\Enemies\Enemy_Bomb.cpp" />
     <ClCompile Include="Engine\3d\Primitive\Primitive.cpp" />
     <ClCompile Include="GameProgram\Enemies\EnemyBullet.cpp" />
     <ClCompile Include="GameProgram\Enemies\Enemy_Turret.cpp" />
@@ -175,11 +179,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\Player\PlayerBullet.cpp" />
     <ClCompile Include="GameProgram\Enemies\IEnemy.cpp" />
     <ClCompile Include="GameProgram\Player\Umbrella.cpp" />
-    <ClCompile Include="WarpGate.cpp" />
+    <ClCompile Include="GameProgram\System\WarpGate.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CheckPoint.h" />
-    <ClInclude Include="Enemy_Bomb.h" />
+    <ClInclude Include="GameProgram\LoadingModels.h" />
+    <ClInclude Include="GameProgram\Scene\ClearScene.h" />
+    <ClInclude Include="GameProgram\Scene\GameOverScene.h" />
+    <ClInclude Include="GameProgram\Scene\SelectScene.h" />
+    <ClInclude Include="GameProgram\System\CheckPoint.h" />
+    <ClInclude Include="GameProgram\Enemies\Enemy_Bomb.h" />
     <ClInclude Include="Engine\3d\Primitive\Primitive.h" />
     <ClInclude Include="Engine\3d\_Particle\ParticleNumber.h" />
     <ClInclude Include="GameProgram\Enemies\EnemyBullet.h" />
@@ -244,7 +252,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\Player\PlayerBullet.h" />
     <ClInclude Include="GameProgram\Enemies\IEnemy.h" />
     <ClInclude Include="GameProgram\Player\Umbrella.h" />
-    <ClInclude Include="WarpGate.h" />
+    <ClInclude Include="GameProgram\System\WarpGate.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

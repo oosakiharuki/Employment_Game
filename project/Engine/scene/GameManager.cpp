@@ -27,6 +27,15 @@ void GameManager::SceneChange(int prev, int current) {
 		break;
 	case Game:
 		sceneArr_[current] = new GameScene();
+		break;	
+	case Select:
+		sceneArr_[current] = new SelectScene();
+		break;
+	case Clear:
+		sceneArr_[current] = new ClearScene();
+		break;
+	case GameOver:
+		sceneArr_[current] = new GameOverScene();
 		break;
 	}
 }

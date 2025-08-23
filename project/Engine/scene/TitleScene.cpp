@@ -1,4 +1,5 @@
 #include "TitleScene.h"
+#include "LoadingModels.h"
 
 void TitleScene::Initialize() {
 	sprite = new Sprite();
@@ -6,13 +7,18 @@ void TitleScene::Initialize() {
 
 	sprite->SetPosition({ 64,64 });
 	sprite->SetSize({ 128,128 });
+
+	//objectをローディング
+	LoadingModels::GetInstance()->LoadObjects();
+	LoadingModels::GetInstance()->Finalize();
+
 }
 
 void TitleScene::Update() {
 	sprite->Update();
 
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		sceneNo = Game;
+		sceneNo = Select;
 	}
 
 }
