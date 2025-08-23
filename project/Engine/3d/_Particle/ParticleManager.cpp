@@ -29,10 +29,6 @@ void ParticleManager::Finalize() {
 
 
 void ParticleManager::CreateParticleGroup(const std::string name, const std::string textureFilePath, PrimitiveType primitiveType) {
-	//読み込み済み
-	if (particleGroups.contains(name)) {
-		return;
-	}
 
 	assert(srvManager->Max());
 

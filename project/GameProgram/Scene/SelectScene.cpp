@@ -18,6 +18,17 @@ void SelectScene::Initialize() {
 
 void SelectScene::Update() {
 
+	if (isfadeStart) {
+		FadeScreen::GetInstance()->FedeIn();
+		if (!FadeScreen::GetInstance()->GetIsFadeing()) {
+			sceneNo = Game;
+			isfadeStart = false;
+		}
+	}
+	else{
+		FadeScreen::GetInstance()->FedeOut();
+	}
+
 	for (auto& warpgate : warpGates) {
 		warpgate->Update();
 	}
@@ -31,7 +42,7 @@ void SelectScene::Update() {
 
 	for (auto& warpGate : warpGates) {
 		if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB())) {
-			sceneNo = Game;
+			isfadeStart = true;
 			break;
 		}
 	}

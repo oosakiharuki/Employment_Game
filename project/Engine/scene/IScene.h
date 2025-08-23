@@ -20,6 +20,7 @@
 #include "BoxModel.h"
 
 #include "ParticleNumber.h"
+#include "FadeScreen.h"
 
 
 enum SCENE{
@@ -69,6 +70,9 @@ protected:
 	void LevelEditorObjectSetting(const std::string leveleditor_file);
 	//全シーン共有できる当たり判定
 	void CollisionCommon();
+
+	//フェードスイッチ
+	bool isfadeStart = false;
 
 public:
 	virtual void Initialize() = 0;

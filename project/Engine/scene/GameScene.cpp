@@ -25,6 +25,27 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
+	if (isfadeStart) {
+		FadeScreen::GetInstance()->FedeIn();
+		if (!FadeScreen::GetInstance()->GetIsFadeing()) {
+			if (isGameClear) {
+				//ゲームクリアシーンに移動
+				sceneNo = Clear;
+				Audio::GetInstance()->StopWave(BGMData_);
+			}
+			else if (isGameOver) {
+				//ゲームオーバーシーンに移動
+				sceneNo = GameOver;
+				Audio::GetInstance()->StopWave(BGMData_);
+			}
+			isfadeStart = false;
+		}
+		return;
+	}
+	else {
+		FadeScreen::GetInstance()->FedeOut();
+	}
+
 	for (auto& warpGate : warpGates) {
 		if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB())) {
 			StageMovement("resource/Levelediter/stage_1.json", "stage_1.obj");
@@ -58,12 +79,27 @@ void GameScene::Update() {
 
 	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
 	if (player_->GetIsPlayerDown() && player_->GetIsRespown()) {
-		for (auto& enemy : enemies) {
-			enemy->RespownEnemy();
+
+		RemainingLife--;
+		if (RemainingLife != 0) {
+			for (auto& enemy : enemies) {
+				enemy->RespownEnemy();
+			}
+			player_->AllRespownEnd();
 		}
-		player_->AllRespownEnd();
+		else {
+			isGameOver = true;
+			isfadeStart = true;
+		}
 	}
 	
+	//
+	if (Input::GetInstance()->TriggerKey(DIK_F2)) {
+		sceneNo = Clear;
+		Audio::GetInstance()->StopWave(BGMData_);
+	}
+
+
 	//リスポーン地点を変更前に倒した敵は復活しない
 	if (isChangeRespown) {
 		//敵を倒したら削除

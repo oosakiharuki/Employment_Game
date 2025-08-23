@@ -6,6 +6,9 @@ void MyGame::Initialize() {
 
 	gameScene = new GameManager();
 	gameScene->Initialize();
+
+	fadeScreen = FadeScreen::GetInstance();
+	fadeScreen->Initialize();
 }
 
 void MyGame::Update() {
@@ -17,6 +20,7 @@ void MyGame::Update() {
 #endif //  USE_IMGUI
 
 	gameScene->Update();
+	fadeScreen->Update();
 	
 	//ポストエフェクト更新/変更
 	PostEffectManager::GetInstance()->Update();
@@ -32,12 +36,15 @@ void MyGame::Draw() {
 	DirectXCommon::GetInstance()->RenderTexturePreDraw();// 対 renderTexture
 
 	gameScene->Draw();
-	
+
 
 	DirectXCommon::GetInstance()->RenderTexturePostDraw();
 
 	//描画開始
 	DirectXCommon::GetInstance()->PreDraw();// 対 swapchain
+	
+	//フェード
+	fadeScreen->Draw();
 
 #ifdef  USE_IMGUI
 	//ImGui描画処理
@@ -53,6 +60,7 @@ void MyGame::Draw() {
 void MyGame::Finalize() {
 	//gameScene->Finalize();
 	delete gameScene;
+	fadeScreen->Finalize();
 
 #ifdef  USE_IMGUI
 	ImGuiManager::GetInstance()->Finalize();

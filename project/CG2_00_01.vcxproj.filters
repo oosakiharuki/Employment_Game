@@ -267,6 +267,9 @@
     <ClCompile Include="GameProgram\LoadingModels.cpp">
       <Filter>ソース ファイル\GameProgram</Filter>
     </ClCompile>
+    <ClCompile Include="GameProgram\FadeScreen.cpp">
+      <Filter>ソース ファイル\GameProgram</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -480,6 +483,9 @@
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\LoadingModels.h">
+      <Filter>ソース ファイル\GameProgram</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\FadeScreen.h">
       <Filter>ソース ファイル\GameProgram</Filter>
     </ClInclude>
   </ItemGroup>

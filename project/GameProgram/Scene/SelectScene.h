@@ -9,5 +9,5 @@ public:
 	void Finalize() override;
 private:
 	Sprite* sprite;
-
+	
 };

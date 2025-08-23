@@ -18,4 +18,11 @@ private:
 	uint32_t playerHp;
 
 	SoundData soundData_;
+
+	//残機
+	uint32_t RemainingLife = 2;
+
+	bool isGameOver = false;
+	bool isGameClear = false;
+
 };

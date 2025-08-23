@@ -17,8 +17,24 @@ void TitleScene::Initialize() {
 void TitleScene::Update() {
 	sprite->Update();
 
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		sceneNo = Select;
+
+	if (isfadeStart) {
+		FadeScreen::GetInstance()->FedeIn();
+
+		if (!FadeScreen::GetInstance()->GetIsFadeing()) {
+			sceneNo = Select;
+			isfadeStart = false;
+		}
+	}
+	else {
+		FadeScreen::GetInstance()->FedeOut();
+	}
+
+	//フェードが終わったら押せる
+	if (!FadeScreen::GetInstance()->GetIsFadeing()) {
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			isfadeStart = true;
+		}
 	}
 
 }

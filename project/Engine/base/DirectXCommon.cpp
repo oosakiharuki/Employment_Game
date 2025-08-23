@@ -15,6 +15,7 @@
 #include "ImGuiManager.h"
 
 #include "PostEffectManager.h"
+#include <FadeScreen.h>
 
 
 //#define UNREFERENCED_PARMETER(hr)
@@ -535,7 +536,7 @@ void DirectXCommon::PreDraw() {
 
 	commandList->RSSetViewports(1, &viewport);
 	commandList->RSSetScissorRects(1, &scissorRect);
-
+	
 	///PostEffect
 
 	//バリアを貼る対象のリソース。現在のバッファに対して行う
@@ -560,7 +561,7 @@ void DirectXCommon::PreDraw() {
 	
 
 	///ここまで
-
+	
 }
 
 //更新後

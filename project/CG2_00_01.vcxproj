@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameProgram\FadeScreen.cpp" />
     <ClCompile Include="GameProgram\LoadingModels.cpp" />
     <ClCompile Include="GameProgram\Scene\ClearScene.cpp" />
     <ClCompile Include="GameProgram\Scene\GameOverScene.cpp" />
@@ -182,6 +183,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\System\WarpGate.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameProgram\FadeScreen.h" />
     <ClInclude Include="GameProgram\LoadingModels.h" />
     <ClInclude Include="GameProgram\Scene\ClearScene.h" />
     <ClInclude Include="GameProgram\Scene\GameOverScene.h" />
