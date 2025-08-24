@@ -116,16 +116,21 @@ void GameScene::Update() {
 	//カメラの移動範囲
 	if (cameraTranslate.x + cameraPoint1.x < player_->GetTranslate().x && cameraTranslate.x + cameraPoint2.x > player_->GetTranslate().x) {
 		worldTransformCamera_.translation_.x = player_->GetTranslate().x;
-		camera->SetTranslate(worldTransformCamera_.translation_);
 	}
 	else if(cameraTranslate.x + cameraPoint1.x >= player_->GetTranslate().x){
 		worldTransformCamera_.translation_.x = cameraTranslate.x + cameraPoint1.x;
-		camera->SetTranslate(worldTransformCamera_.translation_);
 	}
 	else if (cameraTranslate.x + cameraPoint2.x <= player_->GetTranslate().x) {
 		worldTransformCamera_.translation_.x = cameraTranslate.x + cameraPoint2.x;
-		camera->SetTranslate(worldTransformCamera_.translation_);
 	}
+
+	if (cameraTranslate.y < player_->GetTranslate().y + 10.0f) {
+		worldTransformCamera_.translation_.y = player_->GetTranslate().y + 10.0f;
+	}
+
+	camera->SetTranslate(worldTransformCamera_.translation_);
+
+
 
 	if (player_->GetTranslate().y < -10.0f) {
 		player_->IsFall();
