@@ -300,4 +300,37 @@ void IScene::CollisionCommon() {
 		}
 
 	}
+
+	Vector3 max = { 0,0,0 };
+
+	for (auto& stage : stagesAABB) {
+		AABB shadowAABB = player_->GetShadowAABB();
+
+		Vector3 result = { 0,0,0 };
+
+		if (IsCollisionAABB(shadowAABB, stage)) {
+			Vector3 position = player_->GetShadowPosition();
+			Vector3 overlap = OverAABB(player_->GetShadowAABB(), stage);
+
+			// 重なりが最小の軸で押し戻しを行う	
+				float push = overlap.y;
+
+				if (push >= 0.0f) {
+					position.y += push;
+				}
+
+				result = position;
+
+				if (max.y) {
+					max = result;
+				}
+
+				if (max.y < result.y) {
+					max.y = result.y;
+				}
+		}
+	}
+
+	player_->SetShadowPosition(max);
+	player_->ShadowUpdate();
 }

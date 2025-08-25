@@ -124,8 +124,8 @@ void GameScene::Update() {
 		worldTransformCamera_.translation_.x = cameraTranslate.x + cameraPoint2.x;
 	}
 
-	if (cameraTranslate.y < player_->GetTranslate().y + 10.0f) {
-		worldTransformCamera_.translation_.y = player_->GetTranslate().y + 10.0f;
+	if (cameraTranslate.y < player_->GetTranslate().y + 6.0f) {
+		worldTransformCamera_.translation_.y = player_->GetTranslate().y + 6.0f;
 	}
 
 	camera->SetTranslate(worldTransformCamera_.translation_);

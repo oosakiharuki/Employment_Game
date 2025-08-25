@@ -217,10 +217,6 @@ void Player::Update() {
 		if (isGround) {
 			isJump = false;
 			isOneBrink = false;//ブリンク可能
-
-			shadowPosition = worldTransform.translation_;
-			shadowPosition.y -= 1.0f;
-
 		}
 
 
@@ -288,8 +284,13 @@ void Player::Update() {
 			}
 		}
 
-		shadow_->SetTranslate(shadowPosition);
-		shadow_->Update();
+
+		shadowPosition.x = worldTransform.translation_.x;
+		shadowPosition.z = worldTransform.translation_.z;
+
+		shadowAABB.min = shadowPosition - Vector3{ 1,0.01f,1 };
+		shadowAABB.max = shadowPosition + Vector3{ 1,0,1 };
+
 
 	}
 
@@ -448,24 +449,23 @@ void Player::Update() {
 }
 
 void Player::Draw() {
-	if (Hp == 0) {
-		return;
+	if (Hp != 0) {
+		GLTFCommon::GetInstance()->Command();
+
+		object->Draw();
+
+		shadow_->Draw();
+
+		Object3dCommon::GetInstance()->Command();
+
+		umbrella->Draw();
 	}
-
-	GLTFCommon::GetInstance()->Command();
-
-	object->Draw();
-
-	shadow_->Draw();
-
-	Object3dCommon::GetInstance()->Command();
 
 	
 	for (auto* bullet : bullets_) {
 		bullet->Draw();
 	}
 
-	umbrella->Draw();
 }
 
 void Player::DrawP() {
@@ -589,4 +589,9 @@ void Player::PariSuccess() {
 	particle_pari->SetScale({2.0f,0.2f,2.0f});
 
 	particle_pari->ChangeMode(BornParticle::MomentMode);
+}
+
+void Player::ShadowUpdate() {
+	shadow_->SetTranslate(shadowPosition);
+	shadow_->Update();
 }

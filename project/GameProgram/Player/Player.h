@@ -100,6 +100,13 @@ public:
 	uint32_t GetHp() { return Hp; }
 	void SetHp(uint32_t preHp) { Hp = preHp; }
 
+	Vector3 GetShadowPosition() { return shadowPosition; }
+	void SetShadowPosition(Vector3 position) { shadowPosition.y = position.y; }
+
+	AABB GetShadowAABB() { return shadowAABB; }
+
+	void ShadowUpdate();
+
 private:
 	//Object3d* object;
 	Object_glTF* object;
@@ -194,4 +201,6 @@ private:
 	///影
 	Shadow* shadow_;
 	Vector3 shadowPosition;
+
+	AABB shadowAABB;
 };
