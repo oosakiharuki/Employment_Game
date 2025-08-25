@@ -24,5 +24,9 @@ private:
 
 	bool isGameOver = false;
 	bool isGameClear = false;
+	
 
+	//次のステージの移動
+	bool isNextStage = false;
+	std::string nextStage_fileName;
 };

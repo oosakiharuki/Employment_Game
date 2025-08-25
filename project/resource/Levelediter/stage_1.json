@@ -980,6 +980,7 @@
                     1.0
                 ]
             },
+            "file_name": "stage_0",
             "collider": {
                 "type": "BOX",
                 "center": [

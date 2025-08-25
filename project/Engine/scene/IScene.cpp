@@ -114,6 +114,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 			warpGate->Initialize();
 			warpGate->SetPosition(warpGateData.translation);
 			warpGate->SetAABB(warpGateData.colliderAABB);
+			warpGate->SetNextStage(warpGateData.fileName);
 			warpGates.push_back(warpGate);
 		}
 	}

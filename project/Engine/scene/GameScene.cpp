@@ -38,6 +38,9 @@ void GameScene::Update() {
 				sceneNo = GameOver;
 				Audio::GetInstance()->StopWave(BGMData_);
 			}
+			else if (isNextStage) {
+				StageMovement("resource/Levelediter/" + nextStage_fileName + ".json", nextStage_fileName + ".obj");
+			}
 			isfadeStart = false;
 		}
 		return;
@@ -48,7 +51,9 @@ void GameScene::Update() {
 
 	for (auto& warpGate : warpGates) {
 		if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB())) {
-			StageMovement("resource/Levelediter/stage_1.json", "stage_1.obj");
+			isNextStage = true;
+			isfadeStart = true;
+			nextStage_fileName = warpGate->GetNextStage();
 			break;
 		}
 	}
