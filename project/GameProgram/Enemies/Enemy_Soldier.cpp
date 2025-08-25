@@ -12,6 +12,7 @@ Enemy_Soldier::~Enemy_Soldier() {
 	}
 	delete particle_fire;
 	delete particle_damage;
+	delete shadow_;
 }
 
 void Enemy_Soldier::Initialize() {
@@ -38,6 +39,11 @@ void Enemy_Soldier::Initialize() {
 	particle_damage->ChangeMode(BornParticle::Stop);
 	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
 	particle_damage->SetFrequency(1.0f);
+
+	///影
+	shadow_ = new Shadow();
+	shadow_->Initialize();
+	shadow_->SetScale({ 1,0,1 });
 
 }
 
@@ -96,6 +102,12 @@ void Enemy_Soldier::Update() {
 			rapidFireTime = 0;
 			coolTime = 0;
 		}
+
+		Vector3 shadowPosition = worldTransform.translation_;
+		shadowPosition.y -= 1.0f;
+
+		shadow_->SetTranslate(shadowPosition);
+		shadow_->Update();
 	}
 
 	for (auto* bullet : bullets_) {
@@ -138,8 +150,9 @@ void Enemy_Soldier::Update() {
 }
 
 void Enemy_Soldier::Draw() {
-	if (!deleteEnemy) {	
+	if (!deleteEnemy) {
 		object->Draw(worldTransform);
+		shadow_->Draw();
 	}
 	for (auto* bullet : bullets_) {
 		bullet->Draw();
@@ -152,7 +165,7 @@ void Enemy_Soldier::Draw() {
 	particle_damage->Draw();
 
 	Object3dCommon::GetInstance()->Command();
-
+	
 }
 
 

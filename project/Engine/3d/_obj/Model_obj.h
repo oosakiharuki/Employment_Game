@@ -14,6 +14,7 @@ public:
 	static ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename, const std::string& objName);
 	
 	void LightOn(bool Light) { materialData->enableLighting = Light; }
+	void SetColor(Vector4 color) { materialData->color = color; }
 
 private:
 	ModelCommon* modelCommon = nullptr;

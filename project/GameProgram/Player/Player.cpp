@@ -20,6 +20,8 @@ Player::~Player() {
 	delete particle_brink;
 	delete particle_damage;
 	delete particle_pari;
+
+	delete shadow_;
 }
 
 void Player::Initialize() {
@@ -80,6 +82,9 @@ void Player::Initialize() {
 	particle_pari->SetParticleMosion(ParticleMosion::Fixed);
 	particle_fire->SetFrequency(0.5f);
 
+	shadow_ = new Shadow();
+	shadow_->Initialize();
+	shadow_->SetScale({ 1,0,1 });
 }
 
 void Player::Update() {
@@ -212,6 +217,10 @@ void Player::Update() {
 		if (isGround) {
 			isJump = false;
 			isOneBrink = false;//ブリンク可能
+
+			shadowPosition = worldTransform.translation_;
+			shadowPosition.y -= 1.0f;
+
 		}
 
 
@@ -278,6 +287,10 @@ void Player::Update() {
 				coolTimer = 0;
 			}
 		}
+
+		shadow_->SetTranslate(shadowPosition);
+		shadow_->Update();
+
 	}
 
 	for (auto* bullet : bullets_) {
@@ -442,6 +455,8 @@ void Player::Draw() {
 	GLTFCommon::GetInstance()->Command();
 
 	object->Draw();
+
+	shadow_->Draw();
 
 	Object3dCommon::GetInstance()->Command();
 

@@ -26,6 +26,7 @@ public:
 	void SetModel(Model_obj* model) { this->model = model; }
 	void SetModelFile(const std::string& filePath);
 	void LightSwitch(bool isLight);
+	void SetColor(Vector4 color);
 
 	void SetScale(const Vector3& scale) { transform.scale = scale; }
 	void SetRotate(const Vector3& rotate) { transform.rotate = rotate; }
@@ -67,4 +68,6 @@ private:
 
 	Model_obj* model = nullptr;
 	Camera* camera = nullptr;
+
+	Material* material;
 };

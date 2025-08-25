@@ -112,6 +112,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\Scene\ClearScene.cpp" />
     <ClCompile Include="GameProgram\Scene\GameOverScene.cpp" />
     <ClCompile Include="GameProgram\Scene\SelectScene.cpp" />
+    <ClCompile Include="GameProgram\Shadow.cpp" />
     <ClCompile Include="GameProgram\System\CheckPoint.cpp" />
     <ClCompile Include="GameProgram\Enemies\Enemy_Bomb.cpp" />
     <ClCompile Include="Engine\3d\Primitive\Primitive.cpp" />
@@ -188,6 +189,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\Scene\ClearScene.h" />
     <ClInclude Include="GameProgram\Scene\GameOverScene.h" />
     <ClInclude Include="GameProgram\Scene\SelectScene.h" />
+    <ClInclude Include="GameProgram\Shadow.h" />
     <ClInclude Include="GameProgram\System\CheckPoint.h" />
     <ClInclude Include="GameProgram\Enemies\Enemy_Bomb.h" />
     <ClInclude Include="Engine\3d\Primitive\Primitive.h" />

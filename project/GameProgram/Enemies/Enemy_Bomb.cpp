@@ -5,6 +5,7 @@ using namespace MyMath;
 
 Enemy_Bomb::~Enemy_Bomb() {
 	delete particle_Bom;
+	delete shadow_;
 }
 
 void Enemy_Bomb::Initialize() {
@@ -26,6 +27,11 @@ void Enemy_Bomb::Initialize() {
 
 	bombAABB.min = { 0,-10,0 };
 	bombAABB.max = { 0,-10,0 };
+
+	///影
+	shadow_ = new Shadow();
+	shadow_->Initialize();
+	shadow_->SetScale({ 1,0,1 });
 }
 
 void Enemy_Bomb::Update() {
@@ -78,6 +84,12 @@ void Enemy_Bomb::Update() {
 		if (isFoundTarget || isStart) {
 			Attack();
 		}
+
+		Vector3 shadowPosition = worldTransform.translation_;
+		shadowPosition.y -= 1.0f;
+
+		shadow_->SetTranslate(shadowPosition);
+		shadow_->Update();
 	}
 
 	particle_Bom->Update();
@@ -88,6 +100,7 @@ void Enemy_Bomb::Update() {
 void Enemy_Bomb::Draw() {
 	if (!isDead) {
 		object->Draw(worldTransform);
+		shadow_->Draw();
 	}
 
 	ParticleCommon::GetInstance()->Command();

@@ -34,6 +34,8 @@ void LoadingModels::LoadObj() {
 	modelManager->LoadModel("stage_0", ".obj");
 	modelManager->LoadModel("stage_1", ".obj");
 	modelManager->LoadModel("warpGate", ".obj");
+
+	modelManager->LoadModel("shadow", ".obj");
 }
 
 void LoadingModels::LoadGltf() {

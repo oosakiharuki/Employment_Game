@@ -101,7 +101,9 @@ protected:
 
 	float grabity = 0.0f;
 	const float deltaTime = 1.0f / 60.0f;
-
+	
+	///影
+	Shadow* shadow_;
 private:
 	std::vector<AABB> stages;
 };

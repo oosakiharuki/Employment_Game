@@ -158,6 +158,12 @@ void Object3d::SetModelFile(const std::string& filePath) {
 	model = ModelManager::GetInstance()->FindModel_obj(filePath);
 }
 
+void Object3d::SetColor(Vector4 color) {
+	if (model) {
+		model->SetColor(color);
+	}
+}
+
 void Object3d::LightSwitch(bool isLight) {
 	if (model) {
 		model->LightOn(isLight);

@@ -11,6 +11,7 @@ Enemy_Turret::~Enemy_Turret() {
 	delete particle_damage;
 	delete particle_dead;
 	delete particle_fire;
+	delete shadow_;
 }
 
 
@@ -45,6 +46,10 @@ void Enemy_Turret::Initialize() {
 	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
 	particle_damage->SetFrequency(1.0f);
 
+	///影
+	shadow_ = new Shadow();
+	shadow_->Initialize();
+	shadow_->SetScale({ 1,0,1 });
 }
 
 void Enemy_Turret::Update() {
@@ -91,6 +96,12 @@ void Enemy_Turret::Update() {
 			rapidFireTime = 0;
 			coolTime = 0;
 		}
+
+		Vector3 shadowPosition = worldTransform.translation_;
+		shadowPosition.y -= 1.0f;
+
+		shadow_->SetTranslate(shadowPosition);
+		shadow_->Update();
 	}
 
 	for (auto* bullet : bullets_) {
@@ -138,6 +149,7 @@ void Enemy_Turret::Draw() {
 
 	if (!deleteEnemy) {
 		object->Draw(worldTransform);
+		shadow_->Draw();
 	}
 
 	for (auto* bullet : bullets_) {

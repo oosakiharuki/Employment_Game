@@ -10,6 +10,8 @@
 #include "GLTFCommon.h"
 #include "Object3dCommon.h"
 
+#include "Shadow.h"
+
 class Player {
 public:
 	Player();
@@ -187,4 +189,9 @@ private:
 	Animation_Mode animation_mode;
 	Animation_Mode PreAnimation_mode;
 	bool isChangeAnimation = false;
+
+
+	///影
+	Shadow* shadow_;
+	Vector3 shadowPosition;
 };
