@@ -10,5 +10,7 @@ public:
 	void Draw() override;
 	void Finalize() override;
 private:
-	Sprite* sprite;
+	Sprite* sprite_Moji_Title;
+	Sprite* sprite_Moji_Start;
+	Sprite* sprite_Moji_End;
 };

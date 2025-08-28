@@ -2,11 +2,17 @@
 #include "LoadingModels.h"
 
 void TitleScene::Initialize() {
-	sprite = new Sprite();
-	sprite->Initialize("monsterBall.png");
+	sprite_Moji_Title = new Sprite();
+	sprite_Moji_Title->Initialize("Moji_Title.png");
+	sprite_Moji_Title->SetPosition({ 100,100 });
 
-	sprite->SetPosition({ 64,64 });
-	sprite->SetSize({ 128,128 });
+	sprite_Moji_Start = new Sprite();
+	sprite_Moji_Start->Initialize("Moji_Title_Start.png");
+	sprite_Moji_Start->SetPosition({ 800,500 });
+
+	sprite_Moji_End = new Sprite();
+	sprite_Moji_End->Initialize("Moji_Title_End.png");
+	sprite_Moji_End->SetPosition({ 700,600 });
 
 	//objectをローディング
 	LoadingModels::GetInstance()->LoadObjects();
@@ -15,7 +21,9 @@ void TitleScene::Initialize() {
 }
 
 void TitleScene::Update() {
-	sprite->Update();
+	sprite_Moji_Title->Update();
+	sprite_Moji_Start->Update();
+	sprite_Moji_End->Update();
 
 
 	if (isfadeStart) {
@@ -42,9 +50,13 @@ void TitleScene::Update() {
 void TitleScene::Draw() {
 	SpriteCommon::GetInstance()->Command();
 
-	sprite->Draw();
+	sprite_Moji_Title->Draw();
+	sprite_Moji_Start->Draw();
+	sprite_Moji_End->Draw();
 }
 
 void TitleScene::Finalize() {
-	delete sprite;
+	delete sprite_Moji_Title;
+	delete sprite_Moji_Start;
+	delete sprite_Moji_End;
 }

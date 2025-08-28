@@ -40,6 +40,7 @@ void GameScene::Update() {
 			}
 			else if (isNextStage) {
 				StageMovement("resource/Levelediter/" + nextStage_fileName + ".json", nextStage_fileName + ".obj");
+				player_->SpriteUpdate();
 			}
 			isfadeStart = false;
 		}

@@ -3,6 +3,8 @@
 #include "ImGuiManager.h"
 #include "Primitive.h"
 
+#include "SpriteCommon.h"
+
 using namespace MyMath;
 using namespace Primitive;
 
@@ -22,6 +24,10 @@ Player::~Player() {
 	delete particle_pari;
 
 	delete shadow_;
+
+	for (Sprite* sprite : sprites_Hp) {
+		delete sprite;
+	}
 }
 
 void Player::Initialize() {
@@ -85,6 +91,15 @@ void Player::Initialize() {
 	shadow_ = new Shadow();
 	shadow_->Initialize();
 	shadow_->SetScale({ 1,0,1 });
+
+
+	for (uint32_t i = 0; i < 3; i++) {
+		Sprite* sprite = new Sprite();
+		sprite->Initialize("Hp.png");
+		sprite->SetPosition({ 20.0f + 64.0f * i , 45.0f - i * 10.0f });
+		sprite->SetSize({64,64});
+		sprites_Hp.push_back(sprite);
+	}
 }
 
 void Player::Update() {
@@ -446,6 +461,9 @@ void Player::Update() {
 
 	umbrella->Update();
 
+	for (Sprite* sprite : sprites_Hp) {
+		sprite->Update();
+	}		
 }
 
 void Player::Draw() {
@@ -475,8 +493,13 @@ void Player::DrawP() {
 	particle_damage->Draw();
 	particle_pari->Draw();
 
-}
+	SpriteCommon::GetInstance()->Command();
+	
+	for (Sprite* sprite : sprites_Hp) {
+		sprite->Draw();
+	}
 
+}
 
 AABB Player::GetAABB() {
 	AABB aabb;
@@ -525,7 +548,13 @@ void Player::IsDamage() {
 		particle_damage->ChangeMode(BornParticle::MomentMode);
 		Audio::GetInstance()->SoundPlayWave(hitSound, 0.4f);
 		infinityTimer = 0.0f;
+		backPower = TransformNormal({ 0,0,0.5f } ,worldTransform.matWorld_);
+		isKnockback = true;
+		KnockBackTimeMax = infinityTimeMax / 3;
 	}
+
+	SpriteUpdate();
+
 }
 
 void Player::IsFall() {
@@ -569,6 +598,11 @@ void Player::DeadPlayer() {
 			worldTransform.translation_ = respownPosition;
 			isRespown = true;
 			deadTimer = 0.0f;
+
+			for (Sprite* sprite : sprites_Hp) {
+				sprite->SetTextureFile("Hp.png");
+			}
+
 		}
 	}
 }
@@ -594,4 +628,16 @@ void Player::PariSuccess() {
 void Player::ShadowUpdate() {
 	shadow_->SetTranslate(shadowPosition);
 	shadow_->Update();
+}
+
+void Player::SpriteUpdate() {
+	if (Hp < 3) {
+		sprites_Hp[2]->SetTextureFile("NoHp.png");
+		if (Hp < 2) {
+			sprites_Hp[1]->SetTextureFile("NoHp.png");
+			if (Hp < 1) {
+				sprites_Hp[0]->SetTextureFile("NoHp.png");
+			}
+		}
+	}
 }

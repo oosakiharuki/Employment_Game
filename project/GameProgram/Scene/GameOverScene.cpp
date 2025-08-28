@@ -2,7 +2,8 @@
 
 void GameOverScene::Initialize() {
 	sprite = new Sprite();
-	sprite->Initialize("uvChecker.png");
+	sprite->Initialize("Moji_GameOver.png");
+	sprite->SetPosition({ 100,100 });
 }
 
 void GameOverScene::Update() {

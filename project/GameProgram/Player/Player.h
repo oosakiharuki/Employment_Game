@@ -11,6 +11,7 @@
 #include "Object3dCommon.h"
 
 #include "Shadow.h"
+#include "Sprite.h"
 
 class Player {
 public:
@@ -106,6 +107,9 @@ public:
 	AABB GetShadowAABB() { return shadowAABB; }
 
 	void ShadowUpdate();
+
+	//スプライトの変化
+	void SpriteUpdate();
 
 private:
 	//Object3d* object;
@@ -203,4 +207,7 @@ private:
 	Vector3 shadowPosition;
 
 	AABB shadowAABB;
+
+	//UI
+	std::vector<Sprite*> sprites_Hp;
 };

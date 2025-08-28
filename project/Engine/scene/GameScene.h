@@ -20,7 +20,7 @@ private:
 	SoundData soundData_;
 
 	//残機
-	uint32_t RemainingLife = 2;
+	uint32_t RemainingLife = 3;
 
 	bool isGameOver = false;
 	bool isGameClear = false;
