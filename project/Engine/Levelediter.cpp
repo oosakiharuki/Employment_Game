@@ -281,6 +281,37 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				warpGateData.colliderAABB.max = center + (size / 2.0f);
 			}
 		}
+		else if (type.compare("Goal") == 0) {
+			//要素追加
+			levelData->goal.emplace_back(LevelData::GoalData{});
+			//
+			LevelData::GoalData& goalData = levelData->goal.back();
+
+			if (object.contains("file_name")) {
+				//ファイル名
+				goalData.fileName = object["file_name"];
+			}
+			//トランスフォームのパラメータ読み込み
+			nlohmann::json& transform = object["transform"];
+			//BlenderのY軸とZ軸と違うため y = [2],z = [1]
+			//移動
+			goalData.translation.x = (float)transform["translation"][0];
+			goalData.translation.y = (float)transform["translation"][2];
+			goalData.translation.z = (float)transform["translation"][1];
+
+			//コライダー
+			nlohmann::json& collider = object["collider"];
+
+			if (collider != nullptr) {
+				//Vectorに変換
+				Vector3 center = { (float)collider["center"][0],(float)collider["center"][2], (float)collider["center"][1] };
+				Vector3 size = { (float)collider["size"][0],(float)collider["size"][2], (float)collider["size"][1] };
+
+				//AABBに追加
+				goalData.colliderAABB.min = center - (size / 2.0f);
+				goalData.colliderAABB.max = center + (size / 2.0f);
+			}
+			}
 
 		//子ノード
 		if (object.contains("children")) {

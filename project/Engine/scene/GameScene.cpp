@@ -59,6 +59,14 @@ void GameScene::Update() {
 		}
 	}
 
+	for (auto& goal_ : goals) {
+		if (IsCollisionAABB(player_->GetAABB(), goal_->GetAABB())) {
+			isGameClear = true;
+			isfadeStart = true;
+			return;
+		}
+	}
+
 	skyBox->Update(wt.matWorld_ * MakeScaleMatrix({ 1000,1000,1000 }));//大きくするため
 
 	camera->Update();
@@ -133,6 +141,9 @@ void GameScene::Update() {
 	if (cameraTranslate.y < player_->GetTranslate().y + 6.0f) {
 		worldTransformCamera_.translation_.y = player_->GetTranslate().y + 6.0f;
 	}
+	else {
+		worldTransformCamera_.translation_.y = cameraTranslate.y;
+	}
 
 	camera->SetTranslate(worldTransformCamera_.translation_);
 
@@ -150,6 +161,9 @@ void GameScene::Update() {
 		warpGate->Update();
 	}
 
+	for (auto& goal_ : goals) {
+		goal_->Update();
+	}
 
 #ifdef  USE_IMGUI
 
@@ -207,6 +221,11 @@ void GameScene::Draw() {
 	for (auto& warpGate : warpGates) {
 		warpGate->Draw();
 	}
+	for (auto& goal_ : goals) {
+		goal_->Draw();
+	}
+	
+
 	//パーティクル描画処理
 	ParticleCommon::GetInstance()->Command();
 	player_->DrawP();
@@ -237,6 +256,11 @@ void GameScene::Finalize() {
 		delete warpGate;
 	}
 	warpGates.clear();
+
+	for (auto& goal_ : goals) {
+		delete goal_;
+	}
+	goals.clear();
 }
 
 void GameScene::StageMovement(const std::string leveleditor_file, const std::string stageObj) {

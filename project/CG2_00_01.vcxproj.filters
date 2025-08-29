@@ -273,6 +273,9 @@
     <ClCompile Include="GameProgram\Shadow.cpp">
       <Filter>ソース ファイル\GameProgram</Filter>
     </ClCompile>
+    <ClCompile Include="GameProgram\System\Goal.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -493,6 +496,9 @@
     </ClInclude>
     <ClInclude Include="GameProgram\Shadow.h">
       <Filter>ソース ファイル\GameProgram</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\System\Goal.h">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

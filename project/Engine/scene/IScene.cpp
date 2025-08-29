@@ -118,6 +118,18 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 			warpGates.push_back(warpGate);
 		}
 	}
+
+	if (!levelediter.GetLevelData()->goal.empty()) {
+		for (auto& goalData : levelediter.GetLevelData()->goal) {
+			Goal* goal_ = new Goal();
+			goal_->Initialize();
+
+			goal_->SetPosition(goalData.translation);
+			goal_->SetAABB(goalData.colliderAABB);
+			goals.push_back(goal_);
+		}
+	}
+
 }
 
 void IScene::CollisionCommon() {

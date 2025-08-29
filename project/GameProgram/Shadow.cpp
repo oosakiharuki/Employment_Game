@@ -22,12 +22,16 @@ void Shadow::Initialize() {
 
 void Shadow::Update() {
 
+#ifdef _DEBUG
+
 	ImGui::Begin("player_shadow");
 
 	ImGui::InputFloat3("worldTransform.translate", &wt_.translation_.x);
 	ImGui::SliderFloat3("worldTransform.translateSlider", &wt_.translation_.x, -30.0f, 30.0f);
 
 	ImGui::End();
+
+#endif // _DEBUG
 
 
 	wt_.UpdateMatrix();

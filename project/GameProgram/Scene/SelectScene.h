@@ -8,6 +8,5 @@ public:
 	void Draw() override;
 	void Finalize() override;
 private:
-	Sprite* sprite;
-	
+
 };

@@ -181,6 +181,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\Player\PlayerBullet.cpp" />
     <ClCompile Include="GameProgram\Enemies\IEnemy.cpp" />
     <ClCompile Include="GameProgram\Player\Umbrella.cpp" />
+    <ClCompile Include="GameProgram\System\Goal.cpp" />
     <ClCompile Include="GameProgram\System\WarpGate.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +257,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\Player\PlayerBullet.h" />
     <ClInclude Include="GameProgram\Enemies\IEnemy.h" />
     <ClInclude Include="GameProgram\Player\Umbrella.h" />
+    <ClInclude Include="GameProgram\System\Goal.h" />
     <ClInclude Include="GameProgram\System\WarpGate.h" />
   </ItemGroup>
   <ItemGroup>

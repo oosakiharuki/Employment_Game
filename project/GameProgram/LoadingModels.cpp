@@ -33,7 +33,9 @@ void LoadingModels::LoadObj() {
 	modelManager->LoadModel("sphere", ".obj");
 	modelManager->LoadModel("stage_0", ".obj");
 	modelManager->LoadModel("stage_1", ".obj");
+	modelManager->LoadModel("stage_2", ".obj");
 	modelManager->LoadModel("warpGate", ".obj");
+	modelManager->LoadModel("goal", ".obj");
 
 	modelManager->LoadModel("shadow", ".obj");
 

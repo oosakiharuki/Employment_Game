@@ -54,12 +54,19 @@ public:
 			AABB colliderAABB;
 		};
 
+		struct GoalData {
+			std::string fileName;
+			Vector3 translation;
+			AABB colliderAABB;
+		};
+
 		std::vector<ObjectData> objects;
 		std::vector<PlayerSpawnData> players;
 		std::vector<EnemySpawnData> spawnEnemies;
 		CameraInitData cameraInit;
 		std::vector<CheckpointData> checkpoints;
 		std::vector<WarpGateData> warpGate;
+		std::vector<GoalData> goal;
 	};
 
 	LevelData* GetLevelData() { return levelData; }

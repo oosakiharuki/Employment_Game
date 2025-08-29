@@ -16,6 +16,7 @@
 #include "Enemy_Bomb.h"
 #include "CheckPoint.h"
 #include "WarpGate.h"
+#include "Goal.h"
 
 #include "BoxModel.h"
 
@@ -53,6 +54,10 @@ protected:
 
 	std::vector<CheckPoint*> checkPoints;
 	std::list<WarpGate*> warpGates;
+	
+
+	std::list<Goal*> goals;
+
 
 	Object3d* stageobj;
 	WorldTransform wt;
