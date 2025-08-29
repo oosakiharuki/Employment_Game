@@ -74,6 +74,8 @@ protected:
 	//フェードスイッチ
 	bool isfadeStart = false;
 
+	//end
+	bool isGameEnd = false;
 public:
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;
@@ -83,4 +85,6 @@ public:
 	virtual ~IScene();
 
 	int GetSceneNo();
+
+	bool GetIsGameEnd() { return isGameEnd; }
 };

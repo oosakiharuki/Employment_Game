@@ -20,6 +20,12 @@ void MyGame::Update() {
 #endif //  USE_IMGUI
 
 	gameScene->Update();
+
+	//タイトル画面で終了を選択した時するとき
+	if (gameScene->SetGameEnd()) {
+		Framework::SetIsEndRequst(gameScene->SetGameEnd());
+	}
+
 	fadeScreen->Update();
 	
 	//ポストエフェクト更新/変更

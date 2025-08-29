@@ -1,10 +1,27 @@
 #include "TitleScene.h"
 #include "LoadingModels.h"
 
+using namespace MyMath;
+
 void TitleScene::Initialize() {
-	sprite_Moji_Title = new Sprite();
-	sprite_Moji_Title->Initialize("Moji_Title.png");
-	sprite_Moji_Title->SetPosition({ 100,100 });
+	//objectをローディング
+	LoadingModels::GetInstance()->LoadObjects();
+	LoadingModels::GetInstance()->Finalize();
+
+	wt.Initialize();
+	wt.translation_ = { 0,0,0.0f };
+
+	camera = new Camera();
+	camera->SetTranslate({ 0,0,-10.0f });
+	camera->SetRotate(wt.rotation_);
+
+
+	Object3dCommon::GetInstance()->SetDefaultCamera(camera);
+
+	Moji_Title = new Object3d();
+	Moji_Title->Initialize();
+	Moji_Title->SetModelFile("Title.obj");
+	Moji_Title->SetTranslate({-3.0f,1.0f,0.0f});
 
 	sprite_Moji_Start = new Sprite();
 	sprite_Moji_Start->Initialize("Moji_Title_Start.png");
@@ -14,24 +31,46 @@ void TitleScene::Initialize() {
 	sprite_Moji_End->Initialize("Moji_Title_End.png");
 	sprite_Moji_End->SetPosition({ 700,600 });
 
-	//objectをローディング
-	LoadingModels::GetInstance()->LoadObjects();
-	LoadingModels::GetInstance()->Finalize();
-
+	sprite_Select_Allow = new Sprite();
+	sprite_Select_Allow->Initialize("Select_Allow.png");
+	sprite_Select_Allow->SetPosition({ 750,550 });
 }
 
 void TitleScene::Update() {
-	sprite_Moji_Title->Update();
+
+	camera->Update();
+
+	if (timer <= TimeMax) {
+		timer += 1.0f / 60.0f;
+	}
+	else {
+		timer = TimeMax;
+	}
+
+	center = EaseIn(center, timer, TimeMax);
+
+	move += 0.01f;
+	wt.translation_.y = 1.0f + center.y + std::sin(move) / 4.0f;
+
+	Moji_Title->Update();
+
+
 	sprite_Moji_Start->Update();
 	sprite_Moji_End->Update();
+	sprite_Select_Allow->Update();
 
 
 	if (isfadeStart) {
 		FadeScreen::GetInstance()->FedeIn();
 
 		if (!FadeScreen::GetInstance()->GetIsFadeing()) {
-			sceneNo = Select;
-			isfadeStart = false;
+			if (sprite_Select_Allow->GetPosition().y == 550) {
+				sceneNo = Select;
+				isfadeStart = false;
+			}
+			else if (sprite_Select_Allow->GetPosition().y == 650) {
+				isGameEnd = true;
+			}
 		}
 	}
 	else {
@@ -40,23 +79,41 @@ void TitleScene::Update() {
 
 	//フェードが終わったら押せる
 	if (!FadeScreen::GetInstance()->GetIsFadeing()) {
+
+		if (Input::GetInstance()->TriggerKey(DIK_W)) {
+			sprite_Select_Allow->SetPosition({ 750,550 });
+
+		}
+		if (Input::GetInstance()->TriggerKey(DIK_S)) {
+			sprite_Select_Allow->SetPosition({ 650,650 });
+		}
+
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 			isfadeStart = true;
 		}
 	}
 
+	wt.UpdateMatrix();
 }
 
 void TitleScene::Draw() {
+
+	Object3dCommon::GetInstance()->Command();
+
+	Moji_Title->Draw(wt);
+
+
 	SpriteCommon::GetInstance()->Command();
 
-	sprite_Moji_Title->Draw();
 	sprite_Moji_Start->Draw();
 	sprite_Moji_End->Draw();
+	sprite_Select_Allow->Draw();
 }
 
 void TitleScene::Finalize() {
-	delete sprite_Moji_Title;
+	delete Moji_Title;
 	delete sprite_Moji_Start;
 	delete sprite_Moji_End;
+	delete sprite_Select_Allow;
+
 }

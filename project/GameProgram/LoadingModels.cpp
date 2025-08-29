@@ -36,6 +36,8 @@ void LoadingModels::LoadObj() {
 	modelManager->LoadModel("warpGate", ".obj");
 
 	modelManager->LoadModel("shadow", ".obj");
+
+	modelManager->LoadModel("Title", ".obj");
 }
 
 void LoadingModels::LoadGltf() {

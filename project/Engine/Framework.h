@@ -29,6 +29,7 @@ public:
 	virtual void Draw() = 0;
 	virtual void Finalize();
 	virtual bool IsEndRequst() { return isRequst; }
+	virtual void SetIsEndRequst(bool result) { isRequst = result; }
 
 	virtual ~Framework() = default;
 

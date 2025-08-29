@@ -18,6 +18,8 @@ public:
 	void Draw();
 	//void Finalize();
 
+	bool SetGameEnd() { return sceneArr_[currentSceneNo_]->GetIsGameEnd(); }
+
 private:
 	
 	void SceneChange(int prev,int current);//シーン入れ替え
