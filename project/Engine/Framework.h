@@ -6,6 +6,7 @@
 #include "SpriteCommon.h"
 #include "Object3dCommon.h"
 #include "GLTFCommon.h"
+#include "SkinningCommon.h"
 #include "ParticleCommon.h"
 
 #include "ModelManager.h"
@@ -43,6 +44,7 @@ private:
 	SpriteCommon* spriteCommon = nullptr;
 	Object3dCommon* object3dCommon = nullptr;
 	GLTFCommon* glTFCommon = nullptr;
+	SkinningCommon* skinningCommon = nullptr;
 	ModelCommon* modelCommon = nullptr;
 	ParticleCommon* particleCommon = nullptr;
 	

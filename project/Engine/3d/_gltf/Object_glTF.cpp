@@ -109,22 +109,33 @@ void Object_glTF::Update(const WorldTransform& worldTransform) {
 	SkeletonUpdate(skeleton,worldTransform.matWorld_ * MakeTranslateMatrix(Vector3(0,0,-0.2f)));
 	SkinClusterUpdate(skinCluster, skeleton);
 
+	Matrix4x4 localMatrix;
+	//一個ならスキ人ぐなしのアニメーション
+	if (skeleton.joints.size() <= 1) {
+		NodeAnimation& rootNodeAnimation = animation.nodeAnimations[modelData.rootNode.name];
+		Vector3 translate = CalculateValue(rootNodeAnimation.translate, animationTime);//nextと逆にする()
+		Quaternion rotate = CalculateValueQuaternion(rootNodeAnimation.rotate, animationTime);
+		Vector3 scale = CalculateValue(rootNodeAnimation.scale, animationTime);
 
+		localMatrix = MakeAffineMatrix(scale, rotate, translate);
+	}
 
-	Matrix4x4 skaletonSpaceMatrix;
 	Matrix4x4 WorldViewProjectionMatrix;
 	if (camera) {
 		Matrix4x4 projectionMatrix = camera->GetViewProjectionMatrix();
-		WorldViewProjectionMatrix = worldTransform.matWorld_ * projectionMatrix;
+		//一個ならスキ人ぐなしのアニメーション
+		if (skeleton.joints.size() <= 1) {
+			WorldViewProjectionMatrix = localMatrix * worldTransform.matWorld_ * projectionMatrix;
+		}
+		else {
+			WorldViewProjectionMatrix = worldTransform.matWorld_ * projectionMatrix;
+		}
 	}
 	else {
 		WorldViewProjectionMatrix = worldTransform.matWorld_;
 	}
-	Matrix4x4 JointWorldMatrix = skaletonSpaceMatrix * worldTransform.matWorld_;
 
-	wvpData->World = JointWorldMatrix * worldTransform.matWorld_;
 	wvpData->World = modelData.rootNode.localMatrix * worldTransform.matWorld_;
-	//wvpData->World = worldMatrix;
 	wvpData->WVP = WorldViewProjectionMatrix;
 
 	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
@@ -140,29 +151,6 @@ void Object_glTF::Draw() {
 	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource->GetGPUVirtualAddress());
 	if (model) {
 		model->Draw();
-	}
-
-#ifdef _DEBUG
-	DebugWireframes::GetInstance()->Command();
-
-	for (auto it : debugSphere) {
-		it->Draw();
-	}
-
-	GLTFCommon::GetInstance()->Command();
-#endif // _DEBUG
-
-}
-
-void Object_glTF::Draw(const std::string& textureData) {
-	//モデル
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource->GetGPUVirtualAddress());
-	if (model) {
-		model->Draw(textureData);
 	}
 
 #ifdef _DEBUG

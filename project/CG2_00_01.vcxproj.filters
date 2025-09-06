@@ -276,6 +276,9 @@
     <ClCompile Include="GameProgram\System\Goal.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\_gltf\SkinningCommon.cpp">
+      <Filter>ソース ファイル\Engine\3d\_gltf</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -499,6 +502,9 @@
     </ClInclude>
     <ClInclude Include="GameProgram\System\Goal.h">
       <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\_gltf\SkinningCommon.h">
+      <Filter>ソース ファイル\Engine\3d\_gltf</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

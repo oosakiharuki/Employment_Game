@@ -1,30 +1,29 @@
-#include "GLTFCommon.h"
+#include "SkinningCommon.h"
 
 using namespace Logger;
 
-GLTFCommon* GLTFCommon::instance = nullptr;
+uint32_t SkinningCommon::kSRVIndexTop = 1;
 
-uint32_t GLTFCommon::kSRVIndexTop = 1;
-
-GLTFCommon* GLTFCommon::GetInstance() {
+SkinningCommon* SkinningCommon::GetInstance() {
 	if (instance == nullptr) {
-		instance = new GLTFCommon;
+		instance = new SkinningCommon;
 	}
 	return instance;
 }
-void GLTFCommon::Finalize() {
+void SkinningCommon::Finalize() {
 	delete instance;
 	instance = nullptr;
 }
-void GLTFCommon::Initialize(DirectXCommon* dxCommon) {
+
+SkinningCommon* SkinningCommon::instance = nullptr;
+
+void SkinningCommon::Initialize(DirectXCommon* dxCommon) {
 	dxCommon_ = dxCommon;
-	
+
 	GraphicsPipeline();
 }
 
-
-void GLTFCommon::RootSignature() {
-
+void SkinningCommon::RootSignature() {
 	//RootSignature
 	descriptionRootSignature.Flags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
@@ -102,9 +101,12 @@ void GLTFCommon::RootSignature() {
 
 }
 
-void GLTFCommon::GraphicsPipeline() {
+
+
+void SkinningCommon::GraphicsPipeline() {
 
 	RootSignature();
+
 
 	//シリアライズしてバイナリにする
 	ID3DBlob* signatureBlob = nullptr;
@@ -129,14 +131,14 @@ void GLTFCommon::GraphicsPipeline() {
 
 	inputElementDescs[1].SemanticName = "TEXCOORD";
 	inputElementDescs[1].SemanticIndex = 0;
-	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;	
+	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
 	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
 	inputElementDescs[2].SemanticName = "NORMAL";
 	inputElementDescs[2].SemanticIndex = 0;
 	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 	inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-	
+
 	inputElementDescs[3].SemanticName = "WORLDPOSITION";
 	inputElementDescs[3].SemanticIndex = 0;
 	inputElementDescs[3].Format = DXGI_FORMAT_R32G32B32_FLOAT;
@@ -153,7 +155,6 @@ void GLTFCommon::GraphicsPipeline() {
 	inputElementDescs[5].Format = DXGI_FORMAT_R32G32B32A32_SINT;
 	inputElementDescs[5].InputSlot = 1; //一番目のshotのVBVだと伝える
 	inputElementDescs[5].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
 
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
 	inputLayoutDesc.pInputElementDescs = inputElementDescs;
@@ -172,7 +173,7 @@ void GLTFCommon::GraphicsPipeline() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 
 	//shaderのコンパイラ
-	Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
+	Microsoft::WRL::ComPtr<IDxcBlob> vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/SkinningObject3d.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 
 	Microsoft::WRL::ComPtr<IDxcBlob> pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d_glTF.PS.hlsl", L"ps_6_0");
@@ -208,9 +209,11 @@ void GLTFCommon::GraphicsPipeline() {
 	//PSOここ絶対最後
 	hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState));
 	assert(SUCCEEDED(hr));
+
 }
 
-void GLTFCommon::Command() {
+
+void SkinningCommon::Command() {
 	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature.Get());
 	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState.Get());
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

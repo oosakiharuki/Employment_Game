@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\3d\_gltf\SkinningCommon.cpp" />
     <ClCompile Include="GameProgram\FadeScreen.cpp" />
     <ClCompile Include="GameProgram\LoadingModels.cpp" />
     <ClCompile Include="GameProgram\Scene\ClearScene.cpp" />
@@ -185,6 +186,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\System\WarpGate.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\3d\_gltf\SkinningCommon.h" />
     <ClInclude Include="GameProgram\FadeScreen.h" />
     <ClInclude Include="GameProgram\LoadingModels.h" />
     <ClInclude Include="GameProgram\Scene\ClearScene.h" />

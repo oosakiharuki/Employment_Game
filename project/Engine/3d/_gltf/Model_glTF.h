@@ -8,12 +8,9 @@ class Model_glTF{
 public:
 
 	void Initialize(ModelCommon* modelCommon,const std::string& directorypath,const std::string& fileName);
-
 	void Draw();
-	void Draw(const std::string& textureFilePath);
 
 	static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
-	//static ModelData_glTF LoadObjFile(const std::string& directoryPath, const std::string& filename);
 	//gltf用
 	static ModelData_glTF LoadModelFile(const std::string& directoryPath, const std::string& filename);
 	static Animation LoadAnimationFile(const std::string& directoryPath, const std::string& filename);

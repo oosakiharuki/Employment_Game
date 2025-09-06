@@ -32,6 +32,9 @@ void Framework::Initialize() {
 	glTFCommon = GLTFCommon::GetInstance();
 	glTFCommon->Initialize(dxCommon);
 
+	skinningCommon = SkinningCommon::GetInstance();
+	skinningCommon->Initialize(dxCommon);
+
 	modelCommon = new ModelCommon();
 	modelCommon->Initialize(dxCommon);
 	ModelManager::GetInstance()->Initialize(dxCommon);
@@ -86,6 +89,7 @@ void Framework::Finalize() {
 	spriteCommon->Finalize();	
 	object3dCommon->Finalize();
 	glTFCommon->Finalize();
+	skinningCommon->Finalize();
 	delete modelCommon;
 	
 	particleCommon->Finalize();

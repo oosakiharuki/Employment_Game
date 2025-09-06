@@ -22,7 +22,6 @@ public:
 	void Initialize();
 	void Update(const WorldTransform& worldTransform);
 	void Draw();
-	void Draw(const std::string& textureData);
 
 
 	//static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
