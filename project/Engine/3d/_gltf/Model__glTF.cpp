@@ -9,36 +9,58 @@
 
 using namespace MyMath;
 
-void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directorypath, const std::string& fileName) {
+void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directorypath, const std::string& fileName, bool isAnimation, bool isSkinning) {
 	this->modelCommon = modelCommon;
 
 	//.gltf
 	modelData = LoadModelFile(directorypath, fileName);
-	animation = LoadAnimationFile(directorypath, fileName);
+	if (isAnimation) {
+		animation = LoadAnimationFile(directorypath, fileName,uint32_t(modelData.indices.size()));
+	}
 
 	InitialData = modelData;
 
 	//vertex
-	vertexResource = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
+	for (auto& vertices : modelData.vertices) {
+		D3D12_VERTEX_BUFFER_VIEW vertexB;
+		Microsoft::WRL::ComPtr<ID3D12Resource> vertexR;
 
-	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
-	vertexBufferView.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
-	vertexBufferView.StrideInBytes = sizeof(VertexData);
+		vertexR = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * vertices.size());
 
-	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
-	std::memcpy(vertexData, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
+		vertexB.BufferLocation = vertexR->GetGPUVirtualAddress();
+		vertexB.SizeInBytes = UINT(sizeof(VertexData) * vertices.size());
+		vertexB.StrideInBytes = sizeof(VertexData);
+
+		vertexR->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
+		std::memcpy(vertexData, vertices.data(), sizeof(VertexData) * vertices.size());
+
+		vertexResource.push_back(vertexR);
+		vertexBufferView.push_back(vertexB);
+
+	}
 
 	//index
-	indexResource = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * modelData.indices.size());
+	uint32_t count = 0;
 
-	indexBufferView.BufferLocation = indexResource->GetGPUVirtualAddress();
-	indexBufferView.SizeInBytes = UINT(sizeof(uint32_t) * modelData.indices.size());
-	indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+	for (auto& indices : modelData.indices) {
+		D3D12_INDEX_BUFFER_VIEW indexB;
+		Microsoft::WRL::ComPtr<ID3D12Resource> indexR;
+
+		indexR = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * indices.size());
+
+		indexB.BufferLocation = indexR->GetGPUVirtualAddress();
+		indexB.SizeInBytes = UINT(sizeof(uint32_t) * indices.size());
+		indexB.Format= DXGI_FORMAT_R32_UINT;
 
 
-	indexResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedIndex));
-	std::memcpy(mappedIndex, modelData.indices.data(), sizeof(uint32_t) * modelData.indices.size());
+		indexR->Map(0, nullptr, reinterpret_cast<void**>(&mappedIndex));
+		std::memcpy(mappedIndex, indices.data(), sizeof(uint32_t) * indices.size());
 
+		indexBufferView.push_back(indexB);
+		indexResource.push_back(indexR);
+
+
+	}
 
 	//Model用マテリアル
 	//マテリアル用のリソース
@@ -50,58 +72,55 @@ void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directo
 	materialData->enableLighting = true;
 	materialData->uvTransform = MakeIdentity4x4();
 	materialData->shininess = 70;
-	materialData->environmentCoefficient = 0.3f;
+	materialData->environmentCoefficient = 0.0f;
 
 	//テクスチャ読み込み
-	TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
-	modelData.material.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData.material.textureFilePath);
+	for (auto& material : modelData.material) {
+		TextureManager::GetInstance()->LoadTexture(material.textureFilePath);
+		material.textureIndex = TextureManager::GetInstance()->GetSrvIndex(material.textureFilePath);
+	}
 
-	skeleton = CreateSkeltion(modelData.rootNode);
-	skinCluster = CreateSkinCluster(skeleton,modelData);
+	if (isSkinning) {
+		for (auto& child : modelData.rootNode.children) {
+			Skeleton skeleton;
+			skeleton = CreateSkeltion(child);
+			skeletons.push_back(skeleton);
+		}
 
-	vbvs[0] = vertexBufferView;
-	vbvs[1] = skinCluster.influenceBufferView;
 
+		SkinCluster skinCluster;
+		skinCluster = CreateSkinCluster(skeletons[1], modelData);
+		skinClusters.push_back(skinCluster);
+	}
+
+	isAnimation_ = isAnimation;
+	isSkinning_ = isSkinning;
 }
 
 void Model_glTF::Draw() {
 	//objファイルに元々あったテクスチャ
 	modelData = InitialData;
-	
-	modelCommon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 2, vbvs);
-	//modelCommon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
-	modelCommon->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView);
-	modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
-	modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData.material.textureFilePath));
-	modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(7, skinCluster.paletteSrvHandle.second);//Skinning.VS t0
-	
-	modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(8, TextureManager::GetInstance()->GetSrvHandleGPU(EnvironmentFile));
-	//modelCommon->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
-	modelCommon->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData.indices.size()), 1, 0, 0, 0);
+	vbvs[0] = vertexBufferView[i];
 
+	if (isSkinning_) {
+		vbvs[1] = skinClusters[i].influenceBufferView;
+		modelCommon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 2, vbvs);
+		modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(8, skinClusters[i].paletteSrvHandle.second);//Skinning.VS t0
+	}
+	else {
+		modelCommon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, vbvs);
+	}
+	//modelCommon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
+	modelCommon->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView[i]);
+	modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
+	modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData.material[i].textureFilePath));
+	modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(7, TextureManager::GetInstance()->GetSrvHandleGPU(EnvironmentFile));
+
+	//modelCommon->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
+	modelCommon->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData.indices[i].size()), 1, 0, 0, 0);
+	i++;
 }
 
-MaterialData Model_glTF::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename) {
-	MaterialData materialData;
-	std::string line;
-	std::ifstream file(directoryPath + "/" + filename);
-	assert(file.is_open());
-
-	//ファイルを開く
-	while (std::getline(file, line)) {
-		std::string identifier;
-		std::istringstream s(line);
-		s >> identifier;
-
-		if (identifier == "map_Kd") {
-			std::string textureFilename;
-			s >> textureFilename;
-
-			materialData.textureFilePath = directoryPath + "/Sprite/" + textureFilename;
-		}
-	}
-	return materialData;
-};
 
 ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const std::string& filename) {
 	ModelData_glTF modelData;
@@ -112,22 +131,31 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 	assert(scene->HasMeshes()); //メッシュがないのは対応なし
 
+	std::vector<VertexData> vertices;
+
 	//VertexDataを読み取る
 	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());//法線があるか
 		assert(mesh->HasTextureCoords(0));//Texcordがあるか
-		modelData.vertices.resize(mesh->mNumVertices);//頂点数分のメモリ確保
+		//modelData.vertices.resize(mesh->mNumVertices);//頂点数分のメモリ確保
+
+		vertices.resize(mesh->mNumVertices);//頂点数分のメモリ確保
 
 		for (uint32_t vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
 			aiVector3D& position = mesh->mVertices[vertexIndex];
 			aiVector3D& normal = mesh->mNormals[vertexIndex];
 			aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
 
-			modelData.vertices[vertexIndex].position = { -position.x,position.y,position.z,1.0f };
-			modelData.vertices[vertexIndex].normal = { -normal.x,normal.y, normal.z, };
-			modelData.vertices[vertexIndex].texcoord = { texcoord.x,texcoord.y };
+			vertices[vertexIndex].position = { -position.x,position.y,position.z,1.0f };
+			vertices[vertexIndex].normal = { -normal.x,normal.y, normal.z, };
+			vertices[vertexIndex].texcoord = { texcoord.x,texcoord.y };
 		}
+
+		modelData.vertices.push_back(vertices);
+
+
+		std::vector<uint32_t> indices;
 
 		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
 			aiFace& face = mesh->mFaces[faceIndex];
@@ -135,9 +163,11 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 
 			for (uint32_t element = 0; element < face.mNumIndices; ++element) {
 				uint32_t vertexIndex = face.mIndices[element];
-				modelData.indices.push_back(vertexIndex);
+				indices.push_back(vertexIndex);
 			}
 		}
+
+		modelData.indices.push_back(indices);
 
 		for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
 			
@@ -163,14 +193,16 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 		}
 	}
 
-	modelData.material.textureFilePath = directoryPath + "/Sprite/uvChecker.png";
 	//MaterialData
 	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex) {
 		aiMaterial* material = scene->mMaterials[materialIndex];
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-			modelData.material.textureFilePath = directoryPath + "/Sprite/" + textureFilePath.C_Str();
+			
+			MaterialData materialData;
+			materialData.textureFilePath = directoryPath + "/Sprite/" + textureFilePath.C_Str();
+			modelData.material.push_back(materialData);
 		}
 
 	}
@@ -203,46 +235,52 @@ Node Model_glTF::ReadNode(aiNode* node) {
 }
 
 
-Animation  Model_glTF::LoadAnimationFile(const std::string& directoryPath, const std::string& filename) {
+std::vector<Animation>  Model_glTF::LoadAnimationFile(const std::string& directoryPath, const std::string& filename, uint32_t Number) {
 	Animation animation;
+	std::vector<Animation> animations_;
+
 	Assimp::Importer importer;
 	std::string filePath = directoryPath + "/" + filename;
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), 0);
 	assert(scene->mNumAnimations != 0);//アニメーションがないとき
-	aiAnimation* animationAssimp = scene->mAnimations[0];//最初のアニメーションのみ。複数はまだ
-	animation.duration = float(animationAssimp->mDuration / animationAssimp->mTicksPerSecond);//時間単位を秒に
 
-	for (uint32_t channelIndex = 0; channelIndex < animationAssimp->mNumChannels; ++channelIndex) {
-		aiNodeAnim* nodeAnimationAssimp = animationAssimp->mChannels[channelIndex];
-		NodeAnimation& nodeAnimation = animation.nodeAnimations[nodeAnimationAssimp->mNodeName.C_Str()];
-		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumPositionKeys; ++keyIndex) {
-			aiVectorKey& keyAssimp = nodeAnimationAssimp->mPositionKeys[keyIndex];
-			keyframeVector3 keyframe;
-			keyframe.time = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond);
-			keyframe.value = { -keyAssimp.mValue.x,keyAssimp.mValue.y ,keyAssimp.mValue.z };//xはマイナス
-			nodeAnimation.translate.keyframes.push_back(keyframe);
+	for (uint32_t i = 0; i < Number; i++) {
+		aiAnimation* animationAssimp = scene->mAnimations[i];//アニメーション数
+		animation.duration = float(animationAssimp->mDuration / animationAssimp->mTicksPerSecond);//時間単位を秒に
+
+		for (uint32_t channelIndex = 0; channelIndex < animationAssimp->mNumChannels; ++channelIndex) {
+			aiNodeAnim* nodeAnimationAssimp = animationAssimp->mChannels[channelIndex];
+			NodeAnimation& nodeAnimation = animation.nodeAnimations[nodeAnimationAssimp->mNodeName.C_Str()];
+			for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumPositionKeys; ++keyIndex) {
+				aiVectorKey& keyAssimp = nodeAnimationAssimp->mPositionKeys[keyIndex];
+				keyframeVector3 keyframe;
+				keyframe.time = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond);
+				keyframe.value = { -keyAssimp.mValue.x,keyAssimp.mValue.y ,keyAssimp.mValue.z };//xはマイナス
+				nodeAnimation.translate.keyframes.push_back(keyframe);
+			}
+
+			for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumRotationKeys; ++keyIndex) {
+				aiQuatKey& keyAssimp = nodeAnimationAssimp->mRotationKeys[keyIndex];
+				keyframeQuatarnion keyframe;
+				keyframe.time = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond);
+				//y,zを右手から左手に変更するため" - "に
+				keyframe.value = { keyAssimp.mValue.x,-keyAssimp.mValue.y ,-keyAssimp.mValue.z,keyAssimp.mValue.w };
+				nodeAnimation.rotate.keyframes.push_back(keyframe);
+			}
+
+			for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumScalingKeys; ++keyIndex) {
+				aiVectorKey& keyAssimp = nodeAnimationAssimp->mScalingKeys[keyIndex];
+				keyframeVector3 keyframe;
+				keyframe.time = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond);
+				keyframe.value = { keyAssimp.mValue.x,keyAssimp.mValue.y ,keyAssimp.mValue.z };
+				nodeAnimation.scale.keyframes.push_back(keyframe);
+			}
 		}
 
-		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumRotationKeys; ++keyIndex) {
-			aiQuatKey& keyAssimp = nodeAnimationAssimp->mRotationKeys[keyIndex];
-			keyframeQuatarnion keyframe;
-			keyframe.time = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond);
-			//y,zを右手から左手に変更するため" - "に
-			keyframe.value = { keyAssimp.mValue.x,-keyAssimp.mValue.y ,-keyAssimp.mValue.z,keyAssimp.mValue.w };
-			nodeAnimation.rotate.keyframes.push_back(keyframe);
-		}
-
-		for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumScalingKeys; ++keyIndex) {
-			aiVectorKey& keyAssimp = nodeAnimationAssimp->mScalingKeys[keyIndex];
-			keyframeVector3 keyframe;
-			keyframe.time = float(keyAssimp.mTime / animationAssimp->mTicksPerSecond);
-			keyframe.value = { keyAssimp.mValue.x,keyAssimp.mValue.y ,keyAssimp.mValue.z };
-			nodeAnimation.scale.keyframes.push_back(keyframe);
-		}
+		animations_.push_back(animation);
 	}
 
-
-	return animation;
+	return animations_;
 }
 
 SkinCluster Model_glTF::CreateSkinCluster(const Skeleton& skeleton,const ModelData_glTF& modelData) {
@@ -276,15 +314,21 @@ SkinCluster Model_glTF::CreateSkinCluster(const Skeleton& skeleton,const ModelDa
 
 	///WEIGHT INDEXのやつ
 	//influenceResource確保
-	skinCluster.influenceResource  = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(VertexInfluence) * modelData.vertices.size());
+
+	uint32_t all_vertex = 0;
+	for (auto& v : modelData.vertices) {
+		all_vertex += uint32_t(v.size());
+	}
+
+	skinCluster.influenceResource  = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(VertexInfluence) * all_vertex);
 	VertexInfluence* mappedInfluence = nullptr;
 	skinCluster.influenceResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedInfluence));
-	std::memset(mappedInfluence, 0, sizeof(VertexInfluence) * modelData.vertices.size());
-	skinCluster.mappedInfluence = { mappedInfluence,modelData.vertices.size() };
+	std::memset(mappedInfluence, 0, sizeof(VertexInfluence) * all_vertex);
+	skinCluster.mappedInfluence = { mappedInfluence,all_vertex };
 
 	//InfluenceのVBV
 	skinCluster.influenceBufferView.BufferLocation = skinCluster.influenceResource->GetGPUVirtualAddress();
-	skinCluster.influenceBufferView.SizeInBytes = UINT(sizeof(VertexInfluence) * modelData.vertices.size());
+	skinCluster.influenceBufferView.SizeInBytes = UINT(sizeof(VertexInfluence) * all_vertex);
 	skinCluster.influenceBufferView.StrideInBytes = sizeof(VertexInfluence);
 
 	//inverseBindPoseMatrixを格納場所、単位行列で埋める

@@ -73,17 +73,17 @@ void SkinningCommon::RootSignature() {
 	rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//plxelshader
 	rootParameters[6].Descriptor.ShaderRegister = 4;//レジスタ番号
 
-	//skinning t0
-	rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	rootParameters[7].DescriptorTable.pDescriptorRanges = descriptorRange;
-	rootParameters[7].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
-
 	//IBL t1
+	rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameters[7].DescriptorTable.pDescriptorRanges = descriptorRangeIBL;
+	rootParameters[7].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeIBL);
+
+	//skinning t0
 	rootParameters[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters[8].DescriptorTable.pDescriptorRanges = descriptorRangeIBL;
-	rootParameters[8].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeIBL);
+	rootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+	rootParameters[8].DescriptorTable.pDescriptorRanges = descriptorRange;
+	rootParameters[8].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
 
 
 	//2でまとめる

@@ -20,7 +20,7 @@ void ModelManager::Initialize(DirectXCommon* dxCommon) {
 	modelCommon->Initialize(dxCommon);
 }
 
-void ModelManager::LoadModel(const std::string& filePath, const std::string& objType) {
+void ModelManager::LoadModel(const std::string& filePath, const std::string& objType, bool isAnimation, bool isSkinning) {
 	
 	std::string fileName = filePath + objType;
 	
@@ -39,7 +39,7 @@ void ModelManager::LoadModel(const std::string& filePath, const std::string& obj
 	}
 	else if (objType == ".gltf") {
 		std::unique_ptr<Model_glTF> model = std::make_unique<Model_glTF>();
-		model->Initialize(modelCommon, "resource", "Object/" + filePath + "/" + fileName);//model,file名,OBJ本体
+		model->Initialize(modelCommon, "resource", "Object/" + filePath + "/" + fileName,isAnimation, isSkinning);//model,file名,OBJ本体
 		glTFs.insert(std::make_pair(fileName, std::move(model)));
 	}
 }

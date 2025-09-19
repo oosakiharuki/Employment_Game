@@ -48,8 +48,7 @@ void LoadingModels::LoadGltf() {
 	modelManager->LoadModel("sneakWalk", ".gltf");
 	modelManager->LoadModel("stop", ".gltf");
 
-	modelManager->LoadModel("AnimatedCube", ".gltf");
-	modelManager->LoadModel("MyBoxRotate", ".gltf");
+	modelManager->LoadModel("TwoMesh_Anime", ".gltf",true);
 
 
 }

@@ -74,17 +74,11 @@ void GLTFCommon::RootSignature() {
 	rootParameters[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//plxelshader
 	rootParameters[6].Descriptor.ShaderRegister = 4;//レジスタ番号
 
-	//skinning t0
-	rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	rootParameters[7].DescriptorTable.pDescriptorRanges = descriptorRange;
-	rootParameters[7].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
-
 	//IBL t1
-	rootParameters[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameters[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters[8].DescriptorTable.pDescriptorRanges = descriptorRangeIBL;
-	rootParameters[8].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeIBL);
+	rootParameters[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameters[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameters[7].DescriptorTable.pDescriptorRanges = descriptorRangeIBL;
+	rootParameters[7].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeIBL);
 
 
 	//2でまとめる
@@ -121,7 +115,7 @@ void GLTFCommon::GraphicsPipeline() {
 
 
 	//InputLayout
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[6] = {};
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[4] = {};
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
 	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -141,18 +135,6 @@ void GLTFCommon::GraphicsPipeline() {
 	inputElementDescs[3].SemanticIndex = 0;
 	inputElementDescs[3].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 	inputElementDescs[3].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-	inputElementDescs[4].SemanticName = "WEIGHT";
-	inputElementDescs[4].SemanticIndex = 0;
-	inputElementDescs[4].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	inputElementDescs[4].InputSlot = 1; //一番目のshotのVBVだと伝える
-	inputElementDescs[4].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-	inputElementDescs[5].SemanticName = "INDEX";
-	inputElementDescs[5].SemanticIndex = 0;
-	inputElementDescs[5].Format = DXGI_FORMAT_R32G32B32A32_SINT;
-	inputElementDescs[5].InputSlot = 1; //一番目のshotのVBVだと伝える
-	inputElementDescs[5].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
 
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};

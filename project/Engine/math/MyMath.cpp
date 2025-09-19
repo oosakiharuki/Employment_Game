@@ -313,7 +313,7 @@ namespace MyMath {
 
 		//position -= overlap;
 	}
-	
+
 	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 		Vector3 result;
 		result.x = v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0];

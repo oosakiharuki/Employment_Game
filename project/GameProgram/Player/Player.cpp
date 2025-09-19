@@ -36,7 +36,7 @@ void Player::Initialize() {
 
 	object = new Object_glTF();
 	object->Initialize();
-	object->SetModelFile("MyBoxRotate.gltf");
+	object->SetModelFile("TwoMesh_Anime.gltf");
 	object->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 
 	worldTransform.scale_ = { 1,1,1 };

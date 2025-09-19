@@ -22,6 +22,7 @@ public:
 	void Initialize();
 	void Update(const WorldTransform& worldTransform);
 	void Draw();
+	void Draw(const std::string& textureData);
 
 
 	//static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
@@ -54,8 +55,8 @@ public:
 private:
 	GLTFCommon* object3dCommon = nullptr;
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource;
-	TransformationMatrix* wvpData = nullptr;
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> wvpResources;
+	std::vector<TransformationMatrix*> wvpDatas;
 
 	//ライト用のリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightSphereResource;
@@ -86,14 +87,14 @@ private:
 	ModelData_glTF modelData;
 
 
-	Animation animation;
+	std::vector<Animation> animation;
 	///アニメーションタイマー
 	float animationTime = 0.0f;
 	/// 補間タイマー
 	float changeTime = 0.0f;
 	
-	Skeleton skeleton;
-	SkinCluster skinCluster;
+	std::vector<Skeleton> skeletons;
+	std::vector<SkinCluster> skinClusters;
 
 	std::vector<SphereModel*> debugSphere;
 	void SetWireframe();
@@ -101,7 +102,7 @@ private:
 	bool isChange = false;
 
 	//変更前のアニメーション
-	Animation preAnimation;
+	std::vector<Animation> preAnimation;
 
 	Material* material;
 };
