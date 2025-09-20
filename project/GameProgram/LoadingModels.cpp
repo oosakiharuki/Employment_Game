@@ -48,7 +48,9 @@ void LoadingModels::LoadGltf() {
 	modelManager->LoadModel("sneakWalk", ".gltf");
 	modelManager->LoadModel("stop", ".gltf");
 
-	modelManager->LoadModel("TwoMesh_Anime", ".gltf",true);
+	modelManager->LoadModel("TwoMesh_Anime", ".gltf", true);
+	modelManager->LoadModel("NewPlayer", ".gltf", true);
+	modelManager->LoadModel("NewPlayer_umbrella", ".gltf");
 
 
 }

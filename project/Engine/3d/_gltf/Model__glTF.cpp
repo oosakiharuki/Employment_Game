@@ -69,7 +69,7 @@ void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directo
 	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 	//色の設定
 	materialData->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	materialData->enableLighting = true;
+	materialData->enableLighting = false;
 	materialData->uvTransform = MakeIdentity4x4();
 	materialData->shininess = 70;
 	materialData->environmentCoefficient = 0.0f;

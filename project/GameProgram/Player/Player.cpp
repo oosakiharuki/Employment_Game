@@ -36,7 +36,7 @@ void Player::Initialize() {
 
 	object = new Object_glTF();
 	object->Initialize();
-	object->SetModelFile("TwoMesh_Anime.gltf");
+	object->SetModelFile("NewPlayer.gltf");
 	object->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 
 	worldTransform.scale_ = { 1,1,1 };
@@ -403,27 +403,27 @@ void Player::Update() {
 	}
 
 	if (isChangeAnimation) {
-		//switch (animation_mode)
-		//{
-		//case Player::Animation_Mode::mode_stop:
-		//	object->ChangeAnimation("stop.gltf");
-		//	break;
-		//case Player::Animation_Mode::mode_move:
-		//	object->ChangeAnimation("walk.gltf");
-		//	break;
-		//case Player::Animation_Mode::mode_sield:
-		//	object->ChangeAnimation("sneakWalk.gltf");
-		//	break;
-		//case Player::Animation_Mode::mode_damage:
-		//	object->ChangeAnimation("stop.gltf");
-		//	break;
-		//default:
-		//	break;
-		//}
-		//object->SetEnvironment("resource/rostock_laage_airport_4k.dds");
+		switch (animation_mode)
+		{
+		case Player::Animation_Mode::mode_stop:
+			object->ChangeAnimation("NewPlayer.gltf");
+			break;
+		case Player::Animation_Mode::mode_move:
+			//object->ChangeAnimation("walk.gltf");
+			break;
+		case Player::Animation_Mode::mode_sield:
+			object->ChangeAnimation("NewPlayer_umbrella.gltf");
+			break;
+		case Player::Animation_Mode::mode_damage:
+			//object->ChangeAnimation("stop.gltf");
+			break;
+		default:
+			break;
+		}
+		object->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 
-		//PreAnimation_mode = animation_mode;
-		//isChangeAnimation = false;
+		PreAnimation_mode = animation_mode;
+		isChangeAnimation = false;
 	}
 	
 	PrePosition = worldTransform.translation_;

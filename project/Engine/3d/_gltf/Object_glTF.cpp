@@ -89,9 +89,12 @@ void Object_glTF::Initialize() {
 void Object_glTF::Update(const WorldTransform& worldTransform) {
 
 	//作るときはフレームレートを60FPSにする
-	uint32_t i = 0;
+	uint32_t i = 0;		
+	
+	animationTime += 1.0f / 60.0f;
+
 	for (auto& animation_ : animation) {
-		animationTime += 1.0f / 60.0f;
+
 		animationTime = std::fmod(animationTime, animation_.duration);
 
 		//スキニング処理
@@ -135,7 +138,7 @@ void Object_glTF::Update(const WorldTransform& worldTransform) {
 				localMatrix = MakeAffineMatrix(scale, rotate, translate);
 				localMatrices.push_back(localMatrix);
 			}
-			else {
+			else if(model->IsAnimation()){
 				NodeAnimation& rootNodeAnimation = animation[i].nodeAnimations[modelData.rootNode.children[i].name];
 				Vector3 translate = CalculateValue(rootNodeAnimation.translate, animationTime);//nextと逆にする()
 				Quaternion rotate = CalculateValueQuaternion(rootNodeAnimation.rotate, animationTime);
@@ -168,10 +171,16 @@ void Object_glTF::Update(const WorldTransform& worldTransform) {
 
 		wvpDatas[i]->World = modelData.rootNode.localMatrix * worldTransform.matWorld_;
 		if (model->IsSkinning()) {
+			//スキニングのアニメーションの場合
 			wvpDatas[i]->WVP = WorldViewProjectionMatrix;
 		}
-		else {
+		else if(model->IsAnimation()){
+			//アニメーションの場合
 			wvpDatas[i]->WVP = localMatrices[i] * WorldViewProjectionMatrix;
+		}
+		else {
+			//動かない場合
+			wvpDatas[i]->WVP = WorldViewProjectionMatrix;
 		}
 
 	}
@@ -346,12 +355,12 @@ void Object_glTF::SetWireframe() {
 }
 
 void Object_glTF::ChangeAnimation(const std::string& filePath) {
-	
+
 	//モデルが同じならすぐにリターン
 	if (model == ModelManager::GetInstance()->FindModel_gltf(filePath)) {
 		return;
 	}
-	
+
 	//変更前のアニメーションデータ
 	preAnimation = animation;
 
@@ -379,7 +388,7 @@ void Object_glTF::ChangeAnimation(const std::string& filePath) {
 	if (isChange) {
 		changeTime = 0.9f - changeTime;
 	}
-	
+
 	isChange = true;
 
 	//Sleapなどで1より大きい値を出さないようにする
