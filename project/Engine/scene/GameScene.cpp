@@ -50,20 +50,21 @@ void GameScene::Update() {
 		FadeScreen::GetInstance()->FedeOut();
 	}
 
-	for (auto& warpGate : warpGates) {
-		if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB())) {
-			isNextStage = true;
-			isfadeStart = true;
-			nextStage_fileName = warpGate->GetNextStage();
-			break;
-		}
-	}
-
-	for (auto& goal_ : goals) {
-		if (IsCollisionAABB(player_->GetAABB(), goal_->GetAABB())) {
-			isGameClear = true;
-			isfadeStart = true;
-			return;
+	for (auto& stageObject : stageObjects) {
+		if (IsCollisionAABB(player_->GetAABB(), stageObject->GetAABB())) {
+			//ワープゲート
+			if (stageObject == dynamic_cast<WarpGate*>(stageObject)) {
+				WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject);
+				isNextStage = true;
+				isfadeStart = true;
+				nextStage_fileName = warpGate->GetNextStage();
+				break;
+			}//ゴール
+			else if (stageObject == dynamic_cast<Goal*>(stageObject)) {
+				isGameClear = true;
+				isfadeStart = true;
+				return;
+			}
 		}
 	}
 
@@ -80,14 +81,20 @@ void GameScene::Update() {
 
 	CollisionCommon();
 
+	for (auto& stageObject : stageObjects) {
+		stageObject->Update();
+	}
+
 	bool isChangeRespown = false;
 	//リスポーン変更した時
-	for (auto& checkPoint : checkPoints) {
-		checkPoint->Update();
-
-		if (IsCollisionAABB(player_->GetAABB(), checkPoint->GetAABB())) {
-			player_->SetRespownPosition(checkPoint->GetPosition());
-			isChangeRespown = true;
+	for (auto& stageObject : stageObjects) {
+		if (IsCollisionAABB(player_->GetAABB(), stageObject->GetAABB())) {
+			//チェックポイント
+			if (stageObject == dynamic_cast<CheckPoint*>(stageObject)) {
+				CheckPoint* checkPoint = dynamic_cast<CheckPoint*>(stageObject);
+				player_->SetRespownPosition(checkPoint->GetPosition());
+				isChangeRespown = true;
+			}
 		}
 	}
 
@@ -157,13 +164,6 @@ void GameScene::Update() {
 	wt.UpdateMatrix();
 	worldTransformCamera_.UpdateMatrix();
 
-	for (auto& warpGate : warpGates) {
-		warpGate->Update();
-	}
-
-	for (auto& goal_ : goals) {
-		goal_->Update();
-	}
 
 #ifdef  USE_IMGUI
 
@@ -215,14 +215,8 @@ void GameScene::Draw() {
 		enemy->Draw();
 	}
 
-	for (auto& checkPoint : checkPoints) {
-		checkPoint->Draw();
-	}
-	for (auto& warpGate : warpGates) {
-		warpGate->Draw();
-	}
-	for (auto& goal_ : goals) {
-		goal_->Draw();
+	for (auto& stageObject : stageObjects) {
+		stageObject->Draw();
 	}
 	
 
@@ -245,22 +239,12 @@ void GameScene::Finalize() {
 	delete stageobj;
 	delete skyBox;
 
-	for (auto& checkPoint : checkPoints) {
-		delete checkPoint;
+	for (auto& stageObject : stageObjects) {
+		delete stageObject;
 	}
-	checkPoints.clear();
+	stageObjects.clear();
 
 	stagesAABB.clear();
-
-	for (auto& warpGate : warpGates) {
-		delete warpGate;
-	}
-	warpGates.clear();
-
-	for (auto& goal_ : goals) {
-		delete goal_;
-	}
-	goals.clear();
 }
 
 void GameScene::StageMovement(const std::string leveleditor_file, const std::string stageObj) {

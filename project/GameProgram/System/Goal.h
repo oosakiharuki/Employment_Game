@@ -1,25 +1,13 @@
 #pragma once
-#include "Object3d.h"
-#include "MyMath.h"
+#include "IStageObject.h"
 
-class Goal {
+class Goal : public IStageObject {
 public:
 
-	~Goal();
-	void Initialize();
-	void Update();
-	void Draw();
-
-	Vector3 GetPosition() { return wt.translation_; }
-	void SetPosition(Vector3 position) { wt.translation_ = position; }
-
-	AABB GetAABB();
-	void SetAABB(AABB aabb) { goalAABB = aabb; }
+	~Goal() override;
+	void Initialize() override;
+	void Update() override;
+	void Draw() override;
 
 private:
-	Object3d* object_;
-	WorldTransform wt;
-
-	AABB goalAABB;
-
 };

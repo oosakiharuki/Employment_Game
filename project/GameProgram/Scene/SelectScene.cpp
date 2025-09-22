@@ -28,8 +28,8 @@ void SelectScene::Update() {
 		FadeScreen::GetInstance()->FedeOut();
 	}
 
-	for (auto& warpgate : warpGates) {
-		warpgate->Update();
+	for (auto& stageObject : stageObjects) {
+		stageObject->Update();
 	}
 	camera->Update();
 	player_->Update();
@@ -39,10 +39,13 @@ void SelectScene::Update() {
 
 	CollisionCommon();
 
-	for (auto& warpGate : warpGates) {
-		if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB())) {
-			isfadeStart = true;
-			break;
+	for (auto& stageObject : stageObjects) {
+		if (stageObject == dynamic_cast<WarpGate*>(stageObject)) {
+			WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject);
+			if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB())) {
+				isfadeStart = true;
+				break;
+			}
 		}
 	}
 
@@ -60,8 +63,8 @@ void SelectScene::Draw() {
 
 	player_->Draw();
 
-	for (auto& warpgate : warpGates) {
-		warpgate->Draw();
+	for (auto& stageObject : stageObjects) {
+		stageObject->Draw();
 	}
 
 	//パーティクル描画処理
@@ -72,8 +75,8 @@ void SelectScene::Draw() {
 
 void SelectScene::Finalize() {
 	delete player_;
-	for (auto& warpgate : warpGates) {
-		delete warpgate;
+	for (auto& stageObject : stageObjects) {
+		delete stageObject;
 	}	
 	delete camera;
 	delete skyBox;

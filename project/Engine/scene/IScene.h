@@ -52,11 +52,13 @@ protected:
 	Player* player_ = nullptr;
 	std::list<IEnemy*> enemies;
 
-	std::vector<CheckPoint*> checkPoints;
-	std::list<WarpGate*> warpGates;
-	
+	std::vector<IStageObject*> stageObjects;
 
-	std::list<Goal*> goals;
+	//std::vector<CheckPoint*> checkPoints;
+	//std::list<WarpGate*> warpGates;
+	//
+
+	//std::list<Goal*> goals;
 
 
 	Object3d* stageobj;

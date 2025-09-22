@@ -47,10 +47,10 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 		for (auto& enemyData : levelediter.GetLevelData()->spawnEnemies) {
 
 			IEnemy* enemy;
-			if (enemyData.fileName == "Turret") {
+			if (enemyData.EnemyName == "Turret") {
 				enemy = new Enemy_Turret();
 			}
-			else if (enemyData.fileName == "Bomb") {
+			else if (enemyData.EnemyName == "Bomb") {
 				enemy = new Enemy_Bomb();
 			}
 			else {
@@ -88,13 +88,29 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	}
 
 	//チェックポイント地点
-	if (!levelediter.GetLevelData()->objects.empty()) {
-		for (auto& checkPointData : levelediter.GetLevelData()->checkpoints) {
-			CheckPoint* checkPoint = new CheckPoint();
-			checkPoint->Initialize();
-			checkPoint->SetPosition(checkPointData.translation);
-			checkPoint->SetAABB(checkPointData.colliderAABB);
-			checkPoints.push_back(checkPoint);
+	if (!levelediter.GetLevelData()->stageObjects.empty()) {
+		for (auto& stageObjectData : levelediter.GetLevelData()->stageObjects) {
+			IStageObject* stageObject{};
+			
+			if (stageObjectData.ObjectName == "WarpGate") {
+				stageObject = new WarpGate();
+			}
+			else if (stageObjectData.ObjectName == "Checkpoint") {
+				stageObject = new CheckPoint();
+			}
+			else if (stageObjectData.ObjectName == "Goal") {
+				stageObject = new Goal();
+			}
+			stageObject->Initialize();
+			stageObject->SetPosition(stageObjectData.translation);
+			stageObject->SetAABB(stageObjectData.colliderAABB);
+
+			if (stageObject == dynamic_cast<WarpGate*>(stageObject)) {
+				WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject);
+				warpGate->SetNextStage(stageObjectData.fileName);
+			}
+
+			stageObjects.push_back(stageObject);
 		}
 	}
 
@@ -102,32 +118,8 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	worldTransformCamera_.translation_ = cameraTranslate;
 	worldTransformCamera_.rotation_ = cameraRotate;
 
-
-
 	for (auto& enemy : enemies) {
 		enemy->SetStages(stagesAABB);
-	}
-
-	if (!levelediter.GetLevelData()->warpGate.empty()) {
-		for (auto& warpGateData : levelediter.GetLevelData()->warpGate) {
-			WarpGate* warpGate = new WarpGate();
-			warpGate->Initialize();
-			warpGate->SetPosition(warpGateData.translation);
-			warpGate->SetAABB(warpGateData.colliderAABB);
-			warpGate->SetNextStage(warpGateData.fileName);
-			warpGates.push_back(warpGate);
-		}
-	}
-
-	if (!levelediter.GetLevelData()->goal.empty()) {
-		for (auto& goalData : levelediter.GetLevelData()->goal) {
-			Goal* goal_ = new Goal();
-			goal_->Initialize();
-
-			goal_->SetPosition(goalData.translation);
-			goal_->SetAABB(goalData.colliderAABB);
-			goals.push_back(goal_);
-		}
 	}
 
 }

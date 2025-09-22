@@ -90,40 +90,6 @@
             }
         },
         {
-            "type": "PlayerSpawn",
-            "name": "PlayerSpawn",
-            "transform": {
-                "translation": [
-                    -80.0,
-                    0.0,
-                    2.529672622680664
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    89.99999237060547
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    3.0
-                ]
-            }
-        },
-        {
             "type": "MESH",
             "name": "立方体.001",
             "transform": {
@@ -295,52 +261,6 @@
             }
         },
         {
-            "type": "EnemySpawn",
-            "name": "EnemySpawn",
-            "transform": {
-                "translation": [
-                    19.24111557006836,
-                    0.0,
-                    10.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    89.99999237060547
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    3.0
-                ]
-            },
-            "travel_route": {
-                "start": [
-                    -5.059999942779541,
-                    0.0,
-                    0.0
-                ],
-                "end": [
-                    5.0,
-                    0.0,
-                    0.0
-                ]
-            }
-        },
-        {
             "type": "MESH",
             "name": "立方体.006",
             "transform": {
@@ -405,86 +325,6 @@
                     2.0,
                     2.0,
                     2.0
-                ]
-            }
-        },
-        {
-            "type": "EnemySpawn",
-            "name": "EnemySpawn.001",
-            "transform": {
-                "translation": [
-                    41.182769775390625,
-                    0.0,
-                    10.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    89.99999237060547
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    3.0
-                ]
-            },
-            "travel_route": {
-                "start": [
-                    -5.059999942779541,
-                    0.0,
-                    0.0
-                ],
-                "end": [
-                    5.0,
-                    0.0,
-                    0.0
-                ]
-            }
-        },
-        {
-            "type": "Checkpoint",
-            "name": "Checkpoint",
-            "transform": {
-                "translation": [
-                    0.5910873413085938,
-                    0.0,
-                    11.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    3.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    12.0
                 ]
             }
         },
@@ -554,41 +394,6 @@
                     2.0,
                     2.0,
                     2.0
-                ]
-            }
-        },
-        {
-            "type": "EnemySpawn",
-            "name": "EnemySpawn.002",
-            "transform": {
-                "translation": [
-                    74.0,
-                    0.0,
-                    10.0
-                ],
-                "rotation": [
-                    0.0,
-                    0.0,
-                    -89.99999237060547
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": "Turret",
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    3.0
                 ]
             }
         },
@@ -695,75 +500,6 @@
             }
         },
         {
-            "type": "WarpGate",
-            "name": "WarpGate",
-            "transform": {
-                "translation": [
-                    144.2742156982422,
-                    0.0,
-                    14.176626205444336
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": "stage_1",
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
-        },
-        {
-            "type": "Checkpoint",
-            "name": "Checkpoint.001",
-            "transform": {
-                "translation": [
-                    80.0,
-                    0.0,
-                    11.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    3.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    12.0
-                ]
-            }
-        },
-        {
             "type": "MESH",
             "name": "立方体.013",
             "transform": {
@@ -863,6 +599,275 @@
                     2.0,
                     2.0,
                     2.0
+                ]
+            }
+        },
+        {
+            "type": "PlayerSpawn",
+            "name": "PlayerSpawn",
+            "transform": {
+                "translation": [
+                    -80.0,
+                    0.0,
+                    2.5490498542785645
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    3.0
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "Checkpoint",
+            "name": "StageObjectSpawn",
+            "transform": {
+                "translation": [
+                    1.0,
+                    0.0,
+                    11.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    3.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    11.0
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "WarpGate",
+            "name": "StageObjectSpawn.001",
+            "transform": {
+                "translation": [
+                    144.0,
+                    0.0,
+                    14.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "stage_1",
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "Checkpoint",
+            "name": "StageObjectSpawn.002",
+            "transform": {
+                "translation": [
+                    80.0,
+                    0.0,
+                    11.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    3.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    11.0
+                ]
+            }
+        },
+        {
+            "type": "EnemySpawn",
+            "EnemyName": "Turret",
+            "name": "EnemySpawn.002",
+            "transform": {
+                "translation": [
+                    74.0,
+                    0.0,
+                    10.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    3.0
+                ]
+            }
+        },
+        {
+            "type": "EnemySpawn",
+            "EnemyName": "Soldier",
+            "name": "EnemySpawn",
+            "transform": {
+                "translation": [
+                    19.0,
+                    0.0,
+                    10.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    3.0
+                ]
+            },
+            "travel_route": {
+                "start": [
+                    -5.0,
+                    0.0,
+                    0.0
+                ],
+                "end": [
+                    5.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        {
+            "type": "EnemySpawn",
+            "EnemyName": "Soldier",
+            "name": "EnemySpawn.001",
+            "transform": {
+                "translation": [
+                    42.0,
+                    0.0,
+                    10.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    3.0
+                ]
+            },
+            "travel_route": {
+                "start": [
+                    -12.0,
+                    0.0,
+                    0.0
+                ],
+                "end": [
+                    7.0,
+                    0.0,
+                    0.0
                 ]
             }
         }

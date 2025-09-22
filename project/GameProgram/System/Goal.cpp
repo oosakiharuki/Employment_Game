@@ -2,9 +2,7 @@
 
 using namespace MyMath;
 
-Goal::~Goal() {
-	delete object_;
-}
+Goal::~Goal() {}
 
 void Goal::Initialize(){
 	wt.Initialize();
@@ -21,11 +19,4 @@ void Goal::Update(){
 	
 void Goal::Draw(){
 	object_->Draw(wt);
-}
-
-AABB Goal::GetAABB() {
-	AABB aabb;
-	aabb.min = wt.translation_ + goalAABB.min;
-	aabb.max = wt.translation_ + goalAABB.max;
-	return aabb;
 }

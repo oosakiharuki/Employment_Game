@@ -78,74 +78,6 @@
             }
         },
         {
-            "type": "PlayerSpawn",
-            "name": "PlayerSpawn",
-            "transform": {
-                "translation": [
-                    -10.0,
-                    0.0,
-                    3.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    3.0
-                ]
-            }
-        },
-        {
-            "type": "WarpGate",
-            "name": "WarpGate",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    7.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
-        },
-        {
             "type": "MESH",
             "name": "立方体.001",
             "transform": {
@@ -210,6 +142,75 @@
                     2.0,
                     2.0,
                     2.0
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "WarpGate",
+            "name": "StageObjectSpawn",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    7.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "PlayerSpawn",
+            "name": "PlayerSpawn",
+            "transform": {
+                "translation": [
+                    -9.0,
+                    0.0,
+                    3.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    3.0
                 ]
             }
         }

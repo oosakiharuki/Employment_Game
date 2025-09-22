@@ -1,9 +1,7 @@
 #include "WarpGate.h"
 using namespace MyMath;
 
-WarpGate::~WarpGate() {
-	delete object_;
-}
+WarpGate::~WarpGate() {}
 
 
 void WarpGate::Initialize() {
@@ -19,11 +17,4 @@ void WarpGate::Update() {
 
 void WarpGate::Draw() {
 	object_->Draw(wt);
-}
-
-AABB WarpGate::GetAABB() {
-	AABB aabb;
-	aabb.min = wt.translation_ + warpGateAABB.min;
-	aabb.max = wt.translation_ + warpGateAABB.max;
-	return aabb;
 }

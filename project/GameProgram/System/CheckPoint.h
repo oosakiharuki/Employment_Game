@@ -1,25 +1,13 @@
 #pragma once
-#include "Object3d.h"
-#include "MyMath.h"
+#include "IStageObject.h"
 
-class CheckPoint {
+class CheckPoint : public IStageObject {
 public:
-	~CheckPoint();
-	void Initialize();
-	void Update();
-	void Draw();
-
-	Vector3 GetPosition() { return wt.translation_; }
-	void SetPosition(Vector3 position) { wt.translation_ = position; }
-
-	AABB GetAABB();
-	void SetAABB(AABB aabb) { checkPointAABB = aabb; }
+	~CheckPoint() override;
+	void Initialize() override;
+	void Update() override;
+	void Draw() override;
 
 private:
-
-	Object3d* object_ = nullptr;
-	WorldTransform wt;
-	AABB checkPointAABB;
-
 };
 

@@ -133,6 +133,10 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 			//
 			LevelData::EnemySpawnData& enemySpawnData = levelData->spawnEnemies.back();
 
+			if (object.contains("EnemyName")) {
+				enemySpawnData.EnemyName = object["EnemyName"];
+			}
+
 			if (object.contains("file_name")) {
 				//ファイル名
 				enemySpawnData.fileName = object["file_name"];
@@ -209,23 +213,27 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 			}
 
 		}
-		else if (type.compare("Checkpoint") == 0) {
+		else if (type.compare("StageObjectSpawn") == 0) {
 			//要素追加
-			levelData->checkpoints.emplace_back(LevelData::CheckpointData{});
+			levelData->stageObjects.emplace_back(LevelData::StageObjectData{});
 			//
-			LevelData::CheckpointData& checkpointData = levelData->checkpoints.back();
+			LevelData::StageObjectData& stageObjectData = levelData->stageObjects.back();
+
+			if (object.contains("StageObjectName")) {
+				stageObjectData.ObjectName = object["StageObjectName"];
+			}
 
 			if (object.contains("file_name")) {
 				//ファイル名
-				checkpointData.fileName = object["file_name"];
+				stageObjectData.fileName = object["file_name"];
 			}
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			//BlenderのY軸とZ軸と違うため y = [2],z = [1]
 			//移動
-			checkpointData.translation.x = (float)transform["translation"][0];
-			checkpointData.translation.y = (float)transform["translation"][2];
-			checkpointData.translation.z = (float)transform["translation"][1];
+			stageObjectData.translation.x = (float)transform["translation"][0];
+			stageObjectData.translation.y = (float)transform["translation"][2];
+			stageObjectData.translation.z = (float)transform["translation"][1];
 			
 			//回転　必要じゃなさそう
 			//checkpointData.rotation.x = (float)transform["rotation"][0];
@@ -241,78 +249,10 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				Vector3 size = { (float)collider["size"][0],(float)collider["size"][2], (float)collider["size"][1] };
 
 				//AABBに追加
-				checkpointData.colliderAABB.min = center - (size / 2.0f);
-				checkpointData.colliderAABB.max = center + (size / 2.0f);
+				stageObjectData.colliderAABB.min = center - (size / 2.0f);
+				stageObjectData.colliderAABB.max = center + (size / 2.0f);
 			}
 		}
-		else if (type.compare("WarpGate") == 0) {
-			//要素追加
-			levelData->warpGate.emplace_back(LevelData::WarpGateData{});
-			//
-			LevelData::WarpGateData& warpGateData = levelData->warpGate.back();
-
-			if (object.contains("file_name")) {
-				//ファイル名
-				warpGateData.fileName = object["file_name"];
-			}
-			//トランスフォームのパラメータ読み込み
-			nlohmann::json& transform = object["transform"];
-			//BlenderのY軸とZ軸と違うため y = [2],z = [1]
-			//移動
-			warpGateData.translation.x = (float)transform["translation"][0];
-			warpGateData.translation.y = (float)transform["translation"][2];
-			warpGateData.translation.z = (float)transform["translation"][1];
-
-			//回転　必要じゃなさそう
-			//checkpointData.rotation.x = (float)transform["rotation"][0];
-			//checkpointData.rotation.y = (float)transform["rotation"][2];
-			//checkpointData.rotation.z = (float)transform["rotation"][1];
-
-			//コライダー
-			nlohmann::json& collider = object["collider"];
-
-			if (collider != nullptr) {
-				//Vectorに変換
-				Vector3 center = { (float)collider["center"][0],(float)collider["center"][2], (float)collider["center"][1] };
-				Vector3 size = { (float)collider["size"][0],(float)collider["size"][2], (float)collider["size"][1] };
-
-				//AABBに追加
-				warpGateData.colliderAABB.min = center - (size / 2.0f);
-				warpGateData.colliderAABB.max = center + (size / 2.0f);
-			}
-		}
-		else if (type.compare("Goal") == 0) {
-			//要素追加
-			levelData->goal.emplace_back(LevelData::GoalData{});
-			//
-			LevelData::GoalData& goalData = levelData->goal.back();
-
-			if (object.contains("file_name")) {
-				//ファイル名
-				goalData.fileName = object["file_name"];
-			}
-			//トランスフォームのパラメータ読み込み
-			nlohmann::json& transform = object["transform"];
-			//BlenderのY軸とZ軸と違うため y = [2],z = [1]
-			//移動
-			goalData.translation.x = (float)transform["translation"][0];
-			goalData.translation.y = (float)transform["translation"][2];
-			goalData.translation.z = (float)transform["translation"][1];
-
-			//コライダー
-			nlohmann::json& collider = object["collider"];
-
-			if (collider != nullptr) {
-				//Vectorに変換
-				Vector3 center = { (float)collider["center"][0],(float)collider["center"][2], (float)collider["center"][1] };
-				Vector3 size = { (float)collider["size"][0],(float)collider["size"][2], (float)collider["size"][1] };
-
-				//AABBに追加
-				goalData.colliderAABB.min = center - (size / 2.0f);
-				goalData.colliderAABB.max = center + (size / 2.0f);
-			}
-			}
-
 		//子ノード
 		if (object.contains("children")) {
 

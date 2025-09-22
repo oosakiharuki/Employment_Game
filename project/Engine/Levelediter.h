@@ -24,6 +24,7 @@ public:
 		};
 		//敵の生成場所
 		struct EnemySpawnData {
+			std::string EnemyName;
 			std::string fileName;
 			Vector3 translation;
 			Vector3 rotation;
@@ -40,33 +41,21 @@ public:
 			Vector3 Point1;
 			Vector3 Point2;
 		};
-		//チェックポイントの場所
-		struct CheckpointData {
+		//ステージオブジェクトの生成
+		struct StageObjectData {
+			std::string ObjectName;
 			std::string fileName;
 			Vector3 translation;
 			//Vector3 rotation;
 			AABB colliderAABB;
 		};
 
-		struct WarpGateData {
-			std::string fileName;
-			Vector3 translation;
-			AABB colliderAABB;
-		};
-
-		struct GoalData {
-			std::string fileName;
-			Vector3 translation;
-			AABB colliderAABB;
-		};
 
 		std::vector<ObjectData> objects;
 		std::vector<PlayerSpawnData> players;
 		std::vector<EnemySpawnData> spawnEnemies;
 		CameraInitData cameraInit;
-		std::vector<CheckpointData> checkpoints;
-		std::vector<WarpGateData> warpGate;
-		std::vector<GoalData> goal;
+		std::vector<StageObjectData> stageObjects;
 	};
 
 	LevelData* GetLevelData() { return levelData; }

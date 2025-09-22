@@ -1,9 +1,7 @@
 #include "CheckPoint.h"
 using namespace MyMath;
 
-CheckPoint::~CheckPoint() {
-	delete object_;
-}
+CheckPoint::~CheckPoint() {}
 
 
 void CheckPoint::Initialize() {
@@ -19,11 +17,4 @@ void CheckPoint::Update() {
 
 void CheckPoint::Draw() {
 	object_->Draw(wt);
-}
-
-AABB CheckPoint::GetAABB() {
-	AABB aabb;
-	aabb.min = wt.translation_ + checkPointAABB.min;
-	aabb.max = wt.translation_ + checkPointAABB.max;
-	return aabb;
 }
