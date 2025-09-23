@@ -42,7 +42,7 @@ private:
 
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexResource;
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource; //index
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> materialResources;
 
 
 	VertexData* vertexData = nullptr;

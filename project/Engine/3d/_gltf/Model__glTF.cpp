@@ -64,15 +64,27 @@ void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directo
 
 	//Model用マテリアル
 	//マテリアル用のリソース
-	materialResource = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(Material));
-	//書き込むためのアドレス
-	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
-	//色の設定
-	materialData->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	materialData->enableLighting = false;
-	materialData->uvTransform = MakeIdentity4x4();
-	materialData->shininess = 70;
-	materialData->environmentCoefficient = 0.0f;
+	for (auto& material : modelData.material) {
+		Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
+		materialResource = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(Material));
+		//書き込むためのアドレス
+		materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
+		//色の設定
+		
+		if (material.materialColor.s) {
+			//baseColor設定
+			materialData->color = material.materialColor;
+		}
+		else {
+			materialData->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		}
+		materialData->enableLighting = false;
+		materialData->uvTransform = MakeIdentity4x4();
+		materialData->shininess = 70;
+		materialData->environmentCoefficient = 0.0f;
+
+		materialResources.push_back(materialResource);
+	}
 
 	//テクスチャ読み込み
 	for (auto& material : modelData.material) {
@@ -110,13 +122,10 @@ void Model_glTF::Draw() {
 	else {
 		modelCommon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, vbvs);
 	}
-	//modelCommon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 	modelCommon->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView[i]);
-	modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
+	modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResources[i]->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
 	modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData.material[i].textureFilePath));
 	modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(7, TextureManager::GetInstance()->GetSrvHandleGPU(EnvironmentFile));
-
-	//modelCommon->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
 	modelCommon->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData.indices[i].size()), 1, 0, 0, 0);
 	i++;
 }
@@ -202,6 +211,16 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 			
 			MaterialData materialData;
 			materialData.textureFilePath = directoryPath + "/Sprite/" + textureFilePath.C_Str();
+			materialData.materialColor = { 1.0f,1.0f,1.0f,1.0f };
+			modelData.material.push_back(materialData);
+		}
+		else {
+			aiColor4D color;
+			material->Get(AI_MATKEY_BASE_COLOR, color);
+			//Blender初期のベースカラー
+			MaterialData materialData;
+			materialData.textureFilePath = directoryPath + "/Sprite/white.png";
+			materialData.materialColor = { (float)color.r,(float)color.g,(float)color.b,(float)color.a };
 			modelData.material.push_back(materialData);
 		}
 

@@ -8,20 +8,28 @@ void TitleScene::Initialize() {
 	LoadingModels::GetInstance()->LoadObjects();
 	LoadingModels::GetInstance()->Finalize();
 
+	TextureManager::GetInstance()->LoadTexture("resource/rostock_laage_airport_4k.dds");
+
+
 	wt.Initialize();
-	wt.translation_ = { 0,0,0.0f };
 
 	camera = new Camera();
-	camera->SetTranslate({ 0,0,-10.0f });
+	camera->SetTranslate({ 0,0,-30.0f });
 	camera->SetRotate(wt.rotation_);
 
 
 	Object3dCommon::GetInstance()->SetDefaultCamera(camera);
+	GLTFCommon::GetInstance()->SetDefaultCamera(camera);
 
 	Moji_Title = new Object3d();
 	Moji_Title->Initialize();
 	Moji_Title->SetModelFile("Title.obj");
-	Moji_Title->SetTranslate({-3.0f,1.0f,0.0f});
+	Moji_Title->SetTranslate({ -3.0f,1.0f,0.0f });
+
+	brainStem = new Object_glTF();
+	brainStem->Initialize();
+	brainStem->SetModelFile("noTexture.gltf");
+	brainStem->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 
 	sprite_Moji_Start = new Sprite();
 	sprite_Moji_Start->Initialize("Moji_Title_Start.png");
@@ -56,7 +64,7 @@ void TitleScene::Update() {
 	wt.translation_.y = 1.0f + center.y + std::sin(move) / 4.0f;
 
 	Moji_Title->Update();
-
+	brainStem->Update(wt);
 
 	sprite_Moji_Start->Update();
 	sprite_Moji_End->Update();
@@ -121,6 +129,9 @@ void TitleScene::Draw() {
 
 	Moji_Title->Draw(wt);
 
+	GLTFCommon::GetInstance()->Command();
+
+	brainStem->Draw();
 
 	SpriteCommon::GetInstance()->Command();
 
@@ -131,6 +142,7 @@ void TitleScene::Draw() {
 
 void TitleScene::Finalize() {
 	delete Moji_Title;
+	delete brainStem;
 	delete sprite_Moji_Start;
 	delete sprite_Moji_End;
 	delete sprite_Select_Allow;

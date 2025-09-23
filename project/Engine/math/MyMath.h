@@ -28,6 +28,7 @@
 struct MaterialData {
 	std::string textureFilePath;
 	uint32_t textureIndex;
+	Vector4 materialColor;
 };
 
 struct VertexData {

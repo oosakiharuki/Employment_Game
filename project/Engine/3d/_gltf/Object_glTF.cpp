@@ -125,7 +125,7 @@ void Object_glTF::Update(const WorldTransform& worldTransform) {
 
 	std::vector<Matrix4x4> localMatrices;
 
-	if (!model->IsSkinning()) {
+	if (!model->IsSkinning() && model->IsAnimation()) {
 		for (uint32_t i = 0; i < modelData.indices.size(); i++) {
 			Matrix4x4 localMatrix;
 
@@ -158,7 +158,7 @@ void Object_glTF::Update(const WorldTransform& worldTransform) {
 		WorldViewProjectionMatrix = worldTransform.matWorld_ * modelData.rootNode.localMatrix * projectionMatrix;
 
 		//通常のアニメーション
-		if (!model->IsSkinning()) {
+		if (!model->IsSkinning() && model->IsAnimation()) {
 			WorldViewProjectionMatrix = worldTransform.matWorld_ * projectionMatrix;
 		}
 	}

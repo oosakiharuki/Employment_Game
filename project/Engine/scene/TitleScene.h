@@ -11,6 +11,7 @@ public:
 	void Finalize() override;
 private:
 	Object3d* Moji_Title;
+	Object_glTF* brainStem;
 
 	Sprite* sprite_Moji_Start;
 	Sprite* sprite_Moji_End;

@@ -44,6 +44,9 @@ void LoadingModels::LoadObj() {
 }
 
 void LoadingModels::LoadGltf() {
+	modelManager->LoadModel("noTexture", ".gltf");
+	//modelManager->LoadModel("BrainStem", ".gltf",true,true);//まだできない スキニングが変かも
+
 	modelManager->LoadModel("walk", ".gltf");
 	modelManager->LoadModel("sneakWalk", ".gltf");
 	modelManager->LoadModel("stop", ".gltf");
