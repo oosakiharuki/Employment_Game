@@ -101,11 +101,16 @@ void Player::Initialize() {
 		sprite->SetSize({64,64});
 		sprites_Hp.push_back(sprite);
 	}
+
+	input_ = Input::GetInstance();
 }
 
 void Player::Update() {
 
 	DeadPlayer();
+
+	input_->GetJoyStickState(0, state);
+	input_->GetJoystickStatePrevious(0, preState);
 
 	if (!isPlayerDown) {
 
@@ -114,17 +119,37 @@ void Player::Update() {
 		bool pushW = false;
 		bool pushS = false;
 
-		if (Input::GetInstance()->PushKey(DIK_A)) {
+		if (input_->PushKey(DIK_A)) {
 			pushA = true;
 		}
-		if (Input::GetInstance()->PushKey(DIK_D)) {
+		if (input_->PushKey(DIK_D)) {
 			pushD = true;
 		}
-		if (Input::GetInstance()->PushKey(DIK_W)) {
+		if (input_->PushKey(DIK_W)) {
 			pushW = true;
 		}
-		if (Input::GetInstance()->PushKey(DIK_S)) {
+		if (input_->PushKey(DIK_S)) {
 			pushS = true;
+		}
+
+
+		if (input_->GetJoyStickState(0, state)) {
+			float padX = static_cast<float>(state.Gamepad.sThumbLX) / 32768.0f;
+			float padY = static_cast<float>(state.Gamepad.sThumbLY) / 32768.0f;
+
+			if (padX > 0.5f) {
+				pushD = true;
+			}
+			else if (padX < -0.5f) {
+				pushA = true;
+			}
+			
+			if (padY > 0.5f) {
+				pushW = true;
+			}
+			else if (padY < -0.5f) {
+				pushS = true;
+			}
 		}
 
 		if (isShield) {
@@ -224,7 +249,8 @@ void Player::Update() {
 		}
 
 		//ジャンプ
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE) && isGround && !isShield) {
+		if ((input_->TriggerKey(DIK_SPACE) || input_->TriggerBotton(state,preState,XINPUT_GAMEPAD_A))
+			&& isGround && !isShield) {
 			isJump = true;
 			isGround = false;
 		}
@@ -237,9 +263,10 @@ void Player::Update() {
 
 
 		//傘シールド
-		if (Input::GetInstance()->PushKey(DIK_L)) {
+		if (input_->PushKey(DIK_L) || input_->PushBotton(state, XINPUT_GAMEPAD_B)) {
 			//押した瞬間に移動キーを押している場合ブリンクが発動+一度ブリンクしていないとき
-			if (Input::GetInstance()->TriggerKey(DIK_L) && (pushA || pushD || pushW || pushS) && !isOneBrink) {
+			if ((input_->TriggerKey(DIK_L) || input_->TriggerBotton(state, preState, XINPUT_GAMEPAD_B))
+				&& (pushA || pushD || pushW || pushS) && !isOneBrink) {
 				isBrink = true;
 			}
 			isShield = true;
@@ -293,7 +320,7 @@ void Player::Update() {
 		}
 
 		coolTimer += deltaTime;
-		if (Input::GetInstance()->TriggerKey(DIK_K) && !isShield) {
+		if ((input_->TriggerKey(DIK_K) || input_->TriggerBotton(state,preState,XINPUT_GAMEPAD_X)) && !isShield) {
 			if (coolTimer >= coolMax) {
 				ShootBullet();
 				coolTimer = 0;

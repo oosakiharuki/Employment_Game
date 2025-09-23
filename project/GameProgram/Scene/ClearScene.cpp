@@ -7,6 +7,10 @@ void ClearScene::Initialize() {
 }
 
 void ClearScene::Update() {
+
+	Input::GetInstance()->GetJoyStickState(0, state);
+	Input::GetInstance()->GetJoystickStatePrevious(0, preState);
+
 	sprite->Update();
 
 	if (isfadeStart) {
@@ -21,7 +25,8 @@ void ClearScene::Update() {
 		FadeScreen::GetInstance()->FedeOut();
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE) || 
+		Input::GetInstance()->TriggerBotton(state,preState,XINPUT_GAMEPAD_A)) {
 		isfadeStart = true;
 	}
 

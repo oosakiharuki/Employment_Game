@@ -5,6 +5,7 @@
 #include "PlayerBullet.h"
 #include "Umbrella.h"
 #include "Audio.h"
+#include "Input.h"
 #include "Particle.h"
 
 #include "GLTFCommon.h"
@@ -117,6 +118,10 @@ private:
 	WorldTransform worldTransform;
 	AABB playerAABB;
 
+	//input
+	Input* input_ = nullptr;
+	XINPUT_STATE state, preState;
+
 	const float standard_speed = 0.14f;
 	float speed = standard_speed;
 
@@ -145,6 +150,7 @@ private:
 	/// 傘のシールド
 	bool isShield = false;
 	Umbrella* umbrella = nullptr;
+	float umbrellaNormal = 0.0f;
 
 	//パリィ
 	bool isPari = false;

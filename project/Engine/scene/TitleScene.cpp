@@ -38,6 +38,9 @@ void TitleScene::Initialize() {
 
 void TitleScene::Update() {
 
+	Input::GetInstance()->GetJoyStickState(0, state);
+	Input::GetInstance()->GetJoystickStatePrevious(0, preState);
+
 	camera->Update();
 
 	if (timer <= TimeMax) {
@@ -82,13 +85,29 @@ void TitleScene::Update() {
 
 		if (Input::GetInstance()->TriggerKey(DIK_W)) {
 			sprite_Select_Allow->SetPosition({ 750,550 });
-
 		}
 		if (Input::GetInstance()->TriggerKey(DIK_S)) {
 			sprite_Select_Allow->SetPosition({ 650,650 });
 		}
 
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			isfadeStart = true;
+		}
+
+		//ゲームパット操作
+		
+		if (Input::GetInstance()->GetJoyStickState(0, state)) {
+			float padY = static_cast<float>(state.Gamepad.sThumbLY) / 32768.0f;
+
+			if (padY > 0.5f) {
+				sprite_Select_Allow->SetPosition({ 750,550 });
+			}
+			else if (padY < -0.5f) {
+				sprite_Select_Allow->SetPosition({ 650,650 });
+			}
+		}
+
+		if (Input::GetInstance()->TriggerBotton(state,preState, XINPUT_GAMEPAD_A)) {
 			isfadeStart = true;
 		}
 	}
