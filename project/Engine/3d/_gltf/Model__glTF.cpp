@@ -146,8 +146,6 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
 		aiMesh* mesh = scene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());//法線があるか
-		assert(mesh->HasTextureCoords(0));//Texcordがあるか
-		//modelData.vertices.resize(mesh->mNumVertices);//頂点数分のメモリ確保
 
 		vertices.resize(mesh->mNumVertices);//頂点数分のメモリ確保
 
@@ -158,7 +156,15 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 
 			vertices[vertexIndex].position = { -position.x,position.y,position.z,1.0f };
 			vertices[vertexIndex].normal = { -normal.x,normal.y, normal.z, };
-			vertices[vertexIndex].texcoord = { texcoord.x,texcoord.y };
+
+			//Texcordがあるか
+			if (mesh->HasTextureCoords(0)) {
+				vertices[vertexIndex].texcoord = { texcoord.x,texcoord.y };
+			}
+			else {
+				//BaseColorは設定されていない
+				vertices[vertexIndex].texcoord = { 1,1 };
+			}
 		}
 
 		modelData.vertices.push_back(vertices);

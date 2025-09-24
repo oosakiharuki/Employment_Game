@@ -14,7 +14,7 @@ void TitleScene::Initialize() {
 	wt.Initialize();
 
 	camera = new Camera();
-	camera->SetTranslate({ 0,0,-30.0f });
+	camera->SetTranslate({ 0,0,-10.0f });
 	camera->SetRotate(wt.rotation_);
 
 
@@ -28,7 +28,7 @@ void TitleScene::Initialize() {
 
 	brainStem = new Object_glTF();
 	brainStem->Initialize();
-	brainStem->SetModelFile("noTexture.gltf");
+	brainStem->SetModelFile("BrainStem.gltf");
 	brainStem->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 
 	sprite_Moji_Start = new Sprite();
@@ -62,6 +62,7 @@ void TitleScene::Update() {
 
 	move += 0.01f;
 	wt.translation_.y = 1.0f + center.y + std::sin(move) / 4.0f;
+	wt.rotation_.x += 0.1f;
 
 	Moji_Title->Update();
 	brainStem->Update(wt);
@@ -130,8 +131,9 @@ void TitleScene::Draw() {
 	Moji_Title->Draw(wt);
 
 	GLTFCommon::GetInstance()->Command();
-
 	brainStem->Draw();
+
+	SkinningCommon::GetInstance()->Command();	
 
 	SpriteCommon::GetInstance()->Command();
 
