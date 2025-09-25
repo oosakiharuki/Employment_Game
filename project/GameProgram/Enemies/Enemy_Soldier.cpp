@@ -107,7 +107,11 @@ void Enemy_Soldier::Update() {
 		shadowPosition.y -= 1.0f;
 
 		shadow_->SetTranslate(shadowPosition);
-		shadow_->Update();
+		shadow_->Update();	
+	}
+
+	if (isDamageMosion) {
+		ScaleUpdate(&isDamageMosion, damageScale, damageMaxTime);
 	}
 
 	for (auto* bullet : bullets_) {
@@ -173,7 +177,7 @@ void Enemy_Soldier::Draw() {
 void Enemy_Soldier::IsDamage() {
 	particle_damage->SetTranslate(worldTransform.translation_);
 	particle_damage->ChangeMode(BornParticle::MomentMode);
-
+	isDamageMosion = true;
 	if (hp == 0) {
 		return;
 	}

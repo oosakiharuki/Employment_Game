@@ -95,3 +95,25 @@ void IEnemy::DirectionDegree() {
 		direction = left;
 	}
 }
+
+void IEnemy::ScaleUpdate(bool* mosionOn, Vector3 scale,const float maxTime) {
+	if (TimeReturn) {
+		worldTransform.scale_ -= scale;
+		scaleTimer -= deltaTime;
+		if (scaleTimer <= 0.0f) {
+			scaleTimer = 0.0f;
+			worldTransform.scale_ = { 1,1,1 };
+			TimeReturn = false;
+
+			//モーションを終了する
+			*mosionOn = false;
+		}
+	}
+	else {
+		worldTransform.scale_ += scale;
+		scaleTimer += deltaTime;
+		if (scaleTimer >= maxTime) {
+			TimeReturn = true;
+		}
+	}
+}

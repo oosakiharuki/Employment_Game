@@ -56,6 +56,8 @@ public:
 
 	void SetStages(std::vector<AABB> aabb) { stages = aabb; }
 
+	void ScaleUpdate(bool* mosionOn,Vector3 scale, const float maxTime);
+
 protected:
 	Object3d* object;
 	WorldTransform worldTransform;
@@ -104,6 +106,10 @@ protected:
 	
 	///影
 	Shadow* shadow_;
+
+
+	float scaleTimer = 0.0f;
+	bool TimeReturn = false;
 private:
 	std::vector<AABB> stages;
 };

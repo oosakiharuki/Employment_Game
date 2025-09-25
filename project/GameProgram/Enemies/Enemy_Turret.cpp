@@ -104,6 +104,10 @@ void Enemy_Turret::Update() {
 		shadow_->Update();
 	}
 
+	if (isDamageMosion) {
+		ScaleUpdate(&isDamageMosion, damageScale, damageMaxTime);
+	}
+
 	for (auto* bullet : bullets_) {
 		bullet->Update();
 	}
@@ -171,7 +175,7 @@ void Enemy_Turret::Draw() {
 void Enemy_Turret::IsDamage() {
 	particle_damage->SetTranslate(worldTransform.translation_);
 	particle_damage->ChangeMode(BornParticle::MomentMode);
-
+	isDamageMosion = true;
 	if (hp == 0) {
 		return;
 	}

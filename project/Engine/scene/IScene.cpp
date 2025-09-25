@@ -148,6 +148,7 @@ void IScene::CollisionCommon() {
 					bulletE->IsHit();
 					player_->KnockBackUmbrella(Vector3(0.0f, 0.0f, 0.3f), 0.0f);
 				}
+				player_->IsShildMosion();
 			}
 
 			//プレイヤーの当たり判定

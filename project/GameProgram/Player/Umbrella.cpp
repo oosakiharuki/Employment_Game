@@ -60,3 +60,25 @@ AABB Umbrella::GetAABB() {
 	aabb.max = wt.translation_ + umbrellaAABB.max;
 	return aabb;
 }
+
+void Umbrella::ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime) {
+	if (TimeReturn) {
+		wt.scale_ -= scale;
+		scaleTimer -= deltaTime;
+		if (scaleTimer <= 0.0f) {
+			scaleTimer = 0.0f;
+			wt.scale_ = { 1,1,1 };
+			TimeReturn = false;
+
+			//モーションを終了する
+			*mosionOn = false;
+		}
+	}
+	else {
+		wt.scale_ += scale;
+		scaleTimer += deltaTime;
+		if (scaleTimer >= maxTime) {
+			TimeReturn = true;
+		}
+	}
+}

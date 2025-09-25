@@ -17,6 +17,7 @@ public:
 
 	void ShieldMode(bool isShield) { isShieldMode = isShield; }
 
+	void ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime);
 private:
 	Object3d* object_Open;
 	Object3d* object_Close;
@@ -26,5 +27,14 @@ private:
 	AABB umbrellaAABB;
 
 	bool isShieldMode = false;
+
+	const float deltaTime = 1.0f / 60.0f;
+
+	bool isDamageMosion = false;
+	Vector3 damageScale = { 0.1f, 0.1f, 0.1f };
+	const float damageMaxTime = 0.025f;
+
+	float scaleTimer = 0.0f;
+	bool TimeReturn = false;
 };
 

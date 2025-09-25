@@ -112,6 +112,9 @@ public:
 	//スプライトの変化
 	void SpriteUpdate();
 
+	void ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime);
+	void IsShildMosion() { isShildMosion = true; }
+
 private:
 	//Object3d* object;
 	Object_glTF* object;
@@ -216,4 +219,13 @@ private:
 
 	//UI
 	std::vector<Sprite*> sprites_Hp;
+
+	bool isDamageMosion = false;
+	Vector3 damageScale = { 0.1f, 0.1f, 0.1f };
+	const float damageMaxTime = 0.025f;
+
+	float scaleTimer = 0.0f;
+	bool TimeReturn = false;
+
+	bool isShildMosion = false;
 };

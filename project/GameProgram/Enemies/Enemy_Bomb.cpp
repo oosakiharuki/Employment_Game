@@ -121,7 +121,7 @@ void Enemy_Bomb::Attack() {
 
 	distance = Normalize(distance);
 
-	worldTransform.translation_ += distance * Vector3{ -0.03f,0,0 }* 3;
+	worldTransform.translation_ += distance * Vector3{ -0.03f,0,0 } * 3;
 
 	if (distance.x < 0) {
 		worldTransform.rotation_.y = 90.0f;
@@ -133,7 +133,15 @@ void Enemy_Bomb::Attack() {
 	if (bombTimer >= bombTimeMax) {
 		Exprosion();
 	}
-
+	
+	bool s = true;
+	if (bombTimer >= bombTimeMax / 1.5f) {
+		//爆発寸前だと揺れが細かくなる
+		ScaleUpdate(&s, Vector3(0.05f,0.05f,0.05f) * 2, 0.1f / 2);
+	}
+	else {
+		ScaleUpdate(&s, { 0.05f,0.05f,0.05f }, 0.1f);
+	}
 }
 
 void Enemy_Bomb::IsDamage() {

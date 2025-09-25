@@ -337,6 +337,15 @@ void Player::Update() {
 
 	}
 
+	if (isDamageMosion) {
+		ScaleUpdate(&isDamageMosion, damageScale, damageMaxTime);
+	}
+
+	if (isShildMosion) {
+		umbrella->ScaleUpdate(&isShildMosion, damageScale, damageMaxTime);
+	}
+
+
 	for (auto* bullet : bullets_) {
 		bullet->Update();
 	}
@@ -581,6 +590,7 @@ void Player::IsDamage() {
 		KnockBackTimeMax = infinityTimeMax / 3;
 	}
 
+	isDamageMosion = true;
 	SpriteUpdate();
 
 }
@@ -666,6 +676,28 @@ void Player::SpriteUpdate() {
 			if (Hp < 1) {
 				sprites_Hp[0]->SetTextureFile("NoHp.png");
 			}
+		}
+	}
+}
+
+void Player::ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime) {
+	if (TimeReturn) {
+		worldTransform.scale_ -= scale;
+		scaleTimer -= deltaTime;
+		if (scaleTimer <= 0.0f) {
+			scaleTimer = 0.0f;
+			worldTransform.scale_ = { 1,1,1 };
+			TimeReturn = false;
+
+			//モーションを終了する
+			*mosionOn = false;
+		}
+	}
+	else {
+		worldTransform.scale_ += scale;
+		scaleTimer += deltaTime;
+		if (scaleTimer >= maxTime) {
+			TimeReturn = true;
 		}
 	}
 }
