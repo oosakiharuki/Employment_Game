@@ -28,10 +28,27 @@ void SelectScene::Update() {
 		FadeScreen::GetInstance()->FedeOut();
 	}
 
+	if (isZumuIn) {
+		if (zumuTimer <= 1.0f) {
+			zumuTimer += 1.0f / 60.0f;
+
+		}
+		camera->Zumu(cameraSegment, zumuTimer);
+
+		if (zumuTimer >= 1.0f) {
+			isfadeStart = true;
+		}
+	}
+
 	for (auto& stageObject : stageObjects) {
 		stageObject->Update();
 	}
 	camera->Update();
+	
+	if (isZumuIn) {
+		return;
+	}
+
 	player_->Update();
 
 	skyBox->Update(wt.matWorld_ * MakeScaleMatrix({ 1000,1000,1000 }));
@@ -39,11 +56,14 @@ void SelectScene::Update() {
 
 	CollisionCommon();
 
+
 	for (auto& stageObject : stageObjects) {
 		if (stageObject == dynamic_cast<WarpGate*>(stageObject)) {
 			WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject);
-			if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB())) {
-				isfadeStart = true;
+			if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB()) && Input::GetInstance()->TriggerKey(DIK_E)) {
+				isZumuIn = true;
+				cameraSegment.origin = camera->GetTranslate();//ズーム前のカメラ位置
+				cameraSegment.diff = player_->GetTranslate() + Vector3(0, 2, -15.0f);//プレイヤーよりちょっと離れてる
 				break;
 			}
 		}
