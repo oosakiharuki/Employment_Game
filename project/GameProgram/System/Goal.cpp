@@ -14,9 +14,10 @@ void Goal::Initialize(){
 }
 	
 void Goal::Update(){
+	object_->Update(wt);
 	wt.UpdateMatrix();
 }
 	
 void Goal::Draw(){
-	object_->Draw(wt);
+	object_->Draw();
 }

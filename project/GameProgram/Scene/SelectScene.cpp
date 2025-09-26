@@ -52,7 +52,7 @@ void SelectScene::Update() {
 	player_->Update();
 
 	skyBox->Update(wt.matWorld_ * MakeScaleMatrix({ 1000,1000,1000 }));
-	stageobj->Update();
+	stageobj->Update(wt);
 
 	CollisionCommon();
 
@@ -79,7 +79,7 @@ void SelectScene::Draw() {
 
 	Object3dCommon::GetInstance()->Command();
 
-	stageobj->Draw(wt);
+	stageobj->Draw();
 
 	player_->Draw();
 

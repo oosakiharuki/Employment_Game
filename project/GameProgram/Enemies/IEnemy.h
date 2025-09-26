@@ -17,11 +17,11 @@ public:
 
 	void GrabityUpdate();
 	
-	Vector3 GetTranslate() { return worldTransform.translation_; }
-	void SetTranslate(Vector3 translate) { worldTransform.translation_ = translate;}
+	Vector3 GetTranslate() { return wt.translation_; }
+	void SetTranslate(Vector3 translate) { wt.translation_ = translate;}
 
-	Vector3 GetRotate() { return worldTransform.rotation_; }
-	void SetRotate(Vector3 rotate) { worldTransform.rotation_ = rotate;}
+	Vector3 GetRotate() { return wt.rotation_; }
+	void SetRotate(Vector3 rotate) { wt.rotation_ = rotate;}
 
 	void SetInit_Position(Vector3 translate, Vector3 rotate) {
 		init_point = translate;
@@ -60,7 +60,7 @@ public:
 
 protected:
 	Object3d* object;
-	WorldTransform worldTransform;
+	WorldTransform wt;
 	AABB enemyAABB;
 
 	std::list<EnemyBullet*> bullets_;

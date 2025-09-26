@@ -16,7 +16,7 @@ Enemy_Turret::~Enemy_Turret() {
 
 
 void Enemy_Turret::Initialize() {
-	worldTransform.Initialize();
+	wt.Initialize();
 
 	object = new Object3d();
 	object->Initialize();
@@ -73,12 +73,12 @@ void Enemy_Turret::Update() {
 		switch (direction)
 		{
 		case right:
-			eyeAABB.min = worldTransform.translation_ + Vector3(0, -2, -1);
-			eyeAABB.max = worldTransform.translation_ + Vector3(15, 2, 1);
+			eyeAABB.min = wt.translation_ + Vector3(0, -2, -1);
+			eyeAABB.max = wt.translation_ + Vector3(15, 2, 1);
 			break;
 		case left:
-			eyeAABB.min = worldTransform.translation_ + Vector3(-15, -2, -1);
-			eyeAABB.max = worldTransform.translation_ + Vector3(0, 2, 1);
+			eyeAABB.min = wt.translation_ + Vector3(-15, -2, -1);
+			eyeAABB.max = wt.translation_ + Vector3(0, 2, 1);
 			break;
 		}
 
@@ -97,7 +97,7 @@ void Enemy_Turret::Update() {
 			coolTime = 0;
 		}
 
-		Vector3 shadowPosition = worldTransform.translation_;
+		Vector3 shadowPosition = wt.translation_;
 		shadowPosition.y -= 1.0f;
 
 		shadow_->SetTranslate(shadowPosition);
@@ -122,7 +122,7 @@ void Enemy_Turret::Update() {
 
 
 	particle_fire->SetScale({2,2,2});
-	particle_fire->SetRotate({0,0,-worldTransform.rotation_.y});
+	particle_fire->SetRotate({0,0,-wt.rotation_.y});
 
 
 	particle_fire->Update();
@@ -134,8 +134,8 @@ void Enemy_Turret::Update() {
 
 	ImGui::Begin("Enemy_Turret");
 
-	ImGui::Text("translate : %f,%f,%f", worldTransform.translation_.x, worldTransform.translation_.y, worldTransform.translation_.z);
-	ImGui::Text("translate : %f,%f,%f", worldTransform.rotation_.x, worldTransform.rotation_.y, worldTransform.rotation_.z);
+	ImGui::Text("translate : %f,%f,%f", wt.translation_.x, wt.translation_.y, wt.translation_.z);
+	ImGui::Text("translate : %f,%f,%f", wt.rotation_.x, wt.rotation_.y, wt.rotation_.z);
 	
 	ImGui::Text("Eye_Min : %f,%f,%f", eyeAABB.min.x, eyeAABB.min.y, eyeAABB.min.z);
 	ImGui::Text("Eye_Max : %f,%f,%f", eyeAABB.max.x, eyeAABB.max.y, eyeAABB.max.z);
@@ -146,13 +146,14 @@ void Enemy_Turret::Update() {
 
 #endif // _DEBUG
 
-	worldTransform.UpdateMatrix();
+	object->Update(wt);
+	wt.UpdateMatrix();
 }
 
 void Enemy_Turret::Draw() {
 
 	if (!deleteEnemy) {
-		object->Draw(worldTransform);
+		object->Draw();
 		shadow_->Draw();
 	}
 
@@ -173,7 +174,7 @@ void Enemy_Turret::Draw() {
 
 
 void Enemy_Turret::IsDamage() {
-	particle_damage->SetTranslate(worldTransform.translation_);
+	particle_damage->SetTranslate(wt.translation_);
 	particle_damage->ChangeMode(BornParticle::MomentMode);
 	isDamageMosion = true;
 	if (hp == 0) {
@@ -207,9 +208,9 @@ void Enemy_Turret::Attack() {
 
 void Enemy_Turret::Fire() {
 	Vector3 translate = {
-	worldTransform.translation_.x - 1.0f,
-	worldTransform.translation_.y + 1.0f,
-	worldTransform.translation_.z
+	wt.translation_.x - 1.0f,
+	wt.translation_.y + 1.0f,
+	wt.translation_.z
 	};
 
 
@@ -217,7 +218,7 @@ void Enemy_Turret::Fire() {
 
 
 	Vector3 velocity = { 0.0f,0.0f,0.5f };
-	velocity = TransformNormal(velocity, worldTransform.matWorld_);
+	velocity = TransformNormal(velocity, wt.matWorld_);
 
 	EnemyBullet* bullet = new EnemyBullet();
 	bullet->Initialize();

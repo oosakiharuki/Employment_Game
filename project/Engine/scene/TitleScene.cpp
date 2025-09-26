@@ -64,7 +64,7 @@ void TitleScene::Update() {
 	wt.translation_.y = 1.0f + center.y + std::sin(move) / 4.0f;
 	wt.rotation_.x += 0.1f;
 
-	Moji_Title->Update();
+	Moji_Title->Update(wt);
 	brainStem->Update(wt);
 
 	sprite_Moji_Start->Update();
@@ -128,7 +128,7 @@ void TitleScene::Draw() {
 
 	Object3dCommon::GetInstance()->Command();
 
-	Moji_Title->Draw(wt);
+	Moji_Title->Draw();
 
 	GLTFCommon::GetInstance()->Command();
 	brainStem->Draw();

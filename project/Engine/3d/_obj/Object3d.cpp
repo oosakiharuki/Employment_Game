@@ -76,28 +76,8 @@ void Object3d::Initialize() {
 
 }
 
-void Object3d::Update() {
+void Object3d::Update(const WorldTransform& worldTransform) {
 
-	//モデル
-	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
-	Matrix4x4 WorldViewProjectionMatrix;
-	if (camera) {
-		Matrix4x4 projectionMatrix = camera->GetViewProjectionMatrix();
-		WorldViewProjectionMatrix = Multiply(worldMatrix, projectionMatrix);
-	}
-	else {
-		WorldViewProjectionMatrix = worldMatrix;
-	}
-	wvpData->World = worldMatrix;
-	wvpData->WVP = WorldViewProjectionMatrix;
-
-	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
-
-
-}
-
-
-void Object3d::Draw(const WorldTransform& worldTransform) {
 	Matrix4x4 WorldViewProjectionMatrix;
 	if (camera) {
 		Matrix4x4 projectionMatrix = camera->GetViewProjectionMatrix();
@@ -108,11 +88,15 @@ void Object3d::Draw(const WorldTransform& worldTransform) {
 	}
 
 	wvpData->World = worldTransform.matWorld_;
-	//wvpData->World = worldMatrix;
 	wvpData->WVP = WorldViewProjectionMatrix;
 
 	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
 
+
+}
+
+
+void Object3d::Draw() {
 
 	//モデル
 	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
@@ -125,23 +109,7 @@ void Object3d::Draw(const WorldTransform& worldTransform) {
 	}
 }
 
-void Object3d::Draw(const WorldTransform& worldTransform, const std::string& textureData) {
-
-	Matrix4x4 WorldViewProjectionMatrix;
-	if (camera) {
-		Matrix4x4 projectionMatrix = camera->GetViewProjectionMatrix();
-		WorldViewProjectionMatrix = Multiply(worldTransform.matWorld_, projectionMatrix);
-	}
-	else {
-		WorldViewProjectionMatrix = worldTransform.matWorld_;
-	}
-
-	wvpData->World = worldTransform.matWorld_;
-	//wvpData->World = worldMatrix;
-	wvpData->WVP = WorldViewProjectionMatrix;
-
-	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
-
+void Object3d::Draw(const std::string& textureData) {
 
 	//モデル
 	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());

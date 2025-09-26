@@ -9,7 +9,7 @@ Enemy_Bomb::~Enemy_Bomb() {
 }
 
 void Enemy_Bomb::Initialize() {
-	worldTransform.Initialize();
+	wt.Initialize();
 
 	object = new Object3d();
 	object->Initialize();
@@ -51,10 +51,10 @@ void Enemy_Bomb::Update() {
 
 		if (!isStart) {
 			if (move.x < route_point1.x) {
-				worldTransform.rotation_.y = 90.0f;
+				wt.rotation_.y = 90.0f;
 			}
 			if (move.x > route_point2.x) {
-				worldTransform.rotation_.y = -90.0f;
+				wt.rotation_.y = -90.0f;
 			}
 
 			DirectionDegree();
@@ -63,18 +63,18 @@ void Enemy_Bomb::Update() {
 				switch (direction)
 				{
 				case right:
-					eyeAABB.min = worldTransform.translation_ + Vector3(0, -2, -1);
-					eyeAABB.max = worldTransform.translation_ + Vector3(15, 2, 1);
+					eyeAABB.min = wt.translation_ + Vector3(0, -2, -1);
+					eyeAABB.max = wt.translation_ + Vector3(15, 2, 1);
 					speed = { 0.03f,0,0 };
 					break;
 				case left:
-					eyeAABB.min = worldTransform.translation_ + Vector3(-15, -2, -1);
-					eyeAABB.max = worldTransform.translation_ + Vector3(0, 2, 1);
+					eyeAABB.min = wt.translation_ + Vector3(-15, -2, -1);
+					eyeAABB.max = wt.translation_ + Vector3(0, 2, 1);
 					speed = { -0.03f,0,0 };
 					break;
 				}
 
-				worldTransform.translation_ += speed;
+				wt.translation_ += speed;
 				move += speed;
 			}
 		}	
@@ -85,7 +85,7 @@ void Enemy_Bomb::Update() {
 			Attack();
 		}
 
-		Vector3 shadowPosition = worldTransform.translation_;
+		Vector3 shadowPosition = wt.translation_;
 		shadowPosition.y -= 1.0f;
 
 		shadow_->SetTranslate(shadowPosition);
@@ -94,12 +94,13 @@ void Enemy_Bomb::Update() {
 
 	particle_Bom->Update();
 
-	worldTransform.UpdateMatrix();
+	object->Update(wt);
+	wt.UpdateMatrix();
 }
 
 void Enemy_Bomb::Draw() {
 	if (!isDead) {
-		object->Draw(worldTransform);
+		object->Draw();
 		shadow_->Draw();
 	}
 
@@ -121,13 +122,13 @@ void Enemy_Bomb::Attack() {
 
 	distance = Normalize(distance);
 
-	worldTransform.translation_ += distance * Vector3{ -0.03f,0,0 } * 3;
+	wt.translation_ += distance * Vector3{ -0.03f,0,0 } * 3;
 
 	if (distance.x < 0) {
-		worldTransform.rotation_.y = 90.0f;
+		wt.rotation_.y = 90.0f;
 	}
 	if (distance.x >= 0) {
-		worldTransform.rotation_.y = -90.0f;
+		wt.rotation_.y = -90.0f;
 	}
 
 	if (bombTimer >= bombTimeMax) {
@@ -166,18 +167,18 @@ void Enemy_Bomb::RespownEnemy() {
 Vector3 Enemy_Bomb::GetWorldPosition() {
 	Vector3 result;
 
-	result.x = worldTransform.matWorld_.m[3][0];
-	result.y = worldTransform.matWorld_.m[3][1];
-	result.z = worldTransform.matWorld_.m[3][2];
+	result.x = wt.matWorld_.m[3][0];
+	result.y = wt.matWorld_.m[3][1];
+	result.z = wt.matWorld_.m[3][2];
 
 	return result;
 }
 
 void Enemy_Bomb::Exprosion() {
-	bombAABB.min = worldTransform.translation_ - hani;
-	bombAABB.max = worldTransform.translation_ + hani;
+	bombAABB.min = wt.translation_ - hani;
+	bombAABB.max = wt.translation_ + hani;
 
-	particle_Bom->SetTranslate(worldTransform.translation_);
+	particle_Bom->SetTranslate(wt.translation_);
 	particle_Bom->ChangeMode(BornParticle::MomentMode);
 
 	IsDamage();

@@ -10,10 +10,10 @@ public:
 	void Update();
 	void Draw();
 
-	void SetTranslate(Vector3 position) { wt_.translation_ = position; }
-	void SetScale(Vector3 scale) { wt_.scale_ = scale; }
+	void SetTranslate(Vector3 position) { wt.translation_ = position; }
+	void SetScale(Vector3 scale) { wt.scale_ = scale; }
 
 private:
 	Object3d* object_;
-	WorldTransform wt_;
+	WorldTransform wt;
 };

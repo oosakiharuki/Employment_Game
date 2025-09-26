@@ -12,9 +12,10 @@ void CheckPoint::Initialize() {
 }
 
 void CheckPoint::Update() {
+	object_->Update(wt);
 	wt.UpdateMatrix();
 }
 
 void CheckPoint::Draw() {
-	object_->Draw(wt);
+	object_->Draw();
 }

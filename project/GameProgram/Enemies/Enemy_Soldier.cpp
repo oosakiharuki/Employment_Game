@@ -16,7 +16,7 @@ Enemy_Soldier::~Enemy_Soldier() {
 }
 
 void Enemy_Soldier::Initialize() {
-	worldTransform.Initialize();
+	wt.Initialize();
 
 	object = new Object3d();
 	object->Initialize();
@@ -62,10 +62,10 @@ void Enemy_Soldier::Update() {
 
 
 		if (move.x < route_point1.x) {
-			worldTransform.rotation_.y = 90.0f;
+			wt.rotation_.y = 90.0f;
 		}
 		if(move.x > route_point2.x){
-			worldTransform.rotation_.y = -90.0f;
+			wt.rotation_.y = -90.0f;
 		}
 
 		DirectionDegree();
@@ -74,18 +74,18 @@ void Enemy_Soldier::Update() {
 			switch (direction)
 			{
 			case right:
-				eyeAABB.min = worldTransform.translation_ + Vector3(0, -10, -1);
-				eyeAABB.max = worldTransform.translation_ + Vector3(20, 10, 1);
+				eyeAABB.min = wt.translation_ + Vector3(0, -10, -1);
+				eyeAABB.max = wt.translation_ + Vector3(20, 10, 1);
 				speed = { 0.03f,0,0 };
 				break;
 			case left:
-				eyeAABB.min = worldTransform.translation_ + Vector3(-20, -10, -1);
-				eyeAABB.max = worldTransform.translation_ + Vector3(0, 10, 1);
+				eyeAABB.min = wt.translation_ + Vector3(-20, -10, -1);
+				eyeAABB.max = wt.translation_ + Vector3(0, 10, 1);
 				speed = { -0.03f,0,0 };
 				break;
 			}		
 			
-			worldTransform.translation_ += speed;		
+			wt.translation_ += speed;		
 			move += speed;
 		}
 
@@ -103,7 +103,7 @@ void Enemy_Soldier::Update() {
 			coolTime = 0;
 		}
 
-		Vector3 shadowPosition = worldTransform.translation_;
+		Vector3 shadowPosition = wt.translation_;
 		shadowPosition.y -= 1.0f;
 
 		shadow_->SetTranslate(shadowPosition);
@@ -127,7 +127,7 @@ void Enemy_Soldier::Update() {
 		});
 
 
-	particle_fire->SetRotate({ 0,0,-worldTransform.rotation_.y });
+	particle_fire->SetRotate({ 0,0,-wt.rotation_.y });
 	particle_fire->Update();
 
 	particle_damage->Update();
@@ -136,7 +136,7 @@ void Enemy_Soldier::Update() {
 
 	ImGui::Begin("Enemy_soldier");
 	
-	//ImGui::Text("translate : %f,%f,%f", worldTransform.translation_.x, worldTransform.translation_.y, worldTransform.translation_.z);
+	//ImGui::Text("translate : %f,%f,%f", wt.translation_.x, wt.translation_.y, wt.translation_.z);
 
 
 	//ImGui::Text("Eye_Max : %f,%f,%f", eyeAABB.max.x, eyeAABB.max.y, eyeAABB.max.z);
@@ -150,12 +150,13 @@ void Enemy_Soldier::Update() {
 
 #endif // _DEBUG
 
-	worldTransform.UpdateMatrix();
+	object->Update(wt);
+	wt.UpdateMatrix();
 }
 
 void Enemy_Soldier::Draw() {
 	if (!deleteEnemy) {
-		object->Draw(worldTransform);
+		object->Draw();
 		shadow_->Draw();
 	}
 	for (auto* bullet : bullets_) {
@@ -175,7 +176,7 @@ void Enemy_Soldier::Draw() {
 
 
 void Enemy_Soldier::IsDamage() {
-	particle_damage->SetTranslate(worldTransform.translation_);
+	particle_damage->SetTranslate(wt.translation_);
 	particle_damage->ChangeMode(BornParticle::MomentMode);
 	isDamageMosion = true;
 	if (hp == 0) {
@@ -212,9 +213,9 @@ void Enemy_Soldier::Fire() {
 	
 	Vector3 enemyPosition;
 
-	enemyPosition.x = worldTransform.matWorld_.m[3][0];
-	enemyPosition.y = worldTransform.matWorld_.m[3][1];
-	enemyPosition.z = worldTransform.matWorld_.m[3][2];
+	enemyPosition.x = wt.matWorld_.m[3][0];
+	enemyPosition.y = wt.matWorld_.m[3][1];
+	enemyPosition.z = wt.matWorld_.m[3][2];
 
 	//プレイヤーの方向に向かう(最初に打つ弾にそって進む)
 	if (rapidCount == 0) {

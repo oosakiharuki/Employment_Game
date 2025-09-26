@@ -40,16 +40,23 @@ void Umbrella::Update() {
 
 #endif // _DEBUG
 
+	if (isShieldMode) {
+		object_Open->Update(wt);
+	}
+	else {
+		object_Close->Update(wt);
+	}
+
 	wt.UpdateMatrix();
 }
 
 
 void Umbrella::Draw() {
 	if (isShieldMode) {
-		object_Open->Draw(wt);
+		object_Open->Draw();
 	}
 	else {
-		object_Close->Draw(wt);
+		object_Close->Draw();
 	}
 }
 

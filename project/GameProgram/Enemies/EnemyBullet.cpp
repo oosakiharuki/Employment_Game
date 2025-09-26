@@ -12,7 +12,7 @@ void EnemyBullet::Initialize() {
 	object->Initialize();
 	object->SetModelFile("PlayerBullet.obj");
 
-	worldTransform_.Initialize();
+	wt.Initialize();
 
 	bulletAABB.min = { -0.5f,-0.5f,-0.5f };
 	bulletAABB.max = { 0.5f,0.5f,0.5f };
@@ -20,11 +20,11 @@ void EnemyBullet::Initialize() {
 
 void EnemyBullet::Update() {
 	if (!isPari) {
-		worldTransform_.translation_ += velocity_;
+		wt.translation_ += velocity_;
 	}
 	else {
 		///パリィされた時
-		worldTransform_.translation_ -= velocity_;
+		wt.translation_ -= velocity_;
 	}
 
 
@@ -34,18 +34,18 @@ void EnemyBullet::Update() {
 		isDead = true;
 	}
 
-
-	worldTransform_.UpdateMatrix();
+	object->Update(wt);
+	wt.UpdateMatrix();
 }
 
 void EnemyBullet::Draw() {
-	object->Draw(worldTransform_);
+	object->Draw();
 }
 
 AABB EnemyBullet::GetAABB() {
 	AABB aabb;
-	aabb.min = worldTransform_.translation_ + bulletAABB.min;
-	aabb.max = worldTransform_.translation_ + bulletAABB.max;
+	aabb.min = wt.translation_ + bulletAABB.min;
+	aabb.max = wt.translation_ + bulletAABB.max;
 	return aabb;
 }
 

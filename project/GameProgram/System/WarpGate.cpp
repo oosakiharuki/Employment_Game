@@ -12,9 +12,10 @@ void WarpGate::Initialize() {
 }
 
 void WarpGate::Update() {
+	object_->Update(wt);
 	wt.UpdateMatrix();
 }
 
 void WarpGate::Draw() {
-	object_->Draw(wt);
+	object_->Draw();
 }

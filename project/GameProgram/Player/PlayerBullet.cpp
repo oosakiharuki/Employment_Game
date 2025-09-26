@@ -12,7 +12,7 @@ void PlayerBullet::Initialize() {
 	object->Initialize();
 	object->SetModelFile("PlayerBullet.obj");
 
-	worldTransform_.Initialize();
+	wt.Initialize();
 
 	bulletAABB.min = { -1,-1,-1 };
 	bulletAABB.max = { 1,1,1 };
@@ -25,23 +25,23 @@ void PlayerBullet::Update() {
 	Vector3 speed;
 	speed = EaseIn(velocity_,deathTimer,endTime);
 
-	worldTransform_.translation_ += speed;
+	wt.translation_ += speed;
 
 	if (deathTimer >= endTime) {
 		isDead = true;
 	}
 
-
-	worldTransform_.UpdateMatrix();
+	object->Update(wt);
+	wt.UpdateMatrix();
 }
 
 void PlayerBullet::Draw() {
-	object->Draw(worldTransform_);
+	object->Draw();
 }
 
 AABB PlayerBullet::GetAABB() {
 	AABB aabb;
-	aabb.min = worldTransform_.translation_ + bulletAABB.min;
-	aabb.max = worldTransform_.translation_ + bulletAABB.max;
+	aabb.min = wt.translation_ + bulletAABB.min;
+	aabb.max = wt.translation_ + bulletAABB.max;
 	return aabb;
 }

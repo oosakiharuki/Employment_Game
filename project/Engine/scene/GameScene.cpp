@@ -183,6 +183,7 @@ void GameScene::Update() {
 		player_->IsFall();
 	}
 
+	stageobj->Update(wt);
 
 	wt.UpdateMatrix();
 	worldTransformCamera_.UpdateMatrix();
@@ -231,7 +232,7 @@ void GameScene::Draw() {
 	//モデル描画処理
 	Object3dCommon::GetInstance()->Command();
 	
-	stageobj->Draw(wt);
+	stageobj->Draw();
 
 	player_->Draw();
 	for (auto& enemy : enemies) {

@@ -11,8 +11,8 @@ public:
 	void Update();
 	void Draw();
 
-	Vector3 GetTranslate() { return worldTransform_.translation_; }
-	void SetTranslate(Vector3 translate) { worldTransform_.translation_ = translate; }
+	Vector3 GetTranslate() { return wt.translation_; }
+	void SetTranslate(Vector3 translate) { wt.translation_ = translate; }
 	void SetVelocty(Vector3 velocity) { velocity_ = velocity; }
 
 	bool IsDead() { return isDead; }
@@ -21,7 +21,7 @@ public:
 
 private:
 	Object3d* object = nullptr;
-	WorldTransform worldTransform_;
+	WorldTransform wt;
 	Vector3 velocity_;
 
 	float deathTimer = 0.0f;
