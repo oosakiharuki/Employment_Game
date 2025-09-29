@@ -29,9 +29,10 @@ private:
 	//次のステージの移動
 	bool isNextStage = false;
 	std::string nextStage_fileName;
+	bool isChangeStage = true;
 
 	//カメラズーム
 	Segment cameraSegment{};
 	float zumuTimer = 0.0f;
-	bool isZumuIn = false;
+	//bool isZumuIn = false;
 };

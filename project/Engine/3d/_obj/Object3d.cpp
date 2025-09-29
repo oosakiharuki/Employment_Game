@@ -78,25 +78,21 @@ void Object3d::Initialize() {
 
 void Object3d::Update(const WorldTransform& worldTransform) {
 
-	Matrix4x4 WorldViewProjectionMatrix;
-	if (camera) {
-		Matrix4x4 projectionMatrix = camera->GetViewProjectionMatrix();
-		WorldViewProjectionMatrix = Multiply(worldTransform.matWorld_, projectionMatrix);
-	}
-	else {
-		WorldViewProjectionMatrix = worldTransform.matWorld_;
-	}
-
 	wvpData->World = worldTransform.matWorld_;
-	wvpData->WVP = WorldViewProjectionMatrix;
+	worldMatrix = worldTransform.matWorld_;
 
 	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
-
-
 }
 
 
 void Object3d::Draw() {
+	if (camera) {
+		Matrix4x4 projectionMatrix = camera->GetViewProjectionMatrix();
+		wvpData->WVP = worldMatrix * projectionMatrix;
+	}
+	else {
+		wvpData->WVP = worldMatrix;
+	}
 
 	//モデル
 	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());

@@ -122,4 +122,8 @@ private:
 	ParticleMosion particleMosion = ParticleMosion::Normal;
 
 	uint32_t number = 0;
+
+	//ワールド行列
+	Matrix4x4 worldMatrix;
+
 };

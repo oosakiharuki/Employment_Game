@@ -105,4 +105,7 @@ private:
 	std::vector<Animation> preAnimation;
 
 	Material* material;
+
+	Matrix4x4 worldMatrix{};
+	std::vector<Matrix4x4> localMatrices;
 };

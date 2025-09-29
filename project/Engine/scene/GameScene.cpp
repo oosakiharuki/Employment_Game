@@ -41,18 +41,17 @@ void GameScene::Update() {
 			else if (isNextStage) {
 				StageMovement("resource/Levelediter/" + nextStage_fileName + ".json", nextStage_fileName + ".obj");
 				player_->SpriteUpdate();
-				isZumuIn = false;
+				isNextStage = false;
 				zumuTimer = 0.0f;
 			}
 			isfadeStart = false;
 		}
-		return;
 	}
 	else {
 		FadeScreen::GetInstance()->FedeOut();
 	}
 
-	if (isZumuIn) {
+	if (isNextStage) {
 		if (zumuTimer <= 1.0f) {
 			zumuTimer += 1.0f / 60.0f;
 
@@ -69,7 +68,6 @@ void GameScene::Update() {
 			//ワープゲート
 			if (stageObject == dynamic_cast<WarpGate*>(stageObject) && Input::GetInstance()->TriggerKey(DIK_E)) {
 				WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject);
-				isZumuIn = true;
 				cameraSegment.origin = camera->GetTranslate();//ズーム前のカメラ位置
 				cameraSegment.diff = player_->GetTranslate() + Vector3(0, 2, -15.0f);//プレイヤーよりちょっと離れてる
 				isNextStage = true;
@@ -88,7 +86,7 @@ void GameScene::Update() {
 
 	camera->Update();
 
-	if (isZumuIn) {
+	if (isNextStage) {
 		return;
 	}
 
@@ -156,7 +154,8 @@ void GameScene::Update() {
 
 	//カメラの移動範囲
 
-	if (!isZumuIn) {
+	//次ステージ移動時はズームされるのでここは除外
+	if (!isNextStage) {
 		if (cameraTranslate.x + cameraPoint1.x < player_->GetTranslate().x && cameraTranslate.x + cameraPoint2.x > player_->GetTranslate().x) {
 			worldTransformCamera_.translation_.x = player_->GetTranslate().x;
 		}
@@ -206,8 +205,8 @@ void GameScene::Update() {
 	ImGui::Text("p1 : %f %f %f", cameraPoint1.x, cameraPoint1.y, cameraPoint1.z);
 	ImGui::Text("p2 : %f %f %f", cameraPoint2.x, cameraPoint2.y, cameraPoint2.z);
 
-	//camera->SetRotate(worldTransformCamera_.rotation_);
-	//camera->SetTranslate(worldTransformCamera_.translation_);
+	camera->SetRotate(worldTransformCamera_.rotation_);
+	camera->SetTranslate(worldTransformCamera_.translation_);
 
 	ImGui::SliderFloat("volume", &volume, 0.0f, 1.0f);
 
@@ -224,7 +223,7 @@ void GameScene::Draw() {
 	
 	Cubemap::GetInstance()->Command();
 	skyBox->Draw();
-
+	
 
 	//モデル描画処理
 	GLTFCommon::GetInstance()->Command();

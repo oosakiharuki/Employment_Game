@@ -202,22 +202,11 @@ void Particle::Update() {
 		billboardMatrix.m[3][1] = 0.0f;
 		billboardMatrix.m[3][2] = 0.0f;
 
-		Matrix4x4 worldMatrix;
+		
 		//ビルボード
 		//worldMatrix = Multiply(scaleMatrix, Multiply(billboardMatrix, translateMatrix));
 		//通常
 		worldMatrix = MakeAffineMatrix((*particleIterator).transform.scale, (*particleIterator).transform.rotate, (*particleIterator).transform.translate);
-
-
-		Matrix4x4 WorldViewProjectionMatrix;
-
-		if (camera) {
-			Matrix4x4 projectionMatrix = camera->GetViewProjectionMatrix();
-			WorldViewProjectionMatrix = Multiply(worldMatrix, projectionMatrix);
-		}
-		else {
-			WorldViewProjectionMatrix = worldMatrix;
-		}
 
 		// wvpDataのnullチェック
 		if (wvpData) {
@@ -226,8 +215,8 @@ void Particle::Update() {
 			wvpData[numInstance].color = (*particleIterator).color;
 			wvpData[numInstance].color.s = alpha;
 
+			//パーティクルカウンター
 			if (numInstance < kNumMaxInstance) {
-				wvpData[numInstance].WVP = WorldViewProjectionMatrix;
 				++numInstance;
 			}
 		}
@@ -242,7 +231,22 @@ void Particle::Update() {
 }
 
 void Particle::Draw() {
-	
+	//射影行列
+	Matrix4x4 WorldViewProjectionMatrix;
+
+	for (uint32_t i = 0; i < numInstance; i++) {
+		if (camera) {
+			Matrix4x4 projectionMatrix = camera->GetViewProjectionMatrix();
+			WorldViewProjectionMatrix = wvpData[i].World * projectionMatrix;
+		}
+		else {
+			WorldViewProjectionMatrix = wvpData[i].World;
+		}
+
+		wvpData[i].WVP = WorldViewProjectionMatrix;
+	}
+
+
 	particleCommon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 	particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
 	particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());

@@ -17,6 +17,8 @@ Player::~Player() {
 	for (auto* bullet : bullets_) {
 		delete bullet;
 	}
+	bullets_.clear();
+
 	delete umbrella;
 	delete particle_walk;
 	delete particle_fire;
@@ -29,6 +31,7 @@ Player::~Player() {
 	for (Sprite* sprite : sprites_Hp) {
 		delete sprite;
 	}
+	sprites_Hp.clear();
 }
 
 void Player::Initialize() {

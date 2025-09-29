@@ -123,7 +123,8 @@ void Object_glTF::Update(const WorldTransform& worldTransform) {
 		}
 	}
 
-	std::vector<Matrix4x4> localMatrices;
+	//一度リセット
+	localMatrices.clear();
 
 	if (!model->IsSkinning() && model->IsAnimation()) {
 		for (uint32_t i = 0; i < modelData.indices.size(); i++) {
@@ -150,39 +151,10 @@ void Object_glTF::Update(const WorldTransform& worldTransform) {
 		}
 	}
 
-	Matrix4x4 skaletonSpaceMatrix;
-	Matrix4x4 WorldViewProjectionMatrix{};
-
-	if (camera) {
-		Matrix4x4 projectionMatrix = camera->GetViewProjectionMatrix();
-		WorldViewProjectionMatrix = worldTransform.matWorld_ * modelData.rootNode.localMatrix * projectionMatrix;
-
-		//通常のアニメーション
-		if (!model->IsSkinning() && model->IsAnimation()) {
-			WorldViewProjectionMatrix = worldTransform.matWorld_ * projectionMatrix;
-		}
-	}
-	else {
-		WorldViewProjectionMatrix = worldTransform.matWorld_;
-	}
-	Matrix4x4 JointWorldMatrix = skaletonSpaceMatrix * worldTransform.matWorld_;
+	worldMatrix = worldTransform.matWorld_;
 
 	for (uint32_t i = 0; i < modelData.indices.size(); i++) {
-
 		wvpDatas[i]->World = modelData.rootNode.localMatrix * worldTransform.matWorld_;
-		if (model->IsSkinning()) {
-			//スキニングのアニメーションの場合
-			wvpDatas[i]->WVP = WorldViewProjectionMatrix;
-		}
-		else if(model->IsAnimation()){
-			//アニメーションの場合
-			wvpDatas[i]->WVP = localMatrices[i] * WorldViewProjectionMatrix;
-		}
-		else {
-			//動かない場合
-			wvpDatas[i]->WVP = WorldViewProjectionMatrix;
-		}
-
 	}
 
 	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
@@ -190,6 +162,35 @@ void Object_glTF::Update(const WorldTransform& worldTransform) {
 
 
 void Object_glTF::Draw() {
+	Matrix4x4 WorldViewProjectionMatrix;
+	
+	if (camera) {
+		Matrix4x4 ProjectionMatrix = camera->GetViewProjectionMatrix();
+		WorldViewProjectionMatrix = worldMatrix * modelData.rootNode.localMatrix * ProjectionMatrix;
+		//通常のアニメーション
+		if (!model->IsSkinning() && model->IsAnimation()) {
+			WorldViewProjectionMatrix = worldMatrix * ProjectionMatrix;
+		}
+	}
+	else {
+		WorldViewProjectionMatrix = worldMatrix;
+	}
+
+	for (uint32_t i = 0; i < modelData.indices.size(); i++) {
+		if (model->IsSkinning()) {
+			//スキニングのアニメーションの場合
+			wvpDatas[i]->WVP = WorldViewProjectionMatrix;
+		}
+		else if (model->IsAnimation()) {
+			//アニメーションの場合
+			wvpDatas[i]->WVP = localMatrices[i] * WorldViewProjectionMatrix;
+		}
+		else {
+			//動かない場合
+			wvpDatas[i]->WVP = WorldViewProjectionMatrix;
+		}
+	}
+
 	//モデル
 	for (uint32_t i = 0; i < modelData.indices.size();i++) {
 		object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResources[i]->GetGPUVirtualAddress());

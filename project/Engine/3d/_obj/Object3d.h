@@ -70,4 +70,7 @@ private:
 	Camera* camera = nullptr;
 
 	Material* material;
+
+	//ワールド行列
+	Matrix4x4 worldMatrix{};
 };
