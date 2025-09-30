@@ -83,6 +83,9 @@ protected:
 
 	//end
 	bool isGameEnd = false;
+
+
+	Vector3 ShadowCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position);
 public:
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;

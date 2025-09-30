@@ -376,10 +376,7 @@ void Player::Update() {
 		}
 
 		//影の更新
-		shadowPosition = worldTransform.translation_;
-
-		shadowAABB.min = shadowPosition + Vector3{ -0.1f,-1000.0f,-0.1f };
-		shadowAABB.max = shadowPosition + Vector3{ 0.1f,0,0.1f };
+		shadow_->SetTranslate(worldTransform.translation_);
 	}
 
 	for (auto* bullet : bullets_) {
@@ -668,7 +665,6 @@ void Player::PariSuccess() {
 }
 
 void Player::ShadowUpdate() {
-	shadow_->SetTranslate(shadowPosition);
 	shadow_->Update();
 }
 

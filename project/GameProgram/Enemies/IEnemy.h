@@ -58,6 +58,11 @@ public:
 
 	void ScaleUpdate(bool* mosionOn,Vector3 scale, const float maxTime);
 
+	//影
+	void SetShadowPosition(Vector3 position) { shadow_->SetTranslate(position); }
+	AABB GetShadowAABB() { return shadow_->GetAABB(); }
+	void ShadowUpdate();
+
 protected:
 	Object3d* object;
 	WorldTransform wt;

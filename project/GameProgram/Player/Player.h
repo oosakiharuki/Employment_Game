@@ -103,10 +103,8 @@ public:
 	uint32_t GetHp() { return Hp; }
 	void SetHp(uint32_t preHp) { Hp = preHp; }
 
-	Vector3 GetShadowPosition() { return shadowPosition; }
-	void SetShadowPosition(Vector3 position) { shadowPosition.y = position.y; }
-
-	AABB GetShadowAABB() { return shadowAABB; }
+	void SetShadowPosition(Vector3 position) { shadow_->SetTranslate(position); }
+	AABB GetShadowAABB() { return shadow_->GetAABB(); }
 
 	void ShadowUpdate();
 
@@ -216,9 +214,6 @@ private:
 
 	///影
 	Shadow* shadow_;
-	Vector3 shadowPosition;
-
-	AABB shadowAABB;
 
 	//UI
 	std::vector<Sprite*> sprites_Hp;

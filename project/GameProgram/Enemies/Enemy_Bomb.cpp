@@ -85,11 +85,7 @@ void Enemy_Bomb::Update() {
 			Attack();
 		}
 
-		Vector3 shadowPosition = wt.translation_;
-		shadowPosition.y -= 1.0f;
-
-		shadow_->SetTranslate(shadowPosition);
-		shadow_->Update();
+		shadow_->SetTranslate(wt.translation_);
 	}
 
 	particle_Bom->Update();

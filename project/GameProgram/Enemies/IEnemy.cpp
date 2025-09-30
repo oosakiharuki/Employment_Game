@@ -117,3 +117,7 @@ void IEnemy::ScaleUpdate(bool* mosionOn, Vector3 scale,const float maxTime) {
 		}
 	}
 }
+
+void IEnemy::ShadowUpdate() {
+	shadow_->Update();
+}

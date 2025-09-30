@@ -308,22 +308,31 @@ void IScene::CollisionCommon() {
 	}
 
 	Vector3 shadowPos = { 0,0,0 };
+
+	shadowPos = ShadowCollision(stagesAABB, player_->GetShadowAABB(), player_->GetTranslate());
+
+	player_->SetShadowPosition(shadowPos);
+	player_->ShadowUpdate();
+
+	for (auto& enemy : enemies) {
+		shadowPos = ShadowCollision(stagesAABB, enemy->GetShadowAABB(), enemy->GetTranslate());
+
+		enemy->SetShadowPosition(shadowPos);
+		enemy->ShadowUpdate();
+	}
+
 	
+}
+
+Vector3 IScene::ShadowCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position) {
 	
-	//一番距離が近い足場が影の位置(そのため最初は大きい値)
 	float minY = 1000.0f;
-	float positionY = player_->GetShadowPosition().y;
-
-	float lengthMax = Length(positionY, minY);
-
-	for (auto& stage : stagesAABB) {
-		AABB shadowAABB = player_->GetShadowAABB();
+	float lengthMax = Length(position.y, minY);
+	
+	for (auto& stage : stageAABB) {
 
 		if (IsCollisionAABB(shadowAABB, stage)) {
-			
-			//Vector3 overlap = OverAABB(player_->GetShadowAABB(), stage);
-
-			float length = Length(positionY, stage.max.y);
+			float length = Length(position.y, stage.max.y);
 
 			//プレイヤーと足場の長さが短いところを影に
 			if (length < lengthMax) {
@@ -332,10 +341,8 @@ void IScene::CollisionCommon() {
 			}
 		}
 	}
+	Vector3 result = position;
+	result.y = minY;
 
-	shadowPos = player_->GetWorldPosition();
-	shadowPos.y = minY;
-
-	player_->SetShadowPosition(shadowPos);
-	player_->ShadowUpdate();
+	return result;
 }

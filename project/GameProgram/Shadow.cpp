@@ -17,6 +17,11 @@ void Shadow::Initialize() {
 	object_->SetColor({0,0,0,1});
 
 	wt.Initialize();
+
+	shadowAABB = {
+		{ -0.1f,-1000.0f,-0.1f },
+		{ -0.1f,0.0f,-0.1f }
+	};
 }
 
 
@@ -46,4 +51,9 @@ void Shadow::Draw() {
 	}
 }
 
-
+AABB Shadow::GetAABB() {
+	AABB aabb;
+	aabb.min = wt.translation_ + shadowAABB.min;
+	aabb.max = wt.translation_ + shadowAABB.max;
+	return aabb;
+}
