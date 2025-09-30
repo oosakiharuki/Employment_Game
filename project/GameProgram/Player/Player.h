@@ -91,7 +91,8 @@ public:
 		mode_stop,
 		mode_move,
 		mode_sield,
-		mode_damage
+		mode_damage,
+		mode_NextStage
 	};
 
 	bool GetIsPari() { return isPari; }
@@ -114,6 +115,8 @@ public:
 
 	void ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime);
 	void IsShildMosion() { isShildMosion = true; }
+
+	void IsAnimationOnlyUpdate() { isAnimationOnlyUpdate = true; }
 
 private:
 	//Object3d* object;
@@ -228,4 +231,6 @@ private:
 	bool TimeReturn = false;
 
 	bool isShildMosion = false;
+
+	bool isAnimationOnlyUpdate = false;
 };

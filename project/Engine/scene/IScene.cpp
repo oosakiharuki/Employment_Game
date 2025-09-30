@@ -307,36 +307,35 @@ void IScene::CollisionCommon() {
 
 	}
 
-	Vector3 max = { 0,0,0 };
+	Vector3 shadowPos = { 0,0,0 };
+	
+	
+	//一番距離が近い足場が影の位置(そのため最初は大きい値)
+	float minY = 1000.0f;
+	float positionY = player_->GetShadowPosition().y;
+
+	float lengthMax = Length(positionY, minY);
 
 	for (auto& stage : stagesAABB) {
 		AABB shadowAABB = player_->GetShadowAABB();
 
-		Vector3 result = { 0,0,0 };
-
 		if (IsCollisionAABB(shadowAABB, stage)) {
-			Vector3 position = player_->GetShadowPosition();
-			Vector3 overlap = OverAABB(player_->GetShadowAABB(), stage);
+			
+			//Vector3 overlap = OverAABB(player_->GetShadowAABB(), stage);
 
-			// 重なりが最小の軸で押し戻しを行う	
-				float push = overlap.y;
+			float length = Length(positionY, stage.max.y);
 
-				if (push >= 0.0f) {
-					position.y += push;
-				}
-
-				result = position;
-
-				if (max.y) {
-					max = result;
-				}
-
-				if (max.y < result.y) {
-					max.y = result.y;
-				}
+			//プレイヤーと足場の長さが短いところを影に
+			if (length < lengthMax) {
+				lengthMax = length;
+				minY = stage.max.y + 0.01f;
+			}
 		}
 	}
 
-	player_->SetShadowPosition(max);
+	shadowPos = player_->GetWorldPosition();
+	shadowPos.y = minY;
+
+	player_->SetShadowPosition(shadowPos);
 	player_->ShadowUpdate();
 }

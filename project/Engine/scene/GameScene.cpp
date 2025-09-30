@@ -86,12 +86,13 @@ void GameScene::Update() {
 
 	camera->Update();
 
-	if (isNextStage) {
-		return;
-	}
-
 	player_->Update();
 
+	if (isNextStage) {
+		player_->IsAnimationOnlyUpdate();
+		return;
+	}
+	
 	for (auto& enemy : enemies) {
 		enemy->SetPlayer(player_);
 		enemy->Update();

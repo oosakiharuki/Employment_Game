@@ -257,6 +257,8 @@ namespace MyMath {
 	Vector3 EaseIn(const Vector3& v, const float t, const float endt);
 	Vector3 EaseOut(const Vector3& v, const float t);
 
+	float Length(float start, float target);
+
 #pragma region Affine
 
 	Matrix4x4 Multiply(Matrix4x4 m1, Matrix4x4 m2);

@@ -45,11 +45,13 @@ void SelectScene::Update() {
 	}
 	camera->Update();
 	
-	if (isZumuIn) {
-		return;
-	}
 
 	player_->Update();
+
+	if (isZumuIn) {
+		player_->IsAnimationOnlyUpdate();
+		return;
+	}
 
 	skyBox->Update(wt.matWorld_ * MakeScaleMatrix({ 1000,1000,1000 }));
 	stageobj->Update(wt);

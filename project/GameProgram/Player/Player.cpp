@@ -115,7 +115,7 @@ void Player::Update() {
 	input_->GetJoyStickState(0, state);
 	input_->GetJoystickStatePrevious(0, preState);
 
-	if (!isPlayerDown) {
+	if (!isPlayerDown && !isAnimationOnlyUpdate) {
 
 		bool pushA = false;
 		bool pushD = false;
@@ -146,7 +146,7 @@ void Player::Update() {
 			else if (padX < -0.5f) {
 				pushA = true;
 			}
-			
+
 			if (padY > 0.5f) {
 				pushW = true;
 			}
@@ -252,7 +252,7 @@ void Player::Update() {
 		}
 
 		//ジャンプ
-		if ((input_->TriggerKey(DIK_SPACE) || input_->TriggerBotton(state,preState,XINPUT_GAMEPAD_A))
+		if ((input_->TriggerKey(DIK_SPACE) || input_->TriggerBotton(state, preState, XINPUT_GAMEPAD_A))
 			&& isGround && !isShield) {
 			isJump = true;
 			isGround = false;
@@ -288,7 +288,7 @@ void Player::Update() {
 		else {
 			isShield = false;
 			pariCoolTime += deltaTime;
-		}			
+		}
 		//連打してもすぐにパリィできないようにする
 		if (pariCoolTime >= pariTimeMax) {
 			pariTime = pariTimeMax;
@@ -323,31 +323,64 @@ void Player::Update() {
 		}
 
 		coolTimer += deltaTime;
-		if ((input_->TriggerKey(DIK_K) || input_->TriggerBotton(state,preState,XINPUT_GAMEPAD_X)) && !isShield) {
+		if ((input_->TriggerKey(DIK_K) || input_->TriggerBotton(state, preState, XINPUT_GAMEPAD_X)) && !isShield) {
 			if (coolTimer >= coolMax) {
 				ShootBullet();
 				coolTimer = 0;
 			}
 		}
 
+		if (isDamageMosion) {
+			ScaleUpdate(&isDamageMosion, damageScale, damageMaxTime);
+		}
 
-		shadowPosition.x = worldTransform.translation_.x;
-		shadowPosition.z = worldTransform.translation_.z;
+		if (isShildMosion) {
+			umbrella->ScaleUpdate(&isShildMosion, damageScale, damageMaxTime);
+		}
 
-		shadowAABB.min = shadowPosition - Vector3{ 1,0.01f,1 };
-		shadowAABB.max = shadowPosition + Vector3{ 1,0,1 };
+		if (isJump) {
+			worldTransform.translation_.y += 0.25f;
+		}
+
+		//重力
+		if (isShield && !isGround && range == Up) {
+			if (isJump) {
+				isJump = false;
+			}
+			grabity = 0.0f;
+			worldTransform.translation_.y -= 0.05f;
+		}
+		else {
+			worldTransform.translation_.y += grabity;
+		}
 
 
+		//ノックバック発動
+		if (isKnockback) {
+
+			//ゼロならイーズインされない
+			if (KnockBackTimeMax == 0.0f) {
+				worldTransform.translation_ -= backPower;
+				isKnockback = false;
+			}
+			else {
+				KnockBackTimer += deltaTime;
+
+				worldTransform.translation_ -= EaseIn(backPower, KnockBackTimer, KnockBackTimeMax);
+				if (KnockBackTimer >= KnockBackTimeMax) {
+					isKnockback = false;
+					KnockBackTimer = 0.0f;
+				}
+			}
+
+		}
+
+		//影の更新
+		shadowPosition = worldTransform.translation_;
+
+		shadowAABB.min = shadowPosition + Vector3{ -0.1f,-1000.0f,-0.1f };
+		shadowAABB.max = shadowPosition + Vector3{ 0.1f,0,0.1f };
 	}
-
-	if (isDamageMosion) {
-		ScaleUpdate(&isDamageMosion, damageScale, damageMaxTime);
-	}
-
-	if (isShildMosion) {
-		umbrella->ScaleUpdate(&isShildMosion, damageScale, damageMaxTime);
-	}
-
 
 	for (auto* bullet : bullets_) {
 		bullet->Update();
@@ -359,45 +392,7 @@ void Player::Update() {
 			return true;
 		}
 		return false;
-		});
-
-
-	if (isJump) {
-		worldTransform.translation_.y += 0.25f;
-	}
-
-	//重力
-	if (isShield && !isGround && range == Up) {
-		if (isJump) {
-			isJump = false;
-		}
-		grabity = 0.0f;
-		worldTransform.translation_.y -= 0.05f;
-	}
-	else {
-		worldTransform.translation_.y += grabity;
-	}
-
-
-	//ノックバック発動
-	if (isKnockback) {
-
-		//ゼロならイーズインされない
-		if (KnockBackTimeMax == 0.0f) {
-			worldTransform.translation_ -= backPower;
-			isKnockback = false;
-		}
-		else {
-			KnockBackTimer += deltaTime;
-
-			worldTransform.translation_ -= EaseIn(backPower, KnockBackTimer, KnockBackTimeMax);
-			if (KnockBackTimer >= KnockBackTimeMax) {
-				isKnockback = false;
-				KnockBackTimer = 0.0f;
-			}
-		}
-
-	}
+	});
 
 	if (infinityTimer >= infinityTimeMax) {
 		infinityTimer = infinityTimeMax;
@@ -426,8 +421,11 @@ void Player::Update() {
 	particle_pari->Update();
 
 	///アニメーション
-
-	if (isShield) {
+	if (isAnimationOnlyUpdate) {
+		animation_mode = Animation_Mode::mode_NextStage;
+		worldTransform.rotation_.y = 0.0f;
+	}
+	else if (isShield) {
 		animation_mode = Animation_Mode::mode_sield;
 	}
 	else if (worldTransform.translation_.x != PrePosition.x || worldTransform.translation_.y != PrePosition.y) {
@@ -448,13 +446,16 @@ void Player::Update() {
 			object->ChangeAnimation("NewPlayer.gltf");
 			break;
 		case Player::Animation_Mode::mode_move:
-			//object->ChangeAnimation("walk.gltf");
+			object->ChangeAnimation("NewPlayer.gltf");
 			break;
 		case Player::Animation_Mode::mode_sield:
 			object->ChangeAnimation("NewPlayer_umbrella.gltf");
 			break;
 		case Player::Animation_Mode::mode_damage:
 			//object->ChangeAnimation("stop.gltf");
+			break;
+		case Player::Animation_Mode::mode_NextStage:
+			object->ChangeAnimation("NewPlayer.gltf");
 			break;
 		default:
 			break;

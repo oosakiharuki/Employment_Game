@@ -314,6 +314,16 @@ namespace MyMath {
 		//position -= overlap;
 	}
 
+	float Length(float start, float target) {
+		
+
+		float point1 = std::abs(start);
+		float point2 = std::abs(target);
+
+		return std::abs(point1 - point2);
+	}
+
+
 	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
 		Vector3 result;
 		result.x = v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0];
