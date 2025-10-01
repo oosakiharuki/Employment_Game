@@ -13,6 +13,13 @@ public:
 	void SetTranslate(Vector3 translate) { wt.translation_ = translate; }
 
 	void SetRotate(Vector3 rotate) { wt.rotation_ = rotate; }
+
+	void SetScale(Vector3 scale) { 
+		wt.scale_ = scale;
+		scaleTimer = 0.0f;
+	}
+
+
 	AABB GetAABB();
 
 	void ShieldMode(bool isShield) { isShieldMode = isShield; }

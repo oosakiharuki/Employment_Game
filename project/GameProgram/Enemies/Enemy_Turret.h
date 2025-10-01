@@ -35,6 +35,6 @@ private:
 
 	bool isDamageMosion = false;
 	Vector3 damageScale = { 0.1f, 0.1f, 0.1f };
-	const float damageMaxTime = 0.025f;
+	const float damageMaxTime = 0.14f;
 };
 

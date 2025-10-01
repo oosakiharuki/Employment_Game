@@ -592,6 +592,11 @@ void Player::IsDamage() {
 	}
 
 	isDamageMosion = true;
+	
+	//連続ヒット時、元に戻す
+	scaleTimer = 0.0f;
+	worldTransform.scale_ = { 1,1,1 };
+
 	SpriteUpdate();
 
 }
@@ -615,6 +620,10 @@ void Player::KnockBackUmbrella(const Vector3 Power, const float TimerMax) {
 	backPower = TransformNormal(Power, wtGun.matWorld_); 
 	isKnockback = true;
 	KnockBackTimeMax = TimerMax;
+
+	//連続ヒット時、元に戻す
+	umbrella->SetScale({ 1,1,1 });
+
 }
 
 
@@ -681,23 +690,18 @@ void Player::SpriteUpdate() {
 }
 
 void Player::ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime) {
-	if (TimeReturn) {
+	if (scaleTimer >= maxTime / 2.0f) {
 		worldTransform.scale_ -= scale;
-		scaleTimer -= deltaTime;
-		if (scaleTimer <= 0.0f) {
+		if (scaleTimer >= maxTime) {
 			scaleTimer = 0.0f;
 			worldTransform.scale_ = { 1,1,1 };
-			TimeReturn = false;
 
 			//モーションを終了する
 			*mosionOn = false;
 		}
 	}
 	else {
-		worldTransform.scale_ += scale;
-		scaleTimer += deltaTime;
-		if (scaleTimer >= maxTime) {
-			TimeReturn = true;
-		}
+		worldTransform.scale_ += scale;	
 	}
+	scaleTimer += deltaTime;
 }

@@ -175,6 +175,11 @@ void Enemy_Soldier::IsDamage() {
 	particle_damage->SetTranslate(wt.translation_);
 	particle_damage->ChangeMode(BornParticle::MomentMode);
 	isDamageMosion = true;
+
+	//連続ヒット時、元に戻す
+	wt.scale_ = defaultScale;
+	scaleTimer = 0.0f;
+
 	if (hp == 0) {
 		return;
 	}

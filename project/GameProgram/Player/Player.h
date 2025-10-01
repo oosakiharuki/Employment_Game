@@ -218,14 +218,15 @@ private:
 	//UI
 	std::vector<Sprite*> sprites_Hp;
 
+	//リアクション
 	bool isDamageMosion = false;
-	Vector3 damageScale = { 0.1f, 0.1f, 0.1f };
-	const float damageMaxTime = 0.025f;
-
-	float scaleTimer = 0.0f;
-	bool TimeReturn = false;
-
 	bool isShildMosion = false;
+
+	Vector3 damageScale = { 0.1f, 0.1f, 0.1f };
+	const float damageMaxTime = 0.14f;
+	float scaleTimer = 0.0f;
+
+	Vector3 defaultScale = { 1,1,1 };//元の大きさ
 
 	bool isAnimationOnlyUpdate = false;
 };

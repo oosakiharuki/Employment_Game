@@ -112,9 +112,9 @@ protected:
 	///影
 	Shadow* shadow_;
 
-
 	float scaleTimer = 0.0f;
-	bool TimeReturn = false;
+	Vector3 defaultScale = { 1,1,1 };//元の大きさ
+
 private:
 	std::vector<AABB> stages;
 };

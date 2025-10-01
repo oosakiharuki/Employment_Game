@@ -172,6 +172,11 @@ void Enemy_Turret::Draw() {
 void Enemy_Turret::IsDamage() {
 	particle_damage->SetTranslate(wt.translation_);
 	particle_damage->ChangeMode(BornParticle::MomentMode);
+
+	//連続ヒット時、元に戻す
+	wt.scale_ = defaultScale;
+	scaleTimer = 0.0f;
+
 	isDamageMosion = true;
 	if (hp == 0) {
 		return;
