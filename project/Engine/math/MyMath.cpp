@@ -1,7 +1,4 @@
 #include "MyMath.h"
-#include <cassert>
-#include <cmath>
-#include <numbers>
 
 namespace MyMath {
 
@@ -88,6 +85,14 @@ namespace MyMath {
 		v1.y /= v2.y;
 		v1.z /= v2.z;
 		return v1;
+	}
+
+	Vector3 operator-(const Vector3& v) {
+		Vector3 result;
+		result.x = -v.x;
+		result.y = -v.y;
+		result.z = -v.z;
+		return result;
 	}
 
 
@@ -309,6 +314,40 @@ namespace MyMath {
 		//position -= overlap;
 	}
 
+	float Length(float start, float target) {
+		
+
+		float point1 = std::abs(start);
+		float point2 = std::abs(target);
+
+		return std::abs(point1 - point2);
+	}
+
+
+	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m) {
+		Vector3 result;
+		result.x = v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0];
+		result.y = v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1];
+		result.z = v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2];
+		return result;
+	}
+
+
+	Vector3 EaseIn(const Vector3& v, const float t, const float endt) {
+		Vector3 result;
+		result.x = (endt - t) * v.x;
+		result.y = (endt - t) * v.y;
+		result.z = (endt - t) * v.z;
+		return result;
+	}
+
+	Vector3 EaseOut(const Vector3& v,const float t) {
+		Vector3 result;
+		result.x = t * v.x;
+		result.y = t * v.y;
+		result.z = t * v.z;
+		return result;
+	}
 
 #pragma region Affine
 
@@ -339,9 +378,9 @@ namespace MyMath {
 	Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate) {
 
 		//角度に合わせる
-		Matrix4x4 resultX = MakeRotateXMatrix(rotate.x * -(float(M_PI) / 180.0f));
-		Matrix4x4 resultY = MakeRotateYMatrix(rotate.y * -(float(M_PI) / 180.0f));
-		Matrix4x4 resultZ = MakeRotateZMatrix(rotate.z * -(float(M_PI) / 180.0f));
+		Matrix4x4 resultX = MakeRotateXMatrix(rotate.x * (float(M_PI) / 180.0f));
+		Matrix4x4 resultY = MakeRotateYMatrix(rotate.y * (float(M_PI) / 180.0f));
+		Matrix4x4 resultZ = MakeRotateZMatrix(rotate.z * (float(M_PI) / 180.0f));
 
 		Matrix4x4 rotateXYZ = Multiply(resultX, Multiply(resultY, resultZ));
 
@@ -883,4 +922,71 @@ namespace MyMath {
 		return result;
 	}
 
+	//bool IsCollisionAABB_Segment(const AABB& aabb, const Segment& segment) {
+
+	//	Vector2 t1 = {
+	//		(aabb.min.x - segment.origin.x) / segment.diff.x,
+	//		(aabb.min.y - segment.origin.y) / segment.diff.y
+	//	};
+
+	//	Vector2 t2 = {
+	//		(aabb.max.x - segment.origin.x) / segment.diff.x,
+	//		(aabb.max.y - segment.origin.y) / segment.diff.y
+	//	};
+
+	//	Vector2 tNear = {
+	//		min(t1.x, t2.x),
+	//		min(t1.y, t2.y)
+	//	};
+
+	//	Vector2 tFar = {
+	//		max(t1.x, t2.x),
+	//		max(t1.y, t2.y)
+	//	};
+
+
+	//	float tmin = max(tNear.x, tNear.y);
+	//	float tmax = min(tFar.x, tFar.y);
+
+	//	if (tmin <= tmax) {
+	//		return true;
+	//	}
+	//	return false;
+	//}
+
+	bool IsCollisionAABB_Segment(const AABB& aabb, const Segment& segment) {
+
+
+		Vector2 topLeft = { aabb.min.x, aabb.max.y };
+		Vector2 topRight = { aabb.max.x, aabb.max.y };
+		Vector2 bottomLeft = { aabb.min.x, aabb.min.y };
+		Vector2 bottomRight = { aabb.max.x, aabb.min.y };
+
+		Vector2 p1 = { segment.origin.x,segment.origin.y };
+		Vector2 p2 = { segment.diff.x,segment.diff.y };
+
+
+		// AABBの4辺との交差判定
+		// 線ごとの当たり判定
+		if (Intersect(p1, p2, topLeft, topRight)) return true;
+		if (Intersect(p1, p2, topRight, bottomRight)) return true;
+		if (Intersect(p1, p2, bottomRight, bottomLeft)) return true;
+		if (Intersect(p1, p2, bottomLeft, topLeft)) return true;
+
+
+		return false;
+	}
+
+	bool Intersect(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2) {
+
+		float d = (a2.x - a1.x) * (b2.y - b1.y) - (a2.y - a1.y) * (b2.x - b1.x);//クロス積
+		if (d == 0) {
+			return false; // 平行
+		}
+
+		float u = ((b1.x - a1.x) * (b2.y - b1.y) - (b1.y - a1.y) * (b2.x - b1.x)) / d;
+		float v = ((b1.x - a1.x) * (a2.y - a1.y) - (b1.y - a1.y) * (a2.x - a1.x)) / d;
+
+		return (u >= 0 && u <= 1) && (v >= 0 && v <= 1);
+	}
 }

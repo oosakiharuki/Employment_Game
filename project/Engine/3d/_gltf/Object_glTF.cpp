@@ -23,12 +23,12 @@ Object_glTF::~Object_glTF(){
 void Object_glTF::Initialize() {
 	this->object3dCommon = GLTFCommon::GetInstance();
 	this->camera = object3dCommon->GetDefaultCamera();
-	wvpResource = object3dCommon->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
-	wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
+	//wvpResource = object3dCommon->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
+	//wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
 
 
-	wvpData->World = MakeIdentity4x4();
-	wvpData->WVP = MakeIdentity4x4();
+	//wvpData->World = MakeIdentity4x4();
+	//wvpData->WVP = MakeIdentity4x4();
 
 	//ライト用のリソース
 	directionalLightSphereResource = object3dCommon->GetDirectXCommon()->CreateBufferResource(sizeof(DirectionalLight));
@@ -89,64 +89,126 @@ void Object_glTF::Initialize() {
 void Object_glTF::Update(const WorldTransform& worldTransform) {
 
 	//作るときはフレームレートを60FPSにする
-	animationTime += 1.0f / 60.0f;
-	animationTime = std::fmod(animationTime, animation.duration);
+	uint32_t i = 0;		
 	
-	if (isChange) {
-		changeTime += 1.0f / 60.0f;
-		if (changeTime >= preAnimation.duration) {
-			isChange = false;
-			changeTime = 0;
+	animationTime += 1.0f / 60.0f;
+
+	for (auto& animation_ : animation) {
+
+		animationTime = std::fmod(animationTime, animation_.duration);
+
+		//スキニング処理
+		if (model->IsSkinning()) {
+			if (isChange) {
+				changeTime += 1.0f / 60.0f;
+				if (changeTime >= preAnimation[i].duration) {
+					isChange = false;
+					changeTime = 0;
+				}
+				else {
+					Interpolation(skeletons[i], preAnimation[i], animation_, changeTime);
+				}
+			}
+			else {
+				ApplyAnimation(skeletons[1], animation_, animationTime);
+			}
 		}
-		else {	
-			Interpolation(skeleton, preAnimation, animation, changeTime);
+	}
+	
+	//スキニング
+	if (model->IsSkinning()) {
+		for (auto& skeleton : skeletons) {
+			SkeletonUpdate(skeleton, worldTransform.matWorld_ * MakeTranslateMatrix(Vector3(0, 0, -0.2f)));
+			SkinClusterUpdate(skinClusters[i], skeleton);
 		}
 	}
-	else {
-		ApplyAnimation(skeleton, animation, animationTime);
+
+	//一度リセット
+	localMatrices.clear();
+
+	if (!model->IsSkinning() && model->IsAnimation()) {
+		for (uint32_t i = 0; i < modelData.indices.size(); i++) {
+			Matrix4x4 localMatrix;
+
+			if (modelData.indices.size() <= 1) {
+				NodeAnimation& rootNodeAnimation = animation[i].nodeAnimations[modelData.rootNode.name];
+				Vector3 translate = CalculateValue(rootNodeAnimation.translate, animationTime);//nextと逆にする()
+				Quaternion rotate = CalculateValueQuaternion(rootNodeAnimation.rotate, animationTime);
+				Vector3 scale = CalculateValue(rootNodeAnimation.scale, animationTime);
+
+				localMatrix = MakeAffineMatrix(scale, rotate, translate);
+				localMatrices.push_back(localMatrix);
+			}
+			else if(model->IsAnimation()){
+				NodeAnimation& rootNodeAnimation = animation[i].nodeAnimations[modelData.rootNode.children[i].name];
+				Vector3 translate = CalculateValue(rootNodeAnimation.translate, animationTime);//nextと逆にする()
+				Quaternion rotate = CalculateValueQuaternion(rootNodeAnimation.rotate, animationTime);
+				Vector3 scale = CalculateValue(rootNodeAnimation.scale, animationTime);
+
+				localMatrix = MakeAffineMatrix(scale, rotate, translate);
+				localMatrices.push_back(localMatrix);
+			}
+		}
 	}
 
-	SkeletonUpdate(skeleton,worldTransform.matWorld_ * MakeTranslateMatrix(Vector3(0,0,-0.2f)));
-	SkinClusterUpdate(skinCluster, skeleton);
+	worldMatrix = worldTransform.matWorld_;
 
-
-
-	Matrix4x4 skaletonSpaceMatrix;
-	Matrix4x4 WorldViewProjectionMatrix;
-	if (camera) {
-		Matrix4x4 projectionMatrix = camera->GetViewProjectionMatrix();
-		WorldViewProjectionMatrix = worldTransform.matWorld_ * projectionMatrix;
+	for (uint32_t i = 0; i < modelData.indices.size(); i++) {
+		wvpDatas[i]->World = modelData.rootNode.localMatrix * worldTransform.matWorld_;
 	}
-	else {
-		WorldViewProjectionMatrix = worldTransform.matWorld_;
-	}
-	Matrix4x4 JointWorldMatrix = skaletonSpaceMatrix * worldTransform.matWorld_;
-
-	wvpData->World = JointWorldMatrix * worldTransform.matWorld_;
-	wvpData->World = modelData.rootNode.localMatrix * worldTransform.matWorld_;
-	//wvpData->World = worldMatrix;
-	wvpData->WVP = WorldViewProjectionMatrix;
 
 	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
 }
 
 
 void Object_glTF::Draw() {
-	//モデル
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource->GetGPUVirtualAddress());
-	if (model) {
-		model->Draw();
+	Matrix4x4 WorldViewProjectionMatrix;
+	
+	if (camera) {
+		Matrix4x4 ProjectionMatrix = camera->GetViewProjectionMatrix();
+		WorldViewProjectionMatrix = worldMatrix * modelData.rootNode.localMatrix * ProjectionMatrix;
+		//通常のアニメーション
+		if (!model->IsSkinning() && model->IsAnimation()) {
+			WorldViewProjectionMatrix = worldMatrix * ProjectionMatrix;
+		}
 	}
+	else {
+		WorldViewProjectionMatrix = worldMatrix;
+	}
+
+	for (uint32_t i = 0; i < modelData.indices.size(); i++) {
+		if (model->IsSkinning()) {
+			//スキニングのアニメーションの場合
+			wvpDatas[i]->WVP = WorldViewProjectionMatrix;
+		}
+		else if (model->IsAnimation()) {
+			//アニメーションの場合
+			wvpDatas[i]->WVP = localMatrices[i] * WorldViewProjectionMatrix;
+		}
+		else {
+			//動かない場合
+			wvpDatas[i]->WVP = WorldViewProjectionMatrix;
+		}
+	}
+
+	//モデル
+	for (uint32_t i = 0; i < modelData.indices.size();i++) {
+		object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResources[i]->GetGPUVirtualAddress());
+		object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource->GetGPUVirtualAddress());
+		object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource->GetGPUVirtualAddress());
+		object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource->GetGPUVirtualAddress());
+		object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource->GetGPUVirtualAddress());
+		if (model) {
+			model->Draw();
+		}
+	}
+	model->ResetI();
 
 #ifdef _DEBUG
 	DebugWireframes::GetInstance()->Command();
 
 	for (auto it : debugSphere) {
-		it->Draw();
+		//it->Draw();
 	}
 
 	GLTFCommon::GetInstance()->Command();
@@ -155,25 +217,7 @@ void Object_glTF::Draw() {
 }
 
 void Object_glTF::Draw(const std::string& textureData) {
-	//モデル
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource->GetGPUVirtualAddress());
-	if (model) {
-		model->Draw(textureData);
-	}
-
-#ifdef _DEBUG
-	DebugWireframes::GetInstance()->Command();
-
-	for (auto it : debugSphere) {
-		it->Draw();
-	}
-
-	GLTFCommon::GetInstance()->Command();
-#endif // _DEBUG
+	//モデル 
 
 }
 
@@ -182,24 +226,53 @@ void Object_glTF::SetModelFile(const std::string& filePath) {
 	model = ModelManager::GetInstance()->FindModel_gltf(filePath);
 	material = model->GetMaterial();
 	modelData = model->GetModelData();
-	animation = model->GetAnimationData();
-	skeleton = model->GetSkeleton();
-	skinCluster = model->GetSkinCluster();
 
-	//デバッグワイヤーフレーム
-	//親ノード
-	//SetWireframe();
-	//子ノード
-#ifdef _DEBUG
-	for (uint32_t childIndex = 0; childIndex < skeleton.joints.size(); ++childIndex) {
-		SetWireframe();
+
+	for (auto& i : modelData.indices) {
+		Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource;
+		TransformationMatrix* wvpData;
+		wvpResource = object3dCommon->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
+		wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
+
+
+		wvpData->World = MakeIdentity4x4();
+		wvpData->WVP = MakeIdentity4x4();
+
+		wvpResources.push_back(wvpResource);
+		wvpDatas.push_back(wvpData);
 	}
 
-#endif // _DEBUG
-	SkeletonUpdate(skeleton);
-	SkinClusterUpdate(skinCluster,skeleton);
 
+	if (model->IsAnimation()) {
+		animation = model->GetAnimationData();
+		if (model->IsSkinning()) {
+			skeletons = model->GetSkeleton();
+			skinClusters = model->GetSkinCluster();
+
+			for (auto& skeleton : skeletons) {
+				SkeletonUpdate(skeleton);
+			}
+
+			//デバッグワイヤーフレーム
+#ifdef _DEBUG
+			for (uint32_t i = 0; i < skeletons.size(); i++) {
+				for (uint32_t childIndex = 0; childIndex < skeletons[i].joints.size(); ++childIndex) {
+					SetWireframe();
+				}
+			}
+
+#endif // _DEBUG	
+
+			int i = 0;
+
+			for (auto& skinCluster : skinClusters) {
+				SkinClusterUpdate(skinCluster, skeletons[i]);
+				i++;
+			}
+		}
+	}
 }
+
 
 void Object_glTF::LightSwitch(bool isLight) {
 	if (model) {
@@ -283,12 +356,12 @@ void Object_glTF::SetWireframe() {
 }
 
 void Object_glTF::ChangeAnimation(const std::string& filePath) {
-	
+
 	//モデルが同じならすぐにリターン
 	if (model == ModelManager::GetInstance()->FindModel_gltf(filePath)) {
 		return;
 	}
-	
+
 	//変更前のアニメーションデータ
 	preAnimation = animation;
 
@@ -296,31 +369,35 @@ void Object_glTF::ChangeAnimation(const std::string& filePath) {
 	model = ModelManager::GetInstance()->FindModel_gltf(filePath);
 	modelData = model->GetModelData();
 	animation = model->GetAnimationData();
-	skeleton = model->GetSkeleton();
-	skinCluster = model->GetSkinCluster();
+	skeletons = model->GetSkeleton();
+	skinClusters = model->GetSkinCluster();
 
 	//animationTimeを1.0f/60.0fに
 	//Sleapなどで0より小さい値を出さないようにする
 	//はじめは少しカクつくが、アニメーション補間が終えた後がスムーズ
 	changeTime += 1.0f / 60.0f;
 	animationTime = changeTime;
-
-	Interpolation(skeleton, animation, preAnimation,changeTime);
-	SkeletonUpdate(skeleton);
-	SkinClusterUpdate(skinCluster, skeleton);
-	
+	uint32_t i = 0;
+	for (auto& skeleton : skeletons) {
+		Interpolation(skeleton, animation[i], preAnimation[i], changeTime);
+		SkeletonUpdate(skeleton);
+		for (auto& skinCluster : skinClusters) {
+			SkinClusterUpdate(skinCluster, skeleton);
+		}
+	}
 	//アニメーション補間中に変更があった時
 	if (isChange) {
 		changeTime = 0.9f - changeTime;
 	}
-	
+
 	isChange = true;
 
 	//Sleapなどで1より大きい値を出さないようにする
-	if (preAnimation.duration > 1.0f) {
-		preAnimation.duration = 0.9f;
+	for (auto& preAnimation_ : preAnimation) {
+		if (preAnimation_.duration > 1.0f) {
+			preAnimation_.duration = 0.9f;
+		}
 	}
-
 }
 
 void Object_glTF::Interpolation(Skeleton& skeleton, const Animation& animation, const Animation& nextAnimation, float animationTime) {

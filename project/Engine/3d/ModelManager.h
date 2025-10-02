@@ -14,7 +14,7 @@ public:
 
 	void Initialize(DirectXCommon* dxCommon);
 
-	void LoadModel(const std::string& filePath, const std::string& objType);
+	void LoadModel(const std::string& filePath, const std::string& objType, bool isAnimation = false, bool isSkinning = false);
 	Model_glTF* FindModel_gltf(const std::string& filePath);
 	Model_obj* FindModel_obj(const std::string& filePath);
 

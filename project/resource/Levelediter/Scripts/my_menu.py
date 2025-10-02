@@ -9,16 +9,13 @@ from  .create_ico_sphere import MYADDON_OT_create_ico_sphere
 #オペレータ シーン出力
 from  .export_scene import MYADDON_OT_export_scene
 
-#from .spawn import MYADDON_OT_spawn_import_symbol
-
-#from .spawn import MYADDON_OT_make_spawn_point
-
-#from .spawn import SpawnNames
-
 from .spawn import MYADDON_OT_create_player_spawn
 
 from .spawn import MYADDON_OT_create_enemy_spawn
 
+from .spawn import MYADDON_OT_create_check_point
+
+from .spawn import MYADDON_OT_create_warp_gate
 
 # ブレンダーに登録するアドオン情報
 bl_info = {
@@ -60,15 +57,7 @@ class TOPBAR_MT_my_menu(bpy.types.Menu):
         #区切り線
         self.layout.separator()
         self.layout.operator(MYADDON_OT_export_scene.bl_idname,text=MYADDON_OT_export_scene.bl_label)
-
-        #区切り線
-        #self.layout.separator()
-        #self.layout.operator(MYADDON_OT_spawn_import_symbol.bl_idname,text=MYADDON_OT_spawn_import_symbol.bl_label)
-        
-        #区切り線
-        #self.layout.separator()
-        #self.layout.operator(MYADDON_OT_make_spawn_point.bl_idname,text=MYADDON_OT_make_spawn_point.bl_label)
-               
+  
         #区切り線
         self.layout.separator()
         self.layout.operator(MYADDON_OT_create_player_spawn.bl_idname,text=MYADDON_OT_create_player_spawn.bl_label)
@@ -76,7 +65,15 @@ class TOPBAR_MT_my_menu(bpy.types.Menu):
         #区切り線
         self.layout.separator()
         self.layout.operator(MYADDON_OT_create_enemy_spawn.bl_idname,text=MYADDON_OT_create_enemy_spawn.bl_label)
+        
+        #区切り線
+        self.layout.separator()
+        self.layout.operator(MYADDON_OT_create_check_point.bl_idname,text=MYADDON_OT_create_check_point.bl_label)
 
+        #区切り線
+        self.layout.separator()
+        self.layout.operator(MYADDON_OT_create_warp_gate.bl_idname,text=MYADDON_OT_create_warp_gate.bl_label)
+        
 
     # 存じのメニューにサブメニュー追加
     def submenu(self,context):

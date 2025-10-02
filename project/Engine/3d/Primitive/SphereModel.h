@@ -3,6 +3,7 @@
 #include "DirectXCommon.h"
 #include "Camera.h"
 #include "DebugWireframes.h"
+#include "Primitive.h"
 
 class SphereModel {
 public:
@@ -17,8 +18,6 @@ public:
 		float radius;
 	};
 
-
-	void CreateSphere();
 
 	void SetColor(Vector4 color) { color_ = color; }
 

@@ -10,24 +10,25 @@ public:
 	void Draw();
 	void Draw(const std::string& textureFilePath);
 
-	static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
-	static ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename, const std::string& objName);
+	static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename, const std::string& usemtl);
+	static ModelDataMulti LoadObjFile(const std::string& directoryPath, const std::string& filename, const std::string& objName);
 	
 	void LightOn(bool Light) { materialData->enableLighting = Light; }
+	void SetColor(Vector4 color) { materialData->color = color; }
 
 private:
 	ModelCommon* modelCommon = nullptr;
 
-	ModelData modelData;
+	ModelDataMulti modelData;
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexResource;
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
 
 
 	VertexData* vertexData = nullptr;
 	Material* materialData = nullptr;
 
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
+	std::vector<D3D12_VERTEX_BUFFER_VIEW> vertexBufferView;
 
-	ModelData InitialData;
+	ModelDataMulti InitialData;
 };

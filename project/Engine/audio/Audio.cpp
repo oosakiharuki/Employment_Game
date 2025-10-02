@@ -113,9 +113,9 @@ void Audio::SoundPlayWave(SoundData soundData, const float volume, bool isLoop) 
 	soundData.pSourceVoice->GetState(&state);
 
 	//すでに鳴っている場合
-	if (state.BuffersQueued > 0) {
-		return;
-	}
+	//if (state.BuffersQueued > 0) {
+	//	return;
+	//}
 
 	//波状データを読み込む
 	XAUDIO2_BUFFER buf{};

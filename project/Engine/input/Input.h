@@ -25,6 +25,8 @@ public:
 	bool GetJoyStickState(uint32_t num,XINPUT_STATE& state);
 	bool GetJoystickStatePrevious(uint32_t num, XINPUT_STATE& state);
 
+	bool PushBotton(XINPUT_STATE& state,int botton);
+	bool TriggerBotton(XINPUT_STATE& state, XINPUT_STATE& preState, int botton);
 
 private:
 	ComPtr<IDirectInputDevice8> keyboard;

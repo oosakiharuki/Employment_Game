@@ -20,3 +20,8 @@ void Camera::Update() {
 	projectionMatrix = MakePerspectiveFovMatrix(forY, aspect, nearClip, farClip);
 	viewProjectionMatrix = Multiply(viewMatrix, projectionMatrix);
 }
+void Camera::Zumu(const Segment& segment, float timer) {
+
+	worldTransform_.translation_ = segment.origin + (segment.diff - segment.origin) * timer;
+
+}

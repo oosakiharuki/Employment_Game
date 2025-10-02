@@ -15,9 +15,9 @@ class Object3d
 {
 public:
 	void Initialize();
-	void Update();
-	void Draw(const WorldTransform& worldTransform);
-	void Draw(const WorldTransform& worldTransform, const std::string& textureData);
+	void Update(const WorldTransform& worldTransform);
+	void Draw();
+	void Draw(const std::string& textureData);
 
 
 	//static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
@@ -26,6 +26,7 @@ public:
 	void SetModel(Model_obj* model) { this->model = model; }
 	void SetModelFile(const std::string& filePath);
 	void LightSwitch(bool isLight);
+	void SetColor(Vector4 color);
 
 	void SetScale(const Vector3& scale) { transform.scale = scale; }
 	void SetRotate(const Vector3& rotate) { transform.rotate = rotate; }
@@ -67,4 +68,9 @@ private:
 
 	Model_obj* model = nullptr;
 	Camera* camera = nullptr;
+
+	Material* material;
+
+	//ワールド行列
+	Matrix4x4 worldMatrix{};
 };

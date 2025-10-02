@@ -7,16 +7,13 @@
 class Model_glTF{
 public:
 
-	void Initialize(ModelCommon* modelCommon,const std::string& directorypath,const std::string& fileName);
+	void Initialize(ModelCommon* modelCommon,const std::string& directorypath,const std::string& fileName, bool isAnimation, bool isSkinning);
 
 	void Draw();
-	void Draw(const std::string& textureFilePath);
 
-	static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
-	//static ModelData_glTF LoadObjFile(const std::string& directoryPath, const std::string& filename);
 	//gltf用
 	static ModelData_glTF LoadModelFile(const std::string& directoryPath, const std::string& filename);
-	static Animation LoadAnimationFile(const std::string& directoryPath, const std::string& filename);
+	static std::vector<Animation> LoadAnimationFile(const std::string& directoryPath, const std::string& filename,uint32_t Number);
 
 	void LightOn(bool Light) { materialData->enableLighting = Light; }
 	void SetEnvironment(const std::string mapFile);
@@ -24,41 +21,53 @@ public:
 	static Node ReadNode(aiNode* node);
 
 	ModelData_glTF GetModelData() { return modelData; }
-	Animation GetAnimationData() { return animation; }
+	std::vector<Animation> GetAnimationData() { return animation; }
 
-	Skeleton GetSkeleton() { return skeleton; }
-	SkinCluster GetSkinCluster() { return skinCluster; }
+	std::vector<Skeleton> GetSkeleton() { return skeletons; }
+	std::vector<SkinCluster> GetSkinCluster() { return skinClusters; }
 
 	SkinCluster CreateSkinCluster(const Skeleton& skeleton, const ModelData_glTF& modelData);
 
 	Material* GetMaterial() { return materialData; }
+
+	bool IsSkinning() { return isSkinning_; }
+	bool IsAnimation() { return isAnimation_; }
+
+	void ResetI() { i = 0; }
+
 private:
 	ModelCommon* modelCommon = nullptr;
 
 	ModelData_glTF modelData;
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
-	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource; //index
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexResource;
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource; //index
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> materialResources;
 
 
 	VertexData* vertexData = nullptr;
 	uint32_t* mappedIndex = nullptr;
 	Material* materialData = nullptr;
 
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
-	D3D12_INDEX_BUFFER_VIEW indexBufferView; //index
+	std::vector<D3D12_VERTEX_BUFFER_VIEW> vertexBufferView;
+	std::vector<D3D12_INDEX_BUFFER_VIEW> indexBufferView; //index
 
 	ModelData_glTF InitialData;
 	
 	//アニメーション
-	Animation animation;
+	std::vector<Animation> animation;
 
-	Skeleton skeleton;
+	std::vector<Skeleton> skeletons;
 
-	SkinCluster skinCluster;
+	std::vector<SkinCluster> skinClusters;
 
 	D3D12_VERTEX_BUFFER_VIEW vbvs[2];
 	
 	std::string EnvironmentFile;
+
+	bool isAnimation_ = false;
+	bool isSkinning_ = false;
+
+	uint32_t i = 0;
+
 };

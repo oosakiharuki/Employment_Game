@@ -20,10 +20,15 @@
 #include <wrl/client.h>
 #include <d3d12.h>
 
+#include <numbers>
+#include <cassert>
+#include <cmath>
+
 //model
 struct MaterialData {
 	std::string textureFilePath;
 	uint32_t textureIndex;
+	Vector4 materialColor;
 };
 
 struct VertexData {
@@ -112,11 +117,21 @@ struct ModelData {
 	MaterialData material;
 };
 
+struct ModelDataMulti {
+
+	//std::vector<ModelData> Data;
+
+
+	std::vector<std::vector<VertexData>> vertices;
+	std::vector<MaterialData> material;
+};
+
+
 struct ModelData_glTF {
 	std::map<std::string, JointWeightData> skinClusterDeta;
-	std::vector<VertexData> vertices;
-	std::vector<uint32_t> indices;
-	MaterialData material;
+	std::vector<std::vector<VertexData>> vertices;
+	std::vector<std::vector<uint32_t>> indices;
+	std::vector<MaterialData> material;
 	Node rootNode;
 };
 
@@ -195,6 +210,11 @@ struct AABB {
 	Vector3 max;
 };
 
+struct Segment {
+	Vector3 origin;
+	Vector3 diff;
+};
+
 namespace MyMath {
 
 	Vector3 operator+(const Vector3& v1, const Vector3& v2);
@@ -213,6 +233,9 @@ namespace MyMath {
 	Vector3& operator*=(Vector3& v1, const Vector3& v2);
 	Vector3& operator/=(Vector3& v1, const Vector3& v2);
 
+	Vector3 operator-(const Vector3& v);
+
+
 	Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2);
 
 	Matrix4x4 MakeIdentity4x4();
@@ -228,6 +251,13 @@ namespace MyMath {
 
 	Vector3 OverAABB(const AABB& aabb1, const AABB& aabb2);
 	void ReturnBack(const AABB& aabb1, const AABB& aabb2, Vector3 position);
+
+	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
+
+	Vector3 EaseIn(const Vector3& v, const float t, const float endt);
+	Vector3 EaseOut(const Vector3& v, const float t);
+
+	float Length(float start, float target);
 
 #pragma region Affine
 
@@ -272,4 +302,6 @@ namespace MyMath {
 
 	VertexData AddVert(const VertexData& v1, const VertexData& v2);
 
+	bool IsCollisionAABB_Segment(const AABB& aabb, const Segment& segment);
+	bool Intersect(Vector2 a1, Vector2 a2,Vector2 b1, Vector2 b2);
 }

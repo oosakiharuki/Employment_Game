@@ -4,6 +4,9 @@
 #include "IScene.h"
 #include "GameScene.h"//geme
 #include "TitleScene.h"//title
+#include "SelectScene.h"
+#include "ClearScene.h"
+#include "GameOverScene.h"
 
 class GameManager {
 public:
@@ -15,12 +18,14 @@ public:
 	void Draw();
 	//void Finalize();
 
+	bool SetGameEnd() { return sceneArr_[currentSceneNo_]->GetIsGameEnd(); }
+
 private:
 	
 	void SceneChange(int prev,int current);//シーン入れ替え
 
 	//ステージの最大数
-	static const uint32_t SceneNum = 2;
+	static const uint32_t SceneNum = 5;
 
 	IScene* sceneArr_[SceneNum];
 
