@@ -65,7 +65,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)Engine\PostEffect;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\System</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)Engine\PostEffect;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)Engine\LevelEditor</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -91,7 +91,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)Engine\PostEffect;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\System</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)Engine\PostEffect;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)Engine\LevelEditor</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -114,7 +114,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\Scene\GameOverScene.cpp" />
     <ClCompile Include="GameProgram\Scene\SelectScene.cpp" />
     <ClCompile Include="GameProgram\Shadow.cpp" />
-    <ClCompile Include="GameProgram\System\CheckPoint.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\CheckPoint.cpp" />
     <ClCompile Include="GameProgram\Enemies\Enemy_Bomb.cpp" />
     <ClCompile Include="Engine\3d\Primitive\Primitive.cpp" />
     <ClCompile Include="GameProgram\Enemies\EnemyBullet.cpp" />
@@ -136,8 +136,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\D3DResorceLeakChecker.cpp" />
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\base\SrvManager.cpp" />
-    <ClCompile Include="Engine\Framework.cpp" />
-    <ClCompile Include="Engine\Levelediter.cpp" />
+    <ClCompile Include="Engine\base\Framework.cpp" />
+    <ClCompile Include="Engine\LevelEditor\Levelediter.cpp" />
     <ClCompile Include="Engine\PostEffect\BoxFilter.cpp" />
     <ClCompile Include="Engine\PostEffect\DepthBasedOutline.cpp" />
     <ClCompile Include="Engine\PostEffect\Dissolve.cpp" />
@@ -150,7 +150,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\PostEffect\Random.cpp" />
     <ClCompile Include="Engine\PostEffect\Vignette.cpp" />
     <ClCompile Include="Engine\scene\GameManager.cpp" />
-    <ClCompile Include="Engine\scene\GameScene.cpp" />
+    <ClCompile Include="GameProgram\Scene\GameScene.cpp" />
     <ClCompile Include="Engine\input\Input.cpp">
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -172,8 +172,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\WinApp.cpp">
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
-    <ClCompile Include="Engine\MyGame.cpp" />
-    <ClCompile Include="Engine\scene\TitleScene.cpp" />
+    <ClCompile Include="Engine\base\MyGame.cpp" />
+    <ClCompile Include="GameProgram\Scene\TitleScene.cpp" />
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\PostEffect\IPostEffects.cpp" />
     <ClCompile Include="GameProgram\Enemies\Enemy_Soldier.cpp" />
@@ -182,9 +182,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\Player\PlayerBullet.cpp" />
     <ClCompile Include="GameProgram\Enemies\IEnemy.cpp" />
     <ClCompile Include="GameProgram\Player\Umbrella.cpp" />
-    <ClCompile Include="GameProgram\System\Goal.cpp" />
-    <ClCompile Include="GameProgram\System\IStageObject.cpp" />
-    <ClCompile Include="GameProgram\System\WarpGate.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\Goal.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\IStageObject.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\WarpGate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\3d\_gltf\SkinningCommon.h" />
@@ -194,7 +194,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\Scene\GameOverScene.h" />
     <ClInclude Include="GameProgram\Scene\SelectScene.h" />
     <ClInclude Include="GameProgram\Shadow.h" />
-    <ClInclude Include="GameProgram\System\CheckPoint.h" />
+    <ClInclude Include="GameProgram\StageObjects\CheckPoint.h" />
     <ClInclude Include="GameProgram\Enemies\Enemy_Bomb.h" />
     <ClInclude Include="Engine\3d\Primitive\Primitive.h" />
     <ClInclude Include="Engine\3d\_Particle\ParticleNumber.h" />
@@ -217,8 +217,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\D3DResorceLeakChecker.h" />
     <ClInclude Include="Engine\base\DirectXCommon.h" />
     <ClInclude Include="Engine\base\SrvManager.h" />
-    <ClInclude Include="Engine\Framework.h" />
-    <ClInclude Include="Engine\Levelediter.h" />
+    <ClInclude Include="Engine\base\Framework.h" />
+    <ClInclude Include="Engine\LevelEditor\Levelediter.h" />
     <ClInclude Include="Engine\PostEffect\BoxFilter.h" />
     <ClInclude Include="Engine\PostEffect\DepthBasedOutline.h" />
     <ClInclude Include="Engine\PostEffect\Dissolve.h" />
@@ -231,7 +231,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\PostEffect\Random.h" />
     <ClInclude Include="Engine\PostEffect\Vignette.h" />
     <ClInclude Include="Engine\scene\GameManager.h" />
-    <ClInclude Include="Engine\scene\GameScene.h" />
+    <ClInclude Include="GameProgram\Scene\GameScene.h" />
     <ClInclude Include="Engine\input\Input.h" />
     <ClInclude Include="Engine\base\Logger.h" />
     <ClInclude Include="Engine\3d\ModelCommon.h" />
@@ -250,8 +250,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\math\Vector3.h" />
     <ClInclude Include="Engine\math\Vector4.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
-    <ClInclude Include="Engine\MyGame.h" />
-    <ClInclude Include="Engine\scene\TitleScene.h" />
+    <ClInclude Include="Engine\base\MyGame.h" />
+    <ClInclude Include="GameProgram\Scene\TitleScene.h" />
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\PostEffect\IPostEffects.h" />
     <ClInclude Include="GameProgram\Enemies\Enemy_Soldier.h" />
@@ -260,9 +260,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\Player\PlayerBullet.h" />
     <ClInclude Include="GameProgram\Enemies\IEnemy.h" />
     <ClInclude Include="GameProgram\Player\Umbrella.h" />
-    <ClInclude Include="GameProgram\System\Goal.h" />
-    <ClInclude Include="GameProgram\System\IStageObject.h" />
-    <ClInclude Include="GameProgram\System\WarpGate.h" />
+    <ClInclude Include="GameProgram\StageObjects\Goal.h" />
+    <ClInclude Include="GameProgram\StageObjects\IStageObject.h" />
+    <ClInclude Include="GameProgram\StageObjects\WarpGate.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
