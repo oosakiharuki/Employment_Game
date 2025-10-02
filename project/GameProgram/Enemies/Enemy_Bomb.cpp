@@ -134,10 +134,10 @@ void Enemy_Bomb::Attack() {
 	bool s = true;
 	if (bombTimer >= bombTimeMax / 1.5f) {
 		//爆発寸前だと揺れが細かくなる
-		ScaleUpdate(&s, Vector3(0.05f,0.05f,0.05f) * 2, 0.1f / 2);
+		ScaleUpdate(&s, Vector3(0.05f,0.05f,0.05f) * 2, 0.2f / 2);
 	}
 	else {
-		ScaleUpdate(&s, { 0.05f,0.05f,0.05f }, 0.1f);
+		ScaleUpdate(&s, { 0.05f,0.05f,0.05f }, 0.2f);
 	}
 }
 

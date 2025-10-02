@@ -5,6 +5,7 @@
 
 #include "SpriteCommon.h"
 #include "SkinningCommon.h"
+#include <numbers>
 
 using namespace MyMath;
 using namespace Primitive;
@@ -57,7 +58,7 @@ void Player::Initialize() {
 	pariSound = Audio::GetInstance()->LoadWave("resource/Sound/bane.wav");
 
 	particle_walk = new Particle();
-	particle_walk->Initialize("resource/Sprite/gradationLine.png",PrimitiveType::ring);
+	particle_walk->Initialize("resource/Sprite/ground.png",PrimitiveType::box);
 	particle_walk->ChangeMode(BornParticle::Stop);
 	particle_walk->SetParticleMosion(ParticleMosion::Smaller);
 
@@ -115,12 +116,12 @@ void Player::Update() {
 	input_->GetJoyStickState(0, state);
 	input_->GetJoystickStatePrevious(0, preState);
 
-	if (!isPlayerDown && !isAnimationOnlyUpdate) {
+	bool pushA = false;
+	bool pushD = false;
+	bool pushW = false;
+	bool pushS = false;
 
-		bool pushA = false;
-		bool pushD = false;
-		bool pushW = false;
-		bool pushS = false;
+	if (!isPlayerDown && !isAnimationOnlyUpdate) {
 
 		if (input_->PushKey(DIK_A)) {
 			pushA = true;
@@ -399,12 +400,14 @@ void Player::Update() {
 	}
 
 	//移動しているとパーティクルを発生
-	if (worldTransform.translation_.x != PrePosition.x || worldTransform.translation_.y != PrePosition.y) {
+	if (isGround && (worldTransform.translation_.x != PrePosition.x || worldTransform.translation_.y != PrePosition.y)) {
 		// 通常のパーティクル
-		particle_walk->SetParticleCount(2);
+		particle_walk->SetParticleCount(10);
 		particle_walk->SetFrequency(0.25f);
 		particle_walk->ChangeMode(BornParticle::TimerMode);
-		particle_walk->SetTranslate(worldTransform.translation_);
+		particle_walk->SetTranslate(worldTransform.translation_ + TransformNormal(Vector3{0.0f,-1.0f,-0.3f},worldTransform.matWorld_));
+
+		particle_walk->SetScale({ 0.5f,0.5f,0.5f });
 	}
 	else {
 		particle_walk->ChangeMode(BornParticle::Stop);

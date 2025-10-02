@@ -57,11 +57,15 @@ Particles ParticleEmitter::MakeNewParticleFixed(const Emitter& emitter) {
 Particles ParticleEmitter::MakeNewParticleSmaller(std::mt19937& randomEngine, const Emitter& emitter) {
 	//random
 	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);//position用
+	std::uniform_real_distribution<float> scaleDist(0.1f, 1.0f);//大きさ用
+	std::uniform_real_distribution<float> rotateDist(0.0f, 360.0f);//回転用
 	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
 
+	float scaleValue = scaleDist(randomEngine);
+
 	Particles particle;
-	particle.transform.scale = emitter.transform.scale;
-	particle.transform.rotate = emitter.transform.rotate;
+	particle.transform.scale = emitter.transform.scale * Vector3(scaleValue, scaleValue, scaleValue);
+	particle.transform.rotate = emitter.transform.rotate + Vector3(rotateDist(randomEngine), rotateDist(randomEngine),rotateDist(randomEngine));
 	particle.transform.translate = emitter.transform.translate;
 
 	particle.velocity = { distribution(randomEngine),distribution(randomEngine),distribution(randomEngine) };
