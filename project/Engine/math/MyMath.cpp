@@ -2,6 +2,84 @@
 
 namespace MyMath {
 
+	Vector2 operator+(const Vector2& v1, const Vector2& v2) {
+		Vector2 result{};
+		result.x = v1.x + v2.x;
+		result.y = v1.y + v2.y;
+		return result;
+	}
+
+	Vector2 operator-(const Vector2& v1, const Vector2& v2) {
+		Vector2 result{};
+		result.x = v1.x - v2.x;
+		result.y = v1.y - v2.y;
+		return result;
+	}
+
+
+	Vector2 operator*(const Vector2& v1, const Vector2& v2) {
+		Vector2 result{};
+		result.x = v1.x * v2.x;
+		result.y = v1.y * v2.y;
+		return result;
+	}
+
+	Vector2 operator/(const Vector2& v1, const Vector2& v2) {
+		Vector2 result{};
+		result.x = v1.x / v2.x;
+		result.y = v1.y / v2.y;
+		return result;
+	}
+
+	Vector2 operator*(const Vector2& v, const float f) {
+		Vector2 result{};
+		result.x = v.x * f;
+		result.y = v.y * f;
+		return result;
+	}
+
+	Vector2 operator*(const float f, const Vector2& v) {
+		return v * f;
+	}
+
+
+	Vector2 operator/(const Vector2& v, const float f) {
+		Vector2 result{};
+		result.x = v.x / f;
+		result.y = v.y / f;
+		return result;
+	}
+
+	Vector2 operator/(const float f, const Vector2& v) {
+		return v / f;
+	}
+
+
+	Vector2& operator+=(Vector2& v1, const Vector2& v2) {
+		v1.x += v2.x;
+		v1.y += v2.y;
+		return v1;
+	}
+
+	Vector2& operator-=(Vector2& v1, const Vector2& v2) {
+		v1.x -= v2.x;
+		v1.y -= v2.y;
+		return v1;
+	}
+
+	Vector2& operator*=(Vector2& v1, const Vector2& v2) {
+		v1.x *= v2.x;
+		v1.y *= v2.y;
+		return v1;
+	}
+
+	Vector2& operator/=(Vector2& v1, const Vector2& v2) {
+		v1.x /= v2.x;
+		v1.y /= v2.y;
+		return v1;
+	}
+
+
 	Vector3 operator+(const Vector3& v1, const Vector3& v2) {
 		Vector3 result;
 		result.x = v1.x + v2.x;
@@ -333,11 +411,30 @@ namespace MyMath {
 	}
 
 
-	Vector3 EaseIn(const Vector3& v, const float t, const float endt) {
-		Vector3 result;
-		result.x = (endt - t) * v.x;
-		result.y = (endt - t) * v.y;
-		result.z = (endt - t) * v.z;
+	float EaseIn(const float& v, const float t, const float endt) {
+		//0のとき
+		if (t == endt) {
+			return 0.0f;
+		}
+		return (endt - t) * v;
+	}
+
+	Vector2 EaseIn(const Vector2& v, const float t, const float endt) {
+		Vector2 result{};
+
+		result.x = EaseIn(v.x, t, endt);
+		result.y = EaseIn(v.y, t, endt);
+
+		return result;
+	}
+
+	Vector3 EaseIn(const Vector3& v, const float t, const float endt) {	
+		Vector3 result{};	
+
+		result.x = EaseIn(v.x, t, endt);
+		result.y = EaseIn(v.y, t, endt);
+		result.z = EaseIn(v.z, t, endt);
+
 		return result;
 	}
 

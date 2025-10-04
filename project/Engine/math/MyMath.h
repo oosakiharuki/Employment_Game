@@ -217,6 +217,23 @@ struct Segment {
 
 namespace MyMath {
 
+	Vector2 operator+(const Vector2& v1, const Vector2& v2);
+	Vector2 operator-(const Vector2& v1, const Vector2& v2);
+	Vector2 operator*(const Vector2& v1, const Vector2& v2);
+	Vector2 operator/(const Vector2& v1, const Vector2& v2);
+
+	Vector2 operator*(const Vector2& v, const float f);
+	Vector2 operator*(const float f, const Vector2& v);
+
+	Vector2 operator/(const Vector2& v, const float f);
+	Vector2 operator/(const float f, const Vector2& v);
+
+	Vector2& operator+=(Vector2& v1, const Vector2& v2);
+	Vector2& operator-=(Vector2& v1, const Vector2& v2);
+	Vector2& operator*=(Vector2& v1, const Vector2& v2);
+	Vector2& operator/=(Vector2& v1, const Vector2& v2);
+
+
 	Vector3 operator+(const Vector3& v1, const Vector3& v2);
 	Vector3 operator-(const Vector3& v1, const Vector3& v2);
 	Vector3 operator*(const Vector3& v1, const Vector3& v2);
@@ -254,7 +271,10 @@ namespace MyMath {
 
 	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
+	float EaseIn(const float& v, const float t, const float endt);
+	Vector2 EaseIn(const Vector2& v, const float t, const float endt);
 	Vector3 EaseIn(const Vector3& v, const float t, const float endt);
+
 	Vector3 EaseOut(const Vector3& v, const float t);
 
 	float Length(float start, float target);

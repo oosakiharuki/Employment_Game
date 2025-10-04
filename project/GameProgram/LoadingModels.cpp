@@ -23,12 +23,8 @@ void LoadingModels::LoadObjects() {
 
 void LoadingModels::LoadObj() {
 	modelManager->LoadModel("cannon", ".obj");
-	modelManager->LoadModel("playerHead", ".obj");
 	modelManager->LoadModel("enemy", ".obj");
-	modelManager->LoadModel("stage_proto", ".obj");
 	modelManager->LoadModel("PlayerBullet", ".obj");
-	modelManager->LoadModel("umbrella_Open", ".obj");
-	modelManager->LoadModel("umbrella_Close", ".obj");
 	modelManager->LoadModel("checkpoint", ".obj");
 	modelManager->LoadModel("sphere", ".obj");
 	modelManager->LoadModel("stage_0", ".obj");
@@ -39,21 +35,19 @@ void LoadingModels::LoadObj() {
 	modelManager->LoadModel("goal", ".obj");
 
 	modelManager->LoadModel("shadow", ".obj");
-
-	modelManager->LoadModel("Title", ".obj");
 }
 
 void LoadingModels::LoadGltf() {
-	modelManager->LoadModel("noTexture", ".gltf");
-	modelManager->LoadModel("BrainStem", ".gltf");
-	
-	modelManager->LoadModel("walk", ".gltf", true, true);
-	modelManager->LoadModel("sneakWalk", ".gltf");
-	modelManager->LoadModel("stop", ".gltf");
 
-	modelManager->LoadModel("TwoMesh_Anime", ".gltf", true);
 	modelManager->LoadModel("NewPlayer", ".gltf", true);
 	modelManager->LoadModel("NewPlayer_umbrella", ".gltf");
 
+	modelManager->LoadModel("umbrella_Close", ".gltf");
+	modelManager->LoadModel("umbrella_Open", ".gltf");
+
+	modelManager->LoadModel("Select_Start", ".gltf");
+	modelManager->LoadModel("Select_End", ".gltf");
+
+	modelManager->LoadModel("Title_stage", ".gltf");
 
 }

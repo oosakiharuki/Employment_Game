@@ -16,11 +16,11 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Cube"
+			"name":"cube.001"
 		},
 		{
 			"mesh":1,
-			"name":"Cube.001"
+			"name":"cube"
 		}
 	],
 	"materials":[
@@ -28,12 +28,9 @@
 			"doubleSided":true,
 			"name":"Material",
 			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.8001105785369873,
-					0.41362813115119934,
-					0.0044889734126627445,
-					1
-				],
+				"baseColorTexture":{
+					"index":0
+				},
 				"metallicFactor":0,
 				"roughnessFactor":0.5
 			}
@@ -42,12 +39,9 @@
 			"doubleSided":true,
 			"name":"Material.001",
 			"pbrMetallicRoughness":{
-				"baseColorFactor":[
-					0.07999897003173828,
-					0,
-					1,
-					1
-				],
+				"baseColorTexture":{
+					"index":1
+				},
 				"metallicFactor":0,
 				"roughnessFactor":0.5
 			}
@@ -55,7 +49,7 @@
 	],
 	"meshes":[
 		{
-			"name":"Cube.001",
+			"name":"\u7acb\u65b9\u4f53.002",
 			"primitives":[
 				{
 					"attributes":{
@@ -69,7 +63,7 @@
 			]
 		},
 		{
-			"name":"\u7acb\u65b9\u4f53.001",
+			"name":"\u7acb\u65b9\u4f53",
 			"primitives":[
 				{
 					"attributes":{
@@ -77,10 +71,27 @@
 						"NORMAL":5,
 						"TEXCOORD_0":6
 					},
-					"indices":7,
+					"indices":3,
 					"material":1
 				}
 			]
+		}
+	],
+	"textures":[
+		{
+			"sampler":0,
+			"source":0
+		},
+		{
+			"sampler":0,
+			"source":0
+		}
+	],
+	"images":[
+		{
+			"mimeType":"image/png",
+			"name":"ground",
+			"uri":"ground.png"
 		}
 	],
 	"accessors":[
@@ -89,14 +100,14 @@
 			"componentType":5126,
 			"count":24,
 			"max":[
-				1,
-				1,
-				1
+				27.600000381469727,
+				24.467506408691406,
+				24
 			],
 			"min":[
-				-1,
-				-1,
-				-1
+				-27.600000381469727,
+				-2.3844919204711914,
+				22
 			],
 			"type":"VEC3"
 		},
@@ -123,14 +134,14 @@
 			"componentType":5126,
 			"count":24,
 			"max":[
-				4,
-				1,
-				1
+				27.5,
+				0.19999998807907104,
+				20.295000076293945
 			],
 			"min":[
-				2,
-				-1,
-				-1
+				-27.5,
+				-0.19999998807907104,
+				-20.295000076293945
 			],
 			"type":"VEC3"
 		},
@@ -145,12 +156,6 @@
 			"componentType":5126,
 			"count":24,
 			"type":"VEC2"
-		},
-		{
-			"bufferView":7,
-			"componentType":5123,
-			"count":36,
-			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
@@ -195,18 +200,18 @@
 			"byteLength":192,
 			"byteOffset":1416,
 			"target":34962
-		},
+		}
+	],
+	"samplers":[
 		{
-			"buffer":0,
-			"byteLength":72,
-			"byteOffset":1608,
-			"target":34963
+			"magFilter":9729,
+			"minFilter":9987
 		}
 	],
 	"buffers":[
 		{
-			"byteLength":1680,
-			"uri":"noTexture.bin"
+			"byteLength":1608,
+			"uri":"Title_stage.bin"
 		}
 	]
 }

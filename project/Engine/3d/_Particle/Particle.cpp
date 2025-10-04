@@ -165,7 +165,7 @@ void Particle::Update() {
 		float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
 
 		if (IsCollision(accelerationField.area, (*particleIterator).transform.translate)) {
-			(*particleIterator).velocity += accelerationField.acceleration * kDeltaTime;
+			//(*particleIterator).velocity += accelerationField.acceleration * kDeltaTime;
 		}
 
 		(*particleIterator).transform.translate += (*particleIterator).velocity * kDeltaTime;

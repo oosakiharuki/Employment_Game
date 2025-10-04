@@ -513,14 +513,14 @@ void Player::Draw() {
 
 		object->Draw();
 
-		shadow_->Draw();
-
-		Object3dCommon::GetInstance()->Command();
-
 		umbrella->Draw();
+
+		shadow_->Draw();
 	}
 
 	
+	Object3dCommon::GetInstance()->Command();
+
 	for (auto* bullet : bullets_) {
 		bullet->Draw();
 	}

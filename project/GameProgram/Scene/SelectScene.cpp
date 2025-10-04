@@ -83,11 +83,12 @@ void SelectScene::Draw() {
 
 	stageobj->Draw();
 
-	player_->Draw();
-
 	for (auto& stageObject : stageObjects) {
 		stageObject->Draw();
 	}
+
+	GLTFCommon::GetInstance()->Command();
+	player_->Draw();
 
 	//パーティクル描画処理
 	ParticleCommon::GetInstance()->Command();
