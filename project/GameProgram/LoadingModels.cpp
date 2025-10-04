@@ -55,5 +55,12 @@ void LoadingModels::LoadGltf() {
 	modelManager->LoadModel("NewPlayer", ".gltf", true);
 	modelManager->LoadModel("NewPlayer_umbrella", ".gltf");
 
+	modelManager->LoadModel("umbrella_Close", ".gltf");
+	modelManager->LoadModel("umbrella_Open", ".gltf");
+
+	modelManager->LoadModel("Select_Start", ".gltf");
+	modelManager->LoadModel("Select_End", ".gltf");
+
+	modelManager->LoadModel("Title_stage", ".gltf");
 
 }

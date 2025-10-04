@@ -21,7 +21,7 @@
 	"materials":[
 		{
 			"doubleSided":true,
-			"name":"\u30de\u30c6\u30ea\u30a2\u30eb.001",
+			"name":"\u30de\u30c6\u30ea\u30a2\u30eb",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":0
@@ -33,7 +33,7 @@
 	],
 	"meshes":[
 		{
-			"name":"chilli.001",
+			"name":"chilli",
 			"primitives":[
 				{
 					"attributes":{
@@ -64,29 +64,29 @@
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":326,
+			"count":322,
 			"max":[
-				0.2941199839115143,
-				0.25202006101608276,
-				1.0215801000595093
+				1.004112958908081,
+				0.8518170118331909,
+				1.0215799808502197
 			],
 			"min":[
-				-0.30573999881744385,
-				-0.252020001411438,
-				-1.0825800895690918
+				-1.0234140157699585,
+				-0.851839005947113,
+				-1.0825799703598022
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":326,
+			"count":322,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":326,
+			"count":322,
 			"type":"VEC2"
 		},
 		{
@@ -99,26 +99,26 @@
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":3912,
+			"byteLength":3864,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":3912,
-			"byteOffset":3912,
+			"byteLength":3864,
+			"byteOffset":3864,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2608,
-			"byteOffset":7824,
+			"byteLength":2576,
+			"byteOffset":7728,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":2928,
-			"byteOffset":10432,
+			"byteOffset":10304,
 			"target":34963
 		}
 	],
@@ -130,8 +130,8 @@
 	],
 	"buffers":[
 		{
-			"byteLength":13360,
-			"uri":"umbrella_Close.bin"
+			"byteLength":13232,
+			"uri":"umbrella_Open.bin"
 		}
 	]
 }

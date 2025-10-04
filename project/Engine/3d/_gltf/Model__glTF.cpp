@@ -185,7 +185,7 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 		modelData.indices.push_back(indices);
 
 		for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
-			
+
 			//jointごとの格納領域作成
 			aiBone* bone = mesh->mBones[boneIndex]; // Bone(骨) = joint
 			std::string jointName = bone->mName.C_Str();
@@ -214,7 +214,7 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-			
+
 			MaterialData materialData;
 			materialData.textureFilePath = directoryPath + "/Sprite/" + textureFilePath.C_Str();
 			materialData.materialColor = { 1.0f,1.0f,1.0f,1.0f };
@@ -231,7 +231,7 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 		}
 
 	}
-	
+
 	modelData.rootNode = ReadNode(scene->mRootNode);
 
 	return modelData;
