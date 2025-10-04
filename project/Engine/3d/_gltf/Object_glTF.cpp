@@ -271,6 +271,10 @@ void Object_glTF::SetModelFile(const std::string& filePath) {
 			}
 		}
 	}
+
+	//初期環境マップ
+	TextureManager::GetInstance()->LoadTexture("resource/rostock_laage_airport_4k.dds");
+	model->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 }
 
 

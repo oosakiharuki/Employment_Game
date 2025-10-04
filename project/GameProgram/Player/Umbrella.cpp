@@ -3,20 +3,14 @@
 
 using namespace MyMath;
 
-Umbrella::~Umbrella() {
-	delete object_Open;
-	delete object_Close;
-}
+Umbrella::~Umbrella() {}
 
 void Umbrella::Initialize() {
 	wt.Initialize();
-	object_Open = new Object3d();
-	object_Open->Initialize();
-	object_Open->SetModelFile("umbrella_Open.obj");
 
-	object_Close = new Object3d();
-	object_Close->Initialize();
-	object_Close->SetModelFile("umbrella_Close.obj");
+	object = std::make_unique<Object_glTF>();
+	object->Initialize();
+	object->SetModelFile("umbrella_Close.gltf");
 
 	umbrellaAABB.min = { -0.5f,-1,-0.5f };
 	umbrellaAABB.max = { 0.5f,1,0.5f };
@@ -41,23 +35,19 @@ void Umbrella::Update() {
 #endif // _DEBUG
 
 	if (isShieldMode) {
-		object_Open->Update(wt);
+		object->ChangeAnimation("umbrella_Open.gltf");
 	}
 	else {
-		object_Close->Update(wt);
+		object->ChangeAnimation("umbrella_Close.gltf");
 	}
 
+	object->Update(wt);
 	wt.UpdateMatrix();
 }
 
 
 void Umbrella::Draw() {
-	if (isShieldMode) {
-		object_Open->Draw();
-	}
-	else {
-		object_Close->Draw();
-	}
+	object->Draw();
 }
 
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "Object3d.h"
+#include "Object_glTF.h"
 #include "MyMath.h"
 
 class Umbrella {
@@ -26,9 +26,7 @@ public:
 
 	void ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime);
 private:
-	Object3d* object_Open;
-	Object3d* object_Close;
-
+	std::unique_ptr<Object_glTF> object;
 
 	WorldTransform wt;
 	AABB umbrellaAABB;
