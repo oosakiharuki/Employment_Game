@@ -20,7 +20,7 @@ public:
 	AABB GetAABB();
 
 private:
-	Object3d* object = nullptr;
+	std::unique_ptr<Object3d> object = nullptr;
 	WorldTransform wt;
 	Vector3 velocity_;
 

@@ -5,13 +5,11 @@
 
 using namespace MyMath;
 
-Shadow::~Shadow() {
-	delete object_;
-}
+Shadow::~Shadow() {}
 
 void Shadow::Initialize() {
 
-	object_ = new Object3d();
+	object_ = std::make_unique<Object3d>();
 	object_->Initialize();
 	object_->SetModelFile("shadow.obj");
 	object_->SetColor({0,0,0,1});

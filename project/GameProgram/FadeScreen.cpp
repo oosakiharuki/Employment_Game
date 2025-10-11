@@ -13,7 +13,7 @@ FadeScreen* FadeScreen::GetInstance() {
 }
 
 void FadeScreen::Initialize() {
-	sprite = new Sprite();
+	sprite = std::make_unique<Sprite>();
 	sprite->Initialize("white.png");
 	sprite->SetSize({ 1280,720 });
 }
@@ -30,7 +30,6 @@ void FadeScreen::Draw() {
 }
 
 void FadeScreen::Finalize() {
-	delete sprite;
 	delete instance;
 	instance = nullptr;
 }

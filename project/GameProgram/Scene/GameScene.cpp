@@ -6,11 +6,11 @@ void GameScene::Initialize() {
 
 	LevelEditorObjectSetting("resource/Levelediter/stage_0.json");
 
-	stageobj = new Object3d();
+	stageobj = std::make_unique<Object3d>();
 	stageobj->Initialize();
 	stageobj->SetModelFile("stage_0.obj");
 
-	skyBox = new BoxModel();
+	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
 
 	wt.Initialize();
@@ -66,15 +66,15 @@ void GameScene::Update() {
 	for (auto& stageObject : stageObjects) {
 		if (IsCollisionAABB(player_->GetAABB(), stageObject->GetAABB())) {
 			//ワープゲート
-			if (stageObject == dynamic_cast<WarpGate*>(stageObject) && Input::GetInstance()->TriggerKey(DIK_E)) {
-				WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject);
+			if (stageObject.get() == dynamic_cast<WarpGate*>(stageObject.get()) && Input::GetInstance()->TriggerKey(DIK_E)) {
+				WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject.get());
 				cameraSegment.origin = camera->GetTranslate();//ズーム前のカメラ位置
 				cameraSegment.diff = player_->GetTranslate() + Vector3(0, 2, -15.0f);//プレイヤーよりちょっと離れてる
 				isNextStage = true;
 				nextStage_fileName = warpGate->GetNextStage();
 				break;
 			}//ゴール
-			else if (stageObject == dynamic_cast<Goal*>(stageObject)) {
+			else if (stageObject.get() == dynamic_cast<Goal*>(stageObject.get())) {
 				isGameClear = true;
 				isfadeStart = true;
 				return;
@@ -94,7 +94,7 @@ void GameScene::Update() {
 	}
 	
 	for (auto& enemy : enemies) {
-		enemy->SetPlayer(player_);
+		enemy->SetPlayer(player_.get());
 		enemy->Update();
 	}
 
@@ -109,8 +109,8 @@ void GameScene::Update() {
 	for (auto& stageObject : stageObjects) {
 		if (IsCollisionAABB(player_->GetAABB(), stageObject->GetAABB())) {
 			//チェックポイント
-			if (stageObject == dynamic_cast<CheckPoint*>(stageObject)) {
-				CheckPoint* checkPoint = dynamic_cast<CheckPoint*>(stageObject);
+			if (stageObject.get() == dynamic_cast<CheckPoint*>(stageObject.get())) {
+				CheckPoint* checkPoint = dynamic_cast<CheckPoint*>(stageObject.get());
 				player_->SetRespownPosition(checkPoint->GetPosition());
 				isChangeRespown = true;
 			}
@@ -141,17 +141,17 @@ void GameScene::Update() {
 
 
 	//リスポーン地点を変更前に倒した敵は復活しない
-	if (isChangeRespown) {
-		//敵を倒したら削除
-		enemies.remove_if([](IEnemy* enemy) {
-			if (enemy->GetDeleteEnemy()) {
-				delete enemy;
-				return true;
-			}
-			return false;
-			});
-		isChangeRespown = false;
-	}
+	//if (isChangeRespown) {
+	//	//敵を倒したら削除
+	//	enemies.remove_if([](IEnemy* enemy) {
+	//		if (enemy->GetDeleteEnemy()) {
+	//			delete enemy;
+	//			return true;
+	//		}
+	//		return false;
+	//		});
+	//	isChangeRespown = false;
+	//}
 
 	//カメラの移動範囲
 
@@ -254,20 +254,8 @@ void GameScene::Draw() {
 }
 
 void GameScene::Finalize() {
-	delete camera;
-	delete player_;
-	for (auto& enemy : enemies) {
-		delete enemy;
-	}
 	enemies.clear();
-	delete stageobj;
-	delete skyBox;
-
-	for (auto& stageObject : stageObjects) {
-		delete stageObject;
-	}
 	stageObjects.clear();
-
 	stagesAABB.clear();
 }
 
@@ -282,11 +270,11 @@ void GameScene::StageMovement(const std::string leveleditor_file, const std::str
 	
 	player_->SetHp(playerHp);
 
-	stageobj = new Object3d();
+	stageobj = std::make_unique<Object3d>();
 	stageobj->Initialize();
 	stageobj->SetModelFile(stageObj);
 
-	skyBox = new BoxModel();
+	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
 }
 

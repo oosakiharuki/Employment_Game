@@ -58,9 +58,12 @@ public:
 		UpLeft,
 	};
 
-	std::list<PlayerBullet*> GetBullets() { return bullets_; }
+	//Getterはshared_ptrのほうが適任かも
+	std::list<std::shared_ptr<PlayerBullet>> GetBullets() {
+		return bullets_;
+	};
 	
-	Umbrella* GetUmbrella() { return umbrella; }
+	Umbrella* GetUmbrella() { return umbrella.get(); }
 	bool GetIsShield() { return isShield; }
 
 	void IsDamage();
@@ -117,8 +120,7 @@ public:
 	void IsAnimationOnlyUpdate() { isAnimationOnlyUpdate = true; }
 
 private:
-	//Object3d* object;
-	Object_glTF* object;
+	std::unique_ptr<Object_glTF> object;
 	WorldTransform worldTransform;
 	AABB playerAABB;
 
@@ -139,7 +141,7 @@ private:
 	const float deltaTime = 1.0f / 60.0f;
 
 	/// 弾丸
-	std::list<PlayerBullet*> bullets_;
+	std::list<std::shared_ptr<PlayerBullet>> bullets_;
 
 	float coolTimer = 0.0f;
 	float coolMax = 0.5f;
@@ -153,7 +155,7 @@ private:
 
 	/// 傘のシールド
 	bool isShield = false;
-	Umbrella* umbrella = nullptr;
+	std::unique_ptr<Umbrella> umbrella = nullptr;
 	float umbrellaNormal = 0.0f;
 
 	//パリィ
@@ -198,11 +200,11 @@ private:
 	SoundData pariSound;
 
 	//パーティクル
-	Particle* particle_walk;
-	Particle* particle_fire;
-	Particle* particle_brink;
-	Particle* particle_damage;
-	Particle* particle_pari;
+	std::unique_ptr<Particle> particle_walk;
+	std::unique_ptr<Particle> particle_fire;
+	std::unique_ptr<Particle> particle_brink;
+	std::unique_ptr<Particle> particle_damage;
+	std::unique_ptr<Particle> particle_pari;
 
 	Vector3 PrePosition;
 
@@ -213,10 +215,10 @@ private:
 
 
 	///影
-	Shadow* shadow_;
+	std::unique_ptr<Shadow> shadow_;
 
 	//UI
-	std::vector<Sprite*> sprites_Hp;
+	std::vector <std::unique_ptr<Sprite>> sprites_Hp;
 
 	//リアクション
 	bool isDamageMosion = false;

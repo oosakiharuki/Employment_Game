@@ -39,7 +39,7 @@ protected:
 
 	XINPUT_STATE state, preState;
 
-	Camera* camera = nullptr;
+	std::unique_ptr<Camera> camera = nullptr;
 	Vector3 cameraRotate;//回転
 	Vector3 cameraTranslate;//座標
 	//カメラ移動範囲
@@ -49,19 +49,13 @@ protected:
 
 	Levelediter levelediter;
 
-	Player* player_ = nullptr;
-	std::list<IEnemy*> enemies;
+	std::unique_ptr<Player> player_ = nullptr;
 
-	std::vector<IStageObject*> stageObjects;
+	std::list<std::unique_ptr<IEnemy>> enemies;
 
-	//std::vector<CheckPoint*> checkPoints;
-	//std::list<WarpGate*> warpGates;
-	//
+	std::list<std::unique_ptr<IStageObject>> stageObjects;
 
-	//std::list<Goal*> goals;
-
-
-	Object3d* stageobj;
+	std::unique_ptr<Object3d> stageobj;
 	WorldTransform wt;
 
 	//ステージの足場
@@ -71,7 +65,7 @@ protected:
 	SoundData BGMData_;
 	float volume = 0.3f;
 
-	BoxModel* skyBox = nullptr;
+	std::unique_ptr<BoxModel> skyBox = nullptr;
 
 	//レベルエディタで配置
 	void LevelEditorObjectSetting(const std::string leveleditor_file);

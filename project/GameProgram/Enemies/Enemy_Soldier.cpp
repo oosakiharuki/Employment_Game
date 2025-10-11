@@ -10,22 +10,19 @@ Enemy_Soldier::~Enemy_Soldier() {
 	for (auto* bullet : bullets_) {
 		delete bullet;
 	}
-	delete particle_fire;
-	delete particle_damage;
-	delete shadow_;
 }
 
 void Enemy_Soldier::Initialize() {
 	wt.Initialize();
 
-	object = new Object3d();
+	object = std::make_unique<Object3d>();
 	object->Initialize();
 	object->SetModelFile("enemy.obj");
 
 	maxHp = 3;
 	hp = maxHp;
 
-	particle_fire = new Particle();
+	particle_fire = std::make_unique<Particle>();
 	particle_fire->Initialize("resource/Sprite/cone.png", PrimitiveType::cone);
 	particle_fire->SetParticleCount(1);
 	particle_fire->ChangeMode(BornParticle::Stop);
@@ -33,7 +30,7 @@ void Enemy_Soldier::Initialize() {
 	particle_fire->SetFrequency(0.1f);
 
 
-	particle_damage = new Particle();
+	particle_damage = std::make_unique<Particle>();
 	particle_damage->Initialize("resource/Sprite/circle.png", PrimitiveType::ring);
 	particle_damage->SetParticleCount(10);
 	particle_damage->ChangeMode(BornParticle::Stop);
@@ -41,7 +38,7 @@ void Enemy_Soldier::Initialize() {
 	particle_damage->SetFrequency(1.0f);
 
 	///影
-	shadow_ = new Shadow();
+	shadow_ = std::make_unique<Shadow>();
 	shadow_->Initialize();
 	shadow_->SetScale({ 1,0,1 });
 

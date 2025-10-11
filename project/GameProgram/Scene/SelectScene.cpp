@@ -5,11 +5,11 @@ void SelectScene::Initialize() {
 
 	LevelEditorObjectSetting("resource/Levelediter/stage_select.json");
 
-	skyBox = new BoxModel();
+	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
 	wt.Initialize();
 
-	stageobj = new Object3d();
+	stageobj = std::make_unique<Object3d>();
 	stageobj->Initialize();
 	stageobj->SetModelFile("stage_select.obj");
 
@@ -60,8 +60,8 @@ void SelectScene::Update() {
 
 
 	for (auto& stageObject : stageObjects) {
-		if (stageObject == dynamic_cast<WarpGate*>(stageObject)) {
-			WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject);
+		if (stageObject.get() == dynamic_cast<WarpGate*>(stageObject.get())) {
+			WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject.get());
 			if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB()) && Input::GetInstance()->TriggerKey(DIK_E)) {
 				isZumuIn = true;
 				cameraSegment.origin = camera->GetTranslate();//ズーム前のカメラ位置
@@ -97,11 +97,8 @@ void SelectScene::Draw() {
 }
 
 void SelectScene::Finalize() {
-	delete player_;
-	for (auto& stageObject : stageObjects) {
-		delete stageObject;
-	}	
-	delete camera;
-	delete skyBox;
-	delete stageobj;
+	stageObjects.clear();
+	//for (auto& stageObject : stageObjects) {
+	//	delete stageObject;
+	//}	
 }

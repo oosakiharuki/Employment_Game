@@ -39,8 +39,8 @@ private:
 	Vector3 move = { 0,0,0 };
 
 	//パーティクル
-	Particle* particle_fire;
-	Particle* particle_damage;
+	std::unique_ptr<Particle> particle_fire;
+	std::unique_ptr<Particle> particle_damage;
 
 	bool isDamageMosion = false;
 	Vector3 damageScale = { 0.1f, 0.1f, 0.1f };

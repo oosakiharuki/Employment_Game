@@ -20,7 +20,7 @@ private:
 
 	static FadeScreen* instance;
 
-	Sprite* sprite;
+	std::unique_ptr<Sprite> sprite;
 	Vector4 color = {1,1,1,1};
 
 	float t = 0.05f;

@@ -29,9 +29,9 @@ private:
 	uint32_t rapidCount = 0;
 	const uint32_t rapidFireMax = 6;
 
-	Particle* particle_dead;
-	Particle* particle_damage;
-	Particle* particle_fire;
+	std::unique_ptr<Particle> particle_dead;
+	std::unique_ptr<Particle> particle_damage;
+	std::unique_ptr<Particle> particle_fire;
 
 	bool isDamageMosion = false;
 	Vector3 damageScale = { 0.1f, 0.1f, 0.1f };
