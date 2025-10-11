@@ -3,22 +3,19 @@
 
 using namespace MyMath;
 
-Enemy_Bomb::~Enemy_Bomb() {
-	delete particle_Bom;
-	delete shadow_;
-}
+Enemy_Bomb::~Enemy_Bomb() {}
 
 void Enemy_Bomb::Initialize() {
 	wt.Initialize();
 
-	object = new Object3d();
+	object = std::make_unique<Object3d>();
 	object->Initialize();
 	object->SetModelFile("sphere.obj");
 
 	maxHp = 1;
 	hp = maxHp;
 
-	particle_Bom = new Particle();
+	particle_Bom = std::make_unique<Particle>();
 	particle_Bom->Initialize("resource/Sprite/circle.png", PrimitiveType::ring);
 	particle_Bom->SetParticleCount(10);
 	particle_Bom->ChangeMode(BornParticle::Stop);
@@ -29,7 +26,7 @@ void Enemy_Bomb::Initialize() {
 	bombAABB.max = { 0,-10,0 };
 
 	///影
-	shadow_ = new Shadow();
+	shadow_ = std::make_unique<Shadow>();
 	shadow_->Initialize();
 	shadow_->SetScale({ 1,0,1 });
 }

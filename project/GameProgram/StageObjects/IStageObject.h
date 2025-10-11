@@ -19,7 +19,7 @@ public:
 
 protected:
 
-	Object3d* object_ = nullptr;
+	std::unique_ptr<Object3d> object_ = nullptr;
 	WorldTransform wt;
 	AABB aabb_;
 };

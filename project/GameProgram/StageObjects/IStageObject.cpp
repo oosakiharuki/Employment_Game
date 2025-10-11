@@ -4,9 +4,7 @@ using namespace MyMath;
 
 IStageObject::IStageObject(){}
 
-IStageObject::~IStageObject() {
-	delete object_;
-}
+IStageObject::~IStageObject() {}
 
 AABB IStageObject::GetAABB() {
 	AABB aabb;

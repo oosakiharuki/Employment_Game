@@ -8,24 +8,20 @@ Enemy_Turret::~Enemy_Turret() {
 	for (auto* bullet : bullets_) {
 		delete bullet;
 	}
-	delete particle_damage;
-	delete particle_dead;
-	delete particle_fire;
-	delete shadow_;
 }
 
 
 void Enemy_Turret::Initialize() {
 	wt.Initialize();
 
-	object = new Object3d();
+	object = std::make_unique<Object3d>();
 	object->Initialize();
 	object->SetModelFile("cannon.obj");
 
 	maxHp = 6;
 	hp = maxHp;
 
-	particle_fire = new Particle();
+	particle_fire = std::make_unique<Particle>();
 	particle_fire->Initialize("resource/Sprite/cone.png", PrimitiveType::cone);
 	particle_fire->SetParticleCount(1);
 	particle_fire->ChangeMode(BornParticle::Stop);
@@ -33,13 +29,13 @@ void Enemy_Turret::Initialize() {
 	particle_fire->SetFrequency(0.1f);
 
 
-	particle_dead = new Particle();
+	particle_dead = std::make_unique<Particle>();
 	particle_dead->Initialize("resource/Sprite/gradationLine.png", PrimitiveType::ring);
 	particle_dead->SetParticleCount(1);
 	particle_dead->SetParticleMosion(ParticleMosion::Normal);
 	particle_dead->ChangeMode(BornParticle::Stop);
 
-	particle_damage = new Particle();
+	particle_damage = std::make_unique<Particle>();
 	particle_damage->Initialize("resource/Sprite/circle.png", PrimitiveType::ring);
 	particle_damage->SetParticleCount(10);
 	particle_damage->ChangeMode(BornParticle::Stop);
@@ -47,7 +43,7 @@ void Enemy_Turret::Initialize() {
 	particle_damage->SetFrequency(1.0f);
 
 	///影
-	shadow_ = new Shadow();
+	shadow_ = std::make_unique<Shadow>();
 	shadow_->Initialize();
 	shadow_->SetScale({ 1,0,1 });
 }
@@ -56,8 +52,6 @@ void Enemy_Turret::Update() {
 
 	if (hp == 0) {
 		isDead = true;
-		//particle_dead->SetTranslate(worldTransform.translation_);
-		//particle_dead->ChangeMode(BornParticle::MomentMode);
 	}
 
 	DeadUpdate();

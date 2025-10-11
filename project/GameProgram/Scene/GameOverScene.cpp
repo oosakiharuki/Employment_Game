@@ -1,7 +1,7 @@
 #include "GameOverScene.h"
 
 void GameOverScene::Initialize() {
-	sprite = new Sprite();
+	sprite = std::make_unique<Sprite>();
 	sprite->Initialize("Moji_GameOver.png");
 	sprite->SetPosition({ 100,100 });
 }
@@ -39,6 +39,4 @@ void GameOverScene::Draw() {
 
 }
 
-void GameOverScene::Finalize() {
-	delete sprite;
-}
+void GameOverScene::Finalize() {}

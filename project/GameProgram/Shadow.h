@@ -16,7 +16,7 @@ public:
 	AABB GetAABB();
 
 private:
-	Object3d* object_;
+	std::unique_ptr<Object3d> object_;
 	WorldTransform wt;
 	AABB shadowAABB;
 };

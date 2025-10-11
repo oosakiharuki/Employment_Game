@@ -1,7 +1,7 @@
 #include "ClearScene.h"
 
 void ClearScene::Initialize() {
-	sprite = new Sprite();
+	sprite = std::make_unique<Sprite>();
 	sprite->Initialize("Moji_GameClear.png");
 	sprite->SetPosition({ 100,100 });
 }
@@ -38,7 +38,4 @@ void ClearScene::Draw() {
 	sprite->Draw();
 }
 
-void ClearScene::Finalize() {
-	delete sprite;
-
-}
+void ClearScene::Finalize() {}

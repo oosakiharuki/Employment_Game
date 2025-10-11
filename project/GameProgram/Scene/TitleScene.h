@@ -10,7 +10,7 @@ public:
 	void Draw() override;
 	void Finalize() override;
 private:
-	Object_glTF* object_autoPlayer = nullptr;
+	std::unique_ptr<Object_glTF> object_autoPlayer = nullptr;
 
 	WorldTransform wts[4];
 
@@ -21,7 +21,7 @@ private:
 
 	std::unique_ptr<Shadow> player_shadow;
 
-	Sprite* sprite_Moji_Title;
+	std::unique_ptr<Sprite> sprite_Moji_Title;
 
 	std::unique_ptr<Particle> bullet_particle;
 

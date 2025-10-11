@@ -4,9 +4,7 @@
 using namespace MyMath;
 IEnemy::IEnemy() {}
 
-IEnemy::~IEnemy(){
-	delete object;
-}
+IEnemy::~IEnemy(){}
 
 
 void IEnemy::GrabityUpdate() {

@@ -34,7 +34,7 @@ private:
 	Vector3 speed = { 0.03f,0.0f,0.0f };
 	Vector3 move = { 0,0,0 };
 
-	Particle* particle_Bom;
+	std::unique_ptr<Particle> particle_Bom;
 	AABB bombAABB;
 	Vector3 hani = { 3,3,3 };
 

@@ -13,32 +13,14 @@ using namespace Primitive;
 Player::Player(){}
 
 Player::~Player() {
-	delete object;
-
-	for (auto* bullet : bullets_) {
-		delete bullet;
-	}
 	bullets_.clear();
-
-	delete umbrella;
-	delete particle_walk;
-	delete particle_fire;
-	delete particle_brink;
-	delete particle_damage;
-	delete particle_pari;
-
-	delete shadow_;
-
-	for (Sprite* sprite : sprites_Hp) {
-		delete sprite;
-	}
 	sprites_Hp.clear();
 }
 
 void Player::Initialize() {
 	worldTransform.Initialize();
 
-	object = new Object_glTF();
+	object = std::make_unique<Object_glTF>();
 	object->Initialize();
 	object->SetModelFile("NewPlayer.gltf");
 	object->SetEnvironment("resource/rostock_laage_airport_4k.dds");
@@ -47,7 +29,7 @@ void Player::Initialize() {
 	animation_mode = Animation_Mode::mode_stop;
 	PreAnimation_mode = animation_mode;
 
-	umbrella = new Umbrella();
+	umbrella = std::make_unique<Umbrella>();
 	umbrella->Initialize();
 
 	wtGun.Initialize();
@@ -57,12 +39,12 @@ void Player::Initialize() {
 
 	pariSound = Audio::GetInstance()->LoadWave("resource/Sound/bane.wav");
 
-	particle_walk = new Particle();
+	particle_walk = std::make_unique<Particle>();
 	particle_walk->Initialize("resource/Sprite/ground.png",PrimitiveType::box);
 	particle_walk->ChangeMode(BornParticle::Stop);
 	particle_walk->SetParticleMosion(ParticleMosion::Smaller);
 
-	particle_brink = new Particle();
+	particle_brink = std::make_unique<Particle>();
 	particle_brink->Initialize("resource/Sprite/cone.png", PrimitiveType::cone);
 	particle_brink->SetParticleCount(1);
 	particle_brink->ChangeMode(BornParticle::Stop);
@@ -71,7 +53,7 @@ void Player::Initialize() {
 	particle_brink->SetScale({2,2,2});
 
 
-	particle_fire = new Particle();
+	particle_fire = std::make_unique<Particle>();
 	particle_fire->Initialize("resource/Sprite/cone.png", PrimitiveType::cone);
 	particle_fire->SetParticleCount(1);
 	particle_fire->ChangeMode(BornParticle::Stop);
@@ -79,7 +61,7 @@ void Player::Initialize() {
 	particle_fire->SetFrequency(0.1f);
 
 
-	particle_damage = new Particle();
+	particle_damage = std::make_unique<Particle>();
 	particle_damage->Initialize("resource/Sprite/circle.png", PrimitiveType::ring);
 	particle_damage->SetParticleCount(20);
 	particle_damage->ChangeMode(BornParticle::Stop);
@@ -87,23 +69,23 @@ void Player::Initialize() {
 	particle_damage->SetFrequency(1.0f);
 
 
-	particle_pari = new Particle();
+	particle_pari = std::make_unique<Particle>();
 	particle_pari->Initialize("resource/Sprite/uvChecker.png", PrimitiveType::cone);
 	particle_pari->ChangeMode(BornParticle::Stop);
 	particle_pari->SetParticleMosion(ParticleMosion::Fixed);
 	particle_fire->SetFrequency(0.5f);
 
-	shadow_ = new Shadow();
+	shadow_ = std::make_unique<Shadow>();
 	shadow_->Initialize();
 	shadow_->SetScale({ 1,0,1 });
 
 
 	for (uint32_t i = 0; i < 3; i++) {
-		Sprite* sprite = new Sprite();
+		std::unique_ptr <Sprite> sprite = std::make_unique<Sprite>();
 		sprite->Initialize("Hp.png");
 		sprite->SetPosition({ 20.0f + 64.0f * i , 45.0f - i * 10.0f });
 		sprite->SetSize({64,64});
-		sprites_Hp.push_back(sprite);
+		sprites_Hp.push_back(std::move(sprite));
 	}
 
 	input_ = Input::GetInstance();
@@ -380,13 +362,13 @@ void Player::Update() {
 		shadow_->SetTranslate(worldTransform.translation_);
 	}
 
-	for (auto* bullet : bullets_) {
+	for (auto& bullet : bullets_) {
 		bullet->Update();
 	}
 
-	bullets_.remove_if([](PlayerBullet* bullet) {
+	bullets_.remove_if([](auto& bullet) {
 		if (bullet->IsDead()) {
-			delete bullet;
+			bullet.reset();
 			return true;
 		}
 		return false;
@@ -502,7 +484,7 @@ void Player::Update() {
 
 	umbrella->Update();
 
-	for (Sprite* sprite : sprites_Hp) {
+	for (auto& sprite : sprites_Hp) {
 		sprite->Update();
 	}		
 }
@@ -521,7 +503,7 @@ void Player::Draw() {
 	
 	Object3dCommon::GetInstance()->Command();
 
-	for (auto* bullet : bullets_) {
+	for (auto& bullet : bullets_) {
 		bullet->Draw();
 	}
 
@@ -536,7 +518,7 @@ void Player::DrawP() {
 
 	SpriteCommon::GetInstance()->Command();
 	
-	for (Sprite* sprite : sprites_Hp) {
+	for (auto& sprite : sprites_Hp) {
 		sprite->Draw();
 	}
 
@@ -563,11 +545,11 @@ void Player::ShootBullet() {
 		Vector3 velocity = { 0.0f,float(i) * 0.1f,0.5f};
 		velocity = TransformNormal(velocity, wtGun.matWorld_);
 
-		PlayerBullet* bullet = new PlayerBullet();
+		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
 		bullet->Initialize();
 		bullet->SetTranslate(translate);
 		bullet->SetVelocty(velocity);
-		bullets_.push_back(bullet);
+		bullets_.push_back(std::move(bullet));
 	}
 
 	particle_fire->SetTranslate(translate);
@@ -650,7 +632,7 @@ void Player::DeadPlayer() {
 			isRespown = true;
 			deadTimer = 0.0f;
 
-			for (Sprite* sprite : sprites_Hp) {
+			for (auto& sprite : sprites_Hp) {
 				sprite->SetTextureFile("Hp.png");
 			}
 

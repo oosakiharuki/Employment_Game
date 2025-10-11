@@ -64,7 +64,7 @@ public:
 	void ShadowUpdate();
 
 protected:
-	Object3d* object;
+	std::unique_ptr<Object3d> object;
 	WorldTransform wt;
 	AABB enemyAABB;
 
@@ -110,7 +110,7 @@ protected:
 	const float deltaTime = 1.0f / 60.0f;
 	
 	///影
-	Shadow* shadow_;
+	std::unique_ptr<Shadow> shadow_;
 
 	float scaleTimer = 0.0f;
 	Vector3 defaultScale = { 1,1,1 };//元の大きさ

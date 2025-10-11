@@ -35,16 +35,16 @@ void TitleScene::Initialize() {
 
 	worldTransformCamera_.Initialize();
 
-	camera = new Camera();
+	camera = std::make_unique<Camera>();
 	worldTransformCamera_.translation_ = { 0,0.0f,-30.0f };
 	camera->SetTranslate(worldTransformCamera_.translation_);
 	camera->SetRotate(worldTransformCamera_.rotation_);
 
-	Object3dCommon::GetInstance()->SetDefaultCamera(camera);
-	GLTFCommon::GetInstance()->SetDefaultCamera(camera);
-	ParticleCommon::GetInstance()->SetDefaultCamera(camera);
+	Object3dCommon::GetInstance()->SetDefaultCamera(camera.get());
+	GLTFCommon::GetInstance()->SetDefaultCamera(camera.get());
+	ParticleCommon::GetInstance()->SetDefaultCamera(camera.get());
 
-	object_autoPlayer = new Object_glTF();
+	object_autoPlayer = std::make_unique<Object_glTF>();
 	object_autoPlayer->Initialize();
 	object_autoPlayer->SetModelFile("NewPlayer.gltf");
 	object_autoPlayer->SetEnvironment("resource/rostock_laage_airport_4k.dds");
@@ -79,7 +79,7 @@ void TitleScene::Initialize() {
 	object_stage->SetModelFile("Title_stage.gltf");
 	object_stage->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 
-	sprite_Moji_Title = new Sprite();
+	sprite_Moji_Title = std::make_unique<Sprite>();
 	sprite_Moji_Title->Initialize("Moji_Title.png");
 	sprite_Moji_Title->SetPosition(Title_pos);
 
@@ -270,7 +270,4 @@ void TitleScene::Draw() {
 	bullet_particle->Draw();
 }
 
-void TitleScene::Finalize() {
-	delete object_autoPlayer;
-	delete sprite_Moji_Title;
-}
+void TitleScene::Finalize() {}

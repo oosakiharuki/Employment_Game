@@ -2,13 +2,11 @@
 
 using namespace MyMath;
 
-EnemyBullet::~EnemyBullet() {
-	delete object;
-}
+EnemyBullet::~EnemyBullet() {}
 
 
 void EnemyBullet::Initialize() {
-	object = new Object3d();
+	object = std::make_unique<Object3d>();
 	object->Initialize();
 	object->SetModelFile("PlayerBullet.obj");
 

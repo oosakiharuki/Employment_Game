@@ -11,7 +11,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 
 	levelediter.LoadLevelediter(leveleditor_file);
 
-	camera = new Camera();
+	camera = std::make_unique<Camera>();
 
 	cameraRotate = levelediter.GetLevelData()->cameraInit.rotation;
 	cameraTranslate = levelediter.GetLevelData()->cameraInit.translation;
@@ -23,13 +23,13 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	camera->SetRotate(cameraRotate);
 	camera->SetTranslate(cameraTranslate);
 
-	Object3dCommon::GetInstance()->SetDefaultCamera(camera);
-	GLTFCommon::GetInstance()->SetDefaultCamera(camera);
-	ParticleCommon::GetInstance()->SetDefaultCamera(camera);
-	DebugWireframes::GetInstance()->SetDefaultCamera(camera);
-	Cubemap::GetInstance()->SetDefaultCamera(camera);
+	Object3dCommon::GetInstance()->SetDefaultCamera(camera.get());
+	GLTFCommon::GetInstance()->SetDefaultCamera(camera.get());
+	ParticleCommon::GetInstance()->SetDefaultCamera(camera.get());
+	DebugWireframes::GetInstance()->SetDefaultCamera(camera.get());
+	Cubemap::GetInstance()->SetDefaultCamera(camera.get());
 
-	player_ = new Player();
+	player_ = std::make_unique<Player>();
 	player_->Initialize();
 
 	//プレイヤー配置データがあるときプレイヤーを配置
@@ -46,15 +46,15 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	if (!levelediter.GetLevelData()->spawnEnemies.empty()) {
 		for (auto& enemyData : levelediter.GetLevelData()->spawnEnemies) {
 
-			IEnemy* enemy;
+			std::unique_ptr<IEnemy> enemy;
 			if (enemyData.EnemyName == "Turret") {
-				enemy = new Enemy_Turret();
+				enemy = std::make_unique<Enemy_Turret>();
 			}
 			else if (enemyData.EnemyName == "Bomb") {
-				enemy = new Enemy_Bomb();
+				enemy = std::make_unique<Enemy_Bomb>();
 			}
 			else {
-				enemy = new Enemy_Soldier();
+				enemy = std::make_unique<Enemy_Soldier>();
 			}
 
 
@@ -70,7 +70,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 
 			enemy->DirectionDegree();
 
-			enemies.push_back(enemy);
+			enemies.push_back(std::move(enemy));
 		}
 	}
 
@@ -90,27 +90,27 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	//チェックポイント地点
 	if (!levelediter.GetLevelData()->stageObjects.empty()) {
 		for (auto& stageObjectData : levelediter.GetLevelData()->stageObjects) {
-			IStageObject* stageObject{};
+			std::unique_ptr<IStageObject> stageObject;
 			
 			if (stageObjectData.ObjectName == "WarpGate") {
-				stageObject = new WarpGate();
+				stageObject = std::make_unique<WarpGate>();
 			}
 			else if (stageObjectData.ObjectName == "Checkpoint") {
-				stageObject = new CheckPoint();
+				stageObject = std::make_unique<CheckPoint>();
 			}
 			else if (stageObjectData.ObjectName == "Goal") {
-				stageObject = new Goal();
+				stageObject = std::make_unique<Goal>();
 			}
 			stageObject->Initialize();
 			stageObject->SetPosition(stageObjectData.translation);
 			stageObject->SetAABB(stageObjectData.colliderAABB);
 
-			if (stageObject == dynamic_cast<WarpGate*>(stageObject)) {
-				WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject);
+			if (stageObject.get() == dynamic_cast<WarpGate*>(stageObject.get())) {
+				WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject.get());
 				warpGate->SetNextStage(stageObjectData.fileName);
 			}
 
-			stageObjects.push_back(stageObject);
+			stageObjects.push_back(std::move(stageObject));
 		}
 	}
 
@@ -127,7 +127,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 void IScene::CollisionCommon() {
 	for (auto& enemy : enemies) {
 
-		for (PlayerBullet* bullet : player_->GetBullets()) {
+		for (auto& bullet : player_->GetBullets()) {
 			if (IsCollisionAABB(bullet->GetAABB(), enemy->GetAABB()) && !enemy->IsDead()) {
 				enemy->IsDamage();
 				bullet->IsHit();
@@ -167,8 +167,8 @@ void IScene::CollisionCommon() {
 		//ダウンキャスト
 		//親から子(基盤クラスから派生クラス)に変換し派生クラスの関数を使えることができる
 		//if(enemyが<派生クラス>と同じ) = true
-		if (enemy == dynamic_cast<Enemy_Bomb*>(enemy)) {
-			Enemy_Bomb* enemy_Bomb = dynamic_cast<Enemy_Bomb*>(enemy);
+		if (enemy.get() == dynamic_cast<Enemy_Bomb*>(enemy.get())) {
+			Enemy_Bomb* enemy_Bomb = dynamic_cast<Enemy_Bomb*>(enemy.get());
 			if (IsCollisionAABB(enemy_Bomb->GetBombAABB(), player_->GetAABB()) && !enemy->IsDead()) {
 				player_->IsDamage();
 				player_->KnockBackPlayer(enemy_Bomb->GetDistance(), 0.8f);
@@ -291,13 +291,13 @@ void IScene::CollisionCommon() {
 	}
 
 	for (auto& stage : stagesAABB) {
-		for (PlayerBullet* bullet : player_->GetBullets()) {
+		for (auto& bullet : player_->GetBullets()) {
 			if (IsCollisionAABB(bullet->GetAABB(), stage)) {
 				bullet->IsHit();
 			}
 		}
 
-		for (IEnemy* enemy : enemies) {
+		for (std::unique_ptr<IEnemy>& enemy : enemies) {
 			for (EnemyBullet* bulletE : enemy->GetBullets()) {
 				if (IsCollisionAABB(bulletE->GetAABB(), stage)) {
 					bulletE->IsHit();
