@@ -1,4 +1,4 @@
-name : DebugBuild
+name: DebugBuild
 
 #発動条件/マスターにマージした時
 on:
@@ -13,7 +13,7 @@ env:
 
 jobs:
   build:
-    runs-on: Windows-2022
+    runs-on: windows-2022
 
     steps:
       - name: Checkout
@@ -25,5 +25,5 @@ jobs:
 
       - name: Build
         run: |
-          msbuild ${{env.SOLUTION_FILE_PATH}} /p:Platform=x64,Configuration=${{emv.CONFIGURATION}}
+          msbuild ${{env.SOLUTION_FILE_PATH}} /p:Platform=x64,Configuration=${{env.CONFIGURATION}}
   
