@@ -8,6 +8,9 @@ public:
 	void Initialize(DirectXCommon* dxCommon) override;
 	void Command() override;
 
+	void SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu);
+	void Degress(float value);
+
 	struct Threshold {
 		float degress;
 		float egdeSize;
@@ -31,6 +34,13 @@ private:
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> dissolveResource;
 	
+	Microsoft::WRL::ComPtr<ID3D12Resource> backGroundResource;
+
+	D3D12_CPU_DESCRIPTOR_HANDLE TextureCPU;
+	D3D12_GPU_DESCRIPTOR_HANDLE TextureGPU;
+	bool isFade = false;
+
+
 	Threshold* threshold;
 	bool isChangeMask = false;
 };

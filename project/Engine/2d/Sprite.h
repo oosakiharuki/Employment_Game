@@ -48,6 +48,8 @@ public:
 
 	void SetTextureFile(const std::string textureFile);
 
+	D3D12_GPU_DESCRIPTOR_HANDLE GetResource();
+
 private:
 	SpriteCommon* spriteCommon_ = nullptr;
 

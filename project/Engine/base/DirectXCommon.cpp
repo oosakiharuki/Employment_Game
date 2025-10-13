@@ -550,6 +550,10 @@ void DirectXCommon::PreDraw() {
 
 	PostEffectManager::GetInstance()->Command();
 
+}
+
+void DirectXCommon::FadePreDraw() {
+
 	//バリアを貼る対象のリソース。現在のバッファに対して行う
 	barrier.Transition.pResource = depthStencilResource.Get();//こいつ
 	//前の(現在の)ResourceState
@@ -558,10 +562,9 @@ void DirectXCommon::PreDraw() {
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_DEPTH_WRITE;
 	//TransitionBarrierを張る
 	commandList->ResourceBarrier(1, &barrier);
-	
+
 
 	///ここまで
-	
 }
 
 //更新後
