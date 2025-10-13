@@ -16,7 +16,10 @@ void SelectScene::Initialize() {
 }
 
 void SelectScene::Update() {
-
+	
+	//すぐにタイトルに
+	sceneNo = Title;
+	
 	if (isfadeStart) {
 		FadeScreen::GetInstance()->FedeIn();
 		if (!FadeScreen::GetInstance()->GetIsFadeing()) {

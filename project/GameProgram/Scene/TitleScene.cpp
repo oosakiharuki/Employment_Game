@@ -112,7 +112,7 @@ void TitleScene::Update() {
 
 	}
 	else {
-		wts[0].translation_.y -= gravity;
+		wts[0].translation_.y -= gravity - 1.0f;
 	}
 
 	sprite_Moji_Title->SetPosition(Title_pos);
