@@ -14,19 +14,26 @@ FadeScreen* FadeScreen::GetInstance() {
 
 void FadeScreen::Initialize() {
 	sprite = std::make_unique<Sprite>();
-	sprite->Initialize("white.png");
+	sprite->Initialize("fadeTexture.png");
 	sprite->SetSize({ 1280,720 });
+
+	postEffect_ = std::make_unique<Dissolve>();
+	postEffect_->Initialize(DirectXCommon::GetInstance());
+
+	dissolve = dynamic_cast<Dissolve*>(postEffect_.get());
+	//フェードするテクスチャを導入
+	dissolve->SetBackGround(sprite->GetResource());
 }
 
 void FadeScreen::Update() {
 	sprite->Update();
 	sprite->SetColor(color);
+
+	dissolve->Degress(degress);
 }
 
 void FadeScreen::Draw() {
-	SpriteCommon::GetInstance()->Command();
-
-	sprite->Draw();
+	dissolve->Command();
 }
 
 void FadeScreen::Finalize() {
@@ -35,28 +42,24 @@ void FadeScreen::Finalize() {
 }
 
 void FadeScreen::FedeIn() {
-	if (color.s >= 1.0f) {
-		color.s = 1.0f;
+	if (degress <= 0.0f) {
+		degress = 0.0f;
 		isFading = false;
 		return;
 	}
 
-	color.s += t;
-
+	degress -= deltaTime;
 	isFading = true;
-
 }
 
 void FadeScreen::FedeOut() {
-	if (color.s <= 0.0f) {
-		color.s = 0.0f;
+	if (degress >= 1.0f) {
+		degress = 1.0f;
 		isFading = false;
 		return;
 	}
 
-	color.s -= t;
-
+	degress += deltaTime;
 	isFading = true;
-
 }
 

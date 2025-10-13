@@ -178,7 +178,15 @@ void Dissolve::Command() {
 	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature.Get());
 	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState.Get());
 	//通常の描画
-	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU);
+	
+	if (isFade) {
+		//特定のテクスチャ
+		dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(0, TextureGPU);
+	}
+	else {
+		dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU);
+	}
+	
 	//Dissolveの描画
 	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(1, TextureManager::GetInstance()->GetSrvHandleGPU(textureFileName));
 	//溶ける度合
@@ -236,4 +244,17 @@ void Dissolve::EffectUpdate() {
 		textureFileName = "resource/Sprite/noise0.png";
 		TextureManager::GetInstance()->LoadTexture(textureFileName);
 	}
+}
+
+void Dissolve::SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu) {
+
+	TextureGPU = gpu;
+	isFade = true;
+
+	textureFileName = "resource/Sprite/fade01.png";
+	TextureManager::GetInstance()->LoadTexture(textureFileName);
+}
+
+void Dissolve::Degress(float value) {
+	threshold->degress = value;
 }

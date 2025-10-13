@@ -52,6 +52,8 @@ void MyGame::Draw() {
 	//フェード
 	fadeScreen->Draw();
 
+	DirectXCommon::GetInstance()->FadePreDraw();
+
 #ifdef  USE_IMGUI
 	//ImGui描画処理
 	ImGuiManager::GetInstance()->Draw();

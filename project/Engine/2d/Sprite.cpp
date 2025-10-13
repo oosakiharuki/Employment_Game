@@ -152,3 +152,7 @@ void Sprite::SetTextureFile(const std::string textureFile) {
 	TextureManager::GetInstance()->LoadTexture(filePath);
 
 }
+
+D3D12_GPU_DESCRIPTOR_HANDLE Sprite::GetResource() {
+	return TextureManager::GetInstance()->GetSrvHandleGPU(filePath);
+}

@@ -74,6 +74,8 @@ public:
 	void RenderTexturePreDraw();
 	void RenderTexturePostDraw();
 
+	void FadePreDraw();
+
 	void Finalize();
 
 	//最大SRV数
