@@ -54,8 +54,10 @@ public:
 		std::vector<ObjectData> objects;
 		std::vector<PlayerSpawnData> players;
 		std::vector<EnemySpawnData> spawnEnemies;
-		CameraInitData cameraInit;
+		std::vector<CameraInitData> cameraInit;
 		std::vector<StageObjectData> stageObjects;
+
+		std::vector<AABB> eventTriggerAABBs;
 	};
 
 	LevelData* GetLevelData() { return levelData; }

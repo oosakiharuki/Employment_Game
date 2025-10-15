@@ -61,6 +61,10 @@ protected:
 	//ステージの足場
 	std::vector<AABB> stagesAABB;
 
+	//
+	std::vector<AABB> eventTriggerAABBs;
+	bool isEvent = false;
+
 	//テスト音源
 	SoundData BGMData_;
 	float volume = 0.3f;

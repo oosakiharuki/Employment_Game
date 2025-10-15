@@ -13,12 +13,12 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 
 	camera = std::make_unique<Camera>();
 
-	cameraRotate = levelediter.GetLevelData()->cameraInit.rotation;
-	cameraTranslate = levelediter.GetLevelData()->cameraInit.translation;
+	cameraRotate = levelediter.GetLevelData()->cameraInit[0].rotation;
+	cameraTranslate = levelediter.GetLevelData()->cameraInit[0].translation;
 
 	//カメラの最小/最大地点
-	cameraPoint1 = levelediter.GetLevelData()->cameraInit.Point1;
-	cameraPoint2 = levelediter.GetLevelData()->cameraInit.Point2;
+	cameraPoint1 = levelediter.GetLevelData()->cameraInit[0].Point1;
+	cameraPoint2 = levelediter.GetLevelData()->cameraInit[0].Point2;
 
 	camera->SetRotate(cameraRotate);
 	camera->SetTranslate(cameraTranslate);
@@ -74,6 +74,11 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 		}
 	}
 
+	//
+	if (!levelediter.GetLevelData()->eventTriggerAABBs.empty()) {
+		eventTriggerAABBs.swap(levelediter.GetLevelData()->eventTriggerAABBs);
+	}
+
 	if (!levelediter.GetLevelData()->objects.empty()) {
 		for (auto& object : levelediter.GetLevelData()->objects) {
 
@@ -87,7 +92,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 		}
 	}
 
-	//チェックポイント地点
+	//ステージオブジェクト地点
 	if (!levelediter.GetLevelData()->stageObjects.empty()) {
 		for (auto& stageObjectData : levelediter.GetLevelData()->stageObjects) {
 			std::unique_ptr<IStageObject> stageObject;
@@ -306,6 +311,27 @@ void IScene::CollisionCommon() {
 		}
 
 	}
+
+	//イベントトリガー
+	for (auto& eventTrigger : eventTriggerAABBs) {
+		if (IsCollisionAABB(player_->GetAABB(), eventTrigger)) {
+			cameraRotate = levelediter.GetLevelData()->cameraInit[1].rotation;
+			cameraTranslate = levelediter.GetLevelData()->cameraInit[1].translation;
+
+			//カメラの最小/最大地点
+			cameraPoint1 = levelediter.GetLevelData()->cameraInit[1].Point1;
+			cameraPoint2 = levelediter.GetLevelData()->cameraInit[1].Point2;
+
+
+			camera->SetRotate(cameraRotate);
+			camera->SetTranslate(cameraTranslate);
+
+			isEvent = true;
+		}
+	}
+
+
+
 
 	Vector3 shadowPos = { 0,0,0 };
 

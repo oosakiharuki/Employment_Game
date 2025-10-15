@@ -91,6 +91,19 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				objectData.colliderAABB.min = center - (size * objectData.scaling / 2.0f);
 				objectData.colliderAABB.max = center + (size * objectData.scaling / 2.0f);
 			}
+
+			nlohmann::json& trigger = object["event_trigger"];
+
+			if (trigger != nullptr) {
+				Vector3 center = { (float)trigger["center"][0],(float)trigger["center"][2],(float)trigger["center"][1] };
+				Vector3 size = { (float)trigger["size"][0],(float)trigger["size"][2],(float)trigger["size"][1] };
+
+				levelData->eventTriggerAABBs.emplace_back(AABB{});
+				AABB& eventTrigger = levelData->eventTriggerAABBs.back();
+
+				eventTrigger.min = objectData.translation + center - size;
+				eventTrigger.max = objectData.translation + center + size;
+			}
 		}
 		else if (type.compare("PlayerSpawn") == 0) {
 			//要素追加
@@ -185,9 +198,9 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 		}
 		else if (type.compare("CAMERA") == 0) {
 			//要素追加
-			levelData->cameraInit = LevelData::CameraInitData{};
+			levelData->cameraInit.emplace_back(LevelData::CameraInitData{});
 			//
-			LevelData::CameraInitData& cameraInitData = levelData->cameraInit;
+			LevelData::CameraInitData& cameraInitData = levelData->cameraInit.back();
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			//移動

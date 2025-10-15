@@ -4,11 +4,11 @@ using namespace MyMath;
 
 void GameScene::Initialize() {
 
-	LevelEditorObjectSetting("resource/Levelediter/stage_0.json");
+	LevelEditorObjectSetting("resource/Levelediter/stage_1.json");
 
 	stageobj = std::make_unique<Object3d>();
 	stageobj->Initialize();
-	stageobj->SetModelFile("stage_0.obj");
+	stageobj->SetModelFile("stage_1.obj");
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
@@ -167,11 +167,13 @@ void GameScene::Update() {
 			worldTransformCamera_.translation_.x = cameraTranslate.x + cameraPoint2.x;
 		}
 
-		if (cameraTranslate.y < player_->GetTranslate().y + 6.0f) {
-			worldTransformCamera_.translation_.y = player_->GetTranslate().y + 6.0f;
-		}
-		else {
-			worldTransformCamera_.translation_.y = cameraTranslate.y;
+		if (!isEvent) {
+			if (cameraTranslate.y < player_->GetTranslate().y + 6.0f) {
+				worldTransformCamera_.translation_.y = player_->GetTranslate().y + 6.0f;
+			}
+			else {
+				worldTransformCamera_.translation_.y = cameraTranslate.y;
+			}
 		}
 
 		camera->SetTranslate(worldTransformCamera_.translation_);
