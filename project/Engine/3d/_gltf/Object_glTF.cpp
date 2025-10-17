@@ -402,6 +402,10 @@ void Object_glTF::ChangeAnimation(const std::string& filePath) {
 			preAnimation_.duration = 0.9f;
 		}
 	}
+
+	//初期環境マップ
+	TextureManager::GetInstance()->LoadTexture("resource/rostock_laage_airport_4k.dds");
+	model->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 }
 
 void Object_glTF::Interpolation(Skeleton& skeleton, const Animation& animation, const Animation& nextAnimation, float animationTime) {

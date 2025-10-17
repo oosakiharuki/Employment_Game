@@ -16,7 +16,7 @@ void SelectScene::Initialize() {
 }
 
 void SelectScene::Update() {
-
+	
 	if (isfadeStart) {
 		FadeScreen::GetInstance()->FedeIn();
 		if (!FadeScreen::GetInstance()->GetIsFadeing()) {

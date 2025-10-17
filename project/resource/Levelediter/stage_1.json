@@ -900,53 +900,6 @@
         },
         {
             "type": "EnemySpawn",
-            "EnemyName": "Bomb",
-            "name": "EnemySpawn.003",
-            "transform": {
-                "translation": [
-                    45.0,
-                    0.0,
-                    15.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    3.0
-                ]
-            },
-            "travel_route": {
-                "start": [
-                    -2.0,
-                    0.0,
-                    0.0
-                ],
-                "end": [
-                    2.0,
-                    0.0,
-                    0.0
-                ]
-            }
-        },
-        {
-            "type": "EnemySpawn",
             "EnemyName": "Turret",
             "name": "EnemySpawn.004",
             "transform": {
@@ -1140,7 +1093,7 @@
                 "translation": [
                     30.02124786376953,
                     -8.911773647923837e-07,
-                    32.151451110839844
+                    36.1515007019043
                 ],
                 "rotation": [
                     0.0,
@@ -1164,6 +1117,60 @@
                     2.0,
                     2.0,
                     2.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "ICO球",
+            "transform": {
+                "translation": [
+                    30.0,
+                    7.0,
+                    20.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "event_trigger": {
+                "center": [
+                    0.0,
+                    -7.0,
+                    0.0
+                ],
+                "size": [
+                    24.0,
+                    20.0,
+                    14.0
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "Camera.001",
+            "transform": {
+                "translation": [
+                    30.0,
+                    -47.0,
+                    23.45359992980957
+                ],
+                "rotation": [
+                    84.99999237060547,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
                 ]
             }
         }
