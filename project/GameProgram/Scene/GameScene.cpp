@@ -188,8 +188,15 @@ void GameScene::Update() {
 
 	//カメラの移動範囲
 
+	
+	//イベント中はカメラが固定
+	if (isEvent) {
+		//カメラ固定
+		worldTransformCamera_.rotation_ = cameraRotate;
+		worldTransformCamera_.translation_ = cameraTranslate;
+	}
 	//次ステージ移動時はズームされるのでここは除外
-	if (!isNextStage) {
+	else if (!isNextStage) {
 		if (cameraTranslate.x + cameraPoint1.x < player_->GetTranslate().x && cameraTranslate.x + cameraPoint2.x > player_->GetTranslate().x) {
 			worldTransformCamera_.translation_.x = player_->GetTranslate().x;
 		}
@@ -200,18 +207,13 @@ void GameScene::Update() {
 			worldTransformCamera_.translation_.x = cameraTranslate.x + cameraPoint2.x;
 		}
 
-		if (!isEvent) {
-			if (cameraTranslate.y < player_->GetTranslate().y + 6.0f) {
-				worldTransformCamera_.translation_.y = player_->GetTranslate().y + 6.0f;
-			}
-			else {
-				worldTransformCamera_.translation_.y = cameraTranslate.y;
-			}
+		if (cameraTranslate.y < player_->GetTranslate().y + 6.0f) {
+			worldTransformCamera_.translation_.y = player_->GetTranslate().y + 6.0f;
 		}
-
-		camera->SetTranslate(worldTransformCamera_.translation_);
+		else {
+			worldTransformCamera_.translation_.y = cameraTranslate.y;
+		}	
 	}
-
 
 
 	if (player_->GetTranslate().y < -10.0f) {
@@ -222,6 +224,9 @@ void GameScene::Update() {
 
 	wt.UpdateMatrix();
 	worldTransformCamera_.UpdateMatrix();
+
+	camera->SetRotate(worldTransformCamera_.rotation_);
+	camera->SetTranslate(worldTransformCamera_.translation_);
 
 
 #ifdef  USE_IMGUI
