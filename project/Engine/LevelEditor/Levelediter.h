@@ -50,6 +50,10 @@ public:
 			AABB colliderAABB;
 		};
 
+		struct EventTriggerData {
+			Vector3 center;
+			AABB collisionAABB;
+		};
 
 		std::vector<ObjectData> objects;
 		std::vector<PlayerSpawnData> players;
@@ -57,7 +61,7 @@ public:
 		std::vector<CameraInitData> cameraInit;
 		std::vector<StageObjectData> stageObjects;
 
-		std::vector<AABB> eventTriggerAABBs;
+		std::vector<EventTriggerData> eventTriggers;
 	};
 
 	LevelData* GetLevelData() { return levelData; }

@@ -1,5 +1,5 @@
 #include "GameScene.h"
-
+#include <sstream>
 using namespace MyMath;
 
 void GameScene::Initialize() {
@@ -117,6 +117,15 @@ void GameScene::Update() {
 		}
 	}
 
+	if (isEvent) {
+		if (isLoadCsv) {
+			//Csvを読み込む
+			LoadEventCSV("resource/event.csv");
+		}
+		//敵召喚
+		PopEventEneies();
+	}
+
 	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
 	if (player_->GetIsPlayerDown() && player_->GetIsRespown()) {
 
@@ -130,6 +139,30 @@ void GameScene::Update() {
 		else {
 			isGameOver = true;
 			isfadeStart = true;
+		}
+
+		//強制イベント中の場合
+		if (isEvent) {
+			//イベント終了
+			isEvent = false;
+			eventWave = false;
+			//次に読み込めるように
+			isLoadCsv = true;
+			//カメラを元(メインカメラ)に戻す
+			MainCamera();
+
+			//召喚敵を最後尾から消す
+			for (uint32_t i = 0; i < enemyBornCount; i++) {
+				enemies.pop_back();
+			}
+
+			enemyBornCount = 0;
+
+			//リセット
+			enemyPopCsvFile.clear();
+			//最初の行にする
+			enemyPopCsvFile.seekg(0, std::ios_base::beg);
+
 		}
 	}
 	
@@ -280,3 +313,153 @@ void GameScene::StageMovement(const std::string leveleditor_file, const std::str
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
 }
 
+void GameScene::LoadEventCSV(std::string fileName) {
+
+	std::ifstream file;
+	
+	file.open(fileName);
+	assert(file.is_open());
+
+	enemyPopCsvFile << file.rdbuf();//fileをコピー
+
+	file.close();
+
+	//読み込みをなくす
+	isLoadCsv = false;
+}
+
+void GameScene::PopEventEneies() {
+
+	//敵の倒した数リセット(↓で無限に増えるから)
+	enemyDeadCount = 0;
+
+	//召喚した敵を倒すカウント
+	//召喚は敵配列の最後尾から数える
+	for (uint32_t number = (uint32_t)enemies.size() - 1; number >= enemies.size() - enemyBornCount; number--) {
+		//召喚した敵を倒した判定
+		if (enemies[number]->GetDeleteEnemy()) {
+			enemyDeadCount++;//倒した数だけプラスされる
+		}
+	}
+	
+	//倒した数と召喚した数が同じ
+	if (enemyDeadCount == enemyBornCount) {
+		//次のウェーブに進む
+		eventWave = false;	
+		//召喚敵を最後尾から消す
+		for (uint32_t i = 0; i < enemyBornCount;i++) {
+			enemies.pop_back();
+		}
+		//生んだ数初期化
+		enemyBornCount = 0;
+	}
+
+	if (eventWave) {
+		return;
+	}
+
+	std::string line;
+
+	while (getline(enemyPopCsvFile,line)) {
+
+		std::istringstream line_stream(line);
+		std::string word;
+
+		getline(line_stream, word, ',');
+
+		//コメントはパス
+		if (word.find("//") == 0) {
+			continue;
+		}
+
+		//終了
+		if (word.find("end") == 0) {
+			//イベント終了
+			isEvent = false;
+			//次に読み込めるように
+			isLoadCsv = true;
+			//当たり判定を消す
+			eventTriggerAABBs.erase(eventTriggerAABBs.begin());
+
+			//カメラを元(メインカメラ)に戻す
+			MainCamera();
+
+			//リセット
+			enemyPopCsvFile.clear();
+
+			break;
+		}
+
+		//ウェーブの配分
+		if (word.find("wave") == 0) {
+			eventWave = true;
+			break;
+		}
+
+		//敵の配置
+		if (word.find("pop") == 0) {
+
+			std::string enemyName;
+			//敵の名前
+			getline(line_stream, word, ',');
+			enemyName = word.c_str();
+
+			Vector3 position;
+			//召喚位置.x
+			getline(line_stream, word, ',');
+			position.x = (float)std::atof(word.c_str());
+
+			//召喚位置.y
+			getline(line_stream, word, ',');
+			position.y = (float)std::atof(word.c_str());
+
+			//トリガーの中心地点から足していく
+			position += eventTriggerCenters;
+
+			//召喚位置.zは使わないので0に
+			position.z = 0.0f;
+
+			Vector3 rotate = { 0,0,0 };
+
+			
+			getline(line_stream, word, ',');
+			if (word.find("right") == 0) {
+				rotate.y = 90.0f;
+			}
+			else if (word.find("left") == 0) {
+				rotate.y = -90.0f;
+			}
+
+			//敵召喚
+			EnemyPop(position, rotate, enemyName);
+		}
+	}
+
+}
+
+void GameScene::EnemyPop(const Vector3& position, const Vector3& rotation, const std::string& name) {
+	std::unique_ptr<IEnemy> popEnemy;
+
+	if (name == "soldier") {
+		popEnemy = std::make_unique<Enemy_Soldier>();
+	}
+	else if (name == "turret") {
+		popEnemy = std::make_unique<Enemy_Turret>();
+	}
+
+	popEnemy->Initialize();
+	popEnemy->SetTranslate(position);
+	popEnemy->SetRotate(rotation);
+	
+	//敵の当たり判定更新
+	AABB aabb;
+	aabb.min = { -1.0f,-1.0f,-1.5f };
+	aabb.max = { 1.0f,1.0f,1.5f };
+
+	popEnemy->SetAABB(aabb);
+	
+	enemies.push_back(std::move(popEnemy));
+	
+	//敵の数
+	enemyBornCount++;
+}

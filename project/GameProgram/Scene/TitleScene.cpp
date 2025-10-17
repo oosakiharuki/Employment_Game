@@ -1,14 +1,8 @@
 #include "TitleScene.h"
-#include "LoadingModels.h"
 
 using namespace MyMath;
 
 void TitleScene::Initialize() {
-	//objectをローディング
-	LoadingModels::GetInstance()->LoadObjects();
-	LoadingModels::GetInstance()->Finalize();
-
-	TextureManager::GetInstance()->LoadTexture("resource/rostock_laage_airport_4k.dds");
 
 	//player
 	wts[0].Initialize();

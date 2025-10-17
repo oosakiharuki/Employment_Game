@@ -1,0 +1,11 @@
+//敵の名前,座標x,座標y,向き(right/left)
+pop,soldier,10,1,left
+wave
+pop,soldier,-10,1,right
+wave
+pop,turret,10,1,left
+pop,turret,-10,1,right
+wave
+pop,soldier,10,1,left
+wave
+end

@@ -1,7 +1,7 @@
 #include "IScene.h"
 using namespace MyMath;
 
-int IScene::sceneNo = Title;
+int IScene::sceneNo = Game;
 
 IScene::~IScene(){}
 
@@ -13,15 +13,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 
 	camera = std::make_unique<Camera>();
 
-	cameraRotate = levelediter.GetLevelData()->cameraInit[0].rotation;
-	cameraTranslate = levelediter.GetLevelData()->cameraInit[0].translation;
-
-	//カメラの最小/最大地点
-	cameraPoint1 = levelediter.GetLevelData()->cameraInit[0].Point1;
-	cameraPoint2 = levelediter.GetLevelData()->cameraInit[0].Point2;
-
-	camera->SetRotate(cameraRotate);
-	camera->SetTranslate(cameraTranslate);
+	MainCamera();
 
 	Object3dCommon::GetInstance()->SetDefaultCamera(camera.get());
 	GLTFCommon::GetInstance()->SetDefaultCamera(camera.get());
@@ -75,8 +67,11 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	}
 
 	//
-	if (!levelediter.GetLevelData()->eventTriggerAABBs.empty()) {
-		eventTriggerAABBs.swap(levelediter.GetLevelData()->eventTriggerAABBs);
+	if (!levelediter.GetLevelData()->eventTriggers.empty()) {
+		for (auto& eventTrigger : levelediter.GetLevelData()->eventTriggers) {
+			eventTriggerAABBs.push_back(eventTrigger.collisionAABB);
+			eventTriggerCenters = eventTrigger.center;
+		}
 	}
 
 	if (!levelediter.GetLevelData()->objects.empty()) {
@@ -371,4 +366,19 @@ Vector3 IScene::ShadowCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Ve
 	result.y = minY;
 
 	return result;
+}
+
+void IScene::MainCamera() {
+	//座標と回転
+	cameraRotate = levelediter.GetLevelData()->cameraInit[0].rotation;
+	cameraTranslate = levelediter.GetLevelData()->cameraInit[0].translation;
+
+	//カメラの最小/最大地点
+	cameraPoint1 = levelediter.GetLevelData()->cameraInit[0].Point1;
+	cameraPoint2 = levelediter.GetLevelData()->cameraInit[0].Point2;
+
+	//導入
+	camera->SetRotate(cameraRotate);
+	camera->SetTranslate(cameraTranslate);
+
 }

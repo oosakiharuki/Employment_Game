@@ -35,4 +35,30 @@ private:
 	Segment cameraSegment{};
 	float zumuTimer = 0.0f;
 	//bool isZumuIn = false;
+
+	void LoadEventCSV(std::string file);
+
+	std::stringstream enemyPopCsvFile;
+
+	void PopEventEneies();
+	bool eventWave = false;
+	
+	//敵を生んだ・倒した数
+	uint32_t enemyBornCount = 0;
+	uint32_t enemyDeadCount = 0;
+
+	bool isLoadCsv = true;
+
+	/// <summary>
+	/// 敵の召喚処理
+	/// </summary>
+	/// <param name="position"></param>
+	/// 召喚位置
+	/// <param name="position"></param>
+	/// 向き
+	/// <param name="name"></param>
+	/// 敵の名前
+	void EnemyPop(const Vector3& position,const Vector3& rotation,const std::string& name);
+
+	//std::vector<std::unique_ptr<IEnemy>> eventEnmeies;
 };

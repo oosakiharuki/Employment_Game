@@ -51,7 +51,7 @@ protected:
 
 	std::unique_ptr<Player> player_ = nullptr;
 
-	std::list<std::unique_ptr<IEnemy>> enemies;
+	std::vector<std::unique_ptr<IEnemy>> enemies;
 
 	std::list<std::unique_ptr<IStageObject>> stageObjects;
 
@@ -63,11 +63,13 @@ protected:
 
 	//
 	std::vector<AABB> eventTriggerAABBs;
+	Vector3 eventTriggerCenters;
+
 	bool isEvent = false;
 
 	//テスト音源
 	SoundData BGMData_;
-	float volume = 0.3f;
+	float volume = 0.02f;
 
 	std::unique_ptr<BoxModel> skyBox = nullptr;
 
@@ -83,7 +85,11 @@ protected:
 	bool isGameEnd = false;
 
 
-	Vector3 ShadowCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position);
+	/// <summary>
+	/// メインカメラ(プレイヤー中心カメラ)
+	/// </summary>
+	void MainCamera();
+
 public:
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;
@@ -95,4 +101,20 @@ public:
 	int GetSceneNo();
 
 	bool GetIsGameEnd() { return isGameEnd; }
+
+private:
+	/// <summary>
+	/// 対象(プレイヤー、敵など)
+	/// 影の当たり判定
+	/// </summary>
+	/// <param name="stageAABB"></param>
+	/// ステージ地面の全体
+	/// <param name="shadowAABB"></param>
+	/// 対象の影
+	/// <param name="position"></param>
+	/// 対象の場所
+	/// <returns></returns>
+	/// 対象から一番近い地面の上
+	Vector3 ShadowCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position);
+
 };

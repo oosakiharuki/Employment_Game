@@ -1,10 +1,16 @@
 #include "GameManager.h"
+#include "LoadingModels.h"
 
 GameManager::GameManager() {
-	sceneArr_[Title] = new TitleScene();
+	//objectをローディング
+	LoadingModels::GetInstance()->LoadObjects();
+	LoadingModels::GetInstance()->Finalize();
+
+
+	sceneArr_[Game] = new GameScene();
 
 	prevSceneNo_ = 0;
-	currentSceneNo_ = Title;
+	currentSceneNo_ = Game;
 }
 
 GameManager::~GameManager() {
