@@ -69,8 +69,11 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	//
 	if (!levelediter.GetLevelData()->eventTriggers.empty()) {
 		for (auto& eventTrigger : levelediter.GetLevelData()->eventTriggers) {
-			eventTriggerAABBs.push_back(eventTrigger.collisionAABB);
-			eventTriggerCenters = eventTrigger.center;
+			EventTrigger iterator;
+			iterator.aabb = eventTrigger.collisionAABB;
+			iterator.center = eventTrigger.center;
+			iterator.csvFile = eventTrigger.csvFile;
+			eventTriggers.push_back(iterator);
 		}
 	}
 
@@ -179,111 +182,66 @@ void IScene::CollisionCommon() {
 
 	///当たり判定
 
-	bool isWall = false;
-	bool isGround = false;
 	player_->IsGround(false);
 
+	CollisionOverlap playerCollisionOverlap;
+	playerCollisionOverlap.targetAABB = player_->GetAABB();
+	playerCollisionOverlap.position = player_->GetTranslate();
 
+	//プレイヤーとステージ
 	for (auto& stage : stagesAABB) {
-		AABB playerAABB = player_->GetAABB();
+		if (IsCollisionAABB(playerCollisionOverlap.targetAABB, stage)) {
 
-		if (IsCollisionAABB(playerAABB, stage)) {
+			//ステージ判定代入
+			playerCollisionOverlap.stageAABB = stage;
+			//重なった部分
+			playerCollisionOverlap.overlap = OverAABB(player_->GetAABB(), stage);
+			//場所を戻す・壁と床の判定
+			playerCollisionOverlap = BackPosition(playerCollisionOverlap);
 
-			Vector3 position = player_->GetTranslate();
-			Vector3 overlap = OverAABB(player_->GetAABB(), stage);
-
-			// 重なりが最小の軸で押し戻しを行う	
-			if (overlap.x < overlap.y) {
-				//真ん中の座標を代入
-				float playerCenterX = (playerAABB.min.x + playerAABB.max.x) * 0.5f;
-				float obstacleCenterX = (stage.min.x + stage.max.x) * 0.5f;
-				//真ん中から 右の場合 - / 左の場合 +
-				float push = (playerCenterX < obstacleCenterX) ? -overlap.x : overlap.x;
-
-				position.x += push;
-				isWall = true;
+			//床の判定がtrueの場合
+			if (playerCollisionOverlap.isGround) {
+				//地面にいる判定
+				player_->IsGround(true);
+				player_->GrabityZero();//重力を0に
 			}
-			else if (overlap.y < overlap.x) {
-				// 真ん中の座標を代入
-				float playerCenterY = (playerAABB.min.y + playerAABB.max.y) * 0.5f;
-				float obstacleCenterY = (stage.min.y + stage.max.y) * 0.5f;
-				//真ん中から 右の場合 - / 左の場合 +
-				float push = (playerCenterY < obstacleCenterY) ? -overlap.y : overlap.y;
 
-				//床 or 天井 (0以上は床、0未満は天井)
-				if (push >= 0.0f) {
-					position.y += push;
-					// 着地判定を立てる
-					player_->IsGround(true);
-					player_->GrabityZero();
-				}
-				else if (push < 0.0f) {
-					position.y += push;
-				}
-				isGround = true;
-			}
-			//z軸はいらないかも
-
-			player_->SetTranslate(position);
+			//戻った場所を代入
+			player_->SetTranslate(playerCollisionOverlap.position);
 
 			//両方ともtrueの時
-			if (isWall && isGround) {
+			if (playerCollisionOverlap.isWall && playerCollisionOverlap.isGround) {
 				break;
 			}
 		}
 	}
 
 
-	isWall = false;
-	isGround = false;
-
-	for (auto& enemy : enemies) {
+	for (auto& enemy : enemies) {	
 		enemy->IsGround(false);
+
+		CollisionOverlap enemyCollisionOverlap;
+		enemyCollisionOverlap.targetAABB = enemy->GetAABB();
+		enemyCollisionOverlap.position = enemy->GetTranslate();
+
 		for (auto& stage : stagesAABB) {
 
-			AABB enemyAABB = enemy->GetAABB();
+			if (IsCollisionAABB(enemyCollisionOverlap.targetAABB, stage)) {
 
-			if (IsCollisionAABB(enemyAABB, stage)) {
+				enemyCollisionOverlap.stageAABB = stage;
+				enemyCollisionOverlap.overlap = OverAABB(enemyCollisionOverlap.targetAABB, stage);
 
-				Vector3 position = enemy->GetTranslate();
-				Vector3 overlap = OverAABB(enemy->GetAABB(), stage);
+				enemyCollisionOverlap = BackPosition(enemyCollisionOverlap);
 
-				// 重なりが最小の軸で押し戻しを行う	
-				if (overlap.x < overlap.y) {
-					//真ん中の座標を代入
-					float enemyCenterX = (enemyAABB.min.x + enemyAABB.max.x) * 0.5f;
-					float obstacleCenterX = (stage.min.x + stage.max.x) * 0.5f;
-					//真ん中から 右の場合 - / 左の場合 +
-					float push = (enemyCenterX < obstacleCenterX) ? -overlap.x : overlap.x;
+				enemy->SetTranslate(enemyCollisionOverlap.position);
 
-					position.x += push;
-					isWall = true;
+				if (enemyCollisionOverlap.isGround) {
+					enemy->IsGround(true);
+					enemy->GrabityZero();
 				}
-				else if (overlap.y < overlap.x) {
-					// 真ん中の座標を代入
-					float enemyCenterY = (enemyAABB.min.y + enemyAABB.max.y) * 0.5f;
-					float obstacleCenterY = (stage.min.y + stage.max.y) * 0.5f;
-					//真ん中から 右の場合 - / 左の場合 +
-					float push = (enemyCenterY < obstacleCenterY) ? -overlap.y : overlap.y;
-
-					//床 or 天井 (0以上は床、0未満は天井)
-					if (push >= 0.0f) {
-						position.y += push;
-						// 着地判定を立てる
-						enemy->IsGround(true);
-						enemy->GrabityZero();
-					}
-					else if (push < 0.0f) {
-						position.y += push;
-					}
-					isGround = true;
-				}
-				//z軸はいらないかも
-
-				enemy->SetTranslate(position);
 
 				//両方ともtrueの時
-				if (isWall && isGround) {
+				if (enemyCollisionOverlap.isWall && enemyCollisionOverlap.isGround) {
 					break;
 				}
 			}
@@ -307,9 +265,38 @@ void IScene::CollisionCommon() {
 
 	}
 
+
+	playerCollisionOverlap.targetAABB = player_->GetAABB();
+	playerCollisionOverlap.position = player_->GetTranslate();
+
 	//イベントトリガー
-	for (auto& eventTrigger : eventTriggerAABBs) {
-		if (IsCollisionAABB(player_->GetAABB(), eventTrigger)) {
+	for (auto& eventTrigger : eventTriggers) {
+		//イベントが発動した時
+		if (eventTrigger.isEvent) {
+			//イベントトリガーの範囲外に出ないように(!IsCollisionAABB()によって外に出た判定をとる)
+			if (!IsCollisionAABB(playerCollisionOverlap.targetAABB, eventTrigger.aabb)) {
+				//ステージ判定代入
+				playerCollisionOverlap.stageAABB = eventTrigger.aabb;
+				//重なった部分
+				playerCollisionOverlap.overlap = OverAABB(player_->GetAABB(), eventTrigger.aabb);
+				//場所を戻す・壁と床の判定
+				playerCollisionOverlap = BackPosition(playerCollisionOverlap);
+
+				if (playerCollisionOverlap.isGround) {
+					player_->IsGround(true);
+					player_->GrabityZero();
+				}
+
+				//戻った場所を代入
+				player_->SetTranslate(playerCollisionOverlap.position);
+
+				//両方ともtrueの時
+				if (playerCollisionOverlap.isWall && playerCollisionOverlap.isGround) {
+					break;
+				}
+			}
+		}
+		else if (IsCollisionAABB(player_->GetAABB(), eventTrigger.aabb)) {
 			cameraRotate = levelediter.GetLevelData()->cameraInit[1].rotation;
 			cameraTranslate = levelediter.GetLevelData()->cameraInit[1].translation;
 
@@ -321,7 +308,7 @@ void IScene::CollisionCommon() {
 			camera->SetRotate(cameraRotate);
 			camera->SetTranslate(cameraTranslate);
 
-			isEvent = true;
+			eventTrigger.isEvent = true;
 		}
 	}
 
@@ -381,4 +368,41 @@ void IScene::MainCamera() {
 	camera->SetRotate(cameraRotate);
 	camera->SetTranslate(cameraTranslate);
 
+}
+
+CollisionOverlap IScene::BackPosition(CollisionOverlap collisionOverlap) {
+
+	CollisionOverlap collisionOverlap_ = collisionOverlap;
+
+	// 重なりが一番小さい軸の押し戻しを行う	
+	if (collisionOverlap_.overlap.x < collisionOverlap_.overlap.y) {
+		//真ん中の座標を代入
+		float targetCenterX = (collisionOverlap_.targetAABB.min.x + collisionOverlap_.targetAABB.max.x) * 0.5f;
+		float areaCenterX = (collisionOverlap_.stageAABB.min.x + collisionOverlap_.stageAABB.max.x) * 0.5f;
+		//真ん中から 右の場合 - / 左の場合 +
+		float push = (targetCenterX < areaCenterX) ? -collisionOverlap_.overlap.x : collisionOverlap_.overlap.x;
+
+		collisionOverlap_.position.x += push;
+		collisionOverlap_.isWall = true;
+	}
+	else if (collisionOverlap_.overlap.y < collisionOverlap_.overlap.x) {
+		// 真ん中の座標を代入
+		float targetCenterY = (collisionOverlap_.targetAABB.min.y + collisionOverlap_.targetAABB.max.y) * 0.5f;
+		float areaCenterY = (collisionOverlap_.stageAABB.min.y + collisionOverlap_.stageAABB.max.y) * 0.5f;
+		//真ん中から 右の場合 - / 左の場合 +
+		float push = (targetCenterY < areaCenterY) ? -collisionOverlap_.overlap.y : collisionOverlap_.overlap.y;
+
+		//床 or 天井 (0以上は床、0未満は天井)
+		if (push >= 0.0f) {
+			collisionOverlap_.position.y += push;
+			// 着地判定を立てる
+			collisionOverlap_.isGround = true;
+		}
+		else if (push < 0.0f) {
+			collisionOverlap_.position.y += push;
+		}
+	}
+	//z軸はいらないかも
+
+	return collisionOverlap_;
 }

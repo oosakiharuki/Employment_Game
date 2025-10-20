@@ -180,7 +180,7 @@ private:
 	bool isUmbrellaFall = false;
 
 	/// Hp
-	uint32_t MaxHp = 3;
+	uint32_t MaxHp = 30;
 	uint32_t Hp = MaxHp;
 	//ダメージを食らった後の無敵時間
 	float infinityTimer = 0.0f;

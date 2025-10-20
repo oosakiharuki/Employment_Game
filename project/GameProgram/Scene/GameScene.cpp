@@ -98,8 +98,6 @@ void GameScene::Update() {
 		enemy->Update();
 	}
 
-	CollisionCommon();
-
 	for (auto& stageObject : stageObjects) {
 		stageObject->Update();
 	}
@@ -117,13 +115,19 @@ void GameScene::Update() {
 		}
 	}
 
-	if (isEvent) {
-		if (isLoadCsv) {
-			//Csvを読み込む
-			LoadEventCSV("resource/event.csv");
+	//共有イベントフラグ
+	bool isEventCommon = false;
+
+	for (auto& eventTrigger : eventTriggers) {
+		if (eventTrigger.isEvent) {
+			if (isLoadCsv) {
+				//Csvを読み込む
+				LoadEventCSV(eventTrigger.csvFile);
+			}
+			//敵召喚
+			PopEventEneies(&eventTrigger);
+			isEventCommon = eventTrigger.isEvent;
 		}
-		//敵召喚
-		PopEventEneies();
 	}
 
 	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
@@ -142,9 +146,9 @@ void GameScene::Update() {
 		}
 
 		//強制イベント中の場合
-		if (isEvent) {
+		if (isEventCommon) {
 			//イベント終了
-			isEvent = false;
+			isEventCommon = false;
 			eventWave = false;
 			//次に読み込めるように
 			isLoadCsv = true;
@@ -166,6 +170,8 @@ void GameScene::Update() {
 		}
 	}
 	
+	CollisionCommon();
+
 	//
 	if (Input::GetInstance()->TriggerKey(DIK_F2)) {
 		sceneNo = Clear;
@@ -190,7 +196,7 @@ void GameScene::Update() {
 
 	
 	//イベント中はカメラが固定
-	if (isEvent) {
+	if (isEventCommon) {
 		//カメラ固定
 		worldTransformCamera_.rotation_ = cameraRotate;
 		worldTransformCamera_.translation_ = cameraTranslate;
@@ -333,7 +339,7 @@ void GameScene::LoadEventCSV(std::string fileName) {
 	isLoadCsv = false;
 }
 
-void GameScene::PopEventEneies() {
+void GameScene::PopEventEneies(EventTrigger* eventTrigger) {
 
 	//敵の倒した数リセット(↓で無限に増えるから)
 	enemyDeadCount = 0;
@@ -380,11 +386,11 @@ void GameScene::PopEventEneies() {
 		//終了
 		if (word.find("end") == 0) {
 			//イベント終了
-			isEvent = false;
+			eventTrigger->isEvent = false;
 			//次に読み込めるように
 			isLoadCsv = true;
 			//当たり判定を消す
-			eventTriggerAABBs.erase(eventTriggerAABBs.begin());
+			eventTriggers.erase(eventTriggers.begin());
 
 			//カメラを元(メインカメラ)に戻す
 			MainCamera();
@@ -419,7 +425,7 @@ void GameScene::PopEventEneies() {
 			position.y = (float)std::atof(word.c_str());
 
 			//トリガーの中心地点から足していく
-			position += eventTriggerCenters;
+			position += eventTrigger->center;
 
 			//召喚位置.zは使わないので0に
 			position.z = 0.0f;
@@ -450,6 +456,9 @@ void GameScene::EnemyPop(const Vector3& position, const Vector3& rotation, const
 	}
 	else if (name == "turret") {
 		popEnemy = std::make_unique<Enemy_Turret>();
+	}
+	else if (name == "bomb") {
+		popEnemy = std::make_unique<Enemy_Bomb>();
 	}
 
 	popEnemy->Initialize();

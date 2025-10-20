@@ -33,6 +33,23 @@ enum SCENE{
 };
 
 
+struct CollisionOverlap {
+	bool isWall = false;
+	bool isGround = false;
+	Vector3 position = { 0,0,0 };
+	Vector3 overlap = { 0,0,0 };
+	AABB targetAABB = { { 0,0,0 }, { 0,0,0 } };
+	AABB stageAABB = { { 0,0,0 }, { 0,0,0 } };
+};
+
+struct EventTrigger {
+	bool isEvent = false; //イベント発動フラグ
+	AABB aabb;            //イベント範囲
+	Vector3 center;       //真ん中
+	std::string csvFile;  //csvファイル
+};
+
+
 class IScene{
 protected:
 	static int sceneNo;
@@ -61,11 +78,8 @@ protected:
 	//ステージの足場
 	std::vector<AABB> stagesAABB;
 
-	//
-	std::vector<AABB> eventTriggerAABBs;
-	Vector3 eventTriggerCenters;
-
-	bool isEvent = false;
+	//イベントトリガー
+	std::vector<EventTrigger> eventTriggers;
 
 	//テスト音源
 	SoundData BGMData_;
@@ -117,4 +131,12 @@ private:
 	/// 対象から一番近い地面の上
 	Vector3 ShadowCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position);
 
+	/// <summary>
+	/// 対象の重なった分戻す
+	/// </summary>
+	/// <param name="collisionBack"></param>
+	/// 現在の対象の位置、重なった部分、壁/床のフラグが入ってある構造体
+	/// <returns></returns>
+	/// 現在の位置から重なる部分を引いた位置に、重なった部分が横なら壁で下なら床のフラグがtrueになる
+	CollisionOverlap BackPosition(CollisionOverlap collisionBack);
 };

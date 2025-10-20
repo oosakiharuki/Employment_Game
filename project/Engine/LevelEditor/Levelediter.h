@@ -53,6 +53,7 @@ public:
 		struct EventTriggerData {
 			Vector3 center;
 			AABB collisionAABB;
+			std::string csvFile;
 		};
 
 		std::vector<ObjectData> objects;

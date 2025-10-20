@@ -40,7 +40,7 @@ private:
 
 	std::stringstream enemyPopCsvFile;
 
-	void PopEventEneies();
+	void PopEventEneies(EventTrigger* eventTrigger);
 	bool eventWave = false;
 	
 	//敵を生んだ・倒した数
