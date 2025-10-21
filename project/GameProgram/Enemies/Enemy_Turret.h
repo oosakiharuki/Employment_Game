@@ -1,6 +1,9 @@
 #pragma once
 #include "IEnemy.h"
 
+/// <summary>
+/// ターレットの敵(IEnemyの派生クラス)
+/// </summary>
 class Enemy_Turret : public IEnemy {
 public:
 

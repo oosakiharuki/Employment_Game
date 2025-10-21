@@ -3,6 +3,9 @@
 #include "Framework.h"
 #include "IScene.h"
 
+/// <summary>
+/// クリアシーン(ISceneの派生クラス)
+/// </summary>
 class ClearScene : public IScene{
 public:
 	void Initialize() override;

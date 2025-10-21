@@ -1,6 +1,9 @@
 #pragma once
 #include "IStageObject.h"
 
+/// <summary>
+/// ゴール(IStageObjectの派生クラス)
+/// </summary>
 class Goal : public IStageObject {
 public:
 

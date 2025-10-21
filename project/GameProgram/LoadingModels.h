@@ -1,6 +1,9 @@
 #pragma once
 #include "ModelManager.h"
 
+/// <summary>
+/// モデルのロードをいっぺんにやる場所
+/// </summary>
 class LoadingModels {
 public:
 	static LoadingModels* GetInstance();

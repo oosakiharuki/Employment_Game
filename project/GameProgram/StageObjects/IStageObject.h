@@ -2,6 +2,9 @@
 #include "Object3d.h"
 #include "MyMath.h"
 
+/// <summary>
+/// ステージオブジェクト(ギミック)の基盤クラス
+/// </summary>
 class IStageObject {
 public:
 

@@ -2,6 +2,9 @@
 #include "Object3d.h"
 #include "MyMath.h"
 
+/// <summary>
+/// プレイヤーの弾丸
+/// </summary>
 class PlayerBullet {
 public:
 

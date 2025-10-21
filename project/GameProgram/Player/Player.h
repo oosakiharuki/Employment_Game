@@ -14,6 +14,9 @@
 #include "Shadow.h"
 #include "Sprite.h"
 
+/// <summary>
+/// プレイヤー
+/// </summary>
 class Player {
 public:
 	Player();

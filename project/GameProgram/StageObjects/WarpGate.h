@@ -1,6 +1,9 @@
 #pragma once
 #include "IStageObject.h"
 
+/// <summary>
+/// ワープゲート(IStageObjectの派生クラス)
+/// </summary>
 class WarpGate : public IStageObject
 {
 public:

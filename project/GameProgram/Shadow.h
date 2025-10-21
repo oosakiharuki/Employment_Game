@@ -3,6 +3,9 @@
 #include "Object_glTF.h"
 #include "MyMath.h"
 
+/// <summary>
+/// 影
+/// </summary>
 class Shadow {
 public:
 	~Shadow();

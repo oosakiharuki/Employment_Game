@@ -2,6 +2,9 @@
 #include "Framework.h"
 #include "IScene.h"
 
+/// <summary>
+/// ゲームオーバーシーン(ISceneの派生クラス)
+/// </summary>
 class GameOverScene : public IScene{
 public:
 	void Initialize() override;

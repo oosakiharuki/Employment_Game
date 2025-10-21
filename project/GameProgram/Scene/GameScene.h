@@ -1,6 +1,9 @@
 #pragma once
 #include "IScene.h"
 
+/// <summary>
+/// ゲームシーン(ISceneの派生クラス)
+/// </summary>
 class GameScene : public IScene {
 public:
 	void Initialize() override;

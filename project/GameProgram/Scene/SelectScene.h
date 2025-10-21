@@ -1,6 +1,9 @@
 #pragma once
 #include "IScene.h"
 
+/// <summary>
+/// セレクト(ステージ選択)シーン(ISceneの派生クラス)
+/// </summary>
 class SelectScene : public IScene{
 public:
 	void Initialize() override;

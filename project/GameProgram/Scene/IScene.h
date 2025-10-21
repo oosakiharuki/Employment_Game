@@ -23,7 +23,9 @@
 #include "ParticleNumber.h"
 #include "FadeScreen.h"
 
-
+/// <summary>
+/// シーンの種類
+/// </summary>
 enum SCENE{
 	Title,
 	Game,
@@ -32,7 +34,9 @@ enum SCENE{
 	GameOver,
 };
 
-
+/// <summary>
+/// 当たり判定:重なり部分を
+/// </summary>
 struct CollisionOverlap {
 	bool isWall = false;
 	bool isGround = false;
@@ -42,6 +46,9 @@ struct CollisionOverlap {
 	AABB stageAABB = { { 0,0,0 }, { 0,0,0 } };
 };
 
+/// <summary>
+/// イベントトリガーの構造体
+/// </summary>
 struct EventTrigger {
 	bool isEvent = false; //イベント発動フラグ
 	AABB aabb;            //イベント範囲
@@ -88,7 +95,9 @@ protected:
 
 	//レベルエディタで配置
 	void LevelEditorObjectSetting(const std::string leveleditor_file);
-	//全シーン共有できる当たり判定
+	/// <summary>
+	/// 全シーンに共有できる当たり判定
+	/// </summary>
 	void CollisionCommon();
 
 	//フェードスイッチ

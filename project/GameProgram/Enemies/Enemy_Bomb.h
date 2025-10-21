@@ -2,6 +2,9 @@
 #include "IEnemy.h"
 #include "MyMath.h"
 
+/// <summary>
+/// ボムの敵(IEnemyの派生クラス)
+/// </summary>
 class Enemy_Bomb : public IEnemy {
 public:
 	~Enemy_Bomb() override;
@@ -23,18 +26,19 @@ public:
 	Vector3 GetDistance() { return distance; }
 
 private:
-
+	//爆発開始
 	bool isStart = false;
 
-	const float bombTimeMax = 5.0f;
+	//爆発するまでのタイマー
+	const float bombTimeMax = 5.0f;//max
 	float bombTimer = 0.0f;
 
-	const float deltaTime = 1.0f / 60.0f;
-
+	//敵のスピード
 	Vector3 speed = { 0.03f,0.0f,0.0f };
 	Vector3 move = { 0,0,0 };
 
-	std::unique_ptr<Particle> particle_Bom;
+	//パーティクル
+	std::unique_ptr<Particle> particle_Bom;//爆発
 	AABB bombAABB;
 	Vector3 hani = { 3,3,3 };
 

@@ -1,7 +1,7 @@
-#include "GameManager.h"
+#include "SceneManager.h"
 #include "LoadingModels.h"
 
-GameManager::GameManager() {
+SceneManager::SceneManager() {
 	//objectをローディング
 	LoadingModels::GetInstance()->LoadObjects();
 	LoadingModels::GetInstance()->Finalize();
@@ -13,12 +13,12 @@ GameManager::GameManager() {
 	currentSceneNo_ = Select;
 }
 
-GameManager::~GameManager() {
+SceneManager::~SceneManager() {
 	sceneArr_[currentSceneNo_]->Finalize();
 	delete sceneArr_[currentSceneNo_];
 }
 
-void GameManager::SceneChange(int prev, int current) {
+void SceneManager::SceneChange(int prev, int current) {
 
 	//前のシーンの解放
 	sceneArr_[prev]->Finalize();
@@ -45,11 +45,11 @@ void GameManager::SceneChange(int prev, int current) {
 		break;
 	}
 }
-void GameManager::Initialize() {
+void SceneManager::Initialize() {
 	sceneArr_[currentSceneNo_]->Initialize();
 }
 
-void GameManager::Update() {
+void SceneManager::Update() {
 
 	prevSceneNo_ = currentSceneNo_;
 	currentSceneNo_ = sceneArr_[currentSceneNo_]->GetSceneNo();
@@ -62,6 +62,6 @@ void GameManager::Update() {
 	sceneArr_[currentSceneNo_]->Update();
 }
 
-void GameManager::Draw() {
+void SceneManager::Draw() {
 	sceneArr_[currentSceneNo_]->Draw();
 }

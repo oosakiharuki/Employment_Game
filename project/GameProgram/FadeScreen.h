@@ -2,6 +2,9 @@
 #include "Sprite.h"
 #include "Dissolve.h"
 
+/// <summary>
+/// フェードスクリーン
+/// </summary>
 class FadeScreen {
 public:
 	static FadeScreen* GetInstance();

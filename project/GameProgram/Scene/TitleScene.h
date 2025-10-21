@@ -3,6 +3,9 @@
 #include "Framework.h"
 #include "IScene.h"
 
+/// <summary>
+/// タイトルシーン(ISceneの派生クラス)
+/// </summary>
 class TitleScene : public IScene{
 public:
 	void Initialize() override;
