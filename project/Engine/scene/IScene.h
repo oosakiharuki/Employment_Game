@@ -73,7 +73,6 @@ protected:
 	std::list<std::unique_ptr<IStageObject>> stageObjects;
 
 	std::unique_ptr<Object3d> stageobj;
-	WorldTransform wt;
 
 	//ステージの足場
 	std::vector<AABB> stagesAABB;
@@ -98,6 +97,19 @@ protected:
 	//end
 	bool isGameEnd = false;
 
+	/// <summary>
+	/// 対象(プレイヤー、敵など)の真下の床の位置に
+	/// 影などで使用する
+	/// </summary>
+	/// <param name="stageAABB"></param>
+	/// ステージ地面の全体
+	/// <param name="shadowAABB"></param>
+	/// 対象の影
+	/// <param name="position"></param>
+	/// 対象の場所
+	/// <returns></returns>
+	/// 対象から一番近い地面の上
+	Vector3 UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position);
 
 	/// <summary>
 	/// メインカメラ(プレイヤー中心カメラ)
@@ -117,19 +129,6 @@ public:
 	bool GetIsGameEnd() { return isGameEnd; }
 
 private:
-	/// <summary>
-	/// 対象(プレイヤー、敵など)
-	/// 影の当たり判定
-	/// </summary>
-	/// <param name="stageAABB"></param>
-	/// ステージ地面の全体
-	/// <param name="shadowAABB"></param>
-	/// 対象の影
-	/// <param name="position"></param>
-	/// 対象の場所
-	/// <returns></returns>
-	/// 対象から一番近い地面の上
-	Vector3 ShadowCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position);
 
 	/// <summary>
 	/// 対象の重なった分戻す

@@ -1,7 +1,7 @@
 #include "IScene.h"
 using namespace MyMath;
 
-int IScene::sceneNo = Game;
+int IScene::sceneNo = Title;
 
 IScene::~IScene(){}
 
@@ -317,13 +317,13 @@ void IScene::CollisionCommon() {
 
 	Vector3 shadowPos = { 0,0,0 };
 
-	shadowPos = ShadowCollision(stagesAABB, player_->GetShadowAABB(), player_->GetTranslate());
+	shadowPos = UnderCollision(stagesAABB, player_->GetShadowAABB(), player_->GetTranslate());
 
 	player_->SetShadowPosition(shadowPos);
 	player_->ShadowUpdate();
 
 	for (auto& enemy : enemies) {
-		shadowPos = ShadowCollision(stagesAABB, enemy->GetShadowAABB(), enemy->GetTranslate());
+		shadowPos = UnderCollision(stagesAABB, enemy->GetShadowAABB(), enemy->GetTranslate());
 
 		enemy->SetShadowPosition(shadowPos);
 		enemy->ShadowUpdate();
@@ -332,7 +332,7 @@ void IScene::CollisionCommon() {
 	
 }
 
-Vector3 IScene::ShadowCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position) {
+Vector3 IScene::UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position) {
 	
 	float minY = 1000.0f;
 	float lengthMax = Length(position.y, minY);

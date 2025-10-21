@@ -7,10 +7,10 @@ GameManager::GameManager() {
 	LoadingModels::GetInstance()->Finalize();
 
 
-	sceneArr_[Game] = new GameScene();
+	sceneArr_[Select] = new SelectScene();
 
 	prevSceneNo_ = 0;
-	currentSceneNo_ = Game;
+	currentSceneNo_ = Select;
 }
 
 GameManager::~GameManager() {

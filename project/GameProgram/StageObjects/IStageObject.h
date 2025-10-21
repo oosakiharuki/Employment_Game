@@ -11,8 +11,11 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
-	Vector3 GetPosition() { return wt.translation_; }
-	void SetPosition(Vector3 position) { wt.translation_ = position; }
+	const Vector3& GetPosition() { return wt.translation_; }
+	void SetPosition(const Vector3& position) { wt.translation_ = position; }
+
+	const Vector3& GetRotation() { return wt.rotation_; }
+	void SetRotation(const Vector3& rotation) { wt.rotation_ = rotation; }
 
 	AABB GetAABB();
 	void SetAABB(AABB aabb) { aabb_ = aabb; }

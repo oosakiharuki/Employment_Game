@@ -14,7 +14,7 @@ private:
 	std::string stage_file;
 	void StageMovement(const std::string leveleditor_file, const std::string stageObj);
 	
-	//
+	//シーンチェンジ時に初期化されない用のプレイヤーHp保存場所
 	uint32_t playerHp;
 
 	SoundData soundData_;
@@ -30,6 +30,11 @@ private:
 	bool isNextStage = false;
 	std::string nextStage_fileName;
 	bool isChangeStage = true;
+
+	//スタート演出(水たまりから飛び出る感じに)
+	bool isStartStage = true;
+	Vector3 playerPoint{};
+	float startPointY = 0.0f;
 
 	//カメラズーム
 	Segment cameraSegment{};
@@ -48,6 +53,14 @@ private:
 	uint32_t enemyDeadCount = 0;
 
 	bool isLoadCsv = true;
+
+	//スタート時のワープゲート
+	std::unique_ptr<WarpGate> startWarp;
+
+	/// <summary>
+	/// 水たまりのようなワープゲート出口
+	/// </summary>
+	void WarterWarpExit();
 
 	/// <summary>
 	/// 敵の召喚処理

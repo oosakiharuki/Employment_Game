@@ -21,6 +21,7 @@ public:
 
 	void Initialize();
 	void Update(const WorldTransform& worldTransform);
+	void Update();
 	void Draw();
 	void Draw(const std::string& textureData);
 

@@ -405,11 +405,10 @@ void Player::Update() {
 	///アニメーション
 	if (isAnimationOnlyUpdate) {
 		animation_mode = Animation_Mode::mode_NextStage;
-		worldTransform.rotation_.y = 0.0f;
 	}
 	else if (isShield) {
 		animation_mode = Animation_Mode::mode_sield;
-	}
+	}//前回の座標と現在の座標が違う = 動いた場合
 	else if (worldTransform.translation_.x != PrePosition.x || worldTransform.translation_.y != PrePosition.y) {
 		animation_mode = Animation_Mode::mode_move;
 	}
@@ -417,11 +416,8 @@ void Player::Update() {
 		animation_mode = Animation_Mode::mode_stop;
 	}
 
+	//animationが変わった場合切り替える
 	if (animation_mode != PreAnimation_mode) {
-		isChangeAnimation = true;
-	}
-
-	if (isChangeAnimation) {
 		switch (animation_mode)
 		{
 		case Player::Animation_Mode::mode_stop:
@@ -442,12 +438,11 @@ void Player::Update() {
 		default:
 			break;
 		}
-		object->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 
 		PreAnimation_mode = animation_mode;
-		isChangeAnimation = false;
 	}
 	
+	//現在座標に前回座標を代入
 	PrePosition = worldTransform.translation_;
 
 	object->Update(worldTransform);
@@ -569,7 +564,7 @@ void Player::IsDamage() {
 		Hp--;
 		particle_damage->SetTranslate(worldTransform.translation_);
 		particle_damage->ChangeMode(BornParticle::MomentMode);
-		Audio::GetInstance()->SoundPlayWave(hitSound, 0.4f);
+		Audio::GetInstance()->SoundPlayWave(hitSound, 0.05f);
 		infinityTimer = 0.0f;
 		backPower = TransformNormal({ 0,0,0.5f } ,worldTransform.matWorld_);
 		isKnockback = true;
@@ -591,7 +586,7 @@ void Player::IsFall() {
 		return;
 	}
 	Hp--;
-	Audio::GetInstance()->SoundPlayWave(hitSound, 0.4f);
+	Audio::GetInstance()->SoundPlayWave(hitSound, 0.05f);
 }
 
 void Player::KnockBackPlayer(const Vector3 Power, const float TimerMax) {

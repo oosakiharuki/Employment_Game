@@ -84,6 +84,13 @@ void Object3d::Update(const WorldTransform& worldTransform) {
 	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
 }
 
+void Object3d::Update() {
+
+	wvpData->World = MakeIdentity4x4();
+	worldMatrix = MakeIdentity4x4();
+
+	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
+}
 
 void Object3d::Draw() {
 	if (camera) {

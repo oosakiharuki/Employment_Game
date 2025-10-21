@@ -41,23 +41,6 @@ public:
 
 	void ShootBullet();
 
-	enum Direction {
-		right,
-		left
-	};
-
-	///射程範囲 8方向(順番は上から時計回り)
-	enum Range {
-		Up,
-		UpRight,
-		Right,
-		DownRight,
-		Down,
-		DownLeft,
-		Left,
-		UpLeft,
-	};
-
 	//Getterはshared_ptrのほうが適任かも
 	std::list<std::shared_ptr<PlayerBullet>> GetBullets() {
 		return bullets_;
@@ -90,14 +73,6 @@ public:
 		isPlayerDown = false;
 	}
 
-	enum class Animation_Mode {
-		mode_stop,
-		mode_move,
-		mode_sield,
-		mode_damage,
-		mode_NextStage
-	};
-
 	bool GetIsPari() { return isPari; }
 	//パリィ成功 = 連続弾も跳ね返す
 	void PariSuccess();
@@ -115,9 +90,18 @@ public:
 	void SpriteUpdate();
 
 	void ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime);
+
+	//傘が当たったリアクションを取るとき
 	void IsShildMosion() { isShildMosion = true; }
 
-	void IsAnimationOnlyUpdate() { isAnimationOnlyUpdate = true; }
+	/// <summary>
+	/// アニメーションのみを動かす関数(演出で使う)
+	/// </summary>
+	/// <param name="anser"></param>
+	/// trueならアニメーションのみ / falseなら操作可能
+	void IsAnimationOnlyUpdate(const bool& anser) { isAnimationOnlyUpdate = anser; }
+
+	void IsJumping() { isJump = true; }
 
 private:
 	std::unique_ptr<Object_glTF> object;
@@ -147,10 +131,29 @@ private:
 	float coolMax = 0.5f;
 	uint32_t bulletCount = 3;
 	WorldTransform wtGun;
+	
 	//プレイヤーの向き
+	enum Direction {
+		right,//右
+		left  //左
+	};
+
+	///射程範囲 8方向(順番は上から時計回り)
+	enum Range {
+		Up,
+		UpRight,
+		Right,
+		DownRight,
+		Down,
+		DownLeft,
+		Left,
+		UpLeft,
+	};
+
 	Direction direction = Direction::right;
 	Range range = Range::Right;
 
+	//角度が変わった時のフラグ
 	bool isChangeDirection = false;
 
 	/// 傘のシールド
@@ -206,12 +209,20 @@ private:
 	std::unique_ptr<Particle> particle_damage;
 	std::unique_ptr<Particle> particle_pari;
 
+	//前回座標の保存場所
 	Vector3 PrePosition;
 
 	//アニメーション
+	enum Animation_Mode {
+		mode_stop,
+		mode_move,
+		mode_sield,
+		mode_damage,
+		mode_NextStage
+	};
+
 	Animation_Mode animation_mode;
 	Animation_Mode PreAnimation_mode;
-	bool isChangeAnimation = false;
 
 
 	///影

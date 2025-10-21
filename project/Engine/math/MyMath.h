@@ -250,6 +250,11 @@ namespace MyMath {
 	Vector3& operator*=(Vector3& v1, const Vector3& v2);
 	Vector3& operator/=(Vector3& v1, const Vector3& v2);
 
+	Vector3& operator+=(Vector3& v, const float& f);
+	Vector3& operator-=(Vector3& v, const float& f);
+	Vector3& operator*=(Vector3& v, const float& f);
+	Vector3& operator/=(Vector3& v, const float& f);
+
 	Vector3 operator-(const Vector3& v);
 
 
@@ -271,10 +276,12 @@ namespace MyMath {
 
 	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
-	float EaseIn(const float& v, const float t, const float endt);
+	float EaseIn(const float& f, const float t, const float endt);
 	Vector2 EaseIn(const Vector2& v, const float t, const float endt);
 	Vector3 EaseIn(const Vector3& v, const float t, const float endt);
 
+	float EaseOut(const float& f, const float t);
+	Vector2 EaseOut(const Vector2& v, const float t);
 	Vector3 EaseOut(const Vector3& v, const float t);
 
 	float Length(float start, float target);

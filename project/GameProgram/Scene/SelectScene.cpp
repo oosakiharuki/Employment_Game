@@ -7,7 +7,6 @@ void SelectScene::Initialize() {
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
-	wt.Initialize();
 
 	stageobj = std::make_unique<Object3d>();
 	stageobj->Initialize();
@@ -49,12 +48,13 @@ void SelectScene::Update() {
 	player_->Update();
 
 	if (isZumuIn) {
-		player_->IsAnimationOnlyUpdate();
+		player_->IsAnimationOnlyUpdate(true);
+		player_->SetRotate({ 0,0,0 });//向きを前に
 		return;
 	}
 
-	skyBox->Update(wt.matWorld_ * MakeScaleMatrix({ 1000,1000,1000 }));
-	stageobj->Update(wt);
+	skyBox->Update(MakeScaleMatrix({ 1000,1000,1000 }));
+	stageobj->Update();
 
 	CollisionCommon();
 
@@ -71,7 +71,6 @@ void SelectScene::Update() {
 		}
 	}
 
-	wt.UpdateMatrix();
 }
 
 void SelectScene::Draw() {
