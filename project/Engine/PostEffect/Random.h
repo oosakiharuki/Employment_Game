@@ -1,6 +1,8 @@
 #pragma once
 #include "IPostEffects.h"
-
+/// <summary>
+/// ポストエフェクト_Random(IPostEffectの派生クラス)
+/// </summary>
 class Random : public IPostEffects {
 public:
 	void Finalize() override;

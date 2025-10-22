@@ -24,13 +24,18 @@
 #include <cassert>
 #include <cmath>
 
-//model
+/// <summary>
+/// 構造体_ModelData
+/// </summary>
 struct MaterialData {
 	std::string textureFilePath;
 	uint32_t textureIndex;
 	Vector4 materialColor;
 };
 
+/// <summary>
+/// 構造体‗VertexData
+/// </summary>
 struct VertexData {
 	Vector4 position;
 	Vector2 texcoord;

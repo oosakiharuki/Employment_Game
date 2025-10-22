@@ -1,7 +1,9 @@
 #pragma once
 #include "IPostEffects.h"
 #include <Vector4.h>
-
+/// <summary>
+/// ポストエフェクト_Dissolve(IPostEffectの派生クラス)
+/// </summary>
 class Dissolve : public IPostEffects {
 public:
 	void Finalize() override;

@@ -1,6 +1,8 @@
 #pragma once
 #include "IPostEffects.h"
-
+/// <summary>
+/// ポストエフェクト_LuminanceBasedOutline(IPostEffectの派生クラス)
+/// </summary>
 class LuminanceBasedOutline: public IPostEffects {
 public:
 	void Finalize() override;

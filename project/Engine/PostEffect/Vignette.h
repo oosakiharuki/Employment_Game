@@ -1,6 +1,8 @@
 #pragma once
 #include "IPostEffects.h"
-
+/// <summary>
+/// ポストエフェクト_Vignette(IPostEffectの派生クラス)
+/// </summary>
 class Vignette : public IPostEffects {
 public:
 	void Finalize() override;
