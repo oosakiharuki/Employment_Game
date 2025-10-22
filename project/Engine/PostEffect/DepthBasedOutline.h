@@ -1,7 +1,9 @@
 #pragma once
 #include "IPostEffects.h"
 #include "MyMath.h"
-
+/// <summary>
+/// ポストエフェクト_DepthBasedOutline(IPostEffectの派生クラス)
+/// </summary>
 class DepthBasedOutline : public IPostEffects {
 public:
 	void Finalize() override;

@@ -45,12 +45,15 @@ private:
 
 	static FadeScreen* instance;
 
+	//使用するスプライト
 	std::unique_ptr<Sprite> sprite;
-	Vector4 color = {1,1,1,1};
 
+	//秒数時間
 	const float deltaTime = 1.0f / 60.0f;
 
+	//フェード中フラグ
 	bool isFading = false;
+	//Dissolve(ポストエフェクト)で溶け具合の変数
 	float degress = 0.0f;
 
 	//使用するポストエフェクト

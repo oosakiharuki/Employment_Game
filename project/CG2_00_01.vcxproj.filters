@@ -115,10 +115,10 @@
     <Filter Include="ヘッダー ファイル\GameProgram\StageObjects">
       <UniqueIdentifier>{c25c6d45-4ba0-4c58-be4c-e176ebdd0451}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Engine\LevelEditor">
+    <Filter Include="ソース ファイル\GameProgram\LevelEditor">
       <UniqueIdentifier>{9d3be0b2-740f-4b21-b1be-24756f276d2e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Engine\LevelEditor">
+    <Filter Include="ヘッダー ファイル\GameProgram\LevelEditor">
       <UniqueIdentifier>{b7fd112d-0d92-4f45-ab24-794ea91e597f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -325,7 +325,7 @@
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\LevelEditor\Levelediter.cpp">
-      <Filter>ソース ファイル\Engine\LevelEditor</Filter>
+      <Filter>ソース ファイル\GameProgram\LevelEditor</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\FadeScreen.cpp">
       <Filter>ソース ファイル\GameProgram</Filter>
@@ -555,7 +555,7 @@
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\LevelEditor\Levelediter.h">
-      <Filter>ヘッダー ファイル\Engine\LevelEditor</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\LevelEditor</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\FadeScreen.h">
       <Filter>ヘッダー ファイル\GameProgram</Filter>

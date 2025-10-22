@@ -17,12 +17,27 @@ public:
 	bool IsDead() { return isDead; }
 
 	void RespownEnemy() override;
-
+	
+	/// <summary>
+	/// getter‗ワールド座標系の座標
+	/// </summary>
+	/// <returns></returns>
 	Vector3 GetWorldPosition();
+	/// <summary>
+	/// 爆発する
+	/// </summary>
 	void Exprosion();
 
+	/// <summary>
+	/// getter‗爆発範囲AABB
+	/// </summary>
+	/// <returns></returns>bombAABB
 	AABB GetBombAABB() { return bombAABB; }
 
+	/// <summary>
+	/// getter_距離
+	/// </summary>
+	/// <returns></returns>プレイヤーからボムの距離
 	Vector3 GetDistance() { return distance; }
 
 private:
@@ -39,9 +54,10 @@ private:
 
 	//パーティクル
 	std::unique_ptr<Particle> particle_Bom;//爆発
+	//爆発範囲AABB
 	AABB bombAABB;
-	Vector3 hani = { 3,3,3 };
-
+	Vector3 hani = { 3,3,3 };//大きさ
+	//プレイヤーとの距離感
 	Vector3 distance;
 };
 

@@ -27,8 +27,6 @@ void FadeScreen::Initialize() {
 
 void FadeScreen::Update() {
 	sprite->Update();
-	sprite->SetColor(color);
-
 	dissolve->Degress(degress);
 }
 

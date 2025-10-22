@@ -12,6 +12,9 @@
 #include "Random.h"
 #include "random"
 
+/// <summary>
+/// ポストエフェクトマネージャ
+/// </summary>
 class PostEffectManager {
 public:
 

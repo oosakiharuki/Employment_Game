@@ -4,6 +4,9 @@
 #include "Input.h"
 #include "ImGuiManager.h"
 
+/// <summary>
+/// ポストエフェクトの種類
+/// </summary>
 enum EFFECT {
 	Mode_Normal_Image,//None 何もなし
 	Mode_Grayscale,
@@ -18,6 +21,9 @@ enum EFFECT {
 	Max,//最大
 };
 
+/// <summary>
+/// ポストエフェクト(PostEffect)の基盤クラス
+/// </summary>
 class IPostEffects {
 protected:
 	//postEffect特融処理
@@ -42,21 +48,42 @@ protected:
 	//他はPixselShader等で配列が変わったりするため固有にする
 
 public:
+	/// <summary>
+	/// 削除処理
+	/// </summary>
 	virtual void Finalize() = 0;
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="dxCommon"></param>
 	virtual void Initialize(DirectXCommon* dxCommon) = 0;
 
+	/// <summary>
+	/// 描画モード変更処理
+	/// </summary>
 	virtual void Command() = 0;
 	
 	int GetEffectNo() { return effectNo; }
 
 	//PSO
+	
+	/// <summary>
+	/// ルートシグネチャの作成
+	/// </summary>
 	virtual void RootSignature() = 0;
+	/// <summary>
+	/// パイプラインの作成
+	/// </summary>
 	virtual void GraphicsPipeline() = 0;
-
+	/// <summary>
+	/// imguiで値を動かせるようにする
+	/// </summary>
 	virtual void EffectUpdate() = 0;
 
 	virtual ~IPostEffects();
-
+	/// <summary>
+	/// ポストエフェクト変更処理
+	/// </summary>
 	void ChangeNumber();
 
 	D3D12_GPU_DESCRIPTOR_HANDLE GetEffect() { return srvHandleGPU; }

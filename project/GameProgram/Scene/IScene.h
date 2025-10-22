@@ -118,14 +118,10 @@ protected:
 	/// 対象(プレイヤー、敵など)の真下の床の位置に
 	/// 影などで使用する
 	/// </summary>
-	/// <param name="stageAABB"></param>
-	/// ステージ地面の全体
-	/// <param name="shadowAABB"></param>
-	/// 対象の影
-	/// <param name="position"></param>
-	/// 対象の場所
-	/// <returns></returns>
-	/// 対象から一番近い地面の上
+	/// <param name="stageAABB"></param>ステージ地面の全体
+	/// <param name="shadowAABB"></param>対象の影
+	/// <param name="position"></param>対象の場所
+	/// <returns></returns>対象から一番近い地面の上
 	Vector3 UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position);
 
 	/// <summary>

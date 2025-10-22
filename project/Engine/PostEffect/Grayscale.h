@@ -2,6 +2,9 @@
 #include "IPostEffects.h"
 #include <Vector3.h>
 
+/// <summary>
+/// ポストエフェクト_GrayScale(IPostEffectの派生クラス)
+/// </summary>
 class Grayscale : public IPostEffects {
 public:
 	void Finalize() override;
