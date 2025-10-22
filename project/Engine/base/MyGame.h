@@ -1,6 +1,6 @@
 #pragma once 
 #include "Framework.h"
-#include "GameManager.h"
+#include "SceneManager.h"
 #include "FadeScreen.h"
 
 class MyGame : public Framework{
@@ -11,7 +11,7 @@ public:
 	void Draw() override;
 
 private:
-	GameManager* gameScene = nullptr;
+	SceneManager* gameScene = nullptr;
 	FadeScreen* fadeScreen = nullptr;
 
 };

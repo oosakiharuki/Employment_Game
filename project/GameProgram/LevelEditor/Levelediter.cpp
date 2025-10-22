@@ -107,6 +107,9 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				//オブジェクトの真ん中 + eventTrigger自体の真ん中 ± サイズの半分
 				eventTrigger.collisionAABB.min = objectData.translation + center - size / 2;
 				eventTrigger.collisionAABB.max = objectData.translation + center + size / 2;
+
+				//Blenderで設定したcsvファイル名を入れる
+				eventTrigger.csvFile = "resource/csv/" + objectData.fileName + ".csv";
 			}
 		}
 		else if (type.compare("PlayerSpawn") == 0) {

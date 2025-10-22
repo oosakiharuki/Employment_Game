@@ -4,29 +4,9 @@ using namespace MyMath;
 
 void TitleScene::Initialize() {
 
-	//player
-	wts[0].Initialize();
-	wts[0].rotation_ = { 0,180,0 };
-	wts[0].translation_ = { -4.5f,10.0f,0 };
 
-	//umbrella
-	wts[1].Initialize();
-	wts[1].parent_ = &wts[0];
-	wts[1].translation_ = { 0,2,0 };
-	wts[1].rotation_ = { -90.0f,0,0 };
 
-	//start
-	wts[2].Initialize();
-	wts[2].rotation_.y = rotate_select_moji;
-	wts[2].translation_ = { 3,-0.5f,0 };
-	wts[2].scale_ = { 1.5f,1.5f,1.5f };
-
-	//end
-	wts[3].Initialize();
-	wts[3].rotation_.y = rotate_select_moji;
-	wts[3].translation_ = { 3,-2.5,0 };
-	wts[3].scale_ = { 1.5f,1.5f,1.5f };
-
+	//カメラワールド座標系
 	worldTransformCamera_.Initialize();
 
 	camera = std::make_unique<Camera>();
@@ -38,45 +18,77 @@ void TitleScene::Initialize() {
 	GLTFCommon::GetInstance()->SetDefaultCamera(camera.get());
 	ParticleCommon::GetInstance()->SetDefaultCamera(camera.get());
 
+	//プレイヤー初期化処理
 	object_autoPlayer = std::make_unique<Object_glTF>();
 	object_autoPlayer->Initialize();
 	object_autoPlayer->SetModelFile("NewPlayer.gltf");
 	object_autoPlayer->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 
+	//playerワールド座標系
+	wts[0].Initialize();
+	wts[0].rotation_ = { 0,180,0 };
+	wts[0].translation_ = { -4.5f,10.0f,0 };
+
+	//影
 	player_shadow = std::make_unique<Shadow>();
 	player_shadow->Initialize();
 
+	//手動
 	Vector3 shadowPos = wts[0].translation_;
 	shadowPos.y = -3.8f;
 	shadowPos.y += 0.01f;//少し上に上げてにしない
 
 	player_shadow->SetTranslate(shadowPos);
 
-
-	object_Moji_Start = std::make_unique<Object_glTF>();
-	object_Moji_Start->Initialize();
-	object_Moji_Start->SetModelFile("Select_Start.gltf");
-	object_Moji_Start->SetEnvironment("resource/rostock_laage_airport_4k.dds");
-
-	object_Moji_End = std::make_unique<Object_glTF>();
-	object_Moji_End->Initialize();
-	object_Moji_End->SetModelFile("Select_End.gltf");
-	object_Moji_End->SetEnvironment("resource/rostock_laage_airport_4k.dds");
-
+	//傘の初期化
 	umbrella = std::make_unique<Object_glTF>();
 	umbrella->Initialize();
 	umbrella->SetModelFile("umbrella_Open.gltf");
 	umbrella->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 
+	//umbrellaワールド座標系
+	wts[1].Initialize();
+	wts[1].parent_ = &wts[0];//プレイヤーを親としてついていく
+	wts[1].translation_ = { 0,2,0 };
+	wts[1].rotation_ = { -90.0f,0,0 };
+
+	//ゲームスタート文字の初期化
+	object_Moji_Start = std::make_unique<Object_glTF>();
+	object_Moji_Start->Initialize();
+	object_Moji_Start->SetModelFile("Select_Start.gltf");
+	object_Moji_Start->SetEnvironment("resource/rostock_laage_airport_4k.dds");
+
+
+	//ゲームスタート文字のワールド座標系
+	wts[2].Initialize();
+	wts[2].rotation_.y = rotate_select_moji;
+	wts[2].translation_ = { 3,-0.5f,0 };
+	wts[2].scale_ = { 1.5f,1.5f,1.5f };
+
+	//ゲーム終了文字の初期化
+	object_Moji_End = std::make_unique<Object_glTF>();
+	object_Moji_End->Initialize();
+	object_Moji_End->SetModelFile("Select_End.gltf");
+	object_Moji_End->SetEnvironment("resource/rostock_laage_airport_4k.dds");
+	
+	//ゲーム終了文字のワールド座標系
+	wts[3].Initialize();
+	wts[3].rotation_.y = rotate_select_moji;
+	wts[3].translation_ = { 3,-2.5,0 };
+	wts[3].scale_ = { 1.5f,1.5f,1.5f };
+
+	//ステージ全体のオブジェクト初期化
 	object_stage = std::make_unique<Object_glTF>();
 	object_stage->Initialize();
 	object_stage->SetModelFile("Title_stage.gltf");
 	object_stage->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 
+	//タイトル名スプライトの初期化
 	sprite_Moji_Title = std::make_unique<Sprite>();
 	sprite_Moji_Title->Initialize("Moji_Title.png");
 	sprite_Moji_Title->SetPosition(Title_pos);
 
+	//パーティクル初期化
 	bullet_particle = std::make_unique<Particle>();
 	bullet_particle->Initialize("resource/Sprite/cone.png", PrimitiveType::cone);
 	bullet_particle->SetParticleCount(1);
@@ -87,13 +99,16 @@ void TitleScene::Initialize() {
 
 void TitleScene::Update() {
 
-	Input::GetInstance()->GetJoyStickState(0, state);
-	Input::GetInstance()->GetJoystickStatePrevious(0, preState);
-
+	//ゲームパット用操作処理設定
+	InputGamePad();
+	//カメラ更新
 	camera->Update();
 
+	//プレイヤーが降ってくるところ
 	if (wts[0].translation_.y <= -2.0f) {
+		//座標を維持
 		wts[0].translation_.y = -2.0f;
+		//Maxになるまでタイマーを進ませる
 		if (timer < TimeMax) {
 			timer += 1.0f / 60.0f;
 		}
@@ -101,15 +116,18 @@ void TitleScene::Update() {
 			timer = TimeMax;
 			move += 0.01f;
 		}
+		//タイトルが上からくる
 		start.y = end.y + EaseIn(start.y, timer, TimeMax);
 		Title_pos.y = start.y + 10.0f * std::sin(move);
 
 	}
 	else {
+		//重力でゆっくり落ちる
 		wts[0].translation_.y -= gravity;
 	}
 
-	sprite_Moji_Title->SetPosition(Title_pos);
+	//タイトル更新処理
+	sprite_Moji_Title->SetPosition(Title_pos);//常時場所設定
 	sprite_Moji_Title->Update();
 
 	if (isbullet) {
@@ -131,7 +149,7 @@ void TitleScene::Update() {
 
 		if (!FadeScreen::GetInstance()->GetIsFadeing()) {
 			if (wts[1].translation_.y == wts[2].translation_.y) {
-				sceneNo = Select;
+				sceneNo = Game;
 				isfadeStart = false;
 			}
 			else if (wts[1].translation_.y == wts[3].translation_.y) {
@@ -167,27 +185,30 @@ void TitleScene::Update() {
 			wts[3].rotation_.y -= 30.0f;
 		}
 
+		//キーボード操作
 
 		if (Input::GetInstance()->TriggerKey(DIK_W)) {
-			wts[1].translation_.y = wts[2].translation_.y;
+			wts[1].translation_.y = wts[2].translation_.y;//ゲームスタート
 		}
 		if (Input::GetInstance()->TriggerKey(DIK_S)) {
-			wts[1].translation_.y = wts[3].translation_.y;
+			wts[1].translation_.y = wts[3].translation_.y;//ゲーム終了
 		}
 
 		//ゲームパット操作
 		
 		if (Input::GetInstance()->GetJoyStickState(0, state)) {
+			//スティックの傾き度
 			float padY = static_cast<float>(state.Gamepad.sThumbLY) / 32768.0f;
 
 			if (padY > 0.5f) {
-				wts[1].translation_.y = wts[2].translation_.y;
+				wts[1].translation_.y = wts[2].translation_.y;//ゲームスタート
 			}
 			else if (padY < -0.5f) {
-				wts[1].translation_.y = wts[3].translation_.y;
+				wts[1].translation_.y = wts[3].translation_.y;//ゲーム終了
 			}
 		}
 
+		//spaceもしくはAボタンを押したら実行
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE) || 
 			Input::GetInstance()->TriggerBotton(state,preState, XINPUT_GAMEPAD_A)) {
 			isbullet = true;
@@ -196,7 +217,7 @@ void TitleScene::Update() {
 			bullet_particle->SetRotate({0.0f,0.0f,-90.0f});
 		}
 	}
-
+	//パーティクル更新
 	bullet_particle->Update();
 
 #ifdef _DEBUG
@@ -220,6 +241,7 @@ void TitleScene::Update() {
 
 #endif // _DEBUG
 
+	//ワールド座標系更新
 	for (uint32_t i = 0; i < 4; i++) {
 		wts[i].UpdateMatrix();
 	}
@@ -230,11 +252,7 @@ void TitleScene::Update() {
 	object_Moji_Start->Update(wts[2]);
 	object_Moji_End->Update(wts[3]);
 
-	WorldTransform wt;
-	wt.Initialize();
-	wt.translation_.y = -4.0f;
-	wt.UpdateMatrix();
-	object_stage->Update(wt);
+	object_stage->Update();
 
 	player_shadow->Update();
 }

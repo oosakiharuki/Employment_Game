@@ -1,6 +1,9 @@
 #pragma once
 #include "IEnemy.h"
 
+/// <summary>
+/// 傭兵の敵(IEnemyの派生クラス)
+/// </summary>
 class Enemy_Soldier : public IEnemy{
 public:
 	~Enemy_Soldier() override;

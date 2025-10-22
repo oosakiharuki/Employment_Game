@@ -4,22 +4,26 @@ using namespace MyMath;
 
 void GameScene::Initialize() {
 
-	LevelEditorObjectSetting("resource/Levelediter/stage_1.json");
+	LevelEditorObjectSetting("resource/Levelediter/stage_0.json");
 
 	stageobj = std::make_unique<Object3d>();
 	stageobj->Initialize();
-	stageobj->SetModelFile("stage_1.obj");
+	stageobj->SetModelFile("stage_0.obj");
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
-
-	wt.Initialize();
 
 	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");
 	soundData_ = Audio::GetInstance()->LoadWave("resource/sound/bane.wav");
 
 	Audio::GetInstance()->SoundPlayWave(BGMData_, 0.3f, true);
 
+	WarterWarpExit();
+
+	moji = std::make_unique<Sprite>();
+	moji->Initialize("Moji_Back_Title.png");
+	moji->SetPosition({300,0});
+	moji->SetSize({ 256,128 });
 
 }
 
@@ -50,6 +54,14 @@ void GameScene::Update() {
 	else {
 		FadeScreen::GetInstance()->FedeOut();
 	}
+
+	//
+	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
+		sceneNo = Title;
+		Audio::GetInstance()->StopWave(BGMData_);
+	}
+
+	startWarp->Update();
 
 	if (isNextStage) {
 		if (zumuTimer <= 1.0f) {
@@ -82,14 +94,36 @@ void GameScene::Update() {
 		}
 	}
 
-	skyBox->Update(wt.matWorld_ * MakeScaleMatrix({ 1000,1000,1000 }));//大きくするため
+	skyBox->Update(MakeScaleMatrix({ 1000,1000,1000 }));//大きくするため
 
 	camera->Update();
 
 	player_->Update();
+	
+	stageobj->Update();
+
+	if (isStartStage) {
+		//プレイヤー配置座標 + 地面当たり判定によって上げられる分
+		if (startPointY >= playerPoint.y) {
+			player_->SetTranslate({ playerPoint.x,startPointY,playerPoint.z });
+			isStartStage = false;
+			player_->IsAnimationOnlyUpdate(false);//演出モードを終了し操作できるように
+			player_->IsJumping();//強制的にジャンプさせて飛び出たようにする
+			return;
+		}
+
+		startPointY += 0.1f;
+		player_->SetTranslate({ playerPoint.x,startPointY,playerPoint.z });
+		
+		for (auto& enemy : enemies) {
+			enemy->GrabityZero();
+		}
+	}
+
 
 	if (isNextStage) {
-		player_->IsAnimationOnlyUpdate();
+		player_->IsAnimationOnlyUpdate(true);
+		player_->SetRotate({ 0,0,0 });
 		return;
 	}
 	
@@ -97,8 +131,6 @@ void GameScene::Update() {
 		enemy->SetPlayer(player_.get());
 		enemy->Update();
 	}
-
-	CollisionCommon();
 
 	for (auto& stageObject : stageObjects) {
 		stageObject->Update();
@@ -117,13 +149,19 @@ void GameScene::Update() {
 		}
 	}
 
-	if (isEvent) {
-		if (isLoadCsv) {
-			//Csvを読み込む
-			LoadEventCSV("resource/event.csv");
+	//共有イベントフラグ
+	bool isEventCommon = false;
+
+	for (auto& eventTrigger : eventTriggers) {
+		if (eventTrigger.isEvent) {
+			if (isLoadCsv) {
+				//Csvを読み込む
+				LoadEventCSV(eventTrigger.csvFile);
+			}
+			//敵召喚
+			PopEventEneies(&eventTrigger);
+			isEventCommon = eventTrigger.isEvent;
 		}
-		//敵召喚
-		PopEventEneies();
 	}
 
 	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
@@ -142,9 +180,9 @@ void GameScene::Update() {
 		}
 
 		//強制イベント中の場合
-		if (isEvent) {
+		if (isEventCommon) {
 			//イベント終了
-			isEvent = false;
+			isEventCommon = false;
 			eventWave = false;
 			//次に読み込めるように
 			isLoadCsv = true;
@@ -166,12 +204,11 @@ void GameScene::Update() {
 		}
 	}
 	
-	//
-	if (Input::GetInstance()->TriggerKey(DIK_F2)) {
-		sceneNo = Clear;
-		Audio::GetInstance()->StopWave(BGMData_);
+	//演出では使わない
+	if (!isStartStage) {
+		startWarp->Vanish();//出てきた後消えるようにする
+		CollisionCommon();
 	}
-
 
 	//リスポーン地点を変更前に倒した敵は復活しない
 	//if (isChangeRespown) {
@@ -190,13 +227,14 @@ void GameScene::Update() {
 
 	
 	//イベント中はカメラが固定
-	if (isEvent) {
+	if (isEventCommon) {
 		//カメラ固定
 		worldTransformCamera_.rotation_ = cameraRotate;
 		worldTransformCamera_.translation_ = cameraTranslate;
 	}
 	//次ステージ移動時はズームされるのでここは除外
 	else if (!isNextStage) {
+		//Point1とPoint2から出たとき
 		if (cameraTranslate.x + cameraPoint1.x < player_->GetTranslate().x && cameraTranslate.x + cameraPoint2.x > player_->GetTranslate().x) {
 			worldTransformCamera_.translation_.x = player_->GetTranslate().x;
 		}
@@ -220,9 +258,6 @@ void GameScene::Update() {
 		player_->IsFall();
 	}
 
-	stageobj->Update(wt);
-
-	wt.UpdateMatrix();
 	worldTransformCamera_.UpdateMatrix();
 
 	camera->SetRotate(worldTransformCamera_.rotation_);
@@ -256,7 +291,7 @@ void GameScene::Update() {
 
 #endif //  USE_IMGUI
 
-
+	moji->Update();
 	Audio::GetInstance()->ControlVolume(BGMData_, volume);
 }
 
@@ -283,6 +318,7 @@ void GameScene::Draw() {
 		stageObject->Draw();
 	}
 	
+	startWarp->Draw();
 
 	//パーティクル描画処理
 	ParticleCommon::GetInstance()->Command();
@@ -290,7 +326,7 @@ void GameScene::Draw() {
 
 	//スプライト描画処理(UI用)
 	SpriteCommon::GetInstance()->Command();
-
+	moji->Draw();
 }
 
 void GameScene::Finalize() {
@@ -316,6 +352,8 @@ void GameScene::StageMovement(const std::string leveleditor_file, const std::str
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
+
+	WarterWarpExit();
 }
 
 void GameScene::LoadEventCSV(std::string fileName) {
@@ -333,7 +371,7 @@ void GameScene::LoadEventCSV(std::string fileName) {
 	isLoadCsv = false;
 }
 
-void GameScene::PopEventEneies() {
+void GameScene::PopEventEneies(EventTrigger* eventTrigger) {
 
 	//敵の倒した数リセット(↓で無限に増えるから)
 	enemyDeadCount = 0;
@@ -380,11 +418,11 @@ void GameScene::PopEventEneies() {
 		//終了
 		if (word.find("end") == 0) {
 			//イベント終了
-			isEvent = false;
+			eventTrigger->isEvent = false;
 			//次に読み込めるように
 			isLoadCsv = true;
 			//当たり判定を消す
-			eventTriggerAABBs.erase(eventTriggerAABBs.begin());
+			eventTriggers.erase(eventTriggers.begin());
 
 			//カメラを元(メインカメラ)に戻す
 			MainCamera();
@@ -419,7 +457,7 @@ void GameScene::PopEventEneies() {
 			position.y = (float)std::atof(word.c_str());
 
 			//トリガーの中心地点から足していく
-			position += eventTriggerCenters;
+			position += eventTrigger->center;
 
 			//召喚位置.zは使わないので0に
 			position.z = 0.0f;
@@ -451,6 +489,9 @@ void GameScene::EnemyPop(const Vector3& position, const Vector3& rotation, const
 	else if (name == "turret") {
 		popEnemy = std::make_unique<Enemy_Turret>();
 	}
+	else if (name == "bomb") {
+		popEnemy = std::make_unique<Enemy_Bomb>();
+	}
 
 	popEnemy->Initialize();
 	popEnemy->SetTranslate(position);
@@ -467,4 +508,34 @@ void GameScene::EnemyPop(const Vector3& position, const Vector3& rotation, const
 	
 	//敵の数
 	enemyBornCount++;
+}
+
+void GameScene::WarterWarpExit() {
+	
+	//初期化
+	startWarp = std::make_unique<WarpGate>();
+	startWarp->Initialize();
+	isStartStage = true;
+	startPointY = 10.0f;
+
+	playerPoint = player_->GetTranslate();
+	startPointY = playerPoint.y - startPointY;//プレイヤーが真下からくるように設定する
+
+	//ワープゲート出口の位置決め
+	Vector3 warpPosition = player_->GetTranslate();
+
+	//当たり判定
+	AABB startWarpAABB;
+	startWarpAABB.max = warpPosition + Vector3{ 0,1,0 };
+	startWarpAABB.min = warpPosition + Vector3{ 0,-10,0 };
+
+	//プレイヤー初期位置の真下に
+	warpPosition = UnderCollision(stagesAABB, startWarpAABB, playerPoint);
+	warpPosition.y += 0.02f;//重ならないように影より上にする
+
+	startWarp->SetPosition(warpPosition);//playerの真下に
+	startWarp->SetRotation({ 90.0f,0.0f,0.0f });//下向きにして水たまりに
+
+	player_->IsAnimationOnlyUpdate(true);
+
 }

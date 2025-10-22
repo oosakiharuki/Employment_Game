@@ -3,6 +3,9 @@
 #include "Framework.h"
 #include "IScene.h"
 
+/// <summary>
+/// クリアシーン(ISceneの派生クラス)
+/// </summary>
 class ClearScene : public IScene{
 public:
 	void Initialize() override;
@@ -10,5 +13,5 @@ public:
 	void Draw() override;
 	void Finalize() override;
 private:
-	std::unique_ptr<Sprite> sprite;
+	std::unique_ptr<Sprite> sprite;//ゲームクリアの文字
 };

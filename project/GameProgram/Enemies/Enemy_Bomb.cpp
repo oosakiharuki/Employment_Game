@@ -6,15 +6,19 @@ using namespace MyMath;
 Enemy_Bomb::~Enemy_Bomb() {}
 
 void Enemy_Bomb::Initialize() {
+	//ワールド座標系の初期化
 	wt.Initialize();
 
+	//オブジェクトの初期化
 	object = std::make_unique<Object3d>();
 	object->Initialize();
 	object->SetModelFile("sphere.obj");
 
+	//体力の初期化
 	maxHp = 1;
 	hp = maxHp;
 
+	//爆発パーティクルの初期化
 	particle_Bom = std::make_unique<Particle>();
 	particle_Bom->Initialize("resource/Sprite/circle.png", PrimitiveType::ring);
 	particle_Bom->SetParticleCount(10);
@@ -22,6 +26,7 @@ void Enemy_Bomb::Initialize() {
 	particle_Bom->SetParticleMosion(ParticleMosion::Exprosion);
 	particle_Bom->SetFrequency(1.0f);
 
+	//
 	bombAABB.min = { 0,-10,0 };
 	bombAABB.max = { 0,-10,0 };
 
@@ -33,12 +38,14 @@ void Enemy_Bomb::Initialize() {
 
 void Enemy_Bomb::Update() {
 
+	//体力が0の時
 	if (hp == 0) {
 		isDead = true;
 		bombAABB.min = { 0,-10,0 };
 		bombAABB.max = { 0,-10,0 };
 	}
 
+	//倒されたアニメーション
 	DeadUpdate();
 
 	if (!isDead) {

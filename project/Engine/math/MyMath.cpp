@@ -174,6 +174,37 @@ namespace MyMath {
 	}
 
 
+	Vector3& operator+=(Vector3& v, const float& f) {
+		v.x += f;
+		v.y += f;
+		v.z += f;
+		return v;
+	}
+
+	Vector3& operator-=(Vector3& v, const float& f) {
+		v.x -= f;
+		v.y -= f;
+		v.z -= f;
+		return v;
+	}
+
+	Vector3& operator*=(Vector3& v, const float& f) {
+		v.x *= f;
+		v.y *= f;
+		v.z *= f;
+		return v;
+	}
+
+	Vector3& operator/=(Vector3& v, const float& f) {
+		v.x /= f;
+		v.y /= f;
+		v.z /= f;
+		return v;
+	}
+
+
+
+
 	Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2){
 		Matrix4x4 result;
 		result = Multiply(m1, m2);
@@ -411,12 +442,12 @@ namespace MyMath {
 	}
 
 
-	float EaseIn(const float& v, const float t, const float endt) {
+	float EaseIn(const float& f, const float t, const float endt) {
 		//0のとき
 		if (t == endt) {
 			return 0.0f;
 		}
-		return (endt - t) * v;
+		return (endt - t) * f;
 	}
 
 	Vector2 EaseIn(const Vector2& v, const float t, const float endt) {
@@ -438,11 +469,22 @@ namespace MyMath {
 		return result;
 	}
 
+	float EaseOut(const float& f, const float t) {
+		return f * t;
+	}
+
+	Vector2 EaseOut(const Vector2& v, const float t) {
+		Vector2 result;
+		result.x = EaseOut(v.x, t);
+		result.y = EaseOut(v.y, t);
+		return result;
+	}
+
 	Vector3 EaseOut(const Vector3& v,const float t) {
 		Vector3 result;
-		result.x = t * v.x;
-		result.y = t * v.y;
-		result.z = t * v.z;
+		result.x = EaseOut(v.x, t);
+		result.y = EaseOut(v.y, t);
+		result.z = EaseOut(v.z, t);
 		return result;
 	}
 

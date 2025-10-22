@@ -7,7 +7,6 @@ void SelectScene::Initialize() {
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
-	wt.Initialize();
 
 	stageobj = std::make_unique<Object3d>();
 	stageobj->Initialize();
@@ -17,9 +16,13 @@ void SelectScene::Initialize() {
 
 void SelectScene::Update() {
 	
+	InputGamePad();
+
 	if (isfadeStart) {
 		FadeScreen::GetInstance()->FedeIn();
+		//フェーズインが完了した時
 		if (!FadeScreen::GetInstance()->GetIsFadeing()) {
+			//ゲームシーンに移動
 			sceneNo = Game;
 			isfadeStart = false;
 		}
@@ -49,19 +52,22 @@ void SelectScene::Update() {
 	player_->Update();
 
 	if (isZumuIn) {
-		player_->IsAnimationOnlyUpdate();
+		player_->IsAnimationOnlyUpdate(true);
+		player_->SetRotate({ 0,0,0 });//向きを前に
 		return;
 	}
 
-	skyBox->Update(wt.matWorld_ * MakeScaleMatrix({ 1000,1000,1000 }));
-	stageobj->Update(wt);
+	skyBox->Update(MakeScaleMatrix({ 1000,1000,1000 }));
+	stageobj->Update();
 
 	CollisionCommon();
 
 
 	for (auto& stageObject : stageObjects) {
+		//stageObjectsの中でワープゲートである場合
 		if (stageObject.get() == dynamic_cast<WarpGate*>(stageObject.get())) {
 			WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject.get());
+			//プレイヤーとワープゲートの当たり判定 + Eキーを押した時
 			if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB()) && Input::GetInstance()->TriggerKey(DIK_E)) {
 				isZumuIn = true;
 				cameraSegment.origin = camera->GetTranslate();//ズーム前のカメラ位置
@@ -71,7 +77,6 @@ void SelectScene::Update() {
 		}
 	}
 
-	wt.UpdateMatrix();
 }
 
 void SelectScene::Draw() {
@@ -98,7 +103,4 @@ void SelectScene::Draw() {
 
 void SelectScene::Finalize() {
 	stageObjects.clear();
-	//for (auto& stageObject : stageObjects) {
-	//	delete stageObject;
-	//}	
 }

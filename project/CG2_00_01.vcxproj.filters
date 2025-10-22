@@ -31,9 +31,6 @@
     <Filter Include="ソース ファイル\Engine\audio">
       <UniqueIdentifier>{7e494eda-49a5-4e26-aa68-09331557a0e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Engine\scene">
-      <UniqueIdentifier>{73845869-d02a-4959-b656-d88b792ecf40}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Engine\2d">
       <UniqueIdentifier>{60c51db4-57e8-4c52-a251-89af31add87e}</UniqueIdentifier>
     </Filter>
@@ -90,9 +87,6 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\Engine\PostEffect">
       <UniqueIdentifier>{ad0a51d1-26d1-4779-ad87-6059fa1492fb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Engine\scene">
-      <UniqueIdentifier>{24979a12-7694-4908-b042-3d33498da402}</UniqueIdentifier>
     </Filter>
     <Filter Include="ヘッダー ファイル\Engine\3d\_gltf">
       <UniqueIdentifier>{3bc82e47-6192-4cd4-9855-eb010ef464a3}</UniqueIdentifier>
@@ -176,12 +170,6 @@
     </ClCompile>
     <ClCompile Include="Engine\audio\Audio.cpp">
       <Filter>ソース ファイル\Engine\audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\scene\GameManager.cpp">
-      <Filter>ソース ファイル\Engine\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\scene\IScene.cpp">
-      <Filter>ソース ファイル\Engine\scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\WorldTransform.cpp">
       <Filter>ソース ファイル\Engine\3d</Filter>
@@ -336,11 +324,17 @@
     <ClCompile Include="GameProgram\Scene\GameScene.cpp">
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\LevelEditor\Levelediter.cpp">
+    <ClCompile Include="GameProgram\LevelEditor\Levelediter.cpp">
       <Filter>ソース ファイル\Engine\LevelEditor</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\FadeScreen.cpp">
       <Filter>ソース ファイル\GameProgram</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Scene\SceneManager.cpp">
+      <Filter>ソース ファイル\GameProgram\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Scene\IScene.cpp">
+      <Filter>ソース ファイル\GameProgram\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -497,12 +491,6 @@
     <ClInclude Include="Engine\PostEffect\Vignette.h">
       <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\scene\GameManager.h">
-      <Filter>ヘッダー ファイル\Engine\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\scene\IScene.h">
-      <Filter>ヘッダー ファイル\Engine\scene</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\Enemies\Enemy_Soldier.h">
       <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
@@ -566,11 +554,17 @@
     <ClInclude Include="GameProgram\Scene\GameScene.h">
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\LevelEditor\Levelediter.h">
+    <ClInclude Include="GameProgram\LevelEditor\Levelediter.h">
       <Filter>ヘッダー ファイル\Engine\LevelEditor</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\FadeScreen.h">
       <Filter>ヘッダー ファイル\GameProgram</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Scene\IScene.h">
+      <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Scene\SceneManager.h">
+      <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

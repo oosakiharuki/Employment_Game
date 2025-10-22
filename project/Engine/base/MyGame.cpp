@@ -4,7 +4,7 @@ void MyGame::Initialize() {
 
 	Framework::Initialize();
 
-	gameScene = new GameManager();
+	gameScene = new SceneManager();
 	gameScene->Initialize();
 
 	fadeScreen = FadeScreen::GetInstance();

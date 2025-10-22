@@ -160,6 +160,80 @@ void Object_glTF::Update(const WorldTransform& worldTransform) {
 	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
 }
 
+void Object_glTF::Update() {
+
+	//作るときはフレームレートを60FPSにする
+	uint32_t i = 0;
+
+	animationTime += 1.0f / 60.0f;
+
+	worldMatrix = MakeIdentity4x4();
+
+	for (auto& animation_ : animation) {
+
+		animationTime = std::fmod(animationTime, animation_.duration);
+
+		//スキニング処理
+		if (model->IsSkinning()) {
+			if (isChange) {
+				changeTime += 1.0f / 60.0f;
+				if (changeTime >= preAnimation[i].duration) {
+					isChange = false;
+					changeTime = 0;
+				}
+				else {
+					Interpolation(skeletons[i], preAnimation[i], animation_, changeTime);
+				}
+			}
+			else {
+				ApplyAnimation(skeletons[1], animation_, animationTime);
+			}
+		}
+	}
+
+	//スキニング
+	if (model->IsSkinning()) {
+		for (auto& skeleton : skeletons) {
+			SkeletonUpdate(skeleton, worldMatrix * MakeTranslateMatrix(Vector3(0, 0, -0.2f)));
+			SkinClusterUpdate(skinClusters[i], skeleton);
+		}
+	}
+
+	//一度リセット
+	localMatrices.clear();
+
+	if (!model->IsSkinning() && model->IsAnimation()) {
+		for (uint32_t i = 0; i < modelData.indices.size(); i++) {
+			Matrix4x4 localMatrix;
+
+			if (modelData.indices.size() <= 1) {
+				NodeAnimation& rootNodeAnimation = animation[i].nodeAnimations[modelData.rootNode.name];
+				Vector3 translate = CalculateValue(rootNodeAnimation.translate, animationTime);//nextと逆にする()
+				Quaternion rotate = CalculateValueQuaternion(rootNodeAnimation.rotate, animationTime);
+				Vector3 scale = CalculateValue(rootNodeAnimation.scale, animationTime);
+
+				localMatrix = MakeAffineMatrix(scale, rotate, translate);
+				localMatrices.push_back(localMatrix);
+			}
+			else if (model->IsAnimation()) {
+				NodeAnimation& rootNodeAnimation = animation[i].nodeAnimations[modelData.rootNode.children[i].name];
+				Vector3 translate = CalculateValue(rootNodeAnimation.translate, animationTime);//nextと逆にする()
+				Quaternion rotate = CalculateValueQuaternion(rootNodeAnimation.rotate, animationTime);
+				Vector3 scale = CalculateValue(rootNodeAnimation.scale, animationTime);
+
+				localMatrix = MakeAffineMatrix(scale, rotate, translate);
+				localMatrices.push_back(localMatrix);
+			}
+		}
+	}
+
+	for (uint32_t i = 0; i < modelData.indices.size(); i++) {
+		wvpDatas[i]->World = modelData.rootNode.localMatrix * worldMatrix;
+	}
+
+	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
+}
+
 
 void Object_glTF::Draw() {
 	Matrix4x4 WorldViewProjectionMatrix;

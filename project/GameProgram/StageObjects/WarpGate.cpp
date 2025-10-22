@@ -17,5 +17,17 @@ void WarpGate::Update() {
 }
 
 void WarpGate::Draw() {
+	//完全に小さくなったら映さない
+	if (wt.scale_.x <= 0 && wt.scale_.y <= 0 && wt.scale_.z <= 0) {
+		return;
+	}
+	
 	object_->Draw();
+}
+
+void WarpGate::Vanish() {
+	if (wt.scale_.x > 0 && wt.scale_.y > 0 && wt.scale_.z > 0) {
+		t += 0.1f;
+		wt.scale_ -= EaseOut(0.1f, littleLarge + t);
+	}
 }

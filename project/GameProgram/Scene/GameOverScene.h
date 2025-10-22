@@ -2,6 +2,9 @@
 #include "Framework.h"
 #include "IScene.h"
 
+/// <summary>
+/// ゲームオーバーシーン(ISceneの派生クラス)
+/// </summary>
 class GameOverScene : public IScene{
 public:
 	void Initialize() override;
@@ -9,6 +12,6 @@ public:
 	void Draw() override;
 	void Finalize() override;
 private:
-	std::unique_ptr<Sprite> sprite;
+	std::unique_ptr<Sprite> sprite;//ゲームオーバーの文字
 
 };

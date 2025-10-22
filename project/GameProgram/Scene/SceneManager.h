@@ -8,10 +8,13 @@
 #include "ClearScene.h"
 #include "GameOverScene.h"
 
-class GameManager {
+/// <summary>
+/// シーンマネージャ
+/// </summary>
+class SceneManager {
 public:
-	GameManager();
-	~GameManager();
+	SceneManager();
+	~SceneManager();
 
 	void Initialize();
 	void Update();

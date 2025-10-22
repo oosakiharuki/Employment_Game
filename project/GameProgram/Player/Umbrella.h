@@ -2,6 +2,9 @@
 #include "Object_glTF.h"
 #include "MyMath.h"
 
+/// <summary>
+/// 傘(発泡、守が使える)
+/// </summary>
 class Umbrella {
 public:
 	~Umbrella();
