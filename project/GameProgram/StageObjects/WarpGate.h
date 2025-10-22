@@ -12,7 +12,16 @@ public:
 	void Update() override;
 	void Draw() override;
 
+	/// <summary>
+	/// setter_次のステージ
+	/// </summary>
+	/// <param name="fileName"></param>ステージ名(例:stage_01)
 	void SetNextStage(std::string fileName) { fileName_ = fileName; }
+
+	/// <summary>
+	/// getter_次のステージ
+	/// </summary>
+	/// <returns></returns>次のステージ
 	std::string GetNextStage() { return fileName_; }
 
 	/// <summary>

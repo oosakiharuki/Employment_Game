@@ -13,5 +13,5 @@ public:
 	void Draw() override;
 	void Finalize() override;
 private:
-	std::unique_ptr<Sprite> sprite;
+	std::unique_ptr<Sprite> sprite;//ゲームクリアの文字
 };

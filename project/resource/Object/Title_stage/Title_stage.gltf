@@ -26,7 +26,7 @@
 	"materials":[
 		{
 			"doubleSided":true,
-			"name":"Material",
+			"name":"Material.001",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":0
@@ -37,7 +37,7 @@
 		},
 		{
 			"doubleSided":true,
-			"name":"Material.001",
+			"name":"Material.002",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":1
@@ -101,12 +101,12 @@
 			"count":24,
 			"max":[
 				27.600000381469727,
-				24.467506408691406,
+				20.467506408691406,
 				24
 			],
 			"min":[
 				-27.600000381469727,
-				-2.3844919204711914,
+				-6.384491920471191,
 				22
 			],
 			"type":"VEC3"
@@ -135,12 +135,12 @@
 			"count":24,
 			"max":[
 				27.5,
-				0.19999998807907104,
+				-3.799999952316284,
 				20.295000076293945
 			],
 			"min":[
 				-27.5,
-				-0.19999998807907104,
+				-4.199999809265137,
 				-20.295000076293945
 			],
 			"type":"VEC3"

@@ -7,6 +7,11 @@ IScene::~IScene(){}
 
 int IScene::GetSceneNo() { return sceneNo; }
 
+void IScene::InputGamePad() {
+	input_->GetJoyStickState(0,state);
+	input_->GetJoystickStatePrevious(0, preState);
+}
+
 void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 
 	levelediter.LoadLevelediter(leveleditor_file);
@@ -203,7 +208,6 @@ void IScene::CollisionCommon() {
 			if (playerCollisionOverlap.isGround) {
 				//地面にいる判定
 				player_->IsGround(true);
-				player_->GrabityZero();//重力を0に
 			}
 
 			//戻った場所を代入
@@ -284,7 +288,6 @@ void IScene::CollisionCommon() {
 
 				if (playerCollisionOverlap.isGround) {
 					player_->IsGround(true);
-					player_->GrabityZero();
 				}
 
 				//戻った場所を代入

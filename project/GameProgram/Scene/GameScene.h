@@ -15,6 +15,11 @@ public:
 
 private:
 	std::string stage_file;
+	/// <summary>
+	/// 次のステージに移る
+	/// </summary>
+	/// <param name="leveleditor_file"></param>次のステージの名前
+	/// <param name="stageObj"></param>次のステージのオブジェクト
 	void StageMovement(const std::string leveleditor_file, const std::string stageObj);
 	
 	//シーンチェンジ時に初期化されない用のプレイヤーHp保存場所
@@ -25,6 +30,7 @@ private:
 	//残機
 	uint32_t RemainingLife = 3;
 
+	//クリア/ゲームオーバーのフラグ
 	bool isGameOver = false;
 	bool isGameClear = false;
 	

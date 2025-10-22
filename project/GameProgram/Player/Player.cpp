@@ -403,10 +403,7 @@ void Player::Update() {
 	particle_pari->Update();
 
 	///アニメーション
-	if (isAnimationOnlyUpdate) {
-		animation_mode = Animation_Mode::mode_NextStage;
-	}
-	else if (isShield) {
+	if (isShield) {
 		animation_mode = Animation_Mode::mode_sield;
 	}//前回の座標と現在の座標が違う = 動いた場合
 	else if (worldTransform.translation_.x != PrePosition.x || worldTransform.translation_.y != PrePosition.y) {
@@ -428,14 +425,6 @@ void Player::Update() {
 			break;
 		case Player::Animation_Mode::mode_sield:
 			object->ChangeAnimation("NewPlayer_umbrella.gltf");
-			break;
-		case Player::Animation_Mode::mode_damage:
-			//object->ChangeAnimation("stop.gltf");
-			break;
-		case Player::Animation_Mode::mode_NextStage:
-			object->ChangeAnimation("NewPlayer.gltf");
-			break;
-		default:
 			break;
 		}
 
@@ -526,8 +515,12 @@ AABB Player::GetAABB() {
 	return aabb;
 }
 
-void Player::SetModelFile(std::string filename) {
-
+void Player::IsGround(bool result) {
+	isGround = result;
+	//地面なら重力を0にする(沈まないようにする)
+	if (isGround) {
+		grabity = 0;
+	}
 }
 
 void Player::ShootBullet() {	

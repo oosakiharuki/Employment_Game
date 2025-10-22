@@ -59,38 +59,46 @@ struct EventTrigger {
 
 class IScene{
 protected:
+	//現在のシーン
 	static int sceneNo;
 
+	//入力処理
+	Input* input_ = Input::GetInstance();
+	//ゲームパット用の入力変数
 	XINPUT_STATE state, preState;
 
+	//カメラ
 	std::unique_ptr<Camera> camera = nullptr;
 	Vector3 cameraRotate;//回転
 	Vector3 cameraTranslate;//座標
 	//カメラ移動範囲
 	Vector3 cameraPoint1;//幅1
 	Vector3 cameraPoint2;//幅2
-	WorldTransform worldTransformCamera_;
+	WorldTransform worldTransformCamera_;//ワールド座標
 
+	//レベルエディタ(オブジェクトの配置を.jsonでできる)
 	Levelediter levelediter;
 
+	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
-
+	//敵たち
 	std::vector<std::unique_ptr<IEnemy>> enemies;
-
+	//ステージオブジェクトたち
 	std::list<std::unique_ptr<IStageObject>> stageObjects;
-
+	
+	//ステージ全体のオブジェクト
 	std::unique_ptr<Object3d> stageobj;
-
-	//ステージの足場
+	//ステージ全体の当たり判定AABB
 	std::vector<AABB> stagesAABB;
 
 	//イベントトリガー
 	std::vector<EventTrigger> eventTriggers;
 
-	//テスト音源
+	//BGM
 	SoundData BGMData_;
-	float volume = 0.02f;
+	float volume = 0.02f;//音量調節機能
 
+	//スカイボックス
 	std::unique_ptr<BoxModel> skyBox = nullptr;
 
 	//レベルエディタで配置
@@ -125,16 +133,41 @@ protected:
 	/// </summary>
 	void MainCamera();
 
+	/// <summary>
+	/// ゲームパット入力処理
+	/// </summary>
+	void InputGamePad();
+
 public:
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	virtual void Initialize() = 0;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	virtual void Update() = 0;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	virtual void Draw() = 0;
+	/// <summary>
+	/// 削除処理
+	/// </summary>
 	virtual void Finalize() = 0;
 
 	virtual ~IScene();
 
+	/// <summary>
+	/// シーン名で
+	/// </summary>
+	/// <returns></returns>現在のシーン
 	int GetSceneNo();
 
+	/// <summary>
+	/// ゲーム終了処理
+	/// </summary>
+	/// <returns></returns>trueで終了
 	bool GetIsGameEnd() { return isGameEnd; }
 
 private:

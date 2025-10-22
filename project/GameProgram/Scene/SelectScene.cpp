@@ -16,9 +16,13 @@ void SelectScene::Initialize() {
 
 void SelectScene::Update() {
 	
+	InputGamePad();
+
 	if (isfadeStart) {
 		FadeScreen::GetInstance()->FedeIn();
+		//フェーズインが完了した時
 		if (!FadeScreen::GetInstance()->GetIsFadeing()) {
+			//ゲームシーンに移動
 			sceneNo = Game;
 			isfadeStart = false;
 		}
@@ -60,8 +64,10 @@ void SelectScene::Update() {
 
 
 	for (auto& stageObject : stageObjects) {
+		//stageObjectsの中でワープゲートである場合
 		if (stageObject.get() == dynamic_cast<WarpGate*>(stageObject.get())) {
 			WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject.get());
+			//プレイヤーとワープゲートの当たり判定 + Eキーを押した時
 			if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB()) && Input::GetInstance()->TriggerKey(DIK_E)) {
 				isZumuIn = true;
 				cameraSegment.origin = camera->GetTranslate();//ズーム前のカメラ位置
@@ -97,7 +103,4 @@ void SelectScene::Draw() {
 
 void SelectScene::Finalize() {
 	stageObjects.clear();
-	//for (auto& stageObject : stageObjects) {
-	//	delete stageObject;
-	//}	
 }
