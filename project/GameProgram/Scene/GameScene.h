@@ -83,4 +83,6 @@ private:
 	void EnemyPop(const Vector3& position,const Vector3& rotation,const std::string& name);
 
 	//std::vector<std::unique_ptr<IEnemy>> eventEnmeies;
+
+	std::unique_ptr<Sprite> moji;
 };

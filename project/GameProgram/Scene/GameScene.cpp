@@ -19,6 +19,12 @@ void GameScene::Initialize() {
 	Audio::GetInstance()->SoundPlayWave(BGMData_, 0.3f, true);
 
 	WarterWarpExit();
+
+	moji = std::make_unique<Sprite>();
+	moji->Initialize("Moji_Back_Title.png");
+	moji->SetPosition({300,0});
+	moji->SetSize({ 256,128 });
+
 }
 
 void GameScene::Update() {
@@ -50,7 +56,7 @@ void GameScene::Update() {
 	}
 
 	//
-	if (Input::GetInstance()->TriggerKey(DIK_F2)) {
+	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
 		sceneNo = Title;
 		Audio::GetInstance()->StopWave(BGMData_);
 	}
@@ -285,7 +291,7 @@ void GameScene::Update() {
 
 #endif //  USE_IMGUI
 
-
+	moji->Update();
 	Audio::GetInstance()->ControlVolume(BGMData_, volume);
 }
 
@@ -320,7 +326,7 @@ void GameScene::Draw() {
 
 	//スプライト描画処理(UI用)
 	SpriteCommon::GetInstance()->Command();
-
+	moji->Draw();
 }
 
 void GameScene::Finalize() {
