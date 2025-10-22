@@ -84,5 +84,4 @@ private:
 
 	//std::vector<std::unique_ptr<IEnemy>> eventEnmeies;
 
-	std::unique_ptr<Sprite> moji;
 };

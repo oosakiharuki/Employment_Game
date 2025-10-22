@@ -149,7 +149,7 @@ void TitleScene::Update() {
 
 		if (!FadeScreen::GetInstance()->GetIsFadeing()) {
 			if (wts[1].translation_.y == wts[2].translation_.y) {
-				sceneNo = Game;
+				sceneNo = Select;
 				isfadeStart = false;
 			}
 			else if (wts[1].translation_.y == wts[3].translation_.y) {
