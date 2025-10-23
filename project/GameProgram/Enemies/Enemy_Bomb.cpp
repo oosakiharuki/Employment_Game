@@ -20,7 +20,7 @@ void Enemy_Bomb::Initialize() {
 
 	//爆発パーティクルの初期化
 	particle_Bom = std::make_unique<Particle>();
-	particle_Bom->Initialize("resource/Sprite/circle.png", PrimitiveType::ring);
+	particle_Bom->Initialize("enemyBomb_Attack", "resource/Sprite/circle.png", PrimitiveType::ring);
 	particle_Bom->SetParticleCount(10);
 	particle_Bom->ChangeMode(BornParticle::Stop);
 	particle_Bom->SetParticleMosion(ParticleMosion::Exprosion);

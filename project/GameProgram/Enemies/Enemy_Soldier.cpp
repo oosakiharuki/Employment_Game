@@ -23,7 +23,7 @@ void Enemy_Soldier::Initialize() {
 	hp = maxHp;
 
 	particle_fire = std::make_unique<Particle>();
-	particle_fire->Initialize("resource/Sprite/cone.png", PrimitiveType::cone);
+	particle_fire->Initialize("enemySoldier_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particle_fire->SetParticleCount(1);
 	particle_fire->ChangeMode(BornParticle::Stop);
 	particle_fire->SetParticleMosion(ParticleMosion::Fixed);
@@ -31,7 +31,7 @@ void Enemy_Soldier::Initialize() {
 
 
 	particle_damage = std::make_unique<Particle>();
-	particle_damage->Initialize("resource/Sprite/circle.png", PrimitiveType::ring);
+	particle_damage->Initialize("enemySoldier_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
 	particle_damage->SetParticleCount(10);
 	particle_damage->ChangeMode(BornParticle::Stop);
 	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);

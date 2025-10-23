@@ -40,12 +40,12 @@ void Player::Initialize() {
 	pariSound = Audio::GetInstance()->LoadWave("resource/Sound/bane.wav");
 
 	particle_walk = std::make_unique<Particle>();
-	particle_walk->Initialize("resource/Sprite/ground.png",PrimitiveType::box);
+	particle_walk->Initialize("player_walk", "resource/Sprite/ground.png", PrimitiveType::box);
 	particle_walk->ChangeMode(BornParticle::Stop);
 	particle_walk->SetParticleMosion(ParticleMosion::Smaller);
 
 	particle_brink = std::make_unique<Particle>();
-	particle_brink->Initialize("resource/Sprite/cone.png", PrimitiveType::cone);
+	particle_brink->Initialize("player_brink", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particle_brink->SetParticleCount(1);
 	particle_brink->ChangeMode(BornParticle::Stop);
 	particle_brink->SetParticleMosion(ParticleMosion::Fixed);
@@ -54,7 +54,7 @@ void Player::Initialize() {
 
 
 	particle_fire = std::make_unique<Particle>();
-	particle_fire->Initialize("resource/Sprite/cone.png", PrimitiveType::cone);
+	particle_fire->Initialize("player_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particle_fire->SetParticleCount(1);
 	particle_fire->ChangeMode(BornParticle::Stop);
 	particle_fire->SetParticleMosion(ParticleMosion::Fixed);
@@ -62,7 +62,7 @@ void Player::Initialize() {
 
 
 	particle_damage = std::make_unique<Particle>();
-	particle_damage->Initialize("resource/Sprite/circle.png", PrimitiveType::ring);
+	particle_damage->Initialize("player_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
 	particle_damage->SetParticleCount(20);
 	particle_damage->ChangeMode(BornParticle::Stop);
 	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
@@ -70,7 +70,7 @@ void Player::Initialize() {
 
 
 	particle_pari = std::make_unique<Particle>();
-	particle_pari->Initialize("resource/Sprite/uvChecker.png", PrimitiveType::cone);
+	particle_pari->Initialize("player_pari", "resource/Sprite/uvChecker.png", PrimitiveType::cone);
 	particle_pari->ChangeMode(BornParticle::Stop);
 	particle_pari->SetParticleMosion(ParticleMosion::Fixed);
 	particle_fire->SetFrequency(0.5f);

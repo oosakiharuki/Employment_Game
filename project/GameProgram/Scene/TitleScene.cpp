@@ -90,7 +90,7 @@ void TitleScene::Initialize() {
 
 	//パーティクル初期化
 	bullet_particle = std::make_unique<Particle>();
-	bullet_particle->Initialize("resource/Sprite/cone.png", PrimitiveType::cone);
+	bullet_particle->Initialize("title_bullet", "resource/Sprite/cone.png", PrimitiveType::cone);
 	bullet_particle->SetParticleCount(1);
 	bullet_particle->ChangeMode(BornParticle::Stop);
 	bullet_particle->SetParticleMosion(ParticleMosion::Fixed);

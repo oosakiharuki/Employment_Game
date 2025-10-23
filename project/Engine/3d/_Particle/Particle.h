@@ -30,12 +30,18 @@ struct AccelerationField {
 	AABB area;
 };
 
+/// <summary>
+/// Emitを発動する場面
+/// </summary>
 enum class BornParticle {
 	TimerMode, //タイマーで出てくる
-	MomentMode,//瞬間的に出てくる
-	Stop,
+	MomentMode,//瞬間的に出てくる(その後stopに)
+	Stop,//出さない
 };
 
+/// <summary>
+/// Emitterで動きを変化させる
+/// </summary>
 enum class ParticleMosion {
 	Normal,  //あちこち動く
 	Fixed,   //固定
@@ -47,10 +53,26 @@ enum class ParticleMosion {
 class Particle{
 public:
 	~Particle(); // デストラクタを追加
-	void Initialize(std::string textureFile, PrimitiveType type);
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="particleName"></param>パーティクルの名前
+	/// <param name="textureFile"></param>使用するテクスチャ名
+	/// <param name="type"></param>形(Primitive)
+	void Initialize(const std::string& particleName,std::string textureFile, PrimitiveType type);
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update();
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// setter_
+	/// </summary>
+	/// <param name="scale"></param>
 	void SetScale(const Vector3& scale) { emitter.transform.scale = scale; }
 	const Vector3& GetScale() const { return emitter.transform.scale; }
 
@@ -64,12 +86,23 @@ public:
 
 	void SetCamera(Camera* camera) { this->camera = camera; }
 
+	/// <summary>
+	/// パーティクルのモーション
+	/// </summary>
+	/// <param name="mosion"></param>
 	void SetParticleMosion(ParticleMosion mosion) { particleMosion = mosion; }
 
 
 	bool IsCollision(const AABB& aabb, const Vector3& point);
-
+	/// <summary>
+	/// パーティクル発動モード
+	/// </summary>
+	/// <param name="mode"></param>時間で出る/一度だけ/出さない
 	void ChangeMode(BornParticle mode) { bornP = mode; }
+	/// <summary>
+	/// パーティクルの発生数
+	/// </summary>
+	/// <param name="countnum"></param>
 	void SetParticleCount(uint32_t countnum) { emitter.count = countnum; }
 	void Emit();
 

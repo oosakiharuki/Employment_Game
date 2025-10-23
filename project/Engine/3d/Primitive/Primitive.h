@@ -1,6 +1,9 @@
 #pragma once
 #include "MyMath.h"
 
+/// <summary>
+/// Primitive
+/// </summary>
 enum PrimitiveType {
 	box,
 	plane,
