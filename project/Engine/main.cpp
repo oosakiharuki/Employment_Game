@@ -1,8 +1,5 @@
 #include "MyGame.h"
 
-using namespace MyMath;
-
-
 //Windowsアプリのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
