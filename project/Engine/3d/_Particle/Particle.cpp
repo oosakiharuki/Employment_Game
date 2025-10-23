@@ -35,30 +35,14 @@ Particle::~Particle() {
 	}
 }
 
-void Particle::Initialize(std::string textureFile , PrimitiveType type) {
+void Particle::Initialize(const std::string& particleName, std::string textureFile , PrimitiveType type) {
 	this->particleCommon = ParticleCommon::GetInstance();
 	this->camera = particleCommon->GetDefaultCamera();
-	
-	//パーティクルの発生源数を増やす
-	const uint32_t MAX_PARTICLE_GROUPS = 100; // パーティクルグループの最大数
-	
-	// スレッドセーフなインクリメント
-	static std::mutex particleNumMutex;
-	{
-		std::lock_guard<std::mutex> lock(particleNumMutex);
-		
-		// パーティクル番号が上限に達した場合はリセット
-		if (ParticleNum::number <= MAX_PARTICLE_GROUPS) {
-			ParticleNum::number++;
-		}
-		number = ParticleNum::number;
-	}
 
 	//particleの設定
-	ParticleManager::GetInstance()->CreateParticleGroup(std::to_string(number), textureFile, type);
+	ParticleManager::GetInstance()->CreateParticleGroup(particleName, textureFile, type);
 
-	this->fileName = std::to_string(number);
-
+	this->fileName = particleName;
 	this->textureFile = textureFile;
 
 	modelData = ParticleManager::GetInstance()->GetModelData(fileName);

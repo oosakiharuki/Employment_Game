@@ -22,7 +22,7 @@ void Enemy_Turret::Initialize() {
 	hp = maxHp;
 
 	particle_fire = std::make_unique<Particle>();
-	particle_fire->Initialize("resource/Sprite/cone.png", PrimitiveType::cone);
+	particle_fire->Initialize("enemyTurret_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particle_fire->SetParticleCount(1);
 	particle_fire->ChangeMode(BornParticle::Stop);
 	particle_fire->SetParticleMosion(ParticleMosion::Fixed);
@@ -30,13 +30,13 @@ void Enemy_Turret::Initialize() {
 
 
 	particle_dead = std::make_unique<Particle>();
-	particle_dead->Initialize("resource/Sprite/gradationLine.png", PrimitiveType::ring);
+	particle_dead->Initialize("enemyTurret_dead", "resource/Sprite/gradationLine.png", PrimitiveType::ring);
 	particle_dead->SetParticleCount(1);
 	particle_dead->SetParticleMosion(ParticleMosion::Normal);
 	particle_dead->ChangeMode(BornParticle::Stop);
 
 	particle_damage = std::make_unique<Particle>();
-	particle_damage->Initialize("resource/Sprite/circle.png", PrimitiveType::ring);
+	particle_damage->Initialize("enemyTurret_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
 	particle_damage->SetParticleCount(10);
 	particle_damage->ChangeMode(BornParticle::Stop);
 	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
