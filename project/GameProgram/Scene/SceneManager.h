@@ -8,6 +8,8 @@
 #include "ClearScene.h"
 #include "GameOverScene.h"
 
+#include "SceneFactory.h"
+
 /// <summary>
 /// シーンマネージャ
 /// </summary>
@@ -21,18 +23,16 @@ public:
 	void Draw();
 	void Finalize();
 
-	bool SetGameEnd() { return sceneArr_[currentSceneNo_]->GetIsGameEnd(); }
+	bool SetGameEnd() { return sceneArr.iscene->GetIsGameEnd(); }
 
 private:
 	
-	void SceneChange(int prev,int current);//シーン入れ替え
+	void SceneChange();//シーン入れ替え
 
-	//ステージの最大数
-	static const uint32_t SceneNum = 5;
-	
-	std::unique_ptr<IScene> sceneArr_[SceneNum];
+	SceneGroup sceneArr;
+	SceneFactory sceneFactory;
 
-	int currentSceneNo_;//現在シーン
-	int prevSceneNo_;//前シーン
+	std::string currentSceneNo_;//現在シーン
+	std::string prevSceneNo_;//前シーン
 
 };

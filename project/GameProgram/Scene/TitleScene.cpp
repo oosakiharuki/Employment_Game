@@ -149,7 +149,7 @@ void TitleScene::Update() {
 
 		bulletTimer += 1.0f / 60.0f;
 		if (bulletTimer >= bulletTimeMax) {
-			NextSceneFadeInStart(Select);
+			NextSceneFadeInStart("Select");
 		}
 	}
 

@@ -1,13 +1,13 @@
 #include "IScene.h"
 using namespace MyMath;
 
-int IScene::sceneNo = Game;
+std::string IScene::sceneNo = "Title";
 
-int IScene::nextSceneNo = Game;
+std::string IScene::nextSceneNo = "Title";
 
 IScene::~IScene(){}
 
-int IScene::GetSceneNo() { return sceneNo; }
+std::string IScene::GetSceneNo() { return sceneNo; }
 
 void IScene::InputGamePad() {
 	input_->GetJoyStickState(0,state);
@@ -422,9 +422,9 @@ CollisionOverlap IScene::BackPosition(CollisionOverlap collisionOverlap) {
 	return collisionOverlap_;
 }
 
-void IScene::NextSceneFadeInStart(SCENE No) {
+void IScene::NextSceneFadeInStart(const std::string& name) {
 	FadeScreen::GetInstance()->FadeStart(type_fadeIn);
-	nextSceneNo = No;
+	nextSceneNo = name;
 }
 
 bool IScene::NextSceneFlag() {

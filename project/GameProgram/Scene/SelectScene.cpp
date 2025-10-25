@@ -33,7 +33,7 @@ void SelectScene::Update() {
 		camera->Zumu(cameraSegment, zumuTimer);
 
 		if (zumuTimer >= 1.0f) {
-			NextSceneFadeInStart(Game);
+			NextSceneFadeInStart("Game");
 		}
 	}
 

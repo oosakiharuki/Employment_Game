@@ -26,17 +26,6 @@
 #include "EventTrigger.h"
 
 /// <summary>
-/// シーンの種類
-/// </summary>
-enum SCENE{
-	Title,
-	Game,
-	Select,
-	Clear,
-	GameOver,
-};
-
-/// <summary>
 /// 当たり判定:重なり部分を
 /// </summary>
 struct CollisionOverlap {
@@ -51,9 +40,9 @@ struct CollisionOverlap {
 class IScene{
 protected:
 	//現在のシーン
-	static int sceneNo;
+	static std::string sceneNo;
 	//次のシーン
-	static int nextSceneNo;
+	static std::string nextSceneNo;
 
 	//入力処理
 	Input* input_ = Input::GetInstance();
@@ -128,7 +117,7 @@ protected:
 	/// 次のシーンの選択+フェードインを始める
 	/// </summary>
 	/// <param name="進めたいシーン"></param>
-	void NextSceneFadeInStart(SCENE No);
+	void NextSceneFadeInStart(const std::string& name);
 
 	/// <summary>
 	/// 次のシーンに進むフラグ(フェードなど間を開けたい時)
@@ -165,7 +154,7 @@ public:
 	/// シーン名で
 	/// </summary>
 	/// <returns></returns>現在のシーン
-	int GetSceneNo();
+	std::string GetSceneNo();
 
 	/// <summary>
 	/// ゲーム終了処理

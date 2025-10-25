@@ -30,7 +30,7 @@ void GameScene::Update() {
 	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
-		NextSceneFadeInStart(Title);
+		NextSceneFadeInStart("Title");
 		Audio::GetInstance()->StopWave(BGMData_);
 	}
 
@@ -44,7 +44,7 @@ void GameScene::Update() {
 		camera->Zumu(cameraSegment, zumuTimer);
 
 		if (zumuTimer >= 1.0f) {
-			NextSceneFadeInStart(Game);
+			NextSceneFadeInStart("Game");
 		}
 	}
 
@@ -57,10 +57,11 @@ void GameScene::Update() {
 				cameraSegment.diff = player_->GetTranslate() + Vector3(0, 2, -15.0f);//プレイヤーよりちょっと離れてる
 				isNextStage = true;
 				nextStage_fileName = warpGate->GetNextStage();
+				//NextSceneFadeInStart();
 				break;
 			}//ゴール
 			else if (stageObject.get() == dynamic_cast<Goal*>(stageObject.get())) {
-				NextSceneFadeInStart(Clear);
+				NextSceneFadeInStart("Clear");
 				return;
 			}
 		}
@@ -324,7 +325,7 @@ void GameScene::Respawn() {
 		}
 		else {
 			//残機が0の場合ゲームオーバー
-			NextSceneFadeInStart(GameOver);
+			NextSceneFadeInStart("GameOver");
 		}
 		
 		for (auto& eventTrigger : eventTriggers){
