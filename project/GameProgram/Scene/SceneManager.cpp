@@ -7,41 +7,37 @@ SceneManager::SceneManager() {
 	LoadingModels::GetInstance()->Finalize();
 
 
-	sceneArr_[Select] = new SelectScene();
+	sceneArr_[Title] = std::make_unique<TitleScene>();
 
 	prevSceneNo_ = 0;
-	currentSceneNo_ = Select;
+	currentSceneNo_ = Title;
 }
 
 SceneManager::~SceneManager() {
-	sceneArr_[currentSceneNo_]->Finalize();
-	delete sceneArr_[currentSceneNo_];
+	Finalize();
 }
 
 void SceneManager::SceneChange(int prev, int current) {
 
 	//前のシーンの解放
-	sceneArr_[prev]->Finalize();
-	delete sceneArr_[prev];
-	sceneArr_[prev] = nullptr;
+	Finalize();
 
-	//scene_ = current;
 	switch (current)
 	{
 	case Title:
-		sceneArr_[current] = new TitleScene();
+		sceneArr_[current] = std::make_unique<TitleScene>();
 		break;
 	case Game:
-		sceneArr_[current] = new GameScene();
+		sceneArr_[current] = std::make_unique<GameScene>();
 		break;	
 	case Select:
-		sceneArr_[current] = new SelectScene();
+		sceneArr_[current] = std::make_unique<SelectScene>();
 		break;
 	case Clear:
-		sceneArr_[current] = new ClearScene();
+		sceneArr_[current] = std::make_unique<ClearScene>();
 		break;
 	case GameOver:
-		sceneArr_[current] = new GameOverScene();
+		sceneArr_[current] = std::make_unique<GameOverScene>();
 		break;
 	}
 }
@@ -64,4 +60,8 @@ void SceneManager::Update() {
 
 void SceneManager::Draw() {
 	sceneArr_[currentSceneNo_]->Draw();
+}
+
+void SceneManager::Finalize() {
+	sceneArr_[currentSceneNo_].reset();
 }

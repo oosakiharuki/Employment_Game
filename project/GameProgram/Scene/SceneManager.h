@@ -19,7 +19,7 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
-	//void Finalize();
+	void Finalize();
 
 	bool SetGameEnd() { return sceneArr_[currentSceneNo_]->GetIsGameEnd(); }
 
@@ -29,8 +29,8 @@ private:
 
 	//ステージの最大数
 	static const uint32_t SceneNum = 5;
-
-	IScene* sceneArr_[SceneNum];
+	
+	std::unique_ptr<IScene> sceneArr_[SceneNum];
 
 	int currentSceneNo_;//現在シーン
 	int prevSceneNo_;//前シーン
