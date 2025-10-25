@@ -98,8 +98,8 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				Vector3 center = { (float)trigger["center"][0],(float)trigger["center"][2],(float)trigger["center"][1] };
 				Vector3 size = { (float)trigger["size"][0],(float)trigger["size"][2],(float)trigger["size"][1] };
 
-				levelData->eventTriggers.emplace_back(LevelData::EventTriggerData{});
-				LevelData::EventTriggerData& eventTrigger = levelData->eventTriggers.back();
+				levelData->eventTriggerDatas.emplace_back(LevelData::EventTriggerData{});
+				LevelData::EventTriggerData& eventTrigger = levelData->eventTriggerDatas.back();
 
 				//オブジェクトの真ん中 + eventTrigger自体の真ん中
 				eventTrigger.center = objectData.translation + center;

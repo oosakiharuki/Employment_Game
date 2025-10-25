@@ -23,6 +23,8 @@
 #include "ParticleNumber.h"
 #include "FadeScreen.h"
 
+#include "EventTrigger.h"
+
 /// <summary>
 /// シーンの種類
 /// </summary>
@@ -45,17 +47,6 @@ struct CollisionOverlap {
 	AABB targetAABB = { { 0,0,0 }, { 0,0,0 } };
 	AABB stageAABB = { { 0,0,0 }, { 0,0,0 } };
 };
-
-/// <summary>
-/// イベントトリガーの構造体
-/// </summary>
-struct EventTrigger {
-	bool isEvent = false; //イベント発動フラグ
-	AABB aabb;            //イベント範囲
-	Vector3 center;       //真ん中
-	std::string csvFile;  //csvファイル
-};
-
 
 class IScene{
 protected:
@@ -84,7 +75,7 @@ protected:
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 	//敵たち
-	std::vector<std::unique_ptr<IEnemy>> enemies;
+	std::vector<std::shared_ptr<IEnemy>> enemies;
 	//ステージオブジェクトたち
 	std::list<std::unique_ptr<IStageObject>> stageObjects;
 	
@@ -94,7 +85,7 @@ protected:
 	std::vector<AABB> stagesAABB;
 
 	//イベントトリガー
-	std::vector<EventTrigger> eventTriggers;
+	std::vector<std::unique_ptr<EventTrigger>> eventTriggers;
 
 	//BGM
 	SoundData BGMData_;

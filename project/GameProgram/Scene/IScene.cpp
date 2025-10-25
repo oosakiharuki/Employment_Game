@@ -1,9 +1,9 @@
 #include "IScene.h"
 using namespace MyMath;
 
-int IScene::sceneNo = Title;
+int IScene::sceneNo = Game;
 
-int IScene::nextSceneNo = Title;
+int IScene::nextSceneNo = Game;
 
 IScene::~IScene(){}
 
@@ -74,13 +74,18 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	}
 
 	//
-	if (!levelediter.GetLevelData()->eventTriggers.empty()) {
-		for (auto& eventTrigger : levelediter.GetLevelData()->eventTriggers) {
-			EventTrigger iterator;
-			iterator.aabb = eventTrigger.collisionAABB;
-			iterator.center = eventTrigger.center;
-			iterator.csvFile = eventTrigger.csvFile;
-			eventTriggers.push_back(iterator);
+	if (!levelediter.GetLevelData()->eventTriggerDatas.empty()) {
+		for (auto& eventTriggerData : levelediter.GetLevelData()->eventTriggerDatas) {
+			EventData iterator;
+			iterator.aabb = eventTriggerData.collisionAABB;
+			iterator.center = eventTriggerData.center;
+			iterator.csvFile = eventTriggerData.csvFile;
+
+			std::unique_ptr<EventTrigger> eventTrigger;
+			eventTrigger = std::make_unique<EventTrigger>();
+			eventTrigger->SetEventData(iterator);
+
+			eventTriggers.push_back(std::move(eventTrigger));
 		}
 	}
 
@@ -261,7 +266,7 @@ void IScene::CollisionCommon() {
 			}
 		}
 
-		for (std::unique_ptr<IEnemy>& enemy : enemies) {
+		for (auto& enemy : enemies) {
 			for (EnemyBullet* bulletE : enemy->GetBullets()) {
 				if (IsCollisionAABB(bulletE->GetAABB(), stage)) {
 					bulletE->IsHit();
@@ -278,13 +283,13 @@ void IScene::CollisionCommon() {
 	//イベントトリガー
 	for (auto& eventTrigger : eventTriggers) {
 		//イベントが発動した時
-		if (eventTrigger.isEvent) {
+		if (eventTrigger->GetEventData().isEvent) {
 			//イベントトリガーの範囲外に出ないように(!IsCollisionAABB()によって外に出た判定をとる)
-			if (!IsCollisionAABB(playerCollisionOverlap.targetAABB, eventTrigger.aabb)) {
+			if (!IsCollisionAABB(playerCollisionOverlap.targetAABB, eventTrigger->GetEventData().aabb)) {
 				//ステージ判定代入
-				playerCollisionOverlap.stageAABB = eventTrigger.aabb;
+				playerCollisionOverlap.stageAABB = eventTrigger->GetEventData().aabb;
 				//重なった部分
-				playerCollisionOverlap.overlap = OverAABB(player_->GetAABB(), eventTrigger.aabb);
+				playerCollisionOverlap.overlap = OverAABB(player_->GetAABB(), eventTrigger->GetEventData().aabb);
 				//場所を戻す・壁と床の判定
 				playerCollisionOverlap = BackPosition(playerCollisionOverlap);
 
@@ -301,7 +306,7 @@ void IScene::CollisionCommon() {
 				}
 			}
 		}
-		else if (IsCollisionAABB(player_->GetAABB(), eventTrigger.aabb)) {
+		else if (IsCollisionAABB(player_->GetAABB(), eventTrigger->GetEventData().aabb) && !eventTrigger->EventEnd()) {
 			cameraRotate = levelediter.GetLevelData()->cameraInit[1].rotation;
 			cameraTranslate = levelediter.GetLevelData()->cameraInit[1].translation;
 
@@ -313,8 +318,13 @@ void IScene::CollisionCommon() {
 			camera->SetRotate(cameraRotate);
 			camera->SetTranslate(cameraTranslate);
 
-			eventTrigger.isEvent = true;
+			eventTrigger->StartEvent();
 		}
+
+		if (eventTrigger->EventEnd()) {
+			MainCamera();
+		}
+
 	}
 
 

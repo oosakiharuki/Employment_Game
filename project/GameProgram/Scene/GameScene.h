@@ -39,18 +39,18 @@ private:
 	Segment cameraSegment{};
 	float zumuTimer = 0.0f;
 
-	void LoadEventCSV(std::string file);
+	//void LoadEventCSV(std::string file);
 
-	std::stringstream enemyPopCsvFile;
+	//std::stringstream enemyPopCsvFile;
 
-	void PopEventEneies(EventTrigger* eventTrigger);
-	bool eventWave = false;
-	
-	//敵を生んだ・倒した数
-	uint32_t enemyBornCount = 0;
-	uint32_t enemyDeadCount = 0;
+	//void PopEventEneies(EventTrigger* eventTrigger);
+	//bool eventWave = false;
+	//
+	////敵を生んだ・倒した数
+	//uint32_t enemyBornCount = 0;
+	//uint32_t enemyDeadCount = 0;
 
-	bool isLoadCsv = true;
+	//bool isLoadCsv = true;
 
 	//スタート時のワープゲート
 	std::unique_ptr<WarpGate> startWarp;
@@ -69,12 +69,12 @@ private:
 	/// 向き
 	/// <param name="name"></param>
 	/// 敵の名前
-	void EnemyPop(const Vector3& position,const Vector3& rotation,const std::string& name);
+	//void EnemyPop(const Vector3& position,const Vector3& rotation,const std::string& name);
 
 	/// <summary>
 	/// イベントリセット(共有)
 	/// </summary>
-	void ResetEvent();
+	//void ResetEvent();
 
 	void Respawn();
 
