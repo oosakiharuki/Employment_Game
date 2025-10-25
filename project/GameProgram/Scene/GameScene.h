@@ -10,11 +10,7 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Finalize() override;
-
-	void SetStage(const std::string stage) { stage_file = stage; }
-
 private:
-	std::string stage_file;
 	/// <summary>
 	/// 次のステージに移る
 	/// </summary>
@@ -30,15 +26,9 @@ private:
 	//残機
 	uint32_t RemainingLife = 3;
 
-	//クリア/ゲームオーバーのフラグ
-	bool isGameOver = false;
-	bool isGameClear = false;
-	
-
 	//次のステージの移動
 	bool isNextStage = false;
 	std::string nextStage_fileName;
-	bool isChangeStage = true;
 
 	//スタート演出(水たまりから飛び出る感じに)
 	bool isStartStage = true;
@@ -48,7 +38,6 @@ private:
 	//カメラズーム
 	Segment cameraSegment{};
 	float zumuTimer = 0.0f;
-	//bool isZumuIn = false;
 
 	void LoadEventCSV(std::string file);
 
@@ -82,6 +71,21 @@ private:
 	/// 敵の名前
 	void EnemyPop(const Vector3& position,const Vector3& rotation,const std::string& name);
 
-	//std::vector<std::unique_ptr<IEnemy>> eventEnmeies;
+	/// <summary>
+	/// イベントリセット(共有)
+	/// </summary>
+	void ResetEvent();
+
+	void Respawn();
+
+	/// <summary>
+	/// チェックポイントを変更する
+	/// </summary>
+	void ChangeCheckPoint();
+
+	/// <summary>
+	/// カメラコントロール
+	/// </summary>
+	void CameraControl();
 
 };

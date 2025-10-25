@@ -61,6 +61,8 @@ class IScene{
 protected:
 	//現在のシーン
 	static int sceneNo;
+	//次のシーン
+	static int nextSceneNo;
 
 	//入力処理
 	Input* input_ = Input::GetInstance();
@@ -108,9 +110,6 @@ protected:
 	/// </summary>
 	void CollisionCommon();
 
-	//フェードスイッチ
-	bool isfadeStart = false;
-
 	//end
 	bool isGameEnd = false;
 
@@ -133,6 +132,23 @@ protected:
 	/// ゲームパット入力処理
 	/// </summary>
 	void InputGamePad();
+
+	/// <summary>
+	/// 次のシーンの選択+フェードインを始める
+	/// </summary>
+	/// <param name="進めたいシーン"></param>
+	void NextSceneFadeInStart(SCENE No);
+
+	/// <summary>
+	/// 次のシーンに進むフラグ(フェードなど間を開けたい時)
+	/// </summary>
+	/// <returns></returns>
+	bool NextSceneFlag();
+	
+	/// <summary>
+	/// sceneNo = nextSceneNoに
+	/// </summary>
+	void ChangeScene();
 
 public:
 	/// <summary>

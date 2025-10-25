@@ -13,21 +13,13 @@ void GameOverScene::Update() {
 	
 	sprite->Update();
 
-	if (isfadeStart) {
-		FadeScreen::GetInstance()->FedeIn();
-
-		if (!FadeScreen::GetInstance()->GetIsFadeing()) {
-			sceneNo = Select;
-			isfadeStart = false;
-		}
-	}
-	else {
-		FadeScreen::GetInstance()->FedeOut();
+	if (!FadeScreen::GetInstance()->GetIsFadeing()) {
+		ChangeScene();
 	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
 		Input::GetInstance()->TriggerBotton(state, preState, XINPUT_GAMEPAD_A)) {
-		isfadeStart = true;
+		NextSceneFadeInStart(Select);
 	}
 
 }

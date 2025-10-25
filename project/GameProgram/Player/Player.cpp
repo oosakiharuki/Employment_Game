@@ -578,7 +578,7 @@ void Player::IsFall() {
 	if (Hp == 0) {
 		return;
 	}
-	Hp--;
+	Hp = 0;
 	Audio::GetInstance()->SoundPlayWave(hitSound, 0.05f);
 }
 

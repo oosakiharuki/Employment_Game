@@ -4,11 +4,11 @@ using namespace MyMath;
 
 void GameScene::Initialize() {
 
-	LevelEditorObjectSetting("resource/Levelediter/stage_0.json");
+	LevelEditorObjectSetting("resource/Levelediter/stage_1.json");
 
 	stageobj = std::make_unique<Object3d>();
 	stageobj->Initialize();
-	stageobj->SetModelFile("stage_0.obj");
+	stageobj->SetModelFile("stage_1.obj");
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
@@ -20,39 +20,17 @@ void GameScene::Initialize() {
 
 	WarterWarpExit();
 
+	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
 
 void GameScene::Update() {
 
-	if (isfadeStart) {
-		FadeScreen::GetInstance()->FedeIn();
-		if (!FadeScreen::GetInstance()->GetIsFadeing()) {
-			if (isGameClear) {
-				//ゲームクリアシーンに移動
-				sceneNo = Clear;
-				Audio::GetInstance()->StopWave(BGMData_);
-			}
-			else if (isGameOver) {
-				//ゲームオーバーシーンに移動
-				sceneNo = GameOver;
-				Audio::GetInstance()->StopWave(BGMData_);
-			}
-			else if (isNextStage) {
-				StageMovement("resource/Levelediter/" + nextStage_fileName + ".json", nextStage_fileName + ".obj");
-				player_->SpriteUpdate();
-				isNextStage = false;
-				zumuTimer = 0.0f;
-			}
-			isfadeStart = false;
-		}
-	}
-	else {
-		FadeScreen::GetInstance()->FedeOut();
+	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {
+		ChangeScene();
 	}
 
-	//
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
-		sceneNo = Title;
+		NextSceneFadeInStart(Title);
 		Audio::GetInstance()->StopWave(BGMData_);
 	}
 
@@ -66,7 +44,7 @@ void GameScene::Update() {
 		camera->Zumu(cameraSegment, zumuTimer);
 
 		if (zumuTimer >= 1.0f) {
-			isfadeStart = true;
+			NextSceneFadeInStart(Game);
 		}
 	}
 
@@ -82,8 +60,7 @@ void GameScene::Update() {
 				break;
 			}//ゴール
 			else if (stageObject.get() == dynamic_cast<Goal*>(stageObject.get())) {
-				isGameClear = true;
-				isfadeStart = true;
+				NextSceneFadeInStart(Clear);
 				return;
 			}
 		}
@@ -131,18 +108,7 @@ void GameScene::Update() {
 		stageObject->Update();
 	}
 
-	bool isChangeRespown = false;
-	//リスポーン変更した時
-	for (auto& stageObject : stageObjects) {
-		if (IsCollisionAABB(player_->GetAABB(), stageObject->GetAABB())) {
-			//チェックポイント
-			if (stageObject.get() == dynamic_cast<CheckPoint*>(stageObject.get())) {
-				CheckPoint* checkPoint = dynamic_cast<CheckPoint*>(stageObject.get());
-				player_->SetRespownPosition(checkPoint->GetPosition());
-				isChangeRespown = true;
-			}
-		}
-	}
+	ChangeCheckPoint();
 
 	//共有イベントフラグ
 	bool isEventCommon = false;
@@ -159,105 +125,32 @@ void GameScene::Update() {
 		}
 	}
 
-	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
-	if (player_->GetIsPlayerDown() && player_->GetIsRespown()) {
+	Respawn();
 
-		RemainingLife--;
-		if (RemainingLife != 0) {
-			for (auto& enemy : enemies) {
-				enemy->RespownEnemy();
-			}
-			player_->AllRespownEnd();
-		}
-		else {
-			isGameOver = true;
-			isfadeStart = true;
-		}
-
-		//強制イベント中の場合
-		if (isEventCommon) {
-			//イベント終了
-			isEventCommon = false;
-			eventWave = false;
-			//次に読み込めるように
-			isLoadCsv = true;
-			//カメラを元(メインカメラ)に戻す
-			MainCamera();
-
-			//召喚敵を最後尾から消す
-			for (uint32_t i = 0; i < enemyBornCount; i++) {
-				enemies.pop_back();
-			}
-
-			enemyBornCount = 0;
-
-			//リセット
-			enemyPopCsvFile.clear();
-			//最初の行にする
-			enemyPopCsvFile.seekg(0, std::ios_base::beg);
-
-		}
-	}
-	
 	//演出では使わない
 	if (!isStartStage) {
 		startWarp->Vanish();//出てきた後消えるようにする
 		CollisionCommon();
 	}
 
-	//リスポーン地点を変更前に倒した敵は復活しない
-	//if (isChangeRespown) {
-	//	//敵を倒したら削除
-	//	enemies.remove_if([](IEnemy* enemy) {
-	//		if (enemy->GetDeleteEnemy()) {
-	//			delete enemy;
-	//			return true;
-	//		}
-	//		return false;
-	//		});
-	//	isChangeRespown = false;
-	//}
-
-	//カメラの移動範囲
-
-	
 	//イベント中はカメラが固定
 	if (isEventCommon) {
 		//カメラ固定
 		worldTransformCamera_.rotation_ = cameraRotate;
 		worldTransformCamera_.translation_ = cameraTranslate;
 	}
-	//次ステージ移動時はズームされるのでここは除外
-	else if (!isNextStage) {
-		//Point1とPoint2から出たとき
-		if (cameraTranslate.x + cameraPoint1.x < player_->GetTranslate().x && cameraTranslate.x + cameraPoint2.x > player_->GetTranslate().x) {
-			worldTransformCamera_.translation_.x = player_->GetTranslate().x;
+	else {
+		//カメラの移動範囲
+		//次ステージ移動時はズームされるのでここは除外
+		if (!isNextStage) {
+			CameraControl();
 		}
-		else if (cameraTranslate.x + cameraPoint1.x >= player_->GetTranslate().x) {
-			worldTransformCamera_.translation_.x = cameraTranslate.x + cameraPoint1.x;
-		}
-		else if (cameraTranslate.x + cameraPoint2.x <= player_->GetTranslate().x) {
-			worldTransformCamera_.translation_.x = cameraTranslate.x + cameraPoint2.x;
-		}
-
-		if (cameraTranslate.y < player_->GetTranslate().y + 6.0f) {
-			worldTransformCamera_.translation_.y = player_->GetTranslate().y + 6.0f;
-		}
-		else {
-			worldTransformCamera_.translation_.y = cameraTranslate.y;
-		}	
 	}
 
-
+	//落ちた場合
 	if (player_->GetTranslate().y < -10.0f) {
 		player_->IsFall();
 	}
-
-	worldTransformCamera_.UpdateMatrix();
-
-	camera->SetRotate(worldTransformCamera_.rotation_);
-	camera->SetTranslate(worldTransformCamera_.translation_);
-
 
 #ifdef  USE_IMGUI
 
@@ -413,17 +306,9 @@ void GameScene::PopEventEneies(EventTrigger* eventTrigger) {
 		if (word.find("end") == 0) {
 			//イベント終了
 			eventTrigger->isEvent = false;
-			//次に読み込めるように
-			isLoadCsv = true;
+			ResetEvent();
 			//当たり判定を消す
 			eventTriggers.erase(eventTriggers.begin());
-
-			//カメラを元(メインカメラ)に戻す
-			MainCamera();
-
-			//リセット
-			enemyPopCsvFile.clear();
-
 			break;
 		}
 
@@ -531,5 +416,88 @@ void GameScene::WarterWarpExit() {
 	startWarp->SetRotation({ 90.0f,0.0f,0.0f });//下向きにして水たまりに
 
 	player_->IsAnimationOnlyUpdate(true);
+}
+
+void GameScene::ChangeCheckPoint() {
+	//リスポーン変更した時
+	for (auto& stageObject : stageObjects) {
+		if (IsCollisionAABB(player_->GetAABB(), stageObject->GetAABB())) {
+			//チェックポイント
+			if (stageObject.get() == dynamic_cast<CheckPoint*>(stageObject.get())) {
+				CheckPoint* checkPoint = dynamic_cast<CheckPoint*>(stageObject.get());
+				player_->SetRespownPosition(checkPoint->GetPosition());
+			}
+		}
+	}
+}
+
+void GameScene::CameraControl() {
+
+	//Point1とPoint2から出たとき
+	if (cameraTranslate.x + cameraPoint1.x < player_->GetTranslate().x && cameraTranslate.x + cameraPoint2.x > player_->GetTranslate().x) {
+		worldTransformCamera_.translation_.x = player_->GetTranslate().x;
+	}
+	else if (cameraTranslate.x + cameraPoint1.x >= player_->GetTranslate().x) {
+		worldTransformCamera_.translation_.x = cameraTranslate.x + cameraPoint1.x;
+	}
+	else if (cameraTranslate.x + cameraPoint2.x <= player_->GetTranslate().x) {
+		worldTransformCamera_.translation_.x = cameraTranslate.x + cameraPoint2.x;
+	}
+
+	if (cameraTranslate.y < player_->GetTranslate().y + 6.0f) {
+		worldTransformCamera_.translation_.y = player_->GetTranslate().y + 6.0f;
+	}
+	else {
+		worldTransformCamera_.translation_.y = cameraTranslate.y;
+	}
+	//カメラ座標系更新
+	worldTransformCamera_.UpdateMatrix();
+
+	//カメラ更新
+	camera->SetRotate(worldTransformCamera_.rotation_);
+	camera->SetTranslate(worldTransformCamera_.translation_);
+}
+
+void GameScene::ResetEvent() {
+	//ウェーブフラグ
+	eventWave = false;
+	//次に読み込めるように
+	isLoadCsv = true;
+	//カメラを元(メインカメラ)に戻す
+	MainCamera();
+	//召喚敵を最後尾から消していく
+	for (uint32_t i = 0; i < enemyBornCount; i++) {
+		enemies.pop_back();
+	}
+	enemyBornCount = 0;
+	//リセット
+	enemyPopCsvFile.clear();
+}
+
+void GameScene::Respawn() {
+	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
+	if (player_->GetIsPlayerDown() && player_->GetIsRespown()) {
+
+		RemainingLife--;
+		if (RemainingLife != 0) {
+			for (auto& enemy : enemies) {
+				enemy->RespownEnemy();
+			}
+			player_->AllRespownEnd();
+		}
+		else {
+			//残機が0の場合ゲームオーバー
+			NextSceneFadeInStart(GameOver);
+		}
+
+		//イベントをoffにする
+		for (auto& eventTrigger : eventTriggers) {
+			eventTrigger.isEvent = false;
+		}
+		//強制イベント中の場合
+		ResetEvent();
+		//最初の行にする
+		enemyPopCsvFile.seekg(0, std::ios_base::beg);
+	}
 
 }

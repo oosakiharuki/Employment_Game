@@ -12,23 +12,17 @@ void SelectScene::Initialize() {
 	stageobj->Initialize();
 	stageobj->SetModelFile("stage_select.obj");
 
+	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
 
 void SelectScene::Update() {
 	
 	InputGamePad();
 
-	if (isfadeStart) {
-		FadeScreen::GetInstance()->FedeIn();
-		//フェーズインが完了した時
-		if (!FadeScreen::GetInstance()->GetIsFadeing()) {
-			//ゲームシーンに移動
-			sceneNo = Game;
-			isfadeStart = false;
-		}
-	}
-	else{
-		FadeScreen::GetInstance()->FedeOut();
+	//フェーズインが完了した時
+	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {
+		//ゲームシーンに移動
+		ChangeScene();
 	}
 
 	if (isZumuIn) {
@@ -39,7 +33,7 @@ void SelectScene::Update() {
 		camera->Zumu(cameraSegment, zumuTimer);
 
 		if (zumuTimer >= 1.0f) {
-			isfadeStart = true;
+			NextSceneFadeInStart(Game);
 		}
 	}
 

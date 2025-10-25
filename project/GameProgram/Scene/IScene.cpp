@@ -3,6 +3,8 @@ using namespace MyMath;
 
 int IScene::sceneNo = Title;
 
+int IScene::nextSceneNo = Title;
+
 IScene::~IScene(){}
 
 int IScene::GetSceneNo() { return sceneNo; }
@@ -408,4 +410,20 @@ CollisionOverlap IScene::BackPosition(CollisionOverlap collisionOverlap) {
 	//z軸はいらないかも
 
 	return collisionOverlap_;
+}
+
+void IScene::NextSceneFadeInStart(SCENE No) {
+	FadeScreen::GetInstance()->FadeStart(type_fadeIn);
+	nextSceneNo = No;
+}
+
+bool IScene::NextSceneFlag() {
+	if (sceneNo != nextSceneNo) {
+		return true;
+	}
+	return false;
+}
+
+void IScene::ChangeScene() {
+	sceneNo = nextSceneNo;
 }
