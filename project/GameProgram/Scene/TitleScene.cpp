@@ -3,9 +3,6 @@
 using namespace MyMath;
 
 void TitleScene::Initialize() {
-
-
-
 	//カメラワールド座標系
 	worldTransformCamera_.Initialize();
 
@@ -95,6 +92,8 @@ void TitleScene::Initialize() {
 	bullet_particle->ChangeMode(BornParticle::Stop);
 	bullet_particle->SetParticleMosion(ParticleMosion::Fixed);
 	bullet_particle->SetFrequency(0.5f);
+
+	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
 
 void TitleScene::Update() {

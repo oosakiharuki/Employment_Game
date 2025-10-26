@@ -5,9 +5,13 @@ SceneManager::SceneManager() {
 	//objectをローディング
 	LoadingModels::GetInstance()->LoadObjects();
 	LoadingModels::GetInstance()->Finalize();
+	
+	//シーンの設定
+	currentScene_ = sceneArr->GetSceneNo();
+	prevScene_ = currentScene_;
 
-	sceneFactory.AddScene();
-	sceneArr = sceneFactory.GetSceneGroup("Title");
+	//シーンを作る
+	BuildScene();
 }
 
 SceneManager::~SceneManager() {
@@ -18,29 +22,44 @@ void SceneManager::SceneChange() {
 
 	//前のシーンの解放
 	Finalize();
-	sceneArr = sceneFactory.GetSceneGroup(currentSceneNo_);
+	//次のシーンを作る
+	BuildScene();
 }
+
+void SceneManager::BuildScene() {
+	//シーンを作成
+	sceneFactory.MakeScene(currentScene_);
+	//代入
+	sceneArr = sceneFactory.GetSceneGroup(currentScene_);
+}
+
 void SceneManager::Initialize() {
-	sceneArr.iscene->Initialize();
+	//初期化処理
+	sceneArr->Initialize();
 }
 
 void SceneManager::Update() {
 
-	prevSceneNo_ = currentSceneNo_;
-	currentSceneNo_ = sceneArr.iscene->GetSceneNo();
+	prevScene_ = currentScene_;
+	currentScene_ = sceneArr->GetSceneNo();
 
-	if (prevSceneNo_ != currentSceneNo_) {
+	// シーンを変更(現在のシーンが前回のシーンと同じでない)
+	if (prevScene_ != currentScene_) {
 		SceneChange();
-		sceneArr.iscene->Initialize();
+		sceneArr->Initialize();
 	}
 
-	sceneArr.iscene->Update();
+	//更新処理
+	sceneArr->Update();
 }
 
 void SceneManager::Draw() {
-	sceneArr.iscene->Draw();
+	//描画処理
+	sceneArr->Draw();
 }
 
 void SceneManager::Finalize() {
-	sceneArr.iscene.reset();
+	sceneArr->Finalize();
+	//シーンのリセット
+	sceneArr.reset();
 }

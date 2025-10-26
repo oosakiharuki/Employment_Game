@@ -4,6 +4,8 @@ void GameOverScene::Initialize() {
 	sprite = std::make_unique<Sprite>();
 	sprite->Initialize("Moji_GameOver.png");
 	sprite->SetPosition({ 100,100 });
+
+	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
 
 void GameOverScene::Update() {

@@ -4,11 +4,11 @@ using namespace MyMath;
 
 void GameScene::Initialize() {
 
-	LevelEditorObjectSetting("resource/Levelediter/stage_1.json");
+	LevelEditorObjectSetting("resource/Levelediter/stage_0.json");
 
 	stageobj = std::make_unique<Object3d>();
 	stageobj->Initialize();
-	stageobj->SetModelFile("stage_1.obj");
+	stageobj->SetModelFile("stage_0.obj");
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
@@ -27,11 +27,11 @@ void GameScene::Update() {
 
 	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {
 		ChangeScene();
+		Audio::GetInstance()->StopWave(BGMData_);
 	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
 		NextSceneFadeInStart("Title");
-		Audio::GetInstance()->StopWave(BGMData_);
 	}
 
 	startWarp->Update();
@@ -44,7 +44,7 @@ void GameScene::Update() {
 		camera->Zumu(cameraSegment, zumuTimer);
 
 		if (zumuTimer >= 1.0f) {
-			NextSceneFadeInStart("Game");
+			NextSceneFadeInStart("NextStage");
 		}
 	}
 
@@ -57,7 +57,6 @@ void GameScene::Update() {
 				cameraSegment.diff = player_->GetTranslate() + Vector3(0, 2, -15.0f);//プレイヤーよりちょっと離れてる
 				isNextStage = true;
 				nextStage_fileName = warpGate->GetNextStage();
-				//NextSceneFadeInStart();
 				break;
 			}//ゴール
 			else if (stageObject.get() == dynamic_cast<Goal*>(stageObject.get())) {
@@ -220,27 +219,6 @@ void GameScene::Finalize() {
 	enemies.clear();
 	stageObjects.clear();
 	stagesAABB.clear();
-}
-
-void GameScene::StageMovement(const std::string leveleditor_file, const std::string stageObj) {
-	playerHp = player_->GetHp();
-	Finalize();
-	levelediter.ResetData();
-	//パーティクルナンバー初期化
-	ParticleNum::number = 0;
-
-	LevelEditorObjectSetting(leveleditor_file);	
-	
-	player_->SetHp(playerHp);
-
-	stageobj = std::make_unique<Object3d>();
-	stageobj->Initialize();
-	stageobj->SetModelFile(stageObj);
-
-	skyBox = std::make_unique<BoxModel>();
-	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
-
-	WarterWarpExit();
 }
 
 void GameScene::WarterWarpExit() {

@@ -18,21 +18,44 @@ public:
 	SceneManager();
 	~SceneManager();
 
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize();
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update();
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw();
+	/// <summary>
+	/// 削除処理
+	/// </summary>
 	void Finalize();
 
-	bool SetGameEnd() { return sceneArr.iscene->GetIsGameEnd(); }
+	/// <summary>
+	/// ゲーム終了時の処理
+	/// </summary>
+	/// <returns></returns>trueで終了
+	bool SetGameEnd() { return sceneArr->GetIsGameEnd(); }
 
 private:
-	
-	void SceneChange();//シーン入れ替え
+	/// <summary>
+	/// シーン入れ替え
+	/// </summary>
+	void SceneChange();
 
-	SceneGroup sceneArr;
+	/// <summary>
+	/// シーンを作成し代入する
+	/// </summary>
+	void BuildScene();
+
+	std::unique_ptr<IScene> sceneArr;
 	SceneFactory sceneFactory;
 
-	std::string currentSceneNo_;//現在シーン
-	std::string prevSceneNo_;//前シーン
+	std::string currentScene_;//現在シーン
+	std::string prevScene_;//前シーン
 
 };
