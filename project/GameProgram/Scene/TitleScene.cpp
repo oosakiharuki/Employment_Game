@@ -3,9 +3,6 @@
 using namespace MyMath;
 
 void TitleScene::Initialize() {
-
-
-
 	//カメラワールド座標系
 	worldTransformCamera_.Initialize();
 
@@ -95,9 +92,20 @@ void TitleScene::Initialize() {
 	bullet_particle->ChangeMode(BornParticle::Stop);
 	bullet_particle->SetParticleMosion(ParticleMosion::Fixed);
 	bullet_particle->SetFrequency(0.5f);
+
+	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
 
 void TitleScene::Update() {
+	//次のシーンに移動
+	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {
+		if (wts[1].translation_.y == wts[2].translation_.y) {
+			ChangeScene();
+		}
+		else if (wts[1].translation_.y == wts[3].translation_.y) {
+			isGameEnd = true;
+		}
+	}
 
 	//ゲームパット用操作処理設定
 	InputGamePad();
@@ -140,25 +148,8 @@ void TitleScene::Update() {
 
 		bulletTimer += 1.0f / 60.0f;
 		if (bulletTimer >= bulletTimeMax) {
-			isfadeStart = true;
+			NextSceneFadeInStart("Select");
 		}
-	}
-
-	if (isfadeStart) {
-		FadeScreen::GetInstance()->FedeIn();
-
-		if (!FadeScreen::GetInstance()->GetIsFadeing()) {
-			if (wts[1].translation_.y == wts[2].translation_.y) {
-				sceneNo = Select;
-				isfadeStart = false;
-			}
-			else if (wts[1].translation_.y == wts[3].translation_.y) {
-				isGameEnd = true;
-			}
-		}
-	}
-	else {
-		FadeScreen::GetInstance()->FedeOut();
 	}
 
 	//フェードが終わったら押せる

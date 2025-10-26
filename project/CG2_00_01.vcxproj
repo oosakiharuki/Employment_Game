@@ -112,6 +112,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\LoadingModels.cpp" />
     <ClCompile Include="GameProgram\Scene\ClearScene.cpp" />
     <ClCompile Include="GameProgram\Scene\GameOverScene.cpp" />
+    <ClCompile Include="GameProgram\Scene\SceneFactory.cpp" />
     <ClCompile Include="GameProgram\Scene\SelectScene.cpp" />
     <ClCompile Include="GameProgram\Shadow.cpp" />
     <ClCompile Include="GameProgram\StageObjects\CheckPoint.cpp" />
@@ -182,9 +183,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\Player\PlayerBullet.cpp" />
     <ClCompile Include="GameProgram\Enemies\IEnemy.cpp" />
     <ClCompile Include="GameProgram\Player\Umbrella.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\EventTrigger.cpp" />
     <ClCompile Include="GameProgram\StageObjects\Goal.cpp" />
     <ClCompile Include="GameProgram\StageObjects\IStageObject.cpp" />
     <ClCompile Include="GameProgram\StageObjects\WarpGate.cpp" />
+    <ClCompile Include="LoadingStageScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\3d\_gltf\SkinningCommon.h" />
@@ -192,6 +195,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\LoadingModels.h" />
     <ClInclude Include="GameProgram\Scene\ClearScene.h" />
     <ClInclude Include="GameProgram\Scene\GameOverScene.h" />
+    <ClInclude Include="GameProgram\Scene\SceneFactory.h" />
     <ClInclude Include="GameProgram\Scene\SelectScene.h" />
     <ClInclude Include="GameProgram\Shadow.h" />
     <ClInclude Include="GameProgram\StageObjects\CheckPoint.h" />
@@ -260,9 +264,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\Player\PlayerBullet.h" />
     <ClInclude Include="GameProgram\Enemies\IEnemy.h" />
     <ClInclude Include="GameProgram\Player\Umbrella.h" />
+    <ClInclude Include="GameProgram\StageObjects\EventTrigger.h" />
     <ClInclude Include="GameProgram\StageObjects\Goal.h" />
     <ClInclude Include="GameProgram\StageObjects\IStageObject.h" />
     <ClInclude Include="GameProgram\StageObjects\WarpGate.h" />
+    <ClInclude Include="LoadingStageScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

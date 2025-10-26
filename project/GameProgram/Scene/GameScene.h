@@ -10,18 +10,8 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Finalize() override;
-
-	void SetStage(const std::string stage) { stage_file = stage; }
-
 private:
-	std::string stage_file;
-	/// <summary>
-	/// 次のステージに移る
-	/// </summary>
-	/// <param name="leveleditor_file"></param>次のステージの名前
-	/// <param name="stageObj"></param>次のステージのオブジェクト
-	void StageMovement(const std::string leveleditor_file, const std::string stageObj);
-	
+
 	//シーンチェンジ時に初期化されない用のプレイヤーHp保存場所
 	uint32_t playerHp;
 
@@ -30,15 +20,9 @@ private:
 	//残機
 	uint32_t RemainingLife = 3;
 
-	//クリア/ゲームオーバーのフラグ
-	bool isGameOver = false;
-	bool isGameClear = false;
-	
-
 	//次のステージの移動
 	bool isNextStage = false;
 	std::string nextStage_fileName;
-	bool isChangeStage = true;
 
 	//スタート演出(水たまりから飛び出る感じに)
 	bool isStartStage = true;
@@ -48,20 +32,6 @@ private:
 	//カメラズーム
 	Segment cameraSegment{};
 	float zumuTimer = 0.0f;
-	//bool isZumuIn = false;
-
-	void LoadEventCSV(std::string file);
-
-	std::stringstream enemyPopCsvFile;
-
-	void PopEventEneies(EventTrigger* eventTrigger);
-	bool eventWave = false;
-	
-	//敵を生んだ・倒した数
-	uint32_t enemyBornCount = 0;
-	uint32_t enemyDeadCount = 0;
-
-	bool isLoadCsv = true;
 
 	//スタート時のワープゲート
 	std::unique_ptr<WarpGate> startWarp;
@@ -72,16 +42,18 @@ private:
 	void WarterWarpExit();
 
 	/// <summary>
-	/// 敵の召喚処理
+	/// リスポーン
 	/// </summary>
-	/// <param name="position"></param>
-	/// 召喚位置
-	/// <param name="position"></param>
-	/// 向き
-	/// <param name="name"></param>
-	/// 敵の名前
-	void EnemyPop(const Vector3& position,const Vector3& rotation,const std::string& name);
+	void Respawn();
 
-	//std::vector<std::unique_ptr<IEnemy>> eventEnmeies;
+	/// <summary>
+	/// チェックポイントを変更する
+	/// </summary>
+	void ChangeCheckPoint();
+
+	/// <summary>
+	/// カメラコントロール
+	/// </summary>
+	void CameraControl();
 
 };

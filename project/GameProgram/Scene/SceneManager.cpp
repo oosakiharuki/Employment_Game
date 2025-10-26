@@ -5,63 +5,61 @@ SceneManager::SceneManager() {
 	//objectをローディング
 	LoadingModels::GetInstance()->LoadObjects();
 	LoadingModels::GetInstance()->Finalize();
+	
+	//シーンの設定
+	currentScene_ = sceneArr->GetSceneNo();
+	prevScene_ = currentScene_;
 
-
-	sceneArr_[Select] = new SelectScene();
-
-	prevSceneNo_ = 0;
-	currentSceneNo_ = Select;
+	//シーンを作る
+	BuildScene();
 }
 
 SceneManager::~SceneManager() {
-	sceneArr_[currentSceneNo_]->Finalize();
-	delete sceneArr_[currentSceneNo_];
+	Finalize();
 }
 
-void SceneManager::SceneChange(int prev, int current) {
+void SceneManager::SceneChange() {
 
 	//前のシーンの解放
-	sceneArr_[prev]->Finalize();
-	delete sceneArr_[prev];
-	sceneArr_[prev] = nullptr;
-
-	//scene_ = current;
-	switch (current)
-	{
-	case Title:
-		sceneArr_[current] = new TitleScene();
-		break;
-	case Game:
-		sceneArr_[current] = new GameScene();
-		break;	
-	case Select:
-		sceneArr_[current] = new SelectScene();
-		break;
-	case Clear:
-		sceneArr_[current] = new ClearScene();
-		break;
-	case GameOver:
-		sceneArr_[current] = new GameOverScene();
-		break;
-	}
+	Finalize();
+	//次のシーンを作る
+	BuildScene();
 }
+
+void SceneManager::BuildScene() {
+	//シーンを作成
+	sceneFactory.MakeScene(currentScene_);
+	//代入
+	sceneArr = sceneFactory.GetSceneGroup(currentScene_);
+}
+
 void SceneManager::Initialize() {
-	sceneArr_[currentSceneNo_]->Initialize();
+	//初期化処理
+	sceneArr->Initialize();
 }
 
 void SceneManager::Update() {
 
-	prevSceneNo_ = currentSceneNo_;
-	currentSceneNo_ = sceneArr_[currentSceneNo_]->GetSceneNo();
+	prevScene_ = currentScene_;
+	currentScene_ = sceneArr->GetSceneNo();
 
-	if (prevSceneNo_ != currentSceneNo_) {
-		SceneChange(prevSceneNo_,currentSceneNo_);
-		sceneArr_[currentSceneNo_]->Initialize();
+	// シーンを変更(現在のシーンが前回のシーンと同じでない)
+	if (prevScene_ != currentScene_) {
+		SceneChange();
+		sceneArr->Initialize();
 	}
 
-	sceneArr_[currentSceneNo_]->Update();
+	//更新処理
+	sceneArr->Update();
 }
 
 void SceneManager::Draw() {
-	sceneArr_[currentSceneNo_]->Draw();
+	//描画処理
+	sceneArr->Draw();
+}
+
+void SceneManager::Finalize() {
+	sceneArr->Finalize();
+	//シーンのリセット
+	sceneArr.reset();
 }

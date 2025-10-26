@@ -2,6 +2,11 @@
 #include "Sprite.h"
 #include "Dissolve.h"
 
+enum FadeType {
+	type_fadeIn,
+	type_fadeOut
+};
+
 /// <summary>
 /// フェードスクリーン
 /// </summary>
@@ -26,22 +31,28 @@ public:
 	/// </summary>
 	void Finalize();
 
-	/// <summary>
-	/// フェードイン(シーン移動画面)
-	/// </summary>
-	void FedeIn();
-	/// <summary>
-	/// フェードアウト(ゲーム画面)
-	/// </summary>
-	void FedeOut();
+	void FadeStart(const FadeType& type) {
+		isFading = true;
+		FadeType_ = type;
+	}
+
 
 	/// <summary>
 	/// フェードの最中か
 	/// </summary>
 	/// <returns></returns>フェード中ならtrue
 	bool GetIsFadeing() const{ return isFading; }
-
+	
 private:
+
+	/// <summary>
+	/// フェードイン(シーン移動画面)
+	/// </summary>
+	void FadeIn();
+	/// <summary>
+	/// フェードアウト(ゲーム画面)
+	/// </summary>
+	void FadeOut();
 
 	static FadeScreen* instance;
 
@@ -52,13 +63,16 @@ private:
 	const float deltaTime = 1.0f / 60.0f;
 
 	//フェード中フラグ
-	bool isFading = false;
+	bool isFading = true;
+	//フェードのタイプ
+	FadeType FadeType_ = type_fadeOut;
+
 	//Dissolve(ポストエフェクト)で溶け具合の変数
 	float degress = 0.0f;
 
 	//使用するポストエフェクト
-	std::unique_ptr<IPostEffects> postEffect_ = nullptr;
-	Dissolve* dissolve;
+	//std::unique_ptr<IPostEffects> postEffect_ = nullptr;
+	std::unique_ptr<Dissolve> dissolve;
 
 	FadeScreen() = default;
 	~FadeScreen() = default;

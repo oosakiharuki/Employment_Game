@@ -23,16 +23,7 @@
 #include "ParticleNumber.h"
 #include "FadeScreen.h"
 
-/// <summary>
-/// シーンの種類
-/// </summary>
-enum SCENE{
-	Title,
-	Game,
-	Select,
-	Clear,
-	GameOver,
-};
+#include "EventTrigger.h"
 
 /// <summary>
 /// 当たり判定:重なり部分を
@@ -46,21 +37,12 @@ struct CollisionOverlap {
 	AABB stageAABB = { { 0,0,0 }, { 0,0,0 } };
 };
 
-/// <summary>
-/// イベントトリガーの構造体
-/// </summary>
-struct EventTrigger {
-	bool isEvent = false; //イベント発動フラグ
-	AABB aabb;            //イベント範囲
-	Vector3 center;       //真ん中
-	std::string csvFile;  //csvファイル
-};
-
-
 class IScene{
 protected:
 	//現在のシーン
-	static int sceneNo;
+	static std::string sceneNo;
+	//次のシーン
+	static std::string nextSceneNo;
 
 	//入力処理
 	Input* input_ = Input::GetInstance();
@@ -82,7 +64,7 @@ protected:
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 	//敵たち
-	std::vector<std::unique_ptr<IEnemy>> enemies;
+	std::vector<std::shared_ptr<IEnemy>> enemies;
 	//ステージオブジェクトたち
 	std::list<std::unique_ptr<IStageObject>> stageObjects;
 	
@@ -92,7 +74,7 @@ protected:
 	std::vector<AABB> stagesAABB;
 
 	//イベントトリガー
-	std::vector<EventTrigger> eventTriggers;
+	std::vector<std::unique_ptr<EventTrigger>> eventTriggers;
 
 	//BGM
 	SoundData BGMData_;
@@ -107,9 +89,6 @@ protected:
 	/// 全シーンに共有できる当たり判定
 	/// </summary>
 	void CollisionCommon();
-
-	//フェードスイッチ
-	bool isfadeStart = false;
 
 	//end
 	bool isGameEnd = false;
@@ -133,6 +112,23 @@ protected:
 	/// ゲームパット入力処理
 	/// </summary>
 	void InputGamePad();
+
+	/// <summary>
+	/// 次のシーンの選択+フェードインを始める
+	/// </summary>
+	/// <param name="進めたいシーン"></param>
+	void NextSceneFadeInStart(const std::string& name);
+
+	/// <summary>
+	/// 次のシーンに進むフラグ(フェードなど間を開けたい時)
+	/// </summary>
+	/// <returns></returns>
+	bool NextSceneFlag();
+	
+	/// <summary>
+	/// sceneNo = nextSceneNoに
+	/// </summary>
+	void ChangeScene();
 
 public:
 	/// <summary>
@@ -158,7 +154,7 @@ public:
 	/// シーン名で
 	/// </summary>
 	/// <returns></returns>現在のシーン
-	int GetSceneNo();
+	std::string GetSceneNo();
 
 	/// <summary>
 	/// ゲーム終了処理

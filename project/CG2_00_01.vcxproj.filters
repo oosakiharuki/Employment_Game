@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="ヘッダー ファイル">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
@@ -12,54 +8,6 @@
     <Filter Include="リソース ファイル">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine">
-      <UniqueIdentifier>{193ab31c-5a16-4f54-8224-7c6d6b0a57d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\3d">
-      <UniqueIdentifier>{180c8c76-a122-465c-91ed-1a680a934e3e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\base">
-      <UniqueIdentifier>{9b559435-8421-48c2-b59c-4897517ff2fe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\input">
-      <UniqueIdentifier>{6619066a-b2c8-40a7-9acd-fc8e446b4ebe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\math">
-      <UniqueIdentifier>{5080c25b-1a97-4ac3-bbc4-937a3146f8b7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\audio">
-      <UniqueIdentifier>{7e494eda-49a5-4e26-aa68-09331557a0e6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\2d">
-      <UniqueIdentifier>{60c51db4-57e8-4c52-a251-89af31add87e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\PostEffect">
-      <UniqueIdentifier>{8892f8f3-b441-41f9-bb94-79b6b5f258be}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameProgram">
-      <UniqueIdentifier>{3cede06d-47e6-4f4c-9759-d4b88a455e9d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\3d\_gltf">
-      <UniqueIdentifier>{7dd7b758-fb2b-43e2-a84e-6193a2dcc8ef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\3d\_obj">
-      <UniqueIdentifier>{727cc592-5d53-493e-97fb-4a6a734d0d69}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\3d\_Particle">
-      <UniqueIdentifier>{d8d85738-7095-4115-93c0-678e0261052d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\3d\Primitive">
-      <UniqueIdentifier>{fe0ca8ca-e9ff-405f-a10f-d7bf3d7f1fdd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameProgram\Enemies">
-      <UniqueIdentifier>{7e338690-e00c-4118-9659-23b6267dfd90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameProgram\Player">
-      <UniqueIdentifier>{7eb339fe-1b8a-46e2-9eb2-77c1a78494da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameProgram\Scene">
-      <UniqueIdentifier>{c5623b3f-5406-4d21-a960-cfc3601e4865}</UniqueIdentifier>
     </Filter>
     <Filter Include="ヘッダー ファイル\Engine">
       <UniqueIdentifier>{8f6a37c6-d258-427e-8843-a5b65e3f6151}</UniqueIdentifier>
@@ -109,17 +57,69 @@
     <Filter Include="ヘッダー ファイル\GameProgram\Scene">
       <UniqueIdentifier>{0145c40c-f6f8-4011-ba37-56e69a4de176}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GameProgram\StageObjects">
-      <UniqueIdentifier>{e7200600-3803-4831-a1a7-5b8eee728d58}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\GameProgram\StageObjects">
       <UniqueIdentifier>{c25c6d45-4ba0-4c58-be4c-e176ebdd0451}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GameProgram\LevelEditor">
-      <UniqueIdentifier>{9d3be0b2-740f-4b21-b1be-24756f276d2e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\GameProgram\LevelEditor">
       <UniqueIdentifier>{b7fd112d-0d92-4f45-ab24-794ea91e597f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine">
+      <UniqueIdentifier>{193ab31c-5a16-4f54-8224-7c6d6b0a57d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3d">
+      <UniqueIdentifier>{180c8c76-a122-465c-91ed-1a680a934e3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3d\_gltf">
+      <UniqueIdentifier>{7dd7b758-fb2b-43e2-a84e-6193a2dcc8ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3d\_obj">
+      <UniqueIdentifier>{727cc592-5d53-493e-97fb-4a6a734d0d69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3d\_Particle">
+      <UniqueIdentifier>{d8d85738-7095-4115-93c0-678e0261052d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3d\Primitive">
+      <UniqueIdentifier>{fe0ca8ca-e9ff-405f-a10f-d7bf3d7f1fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\base">
+      <UniqueIdentifier>{9b559435-8421-48c2-b59c-4897517ff2fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\input">
+      <UniqueIdentifier>{6619066a-b2c8-40a7-9acd-fc8e446b4ebe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\math">
+      <UniqueIdentifier>{5080c25b-1a97-4ac3-bbc4-937a3146f8b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\audio">
+      <UniqueIdentifier>{7e494eda-49a5-4e26-aa68-09331557a0e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\2d">
+      <UniqueIdentifier>{60c51db4-57e8-4c52-a251-89af31add87e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\PostEffect">
+      <UniqueIdentifier>{8892f8f3-b441-41f9-bb94-79b6b5f258be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram">
+      <UniqueIdentifier>{3cede06d-47e6-4f4c-9759-d4b88a455e9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\Enemies">
+      <UniqueIdentifier>{7e338690-e00c-4118-9659-23b6267dfd90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\Player">
+      <UniqueIdentifier>{7eb339fe-1b8a-46e2-9eb2-77c1a78494da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\Scene">
+      <UniqueIdentifier>{c5623b3f-5406-4d21-a960-cfc3601e4865}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\StageObjects">
+      <UniqueIdentifier>{e7200600-3803-4831-a1a7-5b8eee728d58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\LevelEditor">
+      <UniqueIdentifier>{9d3be0b2-740f-4b21-b1be-24756f276d2e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -334,6 +334,15 @@
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Scene\IScene.cpp">
+      <Filter>ソース ファイル\GameProgram\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\EventTrigger.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadingStageScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Scene\SceneFactory.cpp">
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -564,6 +573,15 @@
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\Scene\SceneManager.h">
+      <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\EventTrigger.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadingStageScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Scene\SceneFactory.h">
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
     </ClInclude>
   </ItemGroup>

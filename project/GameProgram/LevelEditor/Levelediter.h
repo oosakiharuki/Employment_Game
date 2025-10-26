@@ -63,7 +63,7 @@ public:
 		std::vector<EnemySpawnData> spawnEnemies;
 		std::vector<CameraInitData> cameraInit;
 		std::vector<StageObjectData> stageObjects;
-		std::vector<EventTriggerData> eventTriggers;
+		std::vector<EventTriggerData> eventTriggerDatas;
 	};
 
 	/// <summary>

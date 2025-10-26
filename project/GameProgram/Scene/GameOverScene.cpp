@@ -4,6 +4,8 @@ void GameOverScene::Initialize() {
 	sprite = std::make_unique<Sprite>();
 	sprite->Initialize("Moji_GameOver.png");
 	sprite->SetPosition({ 100,100 });
+
+	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
 
 void GameOverScene::Update() {
@@ -13,21 +15,13 @@ void GameOverScene::Update() {
 	
 	sprite->Update();
 
-	if (isfadeStart) {
-		FadeScreen::GetInstance()->FedeIn();
-
-		if (!FadeScreen::GetInstance()->GetIsFadeing()) {
-			sceneNo = Select;
-			isfadeStart = false;
-		}
-	}
-	else {
-		FadeScreen::GetInstance()->FedeOut();
+	if (!FadeScreen::GetInstance()->GetIsFadeing()) {
+		ChangeScene();
 	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
 		Input::GetInstance()->TriggerBotton(state, preState, XINPUT_GAMEPAD_A)) {
-		isfadeStart = true;
+		NextSceneFadeInStart("Select");
 	}
 
 }

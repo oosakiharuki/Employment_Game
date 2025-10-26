@@ -8,6 +8,8 @@
 #include "ClearScene.h"
 #include "GameOverScene.h"
 
+#include "SceneFactory.h"
+
 /// <summary>
 /// シーンマネージャ
 /// </summary>
@@ -16,23 +18,44 @@ public:
 	SceneManager();
 	~SceneManager();
 
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize();
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update();
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw();
-	//void Finalize();
+	/// <summary>
+	/// 削除処理
+	/// </summary>
+	void Finalize();
 
-	bool SetGameEnd() { return sceneArr_[currentSceneNo_]->GetIsGameEnd(); }
+	/// <summary>
+	/// ゲーム終了時の処理
+	/// </summary>
+	/// <returns></returns>trueで終了
+	bool SetGameEnd() { return sceneArr->GetIsGameEnd(); }
 
 private:
-	
-	void SceneChange(int prev,int current);//シーン入れ替え
+	/// <summary>
+	/// シーン入れ替え
+	/// </summary>
+	void SceneChange();
 
-	//ステージの最大数
-	static const uint32_t SceneNum = 5;
+	/// <summary>
+	/// シーンを作成し代入する
+	/// </summary>
+	void BuildScene();
 
-	IScene* sceneArr_[SceneNum];
+	std::unique_ptr<IScene> sceneArr;
+	SceneFactory sceneFactory;
 
-	int currentSceneNo_;//現在シーン
-	int prevSceneNo_;//前シーン
+	std::string currentScene_;//現在シーン
+	std::string prevScene_;//前シーン
 
 };
