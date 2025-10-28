@@ -204,7 +204,7 @@ void IScene::CollisionCommon() {
 	for (auto& stage : stagesAABB) {
 		//当たり判定AABBが作動した時(プレイヤーがやられていない)
 		if (IsCollisionAABB(playerCollisionOverlap.targetAABB, stage) &&
-			!player_->GetIsPlayerDown() && player_->GetPerformanceMode()) {
+			!player_->GetIsPlayerDown() && !player_->GetPerformanceMode()) {
 
 			//ステージ判定代入
 			playerCollisionOverlap.stageAABB = stage;
