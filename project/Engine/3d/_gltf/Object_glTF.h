@@ -25,6 +25,7 @@ public:
 	void Draw();
 	void Draw(const std::string& textureData);
 
+	void AnimationUpdate();
 
 	//static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
 	//static ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
@@ -34,15 +35,6 @@ public:
 	void LightSwitch(bool isLight);
 	//環境マップ用
 	void SetEnvironment(const std::string& filePath);
-
-	void SetScale(const Vector3& scale) { transform.scale = scale; }
-	void SetRotate(const Vector3& rotate) { transform.rotate = rotate; }
-	void SetTranslate(const Vector3& translate) { transform.translate = translate; }
-	void SetCamera(Camera* camera) { this->camera = camera; }
-
-	const Vector3& GetScale() const { return transform.scale; }
-	const Vector3& GetRotate() const { return transform.rotate; }
-	const Vector3& GetTranslate()const { return transform.translate; }
 
 	void ApplyAnimation(Skeleton& skeleton, const Animation& animation, float animationTime);
 	void Interpolation(Skeleton& skeleton, const Animation& animation, const Animation& nextAnimation, float animationTime);
@@ -76,11 +68,6 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> spotLightResource;
 	//マテリアルにデータを書き込む
 	SpotLight* spotLightData = nullptr;
-
-
-	Transform transform;
-
-	Transform transformL;
 
 	Model_glTF* model = nullptr;
 	Camera* camera = nullptr;

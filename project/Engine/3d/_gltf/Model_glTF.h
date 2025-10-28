@@ -15,7 +15,15 @@ public:
 	static ModelData_glTF LoadModelFile(const std::string& directoryPath, const std::string& filename);
 	static std::vector<Animation> LoadAnimationFile(const std::string& directoryPath, const std::string& filename,uint32_t Number);
 
-	void LightOn(bool Light) { materialData->enableLighting = Light; }
+	void LightOn(bool Light) {
+		for (auto& material : materialResources) {
+			//書き込むためのアドレス
+			material->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
+			materialData->enableLighting = Light;
+		}
+	}
+	
+	
 	void SetEnvironment(const std::string mapFile);
 
 	static Node ReadNode(aiNode* node);

@@ -18,7 +18,7 @@ private:
 	SoundData soundData_;
 
 	//残機
-	uint32_t RemainingLife = 3;
+	uint32_t RemainingLife = 0;
 
 	//次のステージの移動
 	bool isNextStage = false;

@@ -14,4 +14,8 @@ public:
 private:
 	std::unique_ptr<Sprite> sprite;//ゲームオーバーの文字
 
+	std::unique_ptr<Object_glTF> player_gltf;
+	WorldTransform wt;
+	
+	std::unique_ptr<Object_glTF> stage_gltf;
 };

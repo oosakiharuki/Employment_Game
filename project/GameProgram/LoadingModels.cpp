@@ -41,6 +41,8 @@ void LoadingModels::LoadGltf() {
 
 	modelManager->LoadModel("NewPlayer", ".gltf", true);
 	modelManager->LoadModel("NewPlayer_umbrella", ".gltf");
+	modelManager->LoadModel("player_GameOver", ".gltf");
+
 
 	modelManager->LoadModel("umbrella_Close", ".gltf");
 	modelManager->LoadModel("umbrella_Open", ".gltf");
@@ -49,5 +51,6 @@ void LoadingModels::LoadGltf() {
 	modelManager->LoadModel("Select_End", ".gltf");
 
 	modelManager->LoadModel("Title_stage", ".gltf");
+	modelManager->LoadModel("gameover_stage", ".gltf");
 
 }

@@ -1,9 +1,9 @@
 #include "IScene.h"
 using namespace MyMath;
 
-std::string IScene::sceneNo = "Title";
+std::string IScene::sceneNo = "Game";
 
-std::string IScene::nextSceneNo = "Title";
+std::string IScene::nextSceneNo = "Game";
 
 IScene::~IScene(){}
 
@@ -202,7 +202,8 @@ void IScene::CollisionCommon() {
 
 	//プレイヤーとステージ
 	for (auto& stage : stagesAABB) {
-		if (IsCollisionAABB(playerCollisionOverlap.targetAABB, stage)) {
+		//当たり判定AABBが作動した時(プレイヤーがやられていない)
+		if (IsCollisionAABB(playerCollisionOverlap.targetAABB, stage) && !player_->GetIsPlayerDown()) {
 
 			//ステージ判定代入
 			playerCollisionOverlap.stageAABB = stage;

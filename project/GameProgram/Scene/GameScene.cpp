@@ -98,6 +98,14 @@ void GameScene::Update() {
 		player_->SetRotate({ 0,0,0 });
 		return;
 	}
+
+
+	Respawn();
+
+	if (player_->GetIsPlayerDown()) {
+		return;
+	}
+
 	
 	for (auto& enemy : enemies) {
 		enemy->SetPlayer(player_.get());
@@ -123,8 +131,6 @@ void GameScene::Update() {
 			enemies = std::move(eventTrigger->GetPopEnemy());
 		}
 	}
-
-	Respawn();
 
 	//演出では使わない
 	if (!isStartStage) {
@@ -184,7 +190,7 @@ void GameScene::Update() {
 void GameScene::Draw() {
 	
 	Cubemap::GetInstance()->Command();
-	skyBox->Draw();
+	//skyBox->Draw();//見ずらいため一度コメントアウト
 	
 
 	//モデル描画処理
@@ -195,7 +201,7 @@ void GameScene::Draw() {
 	
 	stageobj->Draw();
 
-	player_->Draw();
+
 	for (auto& enemy : enemies) {
 		enemy->Draw();
 	}
@@ -205,6 +211,8 @@ void GameScene::Draw() {
 	}
 	
 	startWarp->Draw();
+	
+	player_->Draw();
 
 	//パーティクル描画処理
 	ParticleCommon::GetInstance()->Command();
@@ -294,22 +302,21 @@ void GameScene::Respawn() {
 	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
 	if (player_->GetIsPlayerDown() && player_->GetIsRespown()) {
 
-		RemainingLife--;
-		if (RemainingLife != 0) {
-			for (auto& enemy : enemies) {
-				enemy->RespownEnemy();
-			}
-			player_->AllRespownEnd();
-		}
-		else {
+		if (RemainingLife == 0) {
 			//残機が0の場合ゲームオーバー
 			NextSceneFadeInStart("GameOver");
+			return;
 		}
-		
-		for (auto& eventTrigger : eventTriggers){
+		RemainingLife--;
+
+		for (auto& enemy : enemies) {
+			enemy->RespownEnemy();
+		}
+		player_->AllRespownEnd();
+
+		for (auto& eventTrigger : eventTriggers) {
 			eventTrigger->FailureEvent();
 			MainCamera();
 		}
 	}
-
 }
