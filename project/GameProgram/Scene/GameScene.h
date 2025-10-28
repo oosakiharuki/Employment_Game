@@ -33,6 +33,10 @@ private:
 	Segment cameraSegment{};
 	float zumuTimer = 0.0f;
 
+	//シェイク
+	float ShakeTimer = 0;
+	float ShakeMaxTime = 0.25f;
+
 	//スタート時のワープゲート
 	std::unique_ptr<WarpGate> startWarp;
 

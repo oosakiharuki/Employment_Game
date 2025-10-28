@@ -643,7 +643,8 @@ void Player::DeadPlayer() {
 		particle_dead->SetTranslate(worldTransform.translation_);
 		particle_dead->ChangeMode(BornParticle::TimerMode);
 
-		worldTransform.rotation_.z += 20.0f;
+		worldTransform.rotation_.y = 180.0f;//カメラのほうに向く
+		worldTransform.rotation_.z += 10.0f;//回転する
 		IsJumping();
 		isGround = false;
 		if (deadTimer >= deadTimeMax) {
