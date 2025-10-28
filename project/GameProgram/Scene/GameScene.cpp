@@ -112,7 +112,11 @@ void GameScene::Update() {
 	Respawn();
 
 	if (player_->GetIsPlayerDown()) {
+		CameraControl();
 		return;
+	}
+	else {
+		ShakeTimer = 0.0f;
 	}
 
 	
@@ -299,6 +303,20 @@ void GameScene::CameraControl() {
 	else {
 		worldTransformCamera_.translation_.y = cameraTranslate.y;
 	}
+
+
+	std::random_device seed;
+	std::mt19937 random(seed());
+
+	if (player_->GetIsPlayerDown() && ShakeTimer <= ShakeMaxTime) {
+		std::uniform_real_distribution<float> yure(-0.5f,0.5f);
+		worldTransformCamera_.translation_.x += yure(random);
+		worldTransformCamera_.translation_.y += yure(random);
+		ShakeTimer += 1.0f / 60.0f;
+	}
+
+
+
 	//カメラ座標系更新
 	worldTransformCamera_.UpdateMatrix();
 
