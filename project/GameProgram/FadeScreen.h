@@ -43,6 +43,9 @@ public:
 	/// <returns></returns>フェード中ならtrue
 	bool GetIsFadeing() const{ return isFading; }
 	
+	void SetMaskTexture(const std::string textureFile) { dissolveTexture = textureFile; }
+	void SetBackGround(const std::string textureFile) { sprite->SetTextureFile(textureFile); }
+
 private:
 
 	/// <summary>
@@ -72,7 +75,8 @@ private:
 
 	//使用するポストエフェクト
 	//std::unique_ptr<IPostEffects> postEffect_ = nullptr;
-	std::unique_ptr<Dissolve> dissolve;
+	std::shared_ptr<Dissolve> dissolve;
+	std::string dissolveTexture;
 
 	FadeScreen() = default;
 	~FadeScreen() = default;

@@ -39,6 +39,8 @@ void GameOverScene::Update() {
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
 		Input::GetInstance()->TriggerBotton(state, preState, XINPUT_GAMEPAD_A)) {
 		NextSceneFadeInStart("Game");
+		FadeScreen::GetInstance()->SetMaskTexture("fade01.png");
+		FadeScreen::GetInstance()->SetBackGround("fadeTexture.png");
 	}
 
 	wt.rotation_.y += 0.5f;

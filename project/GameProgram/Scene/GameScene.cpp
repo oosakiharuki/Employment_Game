@@ -303,8 +303,10 @@ void GameScene::Respawn() {
 	if (player_->GetIsPlayerDown() && player_->GetIsRespown()) {
 
 		if (RemainingLife == 0) {
-			//残機が0の場合ゲームオーバー
+			//残機が0で倒された場合ゲームオーバー
 			NextSceneFadeInStart("GameOver");
+			FadeScreen::GetInstance()->SetMaskTexture("fade02.png");
+			FadeScreen::GetInstance()->SetBackGround("black.png");
 			return;
 		}
 		RemainingLife--;

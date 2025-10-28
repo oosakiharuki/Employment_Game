@@ -170,7 +170,7 @@ void Dissolve::GraphicsPipeline() {
 	dissolveResource->Map(0, nullptr, reinterpret_cast<void**>(&threshold));
 
 	threshold->degress = 0.5f;
-	threshold->egdeSize = 0.03f;
+	threshold->egdeSize = 0.02f;
 	//threshold->egdeColor = { 1.0f, 0.4f, 0.3f, 1.0f };//なぜか反映できない
 }
 
@@ -246,12 +246,12 @@ void Dissolve::EffectUpdate() {
 	}
 }
 
-void Dissolve::SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu) {
+void Dissolve::SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu, const std::string textureFile) {
 
 	TextureGPU = gpu;
 	isFade = true;
 
-	textureFileName = "resource/Sprite/fade01.png";
+	textureFileName = "resource/Sprite/" + textureFile;
 	TextureManager::GetInstance()->LoadTexture(textureFileName);
 }
 

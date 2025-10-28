@@ -288,7 +288,7 @@ void DirectXCommon::RTV() {
 
 	rtvStartHandle = rtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 
-	const Vector4 kRenderTargetClearValue{ 1.0f,0.0f,0.0f,1.0f };//赤色
+	const Vector4 kRenderTargetClearValue{ 0.5f,0.5f,0.5f,1.0f };//赤色
 	renderTextureResource =  CreateRenderTextureResource(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, kRenderTargetClearValue);
 	
 	for (uint32_t i = 0; i < MaxResource; ++i) {
