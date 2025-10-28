@@ -45,6 +45,7 @@ void FadeScreen::Update() {
 	dissolve->SetBackGround(sprite->GetResource(),dissolveTexture);
 
 	dissolve->Degress(degress);
+	dissolve->EgdeSize(0.01f);
 }
 
 void FadeScreen::Draw() {

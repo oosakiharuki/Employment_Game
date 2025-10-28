@@ -20,18 +20,26 @@ public:
 	/// 更新処理
 	/// </summary>
 	virtual void Update() = 0;
+
+	/// <summary>
+	/// 共有する更新処理
+	/// </summary>
+	void UpdateCommon();
+
+
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	virtual void Draw() = 0;
 	/// <summary>
-	/// ダメージ
-	/// </summary>
-	virtual void IsDamage() = 0;
-	/// <summary>
 	/// 攻撃処理
 	/// </summary>
 	virtual void Attack() = 0;
+
+	/// <summary>
+	/// ダメージ
+	/// </summary>
+	void IsDamage();
 
 	/// <summary>
 	/// 重力更新処理
@@ -110,9 +118,9 @@ public:
 	virtual void RespownEnemy() = 0;
 
 	/// <summary>
-	/// 体力や初期位置などを戻す
+	/// 共通リスポーン(体力や初期位置などを戻す)
 	/// </summary>
-	void RespownEnemy_All();
+	void RespownEnemyCommon();
 
 	/// <summary>
 	/// 移動ルートのポイント設定(現在2つ)
@@ -162,6 +170,8 @@ public:
 	/// 影の更新処理
 	/// </summary>
 	void ShadowUpdate();
+
+	void isPerformanceFlag(bool result) { isPerformance = result; }
 
 protected:
 	//オブジェクト
@@ -223,6 +233,30 @@ protected:
 	//リアクション
 	float scaleTimer = 0.0f;
 	Vector3 defaultScale = { 1,1,1 };//元の大きさ
+	//ダメージのリアクション
+	bool isDamageMosion = false;
+	Vector3 damageScale = { 0.1f, 0.1f, 0.1f };
+	const float damageMaxTime = 0.14f;
+
+
+	//弾丸発射フラグ
+	bool isBulletStart = false;
+	//クールタイム
+	float coolTime = 0.0f;
+	const float coolTimeMax = 1.0f;
+	//弾丸の出す間の時間
+	float rapidFireTime = 0.0f;
+	const float rapidFireTimeMax = 0.1f;
+	//発射数
+	uint32_t rapidCount = 0;
+
+
+	//パーティクル
+	std::unique_ptr<Particle> particle_damage;//ダメージを食らったとき
+	std::unique_ptr<Particle> particle_fire;//攻撃するとき
+
+	//演出中フラグ
+	bool isPerformance = false;
 
 private:
 	std::vector<AABB> stages;

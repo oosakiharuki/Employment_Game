@@ -102,6 +102,8 @@ void Player::Initialize() {
 void Player::Update() {
 
 	if (Hp == 0) {
+		isKnockback = false;
+		isDamageMosion = false;
 		DeadPlayer();
 	}
 
@@ -114,7 +116,7 @@ void Player::Update() {
 	bool pushS = false;
 
 
-	if (!isAnimationOnlyUpdate) {
+	if (!performance_mode) {
 		//重力の処理
 		if (isGround) {
 			isJump = false;
@@ -126,7 +128,7 @@ void Player::Update() {
 	}
 
 
-	if (!isPlayerDown && !isAnimationOnlyUpdate) {
+	if (!isPlayerDown && !performance_mode) {
 
 		if (input_->PushKey(DIK_A)) {
 			pushA = true;
@@ -500,10 +502,9 @@ void Player::Draw() {
 
 	if (Hp != 0) {
 		umbrella->Draw();
+
+		shadow_->Draw();
 	}
-
-	shadow_->Draw();
-
 	
 	Object3dCommon::GetInstance()->Command();
 

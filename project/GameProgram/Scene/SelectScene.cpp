@@ -46,7 +46,7 @@ void SelectScene::Update() {
 	player_->Update();
 
 	if (isZumuIn) {
-		player_->IsAnimationOnlyUpdate(true);
+		player_->SetPerformanceMode(true);
 		player_->SetRotate({ 0,0,0 });//向きを前に
 		return;
 	}

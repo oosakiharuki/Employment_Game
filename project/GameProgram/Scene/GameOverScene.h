@@ -13,6 +13,7 @@ public:
 	void Finalize() override;
 private:
 	std::unique_ptr<Sprite> sprite;//ゲームオーバーの文字
+	std::unique_ptr<Sprite> sprite_space;//Spaceでもどるの文字
 
 	std::unique_ptr<Object_glTF> player_gltf;
 	WorldTransform wt;

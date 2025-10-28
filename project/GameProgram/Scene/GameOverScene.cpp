@@ -5,6 +5,11 @@ void GameOverScene::Initialize() {
 	sprite->Initialize("Moji_GameOver.png");
 	sprite->SetPosition({ 100,100 });
 
+	sprite_space = std::make_unique<Sprite>();
+	sprite_space->Initialize("Moji_botton.png");
+	sprite_space->SetPosition({ 800,10 });
+	sprite_space->SetSize({256,64});
+
 	camera = std::make_unique<Camera>();
 	camera->SetTranslate({0,5,-15});
 	camera->SetRotate({15.0f,0,0});
@@ -31,13 +36,15 @@ void GameOverScene::Update() {
 	Input::GetInstance()->GetJoystickStatePrevious(0, preState);
 	
 	sprite->Update();
+	sprite_space->Update();
 
 	if (!FadeScreen::GetInstance()->GetIsFadeing()) {
 		ChangeScene();
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
-		Input::GetInstance()->TriggerBotton(state, preState, XINPUT_GAMEPAD_A)) {
+	//フェードの最中にボタンを押せなくする
+	if ((Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+		Input::GetInstance()->TriggerBotton(state, preState, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance()->GetIsFadeing()) {
 		NextSceneFadeInStart("Game");
 		FadeScreen::GetInstance()->SetMaskTexture("fade01.png");
 		FadeScreen::GetInstance()->SetBackGround("fadeTexture.png");
@@ -67,7 +74,7 @@ void GameOverScene::Draw() {
 	SpriteCommon::GetInstance()->Command();
 
 	sprite->Draw();
-
+	sprite_space->Draw();
 }
 
 void GameOverScene::Finalize() {}

@@ -18,13 +18,12 @@ void Enemy_Bomb::Initialize() {
 	maxHp = 1;
 	hp = maxHp;
 
-	//爆発パーティクルの初期化
-	particle_Bom = std::make_unique<Particle>();
-	particle_Bom->Initialize("enemyBomb_Attack", "resource/Sprite/circle.png", PrimitiveType::ring);
-	particle_Bom->SetParticleCount(10);
-	particle_Bom->ChangeMode(BornParticle::Stop);
-	particle_Bom->SetParticleMosion(ParticleMosion::Exprosion);
-	particle_Bom->SetFrequency(1.0f);
+	particle_damage = std::make_unique<Particle>();
+	particle_damage->Initialize("enemySoldier_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
+	particle_damage->SetParticleCount(10);
+	particle_damage->ChangeMode(BornParticle::Stop);
+	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
+	particle_damage->SetFrequency(1.0f);
 
 	//
 	bombAABB.min = { 0,-10,0 };
@@ -38,20 +37,14 @@ void Enemy_Bomb::Initialize() {
 
 void Enemy_Bomb::Update() {
 
+	UpdateCommon();
+
 	//体力が0の時
-	if (hp == 0) {
+	if (isEnd) {
 		isDead = true;
-		bombAABB.min = { 0,-10,0 };
-		bombAABB.max = { 0,-10,0 };
 	}
 
-	//倒されたアニメーション
-	DeadUpdate();
-
 	if (!isDead) {
-		
-		//重力
-		GrabityUpdate();
 
 		if (!isStart) {
 			if (move.x < route_point1.x) {
@@ -60,8 +53,6 @@ void Enemy_Bomb::Update() {
 			if (move.x > route_point2.x) {
 				wt.rotation_.y = -90.0f;
 			}
-
-			DirectionDegree();
 
 			if (!isFoundTarget) {
 				switch (direction)
@@ -83,19 +74,10 @@ void Enemy_Bomb::Update() {
 			}
 		}	
 		
-		PlayerTarget();
-
-		if (isFoundTarget || isStart) {
-			Attack();
+		if (isStart) {
+			TimeRimmit();
 		}
-
-		shadow_->SetTranslate(wt.translation_);
 	}
-
-	particle_Bom->Update();
-
-	object->Update(wt);
-	wt.UpdateMatrix();
 }
 
 void Enemy_Bomb::Draw() {
@@ -105,16 +87,20 @@ void Enemy_Bomb::Draw() {
 	}
 
 	ParticleCommon::GetInstance()->Command();
-	particle_Bom->Draw();
+
+	particle_damage->Draw();
+
 	Object3dCommon::GetInstance()->Command();
 }
 
 void Enemy_Bomb::Attack() {
-
 	isStart = true;
+}
+
+void Enemy_Bomb::TimeRimmit() {
 
 	bombTimer += deltaTime;
-	
+
 	Vector3 enemyPosition = GetWorldPosition();
 	Vector3 playerPosition = player_->GetWorldPosition();
 
@@ -122,7 +108,7 @@ void Enemy_Bomb::Attack() {
 
 	distance = Normalize(distance);
 
-	wt.translation_ += distance * Vector3{ -0.03f,0,0 } * 3;
+	wt.translation_ += distance * Vector3{ -0.03f,0,0 } *3;
 
 	if (distance.x < 0) {
 		wt.rotation_.y = 90.0f;
@@ -134,27 +120,19 @@ void Enemy_Bomb::Attack() {
 	if (bombTimer >= bombTimeMax) {
 		Exprosion();
 	}
-	
+
 	bool s = true;
 	if (bombTimer >= bombTimeMax / 1.5f) {
 		//爆発寸前だと揺れが細かくなる
-		ScaleUpdate(&s, Vector3(0.05f,0.05f,0.05f) * 2, 0.2f / 2);
+		ScaleUpdate(&s, Vector3(0.05f, 0.05f, 0.05f) * 2, 0.2f / 2);
 	}
 	else {
 		ScaleUpdate(&s, { 0.05f,0.05f,0.05f }, 0.2f);
 	}
 }
 
-void Enemy_Bomb::IsDamage() {
-	if (hp == 0) {
-		return;
-	}
-	hp -= 1;
-	Exprosion();
-}
-
 void Enemy_Bomb::RespownEnemy() {
-	RespownEnemy_All();
+	RespownEnemyCommon();
 	
 	isStart = false;
 	bombTimer = 0.0f;
@@ -178,8 +156,8 @@ void Enemy_Bomb::Exprosion() {
 	bombAABB.min = wt.translation_ - hani;
 	bombAABB.max = wt.translation_ + hani;
 
-	particle_Bom->SetTranslate(wt.translation_);
-	particle_Bom->ChangeMode(BornParticle::MomentMode);
+	particle_damage->SetTranslate(wt.translation_);
+	particle_damage->ChangeMode(BornParticle::MomentMode);
 
-	IsDamage();
+	isEnd = true;
 }

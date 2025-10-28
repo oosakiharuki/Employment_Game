@@ -28,13 +28,6 @@ void Enemy_Turret::Initialize() {
 	particle_fire->SetParticleMosion(ParticleMosion::Fixed);
 	particle_fire->SetFrequency(0.1f);
 
-
-	particle_dead = std::make_unique<Particle>();
-	particle_dead->Initialize("enemyTurret_dead", "resource/Sprite/gradationLine.png", PrimitiveType::ring);
-	particle_dead->SetParticleCount(1);
-	particle_dead->SetParticleMosion(ParticleMosion::Normal);
-	particle_dead->ChangeMode(BornParticle::Stop);
-
 	particle_damage = std::make_unique<Particle>();
 	particle_damage->Initialize("enemyTurret_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
 	particle_damage->SetParticleCount(10);
@@ -50,20 +43,9 @@ void Enemy_Turret::Initialize() {
 
 void Enemy_Turret::Update() {
 
-	if (hp == 0) {
-		isDead = true;
-	}
-
-	DeadUpdate();
+	UpdateCommon();
 
 	if (!isDead) {
-
-		//重力
-		GrabityUpdate();
-
-		DirectionDegree();
-
-
 		switch (direction)
 		{
 		case right:
@@ -75,50 +57,13 @@ void Enemy_Turret::Update() {
 			eyeAABB.max = wt.translation_ + Vector3(0, 2, 1);
 			break;
 		}
-
-		PlayerTarget();
-
-		if (isFoundTarget) {
-			isBulletStart = true;
-		}
-
-		if (isBulletStart) {
-			Attack();
-		}
-		else {
-			rapidCount = 0;
-			rapidFireTime = 0;
-			coolTime = 0;
-		}
-
-		shadow_->SetTranslate(wt.translation_);
 	}
 
-	if (isDamageMosion) {
-		ScaleUpdate(&isDamageMosion, damageScale, damageMaxTime);
-	}
-
-	for (auto* bullet : bullets_) {
-		bullet->Update();
-	}
-
-	bullets_.remove_if([](EnemyBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});
-
-
-	particle_fire->SetScale({2,2,2});
-	particle_fire->SetRotate({0,0,-wt.rotation_.y});
+	particle_fire->SetScale({ 2,2,2 });
+	particle_fire->SetRotate({ 0,0,-wt.rotation_.y });
 
 
 	particle_fire->Update();
-
-	particle_damage->Update();
-	particle_dead->Update();
 
 #ifdef _DEBUG
 
@@ -126,7 +71,7 @@ void Enemy_Turret::Update() {
 
 	ImGui::Text("translate : %f,%f,%f", wt.translation_.x, wt.translation_.y, wt.translation_.z);
 	ImGui::Text("translate : %f,%f,%f", wt.rotation_.x, wt.rotation_.y, wt.rotation_.z);
-	
+
 	ImGui::Text("Eye_Min : %f,%f,%f", eyeAABB.min.x, eyeAABB.min.y, eyeAABB.min.z);
 	ImGui::Text("Eye_Max : %f,%f,%f", eyeAABB.max.x, eyeAABB.max.y, eyeAABB.max.z);
 
@@ -136,8 +81,6 @@ void Enemy_Turret::Update() {
 
 #endif // _DEBUG
 
-	object->Update(wt);
-	wt.UpdateMatrix();
 }
 
 void Enemy_Turret::Draw() {
@@ -154,28 +97,10 @@ void Enemy_Turret::Draw() {
 	ParticleCommon::GetInstance()->Command();
 
 	particle_fire->Draw();
-	particle_dead->Draw();
 	particle_damage->Draw();
 
 	Object3dCommon::GetInstance()->Command();
 
-}
-
-
-
-void Enemy_Turret::IsDamage() {
-	particle_damage->SetTranslate(wt.translation_);
-	particle_damage->ChangeMode(BornParticle::MomentMode);
-
-	//連続ヒット時、元に戻す
-	wt.scale_ = defaultScale;
-	scaleTimer = 0.0f;
-
-	isDamageMosion = true;
-	if (hp == 0) {
-		return;
-	}
-	hp -= 1;
 }
 
 void Enemy_Turret::Attack() {
@@ -209,7 +134,7 @@ void Enemy_Turret::Fire() {
 	};
 
 
-	particle_fire->SetTranslate({ translate.x + 3.0f,translate.y,translate.z });
+	particle_fire->SetTranslate(translate);
 
 
 	Vector3 velocity = { 0.0f,0.0f,0.5f };
@@ -223,5 +148,8 @@ void Enemy_Turret::Fire() {
 }
 
 void Enemy_Turret::RespownEnemy() {
-	RespownEnemy_All();
+	RespownEnemyCommon();
+	rapidCount = 0;
+	coolTime = 0;
+	isBulletStart = false;
 }

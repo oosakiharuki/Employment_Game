@@ -12,8 +12,9 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Attack() override;
+	
+	void TimeRimmit();
 
-	void IsDamage() override;
 	bool IsDead() { return isDead; }
 
 	void RespownEnemy() override;
@@ -43,6 +44,8 @@ public:
 private:
 	//爆発開始
 	bool isStart = false;
+	//爆発終了
+	bool isEnd = false;
 
 	//爆発するまでのタイマー
 	const float bombTimeMax = 5.0f;//max
@@ -52,8 +55,6 @@ private:
 	Vector3 speed = { 0.03f,0.0f,0.0f };
 	Vector3 move = { 0,0,0 };
 
-	//パーティクル
-	std::unique_ptr<Particle> particle_Bom;//爆発
 	//爆発範囲AABB
 	AABB bombAABB;
 	Vector3 hani = { 3,3,3 };//大きさ

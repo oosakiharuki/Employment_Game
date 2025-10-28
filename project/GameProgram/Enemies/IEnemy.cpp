@@ -6,6 +6,78 @@ IEnemy::IEnemy() {}
 
 IEnemy::~IEnemy(){}
 
+void IEnemy::UpdateCommon() {
+	if (hp == 0) {
+		isDead = true;
+	}
+
+	DeadUpdate();
+
+	if (!isDead && !isPerformance) {
+
+		//重力
+		GrabityUpdate();
+
+		DirectionDegree();
+
+		PlayerTarget();
+
+		if (isFoundTarget) {
+			isBulletStart = true;
+		}
+
+		if (isBulletStart) {
+			Attack();
+		}
+		else {
+			rapidCount = 0;
+			rapidFireTime = 0;
+			coolTime = 0;
+		}
+
+		
+	}
+
+	shadow_->SetTranslate(wt.translation_);
+
+	if (isDamageMosion) {
+		ScaleUpdate(&isDamageMosion, damageScale, damageMaxTime);
+	}
+
+	for (auto* bullet : bullets_) {
+		bullet->Update();
+	}
+
+	bullets_.remove_if([](EnemyBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+		});
+
+
+	particle_damage->Update();
+
+	object->Update(wt);
+	wt.UpdateMatrix();
+}
+
+void IEnemy::IsDamage() {
+	particle_damage->SetTranslate(wt.translation_);
+	particle_damage->ChangeMode(BornParticle::MomentMode);
+	isDamageMosion = true;
+
+	//連続ヒット時、元に戻す
+	wt.scale_ = defaultScale;
+	scaleTimer = 0.0f;
+
+	if (hp == 0) {
+		return;
+	}
+	hp -= 1;
+}
+
 
 void IEnemy::GrabityUpdate() {
 	
@@ -52,7 +124,7 @@ void IEnemy::PlayerTarget() {
 
 }
 
-void IEnemy::RespownEnemy_All() {
+void IEnemy::RespownEnemyCommon() {
 	isDead = false;
 	deleteEnemy = false;
 	hp = maxHp;
@@ -60,6 +132,12 @@ void IEnemy::RespownEnemy_All() {
 	//blenderで配置した初期位置に戻る
 	wt.translation_ = init_point;
 	wt.rotation_ = init_rotate;
+
+	bullets_.remove_if([](EnemyBullet* bullet) {
+		delete bullet;
+		return true;
+	});
+
 }
 
 void IEnemy::DeadUpdate() {

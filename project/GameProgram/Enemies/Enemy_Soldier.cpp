@@ -46,17 +46,9 @@ void Enemy_Soldier::Initialize() {
 
 void Enemy_Soldier::Update() {
 
-	if (hp == 0) {
-		isDead = true;
-	}
-
-	DeadUpdate();
+	UpdateCommon();
 
 	if (!isDead) {
-
-		//重力
-		GrabityUpdate();
-
 
 		if (move.x < route_point1.x) {
 			wt.rotation_.y = 90.0f;
@@ -64,8 +56,6 @@ void Enemy_Soldier::Update() {
 		if(move.x > route_point2.x){
 			wt.rotation_.y = -90.0f;
 		}
-
-		DirectionDegree();
 
 		if (!isFoundTarget && !isBulletStart) {
 			switch (direction)
@@ -85,45 +75,10 @@ void Enemy_Soldier::Update() {
 			wt.translation_ += speed;		
 			move += speed;
 		}
-
-		PlayerTarget();
-
-		if (isFoundTarget) {
-			isBulletStart = true;
-		}
-		if (isBulletStart) {
-			Attack();
-		}
-		else {
-			rapidCount = 0;
-			rapidFireTime = 0;
-			coolTime = 0;
-		}
-
-		shadow_->SetTranslate(wt.translation_);
 	}
-
-	if (isDamageMosion) {
-		ScaleUpdate(&isDamageMosion, damageScale, damageMaxTime);
-	}
-
-	for (auto* bullet : bullets_) {
-		bullet->Update();
-	}
-
-	bullets_.remove_if([](EnemyBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-		});
-
 
 	particle_fire->SetRotate({ 0,0,-wt.rotation_.y });
 	particle_fire->Update();
-
-	particle_damage->Update();
 
 #ifdef _DEBUG
 
@@ -142,9 +97,6 @@ void Enemy_Soldier::Update() {
 	ImGui::End();
 
 #endif // _DEBUG
-
-	object->Update(wt);
-	wt.UpdateMatrix();
 }
 
 void Enemy_Soldier::Draw() {
@@ -164,23 +116,6 @@ void Enemy_Soldier::Draw() {
 
 	Object3dCommon::GetInstance()->Command();
 	
-}
-
-
-
-void Enemy_Soldier::IsDamage() {
-	particle_damage->SetTranslate(wt.translation_);
-	particle_damage->ChangeMode(BornParticle::MomentMode);
-	isDamageMosion = true;
-
-	//連続ヒット時、元に戻す
-	wt.scale_ = defaultScale;
-	scaleTimer = 0.0f;
-
-	if (hp == 0) {
-		return;
-	}
-	hp -= 1;
 }
 
 void Enemy_Soldier::Attack() {
@@ -242,6 +177,9 @@ void Enemy_Soldier::Fire() {
 }
 
 void Enemy_Soldier::RespownEnemy() {
-	RespownEnemy_All();
+	RespownEnemyCommon();
 	move = { 0,0,0 };
+	rapidCount = 0;
+	coolTime = 0;
+	isBulletStart = false;
 }
