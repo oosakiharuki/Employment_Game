@@ -1,6 +1,6 @@
 #pragma once
 #include "IPostEffects.h"
-#include <Vector4.h>
+#include "Vector3.h"
 /// <summary>
 /// ポストエフェクト_Dissolve(IPostEffectの派生クラス)
 /// </summary>
@@ -12,11 +12,12 @@ public:
 
 	void SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu,const std::string textureFile);
 	void Degress(float value);
+	void EgdeSize(float value);
 
 	struct Threshold {
 		float degress;
 		float egdeSize;
-		//Vector4 egdeColor;
+		//Vector3 egdeColor;
 	};
 
 private:

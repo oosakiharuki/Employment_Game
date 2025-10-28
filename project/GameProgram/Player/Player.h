@@ -232,7 +232,9 @@ public:
 	/// </summary>
 	/// <param name="anser"></param>
 	/// trueならアニメーションのみ / falseなら操作可能
-	void IsAnimationOnlyUpdate(const bool& anser) { isAnimationOnlyUpdate = anser; }
+	void SetPerformanceMode(const bool& anser) { performance_mode = anser; }
+
+	bool GetPerformanceMode() { return performance_mode; }
 
 	/// <summary>
 	/// 強制的にジャンプさせる(演出等で使う)
@@ -382,5 +384,5 @@ private:
 	Vector3 defaultScale = { 1,1,1 };//元の大きさ
 
 	//アニメーションのみを動かすフラグ
-	bool isAnimationOnlyUpdate = false;
+	bool performance_mode = false;
 };

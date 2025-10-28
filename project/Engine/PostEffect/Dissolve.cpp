@@ -171,7 +171,7 @@ void Dissolve::GraphicsPipeline() {
 
 	threshold->degress = 0.5f;
 	threshold->egdeSize = 0.02f;
-	//threshold->egdeColor = { 1.0f, 0.4f, 0.3f, 1.0f };//なぜか反映できない
+	//threshold->egdeColor = { 1.0f, 1.0f, 1.0f };//なぜか反映できない
 }
 
 void Dissolve::Command() {
@@ -257,4 +257,8 @@ void Dissolve::SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu, const std::string 
 
 void Dissolve::Degress(float value) {
 	threshold->degress = value;
+}
+
+void Dissolve::EgdeSize(float value) {
+	threshold->egdeSize = value;
 }

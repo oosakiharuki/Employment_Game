@@ -36,8 +36,9 @@ void GameOverScene::Update() {
 		ChangeScene();
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
-		Input::GetInstance()->TriggerBotton(state, preState, XINPUT_GAMEPAD_A)) {
+	//フェードの最中にボタンを押せなくする
+	if ((Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+		Input::GetInstance()->TriggerBotton(state, preState, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance()->GetIsFadeing()) {
 		NextSceneFadeInStart("Game");
 		FadeScreen::GetInstance()->SetMaskTexture("fade01.png");
 		FadeScreen::GetInstance()->SetBackGround("fadeTexture.png");

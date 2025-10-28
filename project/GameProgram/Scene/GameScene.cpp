@@ -20,6 +20,11 @@ void GameScene::Initialize() {
 
 	WarterWarpExit();
 
+	//演出時に重力が発動しないようにする
+	for (auto& enemy : enemies) {
+		enemy->isPerformanceFlag(true);
+	}
+
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
 
@@ -79,8 +84,12 @@ void GameScene::Update() {
 		if (startPointY >= playerPoint.y) {
 			player_->SetTranslate({ playerPoint.x,startPointY,playerPoint.z });
 			isStartStage = false;
-			player_->IsAnimationOnlyUpdate(false);//演出モードを終了し操作できるように
+			player_->SetPerformanceMode(false);//演出モードを終了し操作できるように
 			player_->IsJumping();//強制的にジャンプさせて飛び出たようにする
+			//カイジョ
+			for (auto& enemy : enemies) {
+				enemy->isPerformanceFlag(false);
+			}
 			return;
 		}
 
@@ -94,7 +103,7 @@ void GameScene::Update() {
 
 
 	if (isNextStage) {
-		player_->IsAnimationOnlyUpdate(true);
+		player_->SetPerformanceMode(true);
 		player_->SetRotate({ 0,0,0 });
 		return;
 	}
@@ -132,11 +141,11 @@ void GameScene::Update() {
 		}
 	}
 
-	//演出では使わない
 	if (!isStartStage) {
-		startWarp->Vanish();//出てきた後消えるようにする
-		CollisionCommon();
+		startWarp->Vanish();//出てきた後消えるようにする	
 	}
+
+	CollisionCommon();
 
 	//イベント中はカメラが固定
 	if (isEventCommon) {
@@ -255,7 +264,7 @@ void GameScene::WarterWarpExit() {
 	startWarp->SetPosition(warpPosition);//playerの真下に
 	startWarp->SetRotation({ 90.0f,0.0f,0.0f });//下向きにして水たまりに
 
-	player_->IsAnimationOnlyUpdate(true);
+	player_->SetPerformanceMode(true);
 }
 
 void GameScene::ChangeCheckPoint() {

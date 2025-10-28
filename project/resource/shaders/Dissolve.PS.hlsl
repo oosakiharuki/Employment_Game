@@ -34,6 +34,6 @@ PixelShaderOutput main(VartexShaderOutput input)
     float32_t edge = 1.0f - smoothstep(gThreshold.degress, gThreshold.degress + gThreshold.egdeSize, mask); //0.03fは色を付けられる場所
     
     output.color = gTexture.Sample(gSampler, input.texcoord);  
-    output.color.rgb += edge * float32_t3(1.0f, 0.4f, 0.3f);
+    output.color.rgb += edge * float32_t3(0.4f, 0.4f, 0.4f);
     return output;
 }
