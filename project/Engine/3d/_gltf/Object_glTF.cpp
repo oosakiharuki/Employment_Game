@@ -9,6 +9,8 @@
 #include <numbers>
 #include "Logger.h"
 
+#include "ImGuiManager.h"
+
 using namespace MyMath;
 
 Object_glTF::Object_glTF(){}
@@ -23,12 +25,6 @@ Object_glTF::~Object_glTF(){
 void Object_glTF::Initialize() {
 	this->object3dCommon = GLTFCommon::GetInstance();
 	this->camera = object3dCommon->GetDefaultCamera();
-	//wvpResource = object3dCommon->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
-	//wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
-
-
-	//wvpData->World = MakeIdentity4x4();
-	//wvpData->WVP = MakeIdentity4x4();
 
 	//ライト用のリソース
 	directionalLightSphereResource = object3dCommon->GetDirectXCommon()->CreateBufferResource(sizeof(DirectionalLight));
@@ -37,7 +33,7 @@ void Object_glTF::Initialize() {
 	//色の設定
 	directionalLightSphereData->color = { 1.0f,1.0f,1.0f,1.0f };
 	directionalLightSphereData->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightSphereData->intensity = 0.5f;//明るすぎたため
+	directionalLightSphereData->intensity = 0.0f;//明るすぎたため
 
 
 	//Phong Reflection Model
@@ -52,8 +48,8 @@ void Object_glTF::Initialize() {
 	pointLightResource->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData));
 	//設定
 	pointLightData->color = { 1.0f,1.0f,1.0f,1.0f };
-	pointLightData->position = { 0.0f,2.0f,0.0f };
-	pointLightData->intensity = 0.0f;
+	pointLightData->position = { 0.0f,-1.0f,0.0f };
+	pointLightData->intensity = 1.0f;
 	pointLightData->radius = 5.0f;
 	pointLightData->decay = 1.0f;
 
@@ -71,87 +67,14 @@ void Object_glTF::Initialize() {
 	spotLightData->decay = 2.0f;
 	spotLightData->cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
 	spotLightData->cosFalloffStart = std::cos(std::numbers::pi_v<float> / 4.0f);
-
-
-
-
-
-
-	transform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
-
-	transformL = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
-
-
-
-
 }
 
 void Object_glTF::Update(const WorldTransform& worldTransform) {
 
-	//作るときはフレームレートを60FPSにする
-	uint32_t i = 0;		
-	
-	animationTime += 1.0f / 60.0f;
-
-	for (auto& animation_ : animation) {
-
-		animationTime = std::fmod(animationTime, animation_.duration);
-
-		//スキニング処理
-		if (model->IsSkinning()) {
-			if (isChange) {
-				changeTime += 1.0f / 60.0f;
-				if (changeTime >= preAnimation[i].duration) {
-					isChange = false;
-					changeTime = 0;
-				}
-				else {
-					Interpolation(skeletons[i], preAnimation[i], animation_, changeTime);
-				}
-			}
-			else {
-				ApplyAnimation(skeletons[1], animation_, animationTime);
-			}
-		}
-	}
-	
-	//スキニング
-	if (model->IsSkinning()) {
-		for (auto& skeleton : skeletons) {
-			SkeletonUpdate(skeleton, worldTransform.matWorld_ * MakeTranslateMatrix(Vector3(0, 0, -0.2f)));
-			SkinClusterUpdate(skinClusters[i], skeleton);
-		}
-	}
-
-	//一度リセット
-	localMatrices.clear();
-
-	if (!model->IsSkinning() && model->IsAnimation()) {
-		for (uint32_t i = 0; i < modelData.indices.size(); i++) {
-			Matrix4x4 localMatrix;
-
-			if (modelData.indices.size() <= 1) {
-				NodeAnimation& rootNodeAnimation = animation[i].nodeAnimations[modelData.rootNode.name];
-				Vector3 translate = CalculateValue(rootNodeAnimation.translate, animationTime);//nextと逆にする()
-				Quaternion rotate = CalculateValueQuaternion(rootNodeAnimation.rotate, animationTime);
-				Vector3 scale = CalculateValue(rootNodeAnimation.scale, animationTime);
-
-				localMatrix = MakeAffineMatrix(scale, rotate, translate);
-				localMatrices.push_back(localMatrix);
-			}
-			else if(model->IsAnimation()){
-				NodeAnimation& rootNodeAnimation = animation[i].nodeAnimations[modelData.rootNode.children[i].name];
-				Vector3 translate = CalculateValue(rootNodeAnimation.translate, animationTime);//nextと逆にする()
-				Quaternion rotate = CalculateValueQuaternion(rootNodeAnimation.rotate, animationTime);
-				Vector3 scale = CalculateValue(rootNodeAnimation.scale, animationTime);
-
-				localMatrix = MakeAffineMatrix(scale, rotate, translate);
-				localMatrices.push_back(localMatrix);
-			}
-		}
-	}
-
 	worldMatrix = worldTransform.matWorld_;
+
+	AnimationUpdate();
+
 
 	for (uint32_t i = 0; i < modelData.indices.size(); i++) {
 		wvpDatas[i]->World = modelData.rootNode.localMatrix * worldTransform.matWorld_;
@@ -162,12 +85,23 @@ void Object_glTF::Update(const WorldTransform& worldTransform) {
 
 void Object_glTF::Update() {
 
+	worldMatrix = MakeIdentity4x4();
+
+	AnimationUpdate();
+
+	for (uint32_t i = 0; i < modelData.indices.size(); i++) {
+		wvpDatas[i]->World = modelData.rootNode.localMatrix * worldMatrix;
+	}
+
+	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
+}
+
+void Object_glTF::AnimationUpdate() {
+
 	//作るときはフレームレートを60FPSにする
 	uint32_t i = 0;
 
 	animationTime += 1.0f / 60.0f;
-
-	worldMatrix = MakeIdentity4x4();
 
 	for (auto& animation_ : animation) {
 
@@ -226,12 +160,6 @@ void Object_glTF::Update() {
 			}
 		}
 	}
-
-	for (uint32_t i = 0; i < modelData.indices.size(); i++) {
-		wvpDatas[i]->World = modelData.rootNode.localMatrix * worldMatrix;
-	}
-
-	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
 }
 
 
@@ -356,6 +284,20 @@ void Object_glTF::LightSwitch(bool isLight) {
 	if (model) {
 		model->LightOn(isLight);
 	}
+
+
+#ifdef _DEBUG
+	ImGui::Begin("PointLight");
+
+	ImGui::SliderFloat4("pointLight_Color", &pointLightData->color.x, 0, 1);
+	ImGui::SliderFloat3("pointLight_pos", &pointLightData->position.x,-20.0f,20.0f );
+	ImGui::SliderFloat("pointLight_intensity", &pointLightData->intensity,0,1);
+	ImGui::SliderFloat("pointLight_radius", &pointLightData->radius,0.1f,100.0f);
+	ImGui::SliderFloat("pointLight_decay", &pointLightData->decay ,0.0f ,1.0f);
+
+	ImGui::End();
+#endif // _DEBUG
+
 }
 
 //環境マップのファイルパス

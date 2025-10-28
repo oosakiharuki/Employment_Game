@@ -75,6 +75,14 @@ void Player::Initialize() {
 	particle_pari->SetParticleMosion(ParticleMosion::Fixed);
 	particle_fire->SetFrequency(0.5f);
 
+	particle_dead = std::make_unique<Particle>();
+	particle_dead->Initialize("player_dead", "resource/Sprite/ground.png", PrimitiveType::sphere);
+	particle_dead->ChangeMode(BornParticle::Stop);
+	particle_dead->SetParticleMosion(ParticleMosion::Smaller);
+	particle_dead->SetFrequency(0.1f);
+	particle_dead->SetScale({ 0.5f,0.5f,0.5f });
+
+
 	shadow_ = std::make_unique<Shadow>();
 	shadow_->Initialize();
 	shadow_->SetScale({ 1,0,1 });
@@ -93,7 +101,9 @@ void Player::Initialize() {
 
 void Player::Update() {
 
-	DeadPlayer();
+	if (Hp == 0) {
+		DeadPlayer();
+	}
 
 	input_->GetJoyStickState(0, state);
 	input_->GetJoystickStatePrevious(0, preState);
@@ -102,6 +112,19 @@ void Player::Update() {
 	bool pushD = false;
 	bool pushW = false;
 	bool pushS = false;
+
+
+	if (!isAnimationOnlyUpdate) {
+		//重力の処理
+		if (isGround) {
+			isJump = false;
+			isOneBrink = false;//ブリンク可能
+		}
+		else {
+			grabity -= 0.01f;
+		}
+	}
+
 
 	if (!isPlayerDown && !isAnimationOnlyUpdate) {
 
@@ -241,12 +264,6 @@ void Player::Update() {
 			isGround = false;
 		}
 
-		grabity -= 0.01f;
-		if (isGround) {
-			isJump = false;
-			isOneBrink = false;//ブリンク可能
-		}
-
 
 		//傘シールド
 		if (input_->PushKey(DIK_L) || input_->PushBotton(state, XINPUT_GAMEPAD_B)) {
@@ -321,21 +338,7 @@ void Player::Update() {
 			umbrella->ScaleUpdate(&isShildMosion, damageScale, damageMaxTime);
 		}
 
-		if (isJump) {
-			worldTransform.translation_.y += 0.25f;
-		}
 
-		//重力
-		if (isShield && !isGround && range == Up) {
-			if (isJump) {
-				isJump = false;
-			}
-			grabity = 0.0f;
-			worldTransform.translation_.y -= 0.05f;
-		}
-		else {
-			worldTransform.translation_.y += grabity;
-		}
 
 
 		//ノックバック発動
@@ -362,6 +365,22 @@ void Player::Update() {
 		shadow_->SetTranslate(worldTransform.translation_);
 	}
 
+	if (isJump) {
+		worldTransform.translation_.y += 0.25f;
+	}
+
+	//重力
+	if (isShield && !isGround && range == Up && !isPlayerDown) {
+		if (isJump) {
+			isJump = false;
+		}
+		grabity = 0.0f;
+		worldTransform.translation_.y -= 0.05f;
+	}
+	else {
+		worldTransform.translation_.y += grabity;
+	}
+
 	for (auto& bullet : bullets_) {
 		bullet->Update();
 	}
@@ -372,7 +391,7 @@ void Player::Update() {
 			return true;
 		}
 		return false;
-	});
+		});
 
 	if (infinityTimer >= infinityTimeMax) {
 		infinityTimer = infinityTimeMax;
@@ -387,7 +406,7 @@ void Player::Update() {
 		particle_walk->SetParticleCount(10);
 		particle_walk->SetFrequency(0.25f);
 		particle_walk->ChangeMode(BornParticle::TimerMode);
-		particle_walk->SetTranslate(worldTransform.translation_ + TransformNormal(Vector3{0.0f,-1.0f,-0.3f},worldTransform.matWorld_));
+		particle_walk->SetTranslate(worldTransform.translation_ + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, worldTransform.matWorld_));
 
 		particle_walk->SetScale({ 0.5f,0.5f,0.5f });
 	}
@@ -401,6 +420,7 @@ void Player::Update() {
 	particle_brink->Update();
 	particle_damage->Update();
 	particle_pari->Update();
+	particle_dead->Update();
 
 	///アニメーション
 	if (isShield) {
@@ -430,10 +450,10 @@ void Player::Update() {
 
 		PreAnimation_mode = animation_mode;
 	}
-	
+
 	//現在座標に前回座標を代入
 	PrePosition = worldTransform.translation_;
-
+	
 	object->Update(worldTransform);
 
 #ifdef  USE_IMGUI
@@ -470,19 +490,19 @@ void Player::Update() {
 
 	for (auto& sprite : sprites_Hp) {
 		sprite->Update();
-	}		
+	}
 }
 
 void Player::Draw() {
+	GLTFCommon::GetInstance()->Command();
+
+	object->Draw();
+
 	if (Hp != 0) {
-		GLTFCommon::GetInstance()->Command();
-
-		object->Draw();
-
 		umbrella->Draw();
-
-		shadow_->Draw();
 	}
+
+	shadow_->Draw();
 
 	
 	Object3dCommon::GetInstance()->Command();
@@ -499,6 +519,7 @@ void Player::DrawP() {
 	particle_brink->Draw();
 	particle_damage->Draw();
 	particle_pari->Draw();
+	particle_dead->Draw();
 
 	SpriteCommon::GetInstance()->Command();
 	
@@ -611,21 +632,44 @@ Vector3 Player::GetWorldPosition() {
 }
 
 void Player::DeadPlayer() {
-	if (Hp == 0) {
-		deadTimer += deltaTime;
-		isPlayerDown = true;
+
+	deadTimer += deltaTime;
+	isPlayerDown = true;
+
+	if (deadTimer >= hitStopTime) {
+		
+		//倒されたパーティクル配置+発動
+		particle_dead->SetTranslate(worldTransform.translation_);
+		particle_dead->ChangeMode(BornParticle::TimerMode);
+
+		worldTransform.rotation_.z += 20.0f;
+		IsJumping();
+		isGround = false;
 		if (deadTimer >= deadTimeMax) {
-			Hp = MaxHp;
-			worldTransform.translation_ = respownPosition;
 			isRespown = true;
-			deadTimer = 0.0f;
-
-			for (auto& sprite : sprites_Hp) {
-				sprite->SetTextureFile("Hp.png");
-			}
-
+			//パーティクル発動停止
+			particle_dead->ChangeMode(BornParticle::Stop);
 		}
 	}
+	else {
+		grabity = 0.0f;
+		isGround = true;
+	}
+}
+
+void Player::AllRespownEnd() {
+
+	Hp = MaxHp;
+	worldTransform.translation_ = respownPosition;
+	
+	deadTimer = 0.0f;
+	worldTransform.rotation_.z = 0.0f;
+	for (auto& sprite : sprites_Hp) {
+		sprite->SetTextureFile("Hp.png");
+	}	
+	
+	isRespown = false;
+	isPlayerDown = false;		
 }
 
 //パリィ成功 = 連続弾も跳ね返す

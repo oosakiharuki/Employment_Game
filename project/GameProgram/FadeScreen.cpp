@@ -19,8 +19,8 @@ void FadeScreen::Initialize() {
 
 	dissolve = std::make_unique<Dissolve>();
 	dissolve->Initialize(DirectXCommon::GetInstance());
-	//フェードするテクスチャを導入
-	dissolve->SetBackGround(sprite->GetResource());
+
+	dissolveTexture = "fade01.png";
 }
 
 void FadeScreen::Update() {
@@ -41,6 +41,9 @@ void FadeScreen::Update() {
 
 
 	sprite->Update();
+	//フェードするテクスチャを導入
+	dissolve->SetBackGround(sprite->GetResource(),dissolveTexture);
+
 	dissolve->Degress(degress);
 }
 

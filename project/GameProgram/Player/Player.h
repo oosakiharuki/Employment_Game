@@ -164,10 +164,7 @@ public:
 	/// <summary>
 	/// 全ての敵が初期地に戻った時
 	/// </summary>	
-	void AllRespownEnd() { 
-		isRespown = false;
-		isPlayerDown = false;
-	}
+	void AllRespownEnd();
 
 	/// <summary>
 	/// getter_パリィ
@@ -333,7 +330,8 @@ private:
 
 	//倒された
 	float deadTimer = 0.0f;
-	float deadTimeMax = 2.0f;
+	float hitStopTime = 1.0f;
+	float deadTimeMax = 3.0f;
 	bool isPlayerDown = false;
 
 	//復活
@@ -350,6 +348,7 @@ private:
 	std::unique_ptr<Particle> particle_brink;//ブリンク
 	std::unique_ptr<Particle> particle_damage;//ダメージを食らった
 	std::unique_ptr<Particle> particle_pari;//パリィ成功
+	std::unique_ptr<Particle> particle_dead;//倒された演出
 
 	//前回座標の保存場所
 	Vector3 PrePosition;
