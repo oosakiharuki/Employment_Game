@@ -4,11 +4,11 @@ using namespace MyMath;
 
 void GameScene::Initialize() {
 
-	LevelEditorObjectSetting("resource/Levelediter/stage_0.json");
+	LevelEditorObjectSetting("resource/Levelediter/stage_1.json");
 
 	stageobj = std::make_unique<Object3d>();
 	stageobj->Initialize();
-	stageobj->SetModelFile("stage_0.obj");
+	stageobj->SetModelFile("stage_1.obj");
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
@@ -36,19 +36,13 @@ void GameScene::Update() {
 	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
-		NextSceneFadeInStart("Title");
+		//NextSceneFadeInStart("Title");
 	}
 
 	startWarp->Update();
 
 	if (isNextStage) {
-		if (zumuTimer <= 1.0f) {
-			zumuTimer += 1.0f / 60.0f;
-
-		}
-		camera->Zumu(cameraSegment, zumuTimer);
-
-		if (zumuTimer >= 1.0f) {
+		if (cameraControl_->MaxZoom()) {
 			NextSceneFadeInStart("NextStage");
 		}
 	}
@@ -58,8 +52,7 @@ void GameScene::Update() {
 			//ワープゲート
 			if (stageObject.get() == dynamic_cast<WarpGate*>(stageObject.get()) && Input::GetInstance()->TriggerKey(DIK_E)) {
 				WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject.get());
-				cameraSegment.origin = camera->GetTranslate();//ズーム前のカメラ位置
-				cameraSegment.diff = player_->GetTranslate() + Vector3(0, 2, -15.0f);//プレイヤーよりちょっと離れてる
+				cameraControl_->ZoomStart(player_->GetTranslate() + playerAwayPos);
 				isNextStage = true;
 				nextStage_fileName = warpGate->GetNextStage();
 				break;
@@ -73,7 +66,18 @@ void GameScene::Update() {
 
 	skyBox->Update(MakeScaleMatrix({ 1000,1000,1000 }));//大きくするため
 
-	camera->Update();
+	//
+	cameraControl_->SetPlayerPosition(player_->GetTranslate());
+
+	if (player_->GetIsPlayerDown()) {
+		cameraControl_->ShakeMode(true);
+	}
+	else {
+		cameraControl_->ResetShakeTime();
+	}
+
+	cameraControl_->Update(&*camera.get());
+
 
 	player_->Update();
 	
@@ -111,14 +115,10 @@ void GameScene::Update() {
 
 	Respawn();
 
+	//敵やオブジェクトを止める(時間停止)
 	if (player_->GetIsPlayerDown()) {
-		CameraControl();
 		return;
 	}
-	else {
-		ShakeTimer = 0.0f;
-	}
-
 	
 	for (auto& enemy : enemies) {
 		enemy->SetPlayer(player_.get());
@@ -151,20 +151,6 @@ void GameScene::Update() {
 
 	CollisionCommon();
 
-	//イベント中はカメラが固定
-	if (isEventCommon) {
-		//カメラ固定
-		worldTransformCamera_.rotation_ = cameraRotate;
-		worldTransformCamera_.translation_ = cameraTranslate;
-	}
-	else {
-		//カメラの移動範囲
-		//次ステージ移動時はズームされるのでここは除外
-		if (!isNextStage) {
-			CameraControl();
-		}
-	}
-
 	//落ちた場合
 	if (player_->GetTranslate().y < -10.0f) {
 		player_->IsFall();
@@ -176,19 +162,19 @@ void GameScene::Update() {
 	ImGui::Text("ImGuiText");
 
 	//カメラ
-	ImGui::InputFloat3("cameraTranslate", &worldTransformCamera_.translation_.x);
-	ImGui::SliderFloat3("cameraTranslateSlider", &worldTransformCamera_.translation_.x, -30.0f, 30.0f);
+	//ImGui::InputFloat3("cameraTranslate", &cameraTranslate.x);
+	//ImGui::SliderFloat3("cameraTranslateSlider", &cameraTranslate.x, -30.0f, 30.0f);
 
-	ImGui::InputFloat3("cameraRotate", &worldTransformCamera_.rotation_.x);
-	ImGui::SliderFloat("cameraRotateX", &worldTransformCamera_.rotation_.x, -360.0f, 360.0f);
-	ImGui::SliderFloat("cameraRotateY", &worldTransformCamera_.rotation_.y, -360.0f, 360.0f);
-	ImGui::SliderFloat("cameraRotateZ", &worldTransformCamera_.rotation_.z, -360.0f, 360.0f);
+	//ImGui::InputFloat3("cameraRotate", &cameraRotate.x);
+	//ImGui::SliderFloat("cameraRotateX", &cameraRotate.x, -360.0f, 360.0f);
+	//ImGui::SliderFloat("cameraRotateY", &cameraRotate.y, -360.0f, 360.0f);
+	//ImGui::SliderFloat("cameraRotateZ", &cameraRotate.z, -360.0f, 360.0f);
 
 	ImGui::Text("p1 : %f %f %f", cameraPoint1.x, cameraPoint1.y, cameraPoint1.z);
 	ImGui::Text("p2 : %f %f %f", cameraPoint2.x, cameraPoint2.y, cameraPoint2.z);
 
-	camera->SetRotate(worldTransformCamera_.rotation_);
-	camera->SetTranslate(worldTransformCamera_.translation_);
+	//camera->SetRotate(cameraRotate);
+	//camera->SetTranslate(cameraTranslate);
 
 	ImGui::SliderFloat("volume", &volume, 0.0f, 1.0f);
 
@@ -284,47 +270,6 @@ void GameScene::ChangeCheckPoint() {
 	}
 }
 
-void GameScene::CameraControl() {
-
-	//Point1とPoint2から出たとき
-	if (cameraTranslate.x + cameraPoint1.x < player_->GetTranslate().x && cameraTranslate.x + cameraPoint2.x > player_->GetTranslate().x) {
-		worldTransformCamera_.translation_.x = player_->GetTranslate().x;
-	}
-	else if (cameraTranslate.x + cameraPoint1.x >= player_->GetTranslate().x) {
-		worldTransformCamera_.translation_.x = cameraTranslate.x + cameraPoint1.x;
-	}
-	else if (cameraTranslate.x + cameraPoint2.x <= player_->GetTranslate().x) {
-		worldTransformCamera_.translation_.x = cameraTranslate.x + cameraPoint2.x;
-	}
-
-	if (cameraTranslate.y < player_->GetTranslate().y + 6.0f) {
-		worldTransformCamera_.translation_.y = player_->GetTranslate().y + 6.0f;
-	}
-	else {
-		worldTransformCamera_.translation_.y = cameraTranslate.y;
-	}
-
-
-	std::random_device seed;
-	std::mt19937 random(seed());
-
-	if (player_->GetIsPlayerDown() && ShakeTimer <= ShakeMaxTime) {
-		std::uniform_real_distribution<float> yure(-0.5f,0.5f);
-		worldTransformCamera_.translation_.x += yure(random);
-		worldTransformCamera_.translation_.y += yure(random);
-		ShakeTimer += 1.0f / 60.0f;
-	}
-
-
-
-	//カメラ座標系更新
-	worldTransformCamera_.UpdateMatrix();
-
-	//カメラ更新
-	camera->SetRotate(worldTransformCamera_.rotation_);
-	camera->SetTranslate(worldTransformCamera_.translation_);
-}
-
 void GameScene::Respawn() {
 	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
 	if (player_->GetIsPlayerDown() && player_->GetIsRespown()) {
@@ -345,7 +290,7 @@ void GameScene::Respawn() {
 
 		for (auto& eventTrigger : eventTriggers) {
 			eventTrigger->FailureEvent();
-			MainCamera();
+			cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit[0],false);
 		}
 	}
 }

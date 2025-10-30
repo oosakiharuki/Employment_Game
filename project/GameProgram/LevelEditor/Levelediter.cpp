@@ -205,9 +205,9 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 		}
 		else if (type.compare("CAMERA") == 0) {
 			//要素追加
-			levelData->cameraInit.emplace_back(LevelData::CameraInitData{});
+			levelData->cameraInit.emplace_back(CameraInitData{});
 			//
-			LevelData::CameraInitData& cameraInitData = levelData->cameraInit.back();
+			CameraInitData& cameraInitData = levelData->cameraInit.back();
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			//移動

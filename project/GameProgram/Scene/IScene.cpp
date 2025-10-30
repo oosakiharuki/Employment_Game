@@ -20,6 +20,9 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 
 	camera = std::make_unique<Camera>();
 
+	cameraControl_ = std::make_unique<CameraControl>();
+	cameraControl_->Initialize();
+
 	MainCamera();
 
 	Object3dCommon::GetInstance()->SetDefaultCamera(camera.get());
@@ -129,9 +132,6 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 		}
 	}
 
-	worldTransformCamera_.Initialize();
-	worldTransformCamera_.translation_ = cameraTranslate;
-	worldTransformCamera_.rotation_ = cameraRotate;
 
 	for (auto& enemy : enemies) {
 		enemy->SetStages(stagesAABB);
@@ -284,8 +284,18 @@ void IScene::CollisionCommon() {
 
 	//イベントトリガー
 	for (auto& eventTrigger : eventTriggers) {
-		//イベントが発動した時
-		if (eventTrigger->GetEventData().isEvent) {
+		
+		//イベントが終了した時(順番3)
+		if (eventTrigger->EventEnd()) {
+			//一瞬だけ通す
+			if (cameraControl_->IsFixed()) {
+				//カメラの最小/最大地点
+				cameraControl_->FixedMode(false);
+				cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit[0], false);
+			}
+		}
+		//イベントが発動している時(順番2)
+		else if (eventTrigger->GetEventData().isEvent) {
 			//イベントトリガーの範囲外に出ないように(!IsCollisionAABB()によって外に出た判定をとる)
 			if (!IsCollisionAABB(playerCollisionOverlap.targetAABB, eventTrigger->GetEventData().aabb)) {
 				//ステージ判定代入
@@ -308,29 +318,12 @@ void IScene::CollisionCommon() {
 				}
 			}
 		}
-		else if (IsCollisionAABB(player_->GetAABB(), eventTrigger->GetEventData().aabb) && !eventTrigger->EventEnd()) {
-			cameraRotate = levelediter.GetLevelData()->cameraInit[1].rotation;
-			cameraTranslate = levelediter.GetLevelData()->cameraInit[1].translation;
-
-			//カメラの最小/最大地点
-			cameraPoint1 = levelediter.GetLevelData()->cameraInit[1].Point1;
-			cameraPoint2 = levelediter.GetLevelData()->cameraInit[1].Point2;
-
-
-			camera->SetRotate(cameraRotate);
-			camera->SetTranslate(cameraTranslate);
-
+		//イベントトリガーに入った直前(順番1)
+		else if (IsCollisionAABB(player_->GetAABB(), eventTrigger->GetEventData().aabb)) {
+			cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit[1], true);
 			eventTrigger->StartEvent();
 		}
-
-		if (eventTrigger->EventEnd()) {
-			MainCamera();
-		}
-
 	}
-
-
-
 
 	Vector3 shadowPos = { 0,0,0 };
 
@@ -370,21 +363,6 @@ Vector3 IScene::UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vec
 	result.y = minY;
 
 	return result;
-}
-
-void IScene::MainCamera() {
-	//座標と回転
-	cameraRotate = levelediter.GetLevelData()->cameraInit[0].rotation;
-	cameraTranslate = levelediter.GetLevelData()->cameraInit[0].translation;
-
-	//カメラの最小/最大地点
-	cameraPoint1 = levelediter.GetLevelData()->cameraInit[0].Point1;
-	cameraPoint2 = levelediter.GetLevelData()->cameraInit[0].Point2;
-
-	//導入
-	camera->SetRotate(cameraRotate);
-	camera->SetTranslate(cameraTranslate);
-
 }
 
 CollisionOverlap IScene::BackPosition(CollisionOverlap collisionOverlap) {

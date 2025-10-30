@@ -26,13 +26,7 @@ void SelectScene::Update() {
 	}
 
 	if (isZumuIn) {
-		if (zumuTimer <= 1.0f) {
-			zumuTimer += 1.0f / 60.0f;
-
-		}
-		camera->Zumu(cameraSegment, zumuTimer);
-
-		if (zumuTimer >= 1.0f) {
+		if (cameraControl_->MaxZoom()) {
 			NextSceneFadeInStart("Game");
 		}
 	}
@@ -40,7 +34,8 @@ void SelectScene::Update() {
 	for (auto& stageObject : stageObjects) {
 		stageObject->Update();
 	}
-	camera->Update();
+
+	cameraControl_->Update(&*camera);
 	
 
 	player_->Update();
@@ -64,8 +59,7 @@ void SelectScene::Update() {
 			//プレイヤーとワープゲートの当たり判定 + Eキーを押した時
 			if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB()) && Input::GetInstance()->TriggerKey(DIK_E)) {
 				isZumuIn = true;
-				cameraSegment.origin = camera->GetTranslate();//ズーム前のカメラ位置
-				cameraSegment.diff = player_->GetTranslate() + Vector3(0, 2, -15.0f);//プレイヤーよりちょっと離れてる
+				cameraControl_->ZoomStart(player_->GetTranslate() + playerAwayPos);
 				break;
 			}
 		}

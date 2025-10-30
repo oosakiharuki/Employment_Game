@@ -1,6 +1,15 @@
 #pragma once
 #include "MyMath.h"
 
+//カメラの初期位置
+struct CameraInitData {
+	Vector3 translation;
+	Vector3 rotation;
+	//移動ルート
+	Vector3 Point1;
+	Vector3 Point2;
+};
+
 class Levelediter {
 public:
 
@@ -34,14 +43,7 @@ public:
 			Vector3 Point1;
 			Vector3 Point2;
 		};
-		//カメラの初期位置
-		struct CameraInitData {
-			Vector3 translation;
-			Vector3 rotation;
-			//移動ルート
-			Vector3 Point1;
-			Vector3 Point2;
-		};
+
 		//ステージオブジェクトの生成場所
 		struct StageObjectData {
 			std::string ObjectName;

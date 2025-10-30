@@ -24,6 +24,7 @@
 #include "FadeScreen.h"
 
 #include "EventTrigger.h"
+#include "CameraControl.h"
 
 /// <summary>
 /// 当たり判定:重なり部分を
@@ -56,7 +57,9 @@ protected:
 	//カメラ移動範囲
 	Vector3 cameraPoint1;//幅1
 	Vector3 cameraPoint2;//幅2
-	WorldTransform worldTransformCamera_;//ワールド座標
+	std::unique_ptr<CameraControl> cameraControl_;
+
+	Vector3 playerAwayPos = { 0, 2, -15.0f };
 
 	//レベルエディタ(オブジェクトの配置を.jsonでできる)
 	Levelediter levelediter;
@@ -102,11 +105,6 @@ protected:
 	/// <param name="position"></param>対象の場所
 	/// <returns></returns>対象から一番近い地面の上
 	Vector3 UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position);
-
-	/// <summary>
-	/// メインカメラ(プレイヤー中心カメラ)
-	/// </summary>
-	void MainCamera();
 
 	/// <summary>
 	/// ゲームパット入力処理

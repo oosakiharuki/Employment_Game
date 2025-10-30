@@ -345,6 +345,9 @@
     <ClCompile Include="GameProgram\Scene\SceneFactory.cpp">
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="GameProgram\CameraControl.cpp">
+      <Filter>ソース ファイル\GameProgram</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -583,6 +586,9 @@
     </ClInclude>
     <ClInclude Include="GameProgram\Scene\SceneFactory.h">
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\CameraControl.h">
+      <Filter>ヘッダー ファイル\GameProgram</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
