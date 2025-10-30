@@ -97,6 +97,8 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 			if (trigger != nullptr) {
 				Vector3 center = { (float)trigger["center"][0],(float)trigger["center"][2],(float)trigger["center"][1] };
 				Vector3 size = { (float)trigger["size"][0],(float)trigger["size"][2],(float)trigger["size"][1] };
+				std::string cameraName = trigger["camera"];
+				std::string csvName = trigger["csv"];
 
 				levelData->eventTriggerDatas.emplace_back(LevelData::EventTriggerData{});
 				LevelData::EventTriggerData& eventTrigger = levelData->eventTriggerDatas.back();
@@ -109,7 +111,9 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				eventTrigger.collisionAABB.max = objectData.translation + center + size / 2;
 
 				//Blenderで設定したcsvファイル名を入れる
-				eventTrigger.csvFile = "resource/csv/" + objectData.fileName + ".csv";
+				eventTrigger.csvFile = "resource/csv/" + csvName + ".csv";
+
+				eventTrigger.cameraName = cameraName;
 			}
 		}
 		else if (type.compare("PlayerSpawn") == 0) {
@@ -204,10 +208,13 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 			}
 		}
 		else if (type.compare("CAMERA") == 0) {
+
+			//名前を設定
+			std::string CameraName = object["name"].get<std::string>();
+
 			//要素追加
-			levelData->cameraInit.emplace_back(CameraInitData{});
-			//
-			CameraInitData& cameraInitData = levelData->cameraInit.back();
+			CameraInitData& cameraInitData = levelData->cameraInit[CameraName];
+
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
 			//移動

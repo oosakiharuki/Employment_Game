@@ -290,7 +290,7 @@ void GameScene::Respawn() {
 
 		for (auto& eventTrigger : eventTriggers) {
 			eventTrigger->FailureEvent();
-			cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit[0],false);
+			cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit["MainCamera"], false);
 		}
 	}
 }

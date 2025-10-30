@@ -1,5 +1,6 @@
 #pragma once
 #include "MyMath.h"
+#include <unordered_map>
 
 //カメラの初期位置
 struct CameraInitData {
@@ -57,13 +58,14 @@ public:
 			Vector3 center;
 			AABB collisionAABB;
 			std::string csvFile;
+			std::string cameraName;
 		};
 
 		//構造体データの配列たち
 		std::vector<ObjectData> objects;
 		std::vector<PlayerSpawnData> players;
 		std::vector<EnemySpawnData> spawnEnemies;
-		std::vector<CameraInitData> cameraInit;
+		std::unordered_map<std::string, CameraInitData> cameraInit;
 		std::vector<StageObjectData> stageObjects;
 		std::vector<EventTriggerData> eventTriggerDatas;
 	};

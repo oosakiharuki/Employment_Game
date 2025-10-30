@@ -22,8 +22,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 
 	cameraControl_ = std::make_unique<CameraControl>();
 	cameraControl_->Initialize();
-
-	MainCamera();
+	cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit["MainCamera"], false);
 
 	Object3dCommon::GetInstance()->SetDefaultCamera(camera.get());
 	GLTFCommon::GetInstance()->SetDefaultCamera(camera.get());
@@ -83,6 +82,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 			iterator.aabb = eventTriggerData.collisionAABB;
 			iterator.center = eventTriggerData.center;
 			iterator.csvFile = eventTriggerData.csvFile;
+			iterator.cameraName = eventTriggerData.cameraName;
 
 			std::unique_ptr<EventTrigger> eventTrigger;
 			eventTrigger = std::make_unique<EventTrigger>();
@@ -291,7 +291,7 @@ void IScene::CollisionCommon() {
 			if (cameraControl_->IsFixed()) {
 				//カメラの最小/最大地点
 				cameraControl_->FixedMode(false);
-				cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit[0], false);
+				cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit["MainCamera"], false);
 			}
 		}
 		//イベントが発動している時(順番2)
@@ -320,7 +320,7 @@ void IScene::CollisionCommon() {
 		}
 		//イベントトリガーに入った直前(順番1)
 		else if (IsCollisionAABB(player_->GetAABB(), eventTrigger->GetEventData().aabb)) {
-			cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit[1], true);
+			cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit[eventTrigger->GetEventData().cameraName], true);
 			eventTrigger->StartEvent();
 		}
 	}

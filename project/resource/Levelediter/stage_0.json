@@ -24,7 +24,7 @@
         },
         {
             "type": "CAMERA",
-            "name": "Camera",
+            "name": "MainCamera",
             "transform": {
                 "translation": [
                     -73.0,
