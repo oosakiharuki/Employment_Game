@@ -1625,44 +1625,9 @@
             "name": "StageObjectSpawn.001",
             "transform": {
                 "translation": [
-                    15.0,
+                    2.0,
                     0.0,
                     118.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
-        },
-        {
-            "type": "StageObjectSpawn",
-            "StageObjectName": "WarpGate",
-            "name": "StageObjectSpawn.002",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    119.0
                 ],
                 "rotation": [
                     0.0,

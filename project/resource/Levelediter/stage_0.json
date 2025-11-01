@@ -872,41 +872,6 @@
             }
         },
         {
-            "type": "EnemySpawn",
-            "EnemyName": "Turret",
-            "name": "EnemySpawn.003",
-            "transform": {
-                "translation": [
-                    -68.93067932128906,
-                    -7.078929797899036e-08,
-                    2.526867389678955
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    -90.00000762939453
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    3.0
-                ]
-            }
-        },
-        {
             "type": "MESH",
             "name": "立方体.016",
             "transform": {

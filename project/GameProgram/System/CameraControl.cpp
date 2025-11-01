@@ -54,6 +54,9 @@ void CameraControl::Move() {
 	if (playerPos.y >= fixedY) {
 		wt.translation_.y = playerPos.y + fixedY;
 	}
+	else {
+		wt.translation_.y = fixedPos.y;
+	}
 
 }
 
@@ -123,4 +126,6 @@ void CameraControl::CameraSetting(const CameraInitData& data, const bool& fixed_
 	rightEndPoint = wt.translation_ + data.Point2;
 
 	fixed_Mode = fixed_Mode_;
+
+	fixedPos = wt.translation_;
 }

@@ -15,6 +15,4 @@ private:
 	//カメラズーム
 	Segment cameraSegment{};
 	float zumuTimer = 0.0f;
-
-	bool isZumuIn = false;
 };

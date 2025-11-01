@@ -27,6 +27,7 @@
 #include "CameraControl.h"
 
 #include "CollisionManager.h"
+#include "NextStageSave.h"
 
 class IScene{
 protected:
@@ -76,8 +77,19 @@ protected:
 	//スカイボックス
 	std::unique_ptr<BoxModel> skyBox = nullptr;
 
-	//レベルエディタで配置
-	void LevelEditorObjectSetting(const std::string leveleditor_file);
+	/// <summary>
+	/// レベルエディタで配置
+	/// </summary>
+	/// <param name="leveleditor_file"></param>指定したい場合は名前を入れることも可能
+	void LevelEditorObjectSetting(const std::string leveleditor_file = "");
+	
+	/// <summary>
+	/// 前のステージのデータ引継ぎ
+	/// </summary>
+	void PreviousSceneData();
+
+	SceneSaveData data;
+
 	/// <summary>
 	/// 全シーンに共有できる当たり判定
 	/// </summary>
@@ -107,6 +119,11 @@ protected:
 	/// sceneNo = nextSceneNoに
 	/// </summary>
 	void ChangeScene();
+
+	
+	void WarpNextScene();
+
+	bool isWarp = false;
 
 public:
 	/// <summary>
@@ -141,4 +158,6 @@ public:
 	bool GetIsGameEnd() { return isGameEnd; }
 
 private:
+	//ステージの.jsonファイル名
+	std::string Stage_fileName;
 };

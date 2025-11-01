@@ -190,6 +190,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\StageObjects\IStageObject.cpp" />
     <ClCompile Include="GameProgram\StageObjects\WarpGate.cpp" />
     <ClCompile Include="GameProgram\Scene\LoadingStageScene.cpp" />
+    <ClCompile Include="GameProgram\System\NextStageSave.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameProgram\Collision\CollisionManager.h" />
@@ -273,6 +274,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\StageObjects\IStageObject.h" />
     <ClInclude Include="GameProgram\StageObjects\WarpGate.h" />
     <ClInclude Include="GameProgram\Scene\LoadingStageScene.h" />
+    <ClInclude Include="GameProgram\System\NextStageSave.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

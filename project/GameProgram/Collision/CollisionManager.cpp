@@ -62,7 +62,8 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 		//if(enemyが<派生クラス>と同じ) = true
 		if (enemy.get() == dynamic_cast<Enemy_Bomb*>(enemy.get())) {
 			Enemy_Bomb* enemy_Bomb = dynamic_cast<Enemy_Bomb*>(enemy.get());
-			if (IsCollisionAABB(enemy_Bomb->GetBombAABB(), player_->GetAABB()) && !enemy->IsDead()) {
+			if (IsCollisionAABB(enemy_Bomb->GetBombAABB(), player_->GetAABB()) && 
+				enemy_Bomb->IsDead() && !enemy_Bomb->IsExplosion()) {
 				player_->IsDamage();
 				player_->KnockBackPlayer(enemy_Bomb->GetDistance(), 0.8f);
 			}

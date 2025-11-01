@@ -3,7 +3,7 @@ using namespace MyMath;
 
 void SelectScene::Initialize() {
 
-	LevelEditorObjectSetting("resource/Levelediter/stage_select.json");
+	LevelEditorObjectSetting("stage_select");
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
@@ -25,7 +25,7 @@ void SelectScene::Update() {
 		ChangeScene();
 	}
 
-	if (isZumuIn) {
+	if (isWarp) {
 		if (cameraControl_->MaxZoom()) {
 			NextSceneFadeInStart("Game");
 		}
@@ -40,7 +40,7 @@ void SelectScene::Update() {
 
 	player_->Update();
 
-	if (isZumuIn) {
+	if (isWarp) {
 		player_->SetPerformanceMode(true);
 		player_->SetRotate({ 0,0,0 });//向きを前に
 		return;
@@ -51,26 +51,14 @@ void SelectScene::Update() {
 
 	CollisionCommon();
 
-
-	for (auto& stageObject : stageObjects) {
-		//stageObjectsの中でワープゲートである場合
-		if (stageObject.get() == dynamic_cast<WarpGate*>(stageObject.get())) {
-			WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject.get());
-			//プレイヤーとワープゲートの当たり判定 + Eキーを押した時
-			if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB()) && Input::GetInstance()->TriggerKey(DIK_E)) {
-				isZumuIn = true;
-				cameraControl_->ZoomStart(player_->GetTranslate() + playerAwayPos);
-				break;
-			}
-		}
-	}
+	WarpNextScene();
 
 }
 
 void SelectScene::Draw() {
 
 	Cubemap::GetInstance()->Command();
-	skyBox->Draw();
+	//skyBox->Draw();
 
 	Object3dCommon::GetInstance()->Command();
 

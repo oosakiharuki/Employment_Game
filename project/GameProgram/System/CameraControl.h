@@ -57,6 +57,7 @@ private:
 	float fixedY = 6.0f;//固定する高さ
 
 	bool fixed_Mode = false;
+	Vector3 fixedPos;
 
 	//シェイク
 	const float ShakeMaxTime = 0.25f;

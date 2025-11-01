@@ -12,17 +12,10 @@ public:
 	void Finalize() override;
 private:
 
-	//シーンチェンジ時に初期化されない用のプレイヤーHp保存場所
-	uint32_t playerHp;
-
 	SoundData soundData_;
 
 	//残機
 	uint32_t RemainingLife = 2;
-
-	//次のステージの移動
-	bool isNextStage = false;
-	std::string nextStage_fileName;
 
 	//スタート演出(水たまりから飛び出る感じに)
 	bool isStartStage = true;

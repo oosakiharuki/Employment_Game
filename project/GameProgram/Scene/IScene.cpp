@@ -1,9 +1,9 @@
 #include "IScene.h"
 using namespace MyMath;
 
-std::string IScene::sceneNo = "Game";
+std::string IScene::sceneNo = "Title";
 
-std::string IScene::nextSceneNo = "Game";
+std::string IScene::nextSceneNo = "Title";
 
 IScene::~IScene(){}
 
@@ -14,9 +14,22 @@ void IScene::InputGamePad() {
 	input_->GetJoystickStatePrevious(0, preState);
 }
 
+void IScene::PreviousSceneData() {
+	//前に残しておいたデータ
+	data = NextStageSave::GetInstance()->GetNextStageSaveData();
+	Stage_fileName = data.nextStageFile;
+}
+
 void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 
-	levelediter.LoadLevelediter(leveleditor_file);
+	//値が入っている場合
+	if (leveleditor_file != "") {
+		//代入
+		Stage_fileName = leveleditor_file;
+		data.playerHp = 3;
+	}
+		
+	levelediter.LoadLevelediter("resource/Levelediter/" + Stage_fileName + ".json");
 
 	camera = std::make_unique<Camera>();
 
@@ -137,6 +150,33 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 		enemy->SetStages(stagesAABB);
 	}
 
+
+	//プレイヤーの体力を上書き
+	player_->SetHp(data.playerHp);
+
+	//ステージの見た目
+	stageobj = std::make_unique<Object3d>();
+	stageobj->Initialize();
+	stageobj->SetModelFile(Stage_fileName + ".obj");
+}
+
+void IScene::WarpNextScene() {
+	for (auto& stageObject : stageObjects) {
+		//stageObjectsの中でワープゲートである場合
+		if (stageObject.get() == dynamic_cast<WarpGate*>(stageObject.get())) {
+			WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject.get());
+			//プレイヤーとワープゲートの当たり判定 + Eキーを押した時
+			if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB()) && Input::GetInstance()->TriggerKey(DIK_E)) {
+				isWarp = true;
+				cameraControl_->ZoomStart(player_->GetTranslate() + playerAwayPos);
+				//次のステージに持ってくる情報
+				NextStageSave::GetInstance()->SetNextStageFile(warpGate->GetNextStage());
+				NextStageSave::GetInstance()->SetPlayerHp(player_->GetHp());
+				player_->IsGround(true);
+				break;
+			}
+		}
+	}
 }
 
 void IScene::CollisionCommon() {

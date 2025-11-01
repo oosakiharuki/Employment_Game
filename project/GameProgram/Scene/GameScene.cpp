@@ -4,11 +4,10 @@ using namespace MyMath;
 
 void GameScene::Initialize() {
 
-	LevelEditorObjectSetting("resource/Levelediter/stage_1.json");
+	PreviousSceneData();
 
-	stageobj = std::make_unique<Object3d>();
-	stageobj->Initialize();
-	stageobj->SetModelFile("stage_1.obj");
+	LevelEditorObjectSetting();
+
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
@@ -35,29 +34,18 @@ void GameScene::Update() {
 		Audio::GetInstance()->StopWave(BGMData_);
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
-		//NextSceneFadeInStart("Title");
-	}
-
 	startWarp->Update();
 
-	if (isNextStage) {
-		if (cameraControl_->MaxZoom()) {
-			NextSceneFadeInStart("NextStage");
-		}
+	if (isWarp && cameraControl_->MaxZoom()) {
+		NextSceneFadeInStart("NextStage");
 	}
 
+	WarpNextScene();
+
 	for (auto& stageObject : stageObjects) {
-		if (IsCollisionAABB(player_->GetAABB(), stageObject->GetAABB())) {
-			//ワープゲート
-			if (stageObject.get() == dynamic_cast<WarpGate*>(stageObject.get()) && Input::GetInstance()->TriggerKey(DIK_E)) {
-				WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject.get());
-				cameraControl_->ZoomStart(player_->GetTranslate() + playerAwayPos);
-				isNextStage = true;
-				nextStage_fileName = warpGate->GetNextStage();
-				break;
-			}//ゴール
-			else if (stageObject.get() == dynamic_cast<Goal*>(stageObject.get())) {
+		if (IsCollisionAABB(player_->GetAABB(), stageObject->GetAABB())) {	
+			//ゴール
+			if (stageObject.get() == dynamic_cast<Goal*>(stageObject.get())) {
 				NextSceneFadeInStart("Clear");
 				return;
 			}
@@ -103,7 +91,7 @@ void GameScene::Update() {
 	}
 
 
-	if (isNextStage) {
+	if (isWarp) {
 		player_->SetPerformanceMode(true);
 		player_->SetRotate({ 0,0,0 });
 		return;
