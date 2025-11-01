@@ -490,6 +490,8 @@ void Player::Update() {
 
 	umbrella->Update();
 
+	SpriteUpdate();
+
 	for (auto& sprite : sprites_Hp) {
 		sprite->Update();
 	}
@@ -591,8 +593,6 @@ void Player::IsDamage() {
 	//連続ヒット時、元に戻す
 	scaleTimer = 0.0f;
 	worldTransform.scale_ = { 1,1,1 };
-
-	SpriteUpdate();
 
 }
 

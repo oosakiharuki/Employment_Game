@@ -24,18 +24,10 @@
 #include "FadeScreen.h"
 
 #include "EventTrigger.h"
+#include "CameraControl.h"
 
-/// <summary>
-/// 当たり判定:重なり部分を
-/// </summary>
-struct CollisionOverlap {
-	bool isWall = false;
-	bool isGround = false;
-	Vector3 position = { 0,0,0 };
-	Vector3 overlap = { 0,0,0 };
-	AABB targetAABB = { { 0,0,0 }, { 0,0,0 } };
-	AABB stageAABB = { { 0,0,0 }, { 0,0,0 } };
-};
+#include "CollisionManager.h"
+#include "NextStageSave.h"
 
 class IScene{
 protected:
@@ -56,7 +48,9 @@ protected:
 	//カメラ移動範囲
 	Vector3 cameraPoint1;//幅1
 	Vector3 cameraPoint2;//幅2
-	WorldTransform worldTransformCamera_;//ワールド座標
+	std::unique_ptr<CameraControl> cameraControl_;
+
+	Vector3 playerAwayPos = { 0, 2, -15.0f };
 
 	//レベルエディタ(オブジェクトの配置を.jsonでできる)
 	Levelediter levelediter;
@@ -66,7 +60,7 @@ protected:
 	//敵たち
 	std::vector<std::shared_ptr<IEnemy>> enemies;
 	//ステージオブジェクトたち
-	std::list<std::unique_ptr<IStageObject>> stageObjects;
+	std::list<std::shared_ptr<IStageObject>> stageObjects;
 	
 	//ステージ全体のオブジェクト
 	std::unique_ptr<Object3d> stageobj;
@@ -74,7 +68,7 @@ protected:
 	std::vector<AABB> stagesAABB;
 
 	//イベントトリガー
-	std::vector<std::unique_ptr<EventTrigger>> eventTriggers;
+	std::vector<std::shared_ptr<EventTrigger>> eventTriggers;
 
 	//BGM
 	SoundData BGMData_;
@@ -83,8 +77,19 @@ protected:
 	//スカイボックス
 	std::unique_ptr<BoxModel> skyBox = nullptr;
 
-	//レベルエディタで配置
-	void LevelEditorObjectSetting(const std::string leveleditor_file);
+	/// <summary>
+	/// レベルエディタで配置
+	/// </summary>
+	/// <param name="leveleditor_file"></param>指定したい場合は名前を入れることも可能
+	void LevelEditorObjectSetting(const std::string leveleditor_file = "");
+	
+	/// <summary>
+	/// 前のステージのデータ引継ぎ
+	/// </summary>
+	void PreviousSceneData();
+
+	SceneSaveData data;
+
 	/// <summary>
 	/// 全シーンに共有できる当たり判定
 	/// </summary>
@@ -92,21 +97,6 @@ protected:
 
 	//end
 	bool isGameEnd = false;
-
-	/// <summary>
-	/// 対象(プレイヤー、敵など)の真下の床の位置に
-	/// 影などで使用する
-	/// </summary>
-	/// <param name="stageAABB"></param>ステージ地面の全体
-	/// <param name="shadowAABB"></param>対象の影
-	/// <param name="position"></param>対象の場所
-	/// <returns></returns>対象から一番近い地面の上
-	Vector3 UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position);
-
-	/// <summary>
-	/// メインカメラ(プレイヤー中心カメラ)
-	/// </summary>
-	void MainCamera();
 
 	/// <summary>
 	/// ゲームパット入力処理
@@ -129,6 +119,11 @@ protected:
 	/// sceneNo = nextSceneNoに
 	/// </summary>
 	void ChangeScene();
+
+	
+	void WarpNextScene();
+
+	bool isWarp = false;
 
 public:
 	/// <summary>
@@ -163,13 +158,6 @@ public:
 	bool GetIsGameEnd() { return isGameEnd; }
 
 private:
-
-	/// <summary>
-	/// 対象の重なった分戻す
-	/// </summary>
-	/// <param name="collisionBack"></param>
-	/// 現在の対象の位置、重なった部分、壁/床のフラグが入ってある構造体
-	/// <returns></returns>
-	/// 現在の位置から重なる部分を引いた位置に、重なった部分が横なら壁で下なら床のフラグがtrueになる
-	CollisionOverlap BackPosition(CollisionOverlap collisionBack);
+	//ステージの.jsonファイル名
+	std::string Stage_fileName;
 };

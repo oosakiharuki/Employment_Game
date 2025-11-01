@@ -127,6 +127,7 @@ void IEnemy::PlayerTarget() {
 void IEnemy::RespownEnemyCommon() {
 	isDead = false;
 	deleteEnemy = false;
+	isBulletStart = false;
 	hp = maxHp;
 
 	//blenderで配置した初期位置に戻る

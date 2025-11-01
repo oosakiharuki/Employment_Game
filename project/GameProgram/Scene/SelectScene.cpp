@@ -3,7 +3,7 @@ using namespace MyMath;
 
 void SelectScene::Initialize() {
 
-	LevelEditorObjectSetting("resource/Levelediter/stage_select.json");
+	LevelEditorObjectSetting("stage_select");
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
@@ -25,14 +25,8 @@ void SelectScene::Update() {
 		ChangeScene();
 	}
 
-	if (isZumuIn) {
-		if (zumuTimer <= 1.0f) {
-			zumuTimer += 1.0f / 60.0f;
-
-		}
-		camera->Zumu(cameraSegment, zumuTimer);
-
-		if (zumuTimer >= 1.0f) {
+	if (isWarp) {
+		if (cameraControl_->MaxZoom()) {
 			NextSceneFadeInStart("Game");
 		}
 	}
@@ -40,12 +34,13 @@ void SelectScene::Update() {
 	for (auto& stageObject : stageObjects) {
 		stageObject->Update();
 	}
-	camera->Update();
+
+	cameraControl_->Update(&*camera);
 	
 
 	player_->Update();
 
-	if (isZumuIn) {
+	if (isWarp) {
 		player_->SetPerformanceMode(true);
 		player_->SetRotate({ 0,0,0 });//向きを前に
 		return;
@@ -56,27 +51,14 @@ void SelectScene::Update() {
 
 	CollisionCommon();
 
-
-	for (auto& stageObject : stageObjects) {
-		//stageObjectsの中でワープゲートである場合
-		if (stageObject.get() == dynamic_cast<WarpGate*>(stageObject.get())) {
-			WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject.get());
-			//プレイヤーとワープゲートの当たり判定 + Eキーを押した時
-			if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB()) && Input::GetInstance()->TriggerKey(DIK_E)) {
-				isZumuIn = true;
-				cameraSegment.origin = camera->GetTranslate();//ズーム前のカメラ位置
-				cameraSegment.diff = player_->GetTranslate() + Vector3(0, 2, -15.0f);//プレイヤーよりちょっと離れてる
-				break;
-			}
-		}
-	}
+	WarpNextScene();
 
 }
 
 void SelectScene::Draw() {
 
 	Cubemap::GetInstance()->Command();
-	skyBox->Draw();
+	//skyBox->Draw();
 
 	Object3dCommon::GetInstance()->Command();
 
@@ -95,6 +77,4 @@ void SelectScene::Draw() {
 
 }
 
-void SelectScene::Finalize() {
-	stageObjects.clear();
-}
+void SelectScene::Finalize() {}

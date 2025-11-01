@@ -12,33 +12,19 @@ public:
 	void Finalize() override;
 private:
 
-	//シーンチェンジ時に初期化されない用のプレイヤーHp保存場所
-	uint32_t playerHp;
-
 	SoundData soundData_;
 
 	//残機
-	uint32_t RemainingLife = 0;
-
-	//次のステージの移動
-	bool isNextStage = false;
-	std::string nextStage_fileName;
+	uint32_t RemainingLife = 2;
 
 	//スタート演出(水たまりから飛び出る感じに)
 	bool isStartStage = true;
 	Vector3 playerPoint{};
 	float startPointY = 0.0f;
 
-	//カメラズーム
-	Segment cameraSegment{};
-	float zumuTimer = 0.0f;
-
-	//シェイク
-	float ShakeTimer = 0;
-	float ShakeMaxTime = 0.25f;
-
 	//スタート時のワープゲート
 	std::unique_ptr<WarpGate> startWarp;
+
 
 	/// <summary>
 	/// 水たまりのようなワープゲート出口
@@ -54,10 +40,5 @@ private:
 	/// チェックポイントを変更する
 	/// </summary>
 	void ChangeCheckPoint();
-
-	/// <summary>
-	/// カメラコントロール
-	/// </summary>
-	void CameraControl();
 
 };

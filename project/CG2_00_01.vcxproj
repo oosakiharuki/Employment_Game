@@ -65,7 +65,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\LevelEditor</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\System</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -91,7 +91,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\LevelEditor</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\System</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -107,14 +107,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameProgram\Collision\CollisionManager.cpp" />
     <ClCompile Include="Engine\3d\_gltf\SkinningCommon.cpp" />
-    <ClCompile Include="GameProgram\FadeScreen.cpp" />
-    <ClCompile Include="GameProgram\LoadingModels.cpp" />
+    <ClCompile Include="GameProgram\System\CameraControl.cpp" />
+    <ClCompile Include="GameProgram\System\FadeScreen.cpp" />
+    <ClCompile Include="GameProgram\System\LoadingModels.cpp" />
     <ClCompile Include="GameProgram\Scene\ClearScene.cpp" />
     <ClCompile Include="GameProgram\Scene\GameOverScene.cpp" />
     <ClCompile Include="GameProgram\Scene\SceneFactory.cpp" />
     <ClCompile Include="GameProgram\Scene\SelectScene.cpp" />
-    <ClCompile Include="GameProgram\Shadow.cpp" />
+    <ClCompile Include="GameProgram\System\Shadow.cpp" />
     <ClCompile Include="GameProgram\StageObjects\CheckPoint.cpp" />
     <ClCompile Include="GameProgram\Enemies\Enemy_Bomb.cpp" />
     <ClCompile Include="Engine\3d\Primitive\Primitive.cpp" />
@@ -150,7 +152,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\PostEffect\RadialBlur.cpp" />
     <ClCompile Include="Engine\PostEffect\Random.cpp" />
     <ClCompile Include="Engine\PostEffect\Vignette.cpp" />
-    <ClCompile Include="GameProgram\Scene\SceneManager.cpp" />
+    <ClCompile Include="Engine\scene\SceneManager.cpp" />
     <ClCompile Include="GameProgram\Scene\GameScene.cpp" />
     <ClCompile Include="Engine\input\Input.cpp">
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MultiThreadedDebug</RuntimeLibrary>
@@ -187,17 +189,20 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\StageObjects\Goal.cpp" />
     <ClCompile Include="GameProgram\StageObjects\IStageObject.cpp" />
     <ClCompile Include="GameProgram\StageObjects\WarpGate.cpp" />
-    <ClCompile Include="LoadingStageScene.cpp" />
+    <ClCompile Include="GameProgram\Scene\LoadingStageScene.cpp" />
+    <ClCompile Include="GameProgram\System\NextStageSave.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameProgram\Collision\CollisionManager.h" />
     <ClInclude Include="Engine\3d\_gltf\SkinningCommon.h" />
-    <ClInclude Include="GameProgram\FadeScreen.h" />
-    <ClInclude Include="GameProgram\LoadingModels.h" />
+    <ClInclude Include="GameProgram\System\CameraControl.h" />
+    <ClInclude Include="GameProgram\System\FadeScreen.h" />
+    <ClInclude Include="GameProgram\System\LoadingModels.h" />
     <ClInclude Include="GameProgram\Scene\ClearScene.h" />
     <ClInclude Include="GameProgram\Scene\GameOverScene.h" />
     <ClInclude Include="GameProgram\Scene\SceneFactory.h" />
     <ClInclude Include="GameProgram\Scene\SelectScene.h" />
-    <ClInclude Include="GameProgram\Shadow.h" />
+    <ClInclude Include="GameProgram\System\Shadow.h" />
     <ClInclude Include="GameProgram\StageObjects\CheckPoint.h" />
     <ClInclude Include="GameProgram\Enemies\Enemy_Bomb.h" />
     <ClInclude Include="Engine\3d\Primitive\Primitive.h" />
@@ -234,7 +239,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\PostEffect\RadialBlur.h" />
     <ClInclude Include="Engine\PostEffect\Random.h" />
     <ClInclude Include="Engine\PostEffect\Vignette.h" />
-    <ClInclude Include="GameProgram\Scene\SceneManager.h" />
+    <ClInclude Include="Engine\scene\SceneManager.h" />
     <ClInclude Include="GameProgram\Scene\GameScene.h" />
     <ClInclude Include="Engine\input\Input.h" />
     <ClInclude Include="Engine\base\Logger.h" />
@@ -268,7 +273,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\StageObjects\Goal.h" />
     <ClInclude Include="GameProgram\StageObjects\IStageObject.h" />
     <ClInclude Include="GameProgram\StageObjects\WarpGate.h" />
-    <ClInclude Include="LoadingStageScene.h" />
+    <ClInclude Include="GameProgram\Scene\LoadingStageScene.h" />
+    <ClInclude Include="GameProgram\System\NextStageSave.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

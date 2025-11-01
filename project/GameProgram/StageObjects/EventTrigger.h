@@ -15,6 +15,7 @@ struct EventData {
 	AABB aabb;            //イベント範囲
 	Vector3 center;       //真ん中
 	std::string csvFile;  //csvファイル
+	std::string cameraName;
 };
 
 class EventTrigger {

@@ -3,13 +3,10 @@
 using namespace MyMath;
 
 void TitleScene::Initialize() {
-	//カメラワールド座標系
-	worldTransformCamera_.Initialize();
 
 	camera = std::make_unique<Camera>();
-	worldTransformCamera_.translation_ = { 0,0.0f,-30.0f };
-	camera->SetTranslate(worldTransformCamera_.translation_);
-	camera->SetRotate(worldTransformCamera_.rotation_);
+	cameraTranslate = { 0,0.0f,-30.0f };
+	camera->SetTranslate(cameraTranslate);
 
 	Object3dCommon::GetInstance()->SetDefaultCamera(camera.get());
 	GLTFCommon::GetInstance()->SetDefaultCamera(camera.get());
@@ -217,16 +214,16 @@ void TitleScene::Update() {
 	ImGui::Text("ImGuiText");
 
 	//カメラ
-	ImGui::InputFloat3("cameraTranslate", &worldTransformCamera_.translation_.x);
-	ImGui::SliderFloat3("cameraTranslateSlider", &worldTransformCamera_.translation_.x, -30.0f, 30.0f);
+	ImGui::InputFloat3("cameraTranslate", &cameraTranslate.x);
+	ImGui::SliderFloat3("cameraTranslateSlider", &cameraTranslate.x, -30.0f, 30.0f);
 
-	ImGui::InputFloat3("cameraRotate", &worldTransformCamera_.rotation_.x);
-	ImGui::SliderFloat("cameraRotateX", &worldTransformCamera_.rotation_.x, -360.0f, 360.0f);
-	ImGui::SliderFloat("cameraRotateY", &worldTransformCamera_.rotation_.y, -360.0f, 360.0f);
-	ImGui::SliderFloat("cameraRotateZ", &worldTransformCamera_.rotation_.z, -360.0f, 360.0f);
+	ImGui::InputFloat3("cameraRotate", &cameraRotate.x);
+	ImGui::SliderFloat("cameraRotateX", &cameraRotate.x, -360.0f, 360.0f);
+	ImGui::SliderFloat("cameraRotateY", &cameraRotate.y, -360.0f, 360.0f);
+	ImGui::SliderFloat("cameraRotateZ", &cameraRotate.z, -360.0f, 360.0f);
 	
-	camera->SetTranslate(worldTransformCamera_.translation_);
-	camera->SetRotate(worldTransformCamera_.rotation_);
+	camera->SetTranslate(cameraTranslate);
+	camera->SetRotate(cameraRotate);
 
 	ImGui::End();
 

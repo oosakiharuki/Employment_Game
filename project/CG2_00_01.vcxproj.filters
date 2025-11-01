@@ -121,6 +121,24 @@
     <Filter Include="ソース ファイル\GameProgram\LevelEditor">
       <UniqueIdentifier>{9d3be0b2-740f-4b21-b1be-24756f276d2e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\scene">
+      <UniqueIdentifier>{68530bd4-615e-42d5-b16f-de60dbd22256}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\scene">
+      <UniqueIdentifier>{26d10fa8-7aad-4e57-90f8-7b35fee256c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\Collsion">
+      <UniqueIdentifier>{a22a70f0-37ea-4c15-9a1e-03fee3d2eaa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\System">
+      <UniqueIdentifier>{9a2adeec-83d1-4fcb-8b1c-a56e8fc5a89a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\Collision">
+      <UniqueIdentifier>{ad2c5ba7-59ff-4f68-ab2b-1f5fe14f586d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\System">
+      <UniqueIdentifier>{59884d0f-e430-47f8-be48-8ef35d8ea387}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\Sprite.cpp">
@@ -297,12 +315,6 @@
     <ClCompile Include="GameProgram\Scene\SelectScene.cpp">
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\LoadingModels.cpp">
-      <Filter>ソース ファイル\GameProgram</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\Shadow.cpp">
-      <Filter>ソース ファイル\GameProgram</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\Goal.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
@@ -327,23 +339,38 @@
     <ClCompile Include="GameProgram\LevelEditor\Levelediter.cpp">
       <Filter>ソース ファイル\GameProgram\LevelEditor</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\FadeScreen.cpp">
-      <Filter>ソース ファイル\GameProgram</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\Scene\SceneManager.cpp">
-      <Filter>ソース ファイル\GameProgram\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\Scene\IScene.cpp">
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\EventTrigger.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
-    <ClCompile Include="LoadingStageScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\Scene\SceneFactory.cpp">
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Scene\LoadingStageScene.cpp">
+      <Filter>ソース ファイル\GameProgram\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\scene\SceneManager.cpp">
+      <Filter>ソース ファイル\Engine\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Collision\CollisionManager.cpp">
+      <Filter>ソース ファイル\GameProgram\Collsion</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\System\CameraControl.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\System\FadeScreen.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\System\LoadingModels.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\System\Shadow.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\System\NextStageSave.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -545,12 +572,6 @@
     <ClInclude Include="GameProgram\StageObjects\WarpGate.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Shadow.h">
-      <Filter>ヘッダー ファイル\GameProgram</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\LoadingModels.h">
-      <Filter>ヘッダー ファイル\GameProgram</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\base\MyGame.h">
       <Filter>ヘッダー ファイル\Engine\base</Filter>
     </ClInclude>
@@ -566,23 +587,38 @@
     <ClInclude Include="GameProgram\LevelEditor\Levelediter.h">
       <Filter>ヘッダー ファイル\GameProgram\LevelEditor</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\FadeScreen.h">
-      <Filter>ヘッダー ファイル\GameProgram</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\Scene\IScene.h">
-      <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\Scene\SceneManager.h">
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\StageObjects\EventTrigger.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
-    <ClInclude Include="LoadingStageScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\Scene\SceneFactory.h">
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Scene\LoadingStageScene.h">
+      <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\scene\SceneManager.h">
+      <Filter>ヘッダー ファイル\Engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Collision\CollisionManager.h">
+      <Filter>ヘッダー ファイル\GameProgram\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\System\Shadow.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\System\LoadingModels.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\System\FadeScreen.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\System\CameraControl.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\System\NextStageSave.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

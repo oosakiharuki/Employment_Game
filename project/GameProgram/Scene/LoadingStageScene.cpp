@@ -3,21 +3,17 @@
 void LoadingStageScene::Initialize() {
 	sprite = std::make_unique<Sprite>();
 	sprite->Initialize("Loading_moji.png");
-
-	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
 
 void LoadingStageScene::Update() {
 
-	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {
+	if (NextSceneFlag()) {
 		ChangeScene();
 	}
 	sprite->Update();
 
-	if (!FadeScreen::GetInstance()->GetIsFadeing()) {
-		NextSceneFadeInStart("Game");
-	}
-
+	//すぐさまゲームシーンに
+	NextSceneFadeInStart("Game");
 }
 
 void LoadingStageScene::Draw() {

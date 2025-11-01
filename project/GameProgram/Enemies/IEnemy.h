@@ -140,7 +140,6 @@ public:
 	void IsGround(bool result) { isGround = result; }
 
 	bool GetIsGround() { return isGround; }
-	void GrabityZero() { grabity = 0.0f; }
 
 	void SetStages(std::vector<AABB> aabb) { stages = aabb; }
 

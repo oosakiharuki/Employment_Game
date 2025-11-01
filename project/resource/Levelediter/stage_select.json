@@ -24,7 +24,7 @@
         },
         {
             "type": "CAMERA",
-            "name": "Camera",
+            "name": "MainCamera",
             "transform": {
                 "translation": [
                     0.0,
@@ -146,41 +146,6 @@
             }
         },
         {
-            "type": "StageObjectSpawn",
-            "StageObjectName": "WarpGate",
-            "name": "StageObjectSpawn",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    3.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
-        },
-        {
             "type": "PlayerSpawn",
             "name": "PlayerSpawn",
             "transform": {
@@ -211,6 +176,42 @@
                     2.0,
                     2.0,
                     3.0
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "WarpGate",
+            "name": "StageObjectSpawn",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    3.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "stage_0",
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
                 ]
             }
         }

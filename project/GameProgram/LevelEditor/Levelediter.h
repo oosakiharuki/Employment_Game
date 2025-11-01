@@ -1,5 +1,15 @@
 #pragma once
 #include "MyMath.h"
+#include <unordered_map>
+
+//カメラの初期位置
+struct CameraInitData {
+	Vector3 translation;
+	Vector3 rotation;
+	//移動ルート
+	Vector3 Point1;
+	Vector3 Point2;
+};
 
 class Levelediter {
 public:
@@ -34,14 +44,7 @@ public:
 			Vector3 Point1;
 			Vector3 Point2;
 		};
-		//カメラの初期位置
-		struct CameraInitData {
-			Vector3 translation;
-			Vector3 rotation;
-			//移動ルート
-			Vector3 Point1;
-			Vector3 Point2;
-		};
+
 		//ステージオブジェクトの生成場所
 		struct StageObjectData {
 			std::string ObjectName;
@@ -55,13 +58,14 @@ public:
 			Vector3 center;
 			AABB collisionAABB;
 			std::string csvFile;
+			std::string cameraName;
 		};
 
 		//構造体データの配列たち
 		std::vector<ObjectData> objects;
 		std::vector<PlayerSpawnData> players;
 		std::vector<EnemySpawnData> spawnEnemies;
-		std::vector<CameraInitData> cameraInit;
+		std::unordered_map<std::string, CameraInitData> cameraInit;
 		std::vector<StageObjectData> stageObjects;
 		std::vector<EventTriggerData> eventTriggerDatas;
 	};

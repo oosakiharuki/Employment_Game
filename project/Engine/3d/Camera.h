@@ -21,8 +21,6 @@ public:
 	const Vector3& GetRotate() const { return worldTransform_.rotation_; }
 	const Vector3& GetTranslate() const { return worldTransform_.translation_; }
 
-	void Zumu(const Segment& segment,float timer);
-
 private:
 	WorldTransform worldTransform_;
 	Matrix4x4 worldMatrix;

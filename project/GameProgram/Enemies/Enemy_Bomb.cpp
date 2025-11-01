@@ -25,10 +25,6 @@ void Enemy_Bomb::Initialize() {
 	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
 	particle_damage->SetFrequency(1.0f);
 
-	//
-	bombAABB.min = { 0,-10,0 };
-	bombAABB.max = { 0,-10,0 };
-
 	///影
 	shadow_ = std::make_unique<Shadow>();
 	shadow_->Initialize();
@@ -36,13 +32,18 @@ void Enemy_Bomb::Initialize() {
 }
 
 void Enemy_Bomb::Update() {
+	
+	if (isDead) {
+		isExplosion = true;
+	}
 
 	UpdateCommon();
 
 	//体力が0の時
-	if (isEnd) {
-		isDead = true;
+	if ((bombTimer >= bombTimeMax || isDead) && !isExplosion) {
+		Exprosion();
 	}
+
 
 	if (!isDead) {
 
@@ -117,10 +118,6 @@ void Enemy_Bomb::TimeRimmit() {
 		wt.rotation_.y = -90.0f;
 	}
 
-	if (bombTimer >= bombTimeMax) {
-		Exprosion();
-	}
-
 	bool s = true;
 	if (bombTimer >= bombTimeMax / 1.5f) {
 		//爆発寸前だと揺れが細かくなる
@@ -135,11 +132,10 @@ void Enemy_Bomb::RespownEnemy() {
 	RespownEnemyCommon();
 	
 	isStart = false;
+	isExplosion = false;
+
 	bombTimer = 0.0f;
 	move = { 0,0,0 };
-
-	bombAABB.min = { 0,-10,0 };
-	bombAABB.max = { 0,-10,0 };
 }
 
 Vector3 Enemy_Bomb::GetWorldPosition() {
@@ -159,5 +155,5 @@ void Enemy_Bomb::Exprosion() {
 	particle_damage->SetTranslate(wt.translation_);
 	particle_damage->ChangeMode(BornParticle::MomentMode);
 
-	isEnd = true;
+	isDead = true;
 }

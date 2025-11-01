@@ -25,7 +25,6 @@ void GameOverScene::Initialize() {
 	stage_gltf->SetModelFile("gameover_stage.gltf");
 
 	wt.Initialize();
-	worldTransformCamera_.Initialize();
 	
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }

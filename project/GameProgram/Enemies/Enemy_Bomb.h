@@ -12,10 +12,9 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Attack() override;
-	
-	void TimeRimmit();
 
 	bool IsDead() { return isDead; }
+	bool IsExplosion() { return isExplosion; }
 
 	void RespownEnemy() override;
 	
@@ -24,10 +23,6 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	Vector3 GetWorldPosition();
-	/// <summary>
-	/// 爆発する
-	/// </summary>
-	void Exprosion();
 
 	/// <summary>
 	/// getter‗爆発範囲AABB
@@ -44,8 +39,8 @@ public:
 private:
 	//爆発開始
 	bool isStart = false;
-	//爆発終了
-	bool isEnd = false;
+	//爆発
+	bool isExplosion = false;
 
 	//爆発するまでのタイマー
 	const float bombTimeMax = 5.0f;//max
@@ -57,8 +52,15 @@ private:
 
 	//爆発範囲AABB
 	AABB bombAABB;
-	Vector3 hani = { 3,3,3 };//大きさ
+	const Vector3 hani = { 10,10,10 };//大きさ
 	//プレイヤーとの距離感
 	Vector3 distance;
+
+	/// <summary>
+	/// 爆発する
+	/// </summary>
+	void Exprosion();
+
+	void TimeRimmit();
 };
 
