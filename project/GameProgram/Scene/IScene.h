@@ -72,7 +72,7 @@ protected:
 
 	//BGM
 	SoundData BGMData_;
-	float volume = 0.02f;//音量調節機能
+	float volume = 0.07f;//音量調節機能
 
 	//スカイボックス
 	std::unique_ptr<BoxModel> skyBox = nullptr;
