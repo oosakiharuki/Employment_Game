@@ -89,6 +89,4 @@ void SelectScene::Draw() {
 
 }
 
-void SelectScene::Finalize() {
-	stageObjects.clear();
-}
+void SelectScene::Finalize() {}

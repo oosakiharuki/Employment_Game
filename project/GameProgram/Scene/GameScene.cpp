@@ -99,10 +99,7 @@ void GameScene::Update() {
 
 		startPointY += 0.1f;
 		player_->SetTranslate({ playerPoint.x,startPointY,playerPoint.z });
-		
-		for (auto& enemy : enemies) {
-			enemy->GrabityZero();
-		}
+
 	}
 
 
@@ -222,11 +219,7 @@ void GameScene::Draw() {
 
 }
 
-void GameScene::Finalize() {
-	enemies.clear();
-	stageObjects.clear();
-	stagesAABB.clear();
-}
+void GameScene::Finalize() {}
 
 void GameScene::WarterWarpExit() {
 	
@@ -248,7 +241,7 @@ void GameScene::WarterWarpExit() {
 	startWarpAABB.min = warpPosition + Vector3{ 0,-10,0 };
 
 	//プレイヤー初期位置の真下に
-	warpPosition = UnderCollision(stagesAABB, startWarpAABB, playerPoint);
+	warpPosition = CollisionManager::GetInstance()->UnderCollision(stagesAABB, startWarpAABB, playerPoint);
 	warpPosition.y += 0.02f;//重ならないように影より上にする
 
 	startWarp->SetPosition(warpPosition);//playerの真下に

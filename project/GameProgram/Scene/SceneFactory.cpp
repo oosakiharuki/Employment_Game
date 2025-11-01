@@ -11,27 +11,27 @@ void SceneFactory::MakeScene(const std::string preScene) {
 	// シーンの名前が同じであれば
 	//タイトル
 	if (preScene == "Title") {
-		sceneG["Title"] = std::make_unique<TitleScene>();
+		sceneG[preScene] = std::make_unique<TitleScene>();
 	}
 	//セレクトシーン
 	else if(preScene == "Select") {
-		sceneG["Select"] = std::make_unique<SelectScene>();
+		sceneG[preScene] = std::make_unique<SelectScene>();
 	}
 	//ゲームシーン
 	else if (preScene == "Game") {
-		sceneG["Game"] = std::make_unique<GameScene>();
+		sceneG[preScene] = std::make_unique<GameScene>();
 	}
 	//ゲームオーバーシーン
 	else if (preScene == "GameOver") {
-		sceneG["GameOver"] = std::make_unique<GameOverScene>();
+		sceneG[preScene] = std::make_unique<GameOverScene>();
 	}
 	//クリアシーン
 	else if(preScene == "Clear") {
-		sceneG["Clear"] = std::make_unique<ClearScene>();
+		sceneG[preScene] = std::make_unique<ClearScene>();
 	}
 	//ローディングシーン(ステージの変更時)
 	else if(preScene == "NextStage") {
-		sceneG["NextStage"] = std::make_unique<LoadingStageScene>();
+		sceneG[preScene] = std::make_unique<LoadingStageScene>();
 	}
 }
 

@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Engine\3d\_gltf\SkinningCommon.cpp" />
     <ClCompile Include="GameProgram\CameraControl.cpp" />
     <ClCompile Include="GameProgram\FadeScreen.cpp" />
@@ -191,6 +192,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="LoadingStageScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Engine\3d\_gltf\SkinningCommon.h" />
     <ClInclude Include="GameProgram\CameraControl.h" />
     <ClInclude Include="GameProgram\FadeScreen.h" />
