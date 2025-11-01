@@ -581,7 +581,7 @@ void Player::IsDamage() {
 		Hp--;
 		particle_damage->SetTranslate(worldTransform.translation_);
 		particle_damage->ChangeMode(BornParticle::MomentMode);
-		Audio::GetInstance()->SoundPlayWave(hitSound, 0.05f);
+		Audio::GetInstance()->SoundPlayWave(hitSound, volume);
 		infinityTimer = 0.0f;
 		backPower = TransformNormal({ 0,0,0.5f } ,worldTransform.matWorld_);
 		isKnockback = true;
@@ -601,7 +601,7 @@ void Player::IsFall() {
 		return;
 	}
 	Hp = 0;
-	Audio::GetInstance()->SoundPlayWave(hitSound, 0.05f);
+	Audio::GetInstance()->SoundPlayWave(hitSound, volume);
 }
 
 void Player::KnockBackPlayer(const Vector3 Power, const float TimerMax) {
@@ -680,7 +680,7 @@ void Player::PariSuccess() {
 	pariTime = pariTimeMax;
 
 	Audio::GetInstance()->StopWave(pariSound);
-	Audio::GetInstance()->SoundPlayWave(pariSound, 0.3f);
+	Audio::GetInstance()->SoundPlayWave(pariSound, volume);
 
 	Vector3 translate = umbrella->GetTranslate();
 	translate.x += TransformNormal({0,0,2}, wtGun.matWorld_).x;

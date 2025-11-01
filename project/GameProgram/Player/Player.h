@@ -343,6 +343,7 @@ private:
 	//サウンド
 	SoundData hitSound;//ダメージを食らった
 	SoundData pariSound;//パリィに成功
+	float volume = 0.07f;
 
 	//パーティクル
 	std::unique_ptr<Particle> particle_walk;//歩く

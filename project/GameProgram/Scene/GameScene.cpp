@@ -15,7 +15,7 @@ void GameScene::Initialize() {
 	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");
 	soundData_ = Audio::GetInstance()->LoadWave("resource/sound/bane.wav");
 
-	Audio::GetInstance()->SoundPlayWave(BGMData_, 0.3f, true);
+	Audio::GetInstance()->SoundPlayWave(BGMData_, volume, true);
 
 	WarterWarpExit();
 
