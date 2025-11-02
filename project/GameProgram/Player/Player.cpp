@@ -8,14 +8,10 @@
 #include <numbers>
 
 using namespace MyMath;
-using namespace Primitive;
 
 Player::Player(){}
 
-Player::~Player() {
-	bullets_.clear();
-	sprites_Hp.clear();
-}
+Player::~Player() {}
 
 void Player::Initialize() {
 	worldTransform.Initialize();
@@ -107,15 +103,6 @@ void Player::Update() {
 		DeadPlayer();
 	}
 
-	input_->GetJoyStickState(0, state);
-	input_->GetJoystickStatePrevious(0, preState);
-
-	bool pushA = false;
-	bool pushD = false;
-	bool pushW = false;
-	bool pushS = false;
-
-
 	if (!performance_mode) {
 		//重力の処理
 		if (isGround) {
@@ -129,255 +116,27 @@ void Player::Update() {
 
 
 	if (!isPlayerDown && !performance_mode) {
-
-		if (input_->PushKey(DIK_A)) {
-			pushA = true;
-		}
-		if (input_->PushKey(DIK_D)) {
-			pushD = true;
-		}
-		if (input_->PushKey(DIK_W)) {
-			pushW = true;
-		}
-		if (input_->PushKey(DIK_S)) {
-			pushS = true;
-		}
-
-
-		if (input_->GetJoyStickState(0, state)) {
-			float padX = static_cast<float>(state.Gamepad.sThumbLX) / 32768.0f;
-			float padY = static_cast<float>(state.Gamepad.sThumbLY) / 32768.0f;
-
-			if (padX > 0.5f) {
-				pushD = true;
-			}
-			else if (padX < -0.5f) {
-				pushA = true;
-			}
-
-			if (padY > 0.5f) {
-				pushW = true;
-			}
-			else if (padY < -0.5f) {
-				pushS = true;
-			}
-		}
-
-		if (isShield) {
-			speed = standard_speed / 2.0f;
-		}
-		else {
-			speed = standard_speed;
-		}
-
-		if (pushA) {
-			worldTransform.translation_.x -= speed;
-			direction = left;
-			range = Left;
-			isChangeDirection = true;
-
-			if (pushW) {
-				range = UpLeft;
-			}
-			else if (pushS) {
-				range = DownLeft;
-			}
-
-		}
-		else if (pushD) {
-			worldTransform.translation_.x += speed;
-			direction = right;
-			range = Right;
-			isChangeDirection = true;
-
-			if (pushW) {
-				range = UpRight;
-			}
-			else if (pushS) {
-				range = DownRight;
-			}
-		}
-		else if (pushW) {
-			range = Up;
-		}
-		else if (pushS) {
-			range = Down;
-		}
-
-
-		if (isChangeDirection) {
-			switch (direction)
-			{
-			case Player::right:
-				worldTransform.rotation_.y = 90.0f;
-				break;
-			case Player::left:
-				worldTransform.rotation_.y = -90.0f;
-				break;
-			default:
-				break;
-			}
-		}
-
-		if (isShield && !isGround && brinkTimer == 0.0f) {
-			range = Up;
-			if (pushA) {
-				worldTransform.translation_.x -= speed;
-			}
-			else if (pushD) {
-				worldTransform.translation_.x += speed;
-			}
-		}
-
-		switch (range)
-		{
-		case Player::Up:
-			wtGun.rotation_.x = -90.0f;
-			break;
-		case Player::UpRight:
-			wtGun.rotation_.x = -45.0f;
-			break;
-		case Player::Right:
-			wtGun.rotation_.x = 0.0f;
-			break;
-		case Player::DownRight:
-			wtGun.rotation_.x = 45.0f;
-			break;
-		case Player::Down:
-			wtGun.rotation_.x = 90.0f;
-			break;
-		case Player::DownLeft:
-			wtGun.rotation_.x = 135.0f;
-			break;
-		case Player::Left:
-			wtGun.rotation_.x = 180.0f;
-			break;
-		case Player::UpLeft:
-			wtGun.rotation_.x = 225.0f;
-			break;
-		default:
-			break;
-		}
-
-		//ジャンプ
-		if ((input_->TriggerKey(DIK_SPACE) || input_->TriggerBotton(state, preState, XINPUT_GAMEPAD_A))
-			&& isGround && !isShield) {
-			isJump = true;
-			isGround = false;
-		}
-
-
-		//傘シールド
-		if (input_->PushKey(DIK_L) || input_->PushBotton(state, XINPUT_GAMEPAD_B)) {
-			//押した瞬間に移動キーを押している場合ブリンクが発動+一度ブリンクしていないとき
-			if ((input_->TriggerKey(DIK_L) || input_->TriggerBotton(state, preState, XINPUT_GAMEPAD_B))
-				&& (pushA || pushD || pushW || pushS) && !isOneBrink) {
-				isBrink = true;
-			}
-			isShield = true;
-
-			pariTime -= deltaTime;
-			//パリィ時間がすぎるとき+ダメージを食らうとパリィ失敗
-			if (pariTime > 0.0f && infinityTimer >= infinityTimeMax) {
-				isPari = true;
-			}
-			else {
-				isPari = false;
-			}
-
-			pariCoolTime = 0.0f;
-		}
-		else {
-			isShield = false;
-			pariCoolTime += deltaTime;
-		}
-		//連打してもすぐにパリィできないようにする
-		if (pariCoolTime >= pariTimeMax) {
-			pariTime = pariTimeMax;
-		}
-
-		if (isBrink) {
-			//ブリンクの時は傘は開いたまま
-			isShield = true;
-			brinkTimer += deltaTime;
-
-			//地面についている場合、下向きのブリンクは発動しない
-			if (isGround && (range == Down || range == DownLeft || range == DownRight)) {
-				brinkTimer = brinkTimeMax;
-			}
-
-			isOneBrink = true;
-			worldTransform.translation_ += EaseIn(TransformNormal({ 0.0f,0.0f,1.5f }, wtGun.matWorld_), brinkTimer, brinkTimeMax);
-
-
-			//飛んだ瞬間パーティクルをだす
-			if (brinkTimer <= deltaTime) {
-				Vector3 translate = worldTransform.translation_ + TransformNormal({ 0.0f,0.0f,-1.5f }, wtGun.matWorld_);
-				particle_brink->SetTranslate(translate);
-				particle_brink->SetRotate({ wtGun.rotation_.x + 90.0f,wtGun.rotation_.y,wtGun.rotation_.z });
-				particle_brink->ChangeMode(BornParticle::MomentMode);
-			}
-
-			if (brinkTimer >= brinkTimeMax) {
-				isBrink = false;
-				brinkTimer = 0.0f;
-			}
-		}
-
-		coolTimer += deltaTime;
-		if ((input_->TriggerKey(DIK_K) || input_->TriggerBotton(state, preState, XINPUT_GAMEPAD_X)) && !isShield) {
-			if (coolTimer >= coolMax) {
-				ShootBullet();
-				coolTimer = 0;
-			}
-		}
-
-		if (isDamageMosion) {
-			ScaleUpdate(&isDamageMosion, damageScale, damageMaxTime);
-		}
-
-		if (isShildMosion) {
-			umbrella->ScaleUpdate(&isShildMosion, damageScale, damageMaxTime);
-		}
-
-
-
-
-		//ノックバック発動
-		if (isKnockback) {
-
-			//ゼロならイーズインされない
-			if (KnockBackTimeMax == 0.0f) {
-				worldTransform.translation_ -= backPower;
-				isKnockback = false;
-			}
-			else {
-				KnockBackTimer += deltaTime;
-
-				worldTransform.translation_ -= EaseIn(backPower, KnockBackTimer, KnockBackTimeMax);
-				if (KnockBackTimer >= KnockBackTimeMax) {
-					isKnockback = false;
-					KnockBackTimer = 0.0f;
-				}
-			}
-
-		}
-
-		//影の更新
-		shadow_->SetTranslate(worldTransform.translation_);
+		//プレイヤー操作
+		PlayUpdate();
 	}
 
+	//ジャンプ
 	if (isJump) {
 		worldTransform.translation_.y += 0.25f;
 	}
 
 	//重力
-	if (isShield && !isGround && range == Up && !isPlayerDown) {
+	if (isShield && !isGround && (wtGun.rotation_.x >= upDis - Naname_Value && wtGun.rotation_.x <= upDis + Naname_Value) && !isPlayerDown) {
 		if (isJump) {
 			isJump = false;
 		}
-		grabity = 0.0f;
-		worldTransform.translation_.y -= 0.05f;
+		//重力を固定する
+		grabity = 0.05f;
+		worldTransform.translation_.y -= grabity;
+		if (!isBrink) {
+			//傘を上向きから変えない
+			wtGun.rotation_.x = upDis;
+		}
 	}
 	else {
 		worldTransform.translation_.y += grabity;
@@ -405,8 +164,8 @@ void Player::Update() {
 	//移動しているとパーティクルを発生
 	if (isGround && (worldTransform.translation_.x != PrePosition.x || worldTransform.translation_.y != PrePosition.y)) {
 		// 通常のパーティクル
-		particle_walk->SetParticleCount(10);
-		particle_walk->SetFrequency(0.25f);
+		particle_walk->SetParticleCount(5);
+		particle_walk->SetFrequency(0.15f);
 		particle_walk->ChangeMode(BornParticle::TimerMode);
 		particle_walk->SetTranslate(worldTransform.translation_ + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, worldTransform.matWorld_));
 
@@ -483,7 +242,7 @@ void Player::Update() {
 
 	///傘の銃
 	umbrella->SetTranslate(worldTransform.translation_ +
-		TransformNormal(Vector3(0, 0, 1.25f), wtGun.matWorld_));
+		TransformNormal(playerFront, wtGun.matWorld_));
 
 	umbrella->SetRotate(wtGun.rotation_);
 	umbrella->ShieldMode(isShield);
@@ -495,6 +254,190 @@ void Player::Update() {
 	for (auto& sprite : sprites_Hp) {
 		sprite->Update();
 	}
+}
+
+void Player::PlayUpdate() {
+
+	input_->GetJoyStickState(0, state);
+	input_->GetJoystickStatePrevious(0, preState);
+
+	pushA = false;
+	pushD = false;
+	pushW = false;
+	pushS = false;
+
+	if (input_->PushKey(DIK_A)) {
+		pushA = true;
+	}
+	if (input_->PushKey(DIK_D)) {
+		pushD = true;
+	}
+	if (input_->PushKey(DIK_W)) {
+		pushW = true;
+	}
+	if (input_->PushKey(DIK_S)) {
+		pushS = true;
+	}
+
+
+	if (input_->GetJoyStickState(0, state)) {
+		float padX = static_cast<float>(state.Gamepad.sThumbLX) / 32768.0f;
+		float padY = static_cast<float>(state.Gamepad.sThumbLY) / 32768.0f;
+
+		if (padX > 0.5f) {
+			pushD = true;
+		}
+		else if (padX < -0.5f) {
+			pushA = true;
+		}
+
+		if (padY > 0.5f) {
+			pushW = true;
+		}
+		else if (padY < -0.5f) {
+			pushS = true;
+		}
+	}
+
+	if (isShield) {
+		speed = standard_speed / 2.0f;
+	}
+	else {
+		speed = standard_speed;
+	}
+
+	if (pushA) {
+		worldTransform.translation_.x -= speed;
+		worldTransform.rotation_.y = -playerDirection;
+		UmbrellaRange(leftDis);
+	}
+	else if (pushD) {
+		worldTransform.translation_.x += speed;
+		worldTransform.rotation_.y = playerDirection;
+		UmbrellaRange(rightDis);
+	}
+	else if (pushW) {
+		UmbrellaRange(upDis);
+	}
+	else if (pushS) {
+		UmbrellaRange(downtDis);
+	}
+
+	if (isShield && !isGround && brinkTimer == 0.0f) {
+		if (pushA) {
+			worldTransform.translation_.x -= speed;
+		}
+		else if (pushD) {
+			worldTransform.translation_.x += speed;
+		}
+	}
+
+	//ジャンプ
+	if ((input_->TriggerKey(DIK_SPACE) || input_->TriggerBotton(state, preState, XINPUT_GAMEPAD_A))
+		&& isGround && !isShield) {
+		isJump = true;
+		isGround = false;
+	}
+
+
+	//傘シールド
+	if (input_->PushKey(DIK_L) || input_->PushBotton(state, XINPUT_GAMEPAD_B)) {
+		//押した瞬間に移動キーを押している場合ブリンクが発動+一度ブリンクしていないとき
+		if ((input_->TriggerKey(DIK_L) || input_->TriggerBotton(state, preState, XINPUT_GAMEPAD_B))
+			&& (pushA || pushD || pushW || pushS) && !isOneBrink) {
+			isBrink = true;
+		}
+		isShield = true;
+
+		pariTime -= deltaTime;
+		//パリィ時間がすぎるとき+ダメージを食らうとパリィ失敗
+		if (pariTime > 0.0f && infinityTimer >= infinityTimeMax) {
+			isPari = true;
+		}
+		else {
+			isPari = false;
+		}
+
+		pariCoolTime = 0.0f;
+	}
+	else {
+		isShield = false;
+		pariCoolTime += deltaTime;
+	}
+	//連打してもすぐにパリィできないようにする
+	if (pariCoolTime >= pariTimeMax) {
+		pariTime = pariTimeMax;
+	}
+
+	if (isBrink) {
+		//ブリンクの時は傘は開いたまま
+		isShield = true;
+		brinkTimer += deltaTime;
+
+		//地面についている場合、下向きのブリンクは発動しない
+		if (isGround && (wtGun.rotation_.x > 0.0f && wtGun.rotation_.x < leftDis)) {
+			brinkTimer = brinkTimeMax;
+		}
+
+		isOneBrink = true;
+		worldTransform.translation_ += EaseIn(TransformNormal(playerFront, wtGun.matWorld_), brinkTimer, brinkTimeMax);
+
+
+		//飛んだ瞬間後ろにパーティクルをだす
+		if (brinkTimer <= deltaTime) {
+			Vector3 translate = wtGun.translation_ + TransformNormal(-playerFront, wtGun.matWorld_);
+			particle_brink->SetTranslate(translate);
+			particle_brink->SetRotate({ wtGun.rotation_.x + 90.0f,wtGun.rotation_.y,wtGun.rotation_.z });
+			particle_brink->ChangeMode(BornParticle::MomentMode);
+		}
+
+		if (brinkTimer >= brinkTimeMax) {
+			isBrink = false;
+			brinkTimer = 0.0f;
+		}
+	}
+
+	coolTimer += deltaTime;
+	if ((input_->TriggerKey(DIK_K) || input_->TriggerBotton(state, preState, XINPUT_GAMEPAD_X)) && !isShield) {
+		if (coolTimer >= coolMax) {
+			ShootBullet();
+			coolTimer = 0;
+		}
+	}
+
+	if (isDamageMosion) {
+		ScaleUpdate(&isDamageMosion, damageScale, damageMaxTime);
+	}
+
+	if (isShildMosion) {
+		umbrella->ScaleUpdate(&isShildMosion, damageScale, damageMaxTime);
+	}
+
+
+
+
+	//ノックバック発動
+	if (isKnockback) {
+
+		//ゼロならイーズインされない
+		if (KnockBackTimeMax == 0.0f) {
+			worldTransform.translation_ -= backPower;
+			isKnockback = false;
+		}
+		else {
+			KnockBackTimer += deltaTime;
+
+			worldTransform.translation_ -= EaseIn(backPower, KnockBackTimer, KnockBackTimeMax);
+			if (KnockBackTimer >= KnockBackTimeMax) {
+				isKnockback = false;
+				KnockBackTimer = 0.0f;
+			}
+		}
+
+	}
+
+	//影の更新
+	shadow_->SetTranslate(worldTransform.translation_);
 }
 
 void Player::Draw() {
@@ -674,9 +617,9 @@ void Player::AllRespownEnd() {
 	isPlayerDown = false;		
 }
 
-//パリィ成功 = 連続弾も跳ね返す
+//パリィ成功
 void Player::PariSuccess() {
-	//パリィ時間延長
+	//パリィ時間延長(連続弾でも跳ね返せるように)
 	pariTime = pariTimeMax;
 
 	Audio::GetInstance()->StopWave(pariSound);
@@ -723,4 +666,27 @@ void Player::ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime) {
 		worldTransform.scale_ += scale;	
 	}
 	scaleTimer += deltaTime;
+}
+
+void Player::UmbrellaRange(const float& direction) {
+	//ブリンク中は角度を変更しない
+	if (!isBrink) {
+		//上下左右
+		wtGun.rotation_.x = direction;
+
+		//斜めの時
+		//左上と右下
+		if ((pushA && pushW) || (pushD && pushS)) {
+			wtGun.rotation_.x += Naname_Value;
+		}
+		//左下と右上
+		else if ((pushA && pushS) || (pushD && pushW)) {
+			wtGun.rotation_.x -= Naname_Value;
+		}
+	}
+
+	//360度を超えたらマイナスする
+	if (wtGun.rotation_.x > 360.0f) {
+		wtGun.rotation_.x -= 360.0f;
+	}
 }

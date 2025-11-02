@@ -40,6 +40,11 @@ public:
 	void DrawP();
 
 	/// <summary>
+	/// 操作できるときの処理()
+	/// </summary>
+	void PlayUpdate();
+
+	/// <summary>
 	/// getter_座標
 	/// </summary>
 	/// <returns></returns>現在の座標
@@ -241,6 +246,9 @@ public:
 	/// </summary>
 	void IsJumping() { isJump = true; }
 
+
+	void UmbrellaRange(const float& direction);
+
 private:
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object;
@@ -271,29 +279,20 @@ private:
 	float coolMax = 0.5f;
 	uint32_t bulletCount = 3;//一度に出る弾丸数
 	
-	//プレイヤーの向き
-	enum Direction {
-		right,//右
-		left  //左
-	};
+	const float playerDirection = 90.0f;
 
-	///射程範囲 8方向(順番は上から時計回り)
-	enum Range {
-		Up,
-		UpRight,
-		Right,
-		DownRight,
-		Down,
-		DownLeft,
-		Left,
-		UpLeft,
-	};
+	bool pushA = false;
+	bool pushD = false;
+	bool pushW = false;
+	bool pushS = false;
+	
+	const float upDis = 270.0f;//上
+	const float downtDis = 90.0f;//下
 
-	Direction direction = Direction::right;
-	Range range = Range::Right;
+	const float leftDis = 180.0f;//左
+	const float rightDis = 360.0f;//右
 
-	//角度が変わった時のフラグ
-	bool isChangeDirection = false;
+	const float Naname_Value = 45.0f;//斜めにする変数
 
 	//傘銃
 	std::unique_ptr<Umbrella> umbrella = nullptr;
@@ -307,6 +306,7 @@ private:
 	float pariTimeMax = 0.1f;//パリィする時間
 	float pariTime = pariTimeMax;
 	float pariCoolTime = 0.0f;
+	const Vector3 playerFront = { 0,0,1.5f };//プレイヤーの前方
 
 	/// ノックバック
 	bool isKnockback = false;
