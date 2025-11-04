@@ -1,6 +1,7 @@
 #include "CameraControl.h"
 #include <sstream>
 #include <random>
+#include "ImGuiManager.h"
 
 using namespace MyMath;
 
@@ -13,7 +14,7 @@ void CameraControl::Initialize() {
 void CameraControl::Update(Camera* camera) {
 
 	//固定モードでないなら
-	if (!fixed_Mode) {
+	if (!fixed_Mode && !Free_mode) {
 		Move();
 	}
 
@@ -22,6 +23,25 @@ void CameraControl::Update(Camera* camera) {
 	//シェイク
 	Shaking();
 
+#ifdef  USE_IMGUI
+
+	ImGui::Begin("camera");
+	ImGui::Text("ImGuiText");
+
+	//カメラ
+	ImGui::InputFloat3("cameraTranslate", &wt.translation_.x);
+	ImGui::SliderFloat3("cameraTranslateSlider", &wt.translation_.x, -30.0f, 30.0f);
+
+	ImGui::InputFloat3("cameraRotate", &wt.rotation_.x);
+	ImGui::SliderFloat("cameraRotateX", &wt.rotation_.x, -360.0f, 360.0f);
+	ImGui::SliderFloat("cameraRotateY", &wt.rotation_.y, -360.0f, 360.0f);
+	ImGui::SliderFloat("cameraRotateZ", &wt.rotation_.z, -360.0f, 360.0f);
+
+	ImGui::Checkbox("free_Mode",&Free_mode);
+
+	ImGui::End();
+
+#endif //  USE_IMGUI
 
 	wt.UpdateMatrix();
 

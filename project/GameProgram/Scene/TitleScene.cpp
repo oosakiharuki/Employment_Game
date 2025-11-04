@@ -105,7 +105,8 @@ void TitleScene::Update() {
 	}
 
 	//ゲームパット用操作処理設定
-	InputGamePad();
+	input_->JoystickUpdate(state, preState);
+
 	//カメラ更新
 	camera->Update();
 
@@ -184,7 +185,7 @@ void TitleScene::Update() {
 
 		//ゲームパット操作
 		
-		if (Input::GetInstance()->GetJoyStickState(0, state)) {
+		if (Input::GetInstance()->GetJoystickState(0, state)) {
 			//スティックの傾き度
 			float padY = static_cast<float>(state.Gamepad.sThumbLY) / 32768.0f;
 

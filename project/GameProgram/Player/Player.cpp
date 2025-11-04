@@ -16,18 +16,20 @@ Player::~Player() {}
 void Player::Initialize() {
 	worldTransform.Initialize();
 
+	//プレイヤー初期化/オブジェクト読み込み
 	object = std::make_unique<Object_glTF>();
 	object->Initialize();
 	object->SetModelFile("NewPlayer.gltf");
-	object->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 
-	worldTransform.scale_ = { 1,1,1 };
+	//アニメーションモード設定
 	animation_mode = Animation_Mode::mode_stop;
 	PreAnimation_mode = animation_mode;
 
+	//傘の初期化
 	umbrella = std::make_unique<Umbrella>();
 	umbrella->Initialize();
 
+	//傘の行列
 	wtGun.Initialize();
 	wtGun.rotation_.y = 90.0f;
 
@@ -37,58 +39,48 @@ void Player::Initialize() {
 
 	particle_walk = std::make_unique<Particle>();
 	particle_walk->Initialize("player_walk", "resource/Sprite/ground.png", PrimitiveType::box);
-	particle_walk->ChangeMode(BornParticle::Stop);
 	particle_walk->SetParticleMosion(ParticleMosion::Smaller);
 
 	particle_brink = std::make_unique<Particle>();
 	particle_brink->Initialize("player_brink", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particle_brink->SetParticleCount(1);
-	particle_brink->ChangeMode(BornParticle::Stop);
 	particle_brink->SetParticleMosion(ParticleMosion::Fixed);
 	particle_brink->SetFrequency(1.0f);
 	particle_brink->SetScale({2,2,2});
 
-
 	particle_fire = std::make_unique<Particle>();
 	particle_fire->Initialize("player_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particle_fire->SetParticleCount(1);
-	particle_fire->ChangeMode(BornParticle::Stop);
 	particle_fire->SetParticleMosion(ParticleMosion::Fixed);
 	particle_fire->SetFrequency(0.1f);
-
 
 	particle_damage = std::make_unique<Particle>();
 	particle_damage->Initialize("player_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
 	particle_damage->SetParticleCount(20);
-	particle_damage->ChangeMode(BornParticle::Stop);
 	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
 	particle_damage->SetFrequency(1.0f);
 
-
 	particle_pari = std::make_unique<Particle>();
 	particle_pari->Initialize("player_pari", "resource/Sprite/uvChecker.png", PrimitiveType::cone);
-	particle_pari->ChangeMode(BornParticle::Stop);
 	particle_pari->SetParticleMosion(ParticleMosion::Fixed);
 	particle_fire->SetFrequency(0.5f);
 
 	particle_dead = std::make_unique<Particle>();
 	particle_dead->Initialize("player_dead", "resource/Sprite/ground.png", PrimitiveType::sphere);
-	particle_dead->ChangeMode(BornParticle::Stop);
 	particle_dead->SetParticleMosion(ParticleMosion::Smaller);
 	particle_dead->SetFrequency(0.1f);
 	particle_dead->SetScale({ 0.5f,0.5f,0.5f });
 
-
+	//影の初期化
 	shadow_ = std::make_unique<Shadow>();
 	shadow_->Initialize();
-	shadow_->SetScale({ 1,0,1 });
 
-
+	//UI_体力
 	for (uint32_t i = 0; i < 3; i++) {
 		std::unique_ptr <Sprite> sprite = std::make_unique<Sprite>();
 		sprite->Initialize("Hp.png");
-		sprite->SetPosition({ 20.0f + 64.0f * i , 45.0f - i * 10.0f });
-		sprite->SetSize({64,64});
+		sprite->SetPosition({ initializePoint_Hp.x + textureSize_Hp.x * i , initializePoint_Hp.y - i * distanceY_Hp });
+		sprite->SetSize(textureSize_Hp);
 		sprites_Hp.push_back(std::move(sprite));
 	}
 
@@ -97,27 +89,41 @@ void Player::Initialize() {
 
 void Player::Update() {
 
+	//倒された時
 	if (Hp == 0) {
+		//ノックバック、ダメージリアクションをリセット
 		isKnockback = false;
 		isDamageMosion = false;
 		DeadPlayer();
 	}
 
-	if (!performance_mode) {
-		//重力の処理
-		if (isGround) {
-			isJump = false;
-			isOneBrink = false;//ブリンク可能
-		}
-		else {
-			grabity -= 0.01f;
-		}
+	if (!isPlayerDown && !performance_mode) {
+		//プレイヤー操作/アクション
+		PlayUpdate();
 	}
 
+	//地面にいるとき
+	if (isGround) {
+		isJump = false;//ジャンプ可能
+		isOneBrink = false;//ブリンク可能
+	}
 
-	if (!isPlayerDown && !performance_mode) {
-		//プレイヤー操作
-		PlayUpdate();
+	// - 滑空 - 
+	//開いた状態で地面についていない
+	//傘が上向き(斜め上も)の場合かつプレイヤーが倒されていないとき
+	if (isShield && !isGround && 
+		(wtGun.rotation_.x >= upDis - Naname_Value && wtGun.rotation_.x <= upDis + Naname_Value) && !isPlayerDown) {
+		//ジャンプ後だとずっと浮くためfalseに
+		if (isJump) {
+			isJump = false;
+		}
+		//重力を固定することでゆっくり落ちる
+		grabity = fixed_grabity;
+		//ブリンクが終了した時
+		if (!isBrink) {
+			//滑空中は上向きのみ(斜めにはならない)
+			wtGun.rotation_.x = upDis;
+		}
 	}
 
 	//ジャンプ
@@ -125,20 +131,10 @@ void Player::Update() {
 		worldTransform.translation_.y += 0.25f;
 	}
 
-	//重力
-	if (isShield && !isGround && (wtGun.rotation_.x >= upDis - Naname_Value && wtGun.rotation_.x <= upDis + Naname_Value) && !isPlayerDown) {
-		if (isJump) {
-			isJump = false;
-		}
-		//重力を固定する
-		grabity = 0.05f;
-		worldTransform.translation_.y -= grabity;
-		if (!isBrink) {
-			//傘を上向きから変えない
-			wtGun.rotation_.x = upDis;
-		}
-	}
-	else {
+	//演出時は関係なし
+	if (!performance_mode) {
+		//重力
+		grabity -= standard_grabity;
 		worldTransform.translation_.y += grabity;
 	}
 
@@ -258,91 +254,92 @@ void Player::Update() {
 
 void Player::PlayUpdate() {
 
-	input_->GetJoyStickState(0, state);
-	input_->GetJoystickStatePrevious(0, preState);
+	input_->JoystickUpdate(state, preState);
 
+	//それぞれのボタンフラグ
 	pushA = false;
 	pushD = false;
 	pushW = false;
 	pushS = false;
 
+	//左
 	if (input_->PushKey(DIK_A)) {
 		pushA = true;
 	}
+	//右
 	if (input_->PushKey(DIK_D)) {
 		pushD = true;
 	}
+	//上
 	if (input_->PushKey(DIK_W)) {
 		pushW = true;
 	}
+	//下
 	if (input_->PushKey(DIK_S)) {
 		pushS = true;
 	}
 
-
-	if (input_->GetJoyStickState(0, state)) {
+	//Lスティック
+	if (input_->GetJoystickState(0, state)) {
 		float padX = static_cast<float>(state.Gamepad.sThumbLX) / 32768.0f;
 		float padY = static_cast<float>(state.Gamepad.sThumbLY) / 32768.0f;
 
 		if (padX > 0.5f) {
+			//左
 			pushD = true;
 		}
 		else if (padX < -0.5f) {
+			//右
 			pushA = true;
 		}
 
 		if (padY > 0.5f) {
+			//上
 			pushW = true;
 		}
 		else if (padY < -0.5f) {
+			//下
 			pushS = true;
 		}
 	}
 
-	if (isShield) {
+	//元の速さ
+	speed = standard_speed;
+
+	//シールド中足が遅くなる
+	//(滑空中は影響しない)
+	if (isShield && isGround) {
 		speed = standard_speed / 2.0f;
-	}
-	else {
-		speed = standard_speed;
 	}
 
 	if (pushA) {
-		worldTransform.translation_.x -= speed;
-		worldTransform.rotation_.y = -playerDirection;
-		UmbrellaRange(leftDis);
+		worldTransform.translation_.x -= speed;//左に移動
+		worldTransform.rotation_.y = -playerDirection;//左が正面に
+		UmbrellaRange(leftDis);//傘を左に
 	}
 	else if (pushD) {
-		worldTransform.translation_.x += speed;
-		worldTransform.rotation_.y = playerDirection;
-		UmbrellaRange(rightDis);
+		worldTransform.translation_.x += speed;//右に移動
+		worldTransform.rotation_.y = playerDirection;//右が正面に
+		UmbrellaRange(rightDis);//傘を右に
 	}
 	else if (pushW) {
-		UmbrellaRange(upDis);
+		UmbrellaRange(upDis);//傘を上に
 	}
 	else if (pushS) {
-		UmbrellaRange(downtDis);
-	}
-
-	if (isShield && !isGround && brinkTimer == 0.0f) {
-		if (pushA) {
-			worldTransform.translation_.x -= speed;
-		}
-		else if (pushD) {
-			worldTransform.translation_.x += speed;
-		}
+		UmbrellaRange(downtDis);//傘を下に
 	}
 
 	//ジャンプ
+	//指定したボタン、地面についていて傘がシールド状態でないとき
 	if ((input_->TriggerKey(DIK_SPACE) || input_->TriggerBotton(state, preState, XINPUT_GAMEPAD_A))
 		&& isGround && !isShield) {
 		isJump = true;
 		isGround = false;
 	}
 
-
 	//傘シールド
 	if (input_->PushKey(DIK_L) || input_->PushBotton(state, XINPUT_GAMEPAD_B)) {
-		//押した瞬間に移動キーを押している場合ブリンクが発動+一度ブリンクしていないとき
+		//押した瞬間に移動キーを押している場合ブリンクが発動 + 一度ブリンクしていないとき
 		if ((input_->TriggerKey(DIK_L) || input_->TriggerBotton(state, preState, XINPUT_GAMEPAD_B))
 			&& (pushA || pushD || pushW || pushS) && !isOneBrink) {
 			isBrink = true;
@@ -374,14 +371,8 @@ void Player::PlayUpdate() {
 		isShield = true;
 		brinkTimer += deltaTime;
 
-		//地面についている場合、下向きのブリンクは発動しない
-		if (isGround && (wtGun.rotation_.x > 0.0f && wtGun.rotation_.x < leftDis)) {
-			brinkTimer = brinkTimeMax;
-		}
-
 		isOneBrink = true;
 		worldTransform.translation_ += EaseIn(TransformNormal(playerFront, wtGun.matWorld_), brinkTimer, brinkTimeMax);
-
 
 		//飛んだ瞬間後ろにパーティクルをだす
 		if (brinkTimer <= deltaTime) {
@@ -390,11 +381,14 @@ void Player::PlayUpdate() {
 			particle_brink->SetRotate({ wtGun.rotation_.x + 90.0f,wtGun.rotation_.y,wtGun.rotation_.z });
 			particle_brink->ChangeMode(BornParticle::MomentMode);
 		}
-
-		if (brinkTimer >= brinkTimeMax) {
-			isBrink = false;
-			brinkTimer = 0.0f;
-		}
+	}
+	//地面についている場合、下向きのブリンクは発動しない
+	if (isGround && (wtGun.rotation_.x > 0.0f && wtGun.rotation_.x < leftDis)) {
+		brinkTimer = brinkTimeMax;
+	}
+	if (brinkTimer >= brinkTimeMax) {
+		isBrink = false;
+		brinkTimer = 0.0f;
 	}
 
 	coolTimer += deltaTime;
@@ -412,9 +406,6 @@ void Player::PlayUpdate() {
 	if (isShildMosion) {
 		umbrella->ScaleUpdate(&isShildMosion, damageScale, damageMaxTime);
 	}
-
-
-
 
 	//ノックバック発動
 	if (isKnockback) {
@@ -549,7 +540,7 @@ void Player::IsFall() {
 
 void Player::KnockBackPlayer(const Vector3 Power, const float TimerMax) {
 	backPower = TransformNormal(Power, worldTransform.matWorld_);
-	backPower.z = 0.0f;
+	backPower.z = 0.0f;//z方向はなし
 	isKnockback = true;
 	KnockBackTimeMax = TimerMax;
 }

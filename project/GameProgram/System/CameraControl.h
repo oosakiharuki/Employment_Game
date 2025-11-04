@@ -69,5 +69,7 @@ private:
 	Segment cameraSegment = {};
 	float zoomTimer = 0.0f;
 	bool isZoom = false;
-	//Camera
+	
+	//imgui
+	bool Free_mode = false;
 };

@@ -164,7 +164,7 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 	}
 
 	//影とステージの当たり判定
-	Vector3 shadowPos = { 0,0,0 };
+	Vector3 shadowPos = {};
 
 	shadowPos = UnderCollision(stagesAABB, player_->GetShadowAABB(), player_->GetTranslate());
 
@@ -177,8 +177,6 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 		enemy->SetShadowPosition(shadowPos);
 		enemy->ShadowUpdate();
 	}
-
-
 }
 
 
@@ -230,12 +228,13 @@ void CollisionManager::StageCollisions(CollisionOverlap* collisionOverlap , std:
 
 
 void CollisionManager::BackPosition(CollisionOverlap* collisionOverlap) {
+	float half = 0.5f;//中心を求める用に使う
 
 	// 重なりが一番小さい軸の押し戻しを行う	
 	if (collisionOverlap->overlap.x < collisionOverlap->overlap.y) {
 		//真ん中の座標を代入
-		float targetCenterX = (collisionOverlap->targetAABB.min.x + collisionOverlap->targetAABB.max.x) * 0.5f;
-		float areaCenterX = (collisionOverlap->stageAABB.min.x + collisionOverlap->stageAABB.max.x) * 0.5f;
+		float targetCenterX = (collisionOverlap->targetAABB.min.x + collisionOverlap->targetAABB.max.x) * half;
+		float areaCenterX = (collisionOverlap->stageAABB.min.x + collisionOverlap->stageAABB.max.x) * half;
 		//真ん中から 右の場合 - / 左の場合 +
 		float push = (targetCenterX < areaCenterX) ? -collisionOverlap->overlap.x : collisionOverlap->overlap.x;
 
@@ -244,22 +243,18 @@ void CollisionManager::BackPosition(CollisionOverlap* collisionOverlap) {
 	}
 	else if (collisionOverlap->overlap.y < collisionOverlap->overlap.x) {
 		// 真ん中の座標を代入
-		float targetCenterY = (collisionOverlap->targetAABB.min.y + collisionOverlap->targetAABB.max.y) * 0.5f;
-		float areaCenterY = (collisionOverlap->stageAABB.min.y + collisionOverlap->stageAABB.max.y) * 0.5f;
-		//真ん中から 右の場合 - / 左の場合 +
+		float targetCenterY = (collisionOverlap->targetAABB.min.y + collisionOverlap->targetAABB.max.y) * half;
+		float areaCenterY = (collisionOverlap->stageAABB.min.y + collisionOverlap->stageAABB.max.y) * half;
+		//真ん中から 下の場合 - / 上の場合 +
 		float push = (targetCenterY < areaCenterY) ? -collisionOverlap->overlap.y : collisionOverlap->overlap.y;
+
 
 		//床 or 天井 (0以上は床、0未満は天井)
 		if (push >= 0.0f) {
-			collisionOverlap->position.y += push;
 			// 着地判定を立てる
 			collisionOverlap->isGround = true;
 		}
-		else if (push < 0.0f) {
-			collisionOverlap->position.y += push;
-			// 着地判定を立てる
-			collisionOverlap->isGround = false;
-		}
+		collisionOverlap->position.y += push;
 	}
 	//z軸はいらない
 

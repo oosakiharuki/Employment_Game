@@ -1,18 +1,13 @@
 #include "IScene.h"
 using namespace MyMath;
 
-std::string IScene::sceneNo = "Title";
+std::string IScene::sceneNo = "Select";
 
-std::string IScene::nextSceneNo = "Title";
+std::string IScene::nextSceneNo = "Select";
 
 IScene::~IScene(){}
 
 std::string IScene::GetSceneNo() { return sceneNo; }
-
-void IScene::InputGamePad() {
-	input_->GetJoyStickState(0,state);
-	input_->GetJoystickStatePrevious(0, preState);
-}
 
 void IScene::PreviousSceneData() {
 	//前に残しておいたデータ

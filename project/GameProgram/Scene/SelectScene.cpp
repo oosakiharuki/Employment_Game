@@ -17,7 +17,7 @@ void SelectScene::Initialize() {
 
 void SelectScene::Update() {
 	
-	InputGamePad();
+	input_->JoystickUpdate(state, preState);
 
 	//フェーズインが完了した時
 	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {

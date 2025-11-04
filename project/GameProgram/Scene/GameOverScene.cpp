@@ -31,9 +31,8 @@ void GameOverScene::Initialize() {
 
 void GameOverScene::Update() {
 
-	Input::GetInstance()->GetJoyStickState(0, state);
-	Input::GetInstance()->GetJoystickStatePrevious(0, preState);
-	
+	input_->JoystickUpdate(state, preState);
+
 	sprite->Update();
 	sprite_space->Update();
 

@@ -99,11 +99,6 @@ protected:
 	bool isGameEnd = false;
 
 	/// <summary>
-	/// ゲームパット入力処理
-	/// </summary>
-	void InputGamePad();
-
-	/// <summary>
 	/// 次のシーンの選択+フェードインを始める
 	/// </summary>
 	/// <param name="進めたいシーン"></param>

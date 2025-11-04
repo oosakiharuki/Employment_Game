@@ -246,7 +246,10 @@ public:
 	/// </summary>
 	void IsJumping() { isJump = true; }
 
-
+	/// <summary>
+	/// 傘の8方向の回転
+	/// </summary>
+	/// <param name="direction"></param>回転角度
 	void UmbrellaRange(const float& direction);
 
 private:
@@ -270,6 +273,8 @@ private:
 
 	//重力
 	float grabity = 0.0f;
+	const float standard_grabity = 0.01f;//重力の質量
+	const float fixed_grabity = -0.05f;//滑空時重力値を固定
 	//秒数時間
 	const float deltaTime = 1.0f / 60.0f;
 
@@ -279,6 +284,7 @@ private:
 	float coolMax = 0.5f;
 	uint32_t bulletCount = 3;//一度に出る弾丸数
 	
+	//プレイヤー向き
 	const float playerDirection = 90.0f;
 
 	bool pushA = false;
@@ -371,7 +377,10 @@ private:
 	std::unique_ptr<Shadow> shadow_;
 
 	//UI
-	std::vector <std::unique_ptr<Sprite>> sprites_Hp;
+	std::vector<std::unique_ptr<Sprite>> sprites_Hp;
+	const Vector2 textureSize_Hp = { 64,64 };//スプライトサイズ
+	const Vector2 initializePoint_Hp = { 20.0f,45.0f };//スプライトの初期位置
+	const float distanceY_Hp = 10.0f;//スプライトのY軸幅
 
 	//リアクション
 	bool isDamageMosion = false;

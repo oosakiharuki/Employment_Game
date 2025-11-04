@@ -10,8 +10,7 @@ void ClearScene::Initialize() {
 
 void ClearScene::Update() {
 
-	Input::GetInstance()->GetJoyStickState(0, state);
-	Input::GetInstance()->GetJoystickStatePrevious(0, preState);
+	input_->JoystickUpdate(state, preState);
 
 	sprite->Update();
 

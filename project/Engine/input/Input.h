@@ -22,12 +22,18 @@ public:
 	bool PushKey(BYTE keyNumber);
 	bool TriggerKey(BYTE keyNumber);
 
-	bool GetJoyStickState(uint32_t num,XINPUT_STATE& state);
+	bool GetJoystickState(uint32_t num,XINPUT_STATE& state);
 	bool GetJoystickStatePrevious(uint32_t num, XINPUT_STATE& state);
 
 	bool PushBotton(XINPUT_STATE& state,int botton);
 	bool TriggerBotton(XINPUT_STATE& state, XINPUT_STATE& preState, int botton);
 
+	/// <summary>
+	/// ゲームパット用の更新処理
+	/// </summary>
+	/// <param name="state"></param>
+	/// <param name="preState"></param>
+	void JoystickUpdate(XINPUT_STATE& state, XINPUT_STATE& preState);
 private:
 	ComPtr<IDirectInputDevice8> keyboard;
 	ComPtr<IDirectInput8> directInput;

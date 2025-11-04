@@ -72,7 +72,7 @@ bool Input::TriggerKey(BYTE keyNumber) {
 	return false;
 }
 
-bool Input::GetJoyStickState(uint32_t num, XINPUT_STATE& state) {
+bool Input::GetJoystickState(uint32_t num, XINPUT_STATE& state) {
 	DWORD dwResult;
 
 	prevState = state;
@@ -137,4 +137,9 @@ bool Input::TriggerBotton(XINPUT_STATE& state, XINPUT_STATE& preState, int botto
 		return true;
 	}	
 	return false;
+}
+
+void Input::JoystickUpdate(XINPUT_STATE& state, XINPUT_STATE& preState) {
+	GetJoystickState(0, state);
+	GetJoystickStatePrevious(0,preState);
 }

@@ -57,15 +57,10 @@ void GameScene::Update() {
 	//
 	cameraControl_->SetPlayerPosition(player_->GetTranslate());
 
-	if (player_->GetIsPlayerDown()) {
-		cameraControl_->ShakeMode(true);
-	}
-	else {
-		cameraControl_->ResetShakeTime();
-	}
+	//プレイヤーが倒されたらシェイク
+	(player_->GetIsPlayerDown()) ? cameraControl_->ShakeMode(true) : cameraControl_->ResetShakeTime();
 
 	cameraControl_->Update(&*camera.get());
-
 
 	player_->Update();
 	
@@ -144,22 +139,10 @@ void GameScene::Update() {
 #ifdef  USE_IMGUI
 
 	ImGui::Begin("camera");
-	ImGui::Text("ImGuiText");
 
-	//カメラ
-	//ImGui::InputFloat3("cameraTranslate", &cameraTranslate.x);
-	//ImGui::SliderFloat3("cameraTranslateSlider", &cameraTranslate.x, -30.0f, 30.0f);
-
-	//ImGui::InputFloat3("cameraRotate", &cameraRotate.x);
-	//ImGui::SliderFloat("cameraRotateX", &cameraRotate.x, -360.0f, 360.0f);
-	//ImGui::SliderFloat("cameraRotateY", &cameraRotate.y, -360.0f, 360.0f);
-	//ImGui::SliderFloat("cameraRotateZ", &cameraRotate.z, -360.0f, 360.0f);
-
+	//カメラの端
 	ImGui::Text("p1 : %f %f %f", cameraPoint1.x, cameraPoint1.y, cameraPoint1.z);
 	ImGui::Text("p2 : %f %f %f", cameraPoint2.x, cameraPoint2.y, cameraPoint2.z);
-
-	//camera->SetRotate(cameraRotate);
-	//camera->SetTranslate(cameraTranslate);
 
 	ImGui::SliderFloat("volume", &volume, 0.0f, 1.0f);
 

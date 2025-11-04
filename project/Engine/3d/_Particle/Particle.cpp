@@ -105,6 +105,8 @@ void Particle::Initialize(const std::string& particleName, std::string textureFi
 	accelerationField.area.min = { -1.0f,-1.0f,-1.0f };
 	accelerationField.area.max = { 1.0f,1.0f,1.0f };
 
+	//パーティクル発生
+	bornP = BornParticle::Stop;
 }
 
 void Particle::Update() {
