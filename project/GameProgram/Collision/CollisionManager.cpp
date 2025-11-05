@@ -17,11 +17,10 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 	std::vector<std::shared_ptr<EventTrigger>> eventTriggers, CameraControl* cameraControl_, Levelediter levelediter)
 {
 
-
 	for (auto& enemy : enemies) {
 
 		for (auto& bullet : player_->GetBullets()) {
-			if (IsCollisionAABB(bullet->GetAABB(), enemy->GetAABB()) && !enemy->IsDead()) {
+			if (IsCollisionAABB(bullet->GetAABB(), enemy->GetAABB()) && !enemy->GetIsDead()) {
 				enemy->IsDamage();
 				bullet->IsHit();
 			}
@@ -45,7 +44,7 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 			}
 
 			//プレイヤーの当たり判定
-			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetAABB()) && !player_->GetIsPlayerDown()) {
+			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetAABB()) && !player_->GetIsDead()) {
 				bulletE->IsHit();
 				player_->IsDamage();
 			}
@@ -77,7 +76,7 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 	playerCollisionOverlap = SetTarget(player_->GetTranslate(),player_->GetAABB());
 
 	//演出や死んだときは発動しない
-	if (!player_->GetIsPlayerDown() && !player_->GetPerformanceMode()) {
+	if (!player_->GetIsDead() && !player_->GetPerformanceMode()) {
 		StageCollisions(&playerCollisionOverlap, stagesAABB);
 	}
 

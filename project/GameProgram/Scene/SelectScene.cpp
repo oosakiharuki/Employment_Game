@@ -41,7 +41,7 @@ void SelectScene::Update() {
 	player_->Update();
 
 	if (isWarp) {
-		player_->SetPerformanceMode(true);
+		player_->isPerformanceFlag(true);
 		player_->SetRotate({ 0,0,0 });//向きを前に
 		return;
 	}

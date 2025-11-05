@@ -29,6 +29,9 @@ void Enemy_Bomb::Initialize() {
 	shadow_ = std::make_unique<Shadow>();
 	shadow_->Initialize();
 	shadow_->SetScale({ 1,0,1 });
+
+	//見える範囲初期化
+	eyeReach = { 15, 2, 1 };
 }
 
 void Enemy_Bomb::Update() {
@@ -37,6 +40,7 @@ void Enemy_Bomb::Update() {
 		isExplosion = true;
 	}
 
+	//敵の共有処理
 	UpdateCommon();
 
 	//体力が0の時
@@ -44,41 +48,22 @@ void Enemy_Bomb::Update() {
 		Exprosion();
 	}
 
-
 	if (!isDead) {
 
 		if (!isStart) {
-			if (move.x < route_point1.x) {
-				wt.rotation_.y = 90.0f;
-			}
-			if (move.x > route_point2.x) {
-				wt.rotation_.y = -90.0f;
-			}
+			MoveEnemy();
 
 			if (!isFoundTarget) {
-				switch (direction)
-				{
-				case right:
-					eyeAABB.min = wt.translation_ + Vector3(0, -2, -1);
-					eyeAABB.max = wt.translation_ + Vector3(15, 2, 1);
-					speed = { 0.03f,0,0 };
-					break;
-				case left:
-					eyeAABB.min = wt.translation_ + Vector3(-15, -2, -1);
-					eyeAABB.max = wt.translation_ + Vector3(0, 2, 1);
-					speed = { -0.03f,0,0 };
-					break;
-				}
-
-				wt.translation_ += speed;
-				move += speed;
+				SearchRange();
 			}
 		}	
-		
-		if (isStart) {
+		else {
 			TimeRimmit();
 		}
 	}
+
+	//更新が終了
+	UpdateBehind();
 }
 
 void Enemy_Bomb::Draw() {
@@ -128,14 +113,13 @@ void Enemy_Bomb::TimeRimmit() {
 	}
 }
 
-void Enemy_Bomb::RespownEnemy() {
-	RespownEnemyCommon();
+void Enemy_Bomb::RespawnEnemy() {
+	RespawnEnemyCommon();
 	
 	isStart = false;
 	isExplosion = false;
 
 	bombTimer = 0.0f;
-	move = { 0,0,0 };
 }
 
 Vector3 Enemy_Bomb::GetWorldPosition() {

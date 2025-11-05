@@ -58,7 +58,7 @@ void GameScene::Update() {
 	cameraControl_->SetPlayerPosition(player_->GetTranslate());
 
 	//プレイヤーが倒されたらシェイク
-	(player_->GetIsPlayerDown()) ? cameraControl_->ShakeMode(true) : cameraControl_->ResetShakeTime();
+	(player_->GetIsDead()) ? cameraControl_->ShakeMode(true) : cameraControl_->ResetShakeTime();
 
 	cameraControl_->Update(&*camera.get());
 
@@ -71,7 +71,7 @@ void GameScene::Update() {
 		if (startPointY >= playerPoint.y) {
 			player_->SetTranslate({ playerPoint.x,startPointY,playerPoint.z });
 			isStartStage = false;
-			player_->SetPerformanceMode(false);//演出モードを終了し操作できるように
+			player_->isPerformanceFlag(false);//演出モードを終了し操作できるように
 			player_->IsJumping();//強制的にジャンプさせて飛び出たようにする
 			//カイジョ
 			for (auto& enemy : enemies) {
@@ -87,7 +87,7 @@ void GameScene::Update() {
 
 
 	if (isWarp) {
-		player_->SetPerformanceMode(true);
+		player_->isPerformanceFlag(true);
 		player_->SetRotate({ 0,0,0 });
 		return;
 	}
@@ -96,7 +96,7 @@ void GameScene::Update() {
 	Respawn();
 
 	//敵やオブジェクトを止める(時間停止)
-	if (player_->GetIsPlayerDown()) {
+	if (player_->GetIsDead()) {
 		return;
 	}
 	
@@ -218,7 +218,7 @@ void GameScene::WarterWarpExit() {
 	startWarp->SetPosition(warpPosition);//playerの真下に
 	startWarp->SetRotation({ 90.0f,0.0f,0.0f });//下向きにして水たまりに
 
-	player_->SetPerformanceMode(true);
+	player_->isPerformanceFlag(true);
 }
 
 void GameScene::ChangeCheckPoint() {
@@ -228,7 +228,7 @@ void GameScene::ChangeCheckPoint() {
 			//チェックポイント
 			if (stageObject.get() == dynamic_cast<CheckPoint*>(stageObject.get())) {
 				CheckPoint* checkPoint = dynamic_cast<CheckPoint*>(stageObject.get());
-				player_->SetRespownPosition(checkPoint->GetPosition());
+				player_->SetInit_Position(checkPoint->GetPosition(),player_->GetRotate());
 			}
 		}
 	}
@@ -236,7 +236,7 @@ void GameScene::ChangeCheckPoint() {
 
 void GameScene::Respawn() {
 	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
-	if (player_->GetIsPlayerDown() && player_->GetIsRespown()) {
+	if (player_->GetIsDead() && player_->GetIsRespawn()) {
 
 		if (RemainingLife == 0) {
 			//残機が0で倒された場合ゲームオーバー
@@ -248,9 +248,9 @@ void GameScene::Respawn() {
 		RemainingLife--;
 
 		for (auto& enemy : enemies) {
-			enemy->RespownEnemy();
+			enemy->RespawnEnemy();
 		}
-		player_->AllRespownEnd();
+		player_->RespawnPlayer();
 
 		for (auto& eventTrigger : eventTriggers) {
 			eventTrigger->FailureEvent();

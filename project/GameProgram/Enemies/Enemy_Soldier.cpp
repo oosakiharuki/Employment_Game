@@ -42,40 +42,25 @@ void Enemy_Soldier::Initialize() {
 	shadow_->Initialize();
 	shadow_->SetScale({ 1,0,1 });
 
+	//見える範囲初期化
+	eyeReach = { 20, 10, 1 };
 }
 
 void Enemy_Soldier::Update() {
 
+	//敵の共有処理
 	UpdateCommon();
 
 	if (!isDead) {
-
-		if (move.x < route_point1.x) {
-			wt.rotation_.y = 90.0f;
-		}
-		if(move.x > route_point2.x){
-			wt.rotation_.y = -90.0f;
-		}
-
 		if (!isFoundTarget && !isBulletStart) {
-			switch (direction)
-			{
-			case right:
-				eyeAABB.min = wt.translation_ + Vector3(0, -10, -1);
-				eyeAABB.max = wt.translation_ + Vector3(20, 10, 1);
-				speed = { 0.03f,0,0 };
-				break;
-			case left:
-				eyeAABB.min = wt.translation_ + Vector3(-20, -10, -1);
-				eyeAABB.max = wt.translation_ + Vector3(0, 10, 1);
-				speed = { -0.03f,0,0 };
-				break;
-			}		
-			
-			wt.translation_ += speed;		
-			move += speed;
+			SearchRange();
+			MoveEnemy();
 		}
 	}
+
+	//更新が終了
+	UpdateBehind();
+
 
 	particle_fire->SetRotate({ 0,0,-wt.rotation_.y });
 	particle_fire->Update();
@@ -83,14 +68,7 @@ void Enemy_Soldier::Update() {
 #ifdef _DEBUG
 
 	ImGui::Begin("Enemy_soldier");
-	
-	//ImGui::Text("translate : %f,%f,%f", wt.translation_.x, wt.translation_.y, wt.translation_.z);
 
-
-	//ImGui::Text("Eye_Max : %f,%f,%f", eyeAABB.max.x, eyeAABB.max.y, eyeAABB.max.z);
-	//ImGui::Text("Eye_Min : %f,%f,%f", eyeAABB.min.x, eyeAABB.min.y, eyeAABB.min.z);
-
-	ImGui::Text("route_point1 : %f,%f,%f", move.x, move.y, move.z);
 	ImGui::Text("route_point1 : %f,%f,%f", route_point1.x, route_point1.y, route_point1.z);
 	ImGui::Text("route_point2 : %f,%f,%f", route_point2.x, route_point2.y, route_point2.z);
 
@@ -176,9 +154,8 @@ void Enemy_Soldier::Fire() {
 	bullets_.push_back(bullet);
 }
 
-void Enemy_Soldier::RespownEnemy() {
-	RespownEnemyCommon();
-	move = { 0,0,0 };
+void Enemy_Soldier::RespawnEnemy() {
+	RespawnEnemyCommon();
 	rapidCount = 0;
 	coolTime = 0;
 	isBulletStart = false;

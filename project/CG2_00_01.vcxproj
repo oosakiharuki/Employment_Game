@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameActor.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionManager.cpp" />
     <ClCompile Include="Engine\3d\_gltf\SkinningCommon.cpp" />
     <ClCompile Include="GameProgram\System\CameraControl.cpp" />
@@ -193,6 +194,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\System\NextStageSave.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameActor.h" />
     <ClInclude Include="GameProgram\Collision\CollisionManager.h" />
     <ClInclude Include="Engine\3d\_gltf\SkinningCommon.h" />
     <ClInclude Include="GameProgram\System\CameraControl.h" />

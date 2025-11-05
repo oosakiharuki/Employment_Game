@@ -39,25 +39,22 @@ void Enemy_Turret::Initialize() {
 	shadow_ = std::make_unique<Shadow>();
 	shadow_->Initialize();
 	shadow_->SetScale({ 1,0,1 });
+
+	//見える範囲初期化
+	eyeReach = { 15, 2, 1 };
 }
 
 void Enemy_Turret::Update() {
 
+	//敵の共有処理
 	UpdateCommon();
 
 	if (!isDead) {
-		switch (direction)
-		{
-		case right:
-			eyeAABB.min = wt.translation_ + Vector3(0, -2, -1);
-			eyeAABB.max = wt.translation_ + Vector3(15, 2, 1);
-			break;
-		case left:
-			eyeAABB.min = wt.translation_ + Vector3(-15, -2, -1);
-			eyeAABB.max = wt.translation_ + Vector3(0, 2, 1);
-			break;
-		}
+		SearchRange();
 	}
+
+	//更新が終了
+	UpdateBehind();
 
 	particle_fire->SetScale({ 2,2,2 });
 	particle_fire->SetRotate({ 0,0,-wt.rotation_.y });
@@ -74,8 +71,6 @@ void Enemy_Turret::Update() {
 
 	ImGui::Text("Eye_Min : %f,%f,%f", eyeAABB.min.x, eyeAABB.min.y, eyeAABB.min.z);
 	ImGui::Text("Eye_Max : %f,%f,%f", eyeAABB.max.x, eyeAABB.max.y, eyeAABB.max.z);
-
-
 
 	ImGui::End();
 
@@ -147,8 +142,8 @@ void Enemy_Turret::Fire() {
 	bullets_.push_back(bullet);
 }
 
-void Enemy_Turret::RespownEnemy() {
-	RespownEnemyCommon();
+void Enemy_Turret::RespawnEnemy() {
+	RespawnEnemyCommon();
 	rapidCount = 0;
 	coolTime = 0;
 	isBulletStart = false;

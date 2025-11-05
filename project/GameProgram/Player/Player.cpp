@@ -14,7 +14,7 @@ Player::Player(){}
 Player::~Player() {}
 
 void Player::Initialize() {
-	worldTransform.Initialize();
+	wt.Initialize();
 
 	//プレイヤー初期化/オブジェクト読み込み
 	object = std::make_unique<Object_glTF>();
@@ -75,8 +75,10 @@ void Player::Initialize() {
 	shadow_ = std::make_unique<Shadow>();
 	shadow_->Initialize();
 
+	HP_Initialize(setHp);
+
 	//UI_体力
-	for (uint32_t i = 0; i < 3; i++) {
+	for (uint32_t i = 0; i < setHp; i++) {
 		std::unique_ptr <Sprite> sprite = std::make_unique<Sprite>();
 		sprite->Initialize("Hp.png");
 		sprite->SetPosition({ initializePoint_Hp.x + textureSize_Hp.x * i , initializePoint_Hp.y - i * distanceY_Hp });
@@ -90,14 +92,14 @@ void Player::Initialize() {
 void Player::Update() {
 
 	//倒された時
-	if (Hp == 0) {
+	if (hp == 0) {
 		//ノックバック、ダメージリアクションをリセット
 		isKnockback = false;
 		isDamageMosion = false;
 		DeadPlayer();
 	}
 
-	if (!isPlayerDown && !performance_mode) {
+	if (!isDead && !isPerformance) {
 		//プレイヤー操作/アクション
 		PlayUpdate();
 	}
@@ -112,7 +114,7 @@ void Player::Update() {
 	//開いた状態で地面についていない
 	//傘が上向き(斜め上も)の場合かつプレイヤーが倒されていないとき
 	if (isShield && !isGround && 
-		(wtGun.rotation_.x >= upDis - Naname_Value && wtGun.rotation_.x <= upDis + Naname_Value) && !isPlayerDown) {
+		(wtGun.rotation_.x >= upDis - Naname_Value && wtGun.rotation_.x <= upDis + Naname_Value) && !isDead) {
 		//ジャンプ後だとずっと浮くためfalseに
 		if (isJump) {
 			isJump = false;
@@ -128,14 +130,14 @@ void Player::Update() {
 
 	//ジャンプ
 	if (isJump) {
-		worldTransform.translation_.y += 0.25f;
+		wt.translation_.y += 0.25f;
 	}
 
 	//演出時は関係なし
-	if (!performance_mode) {
+	if (!isPerformance) {
 		//重力
 		grabity -= standard_grabity;
-		worldTransform.translation_.y += grabity;
+		wt.translation_.y += grabity;
 	}
 
 	for (auto& bullet : bullets_) {
@@ -158,12 +160,12 @@ void Player::Update() {
 	}
 
 	//移動しているとパーティクルを発生
-	if (isGround && (worldTransform.translation_.x != PrePosition.x || worldTransform.translation_.y != PrePosition.y)) {
+	if (isGround && (wt.translation_.x != PrePosition.x || wt.translation_.y != PrePosition.y)) {
 		// 通常のパーティクル
 		particle_walk->SetParticleCount(5);
 		particle_walk->SetFrequency(0.15f);
 		particle_walk->ChangeMode(BornParticle::TimerMode);
-		particle_walk->SetTranslate(worldTransform.translation_ + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, worldTransform.matWorld_));
+		particle_walk->SetTranslate(wt.translation_ + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt.matWorld_));
 
 		particle_walk->SetScale({ 0.5f,0.5f,0.5f });
 	}
@@ -183,7 +185,7 @@ void Player::Update() {
 	if (isShield) {
 		animation_mode = Animation_Mode::mode_sield;
 	}//前回の座標と現在の座標が違う = 動いた場合
-	else if (worldTransform.translation_.x != PrePosition.x || worldTransform.translation_.y != PrePosition.y) {
+	else if (wt.translation_.x != PrePosition.x || wt.translation_.y != PrePosition.y) {
 		animation_mode = Animation_Mode::mode_move;
 	}
 	else {
@@ -209,35 +211,35 @@ void Player::Update() {
 	}
 
 	//現在座標に前回座標を代入
-	PrePosition = worldTransform.translation_;
+	PrePosition = wt.translation_;
 	
-	object->Update(worldTransform);
+	object->Update(wt);
 
 #ifdef  USE_IMGUI
 
 	ImGui::Begin("player");
 
-	ImGui::InputFloat3("worldTransform.translate", &worldTransform.translation_.x);
-	ImGui::SliderFloat3("worldTransform.translateSlider", &worldTransform.translation_.x, -30.0f, 30.0f);
+	ImGui::InputFloat3("worldTransform.translate", &wt.translation_.x);
+	ImGui::SliderFloat3("worldTransform.translateSlider", &wt.translation_.x, -30.0f, 30.0f);
 
-	ImGui::InputFloat3("Rotate", &worldTransform.rotation_.x);
-	ImGui::SliderFloat("RotateX", &worldTransform.rotation_.x, -360.0f, 360.0f);
-	ImGui::SliderFloat("RotateY", &worldTransform.rotation_.y, -360.0f, 360.0f);
-	ImGui::SliderFloat("RotateZ", &worldTransform.rotation_.z, -360.0f, 360.0f);
+	ImGui::InputFloat3("Rotate", &wt.rotation_.x);
+	ImGui::SliderFloat("RotateX", &wt.rotation_.x, -360.0f, 360.0f);
+	ImGui::SliderFloat("RotateY", &wt.rotation_.y, -360.0f, 360.0f);
+	ImGui::SliderFloat("RotateZ", &wt.rotation_.z, -360.0f, 360.0f);
 
-	ImGui::Text("体力:%d", Hp);
+	ImGui::Text("体力:%d", hp);
 
 	ImGui::End();
 
 #endif //  USE_IMGUI
 
 
-	worldTransform.UpdateMatrix();
-	wtGun.translation_ = worldTransform.translation_;
+	wt.UpdateMatrix();
+	wtGun.translation_ = wt.translation_;
 	wtGun.UpdateMatrix();
 
 	///傘の銃
-	umbrella->SetTranslate(worldTransform.translation_ +
+	umbrella->SetTranslate(wt.translation_ +
 		TransformNormal(playerFront, wtGun.matWorld_));
 
 	umbrella->SetRotate(wtGun.rotation_);
@@ -313,13 +315,13 @@ void Player::PlayUpdate() {
 	}
 
 	if (pushA) {
-		worldTransform.translation_.x -= speed;//左に移動
-		worldTransform.rotation_.y = -playerDirection;//左が正面に
+		wt.translation_.x -= speed;//左に移動
+		wt.rotation_.y = -direction;//左が正面に
 		UmbrellaRange(leftDis);//傘を左に
 	}
 	else if (pushD) {
-		worldTransform.translation_.x += speed;//右に移動
-		worldTransform.rotation_.y = playerDirection;//右が正面に
+		wt.translation_.x += speed;//右に移動
+		wt.rotation_.y = direction;//右が正面に
 		UmbrellaRange(rightDis);//傘を右に
 	}
 	else if (pushW) {
@@ -347,7 +349,7 @@ void Player::PlayUpdate() {
 		isShield = true;
 
 		pariTime -= deltaTime;
-		//パリィ時間がすぎるとき+ダメージを食らうとパリィ失敗
+		//パリィ時間がすぎるとき+ダメージを食らていたらパリィできない
 		if (pariTime > 0.0f && infinityTimer >= infinityTimeMax) {
 			isPari = true;
 		}
@@ -355,6 +357,7 @@ void Player::PlayUpdate() {
 			isPari = false;
 		}
 
+		//パリィ時間リセット
 		pariCoolTime = 0.0f;
 	}
 	else {
@@ -372,7 +375,7 @@ void Player::PlayUpdate() {
 		brinkTimer += deltaTime;
 
 		isOneBrink = true;
-		worldTransform.translation_ += EaseIn(TransformNormal(playerFront, wtGun.matWorld_), brinkTimer, brinkTimeMax);
+		wt.translation_ += EaseIn(TransformNormal(playerFront, wtGun.matWorld_), brinkTimer, brinkTimeMax);
 
 		//飛んだ瞬間後ろにパーティクルをだす
 		if (brinkTimer <= deltaTime) {
@@ -412,13 +415,13 @@ void Player::PlayUpdate() {
 
 		//ゼロならイーズインされない
 		if (KnockBackTimeMax == 0.0f) {
-			worldTransform.translation_ -= backPower;
+			wt.translation_ -= backPower;
 			isKnockback = false;
 		}
 		else {
 			KnockBackTimer += deltaTime;
 
-			worldTransform.translation_ -= EaseIn(backPower, KnockBackTimer, KnockBackTimeMax);
+			wt.translation_ -= EaseIn(backPower, KnockBackTimer, KnockBackTimeMax);
 			if (KnockBackTimer >= KnockBackTimeMax) {
 				isKnockback = false;
 				KnockBackTimer = 0.0f;
@@ -428,7 +431,7 @@ void Player::PlayUpdate() {
 	}
 
 	//影の更新
-	shadow_->SetTranslate(worldTransform.translation_);
+	shadow_->SetTranslate(wt.translation_);
 }
 
 void Player::Draw() {
@@ -436,7 +439,7 @@ void Player::Draw() {
 
 	object->Draw();
 
-	if (Hp != 0) {
+	if (hp != 0) {
 		umbrella->Draw();
 
 		shadow_->Draw();
@@ -464,21 +467,6 @@ void Player::DrawP() {
 		sprite->Draw();
 	}
 
-}
-
-AABB Player::GetAABB() {
-	AABB aabb;
-	aabb.min = worldTransform.translation_ + playerAABB.min;
-	aabb.max = worldTransform.translation_ + playerAABB.max;
-	return aabb;
-}
-
-void Player::IsGround(bool result) {
-	isGround = result;
-	//地面なら重力を0にする(沈まないようにする)
-	if (isGround) {
-		grabity = 0;
-	}
 }
 
 void Player::ShootBullet() {	
@@ -509,15 +497,15 @@ void Player::ShootBullet() {
 
 void Player::IsDamage() {
 	if (infinityTimer >= infinityTimeMax) {
-		if (Hp == 0) {
+		if (hp == 0) {
 			return;
 		}
-		Hp--;
-		particle_damage->SetTranslate(worldTransform.translation_);
+		hp--;
+		particle_damage->SetTranslate(wt.translation_);
 		particle_damage->ChangeMode(BornParticle::MomentMode);
 		Audio::GetInstance()->SoundPlayWave(hitSound, volume);
 		infinityTimer = 0.0f;
-		backPower = TransformNormal({ 0,0,0.5f } ,worldTransform.matWorld_);
+		backPower = TransformNormal({ 0,0,0.5f } ,wt.matWorld_);
 		isKnockback = true;
 		KnockBackTimeMax = infinityTimeMax / 3;
 	}
@@ -526,20 +514,20 @@ void Player::IsDamage() {
 	
 	//連続ヒット時、元に戻す
 	scaleTimer = 0.0f;
-	worldTransform.scale_ = { 1,1,1 };
+	wt.scale_ = { 1,1,1 };
 
 }
 
 void Player::IsFall() {
-	if (Hp == 0) {
+	if (hp == 0) {
 		return;
 	}
-	Hp = 0;
+	hp = 0;
 	Audio::GetInstance()->SoundPlayWave(hitSound, volume);
 }
 
 void Player::KnockBackPlayer(const Vector3 Power, const float TimerMax) {
-	backPower = TransformNormal(Power, worldTransform.matWorld_);
+	backPower = TransformNormal(Power, wt.matWorld_);
 	backPower.z = 0.0f;//z方向はなし
 	isKnockback = true;
 	KnockBackTimeMax = TimerMax;
@@ -559,9 +547,9 @@ void Player::KnockBackUmbrella(const Vector3 Power, const float TimerMax) {
 Vector3 Player::GetWorldPosition() {
 	Vector3 worldPos;
 
-	worldPos.x = worldTransform.matWorld_.m[3][0];
-	worldPos.y = worldTransform.matWorld_.m[3][1];
-	worldPos.z = worldTransform.matWorld_.m[3][2];
+	worldPos.x = wt.matWorld_.m[3][0];
+	worldPos.y = wt.matWorld_.m[3][1];
+	worldPos.z = wt.matWorld_.m[3][2];
 
 	return worldPos;
 }
@@ -569,20 +557,20 @@ Vector3 Player::GetWorldPosition() {
 void Player::DeadPlayer() {
 
 	deadTimer += deltaTime;
-	isPlayerDown = true;
+	isDead = true;
 
 	if (deadTimer >= hitStopTime) {
 		
 		//倒されたパーティクル配置+発動
-		particle_dead->SetTranslate(worldTransform.translation_);
+		particle_dead->SetTranslate(wt.translation_);
 		particle_dead->ChangeMode(BornParticle::TimerMode);
 
-		worldTransform.rotation_.y = 180.0f;//カメラのほうに向く
-		worldTransform.rotation_.z += 10.0f;//回転する
+		wt.rotation_.y = 180.0f;//カメラのほうに向く
+		wt.rotation_.z += 10.0f;//回転する
 		IsJumping();
 		isGround = false;
 		if (deadTimer >= deadTimeMax) {
-			isRespown = true;
+			isRespawn = true;
 			//パーティクル発動停止
 			particle_dead->ChangeMode(BornParticle::Stop);
 		}
@@ -593,19 +581,11 @@ void Player::DeadPlayer() {
 	}
 }
 
-void Player::AllRespownEnd() {
+void Player::RespawnPlayer() {
+	RespawnCommon();
 
-	Hp = MaxHp;
-	worldTransform.translation_ = respownPosition;
-	
 	deadTimer = 0.0f;
-	worldTransform.rotation_.z = 0.0f;
-	for (auto& sprite : sprites_Hp) {
-		sprite->SetTextureFile("Hp.png");
-	}	
-	
-	isRespown = false;
-	isPlayerDown = false;		
+	isRespawn = false;	
 }
 
 //パリィ成功
@@ -626,37 +606,16 @@ void Player::PariSuccess() {
 	particle_pari->ChangeMode(BornParticle::MomentMode);
 }
 
-void Player::ShadowUpdate() {
-	shadow_->Update();
-}
-
 void Player::SpriteUpdate() {
-	if (Hp < 3) {
+	if (hp < 3) {
 		sprites_Hp[2]->SetTextureFile("NoHp.png");
-		if (Hp < 2) {
+		if (hp < 2) {
 			sprites_Hp[1]->SetTextureFile("NoHp.png");
-			if (Hp < 1) {
+			if (hp < 1) {
 				sprites_Hp[0]->SetTextureFile("NoHp.png");
 			}
 		}
 	}
-}
-
-void Player::ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime) {
-	if (scaleTimer >= maxTime / 2.0f) {
-		worldTransform.scale_ -= scale;
-		if (scaleTimer >= maxTime) {
-			scaleTimer = 0.0f;
-			worldTransform.scale_ = { 1,1,1 };
-
-			//モーションを終了する
-			*mosionOn = false;
-		}
-	}
-	else {
-		worldTransform.scale_ += scale;	
-	}
-	scaleTimer += deltaTime;
 }
 
 void Player::UmbrellaRange(const float& direction) {

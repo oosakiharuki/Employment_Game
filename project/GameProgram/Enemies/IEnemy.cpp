@@ -6,6 +6,10 @@ IEnemy::IEnemy() {}
 
 IEnemy::~IEnemy(){}
 
+void IEnemy::InitializeCommon() {
+
+}
+
 void IEnemy::UpdateCommon() {
 	if (hp == 0) {
 		isDead = true;
@@ -58,7 +62,9 @@ void IEnemy::UpdateCommon() {
 
 
 	particle_damage->Update();
+}
 
+void IEnemy::UpdateBehind() {
 	object->Update(wt);
 	wt.UpdateMatrix();
 }
@@ -92,18 +98,9 @@ void IEnemy::GrabityUpdate() {
 
 }
 
-AABB IEnemy::GetAABB() {
-	AABB aabb;
-	aabb.min = wt.translation_ + enemyAABB.min;
-	aabb.max = wt.translation_ + enemyAABB.max;
-	return aabb;
-}
-
-
-
 void IEnemy::PlayerTarget() {
 
-	if (IsCollisionAABB(player_->GetAABB(), eyeAABB) && !player_->GetIsPlayerDown()) {
+	if (IsCollisionAABB(player_->GetAABB(), eyeAABB) && !player_->GetIsDead()) {
 		isFoundTarget = true;
 
 		Segment segment;
@@ -124,21 +121,51 @@ void IEnemy::PlayerTarget() {
 
 }
 
-void IEnemy::RespownEnemyCommon() {
-	isDead = false;
+void IEnemy::SearchRange() {
+	if (direction == direction_right) {
+		eyeAABB.min = wt.translation_ + Vector3(0, -eyeReach.y, -eyeReach.z);
+		eyeAABB.max = wt.translation_ + eyeReach;
+		speed.x = moveX;
+	}
+	else if (direction == direction_left) {
+		eyeAABB.min = wt.translation_ + -eyeReach;
+		eyeAABB.max = wt.translation_ + Vector3(0, eyeReach.y, eyeReach.z);
+		speed.x = -moveX;
+	}
+}
+
+void IEnemy::MoveEnemy() {
+	wt.translation_ += speed;
+	move += speed;
+
+	//移動ポイントの端だと向きを変える
+	if (move.x < route_point1.x) {
+		direction = direction_right;
+	}
+	if (move.x > route_point2.x) {
+		direction = direction_left;
+	}
+
+	wt.rotation_.y = direction;
+}
+
+
+void IEnemy::RespawnEnemyCommon() {
+	RespawnCommon();
+
 	deleteEnemy = false;
-	isBulletStart = false;
-	hp = maxHp;
+	isBulletStart = false;//攻撃はしない
 
-	//blenderで配置した初期位置に戻る
-	wt.translation_ = init_point;
-	wt.rotation_ = init_rotate;
+	//向きリセット
+	DirectionDegree();
+	//移動ルート位置戻す
+	move = { 0,0,0 };
 
+	//弾はすべて消す
 	bullets_.remove_if([](EnemyBullet* bullet) {
 		delete bullet;
 		return true;
 	});
-
 }
 
 void IEnemy::DeadUpdate() {
@@ -160,36 +187,16 @@ void IEnemy::DirectionDegree() {
 	//0~360にする
 	wt.rotation_.y = std::fmod(wt.rotation_.y, 360.0f);
 	//-の場合
-	if (wt.rotation_.y < 0)
-		wt.rotation_.y += 360.0;
-
+	if (wt.rotation_.y < 0) wt.rotation_.y += 360.0;
 
 	///0~180は右
 	if (wt.rotation_.y >= 0.0f && wt.rotation_.y < 180.0f) {
-		direction = right;
-	}///180~360は右
+		direction = direction_right;
+	}///180~360は左
 	else if (wt.rotation_.y <= 360.0f) {
-		direction = left;
+		direction = direction_left;
 	}
-}
 
-void IEnemy::ScaleUpdate(bool* mosionOn, Vector3 scale,const float maxTime) {
-	if (scaleTimer >= maxTime / 2.0f) {
-		wt.scale_ -= scale;
-		if (scaleTimer >= maxTime) {
-			scaleTimer = 0.0f;
-			wt.scale_ = { 1,1,1 };
+	wt.rotation_.y = direction;
 
-			//モーションを終了する
-			*mosionOn = false;
-		}
-	}
-	else {
-		wt.scale_ += scale;
-	}
-	scaleTimer += deltaTime;
-}
-
-void IEnemy::ShadowUpdate() {
-	shadow_->Update();
 }

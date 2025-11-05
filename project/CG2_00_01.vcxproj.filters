@@ -372,6 +372,9 @@
     <ClCompile Include="GameProgram\System\NextStageSave.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
+    <ClCompile Include="GameActor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -619,6 +622,9 @@
     </ClInclude>
     <ClInclude Include="GameProgram\System\NextStageSave.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GameActor.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

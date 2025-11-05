@@ -16,7 +16,7 @@ public:
 	bool IsDead() { return isDead; }
 	bool IsExplosion() { return isExplosion; }
 
-	void RespownEnemy() override;
+	void RespawnEnemy() override;
 	
 	/// <summary>
 	/// getter‗ワールド座標系の座標
@@ -45,10 +45,6 @@ private:
 	//爆発するまでのタイマー
 	const float bombTimeMax = 5.0f;//max
 	float bombTimer = 0.0f;
-
-	//敵のスピード
-	Vector3 speed = { 0.03f,0.0f,0.0f };
-	Vector3 move = { 0,0,0 };
 
 	//爆発範囲AABB
 	AABB bombAABB;

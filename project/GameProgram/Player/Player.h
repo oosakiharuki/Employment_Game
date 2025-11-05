@@ -1,23 +1,16 @@
 #pragma once
-#include "MyMath.h"
-#include "Object3d.h"
 #include "Object_glTF.h"
 #include "PlayerBullet.h"
 #include "Umbrella.h"
 #include "Audio.h"
 #include "Input.h"
-#include "Particle.h"
 
-#include "GLTFCommon.h"
-#include "Object3dCommon.h"
-
-#include "Shadow.h"
-#include "Sprite.h"
+#include "GameActor.h"
 
 /// <summary>
 /// プレイヤー
 /// </summary>
-class Player {
+class Player : public GameActor{
 public:
 	Player();
 	~Player();
@@ -45,50 +38,10 @@ public:
 	void PlayUpdate();
 
 	/// <summary>
-	/// getter_座標
-	/// </summary>
-	/// <returns></returns>現在の座標
-	Vector3 GetTranslate() { return worldTransform.translation_; }
-	/// <summary>
-	/// setter_座標
-	/// </summary>
-	/// <param name="translate"></param>代入する座標
-	void SetTranslate(Vector3 translate) { worldTransform.translation_ = translate; }
-
-	/// <summary>
-	/// setter_回転
-	/// </summary>
-	/// <param name="rotate"></param>代入する各回転角度
-	void SetRotate(Vector3 rotate) { worldTransform.rotation_ = rotate; }
-	
-	/// <summary>
-	/// getter_当たり判定AABB
-	/// </summary>
-	/// <returns></returns>座標が中心のAABB
-	AABB GetAABB();
-	/// <summary>
-	/// setter_当たり判定AABB
-	/// </summary>
-	/// <param name="aabb"></param>AABB
-	void SetAABB(AABB aabb) { playerAABB = aabb; }
-
-	/// <summary>
-	/// 地面判定フラグ変更
-	/// </summary>
-	/// <param name="result"></param>trueは地面 / falseは空中
-	void IsGround(bool result);
-
-	/// <summary>
-	/// getter_地面判定
-	/// </summary>
-	/// <returns></returns>現在の地面判定
-	bool GetIsGround() { return isGround; }
-
-	/// <summary>
 	/// getter_ワールド座標系
 	/// </summary>
 	/// <returns></returns>プレイヤー本体のワールド座標系
-	const WorldTransform& GetWorldTransform() { return worldTransform; }
+	const WorldTransform& GetWorldTransform() { return wt; }
 
 	/// <summary>
 	/// 弾を発射する(ショットガン風)
@@ -146,30 +99,20 @@ public:
 	Vector3 GetWorldPosition();
 
 	/// <summary>
-	/// setter_リスポーンポイント
-	/// </summary>
-	/// <param name="translate"></param>各ステージの最初の位置/チェックポイント
-	void SetRespownPosition(Vector3 translate) { respownPosition = translate; }
-	
-	/// <summary>
 	/// 死んだときの処理
 	/// </summary>
 	void DeadPlayer();
-	/// <summary>
-	/// プレイヤーが倒れた時
-	/// </summary>
-	/// <returns></returns>倒れたフラグ
-	bool GetIsPlayerDown() { return isPlayerDown; }
+
 	/// <summary>
 	/// getter_復活
 	/// </summary>
 	/// <returns></returns>復活フラグ
-	bool GetIsRespown() { return isRespown; }
+	bool GetIsRespawn() { return isRespawn; }
 	
 	/// <summary>
 	/// 全ての敵が初期地に戻った時
 	/// </summary>	
-	void AllRespownEnd();
+	void RespawnPlayer();
 
 	/// <summary>
 	/// getter_パリィ
@@ -191,13 +134,13 @@ public:
 	/// getter_体力
 	/// </summary>
 	/// <returns></returns>現在の体力
-	uint32_t GetHp() { return Hp; }
+	uint32_t GetHp() { return hp; }
 
 	/// <summary>
 	/// setter_体力
 	/// </summary>
 	/// <param name="preHp"></param>代入する体力数
-	void SetHp(uint32_t preHp) { Hp = preHp; }
+	void SetHp(uint32_t preHp) { hp = preHp; }
 
 	/// <summary>
 	/// setter_影の位置
@@ -205,41 +148,13 @@ public:
 	/// <param name="position"></param>影の位置の登録
 	void SetShadowPosition(Vector3 position) { shadow_->SetTranslate(position); }
 
-	/// <summary>
-	/// getter_影の当たり判定
-	/// </summary>
-	/// <returns></returns>影のAABB
-	AABB GetShadowAABB() { return shadow_->GetAABB(); }
-
-	/// <summary>
-	/// 影のみの更新処理
-	/// </summary>
-	void ShadowUpdate();
-
 	//スプライトの変化
 	void SpriteUpdate();
-
-	/// <summary>
-	/// リアクション(拡大縮小)
-	/// </summary>
-	/// <param name="mosionOn"></param>リアクションフラグ
-	/// <param name="scale"></param>どのくらい大きくするか
-	/// <param name="maxTime"></param>リアクションタイマーの最大値
-	void ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime);
 
 	/// <summary>
 	/// 傘が当たったリアクションフラグ
 	/// </summary>
 	void IsShildMosion() { isShildMosion = true; }
-
-	/// <summary>
-	/// アニメーションのみを動かす関数(演出で使う)
-	/// </summary>
-	/// <param name="anser"></param>
-	/// trueならアニメーションのみ / falseなら操作可能
-	void SetPerformanceMode(const bool& anser) { performance_mode = anser; }
-
-	bool GetPerformanceMode() { return performance_mode; }
 
 	/// <summary>
 	/// 強制的にジャンプさせる(演出等で使う)
@@ -255,9 +170,6 @@ public:
 private:
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object;
-	WorldTransform worldTransform;
-	//当たり判定
-	AABB playerAABB;
 
 	//input
 	Input* input_ = nullptr;
@@ -268,33 +180,25 @@ private:
 	//ジャンプフラグ
 	bool isJump = false;
 
-	// 地面判定フラグ{stageの当たり判定で使う}
-	bool isGround = false;
-
 	//重力
-	float grabity = 0.0f;
 	const float standard_grabity = 0.01f;//重力の質量
 	const float fixed_grabity = -0.05f;//滑空時重力値を固定
-	//秒数時間
-	const float deltaTime = 1.0f / 60.0f;
 
 	/// 弾丸
 	std::list<std::shared_ptr<PlayerBullet>> bullets_;
 	float coolTimer = 0.0f;//クールタイム
 	float coolMax = 0.5f;
 	uint32_t bulletCount = 3;//一度に出る弾丸数
-	
-	//プレイヤー向き
-	const float playerDirection = 90.0f;
 
+	//ボタン
 	bool pushA = false;
 	bool pushD = false;
 	bool pushW = false;
 	bool pushS = false;
 	
+	//向き
 	const float upDis = 270.0f;//上
 	const float downtDis = 90.0f;//下
-
 	const float leftDis = 180.0f;//左
 	const float rightDis = 360.0f;//右
 
@@ -303,7 +207,6 @@ private:
 	//傘銃
 	std::unique_ptr<Umbrella> umbrella = nullptr;
 	WorldTransform wtGun;//傘のワールド座標系
-	float umbrellaNormal = 0.0f;
 
 	//傘のシールドフラグ
 	bool isShield = false;
@@ -329,9 +232,7 @@ private:
 	//落下する時ふわふわできるように
 	bool isUmbrellaFall = false;
 
-	//体力
-	uint32_t MaxHp = 3;
-	uint32_t Hp = MaxHp;
+	const uint32_t setHp = 3;//設定する体力
 	//ダメージを食らった後の無敵時間
 	float infinityTimer = 0.0f;
 	const float infinityTimeMax = 1.0f;
@@ -340,11 +241,9 @@ private:
 	float deadTimer = 0.0f;
 	float hitStopTime = 1.0f;
 	float deadTimeMax = 3.0f;
-	bool isPlayerDown = false;
 
 	//復活
-	Vector3 respownPosition;
-	bool isRespown = false;
+	bool isRespawn = false;
 
 	//サウンド
 	SoundData hitSound;//ダメージを食らった
@@ -372,27 +271,15 @@ private:
 	Animation_Mode animation_mode;
 	Animation_Mode PreAnimation_mode;
 
-
-	///影
-	std::unique_ptr<Shadow> shadow_;
-
 	//UI
 	std::vector<std::unique_ptr<Sprite>> sprites_Hp;
 	const Vector2 textureSize_Hp = { 64,64 };//スプライトサイズ
 	const Vector2 initializePoint_Hp = { 20.0f,45.0f };//スプライトの初期位置
 	const float distanceY_Hp = 10.0f;//スプライトのY軸幅
 
-	//リアクション
-	bool isDamageMosion = false;
+	//傘がリアクションするflag
 	bool isShildMosion = false;
 
-	//ダメージのリアクション拡大縮小パラメーター
-	Vector3 damageScale = { 0.1f, 0.1f, 0.1f };
-	const float damageMaxTime = 0.14f;
-	float scaleTimer = 0.0f;
-
-	Vector3 defaultScale = { 1,1,1 };//元の大きさ
-
 	//アニメーションのみを動かすフラグ
-	bool performance_mode = false;
+	//bool performance_mode = false;
 };

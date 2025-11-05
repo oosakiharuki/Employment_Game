@@ -48,7 +48,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 		player_->SetRotate(playerData.rotation);
 		player_->SetAABB(playerData.colliderAABB);
 
-		player_->SetRespownPosition(playerData.translation);
+		player_->SetInit_Position(playerData.translation,playerData.rotation);
 	}
 
 
@@ -78,7 +78,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 			enemy->SetRoutePoint2(enemyData.Point2);
 
 			enemy->DirectionDegree();
-
+			
 			enemies.push_back(std::move(enemy));
 		}
 	}

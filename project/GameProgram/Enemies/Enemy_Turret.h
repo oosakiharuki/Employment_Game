@@ -24,7 +24,7 @@ public:
 	/// </summary>
 	void Fire();
 
-	void RespownEnemy() override;
+	void RespawnEnemy() override;
 
 private:
 	//発射数
