@@ -52,6 +52,10 @@ private:
 	//プレイヤーとの距離感
 	Vector3 distance;
 
+	//リアクション
+	Vector3 bombScale = { 0.05f, 0.05f, 0.05f };
+
+
 	/// <summary>
 	/// 爆発する
 	/// </summary>

@@ -13,34 +13,12 @@ Enemy_Soldier::~Enemy_Soldier() {
 }
 
 void Enemy_Soldier::Initialize() {
-	wt.Initialize();
 
-	object = std::make_unique<Object3d>();
-	object->Initialize();
+	Enemy_InitializeCommon();
 	object->SetModelFile("enemy.obj");
 
-	maxHp = 3;
-	hp = maxHp;
-
-	particle_fire = std::make_unique<Particle>();
-	particle_fire->Initialize("enemySoldier_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
-	particle_fire->SetParticleCount(1);
-	particle_fire->ChangeMode(BornParticle::Stop);
-	particle_fire->SetParticleMosion(ParticleMosion::Fixed);
-	particle_fire->SetFrequency(0.1f);
-
-
-	particle_damage = std::make_unique<Particle>();
-	particle_damage->Initialize("enemySoldier_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
-	particle_damage->SetParticleCount(10);
-	particle_damage->ChangeMode(BornParticle::Stop);
-	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
-	particle_damage->SetFrequency(1.0f);
-
-	///影
-	shadow_ = std::make_unique<Shadow>();
-	shadow_->Initialize();
-	shadow_->SetScale({ 1,0,1 });
+	//体力の初期化
+	HP_Initialize(3);
 
 	//見える範囲初期化
 	eyeReach = { 20, 10, 1 };

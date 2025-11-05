@@ -14,7 +14,8 @@ Player::Player(){}
 Player::~Player() {}
 
 void Player::Initialize() {
-	wt.Initialize();
+
+	Actor_InitializeCommon();
 
 	//プレイヤー初期化/オブジェクト読み込み
 	object = std::make_unique<Object_glTF>();
@@ -71,10 +72,6 @@ void Player::Initialize() {
 	particle_dead->SetFrequency(0.1f);
 	particle_dead->SetScale({ 0.5f,0.5f,0.5f });
 
-	//影の初期化
-	shadow_ = std::make_unique<Shadow>();
-	shadow_->Initialize();
-
 	HP_Initialize(setHp);
 
 	//UI_体力
@@ -93,9 +90,10 @@ void Player::Update() {
 
 	//倒された時
 	if (hp == 0) {
-		//ノックバック、ダメージリアクションをリセット
+		//ノックバック、ダメージリアクション、ブリンクをリセット
 		isKnockback = false;
 		isDamageMosion = false;
+		isBrink = false;
 		DeadPlayer();
 	}
 
@@ -134,7 +132,7 @@ void Player::Update() {
 	}
 
 	//演出時は関係なし
-	if (!isPerformance) {
+	if (!isPerformance && !isDead) {
 		//重力
 		grabity -= standard_grabity;
 		wt.translation_.y += grabity;

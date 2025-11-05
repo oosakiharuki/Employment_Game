@@ -15,7 +15,10 @@ class GameActor
 {
 public:
 
-	void Initialize();
+	/// <summary>
+	/// アクター内でもできる初期化処理
+	/// </summary>
+	void Actor_InitializeCommon();
 
 	/// <summary>
 	/// getter_座標位置
@@ -72,9 +75,9 @@ public:
 	/// <summary>
 	/// リアクション(拡大縮小)
 	/// </summary>
-	/// <param name="mosionOn"></param>リアクションフラグ
-	/// <param name="scale"></param>どのくらい大きくするか
-	/// <param name="maxTime"></param>リアクションタイマーの最大値
+	/// <param name="mosionOn"></param> リアクションフラグ
+	/// <param name="scale"></param> どのくらい大きくするか
+	/// <param name="maxTime"></param> リアクションタイマーの最大値
 	void ScaleUpdate(bool* mosionOn, Vector3 scale,const float& maxTime);
 	
 	/// <summary>
@@ -114,6 +117,10 @@ public:
 	/// </summary>
 	void RespawnCommon();
 
+	/// <summary>
+	/// 体力の設定
+	/// </summary>
+	/// <param name="max"></param>最大体力
 	void HP_Initialize(const uint32_t& max);
 
 protected:
@@ -148,7 +155,7 @@ protected:
 	//ダメージのリアクション
 	bool isDamageMosion = false;
 
-	//リアクション
+	//ダメージリアクション
 	float scaleTimer = 0.0f;
 	Vector3 damageScale = { 0.1f, 0.1f, 0.1f };
 	const Vector3 defaultScale = { 1,1,1 };//元の大きさ

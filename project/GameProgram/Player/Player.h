@@ -48,8 +48,6 @@ public:
 	/// </summary>
 	void ShootBullet();
 
-	//Getterはshared_ptrのほうが適任かも
-
 	/// <summary>
 	/// getter_弾丸リスト
 	/// </summary>

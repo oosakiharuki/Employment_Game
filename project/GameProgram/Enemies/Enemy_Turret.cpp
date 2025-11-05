@@ -12,33 +12,12 @@ Enemy_Turret::~Enemy_Turret() {
 
 
 void Enemy_Turret::Initialize() {
-	wt.Initialize();
 
-	object = std::make_unique<Object3d>();
-	object->Initialize();
+	Enemy_InitializeCommon();
+
 	object->SetModelFile("cannon.obj");
 
-	maxHp = 6;
-	hp = maxHp;
-
-	particle_fire = std::make_unique<Particle>();
-	particle_fire->Initialize("enemyTurret_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
-	particle_fire->SetParticleCount(1);
-	particle_fire->ChangeMode(BornParticle::Stop);
-	particle_fire->SetParticleMosion(ParticleMosion::Fixed);
-	particle_fire->SetFrequency(0.1f);
-
-	particle_damage = std::make_unique<Particle>();
-	particle_damage->Initialize("enemyTurret_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
-	particle_damage->SetParticleCount(10);
-	particle_damage->ChangeMode(BornParticle::Stop);
-	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
-	particle_damage->SetFrequency(1.0f);
-
-	///影
-	shadow_ = std::make_unique<Shadow>();
-	shadow_->Initialize();
-	shadow_->SetScale({ 1,0,1 });
+	HP_Initialize(6);
 
 	//見える範囲初期化
 	eyeReach = { 15, 2, 1 };

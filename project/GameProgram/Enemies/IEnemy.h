@@ -18,7 +18,7 @@ public:
 	/// <summary>
 	/// 共有する初期化処理
 	/// </summary>
-	void InitializeCommon();
+	void Enemy_InitializeCommon();
 
 	/// <summary>
 	/// 更新処理

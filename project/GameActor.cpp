@@ -2,6 +2,15 @@
 
 using namespace MyMath;
 
+void GameActor::Actor_InitializeCommon() {
+	//行列の初期化
+	wt.Initialize();
+
+	//影の初期化
+	shadow_ = std::make_unique<Shadow>();
+	shadow_->Initialize();
+}
+
 void GameActor::IsGround(bool result) {
 	isGround = result;
 	//地面なら重力を0にする(沈まないようにする)
@@ -9,7 +18,6 @@ void GameActor::IsGround(bool result) {
 		grabity = 0;
 	}
 }
-
 
 AABB GameActor::GetAABB() {
 	AABB aabb;
