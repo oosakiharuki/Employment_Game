@@ -13,28 +13,21 @@ public:
 	void Draw() override;
 	void Attack() override;
 
-	bool IsDead() { return isDead; }
-	bool IsExplosion() { return isExplosion; }
+	bool IsExplosion()override { return isExplosion; }
 
 	void RespawnEnemy() override;
-	
-	/// <summary>
-	/// getter‗ワールド座標系の座標
-	/// </summary>
-	/// <returns></returns>
-	Vector3 GetWorldPosition();
 
 	/// <summary>
 	/// getter‗爆発範囲AABB
 	/// </summary>
 	/// <returns></returns>bombAABB
-	AABB GetBombAABB() { return bombAABB; }
+	AABB GetBombAABB()override { return bombAABB; }
 
 	/// <summary>
 	/// getter_距離
 	/// </summary>
 	/// <returns></returns>プレイヤーからボムの距離
-	Vector3 GetDistance() { return distance; }
+	Vector3 GetDistance()override { return distance; }
 
 private:
 	//爆発開始

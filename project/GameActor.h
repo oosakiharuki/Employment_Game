@@ -32,6 +32,12 @@ public:
 	void SetTranslate(Vector3 translate) { wt.translation_ = translate; }
 
 	/// <summary>
+	/// getter_ワールド座標系の位置
+	/// </summary>
+	/// <returns></returns>平行移動成分を搭載したプレイヤー座標
+	Vector3 GetWorldPosition();
+
+	/// <summary>
 	/// getter_回転
 	/// </summary>
 	/// <returns></returns>現在の回転
@@ -41,7 +47,6 @@ public:
 	/// </summary>
 	/// <param name="rotate"></param>代入する各回転角度
 	void SetRotate(Vector3 rotate) { wt.rotation_ = rotate; }
-
 
 	/// <summary>
 	/// getter_当たり判定AABB

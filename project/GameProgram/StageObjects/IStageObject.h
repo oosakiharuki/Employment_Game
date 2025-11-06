@@ -58,9 +58,31 @@ public:
 	/// <param name="aabb"></param>代入するAABB
 	void SetAABB(AABB aabb) { aabb_ = aabb; }
 
+	/// <summary>
+	/// オブジェクトのクラスを知るための名前
+	/// </summary>
+	virtual void SetObjectName() = 0;
+	const std::string& GetObjectName() { return objectName; }
+
+	///ワープゲートで使う
+
+	/// <summary>
+	/// setter_次のステージ
+	/// </summary>
+	/// <param name="fileName"></param>ステージ名(例:stage_01)
+	virtual void SetNextStage(std::string fileName);
+
+	/// <summary>
+	/// getter_次のステージ
+	/// </summary>
+	/// <returns></returns>次のステージ
+	virtual std::string GetNextStage();
+
 protected:
 
 	std::unique_ptr<Object3d> object_ = nullptr;
 	WorldTransform wt;
 	AABB aabb_;
+
+	std::string objectName;
 };

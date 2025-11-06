@@ -105,16 +105,6 @@ void Enemy_Bomb::RespawnEnemy() {
 	bombTimer = 0.0f;
 }
 
-Vector3 Enemy_Bomb::GetWorldPosition() {
-	Vector3 result;
-
-	result.x = wt.matWorld_.m[3][0];
-	result.y = wt.matWorld_.m[3][1];
-	result.z = wt.matWorld_.m[3][2];
-
-	return result;
-}
-
 void Enemy_Bomb::Exprosion() {
 	bombAABB.min = wt.translation_ - hani;
 	bombAABB.max = wt.translation_ + hani;

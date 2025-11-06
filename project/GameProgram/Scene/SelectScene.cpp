@@ -25,7 +25,7 @@ void SelectScene::Update() {
 		ChangeScene();
 	}
 
-	if (isWarp) {
+	if (CollisionManager::GetInstance()->IsWarp()) {
 		if (cameraControl_->MaxZoom()) {
 			NextSceneFadeInStart("Game");
 		}
@@ -40,7 +40,7 @@ void SelectScene::Update() {
 
 	player_->Update();
 
-	if (isWarp) {
+	if (CollisionManager::GetInstance()->IsWarp()) {
 		player_->isPerformanceFlag(true);
 		player_->SetRotate({ 0,0,0 });//向きを前に
 		return;

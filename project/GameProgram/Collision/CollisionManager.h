@@ -48,6 +48,17 @@ public:
 	/// <param name="position"></param>対象の場所
 	/// <returns></returns>対象から一番近い地面の上
 	Vector3 UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position);
+	
+	/// <summary>
+	/// getter_ワープして次のステージに
+	/// </summary>
+	/// <returns></returns>ワープフラグ
+	const bool IsWarp() { return isWarp; }
+	/// <summary>
+	/// getter_ゴール
+	/// </summary>
+	/// <returns></returns>ゴールフラグ
+	const bool IsGoal() { return isGoal; }
 
 
 private:
@@ -86,5 +97,10 @@ private:
 
 	//インスタンス
 	static std::shared_ptr<CollisionManager> instance;
+
+	//ゴールした時フラグ
+	bool isGoal = false;
+	//ワープで次のステージに進むフラグ
+	bool isWarp = false;
 };
 

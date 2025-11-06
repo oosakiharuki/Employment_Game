@@ -71,7 +71,8 @@ public:
 	/// <summary>
 	/// ダメージを食らった
 	/// </summary>
-	void IsDamage();
+	/// <param name="hitPoint"></param>当たった場所
+	void IsDamage(const Vector3& hitPoint);
 	/// <summary>
 	/// 落下した(即死)
 	/// </summary>
@@ -89,12 +90,6 @@ public:
 	/// <param name="Power"></param>ノックバックの強さ
 	/// <param name="TimerMax"></param>ノックバックする時間(EaseInを仕様しているため)
 	void KnockBackUmbrella(const Vector3 Power,const float TimerMax);
-
-	/// <summary>
-	/// getter_ワールド座標系の位置
-	/// </summary>
-	/// <returns></returns>平行移動成分を搭載したプレイヤー座標
-	Vector3 GetWorldPosition();
 
 	/// <summary>
 	/// 死んだときの処理
@@ -133,6 +128,12 @@ public:
 	/// </summary>
 	/// <returns></returns>現在の体力
 	uint32_t GetHp() { return hp; }
+
+	/// <summary>
+	/// setter_体力
+	/// </summary>
+	/// <param name="preHp"></param>代入する体力数
+	const uint32_t GetMaxHp() { return playerMaxHp; }
 
 	/// <summary>
 	/// setter_体力
@@ -230,7 +231,7 @@ private:
 	//落下する時ふわふわできるように
 	bool isUmbrellaFall = false;
 
-	const uint32_t setHp = 3;//設定する体力
+	const uint32_t playerMaxHp = 3;//設定する体力
 	//ダメージを食らった後の無敵時間
 	float infinityTimer = 0.0f;
 	const float infinityTimeMax = 1.0f;

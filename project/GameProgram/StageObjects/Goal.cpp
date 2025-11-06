@@ -21,3 +21,7 @@ void Goal::Update(){
 void Goal::Draw(){
 	object_->Draw();
 }
+
+void Goal::SetObjectName() {
+	objectName = "Goal";
+}

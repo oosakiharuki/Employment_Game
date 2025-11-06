@@ -1,5 +1,9 @@
 #include "CollisionManager.h"
 #include "MyMath.h"
+#include "CheckPoint.h"
+#include <Goal.h>
+#include <WarpGate.h>
+#include <NextStageSave.h>
 
 using namespace MyMath;
 
@@ -17,8 +21,23 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 	std::vector<std::shared_ptr<EventTrigger>> eventTriggers, CameraControl* cameraControl_, Levelediter levelediter)
 {
 
-	for (auto& enemy : enemies) {
+	//ゴールした時フラグ
+	isGoal = false;
+	//ワープで次のステージに進むフラグ
+	isWarp = false;
 
+
+	for (auto& enemy : enemies) {
+		
+		//見える範囲にプレイヤーがいたら
+		if (IsCollisionAABB(player_->GetAABB(), enemy->GetEyeAABB()) && !player_->GetIsDead()) {
+			enemy->IsFoundTarget(true);//見える
+		}
+		else {
+			enemy->IsFoundTarget(false);//見えない
+		}
+
+		//プレイヤーが敵の弾に当たったら
 		for (auto& bullet : player_->GetBullets()) {
 			if (IsCollisionAABB(bullet->GetAABB(), enemy->GetAABB()) && !enemy->GetIsDead()) {
 				enemy->IsDamage();
@@ -27,26 +46,27 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 		}
 
 		//弾丸
-		for (EnemyBullet* bulletE : enemy->GetBullets()) {
+		for (auto* bulletE : enemy->GetBullets()) {
 
 			//傘の当たり判定
 			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetUmbrella()->GetAABB()) && player_->GetIsShield()) {
 
+				//パリィフラグが立ってるなら
 				if (player_->GetIsPari()) {
-					bulletE->Pari_Mode();
-					player_->PariSuccess();
+					bulletE->Pari_Mode();//弾が跳ね返る
+					player_->PariSuccess();//パリィ成功
 				}
-				else {
-					bulletE->IsHit();
-					player_->KnockBackUmbrella(UmbrellaKnockBackPower, UmbrellaKnockBackTime);
+				else {//跳ね返さず防ぐのみ
+					bulletE->IsHit();//当たって消える
+					player_->KnockBackUmbrella(UmbrellaKnockBackPower, UmbrellaKnockBackTime);//ノックバックする
 				}
-				player_->IsShildMosion();
+				player_->IsShildMosion();//傘のリアクションフラグをtrueに
 			}
 
 			//プレイヤーの当たり判定
 			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetAABB()) && !player_->GetIsDead()) {
-				bulletE->IsHit();
-				player_->IsDamage();
+				bulletE->IsHit();//当たって消える
+				player_->IsDamage(bulletE->GetDistance());//プレイヤーがダメージ
 			}
 
 			//跳ね返った弾の当たり判定
@@ -56,17 +76,10 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 			}
 		}
 
-		//ダウンキャスト
-		//親から子(基盤クラスから派生クラス)に変換し派生クラスの関数を使えることができる
-		//if(enemyが<派生クラス>と同じ) = true
-		if (enemy.get() == dynamic_cast<Enemy_Bomb*>(enemy.get())) {
-			Enemy_Bomb* enemy_Bomb = dynamic_cast<Enemy_Bomb*>(enemy.get());
-			if (IsCollisionAABB(enemy_Bomb->GetBombAABB(), player_->GetAABB()) && 
-				enemy_Bomb->IsDead() && !enemy_Bomb->IsExplosion()) {
-				player_->IsDamage();
-				player_->KnockBackPlayer(enemy_Bomb->GetDistance(), 0.8f);
-			}
-			//enemyから値を入れているためdeleteの必要はない
+		//ボムの敵 : 爆発範囲
+		if (IsCollisionAABB(enemy->GetBombAABB(), player_->GetAABB()) && 
+			enemy->GetIsDead() && !enemy->IsExplosion()) {
+			player_->IsDamage(enemy->GetDistance());//プレイヤーがダメージ
 		}
 	}
 
@@ -127,9 +140,8 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 		if (eventTrigger->EventEnd()) {
 			//一瞬だけ通す
 			if (cameraControl_->IsFixed()) {
-				//カメラの最小/最大地点
-				cameraControl_->FixedMode(false);
-				cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit["MainCamera"], false);
+				cameraControl_->FixedMode(false);//カメラを固定しない
+				cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit["MainCamera"], false);//メインカメラに戻す
 			}
 		}
 		//イベントが発動している時(順番2)
@@ -162,6 +174,30 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 		}
 	}
 
+	for (auto& stageObject : stageObjects) {
+		if (IsCollisionAABB(player_->GetAABB(), stageObject->GetAABB())) {
+			//チェックポイント
+			if (stageObject->GetObjectName() == "CheckPoint") {
+				player_->SetInit_Position(stageObject->GetPosition(), player_->GetRotate());
+			}
+			//ゴール
+			else if (stageObject->GetObjectName() == "Goal") {
+				isGoal = true;
+			}
+			//stageObjectsの中でワープゲートである場合
+			else if (stageObject->GetObjectName() == "WarpGate" && Input::GetInstance()->TriggerKey(DIK_E)) {
+				//プレイヤーとワープゲートの当たり判定 + Eキーを押した時
+				isWarp = true;
+				//次のステージに持ってくる情報
+				NextStageSave::GetInstance()->SetNextStageFile(stageObject->GetNextStage());
+				NextStageSave::GetInstance()->SetPlayerHp(player_->GetHp());
+				player_->IsGround(true);
+				break;
+			}
+		}
+	}
+
+
 	//影とステージの当たり判定
 	Vector3 shadowPos = {};
 
@@ -177,8 +213,6 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 		enemy->ShadowUpdate();
 	}
 }
-
-
 
 Vector3 CollisionManager::UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position) {
 
@@ -224,7 +258,6 @@ void CollisionManager::StageCollisions(CollisionOverlap* collisionOverlap , std:
 		}
 	}
 }
-
 
 void CollisionManager::BackPosition(CollisionOverlap* collisionOverlap) {
 	float half = 0.5f;//中心を求める用に使う

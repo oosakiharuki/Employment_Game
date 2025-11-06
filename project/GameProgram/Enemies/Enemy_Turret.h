@@ -14,12 +14,6 @@ public:
 	void Attack() override;
 
 	/// <summary>
-	/// 倒されたフラグ
-	/// </summary>
-	/// <returns></returns>trueなら倒された
-	bool IsDead() { return isDead; }
-
-	/// <summary>
 	/// 弾丸発射処理
 	/// </summary>
 	void Fire();

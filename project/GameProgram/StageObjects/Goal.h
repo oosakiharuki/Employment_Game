@@ -12,5 +12,7 @@ public:
 	void Update() override;
 	void Draw() override;
 
+	void SetObjectName()override;
+
 private:
 };

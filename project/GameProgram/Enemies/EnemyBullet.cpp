@@ -1,4 +1,5 @@
 #include "EnemyBullet.h"
+#include "Player.h"
 
 using namespace MyMath;
 
@@ -45,6 +46,15 @@ AABB EnemyBullet::GetAABB() {
 	aabb.min = wt.translation_ + bulletAABB.min;
 	aabb.max = wt.translation_ + bulletAABB.max;
 	return aabb;
+}
+
+void EnemyBullet::IsHit() { 
+	Vector3 enemyPosition = wt.translation_;
+	Vector3 playerPosition = player_->GetWorldPosition();
+
+	distance = enemyPosition - playerPosition;
+
+	isDead = true;
 }
 
 void EnemyBullet::Pari_Mode() {

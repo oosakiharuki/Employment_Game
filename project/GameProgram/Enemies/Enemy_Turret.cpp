@@ -116,6 +116,7 @@ void Enemy_Turret::Fire() {
 
 	EnemyBullet* bullet = new EnemyBullet();
 	bullet->Initialize();
+	bullet->SetPlayer(player_);
 	bullet->SetTranslate(translate);
 	bullet->SetVelocty(velocity);
 	bullets_.push_back(bullet);

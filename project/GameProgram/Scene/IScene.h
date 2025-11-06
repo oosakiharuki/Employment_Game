@@ -118,8 +118,6 @@ protected:
 	
 	void WarpNextScene();
 
-	bool isWarp = false;
-
 public:
 	/// <summary>
 	/// 初期化処理

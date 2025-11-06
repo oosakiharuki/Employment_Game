@@ -108,6 +108,32 @@ public:
 	/// </summary>
 	void MoveEnemy();
 
+	/// <summary>
+	/// getter_見える範囲
+	/// </summary>
+	/// <returns></returns>
+	AABB GetEyeAABB() { return eyeAABB; }
+
+	void IsFoundTarget(bool result) { isFoundTarget = result; }
+
+	/// <summary>
+	/// getter‗爆発範囲AABB
+	/// </summary>
+	/// <returns></returns>bombAABB
+	virtual AABB GetBombAABB();
+
+	/// <summary>
+	/// getter_距離
+	/// </summary>
+	/// <returns></returns>プレイヤーからボムの距離
+	virtual Vector3 GetDistance();
+	
+	/// <summary>
+	/// 爆発
+	/// </summary>
+	/// <returns></returns>爆発フラグ
+	virtual bool IsExplosion();
+
 protected:
 	//オブジェクト
 	std::unique_ptr<Object3d> object;

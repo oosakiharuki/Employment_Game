@@ -8,7 +8,6 @@ void GameScene::Initialize() {
 
 	LevelEditorObjectSetting();
 
-
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
 
@@ -25,6 +24,8 @@ void GameScene::Initialize() {
 	}
 
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
+	CollisionCommon();
+
 }
 
 void GameScene::Update() {
@@ -36,20 +37,15 @@ void GameScene::Update() {
 
 	startWarp->Update();
 
-	if (isWarp && cameraControl_->MaxZoom()) {
+	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->MaxZoom()) {
 		NextSceneFadeInStart("NextStage");
 	}
 
 	WarpNextScene();
 
-	for (auto& stageObject : stageObjects) {
-		if (IsCollisionAABB(player_->GetAABB(), stageObject->GetAABB())) {	
-			//ゴール
-			if (stageObject.get() == dynamic_cast<Goal*>(stageObject.get())) {
-				NextSceneFadeInStart("Clear");
-				return;
-			}
-		}
+	if (CollisionManager::GetInstance()->IsGoal()) {
+		NextSceneFadeInStart("Clear");
+		return;
 	}
 
 	skyBox->Update(MakeScaleMatrix({ 1000,1000,1000 }));//大きくするため
@@ -86,7 +82,7 @@ void GameScene::Update() {
 	}
 
 
-	if (isWarp) {
+	if (CollisionManager::GetInstance()->IsWarp()) {
 		player_->isPerformanceFlag(true);
 		player_->SetRotate({ 0,0,0 });
 		return;
@@ -108,8 +104,6 @@ void GameScene::Update() {
 	for (auto& stageObject : stageObjects) {
 		stageObject->Update();
 	}
-
-	ChangeCheckPoint();
 
 	//共有イベントフラグ
 	bool isEventCommon = false;
@@ -219,19 +213,6 @@ void GameScene::WarterWarpExit() {
 	startWarp->SetRotation({ 90.0f,0.0f,0.0f });//下向きにして水たまりに
 
 	player_->isPerformanceFlag(true);
-}
-
-void GameScene::ChangeCheckPoint() {
-	//リスポーン変更した時
-	for (auto& stageObject : stageObjects) {
-		if (IsCollisionAABB(player_->GetAABB(), stageObject->GetAABB())) {
-			//チェックポイント
-			if (stageObject.get() == dynamic_cast<CheckPoint*>(stageObject.get())) {
-				CheckPoint* checkPoint = dynamic_cast<CheckPoint*>(stageObject.get());
-				player_->SetInit_Position(checkPoint->GetPosition(),player_->GetRotate());
-			}
-		}
-	}
 }
 
 void GameScene::Respawn() {

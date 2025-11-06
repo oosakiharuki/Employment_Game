@@ -12,17 +12,19 @@ public:
 	void Update() override;
 	void Draw() override;
 
+	void SetObjectName()override;
+
 	/// <summary>
 	/// setter_次のステージ
 	/// </summary>
 	/// <param name="fileName"></param>ステージ名(例:stage_01)
-	void SetNextStage(std::string fileName) { fileName_ = fileName; }
+	void SetNextStage(std::string fileName) override { fileName_ = fileName; }
 
 	/// <summary>
 	/// getter_次のステージ
 	/// </summary>
 	/// <returns></returns>次のステージ
-	std::string GetNextStage() { return fileName_; }
+	std::string GetNextStage() override { return fileName_; }
 
 	/// <summary>
 	/// ゲートを小さくして消す

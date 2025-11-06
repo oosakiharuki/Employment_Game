@@ -12,8 +12,6 @@ public:
 	void Draw() override;
 	void Attack() override;
 
-	bool IsDead() { return isDead; }
-
 	/// <summary>
 	/// 弾丸発射処理
 	/// </summary>

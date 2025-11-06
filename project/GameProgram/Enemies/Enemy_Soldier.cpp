@@ -127,6 +127,7 @@ void Enemy_Soldier::Fire() {
 
 	EnemyBullet* bullet = new EnemyBullet();
 	bullet->Initialize();
+	bullet->SetPlayer(player_);
 	bullet->SetTranslate(enemyPosition);
 	bullet->SetVelocty(velocity);
 	bullets_.push_back(bullet);

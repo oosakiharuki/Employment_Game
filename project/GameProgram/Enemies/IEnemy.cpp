@@ -117,26 +117,17 @@ void IEnemy::GrabityUpdate() {
 }
 
 void IEnemy::PlayerTarget() {
+	Segment segment;
+	segment.origin = wt.translation_;
+	segment.diff = player_->GetTranslate();
 
-	if (IsCollisionAABB(player_->GetAABB(), eyeAABB) && !player_->GetIsDead()) {
-		isFoundTarget = true;
-
-		Segment segment;
-		segment.origin = wt.translation_;
-		segment.diff = player_->GetTranslate();
-
-		//playerと敵との間に壁があるならば
-		for (auto& stage : stages) {
-			if (IsCollisionAABB_Segment(stage, segment)) {
-				isFoundTarget = false;
-				break;
-			}
+	//playerと敵との間に壁があるならば
+	for (auto& stage : stages) {
+		if (IsCollisionAABB_Segment(stage, segment)) {
+			isFoundTarget = false;
+			break;
 		}
 	}
-	else {
-		isFoundTarget = false;
-	}
-
 }
 
 void IEnemy::SearchRange() {
@@ -166,7 +157,6 @@ void IEnemy::MoveEnemy() {
 
 	wt.rotation_.y = direction;
 }
-
 
 void IEnemy::RespawnEnemyCommon() {
 	RespawnCommon();
@@ -218,3 +208,15 @@ void IEnemy::DirectionDegree() {
 	wt.rotation_.y = direction;
 
 }
+
+AABB IEnemy::GetBombAABB() { 
+	AABB null{};
+	return null;
+}
+
+Vector3 IEnemy::GetDistance(){
+	Vector3 null{};
+	return null;
+}
+
+bool IEnemy::IsExplosion() { return false; }

@@ -72,10 +72,10 @@ void Player::Initialize() {
 	particle_dead->SetFrequency(0.1f);
 	particle_dead->SetScale({ 0.5f,0.5f,0.5f });
 
-	HP_Initialize(setHp);
+	maxHp = playerMaxHp;
 
 	//UI_体力
-	for (uint32_t i = 0; i < setHp; i++) {
+	for (uint32_t i = 0; i < hp; i++) {
 		std::unique_ptr <Sprite> sprite = std::make_unique<Sprite>();
 		sprite->Initialize("Hp.png");
 		sprite->SetPosition({ initializePoint_Hp.x + textureSize_Hp.x * i , initializePoint_Hp.y - i * distanceY_Hp });
@@ -493,19 +493,17 @@ void Player::ShootBullet() {
 	KnockBackUmbrella(playerknockback,0.5f);
 }
 
-void Player::IsDamage() {
+void Player::IsDamage(const Vector3& hitPoint) {
 	if (infinityTimer >= infinityTimeMax) {
 		if (hp == 0) {
 			return;
 		}
 		hp--;
-		particle_damage->SetTranslate(wt.translation_);
+		particle_damage->SetTranslate(wt.translation_ + Normalize(hitPoint));
 		particle_damage->ChangeMode(BornParticle::MomentMode);
 		Audio::GetInstance()->SoundPlayWave(hitSound, volume);
 		infinityTimer = 0.0f;
-		backPower = TransformNormal({ 0,0,0.5f } ,wt.matWorld_);
-		isKnockback = true;
-		KnockBackTimeMax = infinityTimeMax / 3;
+		KnockBackPlayer(hitPoint , infinityTimeMax / 3);
 	}
 
 	isDamageMosion = true;
@@ -525,31 +523,20 @@ void Player::IsFall() {
 }
 
 void Player::KnockBackPlayer(const Vector3 Power, const float TimerMax) {
-	backPower = TransformNormal(Power, wt.matWorld_);
+	backPower = Normalize(Power);
 	backPower.z = 0.0f;//z方向はなし
 	isKnockback = true;
 	KnockBackTimeMax = TimerMax;
 }
 
 void Player::KnockBackUmbrella(const Vector3 Power, const float TimerMax) {
-	backPower = TransformNormal(Power, wtGun.matWorld_); 
+	backPower = TransformNormal(Power, wtGun.matWorld_);
 	isKnockback = true;
 	KnockBackTimeMax = TimerMax;
 
 	//連続ヒット時、元に戻す
 	umbrella->SetScale({ 1,1,1 });
 
-}
-
-
-Vector3 Player::GetWorldPosition() {
-	Vector3 worldPos;
-
-	worldPos.x = wt.matWorld_.m[3][0];
-	worldPos.y = wt.matWorld_.m[3][1];
-	worldPos.z = wt.matWorld_.m[3][2];
-
-	return worldPos;
 }
 
 void Player::DeadPlayer() {
@@ -605,14 +592,16 @@ void Player::PariSuccess() {
 }
 
 void Player::SpriteUpdate() {
-	if (hp < 3) {
-		sprites_Hp[2]->SetTextureFile("NoHp.png");
-		if (hp < 2) {
-			sprites_Hp[1]->SetTextureFile("NoHp.png");
-			if (hp < 1) {
-				sprites_Hp[0]->SetTextureFile("NoHp.png");
-			}
+	float i = 0;
+	for (auto& hp_ : sprites_Hp) {
+		//現在の体力状態
+		if (i >= hp) {
+			hp_->SetTextureFile("NoHp.png");
+		}//以上なら体力ある状態に
+		else if (hp_->GetTextureFile() == "NoHp.png") {
+			hp_->SetTextureFile("Hp.png");
 		}
+		i++;
 	}
 }
 
