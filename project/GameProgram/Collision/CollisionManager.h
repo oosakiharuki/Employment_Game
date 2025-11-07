@@ -60,6 +60,7 @@ public:
 	/// <returns></returns>ゴールフラグ
 	const bool IsGoal() { return isGoal; }
 
+	void ResetFlag();
 
 private:
 
@@ -78,6 +79,8 @@ private:
 	/// <param name="collisionOverlap"></param>
 	/// <param name="stageAABB"></param>
 	void StageCollisions(CollisionOverlap* collisionOverlap, std::vector<AABB> stageAABB);
+
+	void GameActorAndStageCollision(GameActor* gameactor, std::vector<AABB> stageAABB);
 
 	/// <summary>
 	/// CollisionOverlapのターゲット(player,enemy)の設定

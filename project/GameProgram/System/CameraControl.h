@@ -68,6 +68,7 @@ private:
 	//カメラズーム
 	Segment cameraSegment = {};
 	float zoomTimer = 0.0f;
+	const float MaxZoomTime = 1.0f;
 	bool isZoom = false;
 	
 	//imgui

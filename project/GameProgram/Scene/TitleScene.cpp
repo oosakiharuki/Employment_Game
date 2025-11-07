@@ -123,7 +123,7 @@ void TitleScene::Update() {
 			move += 0.01f;
 		}
 		//タイトルが上からくる
-		start.y = end.y + EaseIn(start.y, timer, TimeMax);
+		start.y = end.y + EaseOut(start.y, timer, TimeMax);
 		Title_pos.y = start.y + 10.0f * std::sin(move);
 
 	}

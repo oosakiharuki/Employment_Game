@@ -20,12 +20,12 @@ void GameScene::Initialize() {
 
 	//演出時に重力が発動しないようにする
 	for (auto& enemy : enemies) {
-		enemy->isPerformanceFlag(true);
+		enemy->IsPerformanceFlag(true);
 	}
 
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
-	CollisionCommon();
-
+	
+	CollisionManager::GetInstance()->ResetFlag();
 }
 
 void GameScene::Update() {
@@ -40,8 +40,6 @@ void GameScene::Update() {
 	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->MaxZoom()) {
 		NextSceneFadeInStart("NextStage");
 	}
-
-	WarpNextScene();
 
 	if (CollisionManager::GetInstance()->IsGoal()) {
 		NextSceneFadeInStart("Clear");
@@ -59,7 +57,9 @@ void GameScene::Update() {
 	cameraControl_->Update(&*camera.get());
 
 	player_->Update();
-	
+		
+	WarpNextScene();
+
 	stageobj->Update();
 
 	if (isStartStage) {
@@ -67,27 +67,18 @@ void GameScene::Update() {
 		if (startPointY >= playerPoint.y) {
 			player_->SetTranslate({ playerPoint.x,startPointY,playerPoint.z });
 			isStartStage = false;
-			player_->isPerformanceFlag(false);//演出モードを終了し操作できるように
+			player_->IsPerformanceFlag(false);//演出モードを終了し操作できるように
 			player_->IsJumping();//強制的にジャンプさせて飛び出たようにする
 			//カイジョ
 			for (auto& enemy : enemies) {
-				enemy->isPerformanceFlag(false);
+				enemy->IsPerformanceFlag(false);
 			}
 			return;
 		}
 
 		startPointY += 0.1f;
 		player_->SetTranslate({ playerPoint.x,startPointY,playerPoint.z });
-
 	}
-
-
-	if (CollisionManager::GetInstance()->IsWarp()) {
-		player_->isPerformanceFlag(true);
-		player_->SetRotate({ 0,0,0 });
-		return;
-	}
-
 
 	Respawn();
 
@@ -212,7 +203,7 @@ void GameScene::WarterWarpExit() {
 	startWarp->SetPosition(warpPosition);//playerの真下に
 	startWarp->SetRotation({ 90.0f,0.0f,0.0f });//下向きにして水たまりに
 
-	player_->isPerformanceFlag(true);
+	player_->IsPerformanceFlag(true);
 }
 
 void GameScene::Respawn() {

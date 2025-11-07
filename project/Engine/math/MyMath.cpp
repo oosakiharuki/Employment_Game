@@ -398,31 +398,6 @@ namespace MyMath {
 		return result;
 	}
 
-	void ReturnBack(const AABB& aabb1, const AABB& aabb2, Vector3 position) {
-
-		Vector3 overlap = OverAABB(aabb1, aabb2);
-
-
-		// 重なりが最小の軸で押し戻しを行う
-		if (overlap.x < overlap.y && overlap.x < overlap.z) {
-			position.x -= overlap.x;
-		}
-		else if (overlap.y < overlap.x && overlap.y < overlap.z) {
-			position.y -= overlap.y;
-			//// 上向きの押し戻しなら着地判定を立てる
-			//if (push > 0.0f) {
-			//	velocityY = 0.0f;
-			//	onGround = true;
-			//}
-		}
-		else if (overlap.z < overlap.x && overlap.z < overlap.y) {
-			position.z -= overlap.z;
-		}
-
-
-		//position -= overlap;
-	}
-
 	float Length(float start, float target) {
 		
 
@@ -442,7 +417,30 @@ namespace MyMath {
 	}
 
 
-	float EaseIn(const float& f, const float t, const float endt) {
+	float EaseIn(const float& f, const float t) {
+		return f * t;
+	}
+
+	Vector2 EaseIn(const Vector2& v, const float t) {
+		Vector2 result{};
+
+		result.x = EaseIn(v.x, t);
+		result.y = EaseIn(v.y, t);
+
+		return result;
+	}
+
+	Vector3 EaseIn(const Vector3& v, const float t) {	
+		Vector3 result{};	
+
+		result.x = EaseIn(v.x, t);
+		result.y = EaseIn(v.y, t);
+		result.z = EaseIn(v.z, t);
+
+		return result;
+	}
+
+	float EaseOut(const float& f, const float t, const float endt) {
 		//0のとき
 		if (t == endt) {
 			return 0.0f;
@@ -450,41 +448,18 @@ namespace MyMath {
 		return (endt - t) * f;
 	}
 
-	Vector2 EaseIn(const Vector2& v, const float t, const float endt) {
-		Vector2 result{};
-
-		result.x = EaseIn(v.x, t, endt);
-		result.y = EaseIn(v.y, t, endt);
-
-		return result;
-	}
-
-	Vector3 EaseIn(const Vector3& v, const float t, const float endt) {	
-		Vector3 result{};	
-
-		result.x = EaseIn(v.x, t, endt);
-		result.y = EaseIn(v.y, t, endt);
-		result.z = EaseIn(v.z, t, endt);
-
-		return result;
-	}
-
-	float EaseOut(const float& f, const float t) {
-		return f * t;
-	}
-
-	Vector2 EaseOut(const Vector2& v, const float t) {
+	Vector2 EaseOut(const Vector2& v, const float t, const float endt) {
 		Vector2 result;
-		result.x = EaseOut(v.x, t);
-		result.y = EaseOut(v.y, t);
+		result.x = EaseOut(v.x, t, endt);
+		result.y = EaseOut(v.y, t, endt);
 		return result;
 	}
 
-	Vector3 EaseOut(const Vector3& v,const float t) {
+	Vector3 EaseOut(const Vector3& v,const float t, const float endt) {
 		Vector3 result;
-		result.x = EaseOut(v.x, t);
-		result.y = EaseOut(v.y, t);
-		result.z = EaseOut(v.z, t);
+		result.x = EaseOut(v.x, t, endt);
+		result.y = EaseOut(v.y, t, endt);
+		result.z = EaseOut(v.z, t, endt);
 		return result;
 	}
 

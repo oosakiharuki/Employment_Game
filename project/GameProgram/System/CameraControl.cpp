@@ -82,15 +82,14 @@ void CameraControl::Move() {
 
 void CameraControl::Zoom() {
 	if (isZoom) {
-
-		if (zoomTimer < 1.0f) {
+		if (zoomTimer < MaxZoomTime) {
+			wt.translation_ = cameraSegment.diff + EaseOut(cameraSegment.origin - cameraSegment.diff, zoomTimer, MaxZoomTime);
 			zoomTimer += 1.0f / 60.0f;
 		}
 		else {
-			zoomTimer = 1.0f;
+			wt.translation_ = cameraSegment.diff;
+			zoomTimer = MaxZoomTime;
 		}
-
-		wt.translation_ = cameraSegment.origin + (cameraSegment.diff - cameraSegment.origin) * zoomTimer;
 	}
 }
 
@@ -124,7 +123,7 @@ void CameraControl::Shaking() {
 
 
 bool CameraControl::MaxZoom() {
-	if (zoomTimer >= 1.0f) {
+	if (zoomTimer >= MaxZoomTime) {
 		return true;
 	}
 	return false;

@@ -151,8 +151,10 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 }
 
 void IScene::WarpNextScene() {
-	if (CollisionManager::GetInstance()->IsWarp()) {
+	if (CollisionManager::GetInstance()->IsWarp() && !player_->Performancing()) {
 		cameraControl_->ZoomStart(player_->GetTranslate() + playerAwayPos);
+		player_->IsPerformanceFlag(true);
+		player_->SetRotate({ 0,0,0 });//向きを前に
 	}
 }
 

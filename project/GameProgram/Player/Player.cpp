@@ -75,7 +75,7 @@ void Player::Initialize() {
 	maxHp = playerMaxHp;
 
 	//UI_体力
-	for (uint32_t i = 0; i < hp; i++) {
+	for (uint32_t i = 0; i < maxHp; i++) {
 		std::unique_ptr <Sprite> sprite = std::make_unique<Sprite>();
 		sprite->Initialize("Hp.png");
 		sprite->SetPosition({ initializePoint_Hp.x + textureSize_Hp.x * i , initializePoint_Hp.y - i * distanceY_Hp });
@@ -373,7 +373,7 @@ void Player::PlayUpdate() {
 		brinkTimer += deltaTime;
 
 		isOneBrink = true;
-		wt.translation_ += EaseIn(TransformNormal(playerFront, wtGun.matWorld_), brinkTimer, brinkTimeMax);
+		wt.translation_ += EaseOut(TransformNormal(playerFront, wtGun.matWorld_), brinkTimer, brinkTimeMax);
 
 		//飛んだ瞬間後ろにパーティクルをだす
 		if (brinkTimer <= deltaTime) {
@@ -419,7 +419,7 @@ void Player::PlayUpdate() {
 		else {
 			KnockBackTimer += deltaTime;
 
-			wt.translation_ -= EaseIn(backPower, KnockBackTimer, KnockBackTimeMax);
+			wt.translation_ -= EaseOut(backPower, KnockBackTimer, KnockBackTimeMax);
 			if (KnockBackTimer >= KnockBackTimeMax) {
 				isKnockback = false;
 				KnockBackTimer = 0.0f;

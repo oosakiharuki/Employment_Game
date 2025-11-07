@@ -21,7 +21,7 @@ void PlayerBullet::Update() {
 	deathTimer += 1.0f / 60.0f;
 	
 	Vector3 speed;
-	speed = EaseIn(velocity_,deathTimer,endTime);
+	speed = EaseOut(velocity_,deathTimer,endTime);
 
 	wt.translation_ += speed;
 

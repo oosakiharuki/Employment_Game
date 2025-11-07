@@ -166,6 +166,8 @@ public:
 	/// <param name="direction"></param>回転角度
 	void UmbrellaRange(const float& direction);
 
+	const bool Performancing() { return isPerformance; }
+
 private:
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object;

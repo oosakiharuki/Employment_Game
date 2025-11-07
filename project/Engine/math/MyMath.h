@@ -277,17 +277,15 @@ namespace MyMath {
 	bool IsCollisionAABB(const AABB& aabb1, const AABB& aabb2);
 
 	Vector3 OverAABB(const AABB& aabb1, const AABB& aabb2);
-	void ReturnBack(const AABB& aabb1, const AABB& aabb2, Vector3 position);
-
 	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
-	float EaseIn(const float& f, const float t, const float endt);
-	Vector2 EaseIn(const Vector2& v, const float t, const float endt);
-	Vector3 EaseIn(const Vector3& v, const float t, const float endt);
+	float EaseIn(const float& f, const float t);
+	Vector2 EaseIn(const Vector2& v, const float t);
+	Vector3 EaseIn(const Vector3& v, const float t);
 
-	float EaseOut(const float& f, const float t);
-	Vector2 EaseOut(const Vector2& v, const float t);
-	Vector3 EaseOut(const Vector3& v, const float t);
+	float EaseOut(const float& f, const float t, const float endt);
+	Vector2 EaseOut(const Vector2& v, const float t, const float endt);
+	Vector3 EaseOut(const Vector3& v, const float t, const float endt);
 
 	float Length(float start, float target);
 

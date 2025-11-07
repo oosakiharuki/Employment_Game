@@ -20,13 +20,6 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 	std::list<std::shared_ptr<IStageObject>> stageObjects, std::vector<AABB> stagesAABB,
 	std::vector<std::shared_ptr<EventTrigger>> eventTriggers, CameraControl* cameraControl_, Levelediter levelediter)
 {
-
-	//ゴールした時フラグ
-	isGoal = false;
-	//ワープで次のステージに進むフラグ
-	isWarp = false;
-
-
 	for (auto& enemy : enemies) {
 		
 		//見える範囲にプレイヤーがいたら
@@ -83,34 +76,12 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 		}
 	}
 
-	///当たり判定
-
-	CollisionOverlap playerCollisionOverlap;
-	playerCollisionOverlap = SetTarget(player_->GetTranslate(),player_->GetAABB());
-
-	//演出や死んだときは発動しない
-	if (!player_->GetIsDead() && !player_->GetPerformanceMode()) {
-		StageCollisions(&playerCollisionOverlap, stagesAABB);
-	}
-
-	//地面にいる判定(床の判定がtrueの場合)
-	player_->IsGround(playerCollisionOverlap.isGround);
-
-	//戻った場所を代入
-	player_->SetTranslate(playerCollisionOverlap.position);
-
-
+	///ステージの当たり判定
+	//プレイヤーとステージ
+	GameActorAndStageCollision(player_, stagesAABB);
+	//敵とステージ
 	for (auto& enemy : enemies) {
-		CollisionOverlap enemyCollisionOverlap;
-		enemyCollisionOverlap = SetTarget(enemy->GetTranslate(),enemy->GetAABB());
-
-		StageCollisions(&enemyCollisionOverlap, stagesAABB);
-
-		//地面にいる判定(床の判定がtrueの場合)
-		enemy->IsGround(enemyCollisionOverlap.isGround);
-
-		//戻った場所を代入
-		enemy->SetTranslate(enemyCollisionOverlap.position);
+		GameActorAndStageCollision(enemy.get(), stagesAABB);
 	}
 
 
@@ -131,6 +102,7 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 
 	}
 
+	CollisionOverlap playerCollisionOverlap;
 	playerCollisionOverlap = SetTarget(player_->GetTranslate(), player_->GetAABB());
 
 	//イベントトリガー
@@ -237,6 +209,19 @@ Vector3 CollisionManager::UnderCollision(std::vector<AABB> stageAABB, AABB shado
 	return result;
 }
 
+void CollisionManager::GameActorAndStageCollision(GameActor* gameActor, std::vector<AABB> stagesAABB) {
+	CollisionOverlap collisionOverlap;
+	collisionOverlap = SetTarget(gameActor->GetTranslate(), gameActor->GetAABB());
+	//演出や死んだときは発動しない
+	if (!gameActor->GetIsDead() && !gameActor->GetPerformanceMode()) {
+		StageCollisions(&collisionOverlap, stagesAABB);
+	}
+	//地面にいる判定(床の判定がtrueの場合)
+	gameActor->IsGround(collisionOverlap.isGround);
+	//戻った場所を代入
+	gameActor->SetTranslate(collisionOverlap.position);
+}
+
 void CollisionManager::StageCollisions(CollisionOverlap* collisionOverlap , std::vector<AABB> stagesAABB) {
 
 	//プレイヤーとステージ
@@ -301,4 +286,11 @@ CollisionOverlap CollisionManager::SetTarget(Vector3 position, AABB aabb) {
 	result.isWall = false;
 
 	return result;
+}
+
+void CollisionManager::ResetFlag() {
+	//ゴールした時フラグ
+	isGoal = false;
+	//ワープで次のステージに進むフラグ
+	isWarp = false;
 }

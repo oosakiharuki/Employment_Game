@@ -90,7 +90,7 @@ public:
 	/// </summary>
 	/// <param name="anser"></param>
 	/// trueならアニメーションのみ / falseなら操作可能
-	void isPerformanceFlag(const bool& result) { isPerformance = result; }
+	void IsPerformanceFlag(const bool& result) { isPerformance = result; }
 
 	bool GetPerformanceMode() { return isPerformance; }
 
