@@ -275,6 +275,7 @@ namespace MyMath {
 
 	Vector3 Normalize(const Vector3& v);
 	bool IsCollisionAABB(const AABB& aabb1, const AABB& aabb2);
+	bool IsCollisionAABB_outSide(const AABB& aabb1, const AABB& aabb2);
 
 	Vector3 OverAABB(const AABB& aabb1, const AABB& aabb2);
 	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);

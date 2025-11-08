@@ -6,7 +6,7 @@ void GameScene::Initialize() {
 
 	PreviousSceneData();
 
-	LevelEditorObjectSetting();
+	LevelEditorObjectSetting("stage_1");
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
@@ -147,10 +147,14 @@ void GameScene::Draw() {
 
 	//モデル描画処理
 	GLTFCommon::GetInstance()->Command();
+	
+	for (auto& eventTrigger : eventTriggers) {
+		eventTrigger->Draw();
+	}
 
 	//モデル描画処理
 	Object3dCommon::GetInstance()->Command();
-	
+
 	stageobj->Draw();
 
 

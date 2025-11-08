@@ -56,6 +56,7 @@ public:
 		//イベントトリガーの生成場所
 		struct EventTriggerData {
 			Vector3 center;
+			Vector3 size;
 			AABB collisionAABB;
 			std::string csvFile;
 			std::string cameraName;

@@ -47,6 +47,17 @@ public:
 	/// </summary>
 	/// <param name="rotate"></param>代入する各回転角度
 	void SetRotate(Vector3 rotate) { wt.rotation_ = rotate; }
+	
+	/// <summary>
+	/// getter_座標位置
+	/// </summary>
+	/// <returns></returns>現在の座標位置
+	Vector3 GetSize() { return wt.scale_; }
+	/// <summary>
+	/// setter_座標位置
+	/// </summary>
+	/// <param name="translate"></param>代入する座標位置
+	void SetSize(Vector3 size) { wt.scale_ = size; }
 
 	/// <summary>
 	/// getter_当たり判定AABB

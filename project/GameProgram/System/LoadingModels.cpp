@@ -52,5 +52,6 @@ void LoadingModels::LoadGltf() {
 
 	modelManager->LoadModel("Title_stage", ".gltf");
 	modelManager->LoadModel("gameover_stage", ".gltf");
+	modelManager->LoadModel("EventGate", ".gltf");
 
 }

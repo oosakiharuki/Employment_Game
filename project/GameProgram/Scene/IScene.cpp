@@ -1,9 +1,9 @@
 #include "IScene.h"
 using namespace MyMath;
 
-std::string IScene::sceneNo = "Select";
+std::string IScene::sceneNo = "Game";
 
-std::string IScene::nextSceneNo = "Select";
+std::string IScene::nextSceneNo = "Game";
 
 IScene::~IScene(){}
 
@@ -91,11 +91,13 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 			EventData iterator;
 			iterator.aabb = eventTriggerData.collisionAABB;
 			iterator.center = eventTriggerData.center;
+			iterator.size = eventTriggerData.size;
 			iterator.csvFile = eventTriggerData.csvFile;
 			iterator.cameraName = eventTriggerData.cameraName;
 
 			std::unique_ptr<EventTrigger> eventTrigger;
 			eventTrigger = std::make_unique<EventTrigger>();
+			eventTrigger->Initialize();
 			eventTrigger->SetEventData(iterator);
 
 			eventTriggers.push_back(std::move(eventTrigger));

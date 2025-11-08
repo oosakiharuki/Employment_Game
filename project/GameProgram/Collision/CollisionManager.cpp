@@ -107,6 +107,7 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 
 	//イベントトリガー
 	for (auto& eventTrigger : eventTriggers) {
+		EventData data = eventTrigger->GetEventData();
 
 		//イベントが終了した時(順番3)
 		if (eventTrigger->EventEnd()) {
@@ -117,31 +118,18 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 			}
 		}
 		//イベントが発動している時(順番2)
-		else if (eventTrigger->GetEventData().isEvent) {
-			//イベントトリガーの範囲外に出ないように(!IsCollisionAABB()によって外に出た判定をとる)
-			if (!IsCollisionAABB(playerCollisionOverlap.targetAABB, eventTrigger->GetEventData().aabb)) {
-				//ステージ判定代入
-				playerCollisionOverlap.stageAABB = eventTrigger->GetEventData().aabb;
-				//重なった部分
-				playerCollisionOverlap.overlap = OverAABB(player_->GetAABB(), eventTrigger->GetEventData().aabb);
-				//場所を戻す・壁と床の判定
-				BackPosition(&playerCollisionOverlap);
-
-				//地面にいる判定(床の判定がtrueの場合)
-				player_->IsGround(playerCollisionOverlap.isGround);
-
-				//戻った場所を代入
-				player_->SetTranslate(playerCollisionOverlap.position);
-
-				//両方ともtrueの時
-				if (playerCollisionOverlap.isWall && playerCollisionOverlap.isGround) {
-					break;
-				}
-			}
+		else if (data.isEvent) {
+			Vector3 move_range = player_->GetTranslate();
+			Vector3 size = player_->GetSize();
+			//動ける範囲制限
+			move_range.x = std::clamp(move_range.x, data.aabb.min.x + size.x, data.aabb.max.x - size.x);
+			move_range.y = std::clamp(move_range.y, data.aabb.min.y + size.y, data.aabb.max.y - size.y);
+			move_range.z = std::clamp(move_range.z, data.aabb.min.z + size.z, data.aabb.max.z - size.z);
+			player_->SetTranslate(move_range);
 		}
 		//イベントトリガーに入った直前(順番1)
-		else if (IsCollisionAABB(player_->GetAABB(), eventTrigger->GetEventData().aabb)) {
-			cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit[eventTrigger->GetEventData().cameraName], true);
+		else if (IsCollisionAABB(player_->GetAABB(), data.aabb)) {
+			cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit[data.cameraName], true);
 			eventTrigger->StartEvent();
 		}
 	}
