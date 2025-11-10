@@ -39,6 +39,11 @@ public:
 	/// </summary>
 	virtual void Draw() = 0;
 	/// <summary>
+	/// 共有する更新処理
+	/// </summary>
+	void DrawCommon();
+
+	/// <summary>
 	/// 攻撃処理
 	/// </summary>
 	virtual void Attack() = 0;
@@ -176,7 +181,7 @@ protected:
 
 
 	//弾丸発射フラグ
-	bool isBulletStart = false;
+	bool isBullet = false;
 	//クールタイム
 	float coolTime = 0.0f;
 	const float coolTimeMax = 1.0f;
@@ -197,7 +202,17 @@ protected:
 	Vector3 move = { 0,0,0 };
 	const float moveX = 0.03f;
 
+	const float markMaxTime = 1.0f;
+	float markTimer = 0.0f;
+	bool lost_player = false;
+
 private:
 	std::vector<AABB> stages;
+
+	std::unique_ptr<Object3d> object_found;
+	std::unique_ptr<Object3d> object_noFound;
+
+	WorldTransform wtMark;
+
 };
 

@@ -280,7 +280,4 @@ private:
 
 	//傘がリアクションするflag
 	bool isShildMosion = false;
-
-	//アニメーションのみを動かすフラグ
-	//bool performance_mode = false;
 };

@@ -162,6 +162,10 @@ void GameScene::Draw() {
 		enemy->Draw();
 	}
 
+	for (auto& enemy : enemies) {
+		enemy->DrawCommon();
+	}
+
 	for (auto& stageObject : stageObjects) {
 		stageObject->Draw();
 	}

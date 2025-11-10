@@ -35,6 +35,9 @@ void LoadingModels::LoadObj() {
 	modelManager->LoadModel("goal", ".obj");
 
 	modelManager->LoadModel("shadow", ".obj");
+	modelManager->LoadModel("player_found_mark", ".obj");
+	modelManager->LoadModel("player_lost_mark", ".obj");
+
 }
 
 void LoadingModels::LoadGltf() {
@@ -54,4 +57,6 @@ void LoadingModels::LoadGltf() {
 	modelManager->LoadModel("gameover_stage", ".gltf");
 	modelManager->LoadModel("EventGate", ".gltf");
 
+	modelManager->LoadModel("player_found_mark", ".gltf"); 
+	modelManager->LoadModel("player_lost_mark", ".gltf");
 }

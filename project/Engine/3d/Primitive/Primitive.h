@@ -10,7 +10,8 @@ enum PrimitiveType {
 	ring,
 	cylineder,
 	sphere,
-	cone
+	cone,
+	beam
 };
 
 namespace Primitive {
@@ -22,5 +23,6 @@ namespace Primitive {
 	ModelData CreateSphere();
 
 	ModelData CreateCone();//円錐
+	ModelData CreateBeam();//
 
 }

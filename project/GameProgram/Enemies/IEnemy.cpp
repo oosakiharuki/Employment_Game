@@ -12,6 +12,15 @@ void IEnemy::Enemy_InitializeCommon() {
 	object = std::make_unique<Object3d>();
 	object->Initialize();
 
+	object_found = std::make_unique<Object3d>();
+	object_found->Initialize();
+	object_found->SetModelFile("player_found_mark.obj");
+
+	object_noFound = std::make_unique<Object3d>();
+	object_noFound->Initialize();
+	object_noFound->SetModelFile("player_lost_mark.obj");
+
+
 	particle_fire = std::make_unique<Particle>();
 	particle_fire->Initialize("enemySoldier_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particle_fire->SetParticleCount(1);
@@ -26,6 +35,8 @@ void IEnemy::Enemy_InitializeCommon() {
 	particle_damage->ChangeMode(BornParticle::Stop);
 	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
 	particle_damage->SetFrequency(1.0f);
+
+	wtMark.Initialize();
 }
 
 void IEnemy::UpdateCommon() {
@@ -39,25 +50,40 @@ void IEnemy::UpdateCommon() {
 
 		//重力
 		GrabityUpdate();
-
+		//角度
 		DirectionDegree();
-
+		//プレイヤーの発見
 		PlayerTarget();
 
+		//見つかったら
 		if (isFoundTarget) {
-			isBulletStart = true;
+			isBullet = true;
+			if (lost_player) {
+				lost_player = false;
+				markTimer = 0.0f;
+			}
 		}
 
-		if (isBulletStart) {
+		markTimer = std::clamp(markTimer, 0.0f, markMaxTime);
+		
+		if (isBullet) {
+			//攻撃
+			//攻撃し終わるとisBulletがfalseに
 			Attack();
+			//!マーク表示時間
+			markTimer += deltaTime;	
 		}
-		else {
+		else if(!isBullet){
+			//攻撃、見つけたマークのタイマーリセット
 			rapidCount = 0;
 			rapidFireTime = 0;
 			coolTime = 0;
-		}
-
-		
+			lost_player = true;//見失うフラグ
+			markTimer -= deltaTime * 0.5f;
+		}		
+				
+		if(lost_player && markTimer <= 0.0f)
+			lost_player = false;
 	}
 
 	shadow_->SetTranslate(wt.translation_);
@@ -85,6 +111,26 @@ void IEnemy::UpdateCommon() {
 void IEnemy::UpdateBehind() {
 	object->Update(wt);
 	wt.UpdateMatrix();
+
+	if (isDead) return;//死んでるなら読み取らない
+
+	wtMark.translation_ = wt.translation_;
+	wtMark.translation_.y += 2.0f;
+
+	wtMark.UpdateMatrix();
+	object_found->Update(wtMark);
+	object_noFound->Update(wtMark);
+
+}
+
+void IEnemy::DrawCommon() {
+	if (isDead) return;//死んでるなら読み取らない
+
+	if(isBullet && markTimer < markMaxTime)
+		object_found->Draw();
+
+	if (lost_player && markTimer > 0.0f)
+		object_noFound->Draw();
 }
 
 void IEnemy::IsDamage() {
@@ -162,7 +208,7 @@ void IEnemy::RespawnEnemyCommon() {
 	RespawnCommon();
 
 	deleteEnemy = false;
-	isBulletStart = false;//攻撃はしない
+	isBullet = false;//攻撃はしない
 
 	//向きリセット
 	DirectionDegree();

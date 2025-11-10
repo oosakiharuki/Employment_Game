@@ -61,6 +61,9 @@ void ParticleManager::CreateParticleGroup(const std::string name, const std::str
 	case cone:
 		particleG.modelData = CreateCone();
 		break;
+	case beam:
+		particleG.modelData = CreateBeam();
+		break;
 	default:
 		break;
 	}

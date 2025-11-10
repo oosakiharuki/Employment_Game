@@ -21,7 +21,7 @@ void Enemy_Soldier::Initialize() {
 	HP_Initialize(3);
 
 	//見える範囲初期化
-	eyeReach = { 20, 10, 1 };
+	eyeReach = { 15, 10, 1 };
 }
 
 void Enemy_Soldier::Update() {
@@ -30,7 +30,7 @@ void Enemy_Soldier::Update() {
 	UpdateCommon();
 
 	if (!isDead) {
-		if (!isFoundTarget && !isBulletStart) {
+		if (!isFoundTarget && !isBullet && !lost_player) {
 			SearchRange();
 			MoveEnemy();
 		}
@@ -91,7 +91,7 @@ void Enemy_Soldier::Attack() {
 		if (rapidCount == rapidFireMax) {
 			rapidCount = 0;
 			coolTime = 0;
-			isBulletStart = false;
+			isBullet = false;
 		}
 	}
 
@@ -137,5 +137,5 @@ void Enemy_Soldier::RespawnEnemy() {
 	RespawnEnemyCommon();
 	rapidCount = 0;
 	coolTime = 0;
-	isBulletStart = false;
+	isBullet = false;
 }

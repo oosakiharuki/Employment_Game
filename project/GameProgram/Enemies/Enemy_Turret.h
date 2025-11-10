@@ -23,5 +23,7 @@ public:
 private:
 	//発射数
 	const uint32_t rapidFireMax = 6;
+
+	std::unique_ptr<Particle> particle_laser;
 };
 

@@ -428,5 +428,38 @@ namespace Primitive {
 		return modelData;
 	}
 
+	ModelData CreateBeam() {
+		ModelData modelData;
+
+		modelData.vertices.push_back({ {1.0f,1.0f,0.0f,1.0f},{0.0f,0.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {-1.0f,1.0f,0.0f,1.0f},{1.0f,0.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {1.0f,-1.0f,0.0f,1.0f},{0.0f,1.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {1.0f,-1.0f,0.0f,1.0f},{0.0f,1.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {-1.0f,1.0f,0.0f,1.0f},{1.0f,0.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {-1.0f,-1.0f,0.0f,1.0f},{1.0f,1.0f},{0.0f,0.0f,1.0f} });
+
+
+		modelData.vertices.push_back({ {1.0f,0.5f,1.0f,1.0f},{0.0f,0.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {-1.0f,0.5f,1.0f,1.0f},{1.0f,0.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {1.0f,-0.5f,-1.0f,1.0f},{0.0f,1.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {1.0f,-0.5f,-1.0f,1.0f},{0.0f,1.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {-1.0f,0.5f,1.0f,1.0f},{1.0f,0.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {-1.0f,-0.5f,-1.0f,1.0f},{1.0f,1.0f},{0.0f,0.0f,1.0f} });
+
+
+		modelData.vertices.push_back({ {1.0f,-0.5f,1.0f,1.0f},{0.0f,0.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {-1.0f,-0.5f,1.0f,1.0f},{1.0f,0.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {1.0f,0.5f,-1.0f,1.0f},{0.0f,1.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {1.0f,0.5f,-1.0f,1.0f},{0.0f,1.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {-1.0f,-0.5f,1.0f,1.0f},{1.0f,0.0f},{0.0f,0.0f,1.0f} });
+		modelData.vertices.push_back({ {-1.0f,0.5f,-1.0f,1.0f},{1.0f,1.0f},{0.0f,0.0f,1.0f} });
+
+
+
+
+		return modelData;
+	}
+
+
 
 }

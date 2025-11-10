@@ -138,18 +138,19 @@ void Player::Update() {
 		wt.translation_.y += grabity;
 	}
 
+	//弾丸
 	for (auto& bullet : bullets_) {
 		bullet->Update();
 	}
-
 	bullets_.remove_if([](auto& bullet) {
 		if (bullet->IsDead()) {
 			bullet.reset();
 			return true;
 		}
 		return false;
-		});
+	});
 
+	//無敵時間
 	if (infinityTimer >= infinityTimeMax) {
 		infinityTimer = infinityTimeMax;
 	}
@@ -164,7 +165,6 @@ void Player::Update() {
 		particle_walk->SetFrequency(0.15f);
 		particle_walk->ChangeMode(BornParticle::TimerMode);
 		particle_walk->SetTranslate(wt.translation_ + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt.matWorld_));
-
 		particle_walk->SetScale({ 0.5f,0.5f,0.5f });
 	}
 	else {
@@ -245,8 +245,10 @@ void Player::Update() {
 
 	umbrella->Update();
 
+	//UI
 	SpriteUpdate();
 
+	//スプライト更新
 	for (auto& sprite : sprites_Hp) {
 		sprite->Update();
 	}
@@ -400,17 +402,17 @@ void Player::PlayUpdate() {
 		}
 	}
 
+	//ダメージリアクション
 	if (isDamageMosion) {
 		ScaleUpdate(&isDamageMosion, damageScale, damageMaxTime);
 	}
-
+	//傘リアクション
 	if (isShildMosion) {
 		umbrella->ScaleUpdate(&isShildMosion, damageScale, damageMaxTime);
 	}
 
 	//ノックバック発動
 	if (isKnockback) {
-
 		//ゼロならイーズインされない
 		if (KnockBackTimeMax == 0.0f) {
 			wt.translation_ -= backPower;
@@ -425,7 +427,6 @@ void Player::PlayUpdate() {
 				KnockBackTimer = 0.0f;
 			}
 		}
-
 	}
 
 	//影の更新

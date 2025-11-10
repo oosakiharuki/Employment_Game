@@ -20,7 +20,17 @@ void Enemy_Turret::Initialize() {
 	HP_Initialize(6);
 
 	//見える範囲初期化
-	eyeReach = { 15, 2, 1 };
+	eyeReach = { 20, 0, 0 };
+
+	particle_laser = std::make_unique<Particle>();
+	particle_laser->Initialize("tullet_laser","resource/Sprite/3YvXH.png",PrimitiveType::beam);
+	particle_laser->SetFrequency(0.001f);
+	particle_laser->SetParticleCount(1);
+	particle_laser->ChangeMode(BornParticle::TimerMode);
+	particle_laser->SetParticleMosion(ParticleMosion::Fixed);
+	particle_laser->SetScale({ eyeReach.x * 0.5f,0.1f,0.1f });
+
+	particle_fire->SetScale({ 2,2,2 });
 }
 
 void Enemy_Turret::Update() {
@@ -30,16 +40,21 @@ void Enemy_Turret::Update() {
 
 	if (!isDead) {
 		SearchRange();
+		Matrix4x4 a = MakeAffineMatrix(Vector3(1,1,1), wt.rotation_, wt.translation_);
+		particle_laser->SetTranslate(wt.translation_ + TransformNormal(Vector3{0,0,eyeReach.x * 0.5f}, a));
+	}
+	else {
+		particle_laser->ChangeMode(BornParticle::Stop);
 	}
 
 	//更新が終了
 	UpdateBehind();
 
-	particle_fire->SetScale({ 2,2,2 });
 	particle_fire->SetRotate({ 0,0,-wt.rotation_.y });
 
 
 	particle_fire->Update();
+	particle_laser->Update();
 
 #ifdef _DEBUG
 
@@ -72,6 +87,7 @@ void Enemy_Turret::Draw() {
 
 	particle_fire->Draw();
 	particle_damage->Draw();
+	particle_laser->Draw();
 
 	Object3dCommon::GetInstance()->Command();
 
@@ -94,7 +110,7 @@ void Enemy_Turret::Attack() {
 		if (rapidCount == rapidFireMax) {
 			rapidCount = 0;
 			coolTime = 0;
-			isBulletStart = false;
+			isBullet = false;
 		}
 	}
 
@@ -126,5 +142,5 @@ void Enemy_Turret::RespawnEnemy() {
 	RespawnEnemyCommon();
 	rapidCount = 0;
 	coolTime = 0;
-	isBulletStart = false;
+	isBullet = false;
 }
