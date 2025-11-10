@@ -182,6 +182,7 @@ private:
 	bool isJump = false;
 
 	//重力
+	void GravityUpdate();
 	const float standard_grabity = 0.01f;//重力の質量
 	const float fixed_grabity = -0.05f;//滑空時重力値を固定
 

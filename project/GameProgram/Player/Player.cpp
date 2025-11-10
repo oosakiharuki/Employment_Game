@@ -134,8 +134,7 @@ void Player::Update() {
 	//演出時は関係なし
 	if (!isPerformance && !isDead) {
 		//重力
-		grabity -= standard_grabity;
-		wt.translation_.y += grabity;
+		GravityUpdate();
 	}
 
 	//弾丸
@@ -553,7 +552,11 @@ void Player::DeadPlayer() {
 
 		wt.rotation_.y = 180.0f;//カメラのほうに向く
 		wt.rotation_.z += 10.0f;//回転する
-		IsJumping();
+		//少し浮く
+		wt.translation_.y += 0.3f;
+		//重力
+		GravityUpdate();
+
 		isGround = false;
 		if (deadTimer >= deadTimeMax) {
 			isRespawn = true;
@@ -627,4 +630,10 @@ void Player::UmbrellaRange(const float& direction) {
 	if (wtGun.rotation_.x > 360.0f) {
 		wtGun.rotation_.x -= 360.0f;
 	}
+}
+
+void Player::GravityUpdate() {
+	//重力
+	grabity -= standard_grabity;
+	wt.translation_.y += grabity;
 }

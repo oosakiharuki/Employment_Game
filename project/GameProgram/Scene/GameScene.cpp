@@ -6,7 +6,7 @@ void GameScene::Initialize() {
 
 	PreviousSceneData();
 
-	LevelEditorObjectSetting("stage_1");
+	LevelEditorObjectSetting("stage_2");
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");

@@ -8,7 +8,7 @@ Enemy_Bomb::~Enemy_Bomb() {}
 void Enemy_Bomb::Initialize() {
 
 	Enemy_InitializeCommon();
-	object->SetModelFile("sphere.obj");
+	object->SetModelFile("enemy_bomb.obj");
 
 	//体力の初期化
 	HP_Initialize(1);

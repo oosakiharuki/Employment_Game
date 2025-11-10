@@ -26,7 +26,7 @@ void LoadingModels::LoadObj() {
 	modelManager->LoadModel("enemy", ".obj");
 	modelManager->LoadModel("PlayerBullet", ".obj");
 	modelManager->LoadModel("checkpoint", ".obj");
-	modelManager->LoadModel("sphere", ".obj");
+	modelManager->LoadModel("enemy_bomb", ".obj");
 	modelManager->LoadModel("stage_0", ".obj");
 	modelManager->LoadModel("stage_1", ".obj");
 	modelManager->LoadModel("stage_2", ".obj");

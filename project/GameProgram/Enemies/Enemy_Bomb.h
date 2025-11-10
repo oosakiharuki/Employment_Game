@@ -41,7 +41,7 @@ private:
 
 	//爆発範囲AABB
 	AABB bombAABB;
-	const Vector3 hani = { 10,10,10 };//大きさ
+	const Vector3 hani = { 5,5,5 };//大きさ
 	//プレイヤーとの距離感
 	Vector3 distance;
 
