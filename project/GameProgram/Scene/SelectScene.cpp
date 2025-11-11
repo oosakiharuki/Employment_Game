@@ -47,7 +47,7 @@ void SelectScene::Update() {
 
 
 	setumei[0]->SetPosition({ 300,20 });
-	setumei[5]->SetPosition({ 600,20 });
+	setumei[6]->SetPosition({ 600,20 });
 
 	for (auto& a : setumei) {
 		a->Update();
