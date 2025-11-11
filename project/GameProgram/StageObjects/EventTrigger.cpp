@@ -173,7 +173,14 @@ void EventTrigger::EnemyPop(const Vector3& position, const Vector3& rotation, co
 	aabb.min = { -1.0f,-1.0f,-1.5f };
 	aabb.max = { 1.0f,1.0f,1.5f };
 
+	Vector3 center = { 3,0,0 };
+
 	popEnemy->SetAABB(aabb);
+	popEnemy->SetRoutePoint1(position - center);
+	popEnemy->SetRoutePoint2(position + center);
+	popEnemy->SetMoveInit(position);
+
+	popEnemy->DirectionDegree();
 
 	popEnemies.push_back(std::move(popEnemy));
 

@@ -3,9 +3,11 @@ pop,soldier,10,1,left
 wave
 pop,soldier,-10,1,right
 wave
-pop,turret,10,1,left
-pop,turret,-10,1,right
+pop,turret,12,1,left
+pop,turret,-12,1,right
 wave
 pop,soldier,10,1,left
+wave
+pop,bomb,10,1,left
 wave
 end

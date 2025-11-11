@@ -92,6 +92,11 @@ public:
 	/// <param name="point1"></param>
 	void SetRoutePoint1(Vector3 point1) { route_point1 = point1; }
 	void SetRoutePoint2(Vector3 point2) { route_point2 = point2; }
+	/// <summary>
+	/// 移動ルート中心の場合(Eventで使う)
+	/// </summary>
+	/// <param name="init"></param>真ん中にする場所
+	void SetMoveInit(Vector3 init) { move = init; }
 
 	/// <summary>
 	/// 角度で向きを変更
