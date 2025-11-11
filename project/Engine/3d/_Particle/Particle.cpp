@@ -151,7 +151,7 @@ void Particle::Draw() {
 	//射影行列
 	Matrix4x4 WorldViewProjectionMatrix;
 
-	for (uint32_t i = 0; i < ParticleManager::GetInstance()->GetNum(fileName); i++) {
+	for (uint32_t i = 0; i < numInstance; i++) {
 		if (camera) {
 			Matrix4x4 projectionMatrix = camera->GetViewProjectionMatrix();
 			WorldViewProjectionMatrix = wvpData[i].World * projectionMatrix;
@@ -164,7 +164,7 @@ void Particle::Draw() {
 	}
 
 	//パーティクルが出ていないときはパス
-	if (ParticleManager::GetInstance()->GetNum(fileName) > 0) {
+	if (numInstance > 0) {
 		particleCommon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 		particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
 		particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
@@ -174,7 +174,7 @@ void Particle::Draw() {
 		//4のやつ particle専用
 		particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(4, ParticleManager::GetInstance()->GetSrvHandleGPU(fileName));
 
-		particleCommon->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData.vertices.size()), ParticleManager::GetInstance()->GetNum(fileName), 0, 0);
+		particleCommon->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData.vertices.size()), numInstance, 0, 0);
 	}
 	numInstance = 0;
 

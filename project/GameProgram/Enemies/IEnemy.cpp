@@ -34,7 +34,7 @@ void IEnemy::Enemy_InitializeCommon() {
 	particle_damage->SetParticleCount(10);
 	particle_damage->ChangeMode(BornParticle::Stop);
 	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
-	particle_damage->SetFrequency(1.0f);
+	particle_damage->SetFrequency(0.7f);
 
 	wtMark.Initialize();
 }
@@ -111,6 +111,9 @@ void IEnemy::UpdateBehind() {
 	object->Update(wt);
 	wt.UpdateMatrix();
 
+	particle_damage->Update();
+	particle_fire->Update();
+
 	if (isDead) return;//死んでるなら読み取らない
 
 	wtMark.translation_ = wt.translation_;
@@ -119,9 +122,6 @@ void IEnemy::UpdateBehind() {
 	wtMark.UpdateMatrix();
 	object_found->Update(wtMark);
 	object_noFound->Update(wtMark);
-
-	particle_damage->Update();
-	particle_fire->Update();
 }
 
 void IEnemy::DrawCommon() {

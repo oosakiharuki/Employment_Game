@@ -59,7 +59,8 @@ private:
 		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;
 
 		uint32_t numInstance = 0;
-		bool a = false;
+
+		bool Updated = false;
 	};
 
 	const float kDeltaTime = 1.0f / 60.0f;

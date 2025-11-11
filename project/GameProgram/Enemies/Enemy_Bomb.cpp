@@ -18,7 +18,7 @@ void Enemy_Bomb::Initialize() {
 }
 
 void Enemy_Bomb::Update() {
-	
+
 	if (isDead) {
 		isExplosion = true;
 	}
@@ -33,13 +33,21 @@ void Enemy_Bomb::Update() {
 
 	if (!isDead) {
 
+		//それぞれの座標位置
+		Vector3 enemyPosition = GetWorldPosition();
+		Vector3 playerPosition = player_->GetWorldPosition();
+		//プレイヤーとボムの距離
+		distance = enemyPosition - playerPosition;
+		//ノーマライズ
+		distance = Normalize(distance);
+
 		if (!isStart) {
 			MoveEnemy();
 
 			if (!isFoundTarget) {
 				SearchRange();
 			}
-		}	
+		}
 		else {
 			TimeRimmit();
 		}
@@ -69,13 +77,6 @@ void Enemy_Bomb::Attack() {
 void Enemy_Bomb::TimeRimmit() {
 
 	bombTimer += deltaTime;
-
-	Vector3 enemyPosition = GetWorldPosition();
-	Vector3 playerPosition = player_->GetWorldPosition();
-
-	distance = enemyPosition - playerPosition;
-
-	distance = Normalize(distance);
 
 	wt.translation_ += distance * Vector3{ -0.03f,0,0 } *3;
 

@@ -140,11 +140,12 @@ void ParticleManager::Update(const std::string filePath, ParticleForGPU* wvpData
 
 	ParticleGroup& particleG = particleGroups[filePath];
 
-
-	if (!particleG.a) {
-		particleG.numInstance = 0;
-		particleG.a = true;
+	//すでに更新している場合
+	if (particleG.Updated) {
+		return;
 	}
+	particleG.numInstance = 0;
+	particleG.Updated = true;
 
 	for (std::list<Particles>::iterator particleIterator = particleG.particles.begin();
 		particleIterator != particleG.particles.end(); ) {
@@ -240,6 +241,6 @@ void ParticleManager::ResetNum(const std::string& filePath) {
 	assert(srvManager->Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
-	particleG.a = false;
+	particleG.Updated = false;
 }
 
