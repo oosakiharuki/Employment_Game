@@ -6,7 +6,7 @@ void GameScene::Initialize() {
 
 	PreviousSceneData();
 
-	LevelEditorObjectSetting("stage_1");
+	LevelEditorObjectSetting();
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
@@ -121,6 +121,10 @@ void GameScene::Update() {
 		player_->IsFall();
 	}
 
+	for (auto& a : setumei) {
+		a->Update();
+	}
+
 #ifdef  USE_IMGUI
 
 	ImGui::Begin("camera");
@@ -180,7 +184,8 @@ void GameScene::Draw() {
 
 	//スプライト描画処理(UI用)
 	SpriteCommon::GetInstance()->Command();
-
+	
+	DrawCommon();
 }
 
 void GameScene::Finalize() {}

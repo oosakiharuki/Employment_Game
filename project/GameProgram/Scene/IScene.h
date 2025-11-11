@@ -118,6 +118,10 @@ protected:
 	
 	void WarpNextScene();
 
+	void DrawCommon();
+
+	std::vector<std::unique_ptr<Sprite>> setumei;
+
 public:
 	/// <summary>
 	/// 初期化処理
