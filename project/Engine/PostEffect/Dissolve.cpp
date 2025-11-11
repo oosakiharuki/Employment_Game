@@ -196,7 +196,7 @@ void Dissolve::Command() {
 
 void Dissolve::EffectUpdate() {
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Text("Dissolve");
 	ImGui::SliderFloat("溶かし度合", &threshold->degress, 0.0f, 1.0f);

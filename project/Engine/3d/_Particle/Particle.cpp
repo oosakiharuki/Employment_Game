@@ -105,6 +105,10 @@ void Particle::Initialize(const std::string& particleName, std::string textureFi
 	accelerationField.area.min = { -1.0f,-1.0f,-1.0f };
 	accelerationField.area.max = { 1.0f,1.0f,1.0f };
 
+	//パーティクル発生
+	bornP = BornParticle::Stop;
+
+	ParticleManager::GetInstance()->SetCamera(camera);
 }
 
 void Particle::Update() {
@@ -119,93 +123,22 @@ void Particle::Update() {
 
 		if (emitter.frequency <= emitter.frequencyTime) {
 			//発生処理
-			Emit();
+			ParticleManager::GetInstance()->Emit(fileName, emitter, particleMosion);
 			emitter.frequencyTime -= emitter.frequency;
 		}
 		break;
 	case BornParticle::MomentMode:
-
 		//発生処理
-		Emit();
+		ParticleManager::GetInstance()->Emit(fileName, emitter, particleMosion);
 		bornP = BornParticle::Stop;
-
 		break;
 	case BornParticle::Stop:
 		break;
 	}
 
-	numInstance = 0;
-	for (std::list<Particles>::iterator particleIterator = particles.begin();
-		particleIterator != particles.end(); ) {
+	ParticleManager::GetInstance()->Update(fileName, wvpData,particleMosion);
 
-		if ((*particleIterator).lifeTime <= (*particleIterator).currentTime) {
-			particleIterator = particles.erase(particleIterator);
-			continue;
-		}
-
-
-
-
-		float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
-
-		if (IsCollision(accelerationField.area, (*particleIterator).transform.translate)) {
-			//(*particleIterator).velocity += accelerationField.acceleration * kDeltaTime;
-		}
-
-		(*particleIterator).transform.translate += (*particleIterator).velocity * kDeltaTime;
-	
-		if (particleMosion == ParticleMosion::Smaller) {
-			if ((*particleIterator).transform.scale.x > 0) {
-				(*particleIterator).transform.scale.x -= 0.5f * kDeltaTime;
-			}
-			if ((*particleIterator).transform.scale.y > 0) {
-				(*particleIterator).transform.scale.y -= 0.5f * kDeltaTime;
-			}
-			if ((*particleIterator).transform.scale.z > 0) {
-				(*particleIterator).transform.scale.z -= 0.5f * kDeltaTime;
-			}
-		}
-
-		(*particleIterator).currentTime += kDeltaTime;
-
-		Matrix4x4 scaleMatrix = MakeScaleMatrix((*particleIterator).transform.scale);
-		Matrix4x4 translateMatrix = MakeTranslateMatrix((*particleIterator).transform.translate);
-
-		//回転行列
-		Matrix4x4 rotateX = MakeRotateXMatrix((*particleIterator).transform.rotate.x * (float(M_PI) / 180.0f));
-		Matrix4x4 rotateY = MakeRotateYMatrix((*particleIterator).transform.rotate.y * (float(M_PI) / 180.0f));
-		Matrix4x4 rotateZ = MakeRotateZMatrix((*particleIterator).transform.rotate.z * (float(M_PI) / 180.0f));
-		//全てまとめた
-		Matrix4x4 rotateXYZ = Multiply(Multiply(rotateX, rotateY), rotateZ);
-
-		//ビルボード
-		Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
-
-		Matrix4x4 billboardMatrix = Multiply(Multiply(backToFrontMatrix, rotateXYZ), camera->GetWorldMatrix());
-		billboardMatrix.m[3][0] = 0.0f;
-		billboardMatrix.m[3][1] = 0.0f;
-		billboardMatrix.m[3][2] = 0.0f;
-
-		
-		//ビルボード
-		//worldMatrix = Multiply(scaleMatrix, Multiply(billboardMatrix, translateMatrix));
-		//通常
-		worldMatrix = MakeAffineMatrix((*particleIterator).transform.scale, (*particleIterator).transform.rotate, (*particleIterator).transform.translate);
-
-		// wvpDataのnullチェック
-		if (wvpData) {
-			wvpData[numInstance].World = worldMatrix;
-
-			wvpData[numInstance].color = (*particleIterator).color;
-			wvpData[numInstance].color.s = alpha;
-
-			//パーティクルカウンター
-			if (numInstance < kNumMaxInstance) {
-				++numInstance;
-			}
-		}
-		++particleIterator;
-	}
+	numInstance = ParticleManager::GetInstance()->GetNum(fileName);
 
 	// directionalLightSphereDataのnullチェック
 	if (directionalLightSphereData) {
@@ -243,6 +176,9 @@ void Particle::Draw() {
 
 		particleCommon->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData.vertices.size()), numInstance, 0, 0);
 	}
+	numInstance = 0;
+
+	ParticleManager::GetInstance()->ResetNum(fileName);
 }
 
 bool Particle::IsCollision(const AABB& aabb, const Vector3& point) {
@@ -254,15 +190,4 @@ bool Particle::IsCollision(const AABB& aabb, const Vector3& point) {
 	}
 
 	return false;
-}
-
-
-void Particle::Emit() {
-
-	//
-	std::random_device seedGenerator;
-	std::mt19937 randomEngine(seedGenerator());
-
- 	particles.splice(particles.end(), ParticleEmitter::GetInstance()->MakeEmit(emitter, randomEngine, particleMosion));
-
 }

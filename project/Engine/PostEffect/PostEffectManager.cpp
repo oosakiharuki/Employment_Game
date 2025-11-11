@@ -88,7 +88,7 @@ void PostEffectManager::Update() {
 		Change(prevNo_, currentNo_);
 		effectArr_[currentNo_]->Initialize(dxCommon_);
 	}
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Begin("PostEffect");
 	ImGui::Text("スペースキーでポストエフェクトを変更できます");
 #endif
@@ -96,7 +96,7 @@ void PostEffectManager::Update() {
 	effectArr_[currentNo_]->EffectUpdate();//更新処理
 	effectArr_[currentNo_]->ChangeNumber();//ポストエフェクト変更処理
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::End();
 #endif	
 

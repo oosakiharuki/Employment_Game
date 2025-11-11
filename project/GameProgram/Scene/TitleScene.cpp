@@ -86,7 +86,6 @@ void TitleScene::Initialize() {
 	bullet_particle = std::make_unique<Particle>();
 	bullet_particle->Initialize("title_bullet", "resource/Sprite/cone.png", PrimitiveType::cone);
 	bullet_particle->SetParticleCount(1);
-	bullet_particle->ChangeMode(BornParticle::Stop);
 	bullet_particle->SetParticleMosion(ParticleMosion::Fixed);
 	bullet_particle->SetFrequency(0.5f);
 
@@ -105,7 +104,8 @@ void TitleScene::Update() {
 	}
 
 	//ゲームパット用操作処理設定
-	InputGamePad();
+	input_->JoystickUpdate(state, preState);
+
 	//カメラ更新
 	camera->Update();
 
@@ -122,7 +122,7 @@ void TitleScene::Update() {
 			move += 0.01f;
 		}
 		//タイトルが上からくる
-		start.y = end.y + EaseIn(start.y, timer, TimeMax);
+		start.y = end.y + EaseOut(start.y, timer, TimeMax);
 		Title_pos.y = start.y + 10.0f * std::sin(move);
 
 	}
@@ -184,7 +184,7 @@ void TitleScene::Update() {
 
 		//ゲームパット操作
 		
-		if (Input::GetInstance()->GetJoyStickState(0, state)) {
+		if (Input::GetInstance()->GetJoystickState(0, state)) {
 			//スティックの傾き度
 			float padY = static_cast<float>(state.Gamepad.sThumbLY) / 32768.0f;
 
@@ -208,7 +208,7 @@ void TitleScene::Update() {
 	//パーティクル更新
 	bullet_particle->Update();
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Begin("camera");
 	ImGui::Text("ImGuiText");
@@ -227,7 +227,7 @@ void TitleScene::Update() {
 
 	ImGui::End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	//ワールド座標系更新
 	for (uint32_t i = 0; i < 4; i++) {

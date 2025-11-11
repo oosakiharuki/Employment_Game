@@ -21,8 +21,8 @@ public:
 	Particles MakeNewParticleFixed(const Emitter& emitter);
 	Particles MakeNewParticleSmaller(std::mt19937& randomEngine, const Emitter& emitter);
 
-	Particles MakeNewParticleSpike(std::mt19937& randomEngine, const Vector3& translate);
-	Particles MakeNewParticleExprosion(std::mt19937& randomEngine, const Vector3& translate);
+	Particles MakeNewParticleSpike(std::mt19937& randomEngine, const Emitter& emitter);
+	Particles MakeNewParticleExprosion(std::mt19937& randomEngine, const Emitter& emitter);
 
 	std::list<Particles> MakeEmit(const Emitter& emitter, std::mt19937& randomEngine, ParticleMosion mosion);
 

@@ -158,7 +158,7 @@ void BoxFilter::Command() {
 
 void BoxFilter::EffectUpdate() {
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Text("BoxFilter");
 	ImGui::Text("5x5");

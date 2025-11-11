@@ -158,7 +158,7 @@ void LuminanceBasedOutline::Command() {
 
 void LuminanceBasedOutline::EffectUpdate() {
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Text("LuminanceBasedOutline");
 #endif
 

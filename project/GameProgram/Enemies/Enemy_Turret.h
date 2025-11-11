@@ -14,20 +14,16 @@ public:
 	void Attack() override;
 
 	/// <summary>
-	/// 倒されたフラグ
-	/// </summary>
-	/// <returns></returns>trueなら倒された
-	bool IsDead() { return isDead; }
-
-	/// <summary>
 	/// 弾丸発射処理
 	/// </summary>
 	void Fire();
 
-	void RespownEnemy() override;
+	void RespawnEnemy() override;
 
 private:
 	//発射数
 	const uint32_t rapidFireMax = 6;
+
+	std::unique_ptr<Particle> particle_laser;
 };
 

@@ -127,9 +127,6 @@
     <Filter Include="ヘッダー ファイル\Engine\scene">
       <UniqueIdentifier>{26d10fa8-7aad-4e57-90f8-7b35fee256c5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GameProgram\Collsion">
-      <UniqueIdentifier>{a22a70f0-37ea-4c15-9a1e-03fee3d2eaa6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\GameProgram\System">
       <UniqueIdentifier>{9a2adeec-83d1-4fcb-8b1c-a56e8fc5a89a}</UniqueIdentifier>
     </Filter>
@@ -138,6 +135,9 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\GameProgram\System">
       <UniqueIdentifier>{59884d0f-e430-47f8-be48-8ef35d8ea387}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\Collsion">
+      <UniqueIdentifier>{a22a70f0-37ea-4c15-9a1e-03fee3d2eaa6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -371,6 +371,9 @@
     </ClCompile>
     <ClCompile Include="GameProgram\System\NextStageSave.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClCompile>
+    <ClCompile Include="GameActor.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -619,6 +622,9 @@
     </ClInclude>
     <ClInclude Include="GameProgram\System\NextStageSave.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GameActor.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

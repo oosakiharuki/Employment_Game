@@ -1,18 +1,13 @@
 #include "IScene.h"
 using namespace MyMath;
 
-std::string IScene::sceneNo = "Title";
+std::string IScene::sceneNo = "Game";
 
-std::string IScene::nextSceneNo = "Title";
+std::string IScene::nextSceneNo = "Game";
 
 IScene::~IScene(){}
 
 std::string IScene::GetSceneNo() { return sceneNo; }
-
-void IScene::InputGamePad() {
-	input_->GetJoyStickState(0,state);
-	input_->GetJoystickStatePrevious(0, preState);
-}
 
 void IScene::PreviousSceneData() {
 	//前に残しておいたデータ
@@ -21,12 +16,14 @@ void IScene::PreviousSceneData() {
 }
 
 void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
+	
+	player_ = std::make_unique<Player>();
 
 	//値が入っている場合
 	if (leveleditor_file != "") {
 		//代入
 		Stage_fileName = leveleditor_file;
-		data.playerHp = 3;
+		data.playerHp = player_->GetMaxHp();
 	}
 		
 	levelediter.LoadLevelediter("resource/Levelediter/" + Stage_fileName + ".json");
@@ -42,8 +39,9 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	ParticleCommon::GetInstance()->SetDefaultCamera(camera.get());
 	DebugWireframes::GetInstance()->SetDefaultCamera(camera.get());
 	Cubemap::GetInstance()->SetDefaultCamera(camera.get());
-
-	player_ = std::make_unique<Player>();
+	
+	//プレイヤーの体力を上書き
+	player_->SetHp(data.playerHp);
 	player_->Initialize();
 
 	//プレイヤー配置データがあるときプレイヤーを配置
@@ -53,9 +51,8 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 		player_->SetRotate(playerData.rotation);
 		player_->SetAABB(playerData.colliderAABB);
 
-		player_->SetRespownPosition(playerData.translation);
+		player_->SetInit_Position(playerData.translation,playerData.rotation);
 	}
-
 
 	if (!levelediter.GetLevelData()->spawnEnemies.empty()) {
 		for (auto& enemyData : levelediter.GetLevelData()->spawnEnemies) {
@@ -83,7 +80,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 			enemy->SetRoutePoint2(enemyData.Point2);
 
 			enemy->DirectionDegree();
-
+			
 			enemies.push_back(std::move(enemy));
 		}
 	}
@@ -94,11 +91,13 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 			EventData iterator;
 			iterator.aabb = eventTriggerData.collisionAABB;
 			iterator.center = eventTriggerData.center;
+			iterator.size = eventTriggerData.size;
 			iterator.csvFile = eventTriggerData.csvFile;
 			iterator.cameraName = eventTriggerData.cameraName;
 
 			std::unique_ptr<EventTrigger> eventTrigger;
 			eventTrigger = std::make_unique<EventTrigger>();
+			eventTrigger->Initialize();
 			eventTrigger->SetEventData(iterator);
 
 			eventTriggers.push_back(std::move(eventTrigger));
@@ -125,6 +124,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 			
 			if (stageObjectData.ObjectName == "WarpGate") {
 				stageObject = std::make_unique<WarpGate>();
+				stageObject->SetNextStage(stageObjectData.fileName);
 			}
 			else if (stageObjectData.ObjectName == "Checkpoint") {
 				stageObject = std::make_unique<CheckPoint>();
@@ -132,14 +132,10 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 			else if (stageObjectData.ObjectName == "Goal") {
 				stageObject = std::make_unique<Goal>();
 			}
+			stageObject->SetObjectName();//オブジェクトの名前保存
 			stageObject->Initialize();
 			stageObject->SetPosition(stageObjectData.translation);
 			stageObject->SetAABB(stageObjectData.colliderAABB);
-
-			if (stageObject.get() == dynamic_cast<WarpGate*>(stageObject.get())) {
-				WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject.get());
-				warpGate->SetNextStage(stageObjectData.fileName);
-			}
 
 			stageObjects.push_back(std::move(stageObject));
 		}
@@ -150,10 +146,6 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 		enemy->SetStages(stagesAABB);
 	}
 
-
-	//プレイヤーの体力を上書き
-	player_->SetHp(data.playerHp);
-
 	//ステージの見た目
 	stageobj = std::make_unique<Object3d>();
 	stageobj->Initialize();
@@ -161,21 +153,10 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 }
 
 void IScene::WarpNextScene() {
-	for (auto& stageObject : stageObjects) {
-		//stageObjectsの中でワープゲートである場合
-		if (stageObject.get() == dynamic_cast<WarpGate*>(stageObject.get())) {
-			WarpGate* warpGate = dynamic_cast<WarpGate*>(stageObject.get());
-			//プレイヤーとワープゲートの当たり判定 + Eキーを押した時
-			if (IsCollisionAABB(player_->GetAABB(), warpGate->GetAABB()) && Input::GetInstance()->TriggerKey(DIK_E)) {
-				isWarp = true;
-				cameraControl_->ZoomStart(player_->GetTranslate() + playerAwayPos);
-				//次のステージに持ってくる情報
-				NextStageSave::GetInstance()->SetNextStageFile(warpGate->GetNextStage());
-				NextStageSave::GetInstance()->SetPlayerHp(player_->GetHp());
-				player_->IsGround(true);
-				break;
-			}
-		}
+	if (CollisionManager::GetInstance()->IsWarp() && !player_->Performancing()) {
+		cameraControl_->ZoomStart(player_->GetTranslate() + playerAwayPos);
+		player_->IsPerformanceFlag(true);
+		player_->SetRotate({ 0,0,0 });//向きを前に
 	}
 }
 

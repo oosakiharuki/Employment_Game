@@ -2,6 +2,8 @@
 #include "Object3d.h"
 #include "MyMath.h"
 
+class Player;
+
 /// <summary>
 /// 敵の弾丸
 /// </summary>
@@ -18,11 +20,14 @@ public:
 	void SetVelocty(Vector3 velocity) { velocity_ = velocity; }
 
 	bool IsDead() { return isDead; }
-	void IsHit() { isDead = true; }
+	void IsHit();
 	AABB GetAABB();
 
 	void Pari_Mode();
 	bool GetIsPari() { return isPari; }
+
+	Vector3 GetDistance() { return distance; }
+	void SetPlayer(Player* player) { player_ = player; }
 
 private:
 	std::unique_ptr<Object3d> object = nullptr;
@@ -37,5 +42,10 @@ private:
 
 	//パリィされたら敵のほうにダメージになる
 	bool isPari = false;
+
+	Vector3 distance;
+
+	//プレイヤークラス
+	Player* player_ = nullptr;
 };
 

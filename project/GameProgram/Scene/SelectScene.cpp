@@ -13,11 +13,13 @@ void SelectScene::Initialize() {
 	stageobj->SetModelFile("stage_select.obj");
 
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
+	
+	CollisionManager::GetInstance()->ResetFlag();
 }
 
 void SelectScene::Update() {
 	
-	InputGamePad();
+	input_->JoystickUpdate(state, preState);
 
 	//フェーズインが完了した時
 	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {
@@ -25,10 +27,8 @@ void SelectScene::Update() {
 		ChangeScene();
 	}
 
-	if (isWarp) {
-		if (cameraControl_->MaxZoom()) {
-			NextSceneFadeInStart("Game");
-		}
+	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->MaxZoom()) {
+		NextSceneFadeInStart("Game");
 	}
 
 	for (auto& stageObject : stageObjects) {
@@ -36,23 +36,14 @@ void SelectScene::Update() {
 	}
 
 	cameraControl_->Update(&*camera);
-	
+	WarpNextScene();
 
 	player_->Update();
-
-	if (isWarp) {
-		player_->SetPerformanceMode(true);
-		player_->SetRotate({ 0,0,0 });//向きを前に
-		return;
-	}
 
 	skyBox->Update(MakeScaleMatrix({ 1000,1000,1000 }));
 	stageobj->Update();
 
-	CollisionCommon();
-
-	WarpNextScene();
-
+	CollisionCommon();	
 }
 
 void SelectScene::Draw() {

@@ -6,8 +6,7 @@ void GameScene::Initialize() {
 
 	PreviousSceneData();
 
-	LevelEditorObjectSetting();
-
+	LevelEditorObjectSetting("stage_2");
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
@@ -21,10 +20,12 @@ void GameScene::Initialize() {
 
 	//演出時に重力が発動しないようにする
 	for (auto& enemy : enemies) {
-		enemy->isPerformanceFlag(true);
+		enemy->IsPerformanceFlag(true);
 	}
 
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
+	
+	CollisionManager::GetInstance()->ResetFlag();
 }
 
 void GameScene::Update() {
@@ -36,20 +37,13 @@ void GameScene::Update() {
 
 	startWarp->Update();
 
-	if (isWarp && cameraControl_->MaxZoom()) {
+	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->MaxZoom()) {
 		NextSceneFadeInStart("NextStage");
 	}
 
-	WarpNextScene();
-
-	for (auto& stageObject : stageObjects) {
-		if (IsCollisionAABB(player_->GetAABB(), stageObject->GetAABB())) {	
-			//ゴール
-			if (stageObject.get() == dynamic_cast<Goal*>(stageObject.get())) {
-				NextSceneFadeInStart("Clear");
-				return;
-			}
-		}
+	if (CollisionManager::GetInstance()->IsGoal()) {
+		NextSceneFadeInStart("Clear");
+		return;
 	}
 
 	skyBox->Update(MakeScaleMatrix({ 1000,1000,1000 }));//大きくするため
@@ -57,18 +51,15 @@ void GameScene::Update() {
 	//
 	cameraControl_->SetPlayerPosition(player_->GetTranslate());
 
-	if (player_->GetIsPlayerDown()) {
-		cameraControl_->ShakeMode(true);
-	}
-	else {
-		cameraControl_->ResetShakeTime();
-	}
+	//プレイヤーが倒されたらシェイク
+	(player_->GetIsDead()) ? cameraControl_->ShakeMode(true) : cameraControl_->ResetShakeTime();
 
 	cameraControl_->Update(&*camera.get());
 
-
 	player_->Update();
-	
+		
+	WarpNextScene();
+
 	stageobj->Update();
 
 	if (isStartStage) {
@@ -76,32 +67,23 @@ void GameScene::Update() {
 		if (startPointY >= playerPoint.y) {
 			player_->SetTranslate({ playerPoint.x,startPointY,playerPoint.z });
 			isStartStage = false;
-			player_->SetPerformanceMode(false);//演出モードを終了し操作できるように
+			player_->IsPerformanceFlag(false);//演出モードを終了し操作できるように
 			player_->IsJumping();//強制的にジャンプさせて飛び出たようにする
 			//カイジョ
 			for (auto& enemy : enemies) {
-				enemy->isPerformanceFlag(false);
+				enemy->IsPerformanceFlag(false);
 			}
 			return;
 		}
 
 		startPointY += 0.1f;
 		player_->SetTranslate({ playerPoint.x,startPointY,playerPoint.z });
-
 	}
-
-
-	if (isWarp) {
-		player_->SetPerformanceMode(true);
-		player_->SetRotate({ 0,0,0 });
-		return;
-	}
-
 
 	Respawn();
 
 	//敵やオブジェクトを止める(時間停止)
-	if (player_->GetIsPlayerDown()) {
+	if (player_->GetIsDead()) {
 		return;
 	}
 	
@@ -113,8 +95,6 @@ void GameScene::Update() {
 	for (auto& stageObject : stageObjects) {
 		stageObject->Update();
 	}
-
-	ChangeCheckPoint();
 
 	//共有イベントフラグ
 	bool isEventCommon = false;
@@ -144,22 +124,10 @@ void GameScene::Update() {
 #ifdef  USE_IMGUI
 
 	ImGui::Begin("camera");
-	ImGui::Text("ImGuiText");
 
-	//カメラ
-	//ImGui::InputFloat3("cameraTranslate", &cameraTranslate.x);
-	//ImGui::SliderFloat3("cameraTranslateSlider", &cameraTranslate.x, -30.0f, 30.0f);
-
-	//ImGui::InputFloat3("cameraRotate", &cameraRotate.x);
-	//ImGui::SliderFloat("cameraRotateX", &cameraRotate.x, -360.0f, 360.0f);
-	//ImGui::SliderFloat("cameraRotateY", &cameraRotate.y, -360.0f, 360.0f);
-	//ImGui::SliderFloat("cameraRotateZ", &cameraRotate.z, -360.0f, 360.0f);
-
+	//カメラの端
 	ImGui::Text("p1 : %f %f %f", cameraPoint1.x, cameraPoint1.y, cameraPoint1.z);
 	ImGui::Text("p2 : %f %f %f", cameraPoint2.x, cameraPoint2.y, cameraPoint2.z);
-
-	//camera->SetRotate(cameraRotate);
-	//camera->SetTranslate(cameraTranslate);
 
 	ImGui::SliderFloat("volume", &volume, 0.0f, 1.0f);
 
@@ -179,15 +147,23 @@ void GameScene::Draw() {
 
 	//モデル描画処理
 	GLTFCommon::GetInstance()->Command();
+	
+	for (auto& eventTrigger : eventTriggers) {
+		eventTrigger->Draw();
+	}
 
 	//モデル描画処理
 	Object3dCommon::GetInstance()->Command();
-	
+
 	stageobj->Draw();
 
 
 	for (auto& enemy : enemies) {
 		enemy->Draw();
+	}
+
+	for (auto& enemy : enemies) {
+		enemy->DrawCommon();
 	}
 
 	for (auto& stageObject : stageObjects) {
@@ -235,25 +211,12 @@ void GameScene::WarterWarpExit() {
 	startWarp->SetPosition(warpPosition);//playerの真下に
 	startWarp->SetRotation({ 90.0f,0.0f,0.0f });//下向きにして水たまりに
 
-	player_->SetPerformanceMode(true);
-}
-
-void GameScene::ChangeCheckPoint() {
-	//リスポーン変更した時
-	for (auto& stageObject : stageObjects) {
-		if (IsCollisionAABB(player_->GetAABB(), stageObject->GetAABB())) {
-			//チェックポイント
-			if (stageObject.get() == dynamic_cast<CheckPoint*>(stageObject.get())) {
-				CheckPoint* checkPoint = dynamic_cast<CheckPoint*>(stageObject.get());
-				player_->SetRespownPosition(checkPoint->GetPosition());
-			}
-		}
-	}
+	player_->IsPerformanceFlag(true);
 }
 
 void GameScene::Respawn() {
 	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
-	if (player_->GetIsPlayerDown() && player_->GetIsRespown()) {
+	if (player_->GetIsDead() && player_->GetIsRespawn()) {
 
 		if (RemainingLife == 0) {
 			//残機が0で倒された場合ゲームオーバー
@@ -265,9 +228,9 @@ void GameScene::Respawn() {
 		RemainingLife--;
 
 		for (auto& enemy : enemies) {
-			enemy->RespownEnemy();
+			enemy->RespawnEnemy();
 		}
-		player_->AllRespownEnd();
+		player_->RespawnPlayer();
 
 		for (auto& eventTrigger : eventTriggers) {
 			eventTrigger->FailureEvent();

@@ -25,7 +25,7 @@ void Shadow::Initialize() {
 
 void Shadow::Update() {
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Begin("player_shadow");
 
@@ -34,7 +34,7 @@ void Shadow::Update() {
 
 	ImGui::End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	object_->Update(wt);
 	wt.UpdateMatrix();

@@ -47,6 +47,7 @@ public:
 	void SetTextureSize(const Vector2& textureSize) { this->textureSize = textureSize; }
 
 	void SetTextureFile(const std::string textureFile);
+	std::string GetTextureFile();
 
 	D3D12_GPU_DESCRIPTOR_HANDLE GetResource();
 

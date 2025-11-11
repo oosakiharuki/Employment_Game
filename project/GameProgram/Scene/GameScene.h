@@ -36,9 +36,4 @@ private:
 	/// </summary>
 	void Respawn();
 
-	/// <summary>
-	/// チェックポイントを変更する
-	/// </summary>
-	void ChangeCheckPoint();
-
 };

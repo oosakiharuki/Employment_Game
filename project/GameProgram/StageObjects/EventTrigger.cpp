@@ -1,7 +1,16 @@
 #include "EventTrigger.h"
 using namespace MyMath;
 
+void EventTrigger::Initialize() {
+	wt.Initialize();
+
+	object_ = std::make_unique<Object_glTF>();
+	object_->Initialize();
+	object_->SetModelFile("EventGate.gltf");
+}
+
 void EventTrigger::Update() {
+
 	if (eventDatas.isEvent) {
 		if (isLoadCsv) {
 			//Csvを読み込む
@@ -9,6 +18,19 @@ void EventTrigger::Update() {
 		}
 		//敵召喚
 		PopEventEneies();
+		
+		wt.translation_ = eventDatas.center;
+		wt.scale_ = eventDatas.size * 0.5f;
+
+		wt.UpdateMatrix();
+		
+		object_->Update(wt);
+	}
+}
+
+void EventTrigger::Draw() {
+	if (eventDatas.isEvent) {
+		object_->Draw();
 	}
 }
 

@@ -19,3 +19,8 @@ void CheckPoint::Update() {
 void CheckPoint::Draw() {
 	object_->Draw();
 }
+
+
+void CheckPoint::SetObjectName() {
+	objectName = "CheckPoint";
+}

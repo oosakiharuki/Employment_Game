@@ -6,6 +6,7 @@
 /// 移行する前に保存するデータ
 /// </summary>
 struct SceneSaveData {
+	uint32_t playerMaxHp;//プレイヤーの体力
 	uint32_t playerHp;//プレイヤーの体力
 	std::string nextStageFile;//次のステージ名
 };

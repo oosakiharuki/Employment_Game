@@ -14,3 +14,10 @@ AABB IStageObject::GetAABB() {
 
 	return aabb;
 }
+
+void IStageObject::SetNextStage(std::string fileName){}
+
+std::string IStageObject::GetNextStage(){
+	std::string null = "";
+	return null;
+}

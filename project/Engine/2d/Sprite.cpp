@@ -150,8 +150,16 @@ void Sprite::Draw() {
 void Sprite::SetTextureFile(const std::string textureFile) {
 	filePath = "resource/Sprite/" + textureFile;
 	TextureManager::GetInstance()->LoadTexture(filePath);
-
 }
+
+std::string Sprite::GetTextureFile() {
+	std::string result = filePath;
+	size_t fileName = result.rfind("/");// Sprite "/" ○○.png
+	//ファイル名を入れる
+	result = result.substr(fileName + 1,result.size() - fileName - 1);
+	return result;
+}
+
 
 D3D12_GPU_DESCRIPTOR_HANDLE Sprite::GetResource() {
 	return TextureManager::GetInstance()->GetSrvHandleGPU(filePath);

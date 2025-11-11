@@ -13,28 +13,21 @@ public:
 	void Draw() override;
 	void Attack() override;
 
-	bool IsDead() { return isDead; }
-	bool IsExplosion() { return isExplosion; }
+	bool IsExplosion()override { return isExplosion; }
 
-	void RespownEnemy() override;
-	
-	/// <summary>
-	/// getter‗ワールド座標系の座標
-	/// </summary>
-	/// <returns></returns>
-	Vector3 GetWorldPosition();
+	void RespawnEnemy() override;
 
 	/// <summary>
 	/// getter‗爆発範囲AABB
 	/// </summary>
 	/// <returns></returns>bombAABB
-	AABB GetBombAABB() { return bombAABB; }
+	AABB GetBombAABB()override { return bombAABB; }
 
 	/// <summary>
 	/// getter_距離
 	/// </summary>
 	/// <returns></returns>プレイヤーからボムの距離
-	Vector3 GetDistance() { return distance; }
+	Vector3 GetDistance()override { return distance; }
 
 private:
 	//爆発開始
@@ -46,15 +39,15 @@ private:
 	const float bombTimeMax = 5.0f;//max
 	float bombTimer = 0.0f;
 
-	//敵のスピード
-	Vector3 speed = { 0.03f,0.0f,0.0f };
-	Vector3 move = { 0,0,0 };
-
 	//爆発範囲AABB
 	AABB bombAABB;
-	const Vector3 hani = { 10,10,10 };//大きさ
+	const Vector3 hani = { 5,5,5 };//大きさ
 	//プレイヤーとの距離感
 	Vector3 distance;
+
+	//リアクション
+	Vector3 bombScale = { 0.05f, 0.05f, 0.05f };
+
 
 	/// <summary>
 	/// 爆発する

@@ -14,6 +14,7 @@ struct EventData {
 	bool isEvent = false; //イベント発動フラグ
 	AABB aabb;            //イベント範囲
 	Vector3 center;       //真ん中
+	Vector3 size;         //サイズ
 	std::string csvFile;  //csvファイル
 	std::string cameraName;
 };
@@ -21,7 +22,9 @@ struct EventData {
 class EventTrigger {
 public:
 
+	void Initialize();
 	void Update();
+	void Draw();
 
 	/// <summary>
 	/// .csvを読み取る
@@ -82,6 +85,9 @@ public:
 	bool EventEnd() { return eventEnd; }
 
 private:
+
+	std::unique_ptr<Object_glTF> object_;
+	WorldTransform wt;
 
 	std::stringstream enemyPopCsvFile;
 

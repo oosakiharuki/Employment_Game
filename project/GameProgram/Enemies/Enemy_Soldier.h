@@ -12,14 +12,12 @@ public:
 	void Draw() override;
 	void Attack() override;
 
-	bool IsDead() { return isDead; }
-
 	/// <summary>
 	/// 弾丸発射処理
 	/// </summary>
 	void Fire();
 
-	void RespownEnemy() override;
+	void RespawnEnemy() override;
 
 private:
 	//弾丸数
@@ -27,7 +25,4 @@ private:
 	//速度
 	Vector3 velocity;
 
-	//移動
-	Vector3 speed = { 0.03f,0.0f,0.0f };
-	Vector3 move = { 0,0,0 };
 };
