@@ -1,9 +1,9 @@
 #include "IScene.h"
 using namespace MyMath;
 
-std::string IScene::sceneNo = "Game";
+std::string IScene::sceneNo = "Title";
 
-std::string IScene::nextSceneNo = "Game";
+std::string IScene::nextSceneNo = "Title";
 
 IScene::~IScene(){}
 
@@ -150,7 +150,45 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	stageobj = std::make_unique<Object3d>();
 	stageobj->Initialize();
 	stageobj->SetModelFile(Stage_fileName + ".obj");
+
+
+	if (Stage_fileName == "stage_0" || "stage_select") {
+
+		for (uint32_t i = 0; i < 6; i++) {
+			std::unique_ptr<Sprite> iterator = std::make_unique<Sprite>();
+			iterator->Initialize("setumei_" + std::to_string(i) + ".png");
+			iterator->SetSize({ 128,64 });
+			iterator->SetPosition({300,20});
+			setumei.push_back(std::move(iterator));
+		}
+	}
 }
+
+void IScene::DrawCommon() {
+
+	if (Stage_fileName == "stage_select") {
+		setumei[0]->Draw();
+		setumei[5]->Draw();
+	}
+	else if (Stage_fileName == "stage_0") {
+		if (player_->GetTranslate().x >= 80.0f) {
+			setumei[4]->Draw();
+		}
+		else if (player_->GetTranslate().x >= 16.0f) {
+			setumei[3]->Draw();
+		}
+		else if (player_->GetTranslate().x >= 0.0f) {
+			setumei[2]->Draw();
+		}
+		else if (player_->GetTranslate().x >= -60.0f) {
+			setumei[1]->Draw();
+		}
+		else {
+			setumei[0]->Draw();
+		}
+	}
+}
+
 
 void IScene::WarpNextScene() {
 	if (CollisionManager::GetInstance()->IsWarp() && !player_->Performancing()) {

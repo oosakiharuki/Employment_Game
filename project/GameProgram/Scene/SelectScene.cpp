@@ -43,7 +43,16 @@ void SelectScene::Update() {
 	skyBox->Update(MakeScaleMatrix({ 1000,1000,1000 }));
 	stageobj->Update();
 
-	CollisionCommon();	
+	CollisionCommon();
+
+
+	setumei[0]->SetPosition({ 300,20 });
+	setumei[5]->SetPosition({ 600,20 });
+
+	for (auto& a : setumei) {
+		a->Update();
+	}
+
 }
 
 void SelectScene::Draw() {
@@ -66,6 +75,9 @@ void SelectScene::Draw() {
 	ParticleCommon::GetInstance()->Command();
 	player_->DrawP();
 
+	SpriteCommon::GetInstance()->Command();
+	
+	DrawCommon();
 }
 
 void SelectScene::Finalize() {}
