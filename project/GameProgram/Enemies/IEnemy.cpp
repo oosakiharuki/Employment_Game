@@ -195,12 +195,13 @@ void IEnemy::MoveEnemy() {
 	move += speed;
 
 	//移動ポイントの端だと向きを変える
-	if (move.x < route_point1.x) {
-		direction = direction_right;
-	}
 	if (move.x > route_point2.x) {
 		direction = direction_left;
 	}
+	if (move.x < route_point1.x) {
+		direction = direction_right;
+	}
+
 
 	wt.rotation_.y = direction;
 }
