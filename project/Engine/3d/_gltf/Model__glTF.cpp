@@ -107,6 +107,9 @@ void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directo
 
 	isAnimation_ = isAnimation;
 	isSkinning_ = isSkinning;
+
+	EnvironmentFile ="resource/rostock_laage_airport_4k.dds";
+
 }
 
 void Model_glTF::Draw() {

@@ -42,19 +42,17 @@ void Enemy_Turret::Update() {
 		SearchRange();
 		Matrix4x4 a = MakeAffineMatrix(Vector3(1,1,1), wt.rotation_, wt.translation_);
 		particle_laser->SetTranslate(wt.translation_ + TransformNormal(Vector3{0,0,eyeReach.x * 0.5f}, a));
+		particle_laser->ChangeMode(BornParticle::TimerMode);
 	}
 	else {
 		particle_laser->ChangeMode(BornParticle::Stop);
 	}
 
+	particle_fire->SetRotate({ 0,0,-wt.rotation_.y });
+	particle_laser->Update();
+
 	//更新が終了
 	UpdateBehind();
-
-	particle_fire->SetRotate({ 0,0,-wt.rotation_.y });
-
-
-	particle_fire->Update();
-	particle_laser->Update();
 
 #ifdef _DEBUG
 

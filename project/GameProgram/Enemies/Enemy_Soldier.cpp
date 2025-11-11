@@ -36,12 +36,11 @@ void Enemy_Soldier::Update() {
 		}
 	}
 
+	particle_fire->SetRotate({ 0,0,-wt.rotation_.y });
+
 	//更新が終了
 	UpdateBehind();
 
-
-	particle_fire->SetRotate({ 0,0,-wt.rotation_.y });
-	particle_fire->Update();
 
 #ifdef _DEBUG
 

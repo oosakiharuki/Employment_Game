@@ -104,7 +104,6 @@ public:
 	/// </summary>
 	/// <param name="countnum"></param>
 	void SetParticleCount(uint32_t countnum) { emitter.count = countnum; }
-	void Emit();
 
 private:
 	ParticleCommon* particleCommon = nullptr;

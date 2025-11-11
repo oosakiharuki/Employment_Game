@@ -20,6 +20,16 @@ public:
 	std::string GetTextureHandle(const std::string filePath);
 	Microsoft::WRL::ComPtr<ID3D12Resource> GetResource(const std::string filePath);
 	std::list<Particles> GetParticle(const std::string filePath);
+	
+	const uint32_t& GetNum(const std::string& filePath);
+
+	void Update(const std::string filePath, ParticleForGPU* wvpData, const ParticleMosion& particleMosion);
+
+	void Emit(const std::string filePath,const Emitter& emitter,const ParticleMosion& mosion);
+
+	void SetCamera(Camera* camera_) { camera = camera_; }
+
+	void ResetNum(const std::string& filePath);
 
 private:
 	static ParticleManager* instance;
@@ -47,9 +57,15 @@ private:
 
 		D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU;
 		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;
+
+		uint32_t numInstance = 0;
+		bool a = false;
 	};
 
 	const float kDeltaTime = 1.0f / 60.0f;
 	std::unordered_map<std::string, ParticleGroup> particleGroups;
+
+	Camera* camera = nullptr;
+	static const uint32_t kNumMaxInstance = 100;
 
 };

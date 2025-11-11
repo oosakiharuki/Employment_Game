@@ -105,7 +105,6 @@ void IEnemy::UpdateCommon() {
 		});
 
 
-	particle_damage->Update();
 }
 
 void IEnemy::UpdateBehind() {
@@ -121,6 +120,8 @@ void IEnemy::UpdateBehind() {
 	object_found->Update(wtMark);
 	object_noFound->Update(wtMark);
 
+	particle_damage->Update();
+	particle_fire->Update();
 }
 
 void IEnemy::DrawCommon() {

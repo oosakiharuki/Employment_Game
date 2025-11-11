@@ -86,7 +86,6 @@ void TitleScene::Initialize() {
 	bullet_particle = std::make_unique<Particle>();
 	bullet_particle->Initialize("title_bullet", "resource/Sprite/cone.png", PrimitiveType::cone);
 	bullet_particle->SetParticleCount(1);
-	bullet_particle->ChangeMode(BornParticle::Stop);
 	bullet_particle->SetParticleMosion(ParticleMosion::Fixed);
 	bullet_particle->SetFrequency(0.5f);
 
