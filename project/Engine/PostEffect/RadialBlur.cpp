@@ -159,7 +159,7 @@ void RadialBlur::Command() {
 
 void RadialBlur::EffectUpdate() {
 	
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Text("RadialBlur");
 #endif
 }

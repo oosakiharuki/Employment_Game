@@ -170,7 +170,7 @@ void Vignette::Command() {
 
 void Vignette::EffectUpdate() {
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Text("Vignette");
 	ImGui::SliderFloat("明るさ", &vignetteFunction->luminance, 0.0f, 100.0f);
 	ImGui::SliderFloat("暗さ", &vignetteFunction->darkness, 0.0f, 2.0f);

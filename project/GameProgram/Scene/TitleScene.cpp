@@ -208,7 +208,7 @@ void TitleScene::Update() {
 	//パーティクル更新
 	bullet_particle->Update();
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Begin("camera");
 	ImGui::Text("ImGuiText");
@@ -227,7 +227,7 @@ void TitleScene::Update() {
 
 	ImGui::End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	//ワールド座標系更新
 	for (uint32_t i = 0; i < 4; i++) {

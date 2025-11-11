@@ -158,7 +158,7 @@ void Normal_Image::Command() {
 
 void Normal_Image::EffectUpdate() {
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Text("Normal_Image(copyImage)");
 #endif
 

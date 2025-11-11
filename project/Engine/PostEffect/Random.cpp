@@ -168,7 +168,7 @@ void Random::Command() {
 void Random::EffectUpdate() {
 	randomFunction->randomeTimer += 0.1f;
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Text("Random");
 #endif
 

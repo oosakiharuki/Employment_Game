@@ -18,7 +18,7 @@ void Umbrella::Initialize() {
 
 void Umbrella::Update() {
 	
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Begin("um");
 
@@ -32,7 +32,7 @@ void Umbrella::Update() {
 
 	ImGui::End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	if (isShieldMode) {
 		object->ChangeAnimation("umbrella_Open.gltf");

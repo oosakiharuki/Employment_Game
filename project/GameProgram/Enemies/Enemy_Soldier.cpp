@@ -42,7 +42,7 @@ void Enemy_Soldier::Update() {
 	UpdateBehind();
 
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Begin("Enemy_soldier");
 
@@ -51,7 +51,7 @@ void Enemy_Soldier::Update() {
 
 	ImGui::End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void Enemy_Soldier::Draw() {

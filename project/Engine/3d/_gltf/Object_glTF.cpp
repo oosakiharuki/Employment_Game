@@ -286,7 +286,7 @@ void Object_glTF::LightSwitch(bool isLight) {
 	}
 
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Begin("PointLight");
 
 	ImGui::SliderFloat4("pointLight_Color", &pointLightData->color.x, 0, 1);
@@ -296,7 +296,7 @@ void Object_glTF::LightSwitch(bool isLight) {
 	ImGui::SliderFloat("pointLight_decay", &pointLightData->decay ,0.0f ,1.0f);
 
 	ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 }
 

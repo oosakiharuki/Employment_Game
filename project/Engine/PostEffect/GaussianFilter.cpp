@@ -158,7 +158,7 @@ void GaussianFilter::Command() {
 
 void GaussianFilter::EffectUpdate() {
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Text("GaussianFilter");
 	ImGui::Text("9x9");
 #endif

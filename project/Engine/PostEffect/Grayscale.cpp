@@ -169,7 +169,7 @@ void Grayscale::Command() {
 
 void Grayscale::EffectUpdate() {
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Text("Grayscale");
 	ImGui::Checkbox("セピア調", &isSepiaMode);
 #endif

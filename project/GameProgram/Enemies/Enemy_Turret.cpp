@@ -54,7 +54,7 @@ void Enemy_Turret::Update() {
 	//更新が終了
 	UpdateBehind();
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 
 	ImGui::Begin("Enemy_Turret");
 
@@ -66,7 +66,7 @@ void Enemy_Turret::Update() {
 
 	ImGui::End();
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 }
 
