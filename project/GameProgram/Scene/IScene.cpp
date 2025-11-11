@@ -154,7 +154,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 
 	if (Stage_fileName == "stage_0" || "stage_select") {
 
-		for (uint32_t i = 0; i < 6; i++) {
+		for (uint32_t i = 0; i < 7; i++) {
 			std::unique_ptr<Sprite> iterator = std::make_unique<Sprite>();
 			iterator->Initialize("setumei_" + std::to_string(i) + ".png");
 			iterator->SetSize({ 128,64 });
@@ -168,10 +168,13 @@ void IScene::DrawCommon() {
 
 	if (Stage_fileName == "stage_select") {
 		setumei[0]->Draw();
-		setumei[5]->Draw();
+		setumei[6]->Draw();
 	}
 	else if (Stage_fileName == "stage_0") {
-		if (player_->GetTranslate().x >= 80.0f) {
+		if (player_->GetTranslate().x >= 105.0f) {
+			setumei[5]->Draw();
+		}
+		else if (player_->GetTranslate().x >= 80.0f) {
 			setumei[4]->Draw();
 		}
 		else if (player_->GetTranslate().x >= 16.0f) {
