@@ -16,14 +16,15 @@ public:
 	/// <summary>
 	/// 弾丸発射処理
 	/// </summary>
-	void Fire();
+	void FireBullet()override;
 
 	void RespawnEnemy() override;
 
 private:
-	//発射数
-	const uint32_t rapidFireMax = 6;
-
+	//見える範囲のエフェクト
 	std::unique_ptr<Particle> particle_laser;
+
+	//攻撃パーティクルの場所
+	Vector3 particle_position;
 };
 

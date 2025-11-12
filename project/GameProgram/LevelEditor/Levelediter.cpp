@@ -50,9 +50,10 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 			}
 		}
 
-
+		//タイプの設定
 		std::string type = object["type"].get<std::string>();
 
+		//ステージ当たり判定、イベントトリガーの配置
 		if (type.compare("MESH") == 0) {
 			//要素追加
 			levelData->objects.emplace_back(LevelData::ObjectData{});
@@ -92,9 +93,11 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				objectData.colliderAABB.max = center + (size * objectData.scaling / 2.0f);
 			}
 
+			//イベントトリガー
 			nlohmann::json& trigger = object["event_trigger"];
 
 			if (trigger != nullptr) {
+				//Vectorに変更
 				Vector3 center = { (float)trigger["center"][0],(float)trigger["center"][2],(float)trigger["center"][1] };
 				Vector3 size = { (float)trigger["size"][0],(float)trigger["size"][2],(float)trigger["size"][1] };
 				std::string cameraName = trigger["camera"];
@@ -116,7 +119,7 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 
 				eventTrigger.cameraName = cameraName;
 			}
-		}
+		}//プレイヤーの配置
 		else if (type.compare("PlayerSpawn") == 0) {
 			//要素追加
 			levelData->players.emplace_back(LevelData::PlayerSpawnData{});
@@ -151,13 +154,13 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				playerSpawnData.colliderAABB.min = center - (size / 2.0f);
 				playerSpawnData.colliderAABB.max = center + (size / 2.0f);
 			}
-		}
+		}//敵の配置
 		else if (type.compare("EnemySpawn") == 0) {
 			//要素追加
 			levelData->spawnEnemies.emplace_back(LevelData::EnemySpawnData{});
-			//
 			LevelData::EnemySpawnData& enemySpawnData = levelData->spawnEnemies.back();
 
+			//各敵の名前
 			if (object.contains("EnemyName")) {
 				enemySpawnData.EnemyName = object["EnemyName"];
 			}
@@ -178,8 +181,6 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 			enemySpawnData.rotation.x = (float)transform["rotation"][0];
 			enemySpawnData.rotation.y = (float)transform["rotation"][2];
 			enemySpawnData.rotation.z = (float)transform["rotation"][1];
-
-			//enemySpawnData.fileName = transform["name"];
 
 			//コライダー
 			nlohmann::json& collider = object["collider"];
@@ -231,16 +232,17 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 			nlohmann::json& travelRoute = object["travel_route"];
 
 			if (travelRoute != nullptr) {
+				//移動範囲_1
 				cameraInitData.Point1.x = (float)travelRoute["start"][0];
 				cameraInitData.Point1.y = (float)travelRoute["start"][2];
 				cameraInitData.Point1.z = (float)travelRoute["start"][1];
-
+				//移動範囲_2
 				cameraInitData.Point2.x = (float)travelRoute["end"][0];
 				cameraInitData.Point2.y = (float)travelRoute["end"][2];
 				cameraInitData.Point2.z = (float)travelRoute["end"][1];
 			}
 
-		}
+		}//ステージオブジェクトの配置
 		else if (type.compare("StageObjectSpawn") == 0) {
 			//要素追加
 			levelData->stageObjects.emplace_back(LevelData::StageObjectData{});
@@ -280,10 +282,6 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				stageObjectData.colliderAABB.min = center - (size / 2.0f);
 				stageObjectData.colliderAABB.max = center + (size / 2.0f);
 			}
-		}
-		//子ノード
-		if (object.contains("children")) {
-
 		}
 	}
 

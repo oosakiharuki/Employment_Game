@@ -15,6 +15,7 @@ Enemy_Soldier::~Enemy_Soldier() {
 void Enemy_Soldier::Initialize() {
 
 	Enemy_InitializeCommon();
+	//モデル作成
 	object->SetModelFile("enemy.obj");
 
 	//体力の初期化
@@ -22,6 +23,9 @@ void Enemy_Soldier::Initialize() {
 
 	//見える範囲初期化
 	eyeReach = { 15, 10, 1 };
+
+	//最大弾丸数
+	rapidCountMax = 3;
 }
 
 void Enemy_Soldier::Update() {
@@ -36,6 +40,7 @@ void Enemy_Soldier::Update() {
 		}
 	}
 
+	//コーンが上向きなので
 	particle_fire->SetRotate({ 0,0,-wt.rotation_.y });
 
 	//更新が終了
@@ -74,30 +79,11 @@ void Enemy_Soldier::Draw() {
 }
 
 void Enemy_Soldier::Attack() {
-
-	coolTime += 1.0f / 60.0f;
-	if (coolTime >= coolTimeMax) {
-
-		rapidFireTime += 1.0f / 60.0f;
-
-		if (rapidFireTime >= rapidFireTimeMax) {
-			Fire();
-			particle_fire->ChangeMode(BornParticle::MomentMode);
-			rapidCount++;
-			rapidFireTime = 0;
-		}
-
-		if (rapidCount == rapidFireMax) {
-			rapidCount = 0;
-			coolTime = 0;
-			isBullet = false;
-		}
-	}
-
-
+	//発泡処理
+	Fire();
 }
 
-void Enemy_Soldier::Fire() {
+void Enemy_Soldier::FireBullet() {
 	
 	Vector3 enemyPosition;
 
@@ -109,13 +95,14 @@ void Enemy_Soldier::Fire() {
 	if (rapidCount == 0) {
 
 		const float kSpeed = 0.4f;
-
+		//プレイヤーの座標
 		Vector3 playerPosition = player_->GetWorldPosition();
-
+		//敵とプレイヤーの距離
 		Vector3 distance = playerPosition - enemyPosition;
-
+		//
 		Vector3 normal = Normalize(distance);
 
+		//スピードを合わせる
 		normal.x *= kSpeed;
 		normal.y *= kSpeed;
 		normal.z *= kSpeed;
@@ -124,9 +111,10 @@ void Enemy_Soldier::Fire() {
 	}
 	particle_fire->SetTranslate(enemyPosition);
 
+	//弾丸を生み出す
 	EnemyBullet* bullet = new EnemyBullet();
 	bullet->Initialize();
-	bullet->SetPlayer(player_);
+	bullet->SetPlayer(player_);//プレイヤーと当たりノックバックパラメータで使う
 	bullet->SetTranslate(enemyPosition);
 	bullet->SetVelocty(velocity);
 	bullets_.push_back(bullet);
@@ -134,6 +122,8 @@ void Enemy_Soldier::Fire() {
 
 void Enemy_Soldier::RespawnEnemy() {
 	RespawnEnemyCommon();
+
+	//発泡処理のリセット
 	rapidCount = 0;
 	coolTime = 0;
 	isBullet = false;

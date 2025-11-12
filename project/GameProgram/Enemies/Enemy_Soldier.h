@@ -15,13 +15,11 @@ public:
 	/// <summary>
 	/// 弾丸発射処理
 	/// </summary>
-	void Fire();
+	void FireBullet() override;
 
 	void RespawnEnemy() override;
 
 private:
-	//弾丸数
-	const uint32_t rapidFireMax = 3;
 	//速度
 	Vector3 velocity;
 
