@@ -17,7 +17,7 @@
 class ImGuiManager {
 public:
 	void Initialize(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srvManager);
-
+	
 	static ImGuiManager* GetInstance();
 
 	void Begin();
