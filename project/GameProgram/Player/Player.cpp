@@ -34,44 +34,49 @@ void Player::Initialize() {
 	wtGun.Initialize();
 	wtGun.rotation_.y = 90.0f;
 
+	//SE
+	//ダメージ
 	hitSound = Audio::GetInstance()->LoadWave("resource/Sound/damage.wav");
-
+	//パリィ
 	pariSound = Audio::GetInstance()->LoadWave("resource/Sound/bane.wav");
 
+	//パーティクル初期化
+	//歩く
 	particle_walk = std::make_unique<Particle>();
 	particle_walk->Initialize("player_walk", "resource/Sprite/ground.png", PrimitiveType::box);
 	particle_walk->SetParticleMosion(ParticleMosion::Smaller);
-
+	//ブリンク
 	particle_brink = std::make_unique<Particle>();
 	particle_brink->Initialize("player_brink", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particle_brink->SetParticleCount(1);
 	particle_brink->SetParticleMosion(ParticleMosion::Fixed);
-	particle_brink->SetFrequency(1.0f);
+	particle_brink->SetFrequency(1.0f);//時間
 	particle_brink->SetScale({2,2,2});
-
+	//攻撃
 	particle_fire = std::make_unique<Particle>();
 	particle_fire->Initialize("player_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particle_fire->SetParticleCount(1);
 	particle_fire->SetParticleMosion(ParticleMosion::Fixed);
 	particle_fire->SetFrequency(0.1f);
-
+	//ダメージ
 	particle_damage = std::make_unique<Particle>();
 	particle_damage->Initialize("player_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
 	particle_damage->SetParticleCount(20);
 	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
 	particle_damage->SetFrequency(1.0f);
-
+	//パリィ
 	particle_pari = std::make_unique<Particle>();
 	particle_pari->Initialize("player_pari", "resource/Sprite/uvChecker.png", PrimitiveType::cone);
 	particle_pari->SetParticleMosion(ParticleMosion::Fixed);
 	particle_fire->SetFrequency(0.5f);
-
+	//死んだとき
 	particle_dead = std::make_unique<Particle>();
 	particle_dead->Initialize("player_dead", "resource/Sprite/ground.png", PrimitiveType::sphere);
 	particle_dead->SetParticleMosion(ParticleMosion::Smaller);
 	particle_dead->SetFrequency(0.1f);
 	particle_dead->SetScale({ 0.5f,0.5f,0.5f });
 
+	//MaxHp初期設定
 	maxHp = playerMaxHp;
 
 	//UI_体力
@@ -83,6 +88,7 @@ void Player::Initialize() {
 		sprites_Hp.push_back(std::move(sprite));
 	}
 
+	//入力処理
 	input_ = Input::GetInstance();
 }
 
@@ -230,24 +236,25 @@ void Player::Update() {
 
 #endif //  USE_IMGUI
 
+	// - 更新 -
 
 	wt.UpdateMatrix();
-	wtGun.translation_ = wt.translation_;
 	wtGun.UpdateMatrix();
 
-	///傘の銃
+	// - 傘の銃 -
+	//プレイヤーの手前に
 	umbrella->SetTranslate(wt.translation_ +
 		TransformNormal(playerFront, wtGun.matWorld_));
-
+	//傘の方向
 	umbrella->SetRotate(wtGun.rotation_);
+	//防御状態か
 	umbrella->ShieldMode(isShield);
-
+	//更新
 	umbrella->Update();
 
-	//UI
-	SpriteUpdate();
-
+	// - UI -
 	//スプライト更新
+	SpriteUpdate();
 	for (auto& sprite : sprites_Hp) {
 		sprite->Update();
 	}
@@ -378,7 +385,7 @@ void Player::PlayUpdate() {
 
 		//飛んだ瞬間後ろにパーティクルをだす
 		if (brinkTimer <= deltaTime) {
-			Vector3 translate = wtGun.translation_ + TransformNormal(-playerFront, wtGun.matWorld_);
+			Vector3 translate = wt.translation_ + TransformNormal(-playerFront, wtGun.matWorld_);
 			particle_brink->SetTranslate(translate);
 			particle_brink->SetRotate({ wtGun.rotation_.x + 90.0f,wtGun.rotation_.y,wtGun.rotation_.z });
 			particle_brink->ChangeMode(BornParticle::MomentMode);
@@ -434,17 +441,19 @@ void Player::PlayUpdate() {
 
 void Player::Draw() {
 	GLTFCommon::GetInstance()->Command();
-
+	//プレイヤー本体
 	object->Draw();
 
 	if (hp != 0) {
+		//傘
 		umbrella->Draw();
-
+		//影
 		shadow_->Draw();
 	}
 	
 	Object3dCommon::GetInstance()->Command();
 
+	//弾丸
 	for (auto& bullet : bullets_) {
 		bullet->Draw();
 	}
@@ -452,6 +461,7 @@ void Player::Draw() {
 }
 
 void Player::DrawP() {
+	//パーティクル
 	particle_walk->Draw();
 	particle_fire->Draw();
 	particle_brink->Draw();
@@ -460,7 +470,7 @@ void Player::DrawP() {
 	particle_dead->Draw();
 
 	SpriteCommon::GetInstance()->Command();
-	
+	//UI
 	for (auto& sprite : sprites_Hp) {
 		sprite->Draw();
 	}
@@ -469,14 +479,18 @@ void Player::DrawP() {
 
 void Player::ShootBullet() {	
 
+	//傘から出るため
 	Vector3 translate = umbrella->GetTranslate();
 
+	//真ん中を0にする値(3の場合、1,0,-1 | 5の場合、2,1,0,-1,-2)
 	float halfCount = (float(bulletCount) - 1) / 2;
 
 	for (float i = -(halfCount); i <= halfCount; ++i) {
+		//弾が分散するように
 		Vector3 velocity = { 0.0f,float(i) * 0.1f,0.5f};
 		velocity = TransformNormal(velocity, wtGun.matWorld_);
 
+		//弾丸を生み出す
 		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
 		bullet->Initialize();
 		bullet->SetTranslate(translate);
@@ -484,6 +498,7 @@ void Player::ShootBullet() {
 		bullets_.push_back(std::move(bullet));
 	}
 
+	//攻撃パーティクル発生
 	particle_fire->SetTranslate(translate);
 	particle_fire->SetRotate({ wtGun.rotation_.x + 90.0f,wtGun.rotation_.y,wtGun.rotation_.z });
 	particle_fire->ChangeMode(BornParticle::MomentMode);
@@ -494,21 +509,28 @@ void Player::ShootBullet() {
 }
 
 void Player::IsDamage(const Vector3& hitPoint) {
+	//無敵時間をすぎたとき
 	if (infinityTimer >= infinityTimeMax) {
+		//体力がもうないなら
 		if (hp == 0) {
 			return;
 		}
+		//体力 -1
 		hp--;
+		//ダメージのパーティクル発生
 		particle_damage->SetTranslate(wt.translation_ + Normalize(hitPoint));
 		particle_damage->ChangeMode(BornParticle::MomentMode);
+		//ダメージのSE再生
 		Audio::GetInstance()->SoundPlayWave(hitSound, volume);
-		infinityTimer = 0.0f;
+		infinityTimer = 0.0f;//無敵時間発動
+		//ノックバック
 		KnockBackPlayer(hitPoint , infinityTimeMax / 3);
 	}
 
 	isDamageMosion = true;
 	
-	//連続ヒット時、元に戻す
+	//リアクション
+	//連続ヒット時、大きさを元に戻す
 	scaleTimer = 0.0f;
 	wt.scale_ = { 1,1,1 };
 
@@ -518,20 +540,29 @@ void Player::IsFall() {
 	if (hp == 0) {
 		return;
 	}
+	//一発K.O
 	hp = 0;
+	//ダメージSE再生
 	Audio::GetInstance()->SoundPlayWave(hitSound, volume);
 }
 
 void Player::KnockBackPlayer(const Vector3 Power, const float TimerMax) {
+	//威力を代入
 	backPower = Normalize(Power);
 	backPower.z = 0.0f;//z方向はなし
+	//ノックバックするフラグ
 	isKnockback = true;
+	//ノックバック時間(EaseOutで使用する)
 	KnockBackTimeMax = TimerMax;
 }
 
 void Player::KnockBackUmbrella(const Vector3 Power, const float TimerMax) {
+	//威力を代入
 	backPower = TransformNormal(Power, wtGun.matWorld_);
+	backPower.z = 0.0f;//z方向はなし
+	//ノックバックするフラグ
 	isKnockback = true;
+	//ノックバック時間(EaseOutで使用する)
 	KnockBackTimeMax = TimerMax;
 
 	//連続ヒット時、元に戻す
@@ -543,7 +574,8 @@ void Player::DeadPlayer() {
 
 	deadTimer += deltaTime;
 	isDead = true;
-
+	
+	//少しディレイを挟む(カメラのシェイクが終わったら)
 	if (deadTimer >= hitStopTime) {
 		
 		//倒されたパーティクル配置+発動
@@ -565,6 +597,7 @@ void Player::DeadPlayer() {
 		}
 	}
 	else {
+		//止まっているので発動しないようにする
 		grabity = 0.0f;
 		isGround = true;
 	}

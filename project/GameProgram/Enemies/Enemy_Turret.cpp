@@ -14,7 +14,7 @@ Enemy_Turret::~Enemy_Turret() {
 void Enemy_Turret::Initialize() {
 
 	Enemy_InitializeCommon();
-
+	//モデル作成
 	object->SetModelFile("cannon.obj");
 
 	HP_Initialize(6);
@@ -22,6 +22,7 @@ void Enemy_Turret::Initialize() {
 	//見える範囲初期化
 	eyeReach = { 20, 0, 0 };
 
+	//レーザー(見える範囲)の初期化処理
 	particle_laser = std::make_unique<Particle>();
 	particle_laser->Initialize("tullet_laser","resource/Sprite/3YvXH.png",PrimitiveType::beam);
 	particle_laser->SetFrequency(0.001f);
@@ -30,7 +31,11 @@ void Enemy_Turret::Initialize() {
 	particle_laser->SetParticleMosion(ParticleMosion::Fixed);
 	particle_laser->SetScale({ eyeReach.x * 0.5f,0.1f,0.1f });
 
-	particle_fire->SetScale({ 2,2,2 });
+	//ちょっと大きく
+	particle_fire->SetScale({ 1.5f,1.5f,1.5f });
+
+	//最大弾丸数
+	rapidCountMax = 6;
 }
 
 void Enemy_Turret::Update() {
@@ -48,7 +53,10 @@ void Enemy_Turret::Update() {
 		particle_laser->ChangeMode(BornParticle::Stop);
 	}
 
+	//コーンが上向きなので
 	particle_fire->SetRotate({ 0,0,-wt.rotation_.y });
+	
+	//レーザー更新処理
 	particle_laser->Update();
 
 	//更新が終了
@@ -92,37 +100,19 @@ void Enemy_Turret::Draw() {
 }
 
 void Enemy_Turret::Attack() {
-
-	coolTime += 1.0f / 60.0f;
-	if (coolTime >= coolTimeMax) {
-
-		rapidFireTime += 1.0f / 60.0f;
-
-		if (rapidFireTime >= rapidFireTimeMax) {
-			Fire();
-			particle_fire->ChangeMode(BornParticle::MomentMode);
-			rapidCount++;
-			rapidFireTime = 0;
-		}
-
-		if (rapidCount == rapidFireMax) {
-			rapidCount = 0;
-			coolTime = 0;
-			isBullet = false;
-		}
-	}
-
+	//発泡処理
+	Fire();
 }
 
-void Enemy_Turret::Fire() {
-	Vector3 translate = {
-	wt.translation_.x - 1.0f,
-	wt.translation_.y + 1.0f,
-	wt.translation_.z
-	};
+void Enemy_Turret::FireBullet() {
+	
+	Vector3 translate = wt.translation_;
+	//少し前から弾丸が出るように
+	translate.x -= 2.0f,
 
-
-	particle_fire->SetTranslate(translate);
+	//パーティクルの場所変更
+	particle_position = wt.translation_;
+	particle_fire->SetTranslate(particle_position);
 
 
 	Vector3 velocity = { 0.0f,0.0f,0.5f };

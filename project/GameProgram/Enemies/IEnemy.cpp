@@ -268,3 +268,29 @@ Vector3 IEnemy::GetDistance(){
 }
 
 bool IEnemy::IsExplosion() { return false; }
+
+void IEnemy::Fire() {
+	
+	//クールタイム
+	coolTime += 1.0f / 60.0f;
+	if (coolTime >= coolTimeMax) {
+
+		//連射で時間を開ける
+		rapidFireTime += 1.0f / 60.0f;
+		if (rapidFireTime >= rapidFireTimeMax) {
+			FireBullet();//敵の発泡攻撃
+			particle_fire->ChangeMode(BornParticle::MomentMode);//パーティクルが出てくる
+			rapidCount++;//カウント
+			rapidFireTime = 0;//もう一度
+		}
+
+		//最大弾丸数を超えた場合
+		if (rapidCount == rapidCountMax) {
+			rapidCount = 0;//カウントリセット
+			coolTime = 0;//クールタイム発動
+			isBullet = false;//撃たないフラグ
+		}
+	}
+}
+
+void IEnemy::FireBullet(){}
