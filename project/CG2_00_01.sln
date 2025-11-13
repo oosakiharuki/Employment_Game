@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CG2_00_01", "CG2_00_01.vcxproj", "{D9C33899-786E-4974-B1E8-D92DE51A95F1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3C40E246-56FC-4D7D-9A37-7595D15F4898} = {3C40E246-56FC-4D7D-9A37-7595D15F4898}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{25440758-D951-4BDE-A94E-160F0ABC1E72}"
 	ProjectSection(SolutionItems) = preProject

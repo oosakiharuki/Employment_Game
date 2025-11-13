@@ -141,7 +141,7 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 	std::string filePath = directoryPath + "/" + filename;
 
 	const aiScene* kScene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
-	assert(scene->HasMeshes()); //メッシュがないのは対応なし
+	assert(kScene->HasMeshes()); //メッシュがないのは対応なし
 
 	std::vector<VertexData> vertices;
 
