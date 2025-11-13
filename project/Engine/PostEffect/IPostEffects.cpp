@@ -9,11 +9,11 @@ void IPostEffects::ChangeNumber() {
 
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_F1)) {
-		effectNo++;
+		sEffectNo++;
 	}
 	//最大→0に
-	if (effectNo == Max) {
-		effectNo = 0;
+	if (sEffectNo == Max) {
+		sEffectNo = 0;
 	}
 #endif // _DEBUG
 }
