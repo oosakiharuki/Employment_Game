@@ -24,7 +24,7 @@ void Enemy_Bomb::Update() {
 	UpdateCommon();
 
 	//体力が0の時
-	if ((bombTimer >= bombTimeMax || isDead) && !isExplosion) {
+	if ((bombTimer >= kBombTimeMax || isDead) && !isExplosion) {
 		Exprosion();
 	}
 
@@ -81,7 +81,7 @@ void Enemy_Bomb::Attack() {
 
 void Enemy_Bomb::TimeRimmit() {
 	//爆弾タイマー
-	bombTimer += deltaTime;
+	bombTimer += kDeltaTime;
 
 	//プレイヤーに追淳
 	wt.translation_ += distance * Vector3{ -0.03f,0,0 } *3;
@@ -95,7 +95,7 @@ void Enemy_Bomb::TimeRimmit() {
 	}
 
 	//リアクション
-	if (bombTimer >= bombTimeMax / 1.5f) {
+	if (bombTimer >= kBombTimeMax / 1.5f) {
 		//爆発寸前だと揺れが細かくなる
 		ScaleUpdate(&isStart, bombScale * 2, 0.2f / 2);
 	}
@@ -117,8 +117,8 @@ void Enemy_Bomb::RespawnEnemy() {
 
 void Enemy_Bomb::Exprosion() {
 	//爆発範囲AABB
-	bombAABB.min = wt.translation_ - hani;
-	bombAABB.max = wt.translation_ + hani;
+	bombAABB.min = wt.translation_ - kExplosionRange;
+	bombAABB.max = wt.translation_ + kExplosionRange;
 
 	//パーティクルの設定
 	particle_damage->SetTranslate(wt.translation_);

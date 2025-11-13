@@ -92,11 +92,11 @@ private:
 
 
 	//傘のノックバックの値
-	const Vector3 UmbrellaKnockBackPower = { 0.0f,0.0f,0.3f };
-	const float UmbrellaKnockBackTime = 0.0f;
+	const Vector3 kUmbrellaKnockBackPower = { 0.0f,0.0f,0.3f };
+	const float kUmbrellaKnockBackTime = 0.0f;
 
 	//影で少し上にあげる値
-	const float ShadowUp = 0.01f;
+	const float kShadowUp = 0.01f;
 
 	//インスタンス
 	static std::shared_ptr<CollisionManager> instance;

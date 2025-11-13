@@ -28,10 +28,6 @@ void WarpGate::Draw() {
 void WarpGate::Vanish() {
 	if (wt.scale_.x > 0 && wt.scale_.y > 0 && wt.scale_.z > 0) {
 		t += 0.1f;
-		wt.scale_ -= EaseIn(0.1f, littleLarge + t);
+		wt.scale_ -= EaseIn(0.1f, kLittleLarge + t);
 	}
-}
-
-void WarpGate::SetObjectName() {
-	objectName = "WarpGate";
 }

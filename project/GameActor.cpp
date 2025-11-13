@@ -44,7 +44,7 @@ void GameActor::ScaleUpdate(bool* mosionOn, Vector3 scale, const float& maxTime)
 	else {
 		wt.scale_ += scale;
 	}
-	scaleTimer += deltaTime;
+	scaleTimer += kDeltaTime;
 }
 
 void GameActor::RespawnCommon() {
@@ -57,7 +57,7 @@ void GameActor::RespawnCommon() {
 }
 
 void GameActor::HP_Initialize(const uint32_t& max) {
-	maxHp = max;
+	maxHp = max;//最大値を設定
 	hp = maxHp;
 }
 

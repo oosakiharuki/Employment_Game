@@ -63,7 +63,7 @@ private:
 	std::unique_ptr<Sprite> sprite;
 
 	//秒数時間
-	const float deltaTime = 1.0f / 60.0f;
+	const float kDeltaTime = 1.0f / 60.0f;
 
 	//フェード中フラグ
 	bool isFading = true;

@@ -311,10 +311,10 @@ void Object_glTF::ApplyAnimation(Skeleton& skeleton, const Animation& animation,
 	for (Joint& joint : skeleton.joints) {
 		//jointにアニメーションがある場合
 		if (auto it = animation.nodeAnimations.find(joint.name); it != animation.nodeAnimations.end()) {
-			const NodeAnimation& rootNodeAnimation = (*it).second;
-			joint.transform.translate = CalculateValue(rootNodeAnimation.translate, animationTime);
-			joint.transform.rotate = CalculateValueQuaternion(rootNodeAnimation.rotate, animationTime);
-			joint.transform.scale = CalculateValue(rootNodeAnimation.scale, animationTime);
+			const NodeAnimation& kRootNodeAnimation = (*it).second;
+			joint.transform.translate = CalculateValue(kRootNodeAnimation.translate, animationTime);
+			joint.transform.rotate = CalculateValueQuaternion(kRootNodeAnimation.rotate, animationTime);
+			joint.transform.scale = CalculateValue(kRootNodeAnimation.scale, animationTime);
 
 		}
 	}
@@ -429,11 +429,11 @@ void Object_glTF::Interpolation(Skeleton& skeleton, const Animation& animation, 
 		//jointにアニメーションがある場合
 		if (auto itA = animation.nodeAnimations.find(joint.name); itA != animation.nodeAnimations.end()) {
 			if (auto itB = nextAnimation.nodeAnimations.find(joint.name); itB != nextAnimation.nodeAnimations.end()) {
-				const NodeAnimation& rootNodeAnimation = (*itA).second;
-				const NodeAnimation& nextRootNodeAnimation = (*itB).second;
-				joint.transform.translate = InterpolationValue(nextRootNodeAnimation.translate,rootNodeAnimation.translate, animationTime);//nextと逆にする()
-				joint.transform.rotate = InterpolationValueQuaternion(rootNodeAnimation.rotate, nextRootNodeAnimation.rotate, animationTime);
-				joint.transform.scale = InterpolationValue(rootNodeAnimation.scale, nextRootNodeAnimation.scale, animationTime);
+				const NodeAnimation& kRootNodeAnimation = (*itA).second;
+				const NodeAnimation& kNextRootNodeAnimation = (*itB).second;
+				joint.transform.translate = InterpolationValue(kNextRootNodeAnimation.translate,kRootNodeAnimation.translate, animationTime);//nextと逆にする()
+				joint.transform.rotate = InterpolationValueQuaternion(kRootNodeAnimation.rotate, kNextRootNodeAnimation.rotate, animationTime);
+				joint.transform.scale = InterpolationValue(kRootNodeAnimation.scale, kNextRootNodeAnimation.scale, animationTime);
 
 			}
 		}

@@ -10,10 +10,10 @@ struct PixelShaderOutput
 
 PixelShaderOutput main(VartexShaderOutput input)
 {
-    static const int32_t box = 5;
-    float32_t2 kIndex3x3[box][box];
+    static const int32_t kBox = 5;
+    float32_t2 kIndex3x3[kBox][kBox];
     
-    float k = (box - 1) / 2;
+    float k = (kBox - 1) / 2;
     //-1,0,1の順番
     for (int32_t i = -k; i <= k; ++i)
     {
@@ -27,7 +27,7 @@ PixelShaderOutput main(VartexShaderOutput input)
      
     // (自身の面{0,0}) 1 / 9 (縦横斜めの面8+自身の面1)
     //h[][]
-    float32_t kKernel3x3[box][box];
+    float32_t kKernel3x3[kBox][kBox];
 
     uint32_t width, height;
     gTexture.GetDimensions(width, height);
@@ -37,11 +37,11 @@ PixelShaderOutput main(VartexShaderOutput input)
     output.color.rgb = float32_t3(0.0f, 0.0f, 0.0f);
     output.color.a = 1.0f;
 
-    for (int32_t x = 0; x < box; ++x)
+    for (int32_t x = 0; x < kBox; ++x)
     {
-        for (int32_t y = 0; y < box; ++y)
+        for (int32_t y = 0; y < kBox; ++y)
         {
-            kKernel3x3[x][y] = 1.0f / pow(box,2);
+            kKernel3x3[x][y] = 1.0f / pow(kBox,2);
             
             float32_t2 texcoord = input.texcoord + kIndex3x3[x][y] * uvStepSize;
             float32_t3 fetchColor = gTexture.Sample(gSampler, texcoord).rgb;

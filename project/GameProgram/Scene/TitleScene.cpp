@@ -114,15 +114,15 @@ void TitleScene::Update() {
 		//座標を維持
 		wts[0].translation_.y = -2.0f;
 		//Maxになるまでタイマーを進ませる
-		if (timer < TimeMax) {
+		if (timer < kTimeMax) {
 			timer += 1.0f / 60.0f;
 		}
 		else {
-			timer = TimeMax;
+			timer = kTimeMax;
 			move += 0.01f;
 		}
 		//タイトルが上からくる
-		start.y = end.y + EaseOut(start.y, timer, TimeMax);
+		start.y = end.y + EaseOut(start.y, timer, kTimeMax);
 		Title_pos.y = start.y + 10.0f * std::sin(move);
 
 	}
@@ -144,13 +144,13 @@ void TitleScene::Update() {
 		}
 
 		bulletTimer += 1.0f / 60.0f;
-		if (bulletTimer >= bulletTimeMax) {
+		if (bulletTimer >= kBulletTimeMax) {
 			NextSceneFadeInStart("Select");
 		}
 	}
 
 	//フェードが終わったら押せる
-	if (timer >= TimeMax && !isbullet) {
+	if (timer >= kTimeMax && !isbullet) {
 
 		//選択できるようになったら傘を親子関係をなくす
 		if (wts[1].parent_) {

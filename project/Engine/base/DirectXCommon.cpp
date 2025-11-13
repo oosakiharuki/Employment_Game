@@ -208,7 +208,7 @@ void DirectXCommon::SwapChain() {
 
 	//SwapchainからResourceを引っ張ってくる
 
-	for (uint32_t i = 0; i < MaxResource; ++i) {
+	for (uint32_t i = 0; i < kMaxResource; ++i) {
 		hr = swapChain->GetBuffer(i, IID_PPV_ARGS(&swapChainResources[i]));
 		assert(SUCCEEDED(hr));
 	}
@@ -291,7 +291,7 @@ void DirectXCommon::RTV() {
 	const Vector4 kRenderTargetClearValue{ 0.5f,0.5f,0.5f,1.0f };//赤色
 	renderTextureResource =  CreateRenderTextureResource(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, kRenderTargetClearValue);
 	
-	for (uint32_t i = 0; i < MaxResource; ++i) {
+	for (uint32_t i = 0; i < kMaxResource; ++i) {
 		rtvHandles[i] = rtvStartHandle;
 		if (i > 0) {
 			rtvHandles[i].ptr = rtvHandles[i - 1].ptr + device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);

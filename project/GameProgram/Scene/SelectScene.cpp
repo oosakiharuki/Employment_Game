@@ -3,17 +3,20 @@ using namespace MyMath;
 
 void SelectScene::Initialize() {
 
+	//ステージシーンのゲームオブジェクト配置
 	LevelEditorObjectSetting("stage_select");
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
 
+	//ステージの全体層
 	stageobj = std::make_unique<Object3d>();
 	stageobj->Initialize();
 	stageobj->SetModelFile("stage_select.obj");
 
+	//フェードスタート
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
-	
+	//ワープ、ゴールフラグのリセット
 	CollisionManager::GetInstance()->ResetFlag();
 }
 
@@ -27,10 +30,12 @@ void SelectScene::Update() {
 		ChangeScene();
 	}
 
+	//ワープするflag && カメラがズームし終わった
 	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->MaxZoom()) {
 		NextSceneFadeInStart("Game");
 	}
 
+	//ステージオブジェクト更新
 	for (auto& stageObject : stageObjects) {
 		stageObject->Update();
 	}

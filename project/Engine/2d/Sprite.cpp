@@ -45,11 +45,11 @@ void Sprite::Initialize(std::string textureFilePath) {
 	}
 
 	AdjustTextureSize();
-	const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(filePath);
-	float tex_left = textureLeftTop.x / metadata.width;
-	float tex_right = textureLeftTop.x + textureSize.x / metadata.width;
-	float tex_top = textureLeftTop.y / metadata.height;
-	float tex_bottom = textureLeftTop.y + textureSize.y / metadata.height;
+	const DirectX::TexMetadata& kMetadata = TextureManager::GetInstance()->GetMetaData(filePath);
+	float tex_left = textureLeftTop.x / kMetadata.width;
+	float tex_right = textureLeftTop.x + textureSize.x / kMetadata.width;
+	float tex_top = textureLeftTop.y / kMetadata.height;
+	float tex_bottom = textureLeftTop.y + textureSize.y / kMetadata.height;
 
 	vertexData[0].position = { left,bottom,0.0f,1.0f };//0
 	vertexData[0].texcoord = { tex_left,tex_bottom };
@@ -114,10 +114,10 @@ void Sprite::Initialize(std::string textureFilePath) {
 }
 
 void Sprite::AdjustTextureSize() {
-	const DirectX::TexMetadata& metadata = TextureManager::GetInstance()->GetMetaData(filePath);
+	const DirectX::TexMetadata& kMetadata = TextureManager::GetInstance()->GetMetaData(filePath);
 
-	textureSize.x = static_cast<float>(metadata.width);
-	textureSize.y = static_cast<float>(metadata.height);
+	textureSize.x = static_cast<float>(kMetadata.width);
+	textureSize.y = static_cast<float>(kMetadata.height);
 
 	size = textureSize;
 }

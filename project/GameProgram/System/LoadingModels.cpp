@@ -22,6 +22,7 @@ void LoadingModels::LoadObjects() {
 
 
 void LoadingModels::LoadObj() {
+	//objの設定
 	modelManager->LoadModel("cannon", ".obj");
 	modelManager->LoadModel("enemy", ".obj");
 	modelManager->LoadModel("PlayerBullet", ".obj");
@@ -41,7 +42,7 @@ void LoadingModels::LoadObj() {
 }
 
 void LoadingModels::LoadGltf() {
-
+	//gltfの設定
 	modelManager->LoadModel("NewPlayer", ".gltf", true);
 	modelManager->LoadModel("NewPlayer_umbrella", ".gltf");
 	modelManager->LoadModel("player_GameOver", ".gltf");

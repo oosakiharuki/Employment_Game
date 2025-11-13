@@ -3,19 +3,20 @@
 using namespace MyMath;
 
 void GameScene::Initialize() {
-
+	//ゲームデータ引継ぎ(Hp,ステージ面)
 	PreviousSceneData();
 
+	//ゲームオブジェクト配置
 	LevelEditorObjectSetting();
 
-	skyBox = std::make_unique<BoxModel>();
-	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
-
+	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");
 	soundData_ = Audio::GetInstance()->LoadWave("resource/sound/bane.wav");
 
+	//BGM再生(リピート)
 	Audio::GetInstance()->SoundPlayWave(BGMData_, volume, true);
 
+	//スタート演出
 	WarterWarpExit();
 
 	//演出時に重力が発動しないようにする
@@ -23,18 +24,20 @@ void GameScene::Initialize() {
 		enemy->IsPerformanceFlag(true);
 	}
 
+	//フェードスタート
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
-	
+	//ワープやゴールのフラグをオフ
 	CollisionManager::GetInstance()->ResetFlag();
 }
 
 void GameScene::Update() {
-
+	
+	//フェード中でないか && 次のシーンに変更フラグが立ったか
 	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {
 		ChangeScene();
-		Audio::GetInstance()->StopWave(BGMData_);
+		Audio::GetInstance()->StopWave(BGMData_);//BGM停止
 	}
-
+	//演出用のワープゲート出口
 	startWarp->Update();
 
 	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->MaxZoom()) {
@@ -46,18 +49,16 @@ void GameScene::Update() {
 		return;
 	}
 
-	skyBox->Update(MakeScaleMatrix({ 1000,1000,1000 }));//大きくするため
-
-	//
+	//カメラコントロール
 	cameraControl_->SetPlayerPosition(player_->GetTranslate());
-
 	//プレイヤーが倒されたらシェイク
 	(player_->GetIsDead()) ? cameraControl_->ShakeMode(true) : cameraControl_->ResetShakeTime();
-
+	//更新処理
 	cameraControl_->Update(&*camera.get());
 
 	player_->Update();
-		
+	
+	//次のシーンに移動する演出
 	WarpNextScene();
 
 	stageobj->Update();
@@ -69,7 +70,7 @@ void GameScene::Update() {
 			isStartStage = false;
 			player_->IsPerformanceFlag(false);//演出モードを終了し操作できるように
 			player_->IsJumping();//強制的にジャンプさせて飛び出たようにする
-			//カイジョ
+			//演出フラグ解除
 			for (auto& enemy : enemies) {
 				enemy->IsPerformanceFlag(false);
 			}
@@ -230,13 +231,16 @@ void GameScene::Respawn() {
 			FadeScreen::GetInstance()->SetBackGround("black.png");
 			return;
 		}
+		//残機が一つ減る
 		RemainingLife--;
 
+		//敵が復活
 		for (auto& enemy : enemies) {
 			enemy->RespawnEnemy();
 		}
+		//プレイヤー復活
 		player_->RespawnPlayer();
-
+		//突破できてないならやり直し
 		for (auto& eventTrigger : eventTriggers) {
 			eventTrigger->FailureEvent();
 			cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit["MainCamera"], false);

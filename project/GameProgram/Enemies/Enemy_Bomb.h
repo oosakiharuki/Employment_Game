@@ -36,12 +36,12 @@ private:
 	bool isExplosion = false;
 
 	//爆発するまでのタイマー
-	const float bombTimeMax = 5.0f;//max
+	const float kBombTimeMax = 5.0f;//max
 	float bombTimer = 0.0f;
 
 	//爆発範囲AABB
 	AABB bombAABB;
-	const Vector3 hani = { 5,5,5 };//大きさ
+	const Vector3 kExplosionRange = { 5,5,5 };//大きさ
 	//プレイヤーとの距離感
 	Vector3 distance;
 

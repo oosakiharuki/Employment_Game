@@ -12,8 +12,6 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void SetObjectName()override;
-
 	/// <summary>
 	/// setter_次のステージ
 	/// </summary>
@@ -37,6 +35,6 @@ private:
 	//小さくする
 	float t = 0.0f;
 	//少しだけ大きくして緩急をつける
-	const float littleLarge = -1.5f;
+	const float kLittleLarge = -1.5f;
 };
 

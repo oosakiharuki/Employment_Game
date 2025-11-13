@@ -15,6 +15,10 @@ AABB IStageObject::GetAABB() {
 	return aabb;
 }
 
+void IStageObject::SetObjectName(const std::string& name) {
+	objectName = name;
+}
+
 void IStageObject::SetNextStage(std::string fileName){}
 
 std::string IStageObject::GetNextStage(){

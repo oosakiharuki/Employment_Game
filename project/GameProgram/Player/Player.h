@@ -133,7 +133,7 @@ public:
 	/// setter_体力
 	/// </summary>
 	/// <param name="preHp"></param>代入する体力数
-	const uint32_t GetMaxHp() { return playerMaxHp; }
+	const uint32_t GetMaxHp() { return kPlayerMaxHp; }
 
 	/// <summary>
 	/// setter_体力
@@ -176,15 +176,15 @@ private:
 	Input* input_ = nullptr;
 	XINPUT_STATE state, preState;
 	//プレイヤーの速さ
-	const float standard_speed = 0.14f;
-	float speed = standard_speed;
+	const float kStandard_speed = 0.14f;
+	float speed = kStandard_speed;
 	//ジャンプフラグ
 	bool isJump = false;
 
 	//重力
 	void GravityUpdate();
-	const float standard_grabity = 0.01f;//重力の質量
-	const float fixed_grabity = -0.05f;//滑空時重力値を固定
+	const float kStandard_grabity = 0.01f;//重力の質量
+	const float kFixed_grabity = -0.05f;//滑空時重力値を固定
 
 	/// 弾丸
 	std::list<std::shared_ptr<PlayerBullet>> bullets_;
@@ -199,10 +199,10 @@ private:
 	bool pushS = false;
 	
 	//向き
-	const float upDis = 270.0f;//上
-	const float downtDis = 90.0f;//下
-	const float leftDis = 180.0f;//左
-	const float rightDis = 360.0f;//右
+	const float kUpDis = 270.0f;//上
+	const float kDowntDis = 90.0f;//下
+	const float kLeftDis = 180.0f;//左
+	const float kRightDis = 360.0f;//右
 
 	const float Naname_Value = 45.0f;//斜めにする変数
 
@@ -229,12 +229,12 @@ private:
 	bool isBrink = false;
 	bool isOneBrink = false;
 	float brinkTimer = 0.0f;
-	const float brinkTimeMax = 0.5f;
+	const float kBrinkTimeMax = 0.5f;
 
 	//落下する時ふわふわできるように
 	bool isUmbrellaFall = false;
 
-	const uint32_t playerMaxHp = 3;//設定する体力
+	const uint32_t kPlayerMaxHp = 3;//設定する体力
 	//ダメージを食らった後の無敵時間
 	float infinityTimer = 0.0f;
 	const float infinityTimeMax = 1.0f;
@@ -275,9 +275,9 @@ private:
 
 	//UI
 	std::vector<std::unique_ptr<Sprite>> sprites_Hp;
-	const Vector2 textureSize_Hp = { 64,64 };//スプライトサイズ
-	const Vector2 initializePoint_Hp = { 20.0f,45.0f };//スプライトの初期位置
-	const float distanceY_Hp = 10.0f;//スプライトのY軸幅
+	const Vector2 kTextureSize_Hp = { 64,64 };//スプライトサイズ
+	const Vector2 kInitializePoint_Hp = { 20.0f,45.0f };//スプライトの初期位置
+	const float kDistanceY_Hp = 10.0f;//スプライトのY軸幅
 
 	//傘がリアクションするflag
 	bool isShildMosion = false;

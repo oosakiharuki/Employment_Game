@@ -117,14 +117,14 @@ namespace Primitive {
 		const uint32_t kRingDivide = 32;
 		const float kOuterRadius = 1.0f;
 		const float kInnerRadius = 0.2f;
-		const float radianPreDevice = 2.0f * std::numbers::pi_v<float> / float(kRingDivide);
+		const float kRadianPreDevice = 2.0f * std::numbers::pi_v<float> / float(kRingDivide);
 
 		for (uint32_t index = 0; index < kRingDivide; ++index) {
-			float sin = std::sin(index * radianPreDevice);
-			float cos = std::cos(index * radianPreDevice);
+			float sin = std::sin(index * kRadianPreDevice);
+			float cos = std::cos(index * kRadianPreDevice);
 
-			float sinNext = std::sin((index + 1) * radianPreDevice); // ベジェ曲線のイメージ
-			float cosNext = std::cos((index + 1) * radianPreDevice);
+			float sinNext = std::sin((index + 1) * kRadianPreDevice); // ベジェ曲線のイメージ
+			float cosNext = std::cos((index + 1) * kRadianPreDevice);
 
 			float u = float(index) / float(kRingDivide);
 			float uNext = float(index + 1) / float(kRingDivide);
@@ -166,14 +166,14 @@ namespace Primitive {
 		const float kTopRadius = 1.0f;
 		const float kBottomRadius = 1.0f;
 		const float kHeight = 3.0f;
-		const float radianPreDevice = 2.0f * std::numbers::pi_v<float> / float(kCylinderDivide);
+		const float kRadianPreDevice = 2.0f * std::numbers::pi_v<float> / float(kCylinderDivide);
 
 		for (uint32_t index = 0; index < kCylinderDivide; ++index) {
-			float sin = std::sin(index * radianPreDevice);
-			float cos = std::cos(index * radianPreDevice);
+			float sin = std::sin(index * kRadianPreDevice);
+			float cos = std::cos(index * kRadianPreDevice);
 
-			float sinNext = std::sin((index + 1) * radianPreDevice); // ベジェ曲線のイメージ
-			float cosNext = std::cos((index + 1) * radianPreDevice);
+			float sinNext = std::sin((index + 1) * kRadianPreDevice); // ベジェ曲線のイメージ
+			float cosNext = std::cos((index + 1) * kRadianPreDevice);
 
 			float u = float(index) / float(kCylinderDivide);
 			float uNext = float(index + 1) / float(kCylinderDivide);
@@ -353,14 +353,14 @@ namespace Primitive {
 		const float kTopRadius = 1.0f;
 		const float kBottomRadius = 1.0f;
 		const float kHeight = 3.0f;
-		const float radianPreDevice = 2.0f * std::numbers::pi_v<float> / float(kCylinderDivide);
+		const float kRadianPreDevice = 2.0f * std::numbers::pi_v<float> / float(kCylinderDivide);
 
 		for (uint32_t index = 0; index < kCylinderDivide; ++index) {
-			float sin = std::sin(index * radianPreDevice);
-			float cos = std::cos(index * radianPreDevice);
+			float sin = std::sin(index * kRadianPreDevice);
+			float cos = std::cos(index * kRadianPreDevice);
 
-			float sinNext = std::sin((index + 1) * radianPreDevice); // ベジェ曲線のイメージ
-			float cosNext = std::cos((index + 1) * radianPreDevice);
+			float sinNext = std::sin((index + 1) * kRadianPreDevice); // ベジェ曲線のイメージ
+			float cosNext = std::cos((index + 1) * kRadianPreDevice);
 
 			float u = float(index) / float(kCylinderDivide);
 			float uNext = float(index + 1) / float(kCylinderDivide);
