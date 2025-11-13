@@ -64,14 +64,14 @@ void IEnemy::UpdateCommon() {
 			}
 		}
 
-		markTimer = std::clamp(markTimer, 0.0f, markMaxTime);
+		markTimer = std::clamp(markTimer, 0.0f, kMarkMaxTime);
 		
 		if (isBullet) {
 			//攻撃
 			//攻撃し終わるとisBulletがfalseに
 			Attack();
 			//!マーク表示時間
-			markTimer += deltaTime;	
+			markTimer += kDeltaTime;	
 		}
 		else if(!isBullet){
 			//攻撃、見つけたマークのタイマーリセット
@@ -79,7 +79,7 @@ void IEnemy::UpdateCommon() {
 			rapidFireTime = 0;
 			coolTime = 0;
 			lost_player = true;//見失うフラグ
-			markTimer -= deltaTime * 0.5f;
+			markTimer -= kDeltaTime * 0.5f;
 		}		
 				
 		if(lost_player && markTimer <= 0.0f)
@@ -89,7 +89,7 @@ void IEnemy::UpdateCommon() {
 	shadow_->SetTranslate(wt.translation_);
 
 	if (isDamageMosion) {
-		ScaleUpdate(&isDamageMosion, damageScale, damageMaxTime);
+		ScaleUpdate(&isDamageMosion, damageScale, kDamageMaxTime);
 	}
 
 	for (auto* bullet : bullets_) {
@@ -127,7 +127,7 @@ void IEnemy::UpdateBehind() {
 void IEnemy::DrawCommon() {
 	if (isDead) return;//死んでるなら読み取らない
 
-	if(isBullet && markTimer < markMaxTime)
+	if(isBullet && markTimer < kMarkMaxTime)
 		object_found->Draw();
 
 	if (lost_player && markTimer > 0.0f)
@@ -140,7 +140,7 @@ void IEnemy::IsDamage() {
 	isDamageMosion = true;
 
 	//連続ヒット時、元に戻す
-	wt.scale_ = defaultScale;
+	wt.scale_ = kDefaultScale;
 	scaleTimer = 0.0f;
 
 	if (hp == 0) {
@@ -178,15 +178,15 @@ void IEnemy::PlayerTarget() {
 }
 
 void IEnemy::SearchRange() {
-	if (direction == direction_right) {
+	if (direction == kDirection_right) {
 		eyeAABB.min = wt.translation_ + Vector3(0, -eyeReach.y, -eyeReach.z);
 		eyeAABB.max = wt.translation_ + eyeReach;
-		speed.x = moveX;
+		speed.x = kMoveX;
 	}
-	else if (direction == direction_left) {
+	else if (direction == kDirection_left) {
 		eyeAABB.min = wt.translation_ + -eyeReach;
 		eyeAABB.max = wt.translation_ + Vector3(0, eyeReach.y, eyeReach.z);
-		speed.x = -moveX;
+		speed.x = -kMoveX;
 	}
 }
 
@@ -196,10 +196,10 @@ void IEnemy::MoveEnemy() {
 
 	//移動ポイントの端だと向きを変える
 	if (move.x > route_point2.x) {
-		direction = direction_left;
+		direction = kDirection_left;
 	}
 	if (move.x < route_point1.x) {
-		direction = direction_right;
+		direction = kDirection_right;
 	}
 
 
@@ -247,10 +247,10 @@ void IEnemy::DirectionDegree() {
 
 	///0~180は右
 	if (wt.rotation_.y >= 0.0f && wt.rotation_.y < 180.0f) {
-		direction = direction_right;
+		direction = kDirection_right;
 	}///180~360は左
 	else if (wt.rotation_.y <= 360.0f) {
-		direction = direction_left;
+		direction = kDirection_left;
 	}
 
 	wt.rotation_.y = direction;
@@ -273,11 +273,11 @@ void IEnemy::Fire() {
 	
 	//クールタイム
 	coolTime += 1.0f / 60.0f;
-	if (coolTime >= coolTimeMax) {
+	if (coolTime >= kCoolTimeMax) {
 
 		//連射で時間を開ける
 		rapidFireTime += 1.0f / 60.0f;
-		if (rapidFireTime >= rapidFireTimeMax) {
+		if (rapidFireTime >= kRapidFireTimeMax) {
 			FireBullet();//敵の発泡攻撃
 			particle_fire->ChangeMode(BornParticle::MomentMode);//パーティクルが出てくる
 			rapidCount++;//カウント

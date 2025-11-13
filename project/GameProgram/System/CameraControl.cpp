@@ -82,13 +82,13 @@ void CameraControl::Move() {
 
 void CameraControl::Zoom() {
 	if (isZoom) {
-		if (zoomTimer < MaxZoomTime) {
-			wt.translation_ = cameraSegment.diff + EaseOut(cameraSegment.origin - cameraSegment.diff, zoomTimer, MaxZoomTime);
+		if (zoomTimer < kMaxZoomTime) {
+			wt.translation_ = cameraSegment.diff + EaseOut(cameraSegment.origin - cameraSegment.diff, zoomTimer, kMaxZoomTime);
 			zoomTimer += 1.0f / 60.0f;
 		}
 		else {
 			wt.translation_ = cameraSegment.diff;
-			zoomTimer = MaxZoomTime;
+			zoomTimer = kMaxZoomTime;
 		}
 	}
 }
@@ -103,7 +103,7 @@ void CameraControl::Shaking() {
 	}
 	else if (shake_Mode) {
 		//シェイクする前に元々のカメラ位置を設定
-		if (ShakeTimer == ShakeMaxTime) {
+		if (ShakeTimer == kShakeMaxTime) {
 			//シェイク前のカメラ位置
 			preTranslate = wt.translation_;
 		}
@@ -123,7 +123,7 @@ void CameraControl::Shaking() {
 
 
 bool CameraControl::MaxZoom() {
-	if (zoomTimer >= MaxZoomTime) {
+	if (zoomTimer >= kMaxZoomTime) {
 		return true;
 	}
 	return false;

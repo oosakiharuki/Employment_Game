@@ -163,7 +163,7 @@ protected:
 	bool isPerformance = false;
 
 	//秒数時間
-	const float deltaTime = 1.0f / 60.0f;
+	const float kDeltaTime = 1.0f / 60.0f;
 
 	///影
 	std::unique_ptr<Shadow> shadow_;
@@ -174,8 +174,8 @@ protected:
 	//ダメージリアクション
 	float scaleTimer = 0.0f;
 	Vector3 damageScale = { 0.1f, 0.1f, 0.1f };
-	const Vector3 defaultScale = { 1,1,1 };//元の大きさ
-	const float damageMaxTime = 0.14f;
+	const Vector3 kDefaultScale = { 1,1,1 };//元の大きさ
+	const float kDamageMaxTime = 0.14f;
 
 
 	//初期位置保管

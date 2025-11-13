@@ -103,7 +103,7 @@ private:
 	Microsoft::WRL::ComPtr < IDXGISwapChain4> swapChain = nullptr;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
 
-	static const uint32_t MaxResource = 2;
+	static const uint32_t kMaxResource = 2;
 	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, 2> swapChainResources;
 	
 	WinApp* winApp_ = nullptr;
@@ -132,7 +132,7 @@ private:
 
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle;
 
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[MaxResource];
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[kMaxResource];
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandlesRT;
 
 	//ビューポート

@@ -18,14 +18,14 @@ void PlayerBullet::Initialize() {
 
 void PlayerBullet::Update() {
 
-	deathTimer += deltaTime;
+	deathTimer += kDeltaTime;
 	
 	//弾丸速度
 	//徐々に減速する
-	wt.translation_ += EaseOut(velocity_,deathTimer,endTime);
+	wt.translation_ += EaseOut(velocity_,deathTimer,kEndTime);
 
 	//時間がたったら消える
-	if (deathTimer >= endTime) {
+	if (deathTimer >= kEndTime) {
 		isDead = true;
 	}
 

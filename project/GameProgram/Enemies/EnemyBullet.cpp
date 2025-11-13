@@ -30,10 +30,10 @@ void EnemyBullet::Update() {
 	}
 
 
-	deathTimer += deltaTime;
+	deathTimer += kDeltaTime;
 
 	//時間がたったら消える
-	if (deathTimer >= endTime) {
+	if (deathTimer >= kEndTime) {
 		isDead = true;
 	}
 

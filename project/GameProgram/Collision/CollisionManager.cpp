@@ -52,7 +52,7 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 				}
 				else {//跳ね返さず防ぐのみ
 					bulletE->IsHit();//当たって消える
-					player_->KnockBackUmbrella(UmbrellaKnockBackPower, UmbrellaKnockBackTime);//ノックバックする
+					player_->KnockBackUmbrella(kUmbrellaKnockBackPower, kUmbrellaKnockBackTime);//ノックバックする
 				}
 				player_->IsShildMosion();//傘のリアクションフラグをtrueに
 			}

@@ -29,7 +29,7 @@ public:
 	/// <summary>
 	/// シェイク時間を元(最大値)に戻す
 	/// </summary>
-	void ResetShakeTime() { ShakeTimer = ShakeMaxTime; }
+	void ResetShakeTime() { ShakeTimer = kShakeMaxTime; }
 
 	/// <summary>
 	/// カメラを設定する
@@ -60,15 +60,15 @@ private:
 	Vector3 fixedPos;
 
 	//シェイク
-	const float ShakeMaxTime = 0.25f;
-	float ShakeTimer = ShakeMaxTime;
+	const float kShakeMaxTime = 0.25f;
+	float ShakeTimer = kShakeMaxTime;
 	Vector3 preTranslate{};
 	bool shake_Mode = false;
 
 	//カメラズーム
 	Segment cameraSegment = {};
 	float zoomTimer = 0.0f;
-	const float MaxZoomTime = 1.0f;
+	const float kMaxZoomTime = 1.0f;
 	bool isZoom = false;
 	
 	//imgui

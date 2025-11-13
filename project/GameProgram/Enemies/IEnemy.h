@@ -166,8 +166,8 @@ protected:
 	//敵を倒した時のUpdate関数
 	void DeadUpdate();
 
-	const float direction_right = 90.0f;
-	const float direction_left = -90.0f;
+	const float kDirection_right = 90.0f;
+	const float kDirection_left = -90.0f;
 
 	//倒された時フラグ
 	bool deleteEnemy = false;//完全に削除フラグ
@@ -180,23 +180,14 @@ protected:
 	Vector3 route_point1;
 	Vector3 route_point2;
 
-	////リアクション
-	//float scaleTimer = 0.0f;
-	//Vector3 defaultScale = { 1,1,1 };//元の大きさ
-	////ダメージのリアクション
-	//bool isDamageMosion = false;
-	//Vector3 damageScale = { 0.1f, 0.1f, 0.1f };
-	//const float damageMaxTime = 0.14f;
-
-
 	//弾丸発射フラグ
 	bool isBullet = false;
 	//クールタイム
 	float coolTime = 0.0f;
-	const float coolTimeMax = 1.25f;
+	const float kCoolTimeMax = 1.25f;
 	//弾丸の出す間の時間
 	float rapidFireTime = 0.0f;
-	const float rapidFireTimeMax = 0.1f;
+	const float kRapidFireTimeMax = 0.1f;
 	//発射カウント
 	uint32_t rapidCount = 0;
 	//最大弾丸数
@@ -210,9 +201,9 @@ protected:
 	Vector3 speed = { 0,0,0 };
 	//移動
 	Vector3 move = { 0,0,0 };
-	const float moveX = 0.03f;
+	const float kMoveX = 0.03f;
 
-	const float markMaxTime = 1.0f;
+	const float kMarkMaxTime = 1.0f;
 	float markTimer = 0.0f;
 	bool lost_player = false;
 

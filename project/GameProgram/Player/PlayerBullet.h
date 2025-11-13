@@ -64,11 +64,11 @@ private:
 
 	//消えるまでの処理
 	float deathTimer = 0.0f;
-	const float endTime = 0.7f;
+	const float kEndTime = 0.7f;
 	bool isDead = false;
 
 	//秒数時間
-	const float deltaTime = 1.0f / 60.0f;
+	const float kDeltaTime = 1.0f / 60.0f;
 	
 	AABB bulletAABB;
 };

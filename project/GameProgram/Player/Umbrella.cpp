@@ -72,5 +72,5 @@ void Umbrella::ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime) {
 	else {
 		wt.scale_ += scale;
 	}
-	scaleTimer += deltaTime;
+	scaleTimer += kDeltaTime;
 }

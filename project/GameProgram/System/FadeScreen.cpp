@@ -68,7 +68,7 @@ void FadeScreen::FadeIn() {
 		return;
 	}
 
-	degress -= deltaTime;
+	degress -= kDeltaTime;
 }
 
 void FadeScreen::FadeOut() {
@@ -78,6 +78,6 @@ void FadeScreen::FadeOut() {
 		return;
 	}
 
-	degress += deltaTime;
+	degress += kDeltaTime;
 }
 

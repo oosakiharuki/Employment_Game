@@ -33,7 +33,7 @@ private:
 
 	//時間
 	float timer = 0.0f;
-	const float TimeMax = 1.0f;
+	const float kTimeMax = 1.0f;
 	
 	//上下に移動する
 	float move = 0.0f;
@@ -41,7 +41,7 @@ private:
 	Vector3 end = { -2.0f,32.0f,0.0f};
 
 	float bulletTimer = 0.0f;
-	const float bulletTimeMax = 1.0f;
+	const float kBulletTimeMax = 1.0f;
 
 	Vector2 Title_pos = { 430,-300 };
 

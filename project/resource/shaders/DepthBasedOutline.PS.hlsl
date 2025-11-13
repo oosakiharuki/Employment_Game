@@ -26,10 +26,10 @@ float32_t Luminance(float32_t3 v)
 
 PixelShaderOutput main(VartexShaderOutput input)
 {
-    static const int32_t box = 3;
-    float32_t2 kIndex3x3[box][box];
+    static const int32_t kBox = 3;
+    float32_t2 kIndex3x3[kBox][kBox];
     
-    float k = (box - 1) / 2;
+    float k = (kBox - 1) / 2;
     //-1,0,1の順番
     for (int32_t i = -k; i <= k; ++i)
     {

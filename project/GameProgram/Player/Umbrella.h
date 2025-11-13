@@ -73,7 +73,7 @@ private:
 	//シールドモード
 	bool isShieldMode = false;
 	//秒数時間
-	const float deltaTime = 1.0f / 60.0f;
+	const float kDeltaTime = 1.0f / 60.0f;
 	//リアクションのタイマー
 	float scaleTimer = 0.0f;
 };

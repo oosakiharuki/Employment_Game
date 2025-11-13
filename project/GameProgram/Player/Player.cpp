@@ -77,14 +77,14 @@ void Player::Initialize() {
 	particle_dead->SetScale({ 0.5f,0.5f,0.5f });
 
 	//MaxHp初期設定
-	maxHp = playerMaxHp;
+	maxHp = kPlayerMaxHp;
 
 	//UI_体力
 	for (uint32_t i = 0; i < maxHp; i++) {
 		std::unique_ptr <Sprite> sprite = std::make_unique<Sprite>();
 		sprite->Initialize("Hp.png");
-		sprite->SetPosition({ initializePoint_Hp.x + textureSize_Hp.x * i , initializePoint_Hp.y - i * distanceY_Hp });
-		sprite->SetSize(textureSize_Hp);
+		sprite->SetPosition({ kInitializePoint_Hp.x + kTextureSize_Hp.x * i , kInitializePoint_Hp.y - i * kDistanceY_Hp });
+		sprite->SetSize(kTextureSize_Hp);
 		sprites_Hp.push_back(std::move(sprite));
 	}
 
@@ -118,17 +118,17 @@ void Player::Update() {
 	//開いた状態で地面についていない
 	//傘が上向き(斜め上も)の場合かつプレイヤーが倒されていないとき
 	if (isShield && !isGround && 
-		(wtGun.rotation_.x >= upDis - Naname_Value && wtGun.rotation_.x <= upDis + Naname_Value) && !isDead) {
+		(wtGun.rotation_.x >= kUpDis - Naname_Value && wtGun.rotation_.x <= kUpDis + Naname_Value) && !isDead) {
 		//ジャンプ後だとずっと浮くためfalseに
 		if (isJump) {
 			isJump = false;
 		}
 		//重力を固定することでゆっくり落ちる
-		grabity = fixed_grabity;
+		grabity = kFixed_grabity;
 		//ブリンクが終了した時
 		if (!isBrink) {
 			//滑空中は上向きのみ(斜めにはならない)
-			wtGun.rotation_.x = upDis;
+			wtGun.rotation_.x = kUpDis;
 		}
 	}
 
@@ -160,7 +160,7 @@ void Player::Update() {
 		infinityTimer = infinityTimeMax;//Maxになったら無敵時間終了
 	}
 	else {
-		infinityTimer += deltaTime;
+		infinityTimer += kDeltaTime;
 	}
 
 	//移動しているとパーティクルを発生
@@ -312,29 +312,29 @@ void Player::PlayUpdate() {
 	}
 
 	//元の速さ
-	speed = standard_speed;
+	speed = kStandard_speed;
 
 	//シールド中足が遅くなる
 	//(滑空中は影響しない)
 	if (isShield && isGround) {
-		speed = standard_speed / 2.0f;
+		speed = kStandard_speed / 2.0f;
 	}
 
 	if (pushA) {
 		wt.translation_.x -= speed;//左に移動
 		wt.rotation_.y = -direction;//左が正面に
-		UmbrellaRange(leftDis);//傘を左に
+		UmbrellaRange(kLeftDis);//傘を左に
 	}
 	else if (pushD) {
 		wt.translation_.x += speed;//右に移動
 		wt.rotation_.y = direction;//右が正面に
-		UmbrellaRange(rightDis);//傘を右に
+		UmbrellaRange(kRightDis);//傘を右に
 	}
 	else if (pushW) {
-		UmbrellaRange(upDis);//傘を上に
+		UmbrellaRange(kUpDis);//傘を上に
 	}
 	else if (pushS) {
-		UmbrellaRange(downtDis);//傘を下に
+		UmbrellaRange(kDowntDis);//傘を下に
 	}
 
 	//ジャンプ
@@ -354,7 +354,7 @@ void Player::PlayUpdate() {
 		}
 		isShield = true;
 
-		pariTime -= deltaTime;
+		pariTime -= kDeltaTime;
 		//パリィ時間がすぎるとき+ダメージを食らていたらパリィできない
 		if (pariTime > 0.0f && infinityTimer >= infinityTimeMax) {
 			isPari = true;
@@ -368,7 +368,7 @@ void Player::PlayUpdate() {
 	}
 	else {
 		isShield = false;
-		pariCoolTime += deltaTime;
+		pariCoolTime += kDeltaTime;
 	}
 	//連打してもすぐにパリィできないようにする
 	if (pariCoolTime >= pariTimeMax) {
@@ -378,13 +378,13 @@ void Player::PlayUpdate() {
 	if (isBrink) {
 		//ブリンクの時は傘は開いたまま
 		isShield = true;
-		brinkTimer += deltaTime;
+		brinkTimer += kDeltaTime;
 
 		isOneBrink = true;
-		wt.translation_ += EaseOut(TransformNormal(playerFront, wtGun.matWorld_), brinkTimer, brinkTimeMax);
+		wt.translation_ += EaseOut(TransformNormal(playerFront, wtGun.matWorld_), brinkTimer, kBrinkTimeMax);
 
 		//飛んだ瞬間後ろにパーティクルをだす
-		if (brinkTimer <= deltaTime) {
+		if (brinkTimer <= kDeltaTime) {
 			Vector3 translate = wt.translation_ + TransformNormal(-playerFront, wtGun.matWorld_);
 			particle_brink->SetTranslate(translate);
 			particle_brink->SetRotate({ wtGun.rotation_.x + 90.0f,wtGun.rotation_.y,wtGun.rotation_.z });
@@ -392,15 +392,15 @@ void Player::PlayUpdate() {
 		}
 	}
 	//地面についている場合、下向きのブリンクは発動しない
-	if (isGround && (wtGun.rotation_.x > 0.0f && wtGun.rotation_.x < leftDis)) {
-		brinkTimer = brinkTimeMax;
+	if (isGround && (wtGun.rotation_.x > 0.0f && wtGun.rotation_.x < kLeftDis)) {
+		brinkTimer = kBrinkTimeMax;
 	}
-	if (brinkTimer >= brinkTimeMax) {
+	if (brinkTimer >= kBrinkTimeMax) {
 		isBrink = false;
 		brinkTimer = 0.0f;
 	}
 
-	coolTimer += deltaTime;
+	coolTimer += kDeltaTime;
 	if ((input_->TriggerKey(DIK_K) || input_->TriggerBotton(state, preState, XINPUT_GAMEPAD_X)) && !isShield) {
 		if (coolTimer >= coolMax) {
 			ShootBullet();
@@ -410,11 +410,11 @@ void Player::PlayUpdate() {
 
 	//ダメージリアクション
 	if (isDamageMosion) {
-		ScaleUpdate(&isDamageMosion, damageScale, damageMaxTime);
+		ScaleUpdate(&isDamageMosion, damageScale, kDamageMaxTime);
 	}
 	//傘リアクション
 	if (isShildMosion) {
-		umbrella->ScaleUpdate(&isShildMosion, damageScale, damageMaxTime);
+		umbrella->ScaleUpdate(&isShildMosion, damageScale, kDamageMaxTime);
 	}
 
 	//ノックバック発動
@@ -425,7 +425,7 @@ void Player::PlayUpdate() {
 			isKnockback = false;
 		}
 		else {
-			KnockBackTimer += deltaTime;
+			KnockBackTimer += kDeltaTime;
 
 			wt.translation_ -= EaseOut(backPower, KnockBackTimer, KnockBackTimeMax);
 			if (KnockBackTimer >= KnockBackTimeMax) {
@@ -572,7 +572,7 @@ void Player::KnockBackUmbrella(const Vector3 Power, const float TimerMax) {
 
 void Player::DeadPlayer() {
 
-	deadTimer += deltaTime;
+	deadTimer += kDeltaTime;
 	isDead = true;
 	
 	//少しディレイを挟む(カメラのシェイクが終わったら)
@@ -667,6 +667,6 @@ void Player::UmbrellaRange(const float& direction) {
 
 void Player::GravityUpdate() {
 	//重力
-	grabity -= standard_grabity;
+	grabity -= kStandard_grabity;
 	wt.translation_.y += grabity;
 }

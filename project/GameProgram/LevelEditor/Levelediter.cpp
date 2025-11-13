@@ -10,13 +10,13 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 	levelData = new LevelData();
 
 	//ファイルを選択
-	const std::string fullpath = jsonName;
+	const std::string kFullpath = jsonName;
 
 	//ファイルストリーム
 	std::ifstream file;
 
 	//読み取れない場合
-	file.open(fullpath);
+	file.open(kFullpath);
 
 	if (file.fail()) {
 		assert(0);

@@ -140,14 +140,14 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 	Assimp::Importer importer;
 	std::string filePath = directoryPath + "/" + filename;
 
-	const aiScene* scene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
+	const aiScene* kScene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 	assert(scene->HasMeshes()); //メッシュがないのは対応なし
 
 	std::vector<VertexData> vertices;
 
 	//VertexDataを読み取る
-	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
-		aiMesh* mesh = scene->mMeshes[meshIndex];
+	for (uint32_t meshIndex = 0; meshIndex < kScene->mNumMeshes; ++meshIndex) {
+		aiMesh* mesh = kScene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());//法線があるか
 
 		vertices.resize(mesh->mNumVertices);//頂点数分のメモリ確保
@@ -212,8 +212,8 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 	}
 
 	//MaterialData
-	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex) {
-		aiMaterial* material = scene->mMaterials[materialIndex];
+	for (uint32_t materialIndex = 0; materialIndex < kScene->mNumMaterials; ++materialIndex) {
+		aiMaterial* material = kScene->mMaterials[materialIndex];
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
@@ -235,7 +235,7 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 
 	}
 
-	modelData.rootNode = ReadNode(scene->mRootNode);
+	modelData.rootNode = ReadNode(kScene->mRootNode);
 
 	return modelData;
 }
