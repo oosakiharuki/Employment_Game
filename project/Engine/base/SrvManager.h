@@ -20,7 +20,7 @@ public:
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDescriptorHeap() { return descriptorHeap; }
 
 	//最大SRV数
-	static const uint32_t kMaxSRVCount;
+	static const uint32_t sMaxSRVCount;
 
 private:
 	DirectXCommon* directXCommon = nullptr;
@@ -31,12 +31,12 @@ private:
 	uint32_t useIndex = 0;
 
 
-	static SrvManager* instance;
+	static SrvManager* sInstance;
 
 	SrvManager() = default;
 	~SrvManager() = default;
 	SrvManager(SrvManager&) = default;
 	SrvManager& operator=(SrvManager&) = default;
 
-	static uint32_t kSRVIndexTop;
+	static uint32_t sSRVIndexTop;
 };

@@ -32,7 +32,7 @@ public:
 	void ResetNum(const std::string& filePath);
 
 private:
-	static ParticleManager* instance;
+	static ParticleManager* sInstance;
 
 	ParticleManager() = default;
 	~ParticleManager() = default;
@@ -42,7 +42,7 @@ private:
 	ParticleCommon* particleCommon = nullptr;
 
 	SrvManager* srvManager = nullptr;
-	static uint32_t kSRVIndexTop;
+	static uint32_t sSRVIndexTop;
 
 	struct ParticleGroup {
 		std::string textureFile;

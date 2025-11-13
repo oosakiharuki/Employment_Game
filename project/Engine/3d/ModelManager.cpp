@@ -1,18 +1,18 @@
 #include "ModelManager.h"
 
-ModelManager* ModelManager::instance = nullptr;
+ModelManager* ModelManager::sInstance = nullptr;
 
 
 ModelManager* ModelManager::GetInstance() {
-	if (instance == nullptr) {
-		instance = new ModelManager;
+	if (sInstance == nullptr) {
+		sInstance = new ModelManager;
 	}
-	return instance;
+	return sInstance;
 }
 
 void ModelManager::Finalize() {
-	delete instance;
-	instance = nullptr;
+	delete sInstance;
+	sInstance = nullptr;
 }
 
 void ModelManager::Initialize(DirectXCommon* dxCommon) {

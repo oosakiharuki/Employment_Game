@@ -2,19 +2,19 @@
 
 using namespace Logger;
 
-SpriteCommon* SpriteCommon::instance = nullptr;
+SpriteCommon* SpriteCommon::sInstance = nullptr;
 
-uint32_t SpriteCommon::kSRVIndexTop = 1;
+uint32_t SpriteCommon::sSRVIndexTop = 1;
 
 SpriteCommon* SpriteCommon::GetInstance() {
-	if (instance == nullptr) {
-		instance = new SpriteCommon;
+	if (sInstance == nullptr) {
+		sInstance = new SpriteCommon;
 	}
-	return instance;
+	return sInstance;
 }
 void SpriteCommon::Finalize() {
-	delete instance;
-	instance = nullptr;
+	delete sInstance;
+	sInstance = nullptr;
 }
 
 void SpriteCommon::Initialize(DirectXCommon* dxCommon) {

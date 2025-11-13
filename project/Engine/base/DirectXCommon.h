@@ -166,7 +166,7 @@ private:
 	std::chrono::steady_clock::time_point reference_;
 
 
-	static DirectXCommon* instance;
+	static DirectXCommon* sInstance;
 
 	DirectXCommon() = default;
 	~DirectXCommon() = default;
@@ -174,7 +174,7 @@ private:
 	DirectXCommon& operator=(DirectXCommon&) = default;
 
 
-	static uint32_t kSRVIndexTop;
+	static uint32_t sSRVIndexTop;
 
 	//書き込み可能なテクスチャ レンダーテクスチャ
 	Microsoft::WRL::ComPtr<ID3D12Resource> renderTextureResource;

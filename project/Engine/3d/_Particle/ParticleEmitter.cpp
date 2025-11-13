@@ -3,15 +3,15 @@
 
 using namespace MyMath;
 
-ParticleEmitter* ParticleEmitter::instance = nullptr;
+ParticleEmitter* ParticleEmitter::sInstance = nullptr;
 
-uint32_t ParticleEmitter::kSRVIndexTop = 1;
+uint32_t ParticleEmitter::sSRVIndexTop = 1;
 
 ParticleEmitter* ParticleEmitter::GetInstance() {
-	if (instance == nullptr) {
-		instance = new ParticleEmitter();
+	if (sInstance == nullptr) {
+		sInstance = new ParticleEmitter();
 	}
-	return instance;
+	return sInstance;
 }
 
 Particles ParticleEmitter::MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter) {

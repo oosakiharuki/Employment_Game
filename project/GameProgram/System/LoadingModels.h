@@ -20,7 +20,7 @@ private:
 
 	ModelManager* modelManager;
 
-	static LoadingModels* instance;
+	static LoadingModels* sInstance;
 
 	/// <summary>
 	/// .objを読み取る

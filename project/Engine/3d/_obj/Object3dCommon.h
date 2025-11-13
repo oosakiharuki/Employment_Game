@@ -37,7 +37,7 @@ private:
 
 	Camera* defaultCamera = nullptr;
 
-	static Object3dCommon* instance;
+	static Object3dCommon* sInstance;
 
 	Object3dCommon() = default;
 	~Object3dCommon() = default;
@@ -45,8 +45,5 @@ private:
 	Object3dCommon& operator=(Object3dCommon&) = default;
 
 
-	static uint32_t kSRVIndexTop;
-
-
-
+	static uint32_t sSRVIndexTop;
 };

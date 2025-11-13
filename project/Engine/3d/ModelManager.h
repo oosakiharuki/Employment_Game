@@ -19,7 +19,7 @@ public:
 	Model_obj* FindModel_obj(const std::string& filePath);
 
 private:
-	static ModelManager* instance;
+	static ModelManager* sInstance;
 
 	ModelManager() = default;
 	~ModelManager() = default;

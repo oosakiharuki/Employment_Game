@@ -27,6 +27,6 @@ private:
 
 	SceneSaveData sceneSaveData;
 
-	static std::shared_ptr<NextStageSave> instance;
+	static std::shared_ptr<NextStageSave> sInstance;
 };
 

@@ -29,21 +29,21 @@ private:
 	void Change(int prev, int current);//シーン入れ替え
 
 	//最大数
-	static const uint32_t effectNum = Max;
+	static const uint32_t kEffectNum = Max;
 
-	IPostEffects* effectArr_[effectNum];
+	IPostEffects* effectArr_[kEffectNum];
 
 	int currentNo_;//現在シーン
 	int prevNo_;//前シーン
 
-	static PostEffectManager* instance;
+	static PostEffectManager* sInstance;
 
 	PostEffectManager() = default;
 	~PostEffectManager() = default;
 	PostEffectManager(PostEffectManager&) = default;
 	PostEffectManager& operator=(PostEffectManager&) = default;
 
-	static uint32_t kSRVIndexTop;
+	static uint32_t sSRVIndexTop;
 
 	DirectXCommon* dxCommon_;
 };

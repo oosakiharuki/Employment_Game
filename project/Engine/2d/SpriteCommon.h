@@ -33,12 +33,12 @@ private:
 	Microsoft::WRL::ComPtr < ID3D12PipelineState> graphicsPipelineState = nullptr;
 
 
-	static SpriteCommon* instance;
+	static SpriteCommon* sInstance;
 
 	SpriteCommon() = default;
 	~SpriteCommon() = default;
 	SpriteCommon(SpriteCommon&) = default;
 	SpriteCommon& operator=(SpriteCommon&) = default;
 
-	static uint32_t kSRVIndexTop;
+	static uint32_t sSRVIndexTop;
 };

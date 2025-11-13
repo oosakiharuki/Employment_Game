@@ -2,19 +2,19 @@
 
 using namespace Logger;
 
-DebugWireframes* DebugWireframes::instance = nullptr;
+DebugWireframes* DebugWireframes::sInstance = nullptr;
 
-uint32_t DebugWireframes::kSRVIndexTop = 1;
+uint32_t DebugWireframes::sSRVIndexTop = 1;
 
 DebugWireframes* DebugWireframes::GetInstance() {
-	if (instance == nullptr) {
-		instance = new DebugWireframes;
+	if (sInstance == nullptr) {
+		sInstance = new DebugWireframes;
 	}
-	return instance;
+	return sInstance;
 }
 void DebugWireframes::Finalize() {
-	delete instance;
-	instance = nullptr;
+	delete sInstance;
+	sInstance = nullptr;
 }
 void DebugWireframes::Initialize(DirectXCommon* dxCommon) {
 	dxCommon_ = dxCommon;

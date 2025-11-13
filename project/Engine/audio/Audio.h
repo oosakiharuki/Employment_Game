@@ -51,7 +51,7 @@ public:
 	void ControlVolume(SoundData soundData, const float volume);
 private:
 
-	static Audio* instance;
+	static Audio* sInstance;
 
 	Audio() = default;
 	~Audio() = default;

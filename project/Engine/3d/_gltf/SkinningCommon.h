@@ -40,7 +40,7 @@ private:
 
 	Camera* defaultCamera = nullptr;
 
-	static SkinningCommon* instance;
+	static SkinningCommon* sInstance;
 
 	SkinningCommon() = default;
 	~SkinningCommon() = default;
@@ -48,5 +48,5 @@ private:
 	SkinningCommon& operator=(SkinningCommon&) = default;
 
 
-	static uint32_t kSRVIndexTop;
+	static uint32_t sSRVIndexTop;
 };

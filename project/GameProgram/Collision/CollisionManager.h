@@ -99,7 +99,7 @@ private:
 	const float kShadowUp = 0.01f;
 
 	//インスタンス
-	static std::shared_ptr<CollisionManager> instance;
+	static std::shared_ptr<CollisionManager> sInstance;
 
 	//ゴールした時フラグ
 	bool isGoal = false;

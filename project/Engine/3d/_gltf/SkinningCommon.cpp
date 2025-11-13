@@ -2,21 +2,20 @@
 
 using namespace Logger;
 
-uint32_t SkinningCommon::kSRVIndexTop = 1;
+SkinningCommon* SkinningCommon::sInstance = nullptr;
+
+uint32_t SkinningCommon::sSRVIndexTop = 1;
 
 SkinningCommon* SkinningCommon::GetInstance() {
-	if (instance == nullptr) {
-		instance = new SkinningCommon;
+	if (sInstance == nullptr) {
+		sInstance = new SkinningCommon;
 	}
-	return instance;
+	return sInstance;
 }
 void SkinningCommon::Finalize() {
-	delete instance;
-	instance = nullptr;
+	delete sInstance;
+	sInstance = nullptr;
 }
-
-SkinningCommon* SkinningCommon::instance = nullptr;
-
 void SkinningCommon::Initialize(DirectXCommon* dxCommon) {
 	dxCommon_ = dxCommon;
 

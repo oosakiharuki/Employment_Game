@@ -1,6 +1,6 @@
 #include "IPostEffects.h"
 
-int IPostEffects::effectNo = Mode_DepthBasedOutline;
+int IPostEffects::sEffectNo = Mode_DepthBasedOutline;
 
 IPostEffects::~IPostEffects() {}
 

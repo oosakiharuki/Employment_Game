@@ -8,15 +8,15 @@
 using namespace MyMath;
 using namespace Primitive;
 
-ParticleManager* ParticleManager::instance = nullptr;
+ParticleManager* ParticleManager::sInstance = nullptr;
 
-uint32_t ParticleManager::kSRVIndexTop = 1;
+uint32_t ParticleManager::sSRVIndexTop = 1;
 
 ParticleManager* ParticleManager::GetInstance() {
-	if (instance == nullptr) {
-		instance = new ParticleManager();
+	if (sInstance == nullptr) {
+		sInstance = new ParticleManager();
 	}
-	return instance;
+	return sInstance;
 }
 
 void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager) {
@@ -25,8 +25,8 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager
 }
 
 void ParticleManager::Finalize() {
-	delete instance;
-	instance = nullptr;
+	delete sInstance;
+	sInstance = nullptr;
 }
 
 

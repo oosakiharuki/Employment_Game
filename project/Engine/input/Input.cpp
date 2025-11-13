@@ -6,20 +6,20 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"Xinput.lib")
 
-Input* Input::instance = nullptr;
+Input* Input::sInstance = nullptr;
 
-uint32_t Input::kSRVIndexTop = 1;
+uint32_t Input::sSRVIndexTop = 1;
 
 Input* Input::GetInstance() {
-	if (instance == nullptr) {
-		instance = new Input;
+	if (sInstance == nullptr) {
+		sInstance = new Input;
 	}
-	return instance;
+	return sInstance;
 }
 
 void Input::Finalize() {
-	delete instance;
-	instance = nullptr;
+	delete sInstance;
+	sInstance = nullptr;
 }
 
 void Input::Initialize(WinApp* winApp) {
