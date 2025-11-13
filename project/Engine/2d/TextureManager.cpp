@@ -2,28 +2,28 @@
 
 using namespace StringUtility;
 
-TextureManager* TextureManager::instance = nullptr;
+TextureManager* TextureManager::sInstance = nullptr;
 
-uint32_t TextureManager::kSRVIndexTop = 1;
+uint32_t TextureManager::sSRVIndexTop = 1;
 
 
 TextureManager* TextureManager::GetInstance() {
-	if (instance == nullptr) {
-		instance = new TextureManager;
+	if (sInstance == nullptr) {
+		sInstance = new TextureManager;
 	}
-	return instance;
+	return sInstance;
 }
 
 void TextureManager::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager) {
 	dxCommon_ = dxCommon;
 	this->srvManager = srvManager;
-	textureDatas.reserve(SrvManager::kMaxSRVCount);
+	textureDatas.reserve(SrvManager::sMaxSRVCount);
 }
 
 
 void TextureManager::Finalize() {
-	delete instance;
-	instance = nullptr;
+	delete sInstance;
+	sInstance = nullptr;
 }
 
 void TextureManager::LoadTexture(const std::string& filePath) {

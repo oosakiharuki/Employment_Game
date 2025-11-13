@@ -1,26 +1,26 @@
 #include "SrvManager.h"
 
-const uint32_t SrvManager::kMaxSRVCount = 512;
+const uint32_t SrvManager::sMaxSRVCount = 512;
 
-SrvManager* SrvManager::instance = nullptr;
+SrvManager* SrvManager::sInstance = nullptr;
 
-uint32_t SrvManager::kSRVIndexTop = 1;
+uint32_t SrvManager::sSRVIndexTop = 1;
 
 SrvManager* SrvManager::GetInstance() {
-	if (instance == nullptr) {
-		instance = new SrvManager;
+	if (sInstance == nullptr) {
+		sInstance = new SrvManager;
 	}
-	return instance;
+	return sInstance;
 }
 void SrvManager::Finalize() {
-	delete instance;
-	instance = nullptr;
+	delete sInstance;
+	sInstance = nullptr;
 }
 
 
 void SrvManager::Initialize(DirectXCommon* dxCommon) {
 	this->directXCommon = dxCommon;
-	descriptorHeap = directXCommon->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, kMaxSRVCount, true);
+	descriptorHeap = directXCommon->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, sMaxSRVCount, true);
 	descriptorSize= directXCommon->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
 uint32_t SrvManager::Allocate() {
@@ -33,7 +33,7 @@ uint32_t SrvManager::Allocate() {
 }
 
 bool SrvManager::Max() {
-	if (kMaxSRVCount < useIndex) {
+	if (sMaxSRVCount < useIndex) {
 		return false;
 	}
 	else {

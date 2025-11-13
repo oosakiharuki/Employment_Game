@@ -22,7 +22,7 @@ public:
 
 	const DirectX::TexMetadata& GetMetaData(const std::string filePath);
 private:
-	static TextureManager* instance;
+	static TextureManager* sInstance;
 
 	TextureManager() = default;
 	~TextureManager() = default;
@@ -40,7 +40,7 @@ private:
 	std::unordered_map<std::string, TextureData> textureDatas;
 
 
-	static uint32_t kSRVIndexTop;
+	static uint32_t sSRVIndexTop;
 
 	DirectXCommon* dxCommon_ = nullptr;
 	SrvManager* srvManager = nullptr;

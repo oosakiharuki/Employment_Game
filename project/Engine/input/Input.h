@@ -41,14 +41,14 @@ private:
 	BYTE keyPre[256] = {};
 	WinApp* winApp_ = nullptr; //協力関係
 
-	static Input* instance;
+	static Input* sInstance;
 
 	Input() = default;
 	~Input() = default;
 	Input(Input&) = default;
 	Input& operator=(Input&) = default;
 
-	static uint32_t kSRVIndexTop;
+	static uint32_t sSRVIndexTop;
 	
 	XINPUT_STATE prevState = {};
 };

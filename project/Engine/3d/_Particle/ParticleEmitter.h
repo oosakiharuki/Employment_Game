@@ -27,15 +27,14 @@ public:
 	std::list<Particles> MakeEmit(const Emitter& emitter, std::mt19937& randomEngine, ParticleMosion mosion);
 
 private:
-	static ParticleEmitter* instance;
+	static ParticleEmitter* sInstance;
 
 	ParticleEmitter() = default;
 	~ParticleEmitter() = default;
 	ParticleEmitter(ParticleEmitter&) = delete;
 	ParticleEmitter& operator=(ParticleEmitter&) = delete;
 	
-	static uint32_t kSRVIndexTop;
-
+	static uint32_t sSRVIndexTop;
 
 	Emitter emitter{};
 };

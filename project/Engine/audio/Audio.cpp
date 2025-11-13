@@ -1,12 +1,12 @@
 #include "Audio.h"
 
-Audio* Audio::instance = nullptr;
+Audio* Audio::sInstance = nullptr;
 
 Audio* Audio::GetInstance() {
-	if (instance == nullptr) {
-		instance = new Audio();
+	if (sInstance == nullptr) {
+		sInstance = new Audio();
 	}
-	return instance;
+	return sInstance;
 }
 
 void Audio::Finalize() {

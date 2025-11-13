@@ -1,16 +1,16 @@
 #include "LoadingModels.h"
 
-LoadingModels* LoadingModels::instance = nullptr;
+LoadingModels* LoadingModels::sInstance = nullptr;
 
 LoadingModels* LoadingModels::GetInstance() {
-	if (instance == nullptr) {
-		instance = new LoadingModels;
+	if (sInstance == nullptr) {
+		sInstance = new LoadingModels;
 	}
-	return instance;
+	return sInstance;
 }
 void LoadingModels::Finalize() {
-	delete instance;
-	instance = nullptr;
+	delete sInstance;
+	sInstance = nullptr;
 }
 
 void LoadingModels::LoadObjects() {

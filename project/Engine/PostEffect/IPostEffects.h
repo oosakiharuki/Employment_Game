@@ -28,7 +28,7 @@ class IPostEffects {
 protected:
 	//postEffect特融処理
 
-	static int effectNo;
+	static int sEffectNo;
 
 	DirectXCommon* dxCommon_;
 
@@ -63,7 +63,7 @@ public:
 	/// </summary>
 	virtual void Command() = 0;
 	
-	int GetEffectNo() { return effectNo; }
+	int GetEffectNo() { return sEffectNo; }
 
 	//PSO
 	

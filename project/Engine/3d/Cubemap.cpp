@@ -2,19 +2,19 @@
 
 using namespace Logger;
 
-Cubemap* Cubemap::instance = nullptr;
+Cubemap* Cubemap::sInstance = nullptr;
 
-uint32_t Cubemap::kSRVIndexTop = 1;
+uint32_t Cubemap::sSRVIndexTop = 1;
 
 Cubemap* Cubemap::GetInstance() {
-	if (instance == nullptr) {
-		instance = new Cubemap;
+	if (sInstance == nullptr) {
+		sInstance = new Cubemap;
 	}
-	return instance;
+	return sInstance;
 }
 void Cubemap::Finalize() {
-	delete instance;
-	instance = nullptr;
+	delete sInstance;
+	sInstance = nullptr;
 }
 void Cubemap::Initialize(DirectXCommon* dxCommon) {
 	dxCommon_ = dxCommon;

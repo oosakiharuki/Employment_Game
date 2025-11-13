@@ -7,13 +7,13 @@
 
 using namespace MyMath;
 
-std::shared_ptr<CollisionManager> CollisionManager::instance = nullptr;
+std::shared_ptr<CollisionManager> CollisionManager::sInstance = nullptr;
 
 std::shared_ptr<CollisionManager> CollisionManager::GetInstance() {
-	if (instance == nullptr) {
-		instance = std::make_unique<CollisionManager>();
+	if (sInstance == nullptr) {
+		sInstance = std::make_unique<CollisionManager>();
 	}
-	return instance;
+	return sInstance;
 }
 
 void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_ptr<IEnemy>> enemies,

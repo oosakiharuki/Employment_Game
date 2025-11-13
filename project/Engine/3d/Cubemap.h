@@ -37,7 +37,7 @@ private:
 
 	Camera* defaultCamera = nullptr;
 
-	static Cubemap* instance;
+	static Cubemap* sInstance;
 
 	Cubemap() = default;
 	~Cubemap() = default;
@@ -45,5 +45,5 @@ private:
 	Cubemap& operator=(Cubemap&) = default;
 
 
-	static uint32_t kSRVIndexTop;
+	static uint32_t sSRVIndexTop;
 };

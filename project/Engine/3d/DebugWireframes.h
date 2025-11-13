@@ -37,7 +37,7 @@ private:
 
 	Camera* defaultCamera = nullptr;
 
-	static DebugWireframes* instance;
+	static DebugWireframes* sInstance;
 
 	DebugWireframes() = default;
 	~DebugWireframes() = default;
@@ -45,6 +45,6 @@ private:
 	DebugWireframes& operator=(DebugWireframes&) = default;
 
 
-	static uint32_t kSRVIndexTop;
+	static uint32_t sSRVIndexTop;
 
 };

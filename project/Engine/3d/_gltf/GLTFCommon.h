@@ -38,7 +38,7 @@ private:
 
 	Camera* defaultCamera = nullptr;
 
-	static GLTFCommon* instance;
+	static GLTFCommon* sInstance;
 
 	GLTFCommon() = default;
 	~GLTFCommon() = default;
@@ -46,8 +46,5 @@ private:
 	GLTFCommon& operator=(GLTFCommon&) = default;
 
 
-	static uint32_t kSRVIndexTop;
-
-
-
+	static uint32_t sSRVIndexTop;
 };
