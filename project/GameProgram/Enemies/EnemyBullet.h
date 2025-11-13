@@ -82,10 +82,13 @@ private:
 	WorldTransform wt;
 	Vector3 velocity_;
 
-	//消滅
+	//消えるまでの処理
 	float deathTimer = 0.0f;
 	const float endTime = 2.0f;
 	bool isDead = false;
+
+	//秒数時間
+	const float deltaTime = 1.0f / 60.0f;
 
 	//当たり判定
 	AABB bulletAABB;

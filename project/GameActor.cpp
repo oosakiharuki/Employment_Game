@@ -57,7 +57,7 @@ void GameActor::RespawnCommon() {
 }
 
 void GameActor::HP_Initialize(const uint32_t& max) {
-	maxHp = max;
+	maxHp = max;//最大値を設定
 	hp = maxHp;
 }
 

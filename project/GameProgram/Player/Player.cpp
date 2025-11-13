@@ -157,7 +157,7 @@ void Player::Update() {
 
 	//無敵時間
 	if (infinityTimer >= infinityTimeMax) {
-		infinityTimer = infinityTimeMax;
+		infinityTimer = infinityTimeMax;//Maxになったら無敵時間終了
 	}
 	else {
 		infinityTimer += deltaTime;

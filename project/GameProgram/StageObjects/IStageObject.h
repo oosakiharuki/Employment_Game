@@ -61,7 +61,8 @@ public:
 	/// <summary>
 	/// オブジェクトのクラスを知るための名前
 	/// </summary>
-	virtual void SetObjectName() = 0;
+	void SetObjectName(const std::string& name);
+
 	const std::string& GetObjectName() { return objectName; }
 
 	///ワープゲートで使う

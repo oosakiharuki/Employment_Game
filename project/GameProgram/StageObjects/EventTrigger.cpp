@@ -19,11 +19,10 @@ void EventTrigger::Update() {
 		//敵召喚
 		PopEventEneies();
 		
+		//範囲のオブジェクト
 		wt.translation_ = eventDatas.center;
 		wt.scale_ = eventDatas.size * 0.5f;
-
 		wt.UpdateMatrix();
-		
 		object_->Update(wt);
 	}
 }
@@ -153,7 +152,7 @@ void EventTrigger::PopEventEneies() {
 
 void EventTrigger::EnemyPop(const Vector3& position, const Vector3& rotation, const std::string& name) {
 	std::unique_ptr<IEnemy> popEnemy;
-
+	//名前によって変更
 	if (name == "soldier") {
 		popEnemy = std::make_unique<Enemy_Soldier>();
 	}
@@ -173,6 +172,7 @@ void EventTrigger::EnemyPop(const Vector3& position, const Vector3& rotation, co
 	aabb.min = { -1.0f,-1.0f,-1.5f };
 	aabb.max = { 1.0f,1.0f,1.5f };
 
+	//少しだけ動けるように
 	Vector3 center = { 3,0,0 };
 
 	popEnemy->SetAABB(aabb);

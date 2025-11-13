@@ -52,8 +52,8 @@ void CameraControl::Update(Camera* camera) {
 }
 
 void CameraControl::SetEndPoint(const Vector3& left, const Vector3& right){
-	leftEndPoint = left;
-	rightEndPoint = right;
+	leftEndPoint = left;//左端
+	rightEndPoint = right;//右端
 }
 
 void CameraControl::Move() {

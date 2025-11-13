@@ -193,7 +193,7 @@ protected:
 	bool isBullet = false;
 	//クールタイム
 	float coolTime = 0.0f;
-	const float coolTimeMax = 1.5f;
+	const float coolTimeMax = 1.25f;
 	//弾丸の出す間の時間
 	float rapidFireTime = 0.0f;
 	const float rapidFireTimeMax = 0.1f;

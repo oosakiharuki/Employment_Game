@@ -12,8 +12,6 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	void SetObjectName()override;
-
 	/// <summary>
 	/// setter_次のステージ
 	/// </summary>

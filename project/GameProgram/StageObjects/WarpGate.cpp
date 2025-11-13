@@ -31,7 +31,3 @@ void WarpGate::Vanish() {
 		wt.scale_ -= EaseIn(0.1f, littleLarge + t);
 	}
 }
-
-void WarpGate::SetObjectName() {
-	objectName = "WarpGate";
-}

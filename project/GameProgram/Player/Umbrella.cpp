@@ -34,11 +34,12 @@ void Umbrella::Update() {
 
 #endif // USE_IMGUI
 
+	//防御状態の場合
 	if (isShieldMode) {
-		object->ChangeAnimation("umbrella_Open.gltf");
+		object->ChangeAnimation("umbrella_Open.gltf");//開いた傘
 	}
 	else {
-		object->ChangeAnimation("umbrella_Close.gltf");
+		object->ChangeAnimation("umbrella_Close.gltf");//閉じた傘
 	}
 
 	object->Update(wt);
