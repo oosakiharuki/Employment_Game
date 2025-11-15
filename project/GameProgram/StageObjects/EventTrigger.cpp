@@ -24,6 +24,21 @@ void EventTrigger::Update() {
 		wt.scale_ = eventDatas.size * 0.5f;
 		wt.UpdateMatrix();
 		object_->Update(wt);
+
+		for (auto& particle : summon_particles_) {
+			particle->SetParticleCount(10);
+			particle->Update();
+			//敵が出てきたので止める
+			if (summonTimer_ < 0) {
+				particle->ChangeMode(BornParticle::Stop);
+			}
+		}
+
+		//敵が出終わった後ちょっとしてからリセットする
+		if (summonTimer_ <= -kSummonMaxTime) {
+			summon_particles_.clear();
+		}
+
 	}
 }
 
@@ -31,6 +46,14 @@ void EventTrigger::Draw() {
 	if (eventDatas.isEvent) {
 		object_->Draw();
 	}
+
+	ParticleCommon::GetInstance()->Command();
+	
+	for (auto& particle : summon_particles_) {
+		particle->Draw();
+	}
+
+	GLTFCommon::GetInstance()->Command();
 }
 
 void EventTrigger::LoadEventCSV(std::string fileName) {
@@ -51,6 +74,13 @@ void EventTrigger::LoadEventCSV(std::string fileName) {
 }
 
 void EventTrigger::PopEventEneies() {
+
+	//敵召喚		
+	EnemyPop();
+
+	if (enemyPopDatas_.size() != 0) {
+		return;
+	}
 
 	//敵の倒した数リセット(↓で無限に増えるから)
 	enemyDeadCount = 0;
@@ -75,6 +105,8 @@ void EventTrigger::PopEventEneies() {
 		}
 		//生んだ数初期化
 		enemyBornCount = 0;
+		//Maxに戻す
+		summonTimer_ = kSummonMaxTime;
 	}
 
 	if (eventWave) {
@@ -112,80 +144,97 @@ void EventTrigger::PopEventEneies() {
 		//敵の配置
 		if (word.find("pop") == 0) {
 
-			std::string enemyName;
+			EnemyPopData enemyPopData;
 			//敵の名前
 			getline(line_stream, word, ',');
-			enemyName = word.c_str();
-
-			Vector3 position;
+			enemyPopData.enemyName = word.c_str();
+			
 			//召喚位置.x
 			getline(line_stream, word, ',');
-			position.x = (float)std::atof(word.c_str());
+			enemyPopData.position.x = (float)std::atof(word.c_str());
 
 			//召喚位置.y
 			getline(line_stream, word, ',');
-			position.y = (float)std::atof(word.c_str());
+			enemyPopData.position.y = (float)std::atof(word.c_str());
 
 			//トリガーの中心地点から足していく
-			position += eventDatas.center;
-
-			//召喚位置.zは使わないので0に
-			position.z = 0.0f;
-
-			Vector3 rotate = { 0,0,0 };
-
+			enemyPopData.position += eventDatas.center;
 
 			getline(line_stream, word, ',');
 			if (word.find("right") == 0) {
-				rotate.y = 90.0f;
+				enemyPopData.rotate.y = 90.0f;
 			}
 			else if (word.find("left") == 0) {
-				rotate.y = -90.0f;
+				enemyPopData.rotate.y = -90.0f;
 			}
 
-			//敵召喚
-			EnemyPop(position, rotate, enemyName);
+			enemyPopDatas_.push_back(enemyPopData);
+
+			//召喚パーティクル
+			std::unique_ptr<Particle> gParticle;
+			gParticle = std::make_unique<Particle>();
+			gParticle->Initialize("enemies_summon","resource/Sprite/white.png",PrimitiveType::sphere);
+			gParticle->SetParticleMosion(ParticleMosion::Exprosion);
+			gParticle->ChangeMode(BornParticle::TimerMode);
+			gParticle->SetFrequency(kFrequency);
+			gParticle->SetTranslate(enemyPopData.position);
+
+			const float gSize = 0.25f;
+			gParticle->SetScale({gSize,gSize,gSize});
+
+			summon_particles_.push_back(std::move(gParticle));
 		}
 	}
 
 }
 
-void EventTrigger::EnemyPop(const Vector3& position, const Vector3& rotation, const std::string& name) {
-	std::unique_ptr<IEnemy> popEnemy;
-	//名前によって変更
-	if (name == "soldier") {
-		popEnemy = std::make_unique<Enemy_Soldier>();
-	}
-	else if (name == "turret") {
-		popEnemy = std::make_unique<Enemy_Turret>();
-	}
-	else if (name == "bomb") {
-		popEnemy = std::make_unique<Enemy_Bomb>();
+void EventTrigger::EnemyPop() {
+	summonTimer_ -= kDeltaTime;
+
+	if (summonTimer_ > 0.0f) {
+		return;
 	}
 
-	popEnemy->Initialize();
-	popEnemy->SetTranslate(position);
-	popEnemy->SetRotate(rotation);
+	for (auto& enemyPopData : enemyPopDatas_) {
 
-	//敵の当たり判定更新
-	AABB aabb;
-	aabb.min = { -1.0f,-1.0f,-1.5f };
-	aabb.max = { 1.0f,1.0f,1.5f };
+		std::unique_ptr<IEnemy> popEnemy;
+		//名前によって変更
+		if (enemyPopData.enemyName == "soldier") {
+			popEnemy = std::make_unique<Enemy_Soldier>();
+		}
+		else if (enemyPopData.enemyName == "turret") {
+			popEnemy = std::make_unique<Enemy_Turret>();
+		}
+		else if (enemyPopData.enemyName == "bomb") {
+			popEnemy = std::make_unique<Enemy_Bomb>();
+		}
 
-	//少しだけ動けるように
-	Vector3 center = { 3,0,0 };
+		popEnemy->Initialize();
+		popEnemy->SetTranslate(enemyPopData.position);
+		popEnemy->SetRotate(enemyPopData.rotate);
 
-	popEnemy->SetAABB(aabb);
-	popEnemy->SetRoutePoint1(position - center);
-	popEnemy->SetRoutePoint2(position + center);
-	popEnemy->SetMoveInit(position);
+		//敵の当たり判定更新
+		AABB aabb;
+		aabb.min = { -1.0f,-1.0f,-1.5f };
+		aabb.max = { 1.0f,1.0f,1.5f };
 
-	popEnemy->DirectionDegree();
+		//少しだけ動けるように
+		Vector3 center = { 3,0,0 };
 
-	popEnemies.push_back(std::move(popEnemy));
+		popEnemy->SetAABB(aabb);
+		popEnemy->SetRoutePoint1(enemyPopData.position - center);
+		popEnemy->SetRoutePoint2(enemyPopData.position + center);
+		popEnemy->SetMoveInit(enemyPopData.position);
 
-	//敵の数
-	enemyBornCount++;
+		popEnemy->DirectionDegree();
+
+		popEnemies.push_back(std::move(popEnemy));
+
+		//敵の数
+		enemyBornCount++;
+	}
+
+	enemyPopDatas_.clear();
 }
 
 void EventTrigger::FailureEvent() {

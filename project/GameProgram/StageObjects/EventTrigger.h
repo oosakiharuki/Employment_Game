@@ -19,6 +19,12 @@ struct EventData {
 	std::string cameraName;
 };
 
+struct EnemyPopData {
+	Vector3 position = {0,0,0};
+	Vector3 rotate = {0,0,0};
+	std::string enemyName;
+};
+
 class EventTrigger {
 public:
 
@@ -47,7 +53,7 @@ public:
 	/// 向き
 	/// <param name="name"></param>
 	/// 敵の名前
-	void EnemyPop(const Vector3& position, const Vector3& rotation, const std::string& name);
+	void EnemyPop();
 
 	/// <summary>
 	/// イベント内でプレイヤーが倒れたれたとき
@@ -103,4 +109,19 @@ private:
 	std::vector<std::shared_ptr<IEnemy>> popEnemies;
 
 	EventData eventDatas;
+
+	//パーティクル
+	std::list<std::unique_ptr<Particle>> summon_particles_;
+	//召喚タイマー
+	const float kSummonMaxTime = 1.25f;
+	float summonTimer_ = kSummonMaxTime;
+
+	//敵を配置する変数
+	std::list<EnemyPopData> enemyPopDatas_;
+
+	//頻度
+	const float kFrequency = kSummonMaxTime / 15.0f;
+
+	//秒数時間
+	const float kDeltaTime = 1.0f / 60.f;
 };
