@@ -88,7 +88,8 @@ Particles ParticleEmitter::MakeNewParticleSpike(std::mt19937& randomEngine, cons
 	std::uniform_real_distribution<float> distScale(4.5f, 6.5f);
 
 	Particles particle;
-	particle.transform.scale = { 0.05f,distScale(randomEngine),1.0f };
+	Vector3 spikeScale = { 0.05f,distScale(randomEngine),1.0f };
+	particle.transform.scale = emitter.transform.scale * spikeScale;
 	particle.transform.rotate = { 0.0f,0.0f,distRotate(randomEngine) };
 
 	particle.transform.translate = emitter.transform.translate;
@@ -113,7 +114,9 @@ Particles ParticleEmitter::MakeNewParticleExprosion(std::mt19937& randomEngine, 
 	std::uniform_real_distribution<float> distScale(4.5f, 6.5f);
 
 	Particles particle;
-	particle.transform.scale = { 0.5f,distScale(randomEngine),0.5f };
+	Vector3 scale = { 0.5f,distScale(randomEngine),0.5f };
+	particle.transform.scale = emitter.transform.scale * scale;
+
 	particle.transform.rotate = { distRotate(randomEngine),distRotate(randomEngine),distRotate(randomEngine) };
 
 	particle.transform.translate = emitter.transform.translate;
