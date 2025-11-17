@@ -13,5 +13,6 @@ public:
 	void Draw() override;
 	void Finalize() override;
 private:
-	std::unique_ptr<Sprite> sprite;//ゲームクリアの文字
+	std::unique_ptr<Sprite> sprite_;//ゲームクリアの文字
+	std::unique_ptr<Object_glTF> player_gltf_;
 };

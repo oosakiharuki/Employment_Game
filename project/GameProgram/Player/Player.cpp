@@ -17,14 +17,15 @@ void Player::Initialize() {
 
 	Actor_InitializeCommon();
 
+	objectMosions_["standby"] = "player_standby.gltf";
+	objectMosions_["move"] = "player_move.gltf";
+	objectMosions_["shield"] = "player_shield.gltf";
+	objectMosions_["clear"] = "player_clear.gltf";
+
 	//プレイヤー初期化/オブジェクト読み込み
 	object = std::make_unique<Object_glTF>();
 	object->Initialize();
-	object->SetModelFile("NewPlayer.gltf");
-
-	//アニメーションモード設定
-	animation_mode = Animation_Mode::mode_stop;
-	PreAnimation_mode = animation_mode;
+	object->SetModelFile(objectMosions_[mosionName_]);
 
 	//傘の初期化
 	umbrella = std::make_unique<Umbrella>();
@@ -186,31 +187,23 @@ void Player::Update() {
 
 	///アニメーション
 	if (isShield) {
-		animation_mode = Animation_Mode::mode_sield;
+		mosionName_ = "shield";
 	}//前回の座標と現在の座標が違う = 動いた場合
 	else if (wt.translation_.x != PrePosition.x || wt.translation_.y != PrePosition.y) {
-		animation_mode = Animation_Mode::mode_move;
+		mosionName_ = "move";
 	}
 	else {
-		animation_mode = Animation_Mode::mode_stop;
+		mosionName_ = "standby";
+	}
+
+	if (isPerformance) {
+		mosionName_ = "clear";
 	}
 
 	//animationが変わった場合切り替える
-	if (animation_mode != PreAnimation_mode) {
-		switch (animation_mode)
-		{
-		case Player::Animation_Mode::mode_stop:
-			object->ChangeAnimation("NewPlayer.gltf");
-			break;
-		case Player::Animation_Mode::mode_move:
-			object->ChangeAnimation("NewPlayer.gltf");
-			break;
-		case Player::Animation_Mode::mode_sield:
-			object->ChangeAnimation("NewPlayer_umbrella.gltf");
-			break;
-		}
-
-		PreAnimation_mode = animation_mode;
+	if (mosionName_ != preMosionName_) {
+		object->ChangeAnimation(objectMosions_[mosionName_]);
+		preMosionName_ = mosionName_;
 	}
 
 	//現在座標に前回座標を代入

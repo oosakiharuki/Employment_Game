@@ -206,9 +206,11 @@ void IScene::DrawCommon() {
 
 
 void IScene::WarpNextScene() {
+	//ワープするとき && プレイヤーが演出判定でない
 	if (CollisionManager::GetInstance()->IsWarp() && !player_->Performancing()) {
-		cameraControl_->ZoomStart(player_->GetTranslate() + playerAwayPos);
-		player_->IsPerformanceFlag(true);
+		//何度もplayer_のGetTranslateを読み取ると予定より早くなるため
+		cameraControl_->ZoomStart(player_->GetTranslate() + kPlayerAwayPos);
+		player_->IsPerformanceFlag(true);//演出モード
 		player_->SetRotate({ 0,0,0 });//向きを前に
 	}
 }

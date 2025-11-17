@@ -50,7 +50,7 @@ protected:
 	Vector3 cameraPoint2;//幅2
 	std::unique_ptr<CameraControl> cameraControl_;
 
-	Vector3 playerAwayPos = { 0, 2, -15.0f };
+	const Vector3 kPlayerAwayPos = { 0, 2, -15.0f };
 
 	//レベルエディタ(オブジェクトの配置を.jsonでできる)
 	Levelediter levelediter;

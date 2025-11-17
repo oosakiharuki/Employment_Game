@@ -263,15 +263,12 @@ private:
 	//前回座標の保存場所
 	Vector3 PrePosition;
 
-	//アニメーション
-	enum Animation_Mode {
-		mode_stop,//止まってる
-		mode_move,//動いてる
-		mode_sield,//守っている
-	};
+	//オブジェクトたち
+	std::unordered_map<std::string, std::string> objectMosions_;
 
-	Animation_Mode animation_mode;
-	Animation_Mode PreAnimation_mode;
+	//アニメーション変更
+	std::string mosionName_ = "standby";
+	std::string preMosionName_ = "standby"; 
 
 	//UI
 	std::vector<std::unique_ptr<Sprite>> sprites_Hp;
