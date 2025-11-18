@@ -42,12 +42,13 @@ enum class BornParticle {
 /// <summary>
 /// Emitterで動きを変化させる
 /// </summary>
-enum class ParticleMosion {
+enum ParticleMosion {
 	Normal,  //あちこち動く
 	Fixed,   //固定
 	Smaller, //小さくなって消える
 	Spike,   //とげとげ (HitEffect)
-	Exprosion//爆発っぽい感じ(ring)
+	Exprosion,//爆発っぽい感じ(ring)
+	Fanfare,  //紙吹雪っぽいやつ
 };
 
 class Particle{

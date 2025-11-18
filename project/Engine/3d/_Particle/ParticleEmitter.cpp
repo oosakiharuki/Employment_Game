@@ -130,6 +130,41 @@ Particles ParticleEmitter::MakeNewParticleExprosion(std::mt19937& randomEngine, 
 	return particle;
 }
 
+Particles ParticleEmitter::MakeNewParticleFanfare(std::mt19937& randomEngine, const Emitter& emitter) {
+	
+	
+	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
+	
+	std::uniform_real_distribution<float> distTranslate(0.0f,5.0f);
+	std::uniform_real_distribution<float> distRotate(0.0f, 360.0f);
+	std::uniform_real_distribution<float> distScale(0.1f, 0.3f);//大きさ用
+
+	std::uniform_real_distribution<float> distWidth(-1.5f, 1.5f);//幅
+	std::uniform_real_distribution<float> distLifeTime(1.0f, 2.0f);//消える時間
+	
+	Particles gParticle;
+	gParticle.transform.scale = emitter.transform.scale * distScale(randomEngine);
+	
+	gParticle.transform.translate = emitter.transform.translate;
+	//gParticle.transform.translate.y += distTranslate(randomEngine);
+
+	gParticle.transform.rotate = emitter.transform.rotate;
+	gParticle.transform.rotate += distRotate(randomEngine);
+	
+	gParticle.color = { distColor(randomEngine), distColor(randomEngine) ,distColor(randomEngine) ,distColor(randomEngine) };
+	
+	gParticle.velocity = { 0,5.0f,0 };
+	gParticle.velocity.x += distWidth(randomEngine);
+	gParticle.velocity.z += distWidth(randomEngine);
+	gParticle.velocity.y += distWidth(randomEngine);
+
+
+	gParticle.lifeTime = emitter.frequency * distLifeTime(randomEngine);
+	gParticle.currentTime = 0.0f;
+
+	return gParticle;
+}
+
 std::list<Particles> ParticleEmitter::MakeEmit(const Emitter& emitter, std::mt19937& randomEngine, ParticleMosion mosion) {
 	std::list<Particles> particles;
 
@@ -158,6 +193,11 @@ std::list<Particles> ParticleEmitter::MakeEmit(const Emitter& emitter, std::mt19
 	case ParticleMosion::Exprosion:
 		for (uint32_t count = 0; count < emitter.count; ++count) {
 			particles.push_back(MakeNewParticleExprosion(randomEngine, emitter));
+		}
+		break;
+	case ParticleMosion::Fanfare:
+		for (uint32_t count = 0; count < emitter.count; ++count) {
+			particles.push_back(MakeNewParticleFanfare(randomEngine, emitter));
 		}
 		break;
 	default:

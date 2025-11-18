@@ -1,9 +1,9 @@
 #include "IScene.h"
 using namespace MyMath;
 
-std::string IScene::sceneNo = "Game";
+std::string IScene::sceneNo = "Clear";
 
-std::string IScene::nextSceneNo = "Game";
+std::string IScene::nextSceneNo = "Clear";
 
 IScene::~IScene(){}
 
