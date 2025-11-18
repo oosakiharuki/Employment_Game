@@ -144,7 +144,7 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 				player_->SetInit_Position(stageObject->GetPosition(), player_->GetRotate());
 			}
 			//ゴール
-			else if (stageObject->GetObjectName() == "Goal") {
+			else if (stageObject->GetObjectName() == "Goal" && Input::GetInstance()->TriggerKey(DIK_E)) {
 				isGoal = true;
 			}
 			//stageObjectsの中でワープゲートである場合

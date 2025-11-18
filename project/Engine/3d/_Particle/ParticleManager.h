@@ -30,6 +30,11 @@ public:
 	void SetCamera(Camera* camera_) { camera = camera_; }
 
 	void ResetNum(const std::string& filePath);
+	/// <summary>
+	/// パーティクルを一度消す
+	/// </summary>
+	/// <param name="filePath"></param>パーティクルグループ名を選ぶ
+	void ResetParticle(const std::string& filePath);
 
 private:
 	static ParticleManager* sInstance;

@@ -4,7 +4,7 @@ using namespace MyMath;
 void SelectScene::Initialize() {
 
 	//ステージシーンのゲームオブジェクト配置
-	LevelEditorObjectSetting("stage_select");
+	LevelEditorObjectSetting("stage_select_test");
 
 	skyBox = std::make_unique<BoxModel>();
 	skyBox->Initialize("resource/rostock_laage_airport_4k.dds");
@@ -35,6 +35,11 @@ void SelectScene::Update() {
 		NextSceneFadeInStart("Game");
 	}
 
+	//ワープするflag && カメラがズームし終わった
+	if (CollisionManager::GetInstance()->IsGoal() && cameraControl_->MaxZoom()) {
+		NextSceneFadeInStart("Clear");
+	}
+
 	//ステージオブジェクト更新
 	for (auto& stageObject : stageObjects) {
 		stageObject->Update();
@@ -50,6 +55,12 @@ void SelectScene::Update() {
 
 	CollisionCommon();
 
+	//ゴールしたとき
+	if (CollisionManager::GetInstance()->IsGoal() || player_->GetPerformanceMode()) {
+		cameraControl_->ZoomStart(player_->GetTranslate() + kPlayerAwayPos);
+		player_->IsPerformanceFlag(true);
+		player_->SetRotate({ 0,180.0f,0 });//向きを前に
+	}
 
 	setumei[0]->SetPosition({ 300,20 });
 	setumei[6]->SetPosition({ 600,20 });

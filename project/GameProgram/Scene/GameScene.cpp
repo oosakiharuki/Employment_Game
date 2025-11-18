@@ -7,7 +7,7 @@ void GameScene::Initialize() {
 	PreviousSceneData();
 
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting("stage_1");
+	LevelEditorObjectSetting("stage_2");
 
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");
@@ -44,9 +44,8 @@ void GameScene::Update() {
 		NextSceneFadeInStart("NextStage");
 	}
 
-	if (CollisionManager::GetInstance()->IsGoal()) {
+	if (CollisionManager::GetInstance()->IsGoal() && cameraControl_->MaxZoom()) {
 		NextSceneFadeInStart("Clear");
-		return;
 	}
 
 	//カメラコントロール
@@ -55,6 +54,13 @@ void GameScene::Update() {
 	(player_->GetIsDead()) ? cameraControl_->ShakeMode(true) : cameraControl_->ResetShakeTime();
 	//更新処理
 	cameraControl_->Update(&*camera.get());
+
+	//ゴールしたとき
+	if (CollisionManager::GetInstance()->IsGoal() || player_->GetPerformanceMode()) {
+		cameraControl_->ZoomStart(player_->GetTranslate() + kPlayerAwayPos);
+		player_->IsPerformanceFlag(true);
+		player_->SetRotate({ 0,180.0f,0 });//向きを前に
+	}
 
 	player_->Update();
 	
@@ -97,13 +103,9 @@ void GameScene::Update() {
 		stageObject->Update();
 	}
 
-	//共有イベントフラグ
-	bool isEventCommon = false;
-
 	for (auto& eventTrigger : eventTriggers) {
 
 		if (eventTrigger->GetEventData().isEvent) {
-			isEventCommon = true;
 			eventTrigger->SetPopEnemies(enemies);
 			eventTrigger->Update();
 

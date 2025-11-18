@@ -163,6 +163,11 @@ void ParticleManager::Update(const std::string filePath, ParticleForGPU* wvpData
 
 		(*particleIterator).transform.translate += (*particleIterator).velocity * kDeltaTime;
 
+		if (particleMosion == ParticleMosion::Fanfare) {
+			(*particleIterator).transform.rotate += (*particleIterator).velocity;
+			(*particleIterator).velocity.y -= 0.1f;
+		}
+
 		if (particleMosion == ParticleMosion::Smaller) {
 			if ((*particleIterator).transform.scale.x > 0) {
 				(*particleIterator).transform.scale.x -= 0.5f * kDeltaTime;
@@ -244,3 +249,9 @@ void ParticleManager::ResetNum(const std::string& filePath) {
 	particleG.Updated = false;
 }
 
+void ParticleManager::ResetParticle(const std::string& filePath) {
+	assert(srvManager->Max());
+
+	ParticleGroup& particleG = particleGroups[filePath];
+	particleG.particles.clear();
+}

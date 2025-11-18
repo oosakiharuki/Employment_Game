@@ -1,9 +1,9 @@
 #include "IScene.h"
 using namespace MyMath;
 
-std::string IScene::sceneNo = "Game";
+std::string IScene::sceneNo = "Select";
 
-std::string IScene::nextSceneNo = "Game";
+std::string IScene::nextSceneNo = "Select";
 
 IScene::~IScene(){}
 
@@ -164,7 +164,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	stageobj->SetModelFile(Stage_fileName + ".obj");
 
 	//チュートリアル用の
-	if (Stage_fileName == "stage_0" || "stage_select") {
+	if (Stage_fileName == "stage_0" || "stage_select_test") {
 
 		for (uint32_t i = 0; i < 7; i++) {
 			std::unique_ptr<Sprite> iterator = std::make_unique<Sprite>();
@@ -178,7 +178,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 
 void IScene::DrawCommon() {
 	//チュートリアルの出る順番
-	if (Stage_fileName == "stage_select") {
+	if (Stage_fileName == "stage_select_test") {
 		setumei[0]->Draw();
 		setumei[6]->Draw();
 	}
@@ -206,9 +206,11 @@ void IScene::DrawCommon() {
 
 
 void IScene::WarpNextScene() {
+	//ワープするとき && プレイヤーが演出判定でない
 	if (CollisionManager::GetInstance()->IsWarp() && !player_->Performancing()) {
-		cameraControl_->ZoomStart(player_->GetTranslate() + playerAwayPos);
-		player_->IsPerformanceFlag(true);
+		//何度もplayer_のGetTranslateを読み取ると予定より早くなるため
+		cameraControl_->ZoomStart(player_->GetTranslate() + kPlayerAwayPos);
+		player_->IsPerformanceFlag(true);//演出モード
 		player_->SetRotate({ 0,0,0 });//向きを前に
 	}
 }
