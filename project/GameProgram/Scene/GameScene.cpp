@@ -56,8 +56,7 @@ void GameScene::Update() {
 	cameraControl_->Update(&*camera.get());
 
 	//ゴールしたとき
-	if (CollisionManager::GetInstance()->IsGoal() && 
-		((input_->TriggerKey(DIK_E) || input_->TriggerBotton(state,preState, XINPUT_GAMEPAD_Y)) || player_->GetPerformanceMode())) {
+	if (CollisionManager::GetInstance()->IsGoal() || player_->GetPerformanceMode()) {
 		cameraControl_->ZoomStart(player_->GetTranslate() + kPlayerAwayPos);
 		player_->IsPerformanceFlag(true);
 		player_->SetRotate({ 0,180.0f,0 });//向きを前に

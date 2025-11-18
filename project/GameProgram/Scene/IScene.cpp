@@ -1,9 +1,9 @@
 #include "IScene.h"
 using namespace MyMath;
 
-std::string IScene::sceneNo = "Clear";
+std::string IScene::sceneNo = "Select";
 
-std::string IScene::nextSceneNo = "Clear";
+std::string IScene::nextSceneNo = "Select";
 
 IScene::~IScene(){}
 
@@ -164,7 +164,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	stageobj->SetModelFile(Stage_fileName + ".obj");
 
 	//チュートリアル用の
-	if (Stage_fileName == "stage_0" || "stage_select") {
+	if (Stage_fileName == "stage_0" || "stage_select_test") {
 
 		for (uint32_t i = 0; i < 7; i++) {
 			std::unique_ptr<Sprite> iterator = std::make_unique<Sprite>();
@@ -178,7 +178,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 
 void IScene::DrawCommon() {
 	//チュートリアルの出る順番
-	if (Stage_fileName == "stage_select") {
+	if (Stage_fileName == "stage_select_test") {
 		setumei[0]->Draw();
 		setumei[6]->Draw();
 	}
