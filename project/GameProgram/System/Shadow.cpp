@@ -14,9 +14,9 @@ void Shadow::Initialize() {
 	object_->SetModelFile("shadow.obj");
 	object_->SetColor({0,0,0,1});
 
-	wt.Initialize();
+	wt_.Initialize();
 
-	shadowAABB = {
+	shadowAABB_ = {
 		{ -0.1f,-1000.0f,-0.1f },
 		{ -0.1f,0.0f,-0.1f }
 	};
@@ -29,15 +29,15 @@ void Shadow::Update() {
 
 	ImGui::Begin("player_shadow");
 
-	ImGui::InputFloat3("worldTransform.translate", &wt.translation_.x);
-	ImGui::SliderFloat3("worldTransform.translateSlider", &wt.translation_.x, -30.0f, 30.0f);
+	ImGui::InputFloat3("worldTransform.translate", &wt_.translation_.x);
+	ImGui::SliderFloat3("worldTransform.translateSlider", &wt_.translation_.x, -30.0f, 30.0f);
 
 	ImGui::End();
 
 #endif // USE_IMGUI
 
-	object_->Update(wt);
-	wt.UpdateMatrix();
+	object_->Update(wt_);
+	wt_.UpdateMatrix();
 }
 
 void Shadow::Draw() {
@@ -51,7 +51,7 @@ void Shadow::Draw() {
 
 AABB Shadow::GetAABB() {
 	AABB aabb;
-	aabb.min = wt.translation_ + shadowAABB.min;
-	aabb.max = wt.translation_ + shadowAABB.max;
+	aabb.min = wt_.translation_ + shadowAABB_.min;
+	aabb.max = wt_.translation_ + shadowAABB_.max;
 	return aabb;
 }

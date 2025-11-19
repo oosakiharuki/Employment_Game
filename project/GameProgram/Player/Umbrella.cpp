@@ -6,14 +6,14 @@ using namespace MyMath;
 Umbrella::~Umbrella() {}
 
 void Umbrella::Initialize() {
-	wt.Initialize();
+	wt_.Initialize();
 
-	object = std::make_unique<Object_glTF>();
-	object->Initialize();
-	object->SetModelFile("umbrella_Close.gltf");
+	object_ = std::make_unique<Object_glTF>();
+	object_->Initialize();
+	object_->SetModelFile("umbrella_Close.gltf");
 
-	umbrellaAABB.min = { -0.5f,-1,-0.5f };
-	umbrellaAABB.max = { 0.5f,1,0.5f };
+	umbrellaAABB_.min = { -0.5f,-1,-0.5f };
+	umbrellaAABB_.max = { 0.5f,1,0.5f };
 }
 
 void Umbrella::Update() {
@@ -22,55 +22,55 @@ void Umbrella::Update() {
 
 	ImGui::Begin("um");
 
-	ImGui::InputFloat3("worldTransform.translate", &wt.translation_.x);
-	ImGui::SliderFloat3("worldTransform.translateSlider", &wt.translation_.x, -30.0f, 30.0f);
+	ImGui::InputFloat3("worldTransform.translate", &wt_.translation_.x);
+	ImGui::SliderFloat3("worldTransform.translateSlider", &wt_.translation_.x, -30.0f, 30.0f);
 
-	ImGui::InputFloat3("Rotate", &wt.rotation_.x);
-	ImGui::SliderFloat("RotateX", &wt.rotation_.x, -360.0f, 360.0f);
-	ImGui::SliderFloat("RotateY", &wt.rotation_.y, -360.0f, 360.0f);
-	ImGui::SliderFloat("RotateZ", &wt.rotation_.z, -360.0f, 360.0f);
+	ImGui::InputFloat3("Rotate", &wt_.rotation_.x);
+	ImGui::SliderFloat("RotateX", &wt_.rotation_.x, -360.0f, 360.0f);
+	ImGui::SliderFloat("RotateY", &wt_.rotation_.y, -360.0f, 360.0f);
+	ImGui::SliderFloat("RotateZ", &wt_.rotation_.z, -360.0f, 360.0f);
 
 	ImGui::End();
 
 #endif // USE_IMGUI
 
 	//防御状態の場合
-	if (isShieldMode) {
-		object->ChangeAnimation("umbrella_Open.gltf");//開いた傘
+	if (isShieldMode_) {
+		object_->ChangeAnimation("umbrella_Open.gltf");//開いた傘
 	}
 	else {
-		object->ChangeAnimation("umbrella_Close.gltf");//閉じた傘
+		object_->ChangeAnimation("umbrella_Close.gltf");//閉じた傘
 	}
 
-	object->Update(wt);
-	wt.UpdateMatrix();
+	object_->Update(wt_);
+	wt_.UpdateMatrix();
 }
 
 
 void Umbrella::Draw() {
-	object->Draw();
+	object_->Draw();
 }
 
 
 AABB Umbrella::GetAABB() {
 	AABB aabb;
-	aabb.min = wt.translation_ + umbrellaAABB.min;
-	aabb.max = wt.translation_ + umbrellaAABB.max;
+	aabb.min = wt_.translation_ + umbrellaAABB_.min;
+	aabb.max = wt_.translation_ + umbrellaAABB_.max;
 	return aabb;
 }
 
 void Umbrella::ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime) {
-	if (scaleTimer >= maxTime / 2.0f) {
-		wt.scale_ -= scale;
-		if (scaleTimer >= maxTime) {
-			scaleTimer = 0.0f;
-			wt.scale_ = { 1,1,1 };
+	if (scaleTimer_ >= maxTime / 2.0f) {
+		wt_.scale_ -= scale;
+		if (scaleTimer_ >= maxTime) {
+			scaleTimer_ = 0.0f;
+			wt_.scale_ = { 1,1,1 };
 			//モーションを終了する
 			*mosionOn = false;
 		}
 	}
 	else {
-		wt.scale_ += scale;
+		wt_.scale_ += scale;
 	}
-	scaleTimer += kDeltaTime;
+	scaleTimer_ += kDeltaTime_;
 }

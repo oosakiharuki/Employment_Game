@@ -9,14 +9,14 @@ IStageObject::~IStageObject() {}
 AABB IStageObject::GetAABB() {
 	AABB aabb;
 
-	aabb.min = wt.translation_ + aabb_.min;
-	aabb.max = wt.translation_ + aabb_.max;
+	aabb.min = wt_.translation_ + aabb_.min;
+	aabb.max = wt_.translation_ + aabb_.max;
 
 	return aabb;
 }
 
 void IStageObject::SetObjectName(const std::string& name) {
-	objectName = name;
+	objectName_ = name;
 }
 
 void IStageObject::SetNextStage(std::string fileName){}

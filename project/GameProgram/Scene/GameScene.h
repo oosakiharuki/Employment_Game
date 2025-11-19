@@ -15,15 +15,15 @@ private:
 	SoundData soundData_;
 
 	//残機
-	uint32_t RemainingLife = 2;
+	uint32_t RemainingLife_ = 2;
 
 	//スタート演出(水たまりから飛び出る感じに)
-	bool isStartStage = true;
-	Vector3 playerPoint{};
-	float startPointY = 0.0f;
+	bool isStartStage_ = true;
+	Vector3 playerPoint_{};
+	float startPointY_ = 0.0f;
 
 	//スタート時のワープゲート
-	std::unique_ptr<WarpGate> startWarp;
+	std::unique_ptr<WarpGate> startWarp_;
 
 
 	/// <summary>

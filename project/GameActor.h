@@ -24,12 +24,12 @@ public:
 	/// getter_座標位置
 	/// </summary>
 	/// <returns></returns>現在の座標位置
-	Vector3 GetTranslate() { return wt.translation_; }
+	Vector3 GetTranslate() { return wt_.translation_; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
 	/// <param name="translate"></param>代入する座標位置
-	void SetTranslate(Vector3 translate) { wt.translation_ = translate; }
+	void SetTranslate(Vector3 translate) { wt_.translation_ = translate; }
 
 	/// <summary>
 	/// getter_ワールド座標系の位置
@@ -41,23 +41,23 @@ public:
 	/// getter_回転
 	/// </summary>
 	/// <returns></returns>現在の回転
-	Vector3 GetRotate() { return wt.rotation_; }
+	Vector3 GetRotate() { return wt_.rotation_; }
 	/// <summary>
 	/// setter_回転
 	/// </summary>
 	/// <param name="rotate"></param>代入する各回転角度
-	void SetRotate(Vector3 rotate) { wt.rotation_ = rotate; }
+	void SetRotate(Vector3 rotate) { wt_.rotation_ = rotate; }
 	
 	/// <summary>
 	/// getter_座標位置
 	/// </summary>
 	/// <returns></returns>現在の座標位置
-	Vector3 GetSize() { return wt.scale_; }
+	Vector3 GetSize() { return wt_.scale_; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
 	/// <param name="translate"></param>代入する座標位置
-	void SetSize(Vector3 size) { wt.scale_ = size; }
+	void SetSize(Vector3 size) { wt_.scale_ = size; }
 
 	/// <summary>
 	/// getter_当たり判定AABB
@@ -68,7 +68,7 @@ public:
 	/// setter_当たり判定AABB
 	/// </summary>
 	/// <param name="aabb"></param>AABB
-	void SetAABB(AABB aabb) { actorAABB = aabb; }
+	void SetAABB(AABB aabb) { actorAABB_ = aabb; }
 
 	/// <summary>
 	/// 地面判定フラグ変更
@@ -80,13 +80,13 @@ public:
 	/// getter_地面判定
 	/// </summary>
 	/// <returns></returns>現在の地面判定
-	bool GetIsGround() { return isGround; }
+	bool GetIsGround() { return isGround_; }
 
 	/// <summary>
 	/// getter_倒れた時
 	/// </summary>
 	/// <returns></returns>倒れたフラグ
-	bool GetIsDead() { return isDead; }
+	bool GetIsDead() { return isDead_; }
 
 	/// <summary>
 	/// リアクション(拡大縮小)
@@ -101,9 +101,9 @@ public:
 	/// </summary>
 	/// <param name="anser"></param>
 	/// trueならアニメーションのみ / falseなら操作可能
-	void IsPerformanceFlag(const bool& result) { isPerformance = result; }
+	void IsPerformanceFlag(const bool& result) { isPerformance_ = result; }
 
-	bool GetPerformanceMode() { return isPerformance; }
+	bool GetPerformanceMode() { return isPerformance_; }
 
 
 	/// <summary>
@@ -124,8 +124,8 @@ public:
 	/// <param name="translate"></param>座標位置
 	/// <param name="rotate"></param>各回転角度
 	void SetInit_Position(Vector3 translate, Vector3 rotate) {
-		init_point = translate;
-		init_rotate = rotate;
+		initTranslate_ = translate;
+		initRotate_ = rotate;
 	}
 
 	/// <summary>
@@ -141,46 +141,46 @@ public:
 
 protected:
 
-	WorldTransform wt;
+	WorldTransform wt_;
 	//当たり判定
-	AABB actorAABB;
+	AABB actorAABB_;
 
 	//体力
-	uint32_t maxHp;//最大値
-	uint32_t hp;
+	uint32_t maxHp_;//最大値
+	uint32_t hp_;
 
-	bool isDead = false;//倒れたフラグ
+	bool isDead_ = false;//倒れたフラグ
 
 	//向き
-	float direction = 90.0f;
+	float direction_ = 90.0f;
 
 	//地面判定
-	bool isGround = false;
+	bool isGround_ = false;
 	//重力
-	float grabity = 0.0f;
+	float grabity_ = 0.0f;
 
 	//演出中フラグ
-	bool isPerformance = false;
+	bool isPerformance_ = false;
 
 	//秒数時間
-	const float kDeltaTime = 1.0f / 60.0f;
+	const float kDeltaTime_ = 1.0f / 60.0f;
 
 	///影
 	std::unique_ptr<Shadow> shadow_;
 	
 	//ダメージのリアクション
-	bool isDamageMosion = false;
+	bool isDamageMosion_ = false;
 
 	//ダメージリアクション
-	float scaleTimer = 0.0f;
-	Vector3 damageScale = { 0.1f, 0.1f, 0.1f };
-	const Vector3 kDefaultScale = { 1,1,1 };//元の大きさ
-	const float kDamageMaxTime = 0.14f;
+	float scaleTimer_ = 0.0f;
+	Vector3 damageScale_ = { 0.1f, 0.1f, 0.1f };
+	const Vector3 kDefaultScale_ = { 1,1,1 };//元の大きさ
+	const float kDamageMaxTime_ = 0.14f;
 
 
 	//初期位置保管
-	Vector3 init_point;
-	Vector3 init_rotate;
+	Vector3 initTranslate_;
+	Vector3 initRotate_;
 
 private:
 

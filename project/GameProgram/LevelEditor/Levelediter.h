@@ -75,7 +75,7 @@ public:
 	/// getter‗レベルエディタ
 	/// </summary>
 	/// <returns></returns>作成したレベルエディタ
-	LevelData* GetLevelData() { return levelData; }
+	LevelData* GetLevelData() { return levelData_; }
 	/// <summary>
 	/// レベルエディタリセット
 	/// </summary>
@@ -83,5 +83,5 @@ public:
 
 private:
 	//レベルエディタ
-	LevelData* levelData;
+	LevelData* levelData_;
 };

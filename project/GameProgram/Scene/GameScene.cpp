@@ -14,13 +14,13 @@ void GameScene::Initialize() {
 	soundData_ = Audio::GetInstance()->LoadWave("resource/sound/bane.wav");
 
 	//BGM再生(リピート)
-	Audio::GetInstance()->SoundPlayWave(BGMData_, volume, true);
+	Audio::GetInstance()->SoundPlayWave(BGMData_, volume_, true);
 
 	//スタート演出
 	WarterWarpExit();
 
 	//演出時に重力が発動しないようにする
-	for (auto& enemy : enemies) {
+	for (auto& enemy : enemies_) {
 		enemy->IsPerformanceFlag(true);
 	}
 
@@ -38,7 +38,7 @@ void GameScene::Update() {
 		Audio::GetInstance()->StopWave(BGMData_);//BGM停止
 	}
 	//演出用のワープゲート出口
-	startWarp->Update();
+	startWarp_->Update();
 
 	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->MaxZoom()) {
 		NextSceneFadeInStart("NextStage");
@@ -53,11 +53,11 @@ void GameScene::Update() {
 	//プレイヤーが倒されたらシェイク
 	(player_->GetIsDead()) ? cameraControl_->ShakeMode(true) : cameraControl_->ResetShakeTime();
 	//更新処理
-	cameraControl_->Update(&*camera.get());
+	cameraControl_->Update(&*camera_.get());
 
 	//ゴールしたとき
 	if (CollisionManager::GetInstance()->IsGoal() || player_->GetPerformanceMode()) {
-		cameraControl_->ZoomStart(player_->GetTranslate() + kPlayerAwayPos);
+		cameraControl_->ZoomStart(player_->GetTranslate() + kPlayerAwayPos_);
 		player_->IsPerformanceFlag(true);
 		player_->SetRotate({ 0,180.0f,0 });//向きを前に
 	}
@@ -67,24 +67,24 @@ void GameScene::Update() {
 	//次のシーンに移動する演出
 	WarpNextScene();
 
-	stageobj->Update();
+	stageobj_->Update();
 
-	if (isStartStage) {
+	if (isStartStage_) {
 		//プレイヤー配置座標 + 地面当たり判定によって上げられる分
-		if (startPointY >= playerPoint.y) {
-			player_->SetTranslate({ playerPoint.x,startPointY,playerPoint.z });
-			isStartStage = false;
+		if (startPointY_ >= playerPoint_.y) {
+			player_->SetTranslate({ playerPoint_.x,startPointY_,playerPoint_.z });
+			isStartStage_ = false;
 			player_->IsPerformanceFlag(false);//演出モードを終了し操作できるように
 			player_->IsJumping();//強制的にジャンプさせて飛び出たようにする
 			//演出フラグ解除
-			for (auto& enemy : enemies) {
+			for (auto& enemy : enemies_) {
 				enemy->IsPerformanceFlag(false);
 			}
 			return;
 		}
 
-		startPointY += 0.1f;
-		player_->SetTranslate({ playerPoint.x,startPointY,playerPoint.z });
+		startPointY_ += 0.1f;
+		player_->SetTranslate({ playerPoint_.x,startPointY_,playerPoint_.z });
 	}
 
 	Respawn();
@@ -94,27 +94,27 @@ void GameScene::Update() {
 		return;
 	}
 	
-	for (auto& enemy : enemies) {
+	for (auto& enemy : enemies_) {
 		enemy->SetPlayer(player_.get());
 		enemy->Update();
 	}
 
-	for (auto& stageObject : stageObjects) {
+	for (auto& stageObject : stageObjects_) {
 		stageObject->Update();
 	}
 
-	for (auto& eventTrigger : eventTriggers) {
+	for (auto& eventTrigger : eventTriggers_) {
 
 		if (eventTrigger->GetEventData().isEvent) {
-			eventTrigger->SetPopEnemies(enemies);
+			eventTrigger->SetPopEnemies(enemies_);
 			eventTrigger->Update();
 
-			enemies = std::move(eventTrigger->GetPopEnemy());
+			enemies_ = std::move(eventTrigger->GetPopEnemy());
 		}
 	}
 
-	if (!isStartStage) {
-		startWarp->Vanish();//出てきた後消えるようにする	
+	if (!isStartStage_) {
+		startWarp_->Vanish();//出てきた後消えるようにする	
 	}
 
 	CollisionCommon();
@@ -124,7 +124,7 @@ void GameScene::Update() {
 		player_->IsFall();
 	}
 
-	for (auto& a : setumei) {
+	for (auto& a : setumei_) {
 		a->Update();
 	}
 
@@ -133,17 +133,17 @@ void GameScene::Update() {
 	ImGui::Begin("camera");
 
 	//カメラの端
-	ImGui::Text("p1 : %f %f %f", cameraPoint1.x, cameraPoint1.y, cameraPoint1.z);
-	ImGui::Text("p2 : %f %f %f", cameraPoint2.x, cameraPoint2.y, cameraPoint2.z);
+	ImGui::Text("p1 : %f %f %f", cameraPointLeft_.x, cameraPointLeft_.y, cameraPointLeft_.z);
+	ImGui::Text("p2 : %f %f %f", cameraPointRight_.x, cameraPointRight_.y, cameraPointRight_.z);
 
-	ImGui::SliderFloat("volume", &volume, 0.0f, 1.0f);
+	ImGui::SliderFloat("volume", &volume_, 0.0f, 1.0f);
 
 
 	ImGui::End();
 
 #endif //  USE_IMGUI
 
-	Audio::GetInstance()->ControlVolume(BGMData_, volume);
+	Audio::GetInstance()->ControlVolume(BGMData_, volume_);
 }
 
 void GameScene::Draw() {
@@ -155,29 +155,26 @@ void GameScene::Draw() {
 	//モデル描画処理
 	GLTFCommon::GetInstance()->Command();
 	
-	for (auto& eventTrigger : eventTriggers) {
+	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->Draw();
 	}
 
 	//モデル描画処理
 	Object3dCommon::GetInstance()->Command();
 
-	stageobj->Draw();
+	stageobj_->Draw();
 
 
-	for (auto& enemy : enemies) {
+	for (auto& enemy : enemies_) {
 		enemy->Draw();
-	}
-
-	for (auto& enemy : enemies) {
 		enemy->DrawCommon();
 	}
 
-	for (auto& stageObject : stageObjects) {
+	for (auto& stageObject : stageObjects_) {
 		stageObject->Draw();
 	}
 	
-	startWarp->Draw();
+	startWarp_->Draw();
 	
 	player_->Draw();
 
@@ -196,13 +193,13 @@ void GameScene::Finalize() {}
 void GameScene::WarterWarpExit() {
 	
 	//初期化
-	startWarp = std::make_unique<WarpGate>();
-	startWarp->Initialize();
-	isStartStage = true;
-	startPointY = 10.0f;
+	startWarp_ = std::make_unique<WarpGate>();
+	startWarp_->Initialize();
+	isStartStage_ = true;
+	startPointY_ = 10.0f;
 
-	playerPoint = player_->GetTranslate();
-	startPointY = playerPoint.y - startPointY;//プレイヤーが真下からくるように設定する
+	playerPoint_ = player_->GetTranslate();
+	startPointY_ = playerPoint_.y - startPointY_;//プレイヤーが真下からくるように設定する
 
 	//ワープゲート出口の位置決め
 	Vector3 warpPosition = player_->GetTranslate();
@@ -213,11 +210,11 @@ void GameScene::WarterWarpExit() {
 	startWarpAABB.min = warpPosition + Vector3{ 0,-10,0 };
 
 	//プレイヤー初期位置の真下に
-	warpPosition = CollisionManager::GetInstance()->UnderCollision(stagesAABB, startWarpAABB, playerPoint);
+	warpPosition = CollisionManager::GetInstance()->UnderCollision(stagesAABB_, startWarpAABB, playerPoint_);
 	warpPosition.y += 0.02f;//重ならないように影より上にする
 
-	startWarp->SetPosition(warpPosition);//playerの真下に
-	startWarp->SetRotation({ 90.0f,0.0f,0.0f });//下向きにして水たまりに
+	startWarp_->SetPosition(warpPosition);//playerの真下に
+	startWarp_->SetRotation({ 90.0f,0.0f,0.0f });//下向きにして水たまりに
 
 	player_->IsPerformanceFlag(true);
 }
@@ -226,7 +223,7 @@ void GameScene::Respawn() {
 	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
 	if (player_->GetIsDead() && player_->GetIsRespawn()) {
 
-		if (RemainingLife == 0) {
+		if (RemainingLife_ == 0) {
 			//残機が0で倒された場合ゲームオーバー
 			NextSceneFadeInStart("GameOver");
 			FadeScreen::GetInstance()->SetMaskTexture("fade02.png");
@@ -234,18 +231,18 @@ void GameScene::Respawn() {
 			return;
 		}
 		//残機が一つ減る
-		RemainingLife--;
+		RemainingLife_--;
 
 		//敵が復活
-		for (auto& enemy : enemies) {
+		for (auto& enemy : enemies_) {
 			enemy->RespawnEnemy();
 		}
 		//プレイヤー復活
 		player_->RespawnPlayer();
 		//突破できてないならやり直し
-		for (auto& eventTrigger : eventTriggers) {
+		for (auto& eventTrigger : eventTriggers_) {
 			eventTrigger->FailureEvent();
-			cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit["MainCamera"], false);
+			cameraControl_->CameraSetting(levelediter_.GetLevelData()->cameraInit["MainCamera"], false);
 		}
 	}
 }

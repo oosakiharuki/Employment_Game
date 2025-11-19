@@ -14,10 +14,10 @@ public:
 	void Finalize() override;
 private:
 	std::unique_ptr<Sprite> sprite_;//ゲームクリアの文字
-	std::unique_ptr<Sprite> sprite_space;//Spaceでもどるの文字
+	std::unique_ptr<Sprite> spriteSpace_;//Spaceでもどるの文字
 
-	std::unique_ptr<Object_glTF> player_gltf_;
-	std::unique_ptr<Object_glTF> stage_gltf_;
+	std::unique_ptr<Object_glTF> playerGltf_;
+	std::unique_ptr<Object_glTF> stageGltf_;
 	WorldTransform wt_;
 
 	std::vector<std::unique_ptr<Particle>> particle_fanfares_;

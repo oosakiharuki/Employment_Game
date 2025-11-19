@@ -32,8 +32,8 @@ public:
 	void Finalize();
 
 	void FadeStart(const FadeType& type) {
-		isFading = true;
-		FadeType_ = type;
+		isFading_ = true;
+		fadeType_ = type;
 	}
 
 
@@ -41,10 +41,10 @@ public:
 	/// フェードの最中か
 	/// </summary>
 	/// <returns></returns>フェード中ならtrue
-	bool GetIsFadeing() const{ return isFading; }
+	bool GetIsFadeing() const{ return isFading_; }
 	
-	void SetMaskTexture(const std::string textureFile) { dissolveTexture = textureFile; }
-	void SetBackGround(const std::string textureFile) { sprite->SetTextureFile(textureFile); }
+	void SetMaskTexture(const std::string textureFile) { dissolveTexture_ = textureFile; }
+	void SetBackGround(const std::string textureFile) { sprite_->SetTextureFile(textureFile); }
 
 private:
 
@@ -57,26 +57,26 @@ private:
 	/// </summary>
 	void FadeOut();
 
-	static FadeScreen* instance;
+	static FadeScreen* sInstance;
 
 	//使用するスプライト
-	std::unique_ptr<Sprite> sprite;
+	std::unique_ptr<Sprite> sprite_;
 
 	//秒数時間
-	const float kDeltaTime = 1.0f / 60.0f;
+	const float kDeltaTime_ = 1.0f / 60.0f;
 
 	//フェード中フラグ
-	bool isFading = true;
+	bool isFading_ = true;
 	//フェードのタイプ
-	FadeType FadeType_ = type_fadeOut;
+	FadeType fadeType_ = type_fadeOut;
 
 	//Dissolve(ポストエフェクト)で溶け具合の変数
-	float degress = 0.0f;
+	float degress_ = 0.0f;
 
 	//使用するポストエフェクト
 	//std::unique_ptr<IPostEffects> postEffect_ = nullptr;
-	std::shared_ptr<Dissolve> dissolve;
-	std::string dissolveTexture;
+	std::shared_ptr<Dissolve> dissolve_;
+	std::string dissolveTexture_;
 
 	FadeScreen() = default;
 	~FadeScreen() = default;

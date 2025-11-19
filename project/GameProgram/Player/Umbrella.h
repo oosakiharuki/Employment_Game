@@ -25,26 +25,26 @@ public:
 	/// getter_座標
 	/// </summary>
 	/// <returns></returns>現在の座標
-	Vector3 GetTranslate() { return wt.translation_; }
+	Vector3 GetTranslate() { return wt_.translation_; }
 	/// <summary>
 	/// setter‗座標
 	/// </summary>
 	/// <param name="translate"></param>代入する座標
-	void SetTranslate(Vector3 translate) { wt.translation_ = translate; }
+	void SetTranslate(Vector3 translate) { wt_.translation_ = translate; }
 
 	/// <summary>
 	/// setter‗回転
 	/// </summary>
 	/// <param name="rotate"></param>代入する各回転角度
-	void SetRotate(Vector3 rotate) { wt.rotation_ = rotate; }
+	void SetRotate(Vector3 rotate) { wt_.rotation_ = rotate; }
 
 	/// <summary>
 	/// setter‗スケール
 	/// </summary>
 	/// <param name="scale"></param>代入するスケール
 	void SetScale(Vector3 scale) { 
-		wt.scale_ = scale;
-		scaleTimer = 0.0f;
+		wt_.scale_ = scale;
+		scaleTimer_ = 0.0f;
 	}
 
 	/// <summary>
@@ -56,7 +56,7 @@ public:
 	/// シールドモード
 	/// </summary>
 	/// <param name="isShield"></param>trueはシールドモードに変更
-	void ShieldMode(bool isShield) { isShieldMode = isShield; }
+	void ShieldMode(bool isShield) { isShieldMode_ = isShield; }
 
 	/// <summary>
 	/// 当たったリアクション(拡大縮小)
@@ -67,14 +67,14 @@ public:
 	void ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime);
 private:
 	//オブジェクト設定
-	std::unique_ptr<Object_glTF> object;
-	WorldTransform wt;
-	AABB umbrellaAABB;
+	std::unique_ptr<Object_glTF> object_;
+	WorldTransform wt_;
+	AABB umbrellaAABB_;
 	//シールドモード
-	bool isShieldMode = false;
+	bool isShieldMode_ = false;
 	//秒数時間
-	const float kDeltaTime = 1.0f / 60.0f;
+	const float kDeltaTime_ = 1.0f / 60.0f;
 	//リアクションのタイマー
-	float scaleTimer = 0.0f;
+	float scaleTimer_ = 0.0f;
 };
 

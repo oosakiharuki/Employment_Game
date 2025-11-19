@@ -1,8 +1,8 @@
 #include "LoadingStageScene.h"
 
 void LoadingStageScene::Initialize() {
-	sprite = std::make_unique<Sprite>();
-	sprite->Initialize("Loading_moji.png");
+	sprite_ = std::make_unique<Sprite>();
+	sprite_->Initialize("Loading_moji.png");
 }
 
 void LoadingStageScene::Update() {
@@ -10,7 +10,7 @@ void LoadingStageScene::Update() {
 	if (NextSceneFlag()) {
 		ChangeScene();
 	}
-	sprite->Update();
+	sprite_->Update();
 
 	//すぐさまゲームシーンに
 	NextSceneFadeInStart("Game");
@@ -18,7 +18,7 @@ void LoadingStageScene::Update() {
 
 void LoadingStageScene::Draw() {
 	SpriteCommon::GetInstance()->Command();
-	sprite->Draw();
+	sprite_->Draw();
 }
 
 void LoadingStageScene::Finalize() {}

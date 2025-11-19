@@ -41,7 +41,7 @@ public:
 	/// getter_ワールド座標系
 	/// </summary>
 	/// <returns></returns>プレイヤー本体のワールド座標系
-	const WorldTransform& GetWorldTransform() { return wt; }
+	const WorldTransform& GetWorldTransform() { return wt_; }
 
 	/// <summary>
 	/// 弾を発射する(ショットガン風)
@@ -60,13 +60,13 @@ public:
 	/// getter_傘
 	/// </summary>
 	/// <returns></returns>使用している傘クラス
-	Umbrella* GetUmbrella() { return umbrella.get(); }
+	Umbrella* GetUmbrella() { return umbrella_.get(); }
 
 	/// <summary>
 	/// getter_シールドフラグ
 	/// </summary>
 	/// <returns></returns>trueなら守っている
-	bool GetIsShield() { return isShield; }
+	bool GetIsShield() { return isShield_; }
 
 	/// <summary>
 	/// ダメージを食らった
@@ -100,7 +100,7 @@ public:
 	/// getter_復活
 	/// </summary>
 	/// <returns></returns>復活フラグ
-	bool GetIsRespawn() { return isRespawn; }
+	bool GetIsRespawn() { return isRespawn_; }
 	
 	/// <summary>
 	/// 全ての敵が初期地に戻った時
@@ -111,7 +111,7 @@ public:
 	/// getter_パリィ
 	/// </summary>
 	/// <returns></returns>跳ね返したフラグ
-	bool GetIsPari() { return isPari; }
+	bool GetIsPari() { return isPari_; }
 
 	/// <summary>
 	/// パリィ成功 = 連続弾も跳ね返す
@@ -121,25 +121,25 @@ public:
 	/// パリィ成功フラグ
 	/// </summary>
 	/// <param name="result"></param>trueで成功
-	void SetIsPari(bool result) { isPari = result; }
+	void SetIsPari(bool result) { isPari_ = result; }
 
 	/// <summary>
 	/// getter_体力
 	/// </summary>
 	/// <returns></returns>現在の体力
-	uint32_t GetHp() { return hp; }
+	uint32_t GetHp() { return hp_; }
 
 	/// <summary>
 	/// setter_体力
 	/// </summary>
 	/// <param name="preHp"></param>代入する体力数
-	const uint32_t GetMaxHp() { return kPlayerMaxHp; }
+	const uint32_t GetMaxHp() { return kPlayerMaxHp_; }
 
 	/// <summary>
 	/// setter_体力
 	/// </summary>
 	/// <param name="preHp"></param>代入する体力数
-	void SetHp(uint32_t preHp) { hp = preHp; }
+	void SetHp(uint32_t preHp) { hp_ = preHp; }
 
 	/// <summary>
 	/// setter_影の位置
@@ -153,12 +153,12 @@ public:
 	/// <summary>
 	/// 傘が当たったリアクションフラグ
 	/// </summary>
-	void IsShildMosion() { isShildMosion = true; }
+	void IsShildMosion() { isShildMosion_ = true; }
 
 	/// <summary>
 	/// 強制的にジャンプさせる(演出等で使う)
 	/// </summary>
-	void IsJumping() { isJump = true; }
+	void IsJumping() { isJump_ = true; }
 
 	/// <summary>
 	/// 傘の8方向の回転
@@ -166,99 +166,99 @@ public:
 	/// <param name="direction"></param>回転角度
 	void UmbrellaRange(const float& direction);
 
-	const bool Performancing() { return isPerformance; }
+	const bool Performancing() { return isPerformance_; }
 
 private:
 	//オブジェクト
-	std::unique_ptr<Object_glTF> object;
+	std::unique_ptr<Object_glTF> object_;
 
 	//input
 	Input* input_ = nullptr;
-	XINPUT_STATE state, preState;
+	XINPUT_STATE state_, preState_;
 	//プレイヤーの速さ
-	const float kStandard_speed = 0.14f;
-	float speed = kStandard_speed;
+	const float kStandardSpeed_ = 0.14f;
+	float speed_ = kStandardSpeed_;
 	//ジャンプフラグ
-	bool isJump = false;
+	bool isJump_ = false;
 
 	//重力
 	void GravityUpdate();
-	const float kStandard_grabity = 0.01f;//重力の質量
-	const float kFixed_grabity = -0.05f;//滑空時重力値を固定
+	const float kStandardGrabity_ = 0.01f;//重力の質量
+	const float kFixedGrabity_ = -0.05f;//滑空時重力値を固定
 
 	/// 弾丸
 	std::list<std::shared_ptr<PlayerBullet>> bullets_;
-	float coolTimer = 0.0f;//クールタイム
-	float coolMax = 0.5f;
-	uint32_t bulletCount = 3;//一度に出る弾丸数
+	float coolTimer_ = 0.0f;//クールタイム
+	const float kCoolTimeMax_ = 0.5f;
+	uint32_t bulletCount_ = 3;//一度に出る弾丸数
 
 	//ボタン
-	bool pushA = false;
-	bool pushD = false;
-	bool pushW = false;
-	bool pushS = false;
+	bool isPushA_ = false;
+	bool isPushD_ = false;
+	bool isPushW_ = false;
+	bool isPushS_ = false;
 	
 	//向き
-	const float kUpDis = 270.0f;//上
-	const float kDowntDis = 90.0f;//下
-	const float kLeftDis = 180.0f;//左
-	const float kRightDis = 360.0f;//右
+	const float kUpDis_ = 270.0f;//上
+	const float kDowntDis_ = 90.0f;//下
+	const float kLeftDis_ = 180.0f;//左
+	const float kRightDis_ = 360.0f;//右
 
-	const float Naname_Value = 45.0f;//斜めにする変数
+	const float kNanameValue_ = 45.0f;//斜めにする変数
 
 	//傘銃
-	std::unique_ptr<Umbrella> umbrella = nullptr;
-	WorldTransform wtGun;//傘のワールド座標系
+	std::unique_ptr<Umbrella> umbrella_ = nullptr;
+	WorldTransform wtGun_;//傘のワールド座標系
 
 	//傘のシールドフラグ
-	bool isShield = false;
+	bool isShield_ = false;
 	//パリィ
-	bool isPari = false;
-	float pariTimeMax = 0.1f;//パリィする時間
-	float pariTime = pariTimeMax;
-	float pariCoolTime = 0.0f;
-	const Vector3 playerFront = { 0,0,1.5f };//プレイヤーの前方
+	bool isPari_ = false;
+	const float kPariTimeMax_ = 0.1f;//パリィする時間
+	float pariTime_ = kPariTimeMax_;
+	float pariCoolTime_ = 0.0f;
+	const Vector3 playerFront_ = { 0,0,1.5f };//プレイヤーの前方
 
 	/// ノックバック
-	bool isKnockback = false;
-	Vector3 backPower = { 0,0,0 };
-	float KnockBackTimer = 0.0f;
-	float KnockBackTimeMax = 0.5f;
+	bool isKnockback_ = false;
+	Vector3 backPower_ = { 0,0,0 };
+	float knockBackTimer_ = 0.0f;
+	float knockBackTimeMax_ = 0.5f;
 
 	///ブリンク
-	bool isBrink = false;
-	bool isOneBrink = false;
-	float brinkTimer = 0.0f;
-	const float kBrinkTimeMax = 0.5f;
+	bool isBrink_ = false;
+	bool isOneBrink_ = false;
+	float brinkTimer_ = 0.0f;
+	const float kBrinkTimeMax_ = 0.5f;
 
 	//落下する時ふわふわできるように
-	bool isUmbrellaFall = false;
+	bool isUmbrellaFall_ = false;
 
-	const uint32_t kPlayerMaxHp = 3;//設定する体力
+	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
 	//ダメージを食らった後の無敵時間
-	float infinityTimer = 0.0f;
-	const float infinityTimeMax = 1.0f;
+	float infinityTimer_ = 0.0f;
+	const float kInfinityTimeMax_ = 1.0f;
 
 	//倒された
-	float deadTimer = 0.0f;
-	float hitStopTime = 1.0f;
-	float deadTimeMax = 3.0f;
+	float deadTimer_ = 0.0f;
+	const float kHitStopTime_ = 1.0f;
+	const float kDeadTimeMax_ = 3.0f;
 
 	//復活
-	bool isRespawn = false;
+	bool isRespawn_ = false;
 
 	//サウンド
-	SoundData hitSound;//ダメージを食らった
-	SoundData pariSound;//パリィに成功
-	float volume = 0.07f;
+	SoundData hitSound_;//ダメージを食らった
+	SoundData pariSound_;//パリィに成功
+	const float kVolume_ = 0.07f;
 
 	//パーティクル
-	std::unique_ptr<Particle> particle_walk;//歩く
-	std::unique_ptr<Particle> particle_fire;//撃つ
-	std::unique_ptr<Particle> particle_brink;//ブリンク
-	std::unique_ptr<Particle> particle_damage;//ダメージを食らった
-	std::unique_ptr<Particle> particle_pari;//パリィ成功
-	std::unique_ptr<Particle> particle_dead;//倒された演出
+	std::unique_ptr<Particle> particleWalk_;//歩く
+	std::unique_ptr<Particle> particleFire_;//撃つ
+	std::unique_ptr<Particle> particleBrink_;//ブリンク
+	std::unique_ptr<Particle> particleDamage_;//ダメージを食らった
+	std::unique_ptr<Particle> particlePari_;//パリィ成功
+	std::unique_ptr<Particle> particleDead_;//倒された演出
 
 	//前回座標の保存場所
 	Vector3 PrePosition;
@@ -271,11 +271,11 @@ private:
 	std::string preMosionName_ = "standby"; 
 
 	//UI
-	std::vector<std::unique_ptr<Sprite>> sprites_Hp;
-	const Vector2 kTextureSize_Hp = { 64,64 };//スプライトサイズ
-	const Vector2 kInitializePoint_Hp = { 20.0f,45.0f };//スプライトの初期位置
-	const float kDistanceY_Hp = 10.0f;//スプライトのY軸幅
+	std::vector<std::unique_ptr<Sprite>> spritesHp_;
+	const Vector2 kTextureSizeHp_ = { 64,64 };//スプライトサイズ
+	const Vector2 kInitializePointHp_ = { 20.0f,45.0f };//スプライトの初期位置
+	const float kDistanceYHp_ = 10.0f;//スプライトのY軸幅
 
 	//傘がリアクションするflag
-	bool isShildMosion = false;
+	bool isShildMosion_ = false;
 };

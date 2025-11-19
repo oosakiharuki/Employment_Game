@@ -74,7 +74,7 @@ public:
 	/// 完全に削除する(チェックポイントで消せる)
 	/// </summary>
 	/// <returns></returns>
-	bool GetDeleteEnemy() { return deleteEnemy; }
+	bool GetDeleteEnemy() { return isDeleteEnemy_; }
 
 	/// <summary>
 	/// リスポーン
@@ -90,20 +90,20 @@ public:
 	/// 移動ルートのポイント設定(現在2つ)
 	/// </summary>
 	/// <param name="point1"></param>
-	void SetRoutePoint1(Vector3 point1) { route_point1 = point1; }
-	void SetRoutePoint2(Vector3 point2) { route_point2 = point2; }
+	void SetRoutePoint1(Vector3 point1) { routePointLeft_ = point1; }
+	void SetRoutePoint2(Vector3 point2) { routePointRight_ = point2; }
 	/// <summary>
 	/// 移動ルート中心の場合(Eventで使う)
 	/// </summary>
 	/// <param name="init"></param>真ん中にする場所
-	void SetMoveInit(Vector3 init) { move = init; }
+	void SetMoveInit(Vector3 init) { move_ = init; }
 
 	/// <summary>
 	/// 角度で向きを変更
 	/// </summary>
 	void DirectionDegree();
 
-	void SetStages(std::vector<AABB> aabb) { stages = aabb; }
+	void SetStages(std::vector<AABB> aabb) { stages_ = aabb; }
 
 	/// <summary>
 	/// 影の座標位置
@@ -122,9 +122,9 @@ public:
 	/// getter_見える範囲
 	/// </summary>
 	/// <returns></returns>
-	AABB GetEyeAABB() { return eyeAABB; }
+	AABB GetEyeAABB() { return eyeAABB_; }
 
-	void IsFoundTarget(bool result) { isFoundTarget = result; }
+	void IsFoundTarget(bool result) { isFoundTarget_ = result; }
 
 	/// <summary>
 	/// getter‗爆発範囲AABB
@@ -150,7 +150,7 @@ public:
 
 protected:
 	//オブジェクト
-	std::unique_ptr<Object3d> object;
+	std::unique_ptr<Object3d> object_;
 
 	//弾丸リスト
 	std::list<EnemyBullet*> bullets_;
@@ -159,61 +159,56 @@ protected:
 	
 	//playerを見つけたとき
 	void PlayerTarget();
-	AABB eyeAABB;//見える範囲
-	Vector3 eyeReach{};
-	bool isFoundTarget = false;
+	AABB eyeAABB_;//見える範囲
+	Vector3 eyeReach_{};
+	bool isFoundTarget_ = false;
 
 	//敵を倒した時のUpdate関数
 	void DeadUpdate();
 
-	const float kDirection_right = 90.0f;
-	const float kDirection_left = -90.0f;
+	const float kDirectionRight_ = 90.0f;
+	const float kDirectionLeft_ = -90.0f;
 
 	//倒された時フラグ
-	bool deleteEnemy = false;//完全に削除フラグ
-
-	//初期位置保管
-	Vector3 init_point;
-	Vector3 init_rotate;
+	bool isDeleteEnemy_ = false;//完全に削除フラグ
 
 	//動く範囲
-	Vector3 route_point1;
-	Vector3 route_point2;
+	Vector3 routePointRight_;
+	Vector3 routePointLeft_;
 
 	//弾丸発射フラグ
-	bool isBullet = false;
+	bool isBullet_ = false;
 	//クールタイム
-	float coolTime = 0.0f;
-	const float kCoolTimeMax = 1.25f;
+	float coolTime_ = 0.0f;
+	const float kCoolTimeMax_ = 1.25f;
 	//弾丸の出す間の時間
-	float rapidFireTime = 0.0f;
-	const float kRapidFireTimeMax = 0.1f;
+	float rapidFireTime_ = 0.0f;
+	const float kRapidFireTimeMax_ = 0.1f;
 	//発射カウント
-	uint32_t rapidCount = 0;
+	uint32_t rapidCount_ = 0;
 	//最大弾丸数
-	uint32_t rapidCountMax = 3;
+	uint32_t rapidCountMax_ = 3;
 
 	//パーティクル
-	std::unique_ptr<Particle> particle_damage;//ダメージを食らったとき
-	std::unique_ptr<Particle> particle_fire;//攻撃するとき
+	std::unique_ptr<Particle> particleDamage_;//ダメージを食らったとき
+	std::unique_ptr<Particle> particleFire_;//攻撃するとき
 
 	//移動するとき
-	Vector3 speed = { 0,0,0 };
+	Vector3 speed_ = { 0,0,0 };
 	//移動
-	Vector3 move = { 0,0,0 };
-	const float kMoveX = 0.03f;
+	Vector3 move_ = { 0,0,0 };
+	const float kMoveX_ = 0.03f;
 
-	const float kMarkMaxTime = 1.0f;
-	float markTimer = 0.0f;
-	bool lost_player = false;
+	const float kMarkMaxTime_ = 1.0f;
+	float markTimer_ = 0.0f;
+	bool isLostPlayer_ = false;
 
 private:
-	std::vector<AABB> stages;
+	std::vector<AABB> stages_;
 
-	std::unique_ptr<Object3d> object_found;
-	std::unique_ptr<Object3d> object_noFound;
+	std::unique_ptr<Object3d> objectFound_;
+	std::unique_ptr<Object3d> objectNoFound_;
 
-	WorldTransform wtMark;
-
+	WorldTransform wtMark_;
 };
 

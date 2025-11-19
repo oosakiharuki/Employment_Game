@@ -9,44 +9,44 @@ IEnemy::~IEnemy(){}
 void IEnemy::Enemy_InitializeCommon() {
 	Actor_InitializeCommon();
 
-	object = std::make_unique<Object3d>();
-	object->Initialize();
+	object_ = std::make_unique<Object3d>();
+	object_->Initialize();
 
-	object_found = std::make_unique<Object3d>();
-	object_found->Initialize();
-	object_found->SetModelFile("player_found_mark.obj");
+	objectFound_ = std::make_unique<Object3d>();
+	objectFound_->Initialize();
+	objectFound_->SetModelFile("player_found_mark.obj");
 
-	object_noFound = std::make_unique<Object3d>();
-	object_noFound->Initialize();
-	object_noFound->SetModelFile("player_lost_mark.obj");
-
-
-	particle_fire = std::make_unique<Particle>();
-	particle_fire->Initialize("enemySoldier_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
-	particle_fire->SetParticleCount(1);
-	particle_fire->ChangeMode(BornParticle::Stop);
-	particle_fire->SetParticleMosion(ParticleMosion::Fixed);
-	particle_fire->SetFrequency(0.1f);
+	objectNoFound_ = std::make_unique<Object3d>();
+	objectNoFound_->Initialize();
+	objectNoFound_->SetModelFile("player_lost_mark.obj");
 
 
-	particle_damage = std::make_unique<Particle>();
-	particle_damage->Initialize("enemySoldier_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
-	particle_damage->SetParticleCount(10);
-	particle_damage->ChangeMode(BornParticle::Stop);
-	particle_damage->SetParticleMosion(ParticleMosion::Exprosion);
-	particle_damage->SetFrequency(0.7f);
+	particleFire_ = std::make_unique<Particle>();
+	particleFire_->Initialize("enemySoldier_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
+	particleFire_->SetParticleCount(1);
+	particleFire_->ChangeMode(BornParticle::Stop);
+	particleFire_->SetParticleMosion(ParticleMosion::Fixed);
+	particleFire_->SetFrequency(0.1f);
 
-	wtMark.Initialize();
+
+	particleDamage_ = std::make_unique<Particle>();
+	particleDamage_->Initialize("enemySoldier_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
+	particleDamage_->SetParticleCount(10);
+	particleDamage_->ChangeMode(BornParticle::Stop);
+	particleDamage_->SetParticleMosion(ParticleMosion::Exprosion);
+	particleDamage_->SetFrequency(0.7f);
+
+	wtMark_.Initialize();
 }
 
 void IEnemy::UpdateCommon() {
-	if (hp == 0) {
-		isDead = true;
+	if (hp_ == 0) {
+		isDead_ = true;
 	}
 
 	DeadUpdate();
 
-	if (!isDead && !isPerformance) {
+	if (!isDead_ && !isPerformance_) {
 
 		//重力
 		GrabityUpdate();
@@ -56,40 +56,40 @@ void IEnemy::UpdateCommon() {
 		PlayerTarget();
 
 		//見つかったら
-		if (isFoundTarget) {
-			isBullet = true;
-			if (lost_player) {
-				lost_player = false;
-				markTimer = 0.0f;
+		if (isFoundTarget_) {
+			isBullet_ = true;
+			if (isLostPlayer_) {
+				isLostPlayer_ = false;
+				markTimer_ = 0.0f;
 			}
 		}
 
-		markTimer = std::clamp(markTimer, 0.0f, kMarkMaxTime);
+		markTimer_ = std::clamp(markTimer_, 0.0f, kMarkMaxTime_);
 		
-		if (isBullet) {
+		if (isBullet_) {
 			//攻撃
 			//攻撃し終わるとisBulletがfalseに
 			Attack();
 			//!マーク表示時間
-			markTimer += kDeltaTime;	
+			markTimer_ += kDeltaTime_;
 		}
-		else if(!isBullet){
+		else if(!isBullet_){
 			//攻撃、見つけたマークのタイマーリセット
-			rapidCount = 0;
-			rapidFireTime = 0;
-			coolTime = 0;
-			lost_player = true;//見失うフラグ
-			markTimer -= kDeltaTime * 0.5f;
+			rapidCount_ = 0;
+			rapidFireTime_ = 0;
+			coolTime_ = 0;
+			isLostPlayer_ = true;//見失うフラグ
+			markTimer_ -= kDeltaTime_ * 0.5f;
 		}		
 				
-		if(lost_player && markTimer <= 0.0f)
-			lost_player = false;
+		if (isLostPlayer_ && markTimer_ <= 0.0f)
+			isLostPlayer_ = false;
 	}
 
-	shadow_->SetTranslate(wt.translation_);
+	shadow_->SetTranslate(wt_.translation_);
 
-	if (isDamageMosion) {
-		ScaleUpdate(&isDamageMosion, damageScale, kDamageMaxTime);
+	if (isDamageMosion_) {
+		ScaleUpdate(&isDamageMosion_, damageScale_, kDamageMaxTime_);
 	}
 
 	for (auto* bullet : bullets_) {
@@ -108,114 +108,116 @@ void IEnemy::UpdateCommon() {
 }
 
 void IEnemy::UpdateBehind() {
-	object->Update(wt);
-	wt.UpdateMatrix();
+	object_->Update(wt_);
+	wt_.UpdateMatrix();
 
-	particle_damage->Update();
-	particle_fire->Update();
+	particleDamage_->Update();
+	particleFire_->Update();
 
-	if (isDead) return;//死んでるなら読み取らない
+	if (isDead_) return;//死んでるなら読み取らない
 
-	wtMark.translation_ = wt.translation_;
-	wtMark.translation_.y += 2.0f;
+	wtMark_.translation_ = wt_.translation_;
+	wtMark_.translation_.y += 2.0f;
 
-	wtMark.UpdateMatrix();
-	object_found->Update(wtMark);
-	object_noFound->Update(wtMark);
+	wtMark_.UpdateMatrix();
+	objectFound_->Update(wtMark_);
+	objectNoFound_->Update(wtMark_);
 }
 
 void IEnemy::DrawCommon() {
-	if (isDead) return;//死んでるなら読み取らない
+	if (isDead_) return;//死んでるなら読み取らない
 
-	if(isBullet && markTimer < kMarkMaxTime)
-		object_found->Draw();
+	if(isBullet_ && markTimer_ < kMarkMaxTime_)
+		objectFound_->Draw();
 
-	if (lost_player && markTimer > 0.0f)
-		object_noFound->Draw();
+	if (isLostPlayer_ && markTimer_ > 0.0f)
+		objectNoFound_->Draw();
 }
 
 void IEnemy::IsDamage() {
-	particle_damage->SetTranslate(wt.translation_);
-	particle_damage->ChangeMode(BornParticle::MomentMode);
-	isDamageMosion = true;
+	particleDamage_->SetTranslate(wt_.translation_);
+	particleDamage_->ChangeMode(BornParticle::MomentMode);
+	isDamageMosion_ = true;
 
 	//連続ヒット時、元に戻す
-	wt.scale_ = kDefaultScale;
-	scaleTimer = 0.0f;
+	wt_.scale_ = kDefaultScale_;
+	scaleTimer_ = 0.0f;
 
-	if (hp == 0) {
+	if (hp_ == 0) {
 		return;
 	}
-	hp -= 1;
+	hp_ -= 1;
 }
 
 
 void IEnemy::GrabityUpdate() {
 	
-	grabity -= 0.01f;
+	grabity_ -= 0.01f;
 	//重力
-	if (!isGround) {
-		wt.translation_.y += grabity;
+	if (!isGround_) {
+		wt_.translation_.y += grabity_;
 	}
 	else {
-		grabity = 0.0f;
+		grabity_ = 0.0f;
 	}
 
 }
 
 void IEnemy::PlayerTarget() {
 	Segment segment;
-	segment.origin = wt.translation_;
+	segment.origin = wt_.translation_;
 	segment.diff = player_->GetTranslate();
 
 	//playerと敵との間に壁があるならば
-	for (auto& stage : stages) {
+	for (auto& stage : stages_) {
 		if (IsCollisionAABB_Segment(stage, segment)) {
-			isFoundTarget = false;
+			isFoundTarget_ = false;
 			break;
 		}
 	}
 }
 
 void IEnemy::SearchRange() {
-	if (direction == kDirection_right) {
-		eyeAABB.min = wt.translation_ + Vector3(0, -eyeReach.y, -eyeReach.z);
-		eyeAABB.max = wt.translation_ + eyeReach;
-		speed.x = kMoveX;
+	if (direction_ == kDirectionRight_) {
+		eyeAABB_.min = wt_.translation_ + Vector3(0, -eyeReach_.y, -eyeReach_.z);
+		eyeAABB_.max = wt_.translation_ + eyeReach_;
+		speed_.x = kMoveX_;
 	}
-	else if (direction == kDirection_left) {
-		eyeAABB.min = wt.translation_ + -eyeReach;
-		eyeAABB.max = wt.translation_ + Vector3(0, eyeReach.y, eyeReach.z);
-		speed.x = -kMoveX;
+	else if (direction_ == kDirectionLeft_) {
+		eyeAABB_.min = wt_.translation_ + -eyeReach_;
+		eyeAABB_.max = wt_.translation_ + Vector3(0, eyeReach_.y, eyeReach_.z);
+		speed_.x = -kMoveX_;
 	}
 }
 
 void IEnemy::MoveEnemy() {
-	wt.translation_ += speed;
-	move += speed;
+	wt_.translation_ += speed_;
+	move_ += speed_;
 
 	//移動ポイントの端だと向きを変える
-	if (move.x > route_point2.x) {
-		direction = kDirection_left;
+	//右端に行ったら左に旋回
+	if (move_.x > routePointRight_.x) {
+		direction_ = kDirectionLeft_;
 	}
-	if (move.x < route_point1.x) {
-		direction = kDirection_right;
+	//左端に行ったら右に旋回
+	if (move_.x < routePointLeft_.x) {
+		direction_ = kDirectionRight_;
 	}
 
 
-	wt.rotation_.y = direction;
+	wt_.rotation_.y = direction_;
 }
 
 void IEnemy::RespawnEnemyCommon() {
 	RespawnCommon();
 
-	deleteEnemy = false;
-	isBullet = false;//攻撃はしない
+	isDeleteEnemy_ = false;
+	isBullet_ = false;//攻撃はしない
 
 	//向きリセット
 	DirectionDegree();
 	//移動ルート位置戻す
-	move = { 0,0,0 };
+	move_ = { 0,0,0 };
 
 	//弾はすべて消す
 	bullets_.remove_if([](EnemyBullet* bullet) {
@@ -225,35 +227,35 @@ void IEnemy::RespawnEnemyCommon() {
 }
 
 void IEnemy::DeadUpdate() {
-	if (isDead) {
-		wt.rotation_.z += 3.0f;
+	if (isDead_) {
+		wt_.rotation_.z += 3.0f;
 	}
 	else {
-		wt.rotation_.z = 0.0f;
+		wt_.rotation_.z = 0.0f;
 		return;
 	}
 
-	if (wt.rotation_.z > 90.0f) {
-		deleteEnemy = true;
+	if (wt_.rotation_.z > 90.0f) {
+		isDeleteEnemy_ = true;
 	}
 }
 
 void IEnemy::DirectionDegree() {
 
 	//0~360にする
-	wt.rotation_.y = std::fmod(wt.rotation_.y, 360.0f);
+	wt_.rotation_.y = std::fmod(wt_.rotation_.y, 360.0f);
 	//-の場合
-	if (wt.rotation_.y < 0) wt.rotation_.y += 360.0;
+	if (wt_.rotation_.y < 0) wt_.rotation_.y += 360.0;
 
 	///0~180は右
-	if (wt.rotation_.y >= 0.0f && wt.rotation_.y < 180.0f) {
-		direction = kDirection_right;
+	if (wt_.rotation_.y >= 0.0f && wt_.rotation_.y < 180.0f) {
+		direction_ = kDirectionRight_;
 	}///180~360は左
-	else if (wt.rotation_.y <= 360.0f) {
-		direction = kDirection_left;
+	else if (wt_.rotation_.y <= 360.0f) {
+		direction_ = kDirectionLeft_;
 	}
 
-	wt.rotation_.y = direction;
+	wt_.rotation_.y = direction_;
 
 }
 
@@ -272,23 +274,23 @@ bool IEnemy::IsExplosion() { return false; }
 void IEnemy::Fire() {
 	
 	//クールタイム
-	coolTime += 1.0f / 60.0f;
-	if (coolTime >= kCoolTimeMax) {
+	coolTime_ += 1.0f / 60.0f;
+	if (coolTime_ >= kCoolTimeMax_) {
 
 		//連射で時間を開ける
-		rapidFireTime += 1.0f / 60.0f;
-		if (rapidFireTime >= kRapidFireTimeMax) {
+		rapidFireTime_ += 1.0f / 60.0f;
+		if (rapidFireTime_ >= kRapidFireTimeMax_) {
 			FireBullet();//敵の発泡攻撃
-			particle_fire->ChangeMode(BornParticle::MomentMode);//パーティクルが出てくる
-			rapidCount++;//カウント
-			rapidFireTime = 0;//もう一度
+			particleFire_->ChangeMode(BornParticle::MomentMode);//パーティクルが出てくる
+			rapidCount_++;//カウント
+			rapidFireTime_ = 0;//もう一度
 		}
 
 		//最大弾丸数を超えた場合
-		if (rapidCount == rapidCountMax) {
-			rapidCount = 0;//カウントリセット
-			coolTime = 0;//クールタイム発動
-			isBullet = false;//撃たないフラグ
+		if (rapidCount_ == rapidCountMax_) {
+			rapidCount_ = 0;//カウントリセット
+			coolTime_ = 0;//クールタイム発動
+			isBullet_ = false;//撃たないフラグ
 		}
 	}
 }

@@ -64,64 +64,64 @@ public:
 	/// eventDataを導入(Levelediterで設定したやつの代入に使う)
 	/// </summary>
 	/// <param name="data"></param>
-	void SetEventData(EventData data) { eventDatas = data; }
+	void SetEventData(EventData data) { eventData_ = data; }
 
 	/// <summary>
 	/// eventDataの関数を使う
 	/// </summary>
 	/// <returns></returns>
-	EventData GetEventData() { return eventDatas; }
+	EventData GetEventData() { return eventData_; }
 
 	/// <summary>
 	/// イベント開始
 	/// </summary>
-	void StartEvent() { eventDatas.isEvent = true; }
+	void StartEvent() { eventData_.isEvent = true; }
 
 	/// <summary>
 	/// GameSceneにある
 	/// </summary>
 	/// <param name="E"></param>
-	void SetPopEnemies(std::vector<std::shared_ptr<IEnemy>> E) { popEnemies = E; }
-	std::vector<std::shared_ptr<IEnemy>> GetPopEnemy() { return popEnemies; }
+	void SetPopEnemies(std::vector<std::shared_ptr<IEnemy>> enemies) { popEnemies_ = enemies; }
+	std::vector<std::shared_ptr<IEnemy>> GetPopEnemy() { return popEnemies_; }
 
 	/// <summary>
 	/// イベント終了
 	/// </summary>
 	/// <returns></returns>イベント終了フラグ
-	bool EventEnd() { return eventEnd; }
+	bool EventEnd() { return isEventEnd_; }
 
 private:
 
 	std::unique_ptr<Object_glTF> object_;
-	WorldTransform wt;
+	WorldTransform wt_;
 
-	std::stringstream enemyPopCsvFile;
+	std::stringstream enemyPopCsvFile_;
 
-	bool eventWave = false;
-	bool isLoadCsv = true;
+	bool isEventWave_ = false;
+	bool isLoadCsv_ = true;
 
-	bool eventEnd = false;
+	bool isEventEnd_ = false;
 
 	//敵を生んだ・倒した数
-	uint32_t enemyBornCount = 0;
-	uint32_t enemyDeadCount = 0;
+	uint32_t enemyBornCount_ = 0;
+	uint32_t enemyDeadCount_ = 0;
 
-	std::vector<std::shared_ptr<IEnemy>> popEnemies;
+	std::vector<std::shared_ptr<IEnemy>> popEnemies_;
 
-	EventData eventDatas;
+	EventData eventData_;
 
 	//パーティクル
 	std::list<std::unique_ptr<Particle>> summon_particles_;
 	//召喚タイマー
-	const float kSummonMaxTime = 1.25f;
-	float summonTimer_ = kSummonMaxTime;
+	const float kSummonMaxTime_ = 1.25f;
+	float summonTimer_ = kSummonMaxTime_;
 
 	//敵を配置する変数
 	std::list<EnemyPopData> enemyPopDatas_;
 
 	//頻度
-	const float kFrequency = kSummonMaxTime / 15.0f;
+	const float kFrequency_ = kSummonMaxTime_ / 15.0f;
 
 	//秒数時間
-	const float kDeltaTime = 1.0f / 60.f;
+	const float kDeltaTime_ = 1.0f / 60.f;
 };

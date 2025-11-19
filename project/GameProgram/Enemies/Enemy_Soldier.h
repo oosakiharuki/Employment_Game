@@ -21,6 +21,6 @@ public:
 
 private:
 	//速度
-	Vector3 velocity;
+	Vector3 velocity_;
 
 };

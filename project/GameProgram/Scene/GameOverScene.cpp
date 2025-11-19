@@ -2,33 +2,33 @@
 
 void GameOverScene::Initialize() {
 	//ゲームオーバーロゴ作成
-	sprite = std::make_unique<Sprite>();
-	sprite->Initialize("Moji_GameOver.png");
-	sprite->SetPosition({ 100,100 });
+	sprite_ = std::make_unique<Sprite>();
+	sprite_->Initialize("Moji_GameOver.png");
+	sprite_->SetPosition({ 100,100 });
 
 	//戻る
-	sprite_space = std::make_unique<Sprite>();
-	sprite_space->Initialize("Moji_botton.png");
-	sprite_space->SetPosition({ 800,10 });
-	sprite_space->SetSize({256,64});
+	spriteSpace_ = std::make_unique<Sprite>();
+	spriteSpace_->Initialize("Moji_botton.png");
+	spriteSpace_->SetPosition({ 800,10 });
+	spriteSpace_->SetSize({256,64});
 
 	//カメラ設定
-	camera = std::make_unique<Camera>();
-	camera->SetTranslate({0,5,-15});
-	camera->SetRotate({15.0f,0,0});
+	camera_ = std::make_unique<Camera>();
+	camera_->SetTranslate({0,5,-15});
+	camera_->SetRotate({15.0f,0,0});
 
-	GLTFCommon::GetInstance()->SetDefaultCamera(camera.get());
+	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
 
 	//残念そうなプレイヤーオブジェクト
-	player_gltf = std::make_unique<Object_glTF>();
-	player_gltf->Initialize();
-	player_gltf->SetModelFile("player_GameOver.gltf");
+	playerGltf_ = std::make_unique<Object_glTF>();
+	playerGltf_->Initialize();
+	playerGltf_->SetModelFile("player_GameOver.gltf");
 	//地面
-	stage_gltf = std::make_unique<Object_glTF>();
-	stage_gltf->Initialize();
-	stage_gltf->SetModelFile("gameover_stage.gltf");
+	stageGltf_ = std::make_unique<Object_glTF>();
+	stageGltf_->Initialize();
+	stageGltf_->SetModelFile("gameover_stage.gltf");
 
-	wt.Initialize();
+	wt_.Initialize();
 	
 	//フェードスタート
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
@@ -36,10 +36,10 @@ void GameOverScene::Initialize() {
 
 void GameOverScene::Update() {
 
-	input_->JoystickUpdate(state, preState);
+	input_->JoystickUpdate(state_, preState_);
 
-	sprite->Update();
-	sprite_space->Update();
+	sprite_->Update();
+	spriteSpace_->Update();
 
 	if (!FadeScreen::GetInstance()->GetIsFadeing()) {
 		ChangeScene();
@@ -47,24 +47,24 @@ void GameOverScene::Update() {
 
 	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
 	if ((Input::GetInstance()->TriggerKey(DIK_SPACE) ||
-		Input::GetInstance()->TriggerBotton(state, preState, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance()->GetIsFadeing()) {
+		Input::GetInstance()->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance()->GetIsFadeing()) {
 		NextSceneFadeInStart("Select");
 		FadeScreen::GetInstance()->SetMaskTexture("fade01.png");
 		FadeScreen::GetInstance()->SetBackGround("fadeTexture.png");
 	}
 
-	wt.rotation_.y += 0.5f;
-	wt.UpdateMatrix();
+	wt_.rotation_.y += 0.5f;
+	wt_.UpdateMatrix();
 
 	//ライトのスイッチ
-	stage_gltf->LightSwitch(true);
-	player_gltf->LightSwitch(true);
+	stageGltf_->LightSwitch(true);
+	playerGltf_->LightSwitch(true);
 
 	//オブジェクト更新
-	player_gltf->Update(wt);
-	stage_gltf->Update(wt);
+	playerGltf_->Update(wt_);
+	stageGltf_->Update(wt_);
 
-	camera->Update();
+	camera_->Update();
 }
 
 void GameOverScene::Draw() {
@@ -72,13 +72,13 @@ void GameOverScene::Draw() {
 	GLTFCommon::GetInstance()->Command();
 
 	//オブジェクト描画
-	player_gltf->Draw();
-	stage_gltf->Draw();
+	playerGltf_->Draw();
+	stageGltf_->Draw();
 
 	SpriteCommon::GetInstance()->Command();
 
-	sprite->Draw();
-	sprite_space->Draw();
+	sprite_->Draw();
+	spriteSpace_->Draw();
 }
 
 void GameOverScene::Finalize() {}

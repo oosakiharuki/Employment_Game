@@ -33,8 +33,8 @@ private:
 	std::string fileName_;
 
 	//小さくする
-	float t = 0.0f;
+	float timer_ = 0.0f;
 	//少しだけ大きくして緩急をつける
-	const float kLittleLarge = -1.5f;
+	const float kLittleLarge_ = -1.5f;
 };
 

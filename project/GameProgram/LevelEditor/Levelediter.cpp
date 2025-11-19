@@ -7,7 +7,7 @@ using namespace MyMath;
 
 void Levelediter::LoadLevelediter(std::string jsonName) {
 	//json
-	levelData = new LevelData();
+	levelData_ = new LevelData();
 
 	//ファイルを選択
 	const std::string kFullpath = jsonName;
@@ -56,9 +56,9 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 		//ステージ当たり判定、イベントトリガーの配置
 		if (type.compare("MESH") == 0) {
 			//要素追加
-			levelData->objects.emplace_back(LevelData::ObjectData{});
+			levelData_->objects.emplace_back(LevelData::ObjectData{});
 			//
-			LevelData::ObjectData& objectData = levelData->objects.back();
+			LevelData::ObjectData& objectData = levelData_->objects.back();
 
 			if (object.contains("file_name")) {
 				//ファイル名
@@ -103,8 +103,8 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				std::string cameraName = trigger["camera"];
 				std::string csvName = trigger["csv"];
 
-				levelData->eventTriggerDatas.emplace_back(LevelData::EventTriggerData{});
-				LevelData::EventTriggerData& eventTrigger = levelData->eventTriggerDatas.back();
+				levelData_->eventTriggerDatas.emplace_back(LevelData::EventTriggerData{});
+				LevelData::EventTriggerData& eventTrigger = levelData_->eventTriggerDatas.back();
 
 				//オブジェクトの真ん中 + eventTrigger自体の真ん中
 				eventTrigger.center = objectData.translation + center;
@@ -122,9 +122,9 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 		}//プレイヤーの配置
 		else if (type.compare("PlayerSpawn") == 0) {
 			//要素追加
-			levelData->players.emplace_back(LevelData::PlayerSpawnData{});
+			levelData_->players.emplace_back(LevelData::PlayerSpawnData{});
 			//
-			LevelData::PlayerSpawnData& playerSpawnData = levelData->players.back();
+			LevelData::PlayerSpawnData& playerSpawnData = levelData_->players.back();
 
 			if (object.contains("file_name")) {
 				//ファイル名
@@ -157,8 +157,8 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 		}//敵の配置
 		else if (type.compare("EnemySpawn") == 0) {
 			//要素追加
-			levelData->spawnEnemies.emplace_back(LevelData::EnemySpawnData{});
-			LevelData::EnemySpawnData& enemySpawnData = levelData->spawnEnemies.back();
+			levelData_->spawnEnemies.emplace_back(LevelData::EnemySpawnData{});
+			LevelData::EnemySpawnData& enemySpawnData = levelData_->spawnEnemies.back();
 
 			//各敵の名前
 			if (object.contains("EnemyName")) {
@@ -215,7 +215,7 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 			std::string CameraName = object["name"].get<std::string>();
 
 			//要素追加
-			CameraInitData& cameraInitData = levelData->cameraInit[CameraName];
+			CameraInitData& cameraInitData = levelData_->cameraInit[CameraName];
 
 			//トランスフォームのパラメータ読み込み
 			nlohmann::json& transform = object["transform"];
@@ -245,9 +245,9 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 		}//ステージオブジェクトの配置
 		else if (type.compare("StageObjectSpawn") == 0) {
 			//要素追加
-			levelData->stageObjects.emplace_back(LevelData::StageObjectData{});
+			levelData_->stageObjects.emplace_back(LevelData::StageObjectData{});
 			//
-			LevelData::StageObjectData& stageObjectData = levelData->stageObjects.back();
+			LevelData::StageObjectData& stageObjectData = levelData_->stageObjects.back();
 
 			if (object.contains("StageObjectName")) {
 				stageObjectData.ObjectName = object["StageObjectName"];
@@ -288,6 +288,6 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 }
 
 void Levelediter::ResetData() {
-	delete levelData;
-	levelData = nullptr;
+	delete levelData_;
+	levelData_ = nullptr;
 }

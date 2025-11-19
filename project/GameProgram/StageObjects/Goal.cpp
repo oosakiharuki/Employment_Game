@@ -5,7 +5,7 @@ using namespace MyMath;
 Goal::~Goal() {}
 
 void Goal::Initialize(){
-	wt.Initialize();
+	wt_.Initialize();
 
 	object_ = std::make_unique<Object3d>();
 	object_->Initialize();
@@ -14,8 +14,8 @@ void Goal::Initialize(){
 }
 	
 void Goal::Update(){
-	object_->Update(wt);
-	wt.UpdateMatrix();
+	object_->Update(wt_);
+	wt_.UpdateMatrix();
 }
 	
 void Goal::Draw(){

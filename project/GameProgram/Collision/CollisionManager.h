@@ -53,13 +53,16 @@ public:
 	/// getter_ワープして次のステージに
 	/// </summary>
 	/// <returns></returns>ワープフラグ
-	const bool IsWarp() { return isWarp; }
+	const bool IsWarp() { return isWarp_; }
 	/// <summary>
 	/// getter_ゴール
 	/// </summary>
 	/// <returns></returns>ゴールフラグ
-	const bool IsGoal() { return isGoal; }
+	const bool IsGoal() { return isGoal_; }
 
+	/// <summary>
+	/// ゴールとワープのフラグのリセット
+	/// </summary>
 	void ResetFlag();
 
 private:
@@ -92,18 +95,18 @@ private:
 
 
 	//傘のノックバックの値
-	const Vector3 kUmbrellaKnockBackPower = { 0.0f,0.0f,0.3f };
-	const float kUmbrellaKnockBackTime = 0.0f;
+	const Vector3 kUmbrellaKnockBackPower_ = { 0.0f,0.0f,0.3f };
+	const float kUmbrellaKnockBackTime_ = 0.0f;
 
 	//影で少し上にあげる値
-	const float kShadowUp = 0.01f;
+	const float kShadowUp_ = 0.01f;
 
 	//インスタンス
 	static std::shared_ptr<CollisionManager> sInstance;
 
 	//ゴールした時フラグ
-	bool isGoal = false;
+	bool isGoal_ = false;
 	//ワープで次のステージに進むフラグ
-	bool isWarp = false;
+	bool isWarp_ = false;
 };
 

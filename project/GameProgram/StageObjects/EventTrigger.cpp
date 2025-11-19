@@ -2,7 +2,7 @@
 using namespace MyMath;
 
 void EventTrigger::Initialize() {
-	wt.Initialize();
+	wt_.Initialize();
 
 	object_ = std::make_unique<Object_glTF>();
 	object_->Initialize();
@@ -11,19 +11,19 @@ void EventTrigger::Initialize() {
 
 void EventTrigger::Update() {
 
-	if (eventDatas.isEvent) {
-		if (isLoadCsv) {
+	if (eventData_.isEvent) {
+		if (isLoadCsv_) {
 			//Csvを読み込む
-			LoadEventCSV(eventDatas.csvFile);
+			LoadEventCSV(eventData_.csvFile);
 		}
 		//敵召喚
 		PopEventEneies();
 		
 		//範囲のオブジェクト
-		wt.translation_ = eventDatas.center;
-		wt.scale_ = eventDatas.size * 0.5f;
-		wt.UpdateMatrix();
-		object_->Update(wt);
+		wt_.translation_ = eventData_.center;
+		wt_.scale_ = eventData_.size * 0.5f;
+		wt_.UpdateMatrix();
+		object_->Update(wt_);
 
 		for (auto& particle : summon_particles_) {
 			particle->SetParticleCount(10);
@@ -35,7 +35,7 @@ void EventTrigger::Update() {
 		}
 
 		//敵が出終わった後ちょっとしてからリセットする
-		if (summonTimer_ <= -kSummonMaxTime) {
+		if (summonTimer_ <= -kSummonMaxTime_) {
 			summon_particles_.clear();
 		}
 
@@ -43,7 +43,7 @@ void EventTrigger::Update() {
 }
 
 void EventTrigger::Draw() {
-	if (eventDatas.isEvent) {
+	if (eventData_.isEvent) {
 		object_->Draw();
 	}
 
@@ -64,13 +64,13 @@ void EventTrigger::LoadEventCSV(std::string fileName) {
 	file.open(fileName);
 	assert(file.is_open());
 
-	enemyPopCsvFile << file.rdbuf();//fileをコピー
+	enemyPopCsvFile_ << file.rdbuf();//fileをコピー
 
 	//ファイルを閉じる
 	file.close();
 
 	//読み込み処理をはぶく
-	isLoadCsv = false;
+	isLoadCsv_ = false;
 }
 
 void EventTrigger::PopEventEneies() {
@@ -83,39 +83,39 @@ void EventTrigger::PopEventEneies() {
 	}
 
 	//敵の倒した数リセット(↓で無限に増えるから)
-	enemyDeadCount = 0;
+	enemyDeadCount_ = 0;
 
 	//召喚した敵を倒すカウント
 	//召喚は敵配列の最後尾から数える
-	for (uint32_t number = (uint32_t)popEnemies.size() - 1;
-		number >= popEnemies.size() - enemyBornCount; number--) {
+	for (uint32_t number = (uint32_t)popEnemies_.size() - 1;
+		number >= popEnemies_.size() - enemyBornCount_; number--) {
 		//召喚した敵を倒した判定
-		if (popEnemies[number]->GetDeleteEnemy()) {
-			enemyDeadCount++;
+		if (popEnemies_[number]->GetDeleteEnemy()) {
+			enemyDeadCount_++;
 		}
 	}
 
 	//倒した数と召喚した数が同じ
-	if (enemyDeadCount == enemyBornCount) {
+	if (enemyDeadCount_ == enemyBornCount_) {
 		//次のウェーブに進む
-		eventWave = false;
+		isEventWave_ = false;
 		//召喚敵を最後尾から消す
-		for (uint32_t i = 0; i < enemyBornCount; i++) {
-			popEnemies.pop_back();
+		for (uint32_t i = 0; i < enemyBornCount_; i++) {
+			popEnemies_.pop_back();
 		}
 		//生んだ数初期化
-		enemyBornCount = 0;
+		enemyBornCount_ = 0;
 		//Maxに戻す
-		summonTimer_ = kSummonMaxTime;
+		summonTimer_ = kSummonMaxTime_;
 	}
 
-	if (eventWave) {
+	if (isEventWave_) {
 		return;
 	}
 
 	std::string line;
 
-	while (getline(enemyPopCsvFile, line)) {
+	while (getline(enemyPopCsvFile_, line)) {
 
 		std::istringstream line_stream(line);
 		std::string word;
@@ -129,15 +129,15 @@ void EventTrigger::PopEventEneies() {
 
 		//終了
 		if (word.find("end") == 0) {
-			eventDatas.isEvent = false;
+			eventData_.isEvent = false;
 			//イベント終了
-			eventEnd = true;
+			isEventEnd_ = true;
 			break;
 		}
 
 		//ウェーブの配分
 		if (word.find("wave") == 0) {
-			eventWave = true;
+			isEventWave_ = true;
 			break;
 		}
 
@@ -158,7 +158,7 @@ void EventTrigger::PopEventEneies() {
 			enemyPopData.position.y = (float)std::atof(word.c_str());
 
 			//トリガーの中心地点から足していく
-			enemyPopData.position += eventDatas.center;
+			enemyPopData.position += eventData_.center;
 
 			getline(line_stream, word, ',');
 			if (word.find("right") == 0) {
@@ -176,7 +176,7 @@ void EventTrigger::PopEventEneies() {
 			gParticle->Initialize("enemies_summon","resource/Sprite/white.png",PrimitiveType::sphere);
 			gParticle->SetParticleMosion(ParticleMosion::Exprosion);
 			gParticle->ChangeMode(BornParticle::TimerMode);
-			gParticle->SetFrequency(kFrequency);
+			gParticle->SetFrequency(kFrequency_);
 			gParticle->SetTranslate(enemyPopData.position);
 
 			const float gSize = 0.25f;
@@ -189,7 +189,7 @@ void EventTrigger::PopEventEneies() {
 }
 
 void EventTrigger::EnemyPop() {
-	summonTimer_ -= kDeltaTime;
+	summonTimer_ -= kDeltaTime_;
 
 	if (summonTimer_ > 0.0f) {
 		return;
@@ -228,10 +228,10 @@ void EventTrigger::EnemyPop() {
 
 		popEnemy->DirectionDegree();
 
-		popEnemies.push_back(std::move(popEnemy));
+		popEnemies_.push_back(std::move(popEnemy));
 
 		//敵の数
-		enemyBornCount++;
+		enemyBornCount_++;
 	}
 
 	enemyPopDatas_.clear();
@@ -239,18 +239,18 @@ void EventTrigger::EnemyPop() {
 
 void EventTrigger::FailureEvent() {
 	//ウェーブフラグ
-	eventWave = false;
-	//次に読み込めるように
-	isLoadCsv = true;
+	isEventWave_ = false;
+	//また最初からcsvを読み込めるように
+	isLoadCsv_ = true;
 	//イベントをoffにする
-	eventDatas.isEvent = false;
+	eventData_.isEvent = false;
 	//生まれたカウントリセット
-	enemyBornCount = 0;
+	enemyBornCount_ = 0;
 
 	//リセット
-	enemyPopCsvFile.clear();	
+	enemyPopCsvFile_.clear();	
 	
 	//最初の行にする
-	enemyPopCsvFile.seekg(0, std::ios_base::beg);
+	enemyPopCsvFile_.seekg(0, std::ios_base::beg);
 
 }
