@@ -5,20 +5,20 @@ WarpGate::~WarpGate() {}
 
 
 void WarpGate::Initialize() {
-	wt.Initialize();
+	wt_.Initialize();
 	object_ = std::make_unique<Object3d>();
 	object_->Initialize();
 	object_->SetModelFile("warpGate.obj");
 }
 
 void WarpGate::Update() {
-	object_->Update(wt);
-	wt.UpdateMatrix();
+	object_->Update(wt_);
+	wt_.UpdateMatrix();
 }
 
 void WarpGate::Draw() {
 	//完全に小さくなったら映さない
-	if (wt.scale_.x <= 0 && wt.scale_.y <= 0 && wt.scale_.z <= 0) {
+	if (wt_.scale_.x <= 0 && wt_.scale_.y <= 0 && wt_.scale_.z <= 0) {
 		return;
 	}
 	
@@ -26,8 +26,8 @@ void WarpGate::Draw() {
 }
 
 void WarpGate::Vanish() {
-	if (wt.scale_.x > 0 && wt.scale_.y > 0 && wt.scale_.z > 0) {
-		t += 0.1f;
-		wt.scale_ -= EaseIn(0.1f, kLittleLarge + t);
+	if (wt_.scale_.x > 0 && wt_.scale_.y > 0 && wt_.scale_.z > 0) {
+		timer_ += 0.1f;
+		wt_.scale_ -= EaseIn(0.1f, kLittleLarge_ + timer_);
 	}
 }

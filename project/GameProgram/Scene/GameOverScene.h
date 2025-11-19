@@ -12,11 +12,11 @@ public:
 	void Draw() override;
 	void Finalize() override;
 private:
-	std::unique_ptr<Sprite> sprite;//ゲームオーバーの文字
-	std::unique_ptr<Sprite> sprite_space;//Spaceでもどるの文字
+	std::unique_ptr<Sprite> sprite_;//ゲームオーバーの文字
+	std::unique_ptr<Sprite> spriteSpace_;//Spaceでもどるの文字
 
-	std::unique_ptr<Object_glTF> player_gltf;
-	WorldTransform wt;
+	std::unique_ptr<Object_glTF> playerGltf_;
+	WorldTransform wt_;
 	
-	std::unique_ptr<Object_glTF> stage_gltf;
+	std::unique_ptr<Object_glTF> stageGltf_;
 };

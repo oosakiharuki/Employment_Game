@@ -17,5 +17,5 @@ public:
 	std::unique_ptr<IScene> GetSceneGroup(std::string name);
 private:
 
-	std::unordered_map<std::string, std::unique_ptr<IScene>> sceneG;
+	std::unordered_map<std::string, std::unique_ptr<IScene>> sceneG_;
 };

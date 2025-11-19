@@ -3,34 +3,34 @@
 #include "SpriteCommon.h"
 using namespace MyMath;
 
-FadeScreen* FadeScreen::instance = nullptr;
+FadeScreen* FadeScreen::sInstance= nullptr;
 
 FadeScreen* FadeScreen::GetInstance() {
-	if (instance == nullptr) {
-		instance = new FadeScreen;
+	if (sInstance== nullptr) {
+		sInstance= new FadeScreen;
 	}
-	return instance;
+	return sInstance;
 }
 
 void FadeScreen::Initialize() {
 	//フェードのテクスチャ
-	sprite = std::make_unique<Sprite>();
-	sprite->Initialize("fadeTexture.png");
-	sprite->SetSize({ 1280,720 });
+	sprite_ = std::make_unique<Sprite>();
+	sprite_->Initialize("fadeTexture.png");
+	sprite_->SetSize({ 1280,720 });
 
 	//解け具合
-	dissolve = std::make_unique<Dissolve>();
-	dissolve->Initialize(DirectXCommon::GetInstance());
+	dissolve_ = std::make_unique<Dissolve>();
+	dissolve_->Initialize(DirectXCommon::GetInstance());
 	
 	//マウスのテクスチャ
-	dissolveTexture = "fade01.png";
+	dissolveTexture_ = "fade01.png";
 }
 
 void FadeScreen::Update() {
 
 	//フェード中である
-	if (isFading) {
-		switch (FadeType_)
+	if (isFading_) {
+		switch (fadeType_)
 		{
 		case type_fadeIn:
 			FadeIn();//フェードテクスチャ -> ゲーム画面
@@ -43,41 +43,41 @@ void FadeScreen::Update() {
 		}
 	}
 
-	sprite->Update();
+	sprite_->Update();
 	//フェードするテクスチャを導入
-	dissolve->SetBackGround(sprite->GetResource(),dissolveTexture);
+	dissolve_->SetBackGround(sprite_->GetResource(),dissolveTexture_);
 
 	//溶かす度合
-	dissolve->Degress(degress);
-	dissolve->EgdeSize(0.01f);
+	dissolve_->Degress(degress_);
+	dissolve_->EgdeSize(0.01f);
 }
 
 void FadeScreen::Draw() {
-	dissolve->Command();
+	dissolve_->Command();
 }
 
 void FadeScreen::Finalize() {
-	delete instance;
-	instance = nullptr;
+	delete sInstance;
+	sInstance= nullptr;
 }
 
 void FadeScreen::FadeIn() {
-	if (degress <= 0.0f) {
-		degress = 0.0f;
-		isFading = false;
+	if (degress_ <= 0.0f) {
+		degress_ = 0.0f;
+		isFading_ = false;
 		return;
 	}
 
-	degress -= kDeltaTime;
+	degress_ -= kDeltaTime_;
 }
 
 void FadeScreen::FadeOut() {
-	if (degress >= 1.0f) {
-		degress = 1.0f;
-		isFading = false;
+	if (degress_ >= 1.0f) {
+		degress_ = 1.0f;
+		isFading_ = false;
 		return;
 	}
 
-	degress += kDeltaTime;
+	degress_ += kDeltaTime_;
 }
 

@@ -6,15 +6,15 @@
 using namespace MyMath;
 
 void CameraControl::Initialize() {
-	wt.Initialize();
-	fixed_Mode = false;
+	wt_.Initialize();
+	isFixedMode_ = false;
 
 }
 
 void CameraControl::Update(Camera* camera) {
 
 	//固定モードでないなら
-	if (!fixed_Mode && !Free_mode) {
+	if (!isFixedMode_ && !isFreeMode_) {
 		Move();
 	}
 
@@ -29,87 +29,87 @@ void CameraControl::Update(Camera* camera) {
 	ImGui::Text("ImGuiText");
 
 	//カメラ
-	ImGui::InputFloat3("cameraTranslate", &wt.translation_.x);
-	ImGui::SliderFloat3("cameraTranslateSlider", &wt.translation_.x, -30.0f, 30.0f);
+	ImGui::InputFloat3("cameraTranslate", &wt_.translation_.x);
+	ImGui::SliderFloat3("cameraTranslateSlider", &wt_.translation_.x, -30.0f, 30.0f);
 
-	ImGui::InputFloat3("cameraRotate", &wt.rotation_.x);
-	ImGui::SliderFloat("cameraRotateX", &wt.rotation_.x, -360.0f, 360.0f);
-	ImGui::SliderFloat("cameraRotateY", &wt.rotation_.y, -360.0f, 360.0f);
-	ImGui::SliderFloat("cameraRotateZ", &wt.rotation_.z, -360.0f, 360.0f);
+	ImGui::InputFloat3("cameraRotate", &wt_.rotation_.x);
+	ImGui::SliderFloat("cameraRotateX", &wt_.rotation_.x, -360.0f, 360.0f);
+	ImGui::SliderFloat("cameraRotateY", &wt_.rotation_.y, -360.0f, 360.0f);
+	ImGui::SliderFloat("cameraRotateZ", &wt_.rotation_.z, -360.0f, 360.0f);
 
-	ImGui::Checkbox("free_Mode",&Free_mode);
+	ImGui::Checkbox("free_Mode",&isFreeMode_);
 
 	ImGui::End();
 
 #endif //  USE_IMGUI
 
-	wt.UpdateMatrix();
+	wt_.UpdateMatrix();
 
-	camera->SetRotate(wt.rotation_);
-	camera->SetTranslate(wt.translation_);
+	camera->SetRotate(wt_.rotation_);
+	camera->SetTranslate(wt_.translation_);
 	camera->Update();
 
 }
 
 void CameraControl::SetEndPoint(const Vector3& left, const Vector3& right){
-	leftEndPoint = left;//左端
-	rightEndPoint = right;//右端
+	leftEndPoint_ = left;//左端
+	rightEndPoint_ = right;//右端
 }
 
 void CameraControl::Move() {
 	
 	//X座標
 	//プレイヤーが左端を超えたら
-	if (playerPos.x <= leftEndPoint.x) {
-		wt.translation_.x = leftEndPoint.x;
+	if (playerPos_.x <= leftEndPoint_.x) {
+		wt_.translation_.x = leftEndPoint_.x;
 	}//プレイヤーが右端を超えたら
-	else if (playerPos.x >= rightEndPoint.x) {
-		wt.translation_.x = rightEndPoint.x;
+	else if (playerPos_.x >= rightEndPoint_.x) {
+		wt_.translation_.x = rightEndPoint_.x;
 	}//両端の間
 	else {
-		wt.translation_.x = playerPos.x;//プレイヤーX座標
+		wt_.translation_.x = playerPos_.x;//プレイヤーX座標
 	}
 	 
 	//Y座標
-	if (playerPos.y >= fixedY) {
-		wt.translation_.y = playerPos.y + fixedY;
+	if (playerPos_.y >= kFixedY_) {
+		wt_.translation_.y = playerPos_.y + kFixedY_;
 	}
 	else {
-		wt.translation_.y = fixedPos.y;
+		wt_.translation_.y = fixedPos_.y;
 	}
 
 }
 
 void CameraControl::Zoom() {
-	if (isZoom) {
-		if (zoomTimer < kMaxZoomTime) {
-			wt.translation_ = cameraSegment.diff + EaseOut(cameraSegment.origin - cameraSegment.diff, zoomTimer, kMaxZoomTime);
-			zoomTimer += 1.0f / 60.0f;
+	if (isZoom_) {
+		if (zoomTimer_ < kMaxZoomTime_) {
+			wt_.translation_ = cameraSegment_.diff + EaseOut(cameraSegment_.origin - cameraSegment_.diff, zoomTimer_, kMaxZoomTime_);
+			zoomTimer_ += 1.0f / 60.0f;
 		}
 		else {
-			wt.translation_ = cameraSegment.diff;
-			zoomTimer = kMaxZoomTime;
+			wt_.translation_ = cameraSegment_.diff;
+			zoomTimer_ = kMaxZoomTime_;
 		}
 	}
 }
 
 void CameraControl::Shaking() {
 
-	if (ShakeTimer <= 0.0f) {
-		shake_Mode = false;
+	if (shakeTimer_ <= 0.0f) {
+		isShakeMode_ = false;
 		//カメラ位置を戻す
-		wt.translation_ = preTranslate;
+		wt_.translation_ = preTranslate_;
 		return;
 	}
-	else if (shake_Mode) {
+	else if (isShakeMode_) {
 		//シェイクする前に元々のカメラ位置を設定
-		if (ShakeTimer == kShakeMaxTime) {
+		if (shakeTimer_ == kShakeMaxTime_) {
 			//シェイク前のカメラ位置
-			preTranslate = wt.translation_;
+			preTranslate_ = wt_.translation_;
 		}
 
 
-		ShakeTimer -= 1.0f / 60.0f;
+		shakeTimer_ -= 1.0f / 60.0f;
 
 		std::random_device seed;
 		std::mt19937 random(seed());
@@ -117,34 +117,34 @@ void CameraControl::Shaking() {
 		std::uniform_real_distribution<float> yure(-0.5f, 0.5f);
 
 		//上下左右にシェイク(z軸は関係ない)
-		wt.translation_ += Vector3{ yure(random), yure(random), 0.0f };
+		wt_.translation_ += Vector3{ yure(random), yure(random), 0.0f };
 	}
 }
 
 
 bool CameraControl::MaxZoom() {
-	if (zoomTimer >= kMaxZoomTime) {
+	if (zoomTimer_ >= kMaxZoomTime_) {
 		return true;
 	}
 	return false;
 }
 
 void CameraControl::ZoomStart(const Vector3& goal) {
-	cameraSegment.origin = wt.translation_;
-	cameraSegment.diff = goal;
-	isZoom = true;
+	cameraSegment_.origin = wt_.translation_;
+	cameraSegment_.diff = goal;
+	isZoom_ = true;
 }
 
 void CameraControl::CameraSetting(const CameraInitData& data, const bool& fixed_Mode_) {
 	//座標と回転
-	wt.rotation_ = data.rotation;
-	wt.translation_ = data.translation;
+	wt_.rotation_ = data.rotation;
+	wt_.translation_ = data.translation;
 
 	//カメラの最小/最大地点
-	leftEndPoint = wt.translation_ + data.Point1;
-	rightEndPoint = wt.translation_ + data.Point2;
+	leftEndPoint_ = wt_.translation_ + data.Point1;
+	rightEndPoint_ = wt_.translation_ + data.Point2;
 
-	fixed_Mode = fixed_Mode_;
+	isFixedMode_ = fixed_Mode_;
 
-	fixedPos = wt.translation_;
+	fixedPos_ = wt_.translation_;
 }

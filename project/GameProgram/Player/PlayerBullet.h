@@ -27,12 +27,12 @@ public:
 	/// getter_座標位置
 	/// </summary>
 	/// <returns></returns>現在の座標位置
-	Vector3 GetTranslate() { return wt.translation_; }
+	Vector3 GetTranslate() { return wt_.translation_; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
 	/// <param name="translate"></param>代入する座標位置
-	void SetTranslate(Vector3 translate) { wt.translation_ = translate; }
+	void SetTranslate(Vector3 translate) { wt_.translation_ = translate; }
 
 	/// <summary>
 	/// setter_弾丸速度
@@ -44,12 +44,12 @@ public:
 	/// 弾がなくなるフラグ
 	/// </summary>
 	/// <returns></returns>trueなら消滅
-	bool IsDead() { return isDead; }
+	bool IsDead() { return isDead_; }
 	/// <summary>
 	/// 弾が敵などに当たる
 	/// 消える
 	/// </summary>
-	void IsHit() { isDead = true; }
+	void IsHit() { isDead_ = true; }
 
 	/// <summary>
 	/// getter_当たり判定AABB
@@ -58,17 +58,17 @@ public:
 	AABB GetAABB();
 
 private:
-	std::unique_ptr<Object3d> object = nullptr;
-	WorldTransform wt;
+	std::unique_ptr<Object3d> object_ = nullptr;
+	WorldTransform wt_;
 	Vector3 velocity_;
 
 	//消えるまでの処理
-	float deathTimer = 0.0f;
-	const float kEndTime = 0.7f;
-	bool isDead = false;
+	float deathTimer_ = 0.0f;
+	const float kEndTime_ = 0.7f;
+	bool isDead_ = false;
 
 	//秒数時間
-	const float kDeltaTime = 1.0f / 60.0f;
+	const float kDeltaTime_ = 1.0f / 60.0f;
 	
-	AABB bulletAABB;
+	AABB bulletAABB_;
 };

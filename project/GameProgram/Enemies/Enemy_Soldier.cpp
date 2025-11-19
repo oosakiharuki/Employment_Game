@@ -16,16 +16,16 @@ void Enemy_Soldier::Initialize() {
 
 	Enemy_InitializeCommon();
 	//モデル作成
-	object->SetModelFile("enemy.obj");
+	object_->SetModelFile("enemy.obj");
 
 	//体力の初期化
 	HP_Initialize(3);
 
 	//見える範囲初期化
-	eyeReach = { 15, 10, 1 };
+	eyeReach_ = { 15, 10, 1 };
 
 	//最大弾丸数
-	rapidCountMax = 3;
+	rapidCountMax_ = 3;
 }
 
 void Enemy_Soldier::Update() {
@@ -33,15 +33,15 @@ void Enemy_Soldier::Update() {
 	//敵の共有処理
 	UpdateCommon();
 
-	if (!isDead) {
-		if (!isFoundTarget && !isBullet && !lost_player) {
+	if (!isDead_) {
+		if (!isFoundTarget_ && !isBullet_ && !isLostPlayer_) {
 			SearchRange();
 			MoveEnemy();
 		}
 	}
 
 	//コーンが上向きなので
-	particle_fire->SetRotate({ 0,0,-wt.rotation_.y });
+	particleFire_->SetRotate({ 0,0,-wt_.rotation_.y });
 
 	//更新が終了
 	UpdateBehind();
@@ -51,8 +51,8 @@ void Enemy_Soldier::Update() {
 
 	ImGui::Begin("Enemy_soldier");
 
-	ImGui::Text("route_point1 : %f,%f,%f", route_point1.x, route_point1.y, route_point1.z);
-	ImGui::Text("route_point2 : %f,%f,%f", route_point2.x, route_point2.y, route_point2.z);
+	ImGui::Text("routePointLeft : %f,%f,%f", routePointLeft_.x, routePointLeft_.y, routePointLeft_.z);
+	ImGui::Text("routePointRight : %f,%f,%f", routePointRight_.x, routePointRight_.y, routePointRight_.z);
 
 	ImGui::End();
 
@@ -60,8 +60,8 @@ void Enemy_Soldier::Update() {
 }
 
 void Enemy_Soldier::Draw() {
-	if (!deleteEnemy) {
-		object->Draw();
+	if (!isDeleteEnemy_) {
+		object_->Draw();
 		shadow_->Draw();
 	}
 	for (auto* bullet : bullets_) {
@@ -71,8 +71,8 @@ void Enemy_Soldier::Draw() {
 
 	ParticleCommon::GetInstance()->Command();
 
-	particle_fire->Draw();
-	particle_damage->Draw();
+	particleFire_->Draw();
+	particleDamage_->Draw();
 
 	Object3dCommon::GetInstance()->Command();
 	
@@ -87,12 +87,12 @@ void Enemy_Soldier::FireBullet() {
 	
 	Vector3 enemyPosition;
 
-	enemyPosition.x = wt.matWorld_.m[3][0];
-	enemyPosition.y = wt.matWorld_.m[3][1];
-	enemyPosition.z = wt.matWorld_.m[3][2];
+	enemyPosition.x = wt_.matWorld_.m[3][0];
+	enemyPosition.y = wt_.matWorld_.m[3][1];
+	enemyPosition.z = wt_.matWorld_.m[3][2];
 
 	//プレイヤーの方向に向かう(最初に打つ弾にそって進む)
-	if (rapidCount == 0) {
+	if (rapidCount_ == 0) {
 
 		const float kSpeed = 0.4f;
 		//プレイヤーの座標
@@ -107,16 +107,16 @@ void Enemy_Soldier::FireBullet() {
 		normal.y *= kSpeed;
 		normal.z *= kSpeed;
 
-		velocity = normal;
+		velocity_ = normal;
 	}
-	particle_fire->SetTranslate(enemyPosition);
+	particleFire_->SetTranslate(enemyPosition);
 
 	//弾丸を生み出す
 	EnemyBullet* bullet = new EnemyBullet();
 	bullet->Initialize();
 	bullet->SetPlayer(player_);//プレイヤーと当たりノックバックパラメータで使う
 	bullet->SetTranslate(enemyPosition);
-	bullet->SetVelocty(velocity);
+	bullet->SetVelocty(velocity_);
 	bullets_.push_back(bullet);
 }
 
@@ -124,7 +124,7 @@ void Enemy_Soldier::RespawnEnemy() {
 	RespawnEnemyCommon();
 
 	//発泡処理のリセット
-	rapidCount = 0;
-	coolTime = 0;
-	isBullet = false;
+	rapidCount_ = 0;
+	coolTime_ = 0;
+	isBullet_ = false;
 }

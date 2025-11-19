@@ -22,9 +22,9 @@ public:
 
 private:
 	//見える範囲のエフェクト
-	std::unique_ptr<Particle> particle_laser;
+	std::unique_ptr<Particle> particleLaser_;
 
 	//攻撃パーティクルの場所
-	Vector3 particle_position;
+	Vector3 particlePosition_;
 };
 

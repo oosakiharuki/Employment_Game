@@ -12,7 +12,7 @@ void EnemyBullet::Initialize() {
 	object->Initialize();
 	object->SetModelFile("PlayerBullet.obj");
 
-	wt.Initialize();
+	wt_.Initialize();
 
 	//弾の当たり判定の大きさ
 	bulletAABB.min = { -0.5f,-0.5f,-0.5f };
@@ -22,11 +22,11 @@ void EnemyBullet::Initialize() {
 void EnemyBullet::Update() {
 	if (!isPari) {
 		//velocity向きに等速直線運動
-		wt.translation_ += velocity_;
+		wt_.translation_ += velocity_;
 	}
 	else {
 		///パリィされた時
-		wt.translation_ -= velocity_;
+		wt_.translation_ -= velocity_;
 	}
 
 
@@ -34,11 +34,11 @@ void EnemyBullet::Update() {
 
 	//時間がたったら消える
 	if (deathTimer >= kEndTime) {
-		isDead = true;
+		isDead_ = true;
 	}
 
-	object->Update(wt);
-	wt.UpdateMatrix();
+	object->Update(wt_);
+	wt_.UpdateMatrix();
 }
 
 void EnemyBullet::Draw() {
@@ -47,18 +47,18 @@ void EnemyBullet::Draw() {
 
 AABB EnemyBullet::GetAABB() {
 	AABB aabb;
-	aabb.min = wt.translation_ + bulletAABB.min;
-	aabb.max = wt.translation_ + bulletAABB.max;
+	aabb.min = wt_.translation_ + bulletAABB.min;
+	aabb.max = wt_.translation_ + bulletAABB.max;
 	return aabb;
 }
 
 void EnemyBullet::IsHit() { 
-	Vector3 enemyPosition = wt.translation_;
+	Vector3 enemyPosition = wt_.translation_;
 	Vector3 playerPosition = player_->GetWorldPosition();
 	//どの位置でぶつかった記録
 	distance = enemyPosition - playerPosition;
 	//消えるフラグ
-	isDead = true;
+	isDead_ = true;
 }
 
 void EnemyBullet::Pari_Mode() {

@@ -9,33 +9,33 @@ void ClearScene::Initialize() {
 	sprite_->SetPosition({ 100,100 });
 
 	//戻る
-	sprite_space = std::make_unique<Sprite>();
-	sprite_space->Initialize("Moji_botton.png");
-	sprite_space->SetPosition({ 800,10 });
-	sprite_space->SetSize({ 256,64 });
+	spriteSpace_ = std::make_unique<Sprite>();
+	spriteSpace_->Initialize("Moji_botton.png");
+	spriteSpace_->SetPosition({ 800,10 });
+	spriteSpace_->SetSize({ 256,64 });
 
-	camera = std::make_unique<Camera>();
+	camera_ = std::make_unique<Camera>();
 
-	cameraTranslate = { 0,2.0f,-18.0f };
-	cameraRotate = { 0,0.0f,0 };
+	cameraTranslate_ = { 0,2.0f,-18.0f };
+	cameraRotate_ = { 0,0.0f,0 };
 
-	camera->SetTranslate(cameraTranslate);
-	camera->SetRotate(cameraRotate);
+	camera_->SetTranslate(cameraTranslate_);
+	camera_->SetRotate(cameraRotate_);
 
-	GLTFCommon::GetInstance()->SetDefaultCamera(camera.get());
-	ParticleCommon::GetInstance()->SetDefaultCamera(camera.get());
+	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
+	ParticleCommon::GetInstance()->SetDefaultCamera(camera_.get());
 
-	player_gltf_ = std::make_unique<Object_glTF>();
-	player_gltf_->Initialize();
-	player_gltf_->SetModelFile("player_clear.gltf");
+	playerGltf_ = std::make_unique<Object_glTF>();
+	playerGltf_->Initialize();
+	playerGltf_->SetModelFile("player_clear.gltf");
 
 	wt_.Initialize();
 	wt_.rotation_.y = 180.0f;
 
 	//地面
-	stage_gltf_ = std::make_unique<Object_glTF>();
-	stage_gltf_->Initialize();
-	stage_gltf_->SetModelFile("gameover_stage.gltf");
+	stageGltf_ = std::make_unique<Object_glTF>();
+	stageGltf_->Initialize();
+	stageGltf_->SetModelFile("gameover_stage.gltf");
 
 	for (int32_t i = 0; i < 3; i++) {
 		std::unique_ptr<Particle > gParticle;
@@ -53,15 +53,15 @@ void ClearScene::Initialize() {
 
 void ClearScene::Update() {
 
-	input_->JoystickUpdate(state, preState);
+	input_->JoystickUpdate(state_, preState_);
 
-	camera->Update();
+	camera_->Update();
 	//クリアロゴ更新
 	sprite_->Update();	
-	sprite_space->Update();
+	spriteSpace_->Update();
 
 	wt_.UpdateMatrix();
-	player_gltf_->Update(wt_);
+	playerGltf_->Update(wt_);
 
 	Vector3 gTranslate = { -3,2,0 };
 	for (auto& gParticle : particle_fanfares_) {
@@ -74,7 +74,7 @@ void ClearScene::Update() {
 		gTranslate.x += 3.0f;
 	}
 
-	stage_gltf_->Update();
+	stageGltf_->Update();
 
 
 	setFrequencyTime_ = true;
@@ -86,7 +86,7 @@ void ClearScene::Update() {
 
 	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE) || 
-		Input::GetInstance()->TriggerBotton(state,preState,XINPUT_GAMEPAD_A) && !FadeScreen::GetInstance()->GetIsFadeing()) {
+		Input::GetInstance()->TriggerBotton(state_,preState_,XINPUT_GAMEPAD_A) && !FadeScreen::GetInstance()->GetIsFadeing()) {
 		NextSceneFadeInStart("Select");
 	}
 
@@ -95,8 +95,8 @@ void ClearScene::Update() {
 void ClearScene::Draw() {
 
 	GLTFCommon::GetInstance()->Command();
-	player_gltf_->Draw();
-	stage_gltf_->Draw();
+	playerGltf_->Draw();
+	stageGltf_->Draw();
 
 	ParticleCommon::GetInstance()->Command();
 	for (auto& gParticle : particle_fanfares_) {
@@ -106,7 +106,7 @@ void ClearScene::Draw() {
 	SpriteCommon::GetInstance()->Command();
 	//クリアロゴｗ描画
 	sprite_->Draw();
-	sprite_space->Draw();
+	spriteSpace_->Draw();
 }
 
 void ClearScene::Finalize() {

@@ -9,13 +9,13 @@ void Enemy_Bomb::Initialize() {
 
 	Enemy_InitializeCommon();
 	//モデル作成
-	object->SetModelFile("enemy_bomb.obj");
+	object_->SetModelFile("enemy_bomb.obj");
 
 	//体力の初期化
 	HP_Initialize(1);
 
 	//見える範囲初期化
-	eyeReach = { 15, 2, 1 };
+	eyeReach_ = { 15, 2, 1 };
 }
 
 void Enemy_Bomb::Update() {
@@ -24,14 +24,14 @@ void Enemy_Bomb::Update() {
 	UpdateCommon();
 
 	//体力が0の時
-	if ((bombTimer >= kBombTimeMax || isDead) && !isExplosion) {
+	if ((bombTimer_ >= kBombTimeMax_ || isDead_) && !isExplosion_) {
 		Exprosion();
 	}
 
 	//死んだとき
-	if (isDead) {
+	if (isDead_) {
 		//爆発するフラグ
-		isExplosion = true;
+		isExplosion_ = true;
 	}
 	else {
 		//通常処理
@@ -40,14 +40,14 @@ void Enemy_Bomb::Update() {
 		Vector3 enemyPosition = GetWorldPosition();
 		Vector3 playerPosition = player_->GetWorldPosition();
 		//プレイヤーとボムの距離
-		distance = enemyPosition - playerPosition;
+		distance_ = enemyPosition - playerPosition;
 		//ノーマライズ
-		distance = Normalize(distance);
+		distance_ = Normalize(distance_);
 
-		if (!isStart) {
+		if (!isStart_) {
 			MoveEnemy();
 
-			if (!isFoundTarget) {
+			if (!isFoundTarget_) {
 				SearchRange();
 			}
 		}
@@ -62,46 +62,46 @@ void Enemy_Bomb::Update() {
 
 void Enemy_Bomb::Draw() {
 	//死んだら移さない
-	if (!isDead) {
-		object->Draw();
+	if (!isDead_) {
+		object_->Draw();
 		shadow_->Draw();
 	}
 
 	ParticleCommon::GetInstance()->Command();
 	//ダメージのパーティクル
-	particle_damage->Draw();
+	particleDamage_->Draw();
 
 	Object3dCommon::GetInstance()->Command();
 }
 
 void Enemy_Bomb::Attack() {
 	//時限爆弾モードオン
-	isStart = true;
+	isStart_ = true;
 }
 
 void Enemy_Bomb::TimeRimmit() {
 	//爆弾タイマー
-	bombTimer += kDeltaTime;
+	bombTimer_ += kDeltaTime_;
 
 	//プレイヤーに追淳
-	wt.translation_ += distance * Vector3{ -0.03f,0,0 } *3;
+	wt_.translation_ += distance_ * Vector3{ -0.03f,0,0 } *3;
 
 	//向きを合わせる
-	if (distance.x < 0) {
-		wt.rotation_.y = 90.0f;
+	if (distance_.x < 0) {
+		wt_.rotation_.y = 90.0f;
 	}
-	if (distance.x >= 0) {
-		wt.rotation_.y = -90.0f;
+	if (distance_.x >= 0) {
+		wt_.rotation_.y = -90.0f;
 	}
 
 	//リアクション
-	if (bombTimer >= kBombTimeMax / 1.5f) {
+	if (bombTimer_ >= kBombTimeMax_ / 1.5f) {
 		//爆発寸前だと揺れが細かくなる
-		ScaleUpdate(&isStart, bombScale * 2, 0.2f / 2);
+		ScaleUpdate(&isStart_, bombScale_ * 2, 0.2f / 2);
 	}
 	else {
 		//爆発しそうな演出
-		ScaleUpdate(&isStart, bombScale, 0.2f);
+		ScaleUpdate(&isStart_, bombScale_, 0.2f);
 	}
 }
 
@@ -109,21 +109,21 @@ void Enemy_Bomb::RespawnEnemy() {
 	RespawnEnemyCommon();
 	
 	//時限爆弾モードオフ
-	isStart = false;
+	isStart_ = false;
 	//爆発してない
-	isExplosion = false;
-	bombTimer = 0.0f;
+	isExplosion_ = false;
+	bombTimer_ = 0.0f;
 }
 
 void Enemy_Bomb::Exprosion() {
 	//爆発範囲AABB
-	bombAABB.min = wt.translation_ - kExplosionRange;
-	bombAABB.max = wt.translation_ + kExplosionRange;
+	bombAABB_.min = wt_.translation_ - kExplosionRange_;
+	bombAABB_.max = wt_.translation_ + kExplosionRange_;
 
 	//パーティクルの設定
-	particle_damage->SetTranslate(wt.translation_);
-	particle_damage->ChangeMode(BornParticle::MomentMode);
+	particleDamage_->SetTranslate(wt_.translation_);
+	particleDamage_->ChangeMode(BornParticle::MomentMode);
 
 	//爆発したら死んでしまう
-	isDead = true;
+	isDead_ = true;
 }

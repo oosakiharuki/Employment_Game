@@ -10,26 +10,26 @@ public:
 	void Initialize();
 	void Update(Camera* camera);
 
-	void SetTranslation(const Vector3& translate) { wt.translation_ = translate; }
-	void SetRotation(const Vector3& rotation) { wt.rotation_ = rotation; }
+	void SetTranslation(const Vector3& translate) { wt_.translation_ = translate; }
+	void SetRotation(const Vector3& rotation) { wt_.rotation_ = rotation; }
 
 	void SetEndPoint(const Vector3& left,const Vector3& right);
 	
-	void SetPlayerPosition(Vector3 pos) { playerPos = pos; }
+	void SetPlayerPosition(Vector3 pos) { playerPos_ = pos; }
 	void ZoomStart(const Vector3& goal);
 
 	bool MaxZoom();
 
-	void FixedMode(bool result) { fixed_Mode = result; }
-	bool IsFixed() { return fixed_Mode; }
+	void FixedMode(bool result) { isFixedMode_ = result; }
+	bool IsFixed() { return isFixedMode_; }
 
 
-	void ShakeMode(bool result) { shake_Mode = result; }
+	void ShakeMode(bool result) { isShakeMode_ = result; }
 
 	/// <summary>
 	/// シェイク時間を元(最大値)に戻す
 	/// </summary>
-	void ResetShakeTime() { ShakeTimer = kShakeMaxTime; }
+	void ResetShakeTime() { shakeTimer_ = kShakeMaxTime_; }
 
 	/// <summary>
 	/// カメラを設定する
@@ -47,30 +47,30 @@ private:
 	void Shaking();
 
 	//右端、左端
-	Vector3 leftEndPoint;
-	Vector3 rightEndPoint;
+	Vector3 leftEndPoint_;
+	Vector3 rightEndPoint_;
 
-	WorldTransform wt;
+	WorldTransform wt_;
 	
-	Vector3 playerPos;
+	Vector3 playerPos_;
 
-	float fixedY = 6.0f;//固定する高さ
+	const float kFixedY_ = 6.0f;//固定する高さ
 
-	bool fixed_Mode = false;
-	Vector3 fixedPos;
+	bool isFixedMode_ = false;
+	Vector3 fixedPos_;
 
 	//シェイク
-	const float kShakeMaxTime = 0.25f;
-	float ShakeTimer = kShakeMaxTime;
-	Vector3 preTranslate{};
-	bool shake_Mode = false;
+	const float kShakeMaxTime_ = 0.25f;
+	float shakeTimer_ = kShakeMaxTime_;
+	Vector3 preTranslate_{};
+	bool isShakeMode_ = false;
 
 	//カメラズーム
-	Segment cameraSegment = {};
-	float zoomTimer = 0.0f;
-	const float kMaxZoomTime = 1.0f;
-	bool isZoom = false;
+	Segment cameraSegment_ = {};
+	float zoomTimer_ = 0.0f;
+	const float kMaxZoomTime_ = 1.0f;
+	bool isZoom_ = false;
 	
 	//imgui
-	bool Free_mode = false;
+	bool isFreeMode_ = false;
 };

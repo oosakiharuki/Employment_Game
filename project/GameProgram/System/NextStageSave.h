@@ -17,15 +17,15 @@ public:
 
 	static std::shared_ptr<NextStageSave> GetInstance();
 
-	SceneSaveData GetNextStageSaveData() { return sceneSaveData; }
+	SceneSaveData GetNextStageSaveData() { return sceneSaveData_; }
 
-	void SetNextStageFile(std::string instance) { sceneSaveData.nextStageFile = instance; }
+	void SetNextStageFile(const std::string nextStageFile) { sceneSaveData_.nextStageFile = nextStageFile; }
 
-	void SetPlayerHp(uint32_t instance) { sceneSaveData.playerHp = instance; }
+	void SetPlayerHp(const uint32_t playerHp) { sceneSaveData_.playerHp = playerHp; }
 
 private:
 
-	SceneSaveData sceneSaveData;
+	SceneSaveData sceneSaveData_;
 
 	static std::shared_ptr<NextStageSave> sInstance;
 };

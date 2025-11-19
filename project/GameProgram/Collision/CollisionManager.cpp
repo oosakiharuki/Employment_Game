@@ -52,7 +52,7 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 				}
 				else {//跳ね返さず防ぐのみ
 					bulletE->IsHit();//当たって消える
-					player_->KnockBackUmbrella(kUmbrellaKnockBackPower, kUmbrellaKnockBackTime);//ノックバックする
+					player_->KnockBackUmbrella(kUmbrellaKnockBackPower_, kUmbrellaKnockBackTime_);//ノックバックする
 				}
 				player_->IsShildMosion();//傘のリアクションフラグをtrueに
 			}
@@ -145,12 +145,12 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 			}
 			//ゴール
 			else if (stageObject->GetObjectName() == "Goal" && Input::GetInstance()->TriggerKey(DIK_E)) {
-				isGoal = true;
+				isGoal_ = true;
 			}
 			//stageObjectsの中でワープゲートである場合
 			else if (stageObject->GetObjectName() == "WarpGate" && Input::GetInstance()->TriggerKey(DIK_E)) {
 				//プレイヤーとワープゲートの当たり判定 + Eキーを押した時
-				isWarp = true;
+				isWarp_ = true;
 				//次のステージに持ってくる情報
 				NextStageSave::GetInstance()->SetNextStageFile(stageObject->GetNextStage());
 				NextStageSave::GetInstance()->SetPlayerHp(player_->GetHp());
@@ -190,7 +190,7 @@ Vector3 CollisionManager::UnderCollision(std::vector<AABB> stageAABB, AABB shado
 			//プレイヤーと足場の長さが短いところを影に
 			if (length < lengthMax) {
 				lengthMax = length;
-				minY = stage.max.y + 0.01f;
+				minY = stage.max.y + kShadowUp_;
 			}
 		}
 	}
@@ -281,7 +281,7 @@ CollisionOverlap CollisionManager::SetTarget(Vector3 position, AABB aabb) {
 
 void CollisionManager::ResetFlag() {
 	//ゴールした時フラグ
-	isGoal = false;
+	isGoal_ = false;
 	//ワープで次のステージに進むフラグ
-	isWarp = false;
+	isWarp_ = false;
 }

@@ -26,12 +26,12 @@ public:
 	/// setter_座標位置
 	/// </summary>
 	/// <param name="position"></param>代入する座標位置
-	void SetTranslate(Vector3 position) { wt.translation_ = position; }
+	void SetTranslate(Vector3 position) { wt_.translation_ = position; }
 	/// <summary>
 	/// setter_サイズ
 	/// </summary>
 	/// <param name="scale"></param>代入する大きさ
-	void SetScale(Vector3 scale) { wt.scale_ = scale; }
+	void SetScale(Vector3 scale) { wt_.scale_ = scale; }
 
 	/// <summary>
 	/// getter_当たり判定AABB
@@ -41,6 +41,6 @@ public:
 
 private:
 	std::unique_ptr<Object3d> object_;
-	WorldTransform wt;
-	AABB shadowAABB;
+	WorldTransform wt_;
+	AABB shadowAABB_;
 };

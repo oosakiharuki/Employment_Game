@@ -32,50 +32,50 @@
 class IScene{
 protected:
 	//現在のシーン
-	static std::string sceneNo;
+	static std::string sceneNo_;
 	//次のシーン
-	static std::string nextSceneNo;
+	static std::string nextSceneNo_;
 
 	//入力処理
 	Input* input_ = Input::GetInstance();
 	//ゲームパット用の入力変数
-	XINPUT_STATE state, preState;
+	XINPUT_STATE state_, preState_;
 
 	//カメラ
-	std::unique_ptr<Camera> camera = nullptr;
-	Vector3 cameraRotate;//回転
-	Vector3 cameraTranslate;//座標
+	std::unique_ptr<Camera> camera_ = nullptr;
+	Vector3 cameraRotate_;//回転
+	Vector3 cameraTranslate_;//座標
 	//カメラ移動範囲
-	Vector3 cameraPoint1;//幅1
-	Vector3 cameraPoint2;//幅2
+	Vector3 cameraPointLeft_;//左端
+	Vector3 cameraPointRight_;//右端
 	std::unique_ptr<CameraControl> cameraControl_;
 
-	const Vector3 kPlayerAwayPos = { 0, 2, -15.0f };
+	const Vector3 kPlayerAwayPos_ = { 0, 2, -15.0f };
 
 	//レベルエディタ(オブジェクトの配置を.jsonでできる)
-	Levelediter levelediter;
+	Levelediter levelediter_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 	//敵たち
-	std::vector<std::shared_ptr<IEnemy>> enemies;
+	std::vector<std::shared_ptr<IEnemy>> enemies_;
 	//ステージオブジェクトたち
-	std::list<std::shared_ptr<IStageObject>> stageObjects;
+	std::list<std::shared_ptr<IStageObject>> stageObjects_;
 	
 	//ステージ全体のオブジェクト
-	std::unique_ptr<Object3d> stageobj;
+	std::unique_ptr<Object3d> stageobj_;
 	//ステージ全体の当たり判定AABB
-	std::vector<AABB> stagesAABB;
+	std::vector<AABB> stagesAABB_;
 
 	//イベントトリガー
-	std::vector<std::shared_ptr<EventTrigger>> eventTriggers;
+	std::vector<std::shared_ptr<EventTrigger>> eventTriggers_;
 
 	//BGM
 	SoundData BGMData_;
-	float volume = 0.07f;//音量調節機能
+	float volume_ = 0.07f;//音量調節機能
 
 	//スカイボックス
-	std::unique_ptr<BoxModel> skyBox = nullptr;
+	std::unique_ptr<BoxModel> skyBox_ = nullptr;
 
 	/// <summary>
 	/// レベルエディタで配置
@@ -88,7 +88,7 @@ protected:
 	/// </summary>
 	void PreviousSceneData();
 
-	SceneSaveData data;
+	SceneSaveData data_;
 
 	/// <summary>
 	/// 全シーンに共有できる当たり判定
@@ -96,7 +96,7 @@ protected:
 	void CollisionCommon();
 
 	//end
-	bool isGameEnd = false;
+	bool isGameEnd_ = false;
 
 	/// <summary>
 	/// 次のシーンの選択+フェードインを始める
@@ -120,7 +120,7 @@ protected:
 
 	void DrawCommon();
 
-	std::vector<std::unique_ptr<Sprite>> setumei;
+	std::vector<std::unique_ptr<Sprite>> setumei_;
 
 public:
 	/// <summary>
@@ -152,9 +152,9 @@ public:
 	/// ゲーム終了処理
 	/// </summary>
 	/// <returns></returns>trueで終了
-	bool GetIsGameEnd() { return isGameEnd; }
+	bool GetIsGameEnd() { return isGameEnd_; }
 
 private:
 	//ステージの.jsonファイル名
-	std::string Stage_fileName;
+	std::string stageFileName_;
 };

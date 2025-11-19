@@ -15,27 +15,27 @@ void Enemy_Turret::Initialize() {
 
 	Enemy_InitializeCommon();
 	//モデル作成
-	object->SetModelFile("cannon.obj");
+	object_->SetModelFile("cannon.obj");
 
 	HP_Initialize(6);
 
 	//見える範囲初期化
-	eyeReach = { 20, 0, 0 };
+	eyeReach_ = { 20, 0, 0 };
 
 	//レーザー(見える範囲)の初期化処理
-	particle_laser = std::make_unique<Particle>();
-	particle_laser->Initialize("tullet_laser","resource/Sprite/3YvXH.png",PrimitiveType::beam);
-	particle_laser->SetFrequency(0.001f);
-	particle_laser->SetParticleCount(1);
-	particle_laser->ChangeMode(BornParticle::TimerMode);
-	particle_laser->SetParticleMosion(ParticleMosion::Fixed);
-	particle_laser->SetScale({ eyeReach.x * 0.5f,0.1f,0.1f });
+	particleLaser_ = std::make_unique<Particle>();
+	particleLaser_->Initialize("tullet_laser","resource/Sprite/3YvXH.png",PrimitiveType::beam);
+	particleLaser_->SetFrequency(0.001f);
+	particleLaser_->SetParticleCount(1);
+	particleLaser_->ChangeMode(BornParticle::TimerMode);
+	particleLaser_->SetParticleMosion(ParticleMosion::Fixed);
+	particleLaser_->SetScale({ eyeReach_.x * 0.5f,0.1f,0.1f });
 
 	//ちょっと大きく
-	particle_fire->SetScale({ 1.5f,1.5f,1.5f });
+	particleFire_->SetScale({ 1.5f,1.5f,1.5f });
 
 	//最大弾丸数
-	rapidCountMax = 6;
+	rapidCountMax_ = 6;
 }
 
 void Enemy_Turret::Update() {
@@ -43,21 +43,21 @@ void Enemy_Turret::Update() {
 	//敵の共有処理
 	UpdateCommon();
 
-	if (!isDead) {
+	if (!isDead_) {
 		SearchRange();
-		Matrix4x4 a = MakeAffineMatrix(Vector3(1,1,1), wt.rotation_, wt.translation_);
-		particle_laser->SetTranslate(wt.translation_ + TransformNormal(Vector3{0,0,eyeReach.x * 0.5f}, a));
-		particle_laser->ChangeMode(BornParticle::TimerMode);
+		Matrix4x4 a = MakeAffineMatrix(Vector3(1,1,1), wt_.rotation_, wt_.translation_);
+		particleLaser_->SetTranslate(wt_.translation_ + TransformNormal(Vector3{0,0,eyeReach_.x * 0.5f}, a));
+		particleLaser_->ChangeMode(BornParticle::TimerMode);
 	}
 	else {
-		particle_laser->ChangeMode(BornParticle::Stop);
+		particleLaser_->ChangeMode(BornParticle::Stop);
 	}
 
 	//コーンが上向きなので
-	particle_fire->SetRotate({ 0,0,-wt.rotation_.y });
+	particleFire_->SetRotate({ 0,0,-wt_.rotation_.y });
 	
 	//レーザー更新処理
-	particle_laser->Update();
+	particleLaser_->Update();
 
 	//更新が終了
 	UpdateBehind();
@@ -66,11 +66,11 @@ void Enemy_Turret::Update() {
 
 	ImGui::Begin("Enemy_Turret");
 
-	ImGui::Text("translate : %f,%f,%f", wt.translation_.x, wt.translation_.y, wt.translation_.z);
-	ImGui::Text("translate : %f,%f,%f", wt.rotation_.x, wt.rotation_.y, wt.rotation_.z);
+	ImGui::Text("translate : %f,%f,%f", wt_.translation_.x, wt_.translation_.y, wt_.translation_.z);
+	ImGui::Text("translate : %f,%f,%f", wt_.rotation_.x, wt_.rotation_.y, wt_.rotation_.z);
 
-	ImGui::Text("Eye_Min : %f,%f,%f", eyeAABB.min.x, eyeAABB.min.y, eyeAABB.min.z);
-	ImGui::Text("Eye_Max : %f,%f,%f", eyeAABB.max.x, eyeAABB.max.y, eyeAABB.max.z);
+	ImGui::Text("Eye_Min : %f,%f,%f", eyeAABB_.min.x, eyeAABB_.min.y, eyeAABB_.min.z);
+	ImGui::Text("Eye_Max : %f,%f,%f", eyeAABB_.max.x, eyeAABB_.max.y, eyeAABB_.max.z);
 
 	ImGui::End();
 
@@ -80,8 +80,8 @@ void Enemy_Turret::Update() {
 
 void Enemy_Turret::Draw() {
 
-	if (!deleteEnemy) {
-		object->Draw();
+	if (!isDeleteEnemy_) {
+		object_->Draw();
 		shadow_->Draw();
 	}
 
@@ -91,9 +91,9 @@ void Enemy_Turret::Draw() {
 
 	ParticleCommon::GetInstance()->Command();
 
-	particle_fire->Draw();
-	particle_damage->Draw();
-	particle_laser->Draw();
+	particleFire_->Draw();
+	particleDamage_->Draw();
+	particleLaser_->Draw();
 
 	Object3dCommon::GetInstance()->Command();
 
@@ -106,17 +106,17 @@ void Enemy_Turret::Attack() {
 
 void Enemy_Turret::FireBullet() {
 	
-	Vector3 translate = wt.translation_;
+	Vector3 translate = wt_.translation_;
 	//少し前から弾丸が出るように
 	translate.x -= 2.0f,
 
 	//パーティクルの場所変更
-	particle_position = wt.translation_;
-	particle_fire->SetTranslate(particle_position);
+	particlePosition_ = wt_.translation_;
+	particleFire_->SetTranslate(particlePosition_);
 
 
 	Vector3 velocity = { 0.0f,0.0f,0.5f };
-	velocity = TransformNormal(velocity, wt.matWorld_);
+	velocity = TransformNormal(velocity, wt_.matWorld_);
 
 	EnemyBullet* bullet = new EnemyBullet();
 	bullet->Initialize();
@@ -128,7 +128,7 @@ void Enemy_Turret::FireBullet() {
 
 void Enemy_Turret::RespawnEnemy() {
 	RespawnEnemyCommon();
-	rapidCount = 0;
-	coolTime = 0;
-	isBullet = false;
+	rapidCount_ = 0;
+	coolTime_ = 0;
+	isBullet_ = false;
 }

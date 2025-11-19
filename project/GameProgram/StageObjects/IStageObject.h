@@ -27,24 +27,24 @@ public:
 	/// getter_座標位置
 	/// </summary>
 	/// <returns></returns>現在の座標位置
-	const Vector3& GetPosition() { return wt.translation_; }
+	const Vector3& GetPosition() { return wt_.translation_; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
 	/// <param name="position"></param>代入する座標位置
-	void SetPosition(const Vector3& position) { wt.translation_ = position; }
+	void SetPosition(const Vector3& position) { wt_.translation_ = position; }
 
 	/// <summary>
 	/// getter_回転
 	/// </summary>
 	/// <returns></returns>現在の回転角度
-	const Vector3& GetRotation() { return wt.rotation_; }
+	const Vector3& GetRotation() { return wt_.rotation_; }
 
 	/// <summary>
 	/// setter_回転
 	/// </summary>
 	/// <param name="rotation"></param>代入する各回転角度
-	void SetRotation(const Vector3& rotation) { wt.rotation_ = rotation; }
+	void SetRotation(const Vector3& rotation) { wt_.rotation_ = rotation; }
 
 	/// <summary>
 	/// getter_当たり判定AABB
@@ -63,7 +63,7 @@ public:
 	/// </summary>
 	void SetObjectName(const std::string& name);
 
-	const std::string& GetObjectName() { return objectName; }
+	const std::string& GetObjectName() { return objectName_; }
 
 	///ワープゲートで使う
 
@@ -82,8 +82,8 @@ public:
 protected:
 
 	std::unique_ptr<Object3d> object_ = nullptr;
-	WorldTransform wt;
+	WorldTransform wt_;
 	AABB aabb_;
 
-	std::string objectName;
+	std::string objectName_;
 };

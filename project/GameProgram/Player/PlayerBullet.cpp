@@ -6,40 +6,40 @@ PlayerBullet::~PlayerBullet() {}
 
 
 void PlayerBullet::Initialize() {
-	object = std::make_unique<Object3d>();
-	object->Initialize();
-	object->SetModelFile("PlayerBullet.obj");
+	object_ = std::make_unique<Object3d>();
+	object_->Initialize();
+	object_->SetModelFile("PlayerBullet.obj");
 
-	wt.Initialize();
+	wt_.Initialize();
 
-	bulletAABB.min = { -1,-1,-1 };
-	bulletAABB.max = { 1,1,1 };
+	bulletAABB_.min = { -1,-1,-1 };
+	bulletAABB_.max = { 1,1,1 };
 }
 
 void PlayerBullet::Update() {
 
-	deathTimer += kDeltaTime;
+	deathTimer_ += kDeltaTime_;
 	
 	//弾丸速度
 	//徐々に減速する
-	wt.translation_ += EaseOut(velocity_,deathTimer,kEndTime);
+	wt_.translation_ += EaseOut(velocity_,deathTimer_,kEndTime_);
 
 	//時間がたったら消える
-	if (deathTimer >= kEndTime) {
-		isDead = true;
+	if (deathTimer_ >= kEndTime_) {
+		isDead_ = true;
 	}
 
-	object->Update(wt);
-	wt.UpdateMatrix();
+	object_->Update(wt_);
+	wt_.UpdateMatrix();
 }
 
 void PlayerBullet::Draw() {
-	object->Draw();
+	object_->Draw();
 }
 
 AABB PlayerBullet::GetAABB() {
 	AABB aabb;
-	aabb.min = wt.translation_ + bulletAABB.min;
-	aabb.max = wt.translation_ + bulletAABB.max;
+	aabb.min = wt_.translation_ + bulletAABB_.min;
+	aabb.max = wt_.translation_ + bulletAABB_.max;
 	return aabb;
 }
