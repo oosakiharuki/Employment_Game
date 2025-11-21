@@ -440,9 +440,6 @@
     <ClInclude Include="Engine\3d\_Particle\ParticleManager.h">
       <Filter>ヘッダー ファイル\Engine\3d\_Particle</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\_Particle\ParticleNumber.h">
-      <Filter>ヘッダー ファイル\Engine\3d\_Particle</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\3d\Primitive\BoxModel.h">
       <Filter>ヘッダー ファイル\Engine\3d\Primitive</Filter>
     </ClInclude>

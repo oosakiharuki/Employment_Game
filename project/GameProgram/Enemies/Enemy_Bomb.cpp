@@ -122,7 +122,7 @@ void Enemy_Bomb::Exprosion() {
 
 	//パーティクルの設定
 	particleDamage_->SetTranslate(wt_.translation_);
-	particleDamage_->ChangeMode(BornParticle::MomentMode);
+	particleDamage_->SetParticleBorn(ParticleBorn::MomentMode);
 
 	//爆発したら死んでしまう
 	isDead_ = true;

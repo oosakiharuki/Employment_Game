@@ -7,22 +7,49 @@
 
 #include "DirectXCommon.h"
 #include "SrvManager.h"
-
+/// <summary>
+/// テクスチャマネージャ
+/// </summary>
 class TextureManager {
 public:
+	/// <summary>
+	/// インスタンス生成
+	/// </summary>
+	/// <returns></returns>
 	static TextureManager* GetInstance();
-	void Initialize(DirectXCommon* dxCommon,SrvManager* srvManager);
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	void Initialize(DirectXCommon* dxCommon, SrvManager* srvManager);
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize();
-
+	/// <summary>
+	/// テクスチャを読み込む
+	/// </summary>
+	/// <param name="filePath"></param>
 	void LoadTexture(const std::string& filePath);
-
+	/// <summary>
+	/// getter_srvIndex
+	/// </summary>
+	/// <param name="filePath"></param>
+	/// <returns></returns>
 	uint32_t GetSrvIndex(const std::string filePath);
-
+	/// <summary>
+	/// getter_srvHandle
+	/// </summary>
+	/// <param name="filePath"></param>
+	/// <returns></returns>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(const std::string filePath);
-
+	/// <summary>
+	/// getter_メタデータ
+	/// </summary>
+	/// <param name="filePath"></param>
+	/// <returns></returns>
 	const DirectX::TexMetadata& GetMetaData(const std::string filePath);
 private:
-	static TextureManager* sInstance;
+	static TextureManager* sInstance_;
 
 	TextureManager() = default;
 	~TextureManager() = default;
@@ -37,13 +64,13 @@ private:
 		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;
 	};
 
-	std::unordered_map<std::string, TextureData> textureDatas;
+	std::unordered_map<std::string, TextureData> textureDatas_;
 
 
-	static uint32_t sSRVIndexTop;
+	static uint32_t sSRVIndexTop_;
 
 	DirectXCommon* dxCommon_ = nullptr;
-	SrvManager* srvManager = nullptr;
+	SrvManager* srvManager_ = nullptr;
 
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> intermediateResources;
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> intermediateResources_;
 };

@@ -169,12 +169,12 @@ void Player::Update() {
 		// 通常のパーティクル
 		particleWalk_->SetParticleCount(5);
 		particleWalk_->SetFrequency(0.15f);
-		particleWalk_->ChangeMode(BornParticle::TimerMode);
+		particleWalk_->SetParticleBorn(ParticleBorn::TimerMode);
 		particleWalk_->SetTranslate(wt_.translation_ + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.matWorld_));
 		particleWalk_->SetScale({ 0.5f,0.5f,0.5f });
 	}
 	else {
-		particleWalk_->ChangeMode(BornParticle::Stop);
+		particleWalk_->SetParticleBorn(ParticleBorn::Stop);
 	}
 
 	//パーティクル
@@ -381,7 +381,7 @@ void Player::PlayUpdate() {
 			Vector3 translate = wt_.translation_ + TransformNormal(-playerFront_, wtGun_.matWorld_);
 			particleBrink_->SetTranslate(translate);
 			particleBrink_->SetRotate({ wtGun_.rotation_.x + 90.0f,wtGun_.rotation_.y,wtGun_.rotation_.z });
-			particleBrink_->ChangeMode(BornParticle::MomentMode);
+			particleBrink_->SetParticleBorn(ParticleBorn::MomentMode);
 		}
 	}
 	//地面についている場合、下向きのブリンクは発動しない
@@ -494,7 +494,7 @@ void Player::ShootBullet() {
 	//攻撃パーティクル発生
 	particleFire_->SetTranslate(translate);
 	particleFire_->SetRotate({ wtGun_.rotation_.x + 90.0f,wtGun_.rotation_.y,wtGun_.rotation_.z });
-	particleFire_->ChangeMode(BornParticle::MomentMode);
+	particleFire_->SetParticleBorn(ParticleBorn::MomentMode);
 
 	///ノックバック
 	Vector3 playerknockback = { 0.0f,0.0f,0.25f };
@@ -512,7 +512,7 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		hp_--;
 		//ダメージのパーティクル発生
 		particleDamage_->SetTranslate(wt_.translation_ + Normalize(hitPoint));
-		particleDamage_->ChangeMode(BornParticle::MomentMode);
+		particleDamage_->SetParticleBorn(ParticleBorn::MomentMode);
 		//ダメージのSE再生
 		Audio::GetInstance()->SoundPlayWave(hitSound_, kVolume_);
 		infinityTimer_ = 0.0f;//無敵時間発動
@@ -573,7 +573,7 @@ void Player::DeadPlayer() {
 		
 		//倒されたパーティクル配置+発動
 		particleDead_->SetTranslate(wt_.translation_);
-		particleDead_->ChangeMode(BornParticle::TimerMode);
+		particleDead_->SetParticleBorn(ParticleBorn::TimerMode);
 
 		wt_.rotation_.y = 180.0f;//カメラのほうに向く
 		wt_.rotation_.z += 10.0f;//回転する
@@ -586,7 +586,7 @@ void Player::DeadPlayer() {
 		if (deadTimer_ >= kDeadTimeMax_) {
 			isRespawn_ = true;
 			//パーティクル発動停止
-			particleDead_->ChangeMode(BornParticle::Stop);
+			particleDead_->SetParticleBorn(ParticleBorn::Stop);
 		}
 	}
 	else {
@@ -618,7 +618,7 @@ void Player::PariSuccess() {
 	particlePari_->SetRotate({ wtGun_.rotation_.x + 90.0f,wtGun_.rotation_.y,wtGun_.rotation_.z });
 	particlePari_->SetScale({2.0f,0.2f,2.0f});
 
-	particlePari_->ChangeMode(BornParticle::MomentMode);
+	particlePari_->SetParticleBorn(ParticleBorn::MomentMode);
 }
 
 void Player::SpriteUpdate() {

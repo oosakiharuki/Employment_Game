@@ -10,7 +10,9 @@
 #include "WorldTransform.h"
 
 class Object3dCommon;
-
+/// <summary>
+/// .obj版のオブジェクト
+/// </summary>
 class Object3d
 {
 public:
@@ -20,58 +22,39 @@ public:
 	void Draw();
 	void Draw(const std::string& textureData);
 
-
-	//static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
-	//static ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
-
-	void SetModel(Model_obj* model) { this->model = model; }
+	void SetModel(Model_obj* model) { this->model_ = model; }
 	void SetModelFile(const std::string& filePath);
 	void LightSwitch(bool isLight);
 	void SetColor(Vector4 color);
 
-	void SetScale(const Vector3& scale) { transform.scale = scale; }
-	void SetRotate(const Vector3& rotate) { transform.rotate = rotate; }
-	void SetTranslate(const Vector3& translate) { transform.translate = translate; }
-	void SetCamera(Camera* camera) { this->camera = camera; }
-
-	const Vector3& GetScale() const { return transform.scale; }
-	const Vector3& GetRotate() const { return transform.rotate; }
-	const Vector3& GetTranslate()const { return transform.translate; }
-
 private:
-	Object3dCommon* object3dCommon = nullptr;
+	Object3dCommon* object3dCommon_ = nullptr;
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource;
-	TransformationMatrix* wvpData = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
+	TransformationMatrix* wvpData_ = nullptr;
 
 	//ライト用のリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightSphereResource;
+	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightSphereResource_;
 	//マテリアルにデータを書き込む
-	DirectionalLight* directionalLightSphereData = nullptr;
+	DirectionalLight* directionalLightSphereData_ = nullptr;
 	
-	Microsoft::WRL::ComPtr<ID3D12Resource> cameraResource;
-	CameraForGPU* cameraData = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> cameraResource_;
+	CameraForGPU* cameraData_ = nullptr;
 
 	//ポイントライト用のリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> pointLightResource;
+	Microsoft::WRL::ComPtr<ID3D12Resource> pointLightResource_;
 	//マテリアルにデータを書き込む
-	PointLight* pointLightData = nullptr;
+	PointLight* pointLightData_ = nullptr;
 
 	//スポットライト用のリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> spotLightResource;
+	Microsoft::WRL::ComPtr<ID3D12Resource> spotLightResource_;
 	//マテリアルにデータを書き込む
-	SpotLight* spotLightData = nullptr;
+	SpotLight* spotLightData_ = nullptr;
+	Model_obj* model_ = nullptr;
+	Camera* camera_ = nullptr;
 
-
-	Transform transform;
-
-	Transform transformL;
-
-	Model_obj* model = nullptr;
-	Camera* camera = nullptr;
-
-	Material* material;
+	Material* material_;
 
 	//ワールド行列
-	Matrix4x4 worldMatrix{};
+	Matrix4x4 worldMatrix_{};
 };

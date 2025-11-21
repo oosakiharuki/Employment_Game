@@ -3,22 +3,22 @@
 
 using namespace MyMath;
 
-ParticleEmitter* ParticleEmitter::sInstance = nullptr;
+ParticleEmitter* ParticleEmitter::sInstance_ = nullptr;
 
-uint32_t ParticleEmitter::sSRVIndexTop = 1;
+uint32_t ParticleEmitter::sSRVIndexTop_ = 1;
 
 ParticleEmitter* ParticleEmitter::GetInstance() {
-	if (sInstance == nullptr) {
-		sInstance = new ParticleEmitter();
+	if (sInstance_ == nullptr) {
+		sInstance_ = new ParticleEmitter();
 	}
-	return sInstance;
+	return sInstance_;
 }
 
 Particles ParticleEmitter::MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter) {
 	//random
-	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);//position用
-	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);//color用
-	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
+	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);//座標位置用
+	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);//色用
+	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);//生存時間用
 
 	Particles particle;
 	particle.transform.scale = emitter.transform.scale;
@@ -44,6 +44,7 @@ Particles ParticleEmitter::MakeNewParticleFixed(const Emitter& emitter) {
 	particle.transform.rotate = emitter.transform.rotate;
 	particle.transform.translate = emitter.transform.translate;
 
+	//固定のため動かない
 	particle.velocity = { 0,0,0 };
 	particle.color = { 1,1,1,1 };
 
@@ -56,16 +57,17 @@ Particles ParticleEmitter::MakeNewParticleFixed(const Emitter& emitter) {
 
 Particles ParticleEmitter::MakeNewParticleSmaller(std::mt19937& randomEngine, const Emitter& emitter) {
 	//random
-	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);//position用
-	std::uniform_real_distribution<float> scaleDist(0.1f, 1.0f);//大きさ用
-	std::uniform_real_distribution<float> rotateDist(0.0f, 360.0f);//回転用
-	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
+	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);//座標位置用
+	std::uniform_real_distribution<float> distScale(0.1f, 1.0f);//大きさ用
+	std::uniform_real_distribution<float> distRotate(0.0f, 360.0f);//回転用
+	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);//生存時間用
 
-	float scaleValue = scaleDist(randomEngine);
+	//xyzが同じ大きさにするように
+	float scaleValue = distScale(randomEngine);
 
 	Particles particle;
 	particle.transform.scale = emitter.transform.scale * Vector3(scaleValue, scaleValue, scaleValue);
-	particle.transform.rotate = emitter.transform.rotate + Vector3(rotateDist(randomEngine), rotateDist(randomEngine),rotateDist(randomEngine));
+	particle.transform.rotate = emitter.transform.rotate + Vector3(distRotate(randomEngine), distRotate(randomEngine),distRotate(randomEngine));
 	particle.transform.translate = emitter.transform.translate;
 
 	particle.velocity = { distribution(randomEngine),distribution(randomEngine),distribution(randomEngine) };
@@ -79,21 +81,23 @@ Particles ParticleEmitter::MakeNewParticleSmaller(std::mt19937& randomEngine, co
 
 Particles ParticleEmitter::MakeNewParticleSpike(std::mt19937& randomEngine, const Emitter& emitter) {
 	//random
-	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);//position用
-	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);//color用
-	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
+	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);//座標位置用
+	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);//色用
+	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);//生存時間用
 
 	//0度 ～ 360度
-	std::uniform_real_distribution<float> distRotate(0.0f,360.0f);
-	std::uniform_real_distribution<float> distScale(4.5f, 6.5f);
-
-	Particles particle;
+	std::uniform_real_distribution<float> distRotate(0.0f,360.0f);//回転用
+	std::uniform_real_distribution<float> distScale(4.5f, 6.5f);//大きさ用
+	
+	//細くなるように(y軸のみランダムに)
 	Vector3 spikeScale = { 0.05f,distScale(randomEngine),1.0f };
+	Particles particle;
 	particle.transform.scale = emitter.transform.scale * spikeScale;
+	//回転させ全方向に
 	particle.transform.rotate = { 0.0f,0.0f,distRotate(randomEngine) };
-
 	particle.transform.translate = emitter.transform.translate;
 
+	//ちりばめるとになるとスパイクに見えないため動かさない
 	particle.velocity = { 0.0f,0.0f,0.0f };
 	particle.color = { 1.0f,1.0f,1.0f,1.0f };
 
@@ -105,9 +109,9 @@ Particles ParticleEmitter::MakeNewParticleSpike(std::mt19937& randomEngine, cons
 
 Particles ParticleEmitter::MakeNewParticleExprosion(std::mt19937& randomEngine, const Emitter& emitter) {
 	//random
-	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);//position用
-	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);//color用
-	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);
+	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);//座標位置用
+	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);//色用
+	std::uniform_real_distribution<float> distTime(1.0f, 3.0f);//生存時間用
 
 
 	std::uniform_real_distribution<float> distRotate(0.0f,360.0f);
@@ -116,11 +120,10 @@ Particles ParticleEmitter::MakeNewParticleExprosion(std::mt19937& randomEngine, 
 	Particles particle;
 	Vector3 scale = { 0.5f,distScale(randomEngine),0.5f };
 	particle.transform.scale = emitter.transform.scale * scale;
-
+	//回転させ全方向に
 	particle.transform.rotate = { distRotate(randomEngine),distRotate(randomEngine),distRotate(randomEngine) };
-
 	particle.transform.translate = emitter.transform.translate;
-
+	//ちりばめるとになると爆発に見えないため動かさない
 	particle.velocity = { 0.0f,0.0f,0.0f };
 	particle.color = { 1.0f,1.0f,1.0f,1.0f };
 
@@ -133,32 +136,29 @@ Particles ParticleEmitter::MakeNewParticleExprosion(std::mt19937& randomEngine, 
 Particles ParticleEmitter::MakeNewParticleFanfare(std::mt19937& randomEngine, const Emitter& emitter) {
 	
 	
-	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
+	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);//色用
 	
-	std::uniform_real_distribution<float> distTranslate(0.0f,5.0f);
-	std::uniform_real_distribution<float> distRotate(0.0f, 360.0f);
+	std::uniform_real_distribution<float> distRotate(0.0f, 360.0f);//回転用
 	std::uniform_real_distribution<float> distScale(0.1f, 0.3f);//大きさ用
 
-	std::uniform_real_distribution<float> distWidth(-1.5f, 1.5f);//幅
-	std::uniform_real_distribution<float> distLifeTime(1.0f, 2.0f);//消える時間
+	std::uniform_real_distribution<float> distWidth(-1.5f, 1.5f);//幅用
+	std::uniform_real_distribution<float> distLifeTime(1.0f, 2.0f);//生存時間用
 	
 	Particles gParticle;
 	gParticle.transform.scale = emitter.transform.scale * distScale(randomEngine);
 	
 	gParticle.transform.translate = emitter.transform.translate;
-	//gParticle.transform.translate.y += distTranslate(randomEngine);
-
 	gParticle.transform.rotate = emitter.transform.rotate;
 	gParticle.transform.rotate += distRotate(randomEngine);
 	
 	gParticle.color = { distColor(randomEngine), distColor(randomEngine) ,distColor(randomEngine) ,distColor(randomEngine) };
 	
-	gParticle.velocity = { 0,5.0f,0 };
-	gParticle.velocity.x += distWidth(randomEngine);
-	gParticle.velocity.z += distWidth(randomEngine);
-	gParticle.velocity.y += distWidth(randomEngine);
-
-
+	const float kFly = 5.0f;
+	//真上に飛ばす
+	gParticle.velocity = { 0,kFly,0 };
+	//散らばるように
+	gParticle.velocity += Vector3(distWidth(randomEngine), distWidth(randomEngine), distWidth(randomEngine));
+	//消える時間を少し伸ばす(1～2倍)
 	gParticle.lifeTime = emitter.frequency * distLifeTime(randomEngine);
 	gParticle.currentTime = 0.0f;
 

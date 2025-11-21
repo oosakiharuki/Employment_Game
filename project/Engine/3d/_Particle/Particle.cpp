@@ -10,139 +10,134 @@
 #include "ModelManager.h"
 
 #include <string>
-#include "ParticleNumber.h"
 
 using namespace MyMath;
 using namespace Primitive;
 
 Particle::~Particle() {
 	// リソースのアンマップ
-	if (vertexResource && vertexData) {
-		vertexResource->Unmap(0, nullptr);
-		vertexData = nullptr;
+	if (vertexResource_ && vertexData_) {
+		vertexResource_->Unmap(0, nullptr);
+		vertexData_ = nullptr;
 	}
-	if (materialResource && materialData) {
-		materialResource->Unmap(0, nullptr);
-		materialData = nullptr;
+	if (materialResource_ && materialData_) {
+		materialResource_->Unmap(0, nullptr);
+		materialData_ = nullptr;
 	}
-	if (wvpResource && wvpData) {
-		wvpResource->Unmap(0, nullptr);
-		wvpData = nullptr;
+	if (wvpResource_ && wvpData_) {
+		wvpResource_->Unmap(0, nullptr);
+		wvpData_ = nullptr;
 	}
-	if (directionalLightSphereResource && directionalLightSphereData) {
-		directionalLightSphereResource->Unmap(0, nullptr);
-		directionalLightSphereData = nullptr;
+	if (directionalLightSphereResource_ && directionalLightSphereData_) {
+		directionalLightSphereResource_->Unmap(0, nullptr);
+		directionalLightSphereData_ = nullptr;
 	}
 }
 
 void Particle::Initialize(const std::string& particleName, std::string textureFile , PrimitiveType type) {
-	this->particleCommon = ParticleCommon::GetInstance();
-	this->camera = particleCommon->GetDefaultCamera();
+	this->particleCommon_ = ParticleCommon::GetInstance();
+	this->camera_ = particleCommon_->GetDefaultCamera();
 
 	//particleの設定
 	ParticleManager::GetInstance()->CreateParticleGroup(particleName, textureFile, type);
 
-	this->fileName = particleName;
-	this->textureFile = textureFile;
+	//
+	this->fileName_ = particleName;
+	this->textureFile_ = textureFile;
 
-	modelData = ParticleManager::GetInstance()->GetModelData(fileName);
+	modelData_ = ParticleManager::GetInstance()->GetModelData(fileName_);
 	
-	vertexResource = particleCommon->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
+	vertexResource_ = particleCommon_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 
-	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
-	vertexBufferView.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
-	vertexBufferView.StrideInBytes = sizeof(VertexData);
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
 
-	wvpResource = ParticleManager::GetInstance()->GetResource(fileName);
-	wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
+	wvpResource_ = ParticleManager::GetInstance()->GetResource(fileName_);
+	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 	
-	for (uint32_t index = 0; index < kNumMaxInstance; ++index) {
-		wvpData[index].World = MakeIdentity4x4();
-		wvpData[index].WVP = MakeIdentity4x4();
-		wvpData[index].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	for (uint32_t index = 0; index < kNumMaxInstance_; ++index) {
+		wvpData_[index].World = MakeIdentity4x4();
+		wvpData_[index].WVP = MakeIdentity4x4();
+		wvpData_[index].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 
-	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
-	std::memcpy(vertexData, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	std::memcpy(vertexData_, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 
 
 	//Particle用マテリアル
 	//マテリアル用のリソース
-	materialResource = particleCommon->GetDxCommon()->CreateBufferResource(sizeof(Material));
+	materialResource_ = particleCommon_->GetDxCommon()->CreateBufferResource(sizeof(Material));
 	//書き込むためのアドレス
-	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//色の設定
-	materialData->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	materialData->enableLighting = true;
-	materialData->uvTransform = MakeIdentity4x4();
+	materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	materialData_->enableLighting = true;
+	materialData_->uvTransform = MakeIdentity4x4();
 
 	//テクスチャ読み込み
-	TextureManager::GetInstance()->LoadTexture(modelData.material.textureFilePath);
-	modelData.material.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData.material.textureFilePath);
+	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
+	modelData_.material.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData_.material.textureFilePath);
 
 
 	//ライト用のリソース
-	directionalLightSphereResource = particleCommon->GetDxCommon()->CreateBufferResource(sizeof(DirectionalLight));
+	directionalLightSphereResource_ = particleCommon_->GetDxCommon()->CreateBufferResource(sizeof(DirectionalLight));
 	//書き込むためのアドレス
-	directionalLightSphereResource->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightSphereData));
+	directionalLightSphereResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightSphereData_));
 	//色の設定
-	directionalLightSphereData->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightSphereData->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightSphereData->intensity = 1.0f;
+	directionalLightSphereData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	directionalLightSphereData_->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightSphereData_->intensity = 1.0f;
 
 	//エミッター
-	emitter.transform.translate = { 0.0f,0.0f,-3.0f };
-	emitter.transform.rotate = { 0.0f,0.0f,0.0f };
-	emitter.transform.scale = { 1.0f,1.0f,1.0f };
-	emitter.count = 3;
-	emitter.frequency = 0.5f;
-	emitter.frequencyTime = 0.0f;
-
-	//場
-	accelerationField.acceleration = { 0.0f,15.0f,0.0f };
-	accelerationField.area.min = { -1.0f,-1.0f,-1.0f };
-	accelerationField.area.max = { 1.0f,1.0f,1.0f };
+	emitter_.transform.translate = { 0.0f,0.0f,-3.0f };
+	emitter_.transform.rotate = { 0.0f,0.0f,0.0f };
+	emitter_.transform.scale = { 1.0f,1.0f,1.0f };
+	emitter_.count = 3;
+	emitter_.frequency = 0.5f;
+	emitter_.frequencyTime = 0.0f;
 
 	//パーティクル発生
-	bornP = BornParticle::Stop;
+	particleBorn_ = ParticleBorn::Stop;
 
-	ParticleManager::GetInstance()->SetCamera(camera);
+	ParticleManager::GetInstance()->SetCamera(camera_);
 }
 
 void Particle::Update() {
 
 	const float kDeltaTime = 1.0f / 60.0f;
 
-	switch (bornP)
+	switch (particleBorn_)
 	{
-	case BornParticle::TimerMode:
+	case ParticleBorn::TimerMode:
 
-		emitter.frequencyTime += kDeltaTime;
+		emitter_.frequencyTime += kDeltaTime;
 
-		if (emitter.frequency <= emitter.frequencyTime) {
+		if (emitter_.frequency <= emitter_.frequencyTime) {
 			//発生処理
-			ParticleManager::GetInstance()->Emit(fileName, emitter, particleMosion);
-			emitter.frequencyTime -= emitter.frequency;
+			ParticleManager::GetInstance()->Emit(fileName_, emitter_, particleMosion_);
+			emitter_.frequencyTime -= emitter_.frequency;
 		}
 		break;
-	case BornParticle::MomentMode:
+	case ParticleBorn::MomentMode:
 		//発生処理
-		ParticleManager::GetInstance()->Emit(fileName, emitter, particleMosion);
-		bornP = BornParticle::Stop;
+		ParticleManager::GetInstance()->Emit(fileName_, emitter_, particleMosion_);
+		particleBorn_ = ParticleBorn::Stop;
 		break;
-	case BornParticle::Stop:
+	case ParticleBorn::Stop:
 		break;
 	}
 
-	ParticleManager::GetInstance()->Update(fileName, wvpData,particleMosion);
+	ParticleManager::GetInstance()->Update(fileName_, wvpData_,particleMosion_);
 
-	numInstance = ParticleManager::GetInstance()->GetNum(fileName);
+	numInstance_ = ParticleManager::GetInstance()->GetNum(fileName_);
 
 	// directionalLightSphereDataのnullチェック
-	if (directionalLightSphereData) {
-		directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
+	if (directionalLightSphereData_) {
+		directionalLightSphereData_->direction = Normalize(directionalLightSphereData_->direction);
 	}
 
 }
@@ -151,43 +146,32 @@ void Particle::Draw() {
 	//射影行列
 	Matrix4x4 WorldViewProjectionMatrix;
 
-	for (uint32_t i = 0; i < numInstance; i++) {
-		if (camera) {
-			Matrix4x4 projectionMatrix = camera->GetViewProjectionMatrix();
-			WorldViewProjectionMatrix = wvpData[i].World * projectionMatrix;
+	for (uint32_t i = 0; i < numInstance_; i++) {
+		if (camera_) {
+			Matrix4x4 projectionMatrix = camera_->GetViewProjectionMatrix();
+			WorldViewProjectionMatrix = wvpData_[i].World * projectionMatrix;
 		}
 		else {
-			WorldViewProjectionMatrix = wvpData[i].World;
+			WorldViewProjectionMatrix = wvpData_[i].World;
 		}
 
-		wvpData[i].WVP = WorldViewProjectionMatrix;
+		wvpData_[i].WVP = WorldViewProjectionMatrix;
 	}
 
 	//パーティクルが出ていないときはパス
-	if (numInstance > 0) {
-		particleCommon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
-		particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
-		particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
-		particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureFile));
-		particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource->GetGPUVirtualAddress());
+	if (numInstance_ > 0) {
+		particleCommon_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+		particleCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
+		particleCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+		particleCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureFile_));
+		particleCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource_->GetGPUVirtualAddress());
 
 		//4のやつ particle専用
-		particleCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(4, ParticleManager::GetInstance()->GetSrvHandleGPU(fileName));
+		particleCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(4, ParticleManager::GetInstance()->GetSrvHandleGPU(fileName_));
 
-		particleCommon->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData.vertices.size()), numInstance, 0, 0);
+		particleCommon_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), numInstance_, 0, 0);
 	}
-	numInstance = 0;
+	numInstance_ = 0;
 
-	ParticleManager::GetInstance()->ResetNum(fileName);
-}
-
-bool Particle::IsCollision(const AABB& aabb, const Vector3& point) {
-	
-	if ((aabb.min.x < point.x && aabb.max.x > point.x) &&
-		(aabb.min.y < point.y && aabb.max.y > point.y) &&
-		(aabb.min.z < point.z && aabb.max.z > point.z)) {
-		return true;
-	}
-
-	return false;
+	ParticleManager::GetInstance()->ResetNum(fileName_);
 }

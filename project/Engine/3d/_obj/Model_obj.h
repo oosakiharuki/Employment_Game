@@ -1,34 +1,63 @@
 #pragma once
 #include "MyMath.h"
 #include "ModelCommon.h"
-
+/// <summary>
+/// .obj版のモデル
+/// </summary>
 class Model_obj{
 public:
-
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="modelCommon"></param>
+	/// <param name="directorypath"></param>
+	/// <param name="fileName"></param>
+	/// <param name="objName"></param>
 	void Initialize(ModelCommon* modelCommon,const std::string& directorypath,const std::string& fileName,const std::string& objName);
-
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw();
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	/// <param name="textureFilePath"></param>テクスチャ変更
 	void Draw(const std::string& textureFilePath);
 
+	void LightOn(bool Light) { materialData_->enableLighting = Light; }
+	void SetColor(Vector4 color) { materialData_->color = color; }
+
+private:	
+	
+	/// <summary>
+	/// テクスチャとマテリアルの作成
+	/// </summary>
+	/// <param name="directoryPath"></param>
+	/// <param name="filename"></param>
+	/// <param name="usemtl"></param>
+	/// <returns></returns>
 	static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename, const std::string& usemtl);
+	/// <summary>
+	/// .objファイルを読み取る
+	/// </summary>
+	/// <param name="directoryPath"></param>
+	/// <param name="filename"></param>
+	/// <param name="objName"></param>
+	/// <returns></returns>
 	static ModelDataMulti LoadObjFile(const std::string& directoryPath, const std::string& filename, const std::string& objName);
 	
-	void LightOn(bool Light) { materialData->enableLighting = Light; }
-	void SetColor(Vector4 color) { materialData->color = color; }
+	ModelCommon* modelCommon_ = nullptr;
 
-private:
-	ModelCommon* modelCommon = nullptr;
+	ModelDataMulti modelData_;
 
-	ModelDataMulti modelData;
-
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexResource;
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 
 
-	VertexData* vertexData = nullptr;
-	Material* materialData = nullptr;
+	VertexData* vertexData_ = nullptr;
+	Material* materialData_ = nullptr;
 
-	std::vector<D3D12_VERTEX_BUFFER_VIEW> vertexBufferView;
+	std::vector<D3D12_VERTEX_BUFFER_VIEW> vertexBufferView_;
 
-	ModelDataMulti InitialData;
+	ModelDataMulti InitialData_;
 };

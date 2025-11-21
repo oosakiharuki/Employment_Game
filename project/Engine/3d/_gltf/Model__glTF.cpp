@@ -10,18 +10,18 @@
 using namespace MyMath;
 
 void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directorypath, const std::string& fileName, bool isAnimation, bool isSkinning) {
-	this->modelCommon = modelCommon;
+	this->modelCommon_ = modelCommon;
 
 	//.gltf
-	modelData = LoadModelFile(directorypath, fileName);
+	modelData_ = LoadModelFile(directorypath, fileName);
 	if (isAnimation) {
-		animation = LoadAnimationFile(directorypath, fileName,uint32_t(modelData.indices.size()));
+		animation_ = LoadAnimationFile(directorypath, fileName,uint32_t(modelData_.indices.size()));
 	}
 
-	InitialData = modelData;
+	InitialData_ = modelData_;
 
 	//vertex
-	for (auto& vertices : modelData.vertices) {
+	for (auto& vertices : modelData_.vertices) {
 		D3D12_VERTEX_BUFFER_VIEW vertexB;
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexR;
 
@@ -31,18 +31,16 @@ void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directo
 		vertexB.SizeInBytes = UINT(sizeof(VertexData) * vertices.size());
 		vertexB.StrideInBytes = sizeof(VertexData);
 
-		vertexR->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
-		std::memcpy(vertexData, vertices.data(), sizeof(VertexData) * vertices.size());
+		vertexR->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+		std::memcpy(vertexData_, vertices.data(), sizeof(VertexData) * vertices.size());
 
-		vertexResource.push_back(vertexR);
-		vertexBufferView.push_back(vertexB);
+		vertexResource_.push_back(vertexR);
+		vertexBufferView_.push_back(vertexB);
 
 	}
 
 	//index
-	uint32_t count = 0;
-
-	for (auto& indices : modelData.indices) {
+	for (auto& indices : modelData_.indices) {
 		D3D12_INDEX_BUFFER_VIEW indexB;
 		Microsoft::WRL::ComPtr<ID3D12Resource> indexR;
 
@@ -52,85 +50,81 @@ void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directo
 		indexB.SizeInBytes = UINT(sizeof(uint32_t) * indices.size());
 		indexB.Format= DXGI_FORMAT_R32_UINT;
 
+		indexR->Map(0, nullptr, reinterpret_cast<void**>(&mappedIndex_));
+		std::memcpy(mappedIndex_, indices.data(), sizeof(uint32_t) * indices.size());
 
-		indexR->Map(0, nullptr, reinterpret_cast<void**>(&mappedIndex));
-		std::memcpy(mappedIndex, indices.data(), sizeof(uint32_t) * indices.size());
-
-		indexBufferView.push_back(indexB);
-		indexResource.push_back(indexR);
-
-
+		indexBufferView_.push_back(indexB);
+		indexResource_.push_back(indexR);
 	}
 
 	//Model用マテリアル
 	//マテリアル用のリソース
-	for (auto& material : modelData.material) {
+	for (auto& material : modelData_.material) {
 		Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
 		materialResource = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(Material));
 		//書き込むためのアドレス
-		materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
+		materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定
-		
 		if (material.materialColor.s) {
 			//baseColor設定
-			materialData->color = material.materialColor;
+			materialData_->color = material.materialColor;
 		}
 		else {
-			materialData->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+			materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 		}
-		materialData->enableLighting = false;
-		materialData->uvTransform = MakeIdentity4x4();
-		materialData->shininess = 70;
-		materialData->environmentCoefficient = 0.0f;
+		materialData_->enableLighting = false;
+		materialData_->uvTransform = MakeIdentity4x4();
+		materialData_->shininess = 70;
+		materialData_->environmentCoefficient = 0.0f;
 
-		materialResources.push_back(materialResource);
+		materialResources_.push_back(materialResource);
 	}
 
 	//テクスチャ読み込み
-	for (auto& material : modelData.material) {
+	for (auto& material : modelData_.material) {
 		TextureManager::GetInstance()->LoadTexture(material.textureFilePath);
 		material.textureIndex = TextureManager::GetInstance()->GetSrvIndex(material.textureFilePath);
 	}
 
 	if (isSkinning) {
-		for (auto& child : modelData.rootNode.children) {
+		for (auto& child : modelData_.rootNode.children) {
 			Skeleton skeleton;
 			skeleton = CreateSkeltion(child);
-			skeletons.push_back(skeleton);
+			skeletons_.push_back(skeleton);
 		}
 
 
 		SkinCluster skinCluster;
-		skinCluster = CreateSkinCluster(skeletons[1], modelData);
-		skinClusters.push_back(skinCluster);
+		skinCluster = CreateSkinCluster(skeletons_[1], modelData_);
+		skinClusters_.push_back(skinCluster);
 	}
 
 	isAnimation_ = isAnimation;
 	isSkinning_ = isSkinning;
 
-	EnvironmentFile ="resource/rostock_laage_airport_4k.dds";
+	EnvironmentFile_ ="resource/rostock_laage_airport_4k.dds";
 
 }
 
 void Model_glTF::Draw() {
 	//objファイルに元々あったテクスチャ
-	modelData = InitialData;
-	vbvs[0] = vertexBufferView[i];
+	modelData_ = InitialData_;
+	vbvs_[0] = vertexBufferView_[multiMeshCount_];
 
 	if (isSkinning_) {
-		vbvs[1] = skinClusters[i].influenceBufferView;
-		modelCommon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 2, vbvs);
-		modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(8, skinClusters[i].paletteSrvHandle.second);//Skinning.VS t0
+		vbvs_[1] = skinClusters_[multiMeshCount_].influenceBufferView;
+		modelCommon_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 2, vbvs_);
+		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(8, skinClusters_[multiMeshCount_].paletteSrvHandle.second);//Skinning.VS t0
 	}
 	else {
-		modelCommon->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, vbvs);
+		modelCommon_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, vbvs_);
 	}
-	modelCommon->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView[i]);
-	modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResources[i]->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
-	modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData.material[i].textureFilePath));
-	modelCommon->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(7, TextureManager::GetInstance()->GetSrvHandleGPU(EnvironmentFile));
-	modelCommon->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData.indices[i].size()), 1, 0, 0, 0);
-	i++;
+	modelCommon_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_[multiMeshCount_]);
+	modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResources_[multiMeshCount_]->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
+	modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.material[multiMeshCount_].textureFilePath));
+	modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(7, TextureManager::GetInstance()->GetSrvHandleGPU(EnvironmentFile_));
+	modelCommon_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.indices[multiMeshCount_].size()), 1, 0, 0, 0);
+	multiMeshCount_++;
 }
 
 
@@ -319,7 +313,7 @@ SkinCluster Model_glTF::CreateSkinCluster(const Skeleton& skeleton,const ModelDa
 
 	///t0
 	// paletteResource確保
-	skinCluster.paletteResource = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(WellForGPU) * skeleton.joints.size());
+	skinCluster.paletteResource = modelCommon_->GetDxCommon()->CreateBufferResource(sizeof(WellForGPU) * skeleton.joints.size());
 	WellForGPU* mappedPalette = nullptr;
 	skinCluster.paletteResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedPalette));
 	skinCluster.mappedPalette = { mappedPalette,skeleton.joints.size() };//sponのサイズ設定
@@ -337,7 +331,7 @@ SkinCluster Model_glTF::CreateSkinCluster(const Skeleton& skeleton,const ModelDa
 	paletteSrvDesc.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 	paletteSrvDesc.Buffer.NumElements = UINT(skeleton.joints.size());
 	paletteSrvDesc.Buffer.StructureByteStride = sizeof(WellForGPU);
-	modelCommon->GetDxCommon()->GetDevice()->CreateShaderResourceView(skinCluster.paletteResource.Get(), &paletteSrvDesc, skinCluster.paletteSrvHandle.first);
+	modelCommon_->GetDxCommon()->GetDevice()->CreateShaderResourceView(skinCluster.paletteResource.Get(), &paletteSrvDesc, skinCluster.paletteSrvHandle.first);
 	///
 
 	///WEIGHT INDEXのやつ
@@ -348,7 +342,7 @@ SkinCluster Model_glTF::CreateSkinCluster(const Skeleton& skeleton,const ModelDa
 		all_vertex += uint32_t(v.size());
 	}
 
-	skinCluster.influenceResource  = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(VertexInfluence) * all_vertex);
+	skinCluster.influenceResource  = modelCommon_->GetDxCommon()->CreateBufferResource(sizeof(VertexInfluence) * all_vertex);
 	VertexInfluence* mappedInfluence = nullptr;
 	skinCluster.influenceResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedInfluence));
 	std::memset(mappedInfluence, 0, sizeof(VertexInfluence) * all_vertex);
@@ -391,5 +385,5 @@ SkinCluster Model_glTF::CreateSkinCluster(const Skeleton& skeleton,const ModelDa
 
 //環境マップのテクスチャをもらう
 void Model_glTF::SetEnvironment(const std::string mapFile) {
-	EnvironmentFile = mapFile;
+	EnvironmentFile_ = mapFile;
 }

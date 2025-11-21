@@ -1,24 +1,25 @@
 #include "ImGuiManager.h"
 
-ImGuiManager* ImGuiManager::instance = nullptr;
+ImGuiManager* ImGuiManager::sInstance_ = nullptr;
 
-uint32_t ImGuiManager::kSRVIndexTop = 1;
+uint32_t ImGuiManager::sSRVIndexTop_ = 1;
 
 ImGuiManager* ImGuiManager::GetInstance() {
-	if (instance == nullptr) {
-		instance = new ImGuiManager();
+	if (sInstance_ == nullptr) {
+		sInstance_ = new ImGuiManager();
 	}
-	return instance;
+	return sInstance_;
 }
 
 void ImGuiManager::Initialize([[maybe_unused]]WinApp* winApp, DirectXCommon* dxCommon, [[maybe_unused]]SrvManager* srvManager) {
 #ifdef  USE_IMGUI
 
-	dxCommon_ = dxCommon;
+	dxCommon_ = DirectXCommon::GetInstance();
+	srvManager_ = SrvManager::GetInstance();
 
-	uint32_t srvIndex = srvManager->Allocate();
-	srvHeap_ = srvManager->GetDescriptorHeap();
-
+	uint32_t srvIndex = srvManager_->Allocate();
+	srvHeap_ = srvManager_->GetDescriptorHeap();
+	
 	//ImGui初期化
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -29,8 +30,8 @@ void ImGuiManager::Initialize([[maybe_unused]]WinApp* winApp, DirectXCommon* dxC
 		static_cast<int>(dxCommon_->GetSwapChainResourceNum()),
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
 		srvHeap_.Get(),
-		srvManager->GetCPUDescriptorHandle(srvIndex),
-		srvManager->GetGPUDescriptorHandle(srvIndex));
+		srvManager_->GetCPUDescriptorHandle(srvIndex),
+		srvManager_->GetGPUDescriptorHandle(srvIndex));
 
 	///日本語作成用
 	ImGuiIO& io = ImGui::GetIO();
@@ -75,8 +76,8 @@ void ImGuiManager::Finalize() {
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 
-	delete instance;
-	instance = nullptr;
+	delete sInstance_;
+	sInstance_ = nullptr;
 
 #endif //  USE_IMGUI
 }
