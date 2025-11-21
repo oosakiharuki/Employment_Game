@@ -20,18 +20,18 @@ private:
 	void EffectUpdate() override;
 
 	//RootSignature
-	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-	D3D12_ROOT_PARAMETER rootParameters[2] = {};
-	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
+	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};
+	D3D12_ROOT_PARAMETER rootParameters_[2] = {};
+	D3D12_STATIC_SAMPLER_DESC staticSamplers_[1] = {};
 
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> GrayscaleResource;
+	Microsoft::WRL::ComPtr<ID3D12Resource> GrayscaleResource_;
 	
 	struct GrayFunction {
 		int32_t isSepia;
 		Vector3 color;
 	};
 
-	GrayFunction* grayFunction;
-	bool isSepiaMode = false;
+	GrayFunction* grayFunction_;
+	bool isSepiaMode_ = false;
 };

@@ -1,23 +1,23 @@
 #include "PostEffectManager.h"
 
 
-PostEffectManager* PostEffectManager::sInstance = nullptr;
+PostEffectManager* PostEffectManager::sInstance_ = nullptr;
 
-uint32_t PostEffectManager::sSRVIndexTop = 1;
+uint32_t PostEffectManager::sSRVIndexTop_ = 1;
 
 PostEffectManager* PostEffectManager::GetInstance() {
-	if (sInstance == nullptr) {
-		sInstance = new PostEffectManager;
+	if (sInstance_ == nullptr) {
+		sInstance_ = new PostEffectManager;
 	}
-	return sInstance;
+	return sInstance_;
 }
 
 void PostEffectManager::Finalize() {
 	effectArr_[currentNo_]->Finalize();
 	delete effectArr_[currentNo_];
 
-	delete sInstance;
-	sInstance = nullptr;
+	delete sInstance_;
+	sInstance_ = nullptr;
 }
 
 void PostEffectManager::Change(int prev, int current) {

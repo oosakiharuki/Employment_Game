@@ -11,132 +11,126 @@
 using namespace MyMath;
 
 void Object3d::Initialize() {
-	this->object3dCommon = Object3dCommon::GetInstance();	
-	this->camera = object3dCommon->GetDefaultCamera();
-	wvpResource = object3dCommon->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
-	wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
+	this->object3dCommon_ = Object3dCommon::GetInstance();
+	this->camera_ = object3dCommon_->GetDefaultCamera();
+	wvpResource_ = object3dCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
+	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 	
 	
-	wvpData->World = MakeIdentity4x4();
-	wvpData->WVP= MakeIdentity4x4();
+	wvpData_->World = MakeIdentity4x4();
+	wvpData_->WVP= MakeIdentity4x4();
 
 	//ライト用のリソース
-	directionalLightSphereResource = object3dCommon->GetDirectXCommon()->CreateBufferResource(sizeof(DirectionalLight));
+	directionalLightSphereResource_ = object3dCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(DirectionalLight));
 	//書き込むためのアドレス
-	directionalLightSphereResource->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightSphereData));
+	directionalLightSphereResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightSphereData_));
 	//色の設定
-	directionalLightSphereData->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightSphereData->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightSphereData->intensity = 0.0f;
+	directionalLightSphereData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	directionalLightSphereData_->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightSphereData_->intensity = 0.0f;
 
 
 	//Phong Reflection Model
-	cameraResource =object3dCommon->GetDirectXCommon()->CreateBufferResource(sizeof(CameraForGPU));
-	cameraResource->Map(0, nullptr, reinterpret_cast<void**>(&cameraData));
+	cameraResource_ =object3dCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(CameraForGPU));
+	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraData_));
 
-	cameraData->worldPosition = { 0,0,0 };
-
-	//ライト用のリソース
-	pointLightResource = object3dCommon->GetDirectXCommon()->CreateBufferResource(sizeof(PointLight));
-	//書き込むためのアドレス
-	pointLightResource->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData));
-	//設定
-	pointLightData->color = { 1.0f,1.0f,1.0f,1.0f };
-	pointLightData->position = { 0.0f,2.0f,0.0f };
-	pointLightData->intensity = 1.0f;
-	pointLightData->radius = 5.0f;
-	pointLightData->decay = 1.0f;
-
+	cameraData_->worldPosition = { 0,0,0 };
 
 	//ライト用のリソース
-	spotLightResource = object3dCommon->GetDirectXCommon()->CreateBufferResource(sizeof(SpotLight));
+	pointLightResource_ = object3dCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(PointLight));
 	//書き込むためのアドレス
-	spotLightResource->Map(0, nullptr, reinterpret_cast<void**>(&spotLightData));
+	pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
+	//_
+	pointLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	pointLightData_->position = { 0.0f,2.0f,0.0f };
+	pointLightData_->intensity = 1.0f;
+	pointLightData_->radius = 5.0f;
+	pointLightData_->decay = 1.0f;
+
+
+	//ライト用のリソース
+	spotLightResource_ = object3dCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(SpotLight));
+	//書き込むためのアドレス
+	spotLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&spotLightData_));
 	//設定
-	spotLightData->color = { 1.0f,1.0f,1.0f,1.0f };
-	spotLightData->position = { 2.0f,1.25f,0.0f };
-	spotLightData->distance = 70.0f;
-	spotLightData->direction = Normalize({ -1.0f,-1.0f,0.0f });
-	spotLightData->intensity = 0.0f;
-	spotLightData->decay = 2.0f;
-	spotLightData->cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
-	spotLightData->cosFalloffStart = std::cos(std::numbers::pi_v<float> / 4.0f);
-
-
-
-
-
-
-	transform = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
-
-	transformL = { {1.0f,1.0f,1.0f},{0.0f,0.0f,0.0f} ,{0.0f,0.0f,0.0f} };
-
-
-
-
+	spotLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	spotLightData_->position = { 2.0f,1.25f,0.0f };
+	spotLightData_->distance = 70.0f;
+	spotLightData_->direction = Normalize({ -1.0f,-1.0f,0.0f });
+	spotLightData_->intensity = 0.0f;
+	spotLightData_->decay = 2.0f;
+	spotLightData_->cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
+	spotLightData_->cosFalloffStart = std::cos(std::numbers::pi_v<float> / 4.0f);
 }
 
 void Object3d::Update(const WorldTransform& worldTransform) {
 
-	wvpData->World = worldTransform.matWorld_;
-	worldMatrix = worldTransform.matWorld_;
+	wvpData_->World = worldTransform.matWorld_;
+	worldMatrix_ = worldTransform.matWorld_;
 
-	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
+	directionalLightSphereData_->direction = Normalize(directionalLightSphereData_->direction);
 }
 
 void Object3d::Update() {
 
-	wvpData->World = MakeIdentity4x4();
-	worldMatrix = MakeIdentity4x4();
+	wvpData_->World = MakeIdentity4x4();
+	worldMatrix_ = MakeIdentity4x4();
 
-	directionalLightSphereData->direction = Normalize(directionalLightSphereData->direction);
+	directionalLightSphereData_->direction = Normalize(directionalLightSphereData_->direction);
 }
 
 void Object3d::Draw() {
-	if (camera) {
-		Matrix4x4 projectionMatrix = camera->GetViewProjectionMatrix();
-		wvpData->WVP = worldMatrix * projectionMatrix;
+	if (camera_) {
+		Matrix4x4 projectionMatrix = camera_->GetViewProjectionMatrix();
+		wvpData_->WVP = worldMatrix_ * projectionMatrix;
 	}
 	else {
-		wvpData->WVP = worldMatrix;
+		wvpData_->WVP = worldMatrix_;
 	}
 
 	//モデル
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource->GetGPUVirtualAddress());
-	if (model) {
-		model->Draw();
+	object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+	object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource_->GetGPUVirtualAddress());
+	object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
+	object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
+	object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource_->GetGPUVirtualAddress());
+	if (model_) {
+		model_->Draw();
 	}
 }
 
 void Object3d::Draw(const std::string& textureData) {
+	if (camera_) {
+		Matrix4x4 projectionMatrix = camera_->GetViewProjectionMatrix();
+		wvpData_->WVP = worldMatrix_ * projectionMatrix;
+	}
+	else {
+		wvpData_->WVP = worldMatrix_;
+	}
 
 	//モデル
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource->GetGPUVirtualAddress());
-	object3dCommon->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource->GetGPUVirtualAddress());
-	if (model) {
-		model->Draw(textureData);
+	object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+	object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource_->GetGPUVirtualAddress());
+	object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
+	object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
+	object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource_->GetGPUVirtualAddress());
+	if (model_) {
+		model_->Draw(textureData);
 	}
 }
 
 void Object3d::SetModelFile(const std::string& filePath) {
-	model = ModelManager::GetInstance()->FindModel_obj(filePath);
+	model_ = ModelManager::GetInstance()->FindModel_obj(filePath);
 }
 
 void Object3d::SetColor(Vector4 color) {
-	if (model) {
-		model->SetColor(color);
+	if (model_) {
+		model_->SetColor(color);
 	}
 }
 
 void Object3d::LightSwitch(bool isLight) {
-	if (model) {
-		model->LightOn(isLight);
+	if (model_) {
+		model_->LightOn(isLight);
 	}
 }

@@ -8,9 +8,19 @@
 #include <Xinput.h>
 
 #include "WinApp.h"
+/// <summary>
+/// 入力
+/// </summary>
 class Input{
 public:
+	/// <summary>
+	/// インスタンス生成
+	/// </summary>
+	/// <returns></returns>
 	static Input* GetInstance();
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize();
 
 	//using namespace Microsoft::WRL の代わり
@@ -35,20 +45,20 @@ public:
 	/// <param name="preState"></param>
 	void JoystickUpdate(XINPUT_STATE& state, XINPUT_STATE& preState);
 private:
-	ComPtr<IDirectInputDevice8> keyboard;
-	ComPtr<IDirectInput8> directInput;
-	BYTE key[256] = {};
-	BYTE keyPre[256] = {};
+	ComPtr<IDirectInputDevice8> keyboard_;
+	ComPtr<IDirectInput8> directInput_;
+	BYTE key_[256] = {};
+	BYTE keyPre_[256] = {};
 	WinApp* winApp_ = nullptr; //協力関係
 
-	static Input* sInstance;
+	static Input* sInstance_;
 
 	Input() = default;
 	~Input() = default;
 	Input(Input&) = default;
 	Input& operator=(Input&) = default;
 
-	static uint32_t sSRVIndexTop;
+	static uint32_t sSRVIndexTop_;
 	
-	XINPUT_STATE prevState = {};
+	XINPUT_STATE prevState_ = {};
 };

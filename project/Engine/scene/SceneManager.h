@@ -39,7 +39,7 @@ public:
 	/// ゲーム終了時の処理
 	/// </summary>
 	/// <returns></returns>trueで終了
-	bool SetGameEnd() { return sceneArr->GetIsGameEnd(); }
+	bool SetGameEnd() { return sceneArr_->GetIsGameEnd(); }
 
 private:
 	/// <summary>
@@ -52,8 +52,8 @@ private:
 	/// </summary>
 	void BuildScene();
 
-	std::unique_ptr<IScene> sceneArr;
-	SceneFactory sceneFactory;
+	std::unique_ptr<IScene> sceneArr_;
+	SceneFactory sceneFactory_;
 
 	std::string currentScene_;//現在シーン
 	std::string prevScene_;//前シーン

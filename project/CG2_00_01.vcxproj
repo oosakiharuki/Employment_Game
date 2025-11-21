@@ -208,7 +208,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\StageObjects\CheckPoint.h" />
     <ClInclude Include="GameProgram\Enemies\Enemy_Bomb.h" />
     <ClInclude Include="Engine\3d\Primitive\Primitive.h" />
-    <ClInclude Include="Engine\3d\_Particle\ParticleNumber.h" />
     <ClInclude Include="GameProgram\Enemies\EnemyBullet.h" />
     <ClInclude Include="GameProgram\Enemies\Enemy_Turret.h" />
     <ClInclude Include="Engine\3d\Primitive\BoxModel.h" />

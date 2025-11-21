@@ -30,7 +30,7 @@ void EventTrigger::Update() {
 			particle->Update();
 			//敵が出てきたので止める
 			if (summonTimer_ < 0) {
-				particle->ChangeMode(BornParticle::Stop);
+				particle->SetParticleBorn(ParticleBorn::Stop);
 			}
 		}
 
@@ -175,7 +175,7 @@ void EventTrigger::PopEventEneies() {
 			gParticle = std::make_unique<Particle>();
 			gParticle->Initialize("enemies_summon","resource/Sprite/white.png",PrimitiveType::sphere);
 			gParticle->SetParticleMosion(ParticleMosion::Exprosion);
-			gParticle->ChangeMode(BornParticle::TimerMode);
+			gParticle->SetParticleBorn(ParticleBorn::TimerMode);
 			gParticle->SetFrequency(kFrequency_);
 			gParticle->SetTranslate(enemyPopData.position);
 

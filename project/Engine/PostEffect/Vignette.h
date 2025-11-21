@@ -21,25 +21,25 @@ private:
 	DirectXCommon* dxCommon_;
 
 	//RootSignature
-	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
-	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-	D3D12_ROOT_PARAMETER rootParameters[2] = {};
-	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
+	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_{};
+	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};
+	D3D12_ROOT_PARAMETER rootParameters_[2] = {};
+	D3D12_STATIC_SAMPLER_DESC staticSamplers_[1] = {};
 
-	Microsoft::WRL::ComPtr < ID3D12RootSignature> rootSignature = nullptr;
-	Microsoft::WRL::ComPtr < ID3D12PipelineState> graphicsPipelineState = nullptr;
-	Microsoft::WRL::ComPtr < ID3D12PipelineState> graphicsPipelineStateDepth = nullptr;
+	Microsoft::WRL::ComPtr < ID3D12RootSignature> rootSignature_ = nullptr;
+	Microsoft::WRL::ComPtr < ID3D12PipelineState> graphicsPipelineState_ = nullptr;
+	Microsoft::WRL::ComPtr < ID3D12PipelineState> graphicsPipelineStateDepth_ = nullptr;
 
-	uint32_t srvIndex;
-	D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU;
-	D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;
+	uint32_t srvIndex_;
+	D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU_;
+	D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU_;
 
 	struct VignetteFunction {
 		float luminance;
 		float darkness;
 	};
 
-	VignetteFunction* vignetteFunction;
+	VignetteFunction* vignetteFunction_;
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> vignetteResource;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vignetteResource_;
 };

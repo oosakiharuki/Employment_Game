@@ -10,15 +10,13 @@ Audio* Audio::GetInstance() {
 }
 
 void Audio::Finalize() {
-	xAudio2.Reset();
+	xAudio2_.Reset();
 	SoundUnload(&soundData_);
 }
 
 void Audio::Initialize() {
-
-	result = XAudio2Create(&xAudio2, 0, XAUDIO2_DEFAULT_PROCESSOR);
-	result = xAudio2->CreateMasteringVoice(&masterVoice);
-
+	result_ = XAudio2Create(&xAudio2_, 0, XAUDIO2_DEFAULT_PROCESSOR);
+	result_ = xAudio2_->CreateMasteringVoice(&masterVoice_);
 }
 
 SoundData Audio::LoadWave(const char* filename) {
@@ -100,22 +98,16 @@ SoundData Audio::SoundLoadWave(const char* filename)//string?
 	soundData.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
 	soundData.byfferSize = data.size;
 
-	result = xAudio2.Get()->CreateSourceVoice(&soundData.pSourceVoice, &soundData.wfex);
-	assert(SUCCEEDED(result));
+	result_ = xAudio2_.Get()->CreateSourceVoice(&soundData.pSourceVoice, &soundData.wfex);
+	assert(SUCCEEDED(result_));
 
 	return soundData;
 }
-
 
 void Audio::SoundPlayWave(SoundData soundData, const float volume, bool isLoop) {
 
 	XAUDIO2_VOICE_STATE state;
 	soundData.pSourceVoice->GetState(&state);
-
-	//すでに鳴っている場合
-	//if (state.BuffersQueued > 0) {
-	//	return;
-	//}
 
 	//波状データを読み込む
 	XAUDIO2_BUFFER buf{};
@@ -130,9 +122,9 @@ void Audio::SoundPlayWave(SoundData soundData, const float volume, bool isLoop) 
 		buf.LoopLength = 0;
 	}
 
-	result = soundData.pSourceVoice->SetVolume(volume);//音量調節
-	result = soundData.pSourceVoice->SubmitSourceBuffer(&buf);
-	result = soundData.pSourceVoice->Start();
+	result_ = soundData.pSourceVoice->SetVolume(volume);//音量調節
+	result_ = soundData.pSourceVoice->SubmitSourceBuffer(&buf);
+	result_ = soundData.pSourceVoice->Start();
 
 }
 
@@ -146,11 +138,11 @@ void Audio::SoundUnload(SoundData* soundData) {
 }
 
 void Audio::StopWave(SoundData soundData) {
-	result = soundData.pSourceVoice->Stop(); //音源を止める
-	result = soundData.pSourceVoice->FlushSourceBuffers(); //音源のリセット
+	result_ = soundData.pSourceVoice->Stop(); //音源を止める
+	result_ = soundData.pSourceVoice->FlushSourceBuffers(); //音源のリセット
 }
 
 void Audio::ControlVolume(SoundData soundData, const float volume) {
-
-	result = soundData.pSourceVoice->SetVolume(volume);//音量調節
+	//音量調節
+	result_ = soundData.pSourceVoice->SetVolume(volume);
 }

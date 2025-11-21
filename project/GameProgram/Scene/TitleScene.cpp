@@ -200,7 +200,7 @@ void TitleScene::Update() {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE) || 
 			Input::GetInstance()->TriggerBotton(state_,preState_, XINPUT_GAMEPAD_A)) {
 			isbullet = true;
-			particleBullet_->ChangeMode(BornParticle::MomentMode);
+			particleBullet_->SetParticleBorn(ParticleBorn::MomentMode);
 			particleBullet_->SetTranslate(wts[1].translation_);
 			particleBullet_->SetRotate({0.0f,0.0f,-90.0f});
 		}

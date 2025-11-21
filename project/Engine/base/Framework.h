@@ -22,37 +22,61 @@
 
 #include"DebugWireframes.h"
 #include "Cubemap.h"
-
+/// <summary>
+/// エンジンをまとめたもの
+/// </summary>
 class Framework {
 public:
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	virtual void Initialize();
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	virtual void Update();
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	virtual void Draw() = 0;
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	virtual void Finalize();
-	virtual bool IsEndRequst() { return isRequst; }
-	virtual void SetIsEndRequst(bool result) { isRequst = result; }
+	/// <summary>
+	/// ゲームを終了する
+	/// </summary>
+	/// <returns></returns>trueで終了
+	virtual bool IsEndRequst() { return isRequst_; }
+	/// <summary>
+	/// ゲームを終了するか
+	/// </summary>
+	/// <param name="result"></param>
+	virtual void SetIsEndRequst(bool result) { isRequst_ = result; }
 
 	virtual ~Framework() = default;
-
+	/// <summary>
+	/// 繰り返し処理
+	/// </summary>
 	void Run();
 private:
 	WinApp* winApp_ = nullptr;
 	Input* input_;
-	DirectXCommon* dxCommon = nullptr;
-	SrvManager* srvManager = nullptr;
+	DirectXCommon* dxCommon_ = nullptr;
+	SrvManager* srvManager_ = nullptr;
 
-	SpriteCommon* spriteCommon = nullptr;
-	Object3dCommon* object3dCommon = nullptr;
-	GLTFCommon* glTFCommon = nullptr;
-	SkinningCommon* skinningCommon = nullptr;
-	ModelCommon* modelCommon = nullptr;
-	ParticleCommon* particleCommon = nullptr;
+	SpriteCommon* spriteCommon_ = nullptr;
+	Object3dCommon* object3dCommon_ = nullptr;
+	GLTFCommon* glTFCommon_ = nullptr;
+	SkinningCommon* skinningCommon_ = nullptr;
+	ModelCommon* modelCommon_ = nullptr;
+	ParticleCommon* particleCommon_ = nullptr;
 	
-	PostEffectManager* postEffectM = nullptr;
+	PostEffectManager* postEffectM_ = nullptr;
 	Audio* audio_;
 
-	DebugWireframes* debugWireframes = nullptr;
-	Cubemap* cubemap = nullptr;
+	DebugWireframes* debugWireframes_ = nullptr;
+	Cubemap* cubemap_ = nullptr;
 
-	bool isRequst = false;
+	bool isRequst_ = false;
 };

@@ -16,15 +16,15 @@ private:
 	void EffectUpdate() override;
 
 	//RootSignature
-	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-	D3D12_ROOT_PARAMETER rootParameters[2] = {};
-	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
+	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};
+	D3D12_ROOT_PARAMETER rootParameters_[2] = {};
+	D3D12_STATIC_SAMPLER_DESC staticSamplers_[1] = {};
 
 	struct RandomFunction {
 		float randomeTimer;
 	};
 
-	RandomFunction* randomFunction;
+	RandomFunction* randomFunction_;
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> RandomResoure;
+	Microsoft::WRL::ComPtr<ID3D12Resource> RandomResoure_;
 };

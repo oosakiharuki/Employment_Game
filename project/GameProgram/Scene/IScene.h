@@ -19,8 +19,6 @@
 #include "Goal.h"
 
 #include "BoxModel.h"
-
-#include "ParticleNumber.h"
 #include "FadeScreen.h"
 
 #include "EventTrigger.h"
@@ -28,7 +26,9 @@
 
 #include "CollisionManager.h"
 #include "NextStageSave.h"
-
+/// <summary>
+/// シーン共有処理
+/// </summary>
 class IScene{
 protected:
 	//現在のシーン

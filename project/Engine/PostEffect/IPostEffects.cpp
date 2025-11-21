@@ -1,6 +1,6 @@
 #include "IPostEffects.h"
 
-int IPostEffects::sEffectNo = Mode_DepthBasedOutline;
+int IPostEffects::sEffectNo_ = Mode_DepthBasedOutline;
 
 IPostEffects::~IPostEffects() {}
 
@@ -9,11 +9,11 @@ void IPostEffects::ChangeNumber() {
 
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_F1)) {
-		sEffectNo++;
+		sEffectNo_++;
 	}
 	//最大→0に
-	if (sEffectNo == Max) {
-		sEffectNo = 0;
+	if (sEffectNo_ == Max) {
+		sEffectNo_ = 0;
 	}
 #endif // _DEBUG
 }

@@ -27,7 +27,7 @@ void Enemy_Turret::Initialize() {
 	particleLaser_->Initialize("tullet_laser","resource/Sprite/3YvXH.png",PrimitiveType::beam);
 	particleLaser_->SetFrequency(0.001f);
 	particleLaser_->SetParticleCount(1);
-	particleLaser_->ChangeMode(BornParticle::TimerMode);
+	particleLaser_->SetParticleBorn(ParticleBorn::TimerMode);
 	particleLaser_->SetParticleMosion(ParticleMosion::Fixed);
 	particleLaser_->SetScale({ eyeReach_.x * 0.5f,0.1f,0.1f });
 
@@ -47,10 +47,10 @@ void Enemy_Turret::Update() {
 		SearchRange();
 		Matrix4x4 a = MakeAffineMatrix(Vector3(1,1,1), wt_.rotation_, wt_.translation_);
 		particleLaser_->SetTranslate(wt_.translation_ + TransformNormal(Vector3{0,0,eyeReach_.x * 0.5f}, a));
-		particleLaser_->ChangeMode(BornParticle::TimerMode);
+		particleLaser_->SetParticleBorn(ParticleBorn::TimerMode);
 	}
 	else {
-		particleLaser_->ChangeMode(BornParticle::Stop);
+		particleLaser_->SetParticleBorn(ParticleBorn::Stop);
 	}
 
 	//コーンが上向きなので

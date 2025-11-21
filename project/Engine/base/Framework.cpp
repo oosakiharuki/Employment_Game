@@ -1,65 +1,78 @@
 #include "Framework.h"
 
 void Framework::Initialize() {
-
+	//WinApp処理
 	winApp_ = new WinApp();
 	winApp_->Initialize();
 
-
+	//入力処理
 	input_ = Input::GetInstance();
 	//GetHInstance()GetHwnd()を入れず直接winAppのクラスのものを使える
 	input_->Initialize(winApp_);
 
+	//DirectX処理
+	dxCommon_ = DirectXCommon::GetInstance();
+	dxCommon_->SetWinApp(winApp_);
+	dxCommon_->Initialize();
 
-	dxCommon = DirectXCommon::GetInstance();
-	dxCommon->SetWinApp(winApp_);
-	dxCommon->Initialize();
+	//Srv処理
+	srvManager_ = SrvManager::GetInstance();
+	srvManager_->Initialize(dxCommon_);
 
-	srvManager = SrvManager::GetInstance();
-	srvManager->Initialize(dxCommon);
+	//imugi処理
+	ImGuiManager::GetInstance()->Initialize(winApp_, dxCommon_, srvManager_);
 
-	ImGuiManager::GetInstance()->Initialize(winApp_, dxCommon, srvManager);
-
-
-	spriteCommon = SpriteCommon::GetInstance();
-	spriteCommon->Initialize(dxCommon);
-	TextureManager::GetInstance()->Initialize(dxCommon, srvManager);
+	//スプライト共通処理
+	spriteCommon_ = SpriteCommon::GetInstance();
+	spriteCommon_->Initialize(dxCommon_);
+	//テクスチャマネージャ初期化
+	TextureManager::GetInstance()->Initialize(dxCommon_, srvManager_);
 	
-
-	object3dCommon = Object3dCommon::GetInstance();
-	object3dCommon->Initialize(dxCommon);
+	//オブジェクト(.obj)共有処理
+	object3dCommon_ = Object3dCommon::GetInstance();
+	object3dCommon_->Initialize(dxCommon_);
 	
-	glTFCommon = GLTFCommon::GetInstance();
-	glTFCommon->Initialize(dxCommon);
+	//オブジェクト(.gltf)共有処理
+	glTFCommon_ = GLTFCommon::GetInstance();
+	glTFCommon_->Initialize(dxCommon_);
+	
+	//スキニング共有処理
+	skinningCommon_ = SkinningCommon::GetInstance();
+	skinningCommon_->Initialize(dxCommon_);
 
-	skinningCommon = SkinningCommon::GetInstance();
-	skinningCommon->Initialize(dxCommon);
+	//モデル共有処理
+	modelCommon_ = new ModelCommon();
+	modelCommon_->Initialize(dxCommon_);
+	//モデルマネージャ初期化
+	ModelManager::GetInstance()->Initialize(dxCommon_);
 
-	modelCommon = new ModelCommon();
-	modelCommon->Initialize(dxCommon);
-	ModelManager::GetInstance()->Initialize(dxCommon);
+	//パーティクル共有処理
+	particleCommon_ = ParticleCommon::GetInstance();
+	particleCommon_->Initialize(dxCommon_);
+	//パーティクルマネージャ初期化
+	ParticleManager::GetInstance()->Initialize(dxCommon_, srvManager_);
 
+	//ワイヤーフレーム処理
+	debugWireframes_ = DebugWireframes::GetInstance();
+	debugWireframes_->Initialize(dxCommon_);
 
-	particleCommon = ParticleCommon::GetInstance();
-	particleCommon->Initialize(dxCommon);
-	ParticleManager::GetInstance()->Initialize(dxCommon, srvManager);
+	//キューブマップ処理
+	cubemap_ = Cubemap::GetInstance();
+	cubemap_->Initialize(dxCommon_);
 
-	debugWireframes = DebugWireframes::GetInstance();
-	debugWireframes->Initialize(dxCommon);
+	//ポストエフェクト共有処理
+	postEffectM_ = PostEffectManager::GetInstance();
+	postEffectM_->Initialize(dxCommon_);
 
-	cubemap = Cubemap::GetInstance();
-	cubemap->Initialize(dxCommon);
-
-	postEffectM = PostEffectManager::GetInstance();
-	postEffectM->Initialize(dxCommon);
-
+	//音声共有処理
 	audio_ = Audio::GetInstance();
 	audio_->Initialize();
 }
 
 void Framework::Update() {
+	//ウィンドウを閉じるまで終わらない
 	if (winApp_->ProcessMessage()) {
-		isRequst = true;
+		isRequst_ = true;
 	}
 	else {
 		//ゲームの処理
@@ -82,23 +95,17 @@ void Framework::Finalize() {
 	ModelManager::GetInstance()->Finalize();
 	ParticleManager::GetInstance()->Finalize();
 
-	dxCommon->Finalize();
-
-	srvManager->Finalize();
-
-	spriteCommon->Finalize();	
-	object3dCommon->Finalize();
-	glTFCommon->Finalize();
-	skinningCommon->Finalize();
-	delete modelCommon;
-	
-	particleCommon->Finalize();
-
-	debugWireframes->Finalize();
-	cubemap->Finalize();
-
-	postEffectM->Finalize();
-
+	dxCommon_->Finalize();
+	srvManager_->Finalize();
+	spriteCommon_->Finalize();
+	object3dCommon_->Finalize();
+	glTFCommon_->Finalize();
+	skinningCommon_->Finalize();
+	delete modelCommon_;
+	particleCommon_->Finalize();
+	debugWireframes_->Finalize();
+	cubemap_->Finalize();
+	postEffectM_->Finalize();
 	audio_->Finalize();
 }
 

@@ -41,7 +41,7 @@ void ClearScene::Initialize() {
 		std::unique_ptr<Particle > gParticle;
 		gParticle = std::make_unique<Particle>();
 		gParticle->Initialize("clear_fanfare", "resource/Sprite/white.png", PrimitiveType::plane);
-		gParticle->ChangeMode(BornParticle::MomentMode);
+		gParticle->SetParticleBorn(ParticleBorn::MomentMode);
 		gParticle->SetParticleMosion(ParticleMosion::Fanfare);
 		gParticle->SetFrequency(1.5f);
 		gParticle->SetParticleCount(10);
@@ -66,7 +66,7 @@ void ClearScene::Update() {
 	Vector3 gTranslate = { -3,2,0 };
 	for (auto& gParticle : particle_fanfares_) {
 		if (setFrequencyTime_) {
-			gParticle->ChangeMode(BornParticle::TimerMode);
+			gParticle->SetParticleBorn(ParticleBorn::TimerMode);
 		}
 		gParticle->SetTranslate(gTranslate);
 		gParticle->Update();

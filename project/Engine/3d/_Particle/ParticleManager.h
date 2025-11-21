@@ -6,11 +6,25 @@
 #include "SrvManager.h"
 #include "ParticleEmitter.h"
 #include "Primitive.h"
-
+/// <summary>
+/// パーティクルマネージャ
+/// </summary>
 class ParticleManager {
 public:
+	/// <summary>
+	/// インスタンス生成
+	/// </summary>
+	/// <returns></returns>
 	static ParticleManager* GetInstance();
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize();
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="dxCommon"></param>
+	/// <param name="srvManager"></param>
 	void Initialize(DirectXCommon* dxCommon, SrvManager* srvManager);
 
 	void CreateParticleGroup(const std::string name, const std::string textureFilePath, PrimitiveType primitiveType);

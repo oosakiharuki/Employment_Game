@@ -1,14 +1,15 @@
 #include "MyGame.h"
 
 void MyGame::Initialize() {
-
+	//フレームワーク処理
 	Framework::Initialize();
 
-	gameScene = new SceneManager();
-	gameScene->Initialize();
+	//ゲームシーン初期化
+	gameScene_ = new SceneManager();
+	gameScene_->Initialize();
 
-	fadeScreen = FadeScreen::GetInstance();
-	fadeScreen->Initialize();
+	fadeScreen_ = FadeScreen::GetInstance();
+	fadeScreen_->Initialize();
 }
 
 void MyGame::Update() {
@@ -19,14 +20,16 @@ void MyGame::Update() {
 	ImGuiManager::GetInstance()->Begin();
 #endif //  USE_IMGUI
 
-	gameScene->Update();
+	//ゲームシーン更新
+	gameScene_->Update();
 
 	//タイトル画面で終了を選択した時するとき
-	if (gameScene->SetGameEnd()) {
-		Framework::SetIsEndRequst(gameScene->SetGameEnd());
+	if (gameScene_->SetGameEnd()) {
+		Framework::SetIsEndRequst(gameScene_->SetGameEnd());
 	}
 
-	fadeScreen->Update();
+	//フェード更新
+	fadeScreen_->Update();
 	
 	//ポストエフェクト更新/変更
 	PostEffectManager::GetInstance()->Update();
@@ -40,9 +43,9 @@ void MyGame::Update() {
 void MyGame::Draw() {
 	//描画開始
 	DirectXCommon::GetInstance()->RenderTexturePreDraw();// 対 renderTexture
-
-	gameScene->Draw();
-
+	
+	//ゲームシーン描画
+	gameScene_->Draw();
 
 	DirectXCommon::GetInstance()->RenderTexturePostDraw();
 
@@ -50,7 +53,7 @@ void MyGame::Draw() {
 	DirectXCommon::GetInstance()->PreDraw();// 対 swapchain
 	
 	//フェード
-	fadeScreen->Draw();
+	fadeScreen_->Draw();
 
 	DirectXCommon::GetInstance()->FadePreDraw();
 
@@ -66,9 +69,8 @@ void MyGame::Draw() {
 
 
 void MyGame::Finalize() {
-	//gameScene->Finalize();
-	delete gameScene;
-	fadeScreen->Finalize();
+	delete gameScene_;
+	fadeScreen_->Finalize();
 
 #ifdef  USE_IMGUI
 	ImGuiManager::GetInstance()->Finalize();

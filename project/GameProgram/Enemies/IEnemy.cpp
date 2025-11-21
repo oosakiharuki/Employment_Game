@@ -24,7 +24,7 @@ void IEnemy::Enemy_InitializeCommon() {
 	particleFire_ = std::make_unique<Particle>();
 	particleFire_->Initialize("enemySoldier_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particleFire_->SetParticleCount(1);
-	particleFire_->ChangeMode(BornParticle::Stop);
+	particleFire_->SetParticleBorn(ParticleBorn::Stop);
 	particleFire_->SetParticleMosion(ParticleMosion::Fixed);
 	particleFire_->SetFrequency(0.1f);
 
@@ -32,7 +32,7 @@ void IEnemy::Enemy_InitializeCommon() {
 	particleDamage_ = std::make_unique<Particle>();
 	particleDamage_->Initialize("enemySoldier_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
 	particleDamage_->SetParticleCount(10);
-	particleDamage_->ChangeMode(BornParticle::Stop);
+	particleDamage_->SetParticleBorn(ParticleBorn::Stop);
 	particleDamage_->SetParticleMosion(ParticleMosion::Exprosion);
 	particleDamage_->SetFrequency(0.7f);
 
@@ -136,7 +136,7 @@ void IEnemy::DrawCommon() {
 
 void IEnemy::IsDamage() {
 	particleDamage_->SetTranslate(wt_.translation_);
-	particleDamage_->ChangeMode(BornParticle::MomentMode);
+	particleDamage_->SetParticleBorn(ParticleBorn::MomentMode);
 	isDamageMosion_ = true;
 
 	//連続ヒット時、元に戻す
@@ -281,7 +281,7 @@ void IEnemy::Fire() {
 		rapidFireTime_ += 1.0f / 60.0f;
 		if (rapidFireTime_ >= kRapidFireTimeMax_) {
 			FireBullet();//敵の発泡攻撃
-			particleFire_->ChangeMode(BornParticle::MomentMode);//パーティクルが出てくる
+			particleFire_->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
 			rapidCount_++;//カウント
 			rapidFireTime_ = 0;//もう一度
 		}

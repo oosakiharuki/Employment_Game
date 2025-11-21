@@ -3,79 +3,130 @@
 #include "ModelCommon.h"
 #include <assimp/scene.h>
 
-
+/// <summary>
+/// .gltf版のモデル
+/// </summary>
 class Model_glTF{
 public:
-
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="modelCommon"></param>
+	/// <param name="directorypath"></param>
+	/// <param name="fileName"></param>
+	/// <param name="isAnimation"></param>
+	/// <param name="isSkinning"></param>
 	void Initialize(ModelCommon* modelCommon,const std::string& directorypath,const std::string& fileName, bool isAnimation, bool isSkinning);
-
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw();
 
 	//gltf用
 	static ModelData_glTF LoadModelFile(const std::string& directoryPath, const std::string& filename);
 	static std::vector<Animation> LoadAnimationFile(const std::string& directoryPath, const std::string& filename,uint32_t Number);
 
+	/// <summary>
+	/// ライト設定
+	/// </summary>
+	/// <param name="Light"></param>
 	void LightOn(bool Light) {
-		for (auto& material : materialResources) {
+		for (auto& material : materialResources_) {
 			//書き込むためのアドレス
-			material->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
-			materialData->enableLighting = Light;
+			material->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+			//全てのライトを on/off
+			materialData_->enableLighting = Light;
 		}
 	}
 	
-	
+	/// <summary>
+	/// 環境マップの設定
+	/// </summary>
+	/// <param name="mapFile"></param>
 	void SetEnvironment(const std::string mapFile);
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="node"></param>
+	/// <returns></returns>
 	static Node ReadNode(aiNode* node);
 
-	ModelData_glTF GetModelData() { return modelData; }
-	std::vector<Animation> GetAnimationData() { return animation; }
+	/// <summary>
+	/// getter_オブジェクトデータ
+	/// </summary>
+	/// <returns></returns>
+	ModelData_glTF GetModelData() { return modelData_; }
 
-	std::vector<Skeleton> GetSkeleton() { return skeletons; }
-	std::vector<SkinCluster> GetSkinCluster() { return skinClusters; }
+	/// <summary>
+	/// getter_アニメーションデータ
+	/// </summary>
+	/// <returns></returns>
+	std::vector<Animation> GetAnimationData() { return animation_; }
+
+	/// <summary>
+	/// getter_スケルトンデータ
+	/// </summary>
+	/// <returns></returns>
+	std::vector<Skeleton> GetSkeleton() { return skeletons_; }
+	/// <summary>
+	/// getter_スキンデータ
+	/// </summary>
+	/// <returns></returns>	
+	std::vector<SkinCluster> GetSkinCluster() { return skinClusters_; }
 
 	SkinCluster CreateSkinCluster(const Skeleton& skeleton, const ModelData_glTF& modelData);
 
-	Material* GetMaterial() { return materialData; }
+	Material* GetMaterial() { return materialData_; }
+	/// <summary>
+	/// スキニングデータを使用しているか
+	/// </summary>
+	/// <returns></returns>
+	const bool IsSkinning() { return isSkinning_; }
+	/// <summary>
+	/// アニメーションを使用しているか
+	/// </summary>
+	/// <returns></returns>
+	const bool IsAnimation() { return isAnimation_; }
 
-	bool IsSkinning() { return isSkinning_; }
-	bool IsAnimation() { return isAnimation_; }
-
-	void ResetI() { i = 0; }
+	/// <summary>
+	/// マルチメッシュで使う用のカウントをリセット
+	/// </summary>
+	void ResetMeshCount() { multiMeshCount_ = 0; }
 
 private:
-	ModelCommon* modelCommon = nullptr;
+	ModelCommon* modelCommon_ = nullptr;
 
-	ModelData_glTF modelData;
+	ModelData_glTF modelData_;
 
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexResource;
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource; //index
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> materialResources;
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexResource_;
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource_; //index
+	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> materialResources_;
 
 
-	VertexData* vertexData = nullptr;
-	uint32_t* mappedIndex = nullptr;
-	Material* materialData = nullptr;
+	VertexData* vertexData_ = nullptr;
+	uint32_t* mappedIndex_ = nullptr;
+	Material* materialData_ = nullptr;
 
-	std::vector<D3D12_VERTEX_BUFFER_VIEW> vertexBufferView;
-	std::vector<D3D12_INDEX_BUFFER_VIEW> indexBufferView; //index
+	std::vector<D3D12_VERTEX_BUFFER_VIEW> vertexBufferView_;
+	std::vector<D3D12_INDEX_BUFFER_VIEW> indexBufferView_; //index
 
-	ModelData_glTF InitialData;
+	ModelData_glTF InitialData_;
 	
 	//アニメーション
-	std::vector<Animation> animation;
+	std::vector<Animation> animation_;
 
-	std::vector<Skeleton> skeletons;
+	std::vector<Skeleton> skeletons_;
 
-	std::vector<SkinCluster> skinClusters;
+	std::vector<SkinCluster> skinClusters_;
 
-	D3D12_VERTEX_BUFFER_VIEW vbvs[2];
+	D3D12_VERTEX_BUFFER_VIEW vbvs_[2];
 	
-	std::string EnvironmentFile;
+	std::string EnvironmentFile_;
 
 	bool isAnimation_ = false;
 	bool isSkinning_ = false;
 
-	uint32_t i = 0;
+	uint32_t multiMeshCount_ = 0;
 
 };

@@ -4,12 +4,18 @@
 #include <random>
 #include "Primitive.h"
 
+/// <summary>
+/// パーティクル用のGPU
+/// </summary>
 struct ParticleForGPU {
 	Matrix4x4 WVP;
 	Matrix4x4 World;
 	Vector4 color;
 };
 
+/// <summary>
+/// パーティクルのパラメータ
+/// </summary>
 struct Particles {
 	Transform transform;
 	Vector3 velocity;
@@ -17,7 +23,9 @@ struct Particles {
 	float lifeTime;
 	float currentTime;
 };
-
+/// <summary>
+/// エミッター
+/// </summary>
 struct Emitter {
 	Transform transform;
 	uint32_t count; //発生数
@@ -25,15 +33,10 @@ struct Emitter {
 	float frequencyTime; //頻度時刻
 };
 
-struct AccelerationField {
-	Vector3 acceleration;
-	AABB area;
-};
-
 /// <summary>
 /// Emitを発動する場面
 /// </summary>
-enum class BornParticle {
+enum class ParticleBorn {
 	TimerMode, //タイマーで出てくる
 	MomentMode,//瞬間的に出てくる(その後stopに)
 	Stop,//出さない
@@ -50,7 +53,9 @@ enum ParticleMosion {
 	Exprosion,//爆発っぽい感じ(ring)
 	Fanfare,  //紙吹雪っぽいやつ
 };
-
+/// <summary>
+/// パーティクル
+/// </summary>
 class Particle{
 public:
 	~Particle(); // デストラクタを追加
@@ -71,92 +76,109 @@ public:
 	void Draw();
 
 	/// <summary>
-	/// setter_
+	/// setter_拡大縮小
 	/// </summary>
-	/// <param name="scale"></param>
-	void SetScale(const Vector3& scale) { emitter.transform.scale = scale; }
-	const Vector3& GetScale() const { return emitter.transform.scale; }
-
-	const Vector3& GetTranslate()const { return emitter.transform.translate; }
-	void SetTranslate(const Vector3& translate) { emitter.transform.translate = translate; }
-
-	void SetRotate(const Vector3& rotate) { emitter.transform.rotate = rotate; }
-	const Vector3& GetRotate() const { return emitter.transform.rotate; }
-
-	void SetFrequency(const float time) { emitter.frequency = time; }
-
-	void SetCamera(Camera* camera) { this->camera = camera; }
+	/// <param name="scale"></param>emitterで
+	void SetScale(const Vector3& scale) { emitter_.transform.scale = scale; }
+	/// <summary>
+	/// getter_拡大縮小
+	/// </summary>
+	/// <returns></returns>
+	const Vector3& GetScale() const { return emitter_.transform.scale; }	
+	/// <summary>
+	/// setter_座標位置
+	/// </summary>
+	/// <param name="translate"></param>
+	void SetTranslate(const Vector3& translate) { emitter_.transform.translate = translate; }
+	/// <summary>
+	/// getter_座標位置
+	/// </summary>
+	/// <returns></returns>
+	const Vector3& GetTranslate()const { return emitter_.transform.translate; }
+	/// <summary>
+	/// setter_回転
+	/// </summary>
+	/// <param name="rotate"></param>
+	void SetRotate(const Vector3& rotate) { emitter_.transform.rotate = rotate; }
+	/// <summary>
+	/// getter_回転
+	/// </summary>
+	/// <returns></returns>
+	const Vector3& GetRotate() const { return emitter_.transform.rotate; }
+	/// <summary>
+	/// setter_発生時間
+	/// </summary>
+	/// <param name="time"></param>発生させる時間
+	void SetFrequency(const float time) { emitter_.frequency = time; }
+	/// <summary>
+	/// setter_カメラ
+	/// </summary>
+	/// <param name="camera"></param>現在使っているカメラ
+	void SetCamera(Camera* camera) { camera_ = camera; }
 
 	/// <summary>
 	/// パーティクルのモーション
 	/// </summary>
 	/// <param name="mosion"></param>
-	void SetParticleMosion(ParticleMosion mosion) { particleMosion = mosion; }
+	void SetParticleMosion(ParticleMosion mosion) { particleMosion_ = mosion; }
 
-
-	bool IsCollision(const AABB& aabb, const Vector3& point);
 	/// <summary>
 	/// パーティクル発動モード
 	/// </summary>
 	/// <param name="mode"></param>時間で出る/一度だけ/出さない
-	void ChangeMode(BornParticle mode) { bornP = mode; }
+	void SetParticleBorn(ParticleBorn mode) { particleBorn_ = mode; }
 	/// <summary>
 	/// パーティクルの発生数
 	/// </summary>
 	/// <param name="countnum"></param>
-	void SetParticleCount(uint32_t countnum) { emitter.count = countnum; }
+	void SetParticleCount(uint32_t countnum) { emitter_.count = countnum; }
 
 private:
-	ParticleCommon* particleCommon = nullptr;
+	ParticleCommon* particleCommon_ = nullptr;
 
 	
-	std::string fileName;
-	std::string textureFile;
+	std::string fileName_;
+	std::string textureFile_;
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource;
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
-
-
-	VertexData* vertexData = nullptr;
-	Material* materialData = nullptr;
-
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 
 
+	VertexData* vertexData_ = nullptr;
+	Material* materialData_ = nullptr;
+
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource;
-	ParticleForGPU* wvpData = nullptr;
+
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
+	ParticleForGPU* wvpData_ = nullptr;
 
 	//ライト用のリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightSphereResource;
+	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightSphereResource_;
 
 
 	//マテリアルにデータを書き込む
-	DirectionalLight* directionalLightSphereData = nullptr;
+	DirectionalLight* directionalLightSphereData_ = nullptr;
 
 
-	static const uint32_t kNumMaxInstance = 100;
+	static const uint32_t kNumMaxInstance_ = 100;
 
-	std::list<Particles> particles;
-	uint32_t numInstance = 0;
+	std::list<Particles> particles_;
+	uint32_t numInstance_ = 0;
 
-	Transform transformL;
+	Camera* camera_ = nullptr;
 
-	Camera* camera = nullptr;
+	ModelData modelData_;
+	Emitter emitter_{};
 
-	ModelData modelData;
-	Emitter emitter{};
+	ParticleBorn particleBorn_ = ParticleBorn::TimerMode;
+	ParticleMosion particleMosion_ = ParticleMosion::Normal;
 
-
-	AccelerationField accelerationField;
-
-	BornParticle bornP = BornParticle::TimerMode;
-	ParticleMosion particleMosion = ParticleMosion::Normal;
-
-	uint32_t number = 0;
+	uint32_t number_ = 0;
 
 	//ワールド行列
-	Matrix4x4 worldMatrix;
+	Matrix4x4 worldMatrix_;
 
 };

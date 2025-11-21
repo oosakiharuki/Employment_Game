@@ -9,16 +9,16 @@
 /// </summary>
 enum EFFECT {
 	Mode_Normal_Image,//None 何もなし
-	Mode_Grayscale,
-	Mode_Vignette,
-	Mode_BoxFillter,
-	Mode_GaussianFillter,
-	Mode_LuminanceBasedOutline,
-	Mode_DepthBasedOutline,
-	Mode_RadialBlur,
-	Mode_Dissolve,
-	Mode_Random,
-	Max,//最大
+	Mode_Grayscale,//グレースケール
+	Mode_Vignette,//ビネット
+	Mode_BoxFillter,//ボックスフィルター
+	Mode_GaussianFillter,//ガウシアンフィルター
+	Mode_LuminanceBasedOutline,//アウトライン
+	Mode_DepthBasedOutline,//ディープアウトライン
+	Mode_RadialBlur,//ブラー
+	Mode_Dissolve,//溶かす
+	Mode_Random,//ランダム
+	Max,//最大値(エフェクトではない)
 };
 
 /// <summary>
@@ -28,23 +28,23 @@ class IPostEffects {
 protected:
 	//postEffect特融処理
 
-	static int sEffectNo;
+	static int sEffectNo_;
 
 	DirectXCommon* dxCommon_;
 
-	uint32_t srvIndex;
-	D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU;
-	D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;
+	uint32_t srvIndex_;
+	D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU_;
+	D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU_;
 
 	///DepthOutlineで使う
-	D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU2;
-	D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU2;
+	D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPUDepth_;
+	D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPUDepth_;
 
-	Microsoft::WRL::ComPtr < ID3D12RootSignature> rootSignature = nullptr;
-	Microsoft::WRL::ComPtr < ID3D12PipelineState> graphicsPipelineState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_ = nullptr;
 
 	///RootSignature
-	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
+	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_{};
 	//他はPixselShader等で配列が変わったりするため固有にする
 
 public:
@@ -59,11 +59,15 @@ public:
 	virtual void Initialize(DirectXCommon* dxCommon) = 0;
 
 	/// <summary>
-	/// 描画モード変更処理
+	/// 描画コマンド
 	/// </summary>
 	virtual void Command() = 0;
 	
-	int GetEffectNo() { return sEffectNo; }
+	/// <summary>
+	/// ポストエフェクト番号
+	/// </summary>
+	/// <returns></returns>
+	int GetEffectNo() { return sEffectNo_; }
 
 	//PSO
 	
@@ -86,6 +90,5 @@ public:
 	/// </summary>
 	void ChangeNumber();
 
-	D3D12_GPU_DESCRIPTOR_HANDLE GetEffect() { return srvHandleGPU; }
-	//DirectXCommon* GetDirectXCommon()const { return dxCommon_; }
+	D3D12_GPU_DESCRIPTOR_HANDLE GetEffect() { return srvHandleGPU_; }
 };
