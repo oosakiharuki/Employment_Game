@@ -7,7 +7,7 @@ SceneManager::SceneManager() {
 	LoadingModels::GetInstance()->Finalize();
 	
 	//シーンの設定
-	currentScene_ = sceneArr->GetSceneNo();
+	currentScene_ = sceneArr_->GetSceneNo();
 	prevScene_ = currentScene_;
 
 	//シーンを作る
@@ -28,38 +28,38 @@ void SceneManager::SceneChange() {
 
 void SceneManager::BuildScene() {
 	//シーンを作成
-	sceneFactory.MakeScene(currentScene_);
+	sceneFactory_.MakeScene(currentScene_);
 	//代入
-	sceneArr = sceneFactory.GetSceneGroup(currentScene_);
+	sceneArr_ = sceneFactory_.GetSceneGroup(currentScene_);
 }
 
 void SceneManager::Initialize() {
 	//初期化処理
-	sceneArr->Initialize();
+	sceneArr_->Initialize();
 }
 
 void SceneManager::Update() {
 
 	prevScene_ = currentScene_;
-	currentScene_ = sceneArr->GetSceneNo();
+	currentScene_ = sceneArr_->GetSceneNo();
 
 	// シーンを変更(現在のシーンが前回のシーンと同じでない)
 	if (prevScene_ != currentScene_) {
 		SceneChange();
-		sceneArr->Initialize();
+		sceneArr_->Initialize();
 	}
 
 	//更新処理
-	sceneArr->Update();
+	sceneArr_->Update();
 }
 
 void SceneManager::Draw() {
 	//描画処理
-	sceneArr->Draw();
+	sceneArr_->Draw();
 }
 
 void SceneManager::Finalize() {
-	sceneArr->Finalize();
+	sceneArr_->Finalize();
 	//シーンのリセット
-	sceneArr.reset();
+	sceneArr_.reset();
 }

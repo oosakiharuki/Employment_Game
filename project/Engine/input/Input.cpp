@@ -6,20 +6,20 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"Xinput.lib")
 
-Input* Input::sInstance = nullptr;
+Input* Input::sInstance_ = nullptr;
 
-uint32_t Input::sSRVIndexTop = 1;
+uint32_t Input::sSRVIndexTop_ = 1;
 
 Input* Input::GetInstance() {
-	if (sInstance == nullptr) {
-		sInstance = new Input;
+	if (sInstance_ == nullptr) {
+		sInstance_ = new Input;
 	}
-	return sInstance;
+	return sInstance_;
 }
 
 void Input::Finalize() {
-	delete sInstance;
-	sInstance = nullptr;
+	delete sInstance_;
+	sInstance_ = nullptr;
 }
 
 void Input::Initialize(WinApp* winApp) {
@@ -30,16 +30,16 @@ void Input::Initialize(WinApp* winApp) {
 	HRESULT result;
 
 	result = DirectInput8Create(winApp_->GetHInstance(), DIRECTINPUT_VERSION,
-		IID_IDirectInput8, (void**)&directInput, nullptr);
+		IID_IDirectInput8, (void**)&directInput_, nullptr);
 	assert(SUCCEEDED(result));
 
-	result = directInput->CreateDevice(GUID_SysKeyboard, &keyboard, NULL);
+	result = directInput_->CreateDevice(GUID_SysKeyboard, &keyboard_, NULL);
 	assert(SUCCEEDED(result));
 
-	result = keyboard->SetDataFormat(&c_dfDIKeyboard);
+	result = keyboard_->SetDataFormat(&c_dfDIKeyboard);
 	assert(SUCCEEDED(result));
 
-	result = keyboard->SetCooperativeLevel(winApp_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	result = keyboard_->SetCooperativeLevel(winApp_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(result));
 
 }
@@ -47,16 +47,16 @@ void Input::Initialize(WinApp* winApp) {
 void Input::Update() {
 	HRESULT result;
 
-	memcpy(keyPre, key, sizeof(key));
+	memcpy(keyPre_, key_, sizeof(key_));
 
-	result = keyboard->Acquire();
+	result = keyboard_->Acquire();
 
-	result = keyboard->GetDeviceState(sizeof(key), key);
+	result = keyboard_->GetDeviceState(sizeof(key_), key_);
 }
 
 bool Input::PushKey(BYTE keyNumber) {
 	
-	if (key[keyNumber]) {
+	if (key_[keyNumber]) {
 		return true;
 	}
 
@@ -65,7 +65,7 @@ bool Input::PushKey(BYTE keyNumber) {
 
 bool Input::TriggerKey(BYTE keyNumber) {
 	
-	if (key[keyNumber] && !keyPre[keyNumber]) {
+	if (key_[keyNumber] && !keyPre_[keyNumber]) {
 		return true;
 	}
 
@@ -75,7 +75,7 @@ bool Input::TriggerKey(BYTE keyNumber) {
 bool Input::GetJoystickState(uint32_t num, XINPUT_STATE& state) {
 	DWORD dwResult;
 
-	prevState = state;
+	prevState_ = state;
 
 	ZeroMemory(&state, sizeof(XINPUT_STATE));
 	
@@ -111,7 +111,7 @@ bool Input::GetJoystickStatePrevious(uint32_t num, XINPUT_STATE& state) {
 		// Controller is connected	
 
 		//現在の状態から前回の状態に
-		state = prevState;
+		state = prevState_;
 
 		return true;
 	}

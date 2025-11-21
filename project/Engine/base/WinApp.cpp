@@ -18,24 +18,24 @@ void WinApp::Initialize() {
 	timeBeginPeriod(1);
 
 	//ウィンドウプロシージャ
-	wc.lpfnWndProc = WindowProc;
+	wc_.lpfnWndProc = WindowProc;
 	//ウィンドウクラス名
-	wc.lpszClassName = L"C62WindowClass";
+	wc_.lpszClassName = L"C62WindowClass";
 	//インスタンスハンドル
-	wc.hInstance = GetModuleHandle(nullptr);
+	wc_.hInstance = GetModuleHandle(nullptr);
 	//カーソル
-	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+	wc_.hCursor = LoadCursor(nullptr, IDC_ARROW);
 
 	//ウィンドウクラスの登録
-	RegisterClass(&wc);
+	RegisterClass(&wc_);
 
 	//　ウィンドウサイズを表す構造体にクライアント領域を入れる
-	RECT wrc = { 0, 0,kClientWidth,kClientHeight };
+	RECT wrc = { 0, 0,kClientWidth_,kClientHeight_ };
 	//クライアント領域をもとに実際のサイズにwrcを変更してもらう
 	AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
 
-	hwnd = CreateWindow(
-		wc.lpszClassName,
+	hwnd_ = CreateWindow(
+		wc_.lpszClassName,
 		L"LE3B_05_オオサキ_ハルキ_パラソルジャー",
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
@@ -44,10 +44,10 @@ void WinApp::Initialize() {
 		wrc.bottom - wrc.top,
 		nullptr,
 		nullptr,
-		wc.hInstance,
+		wc_.hInstance,
 		nullptr);
 
-	ShowWindow(hwnd, SW_SHOW);
+	ShowWindow(hwnd_, SW_SHOW);
 }
 
 
@@ -95,6 +95,6 @@ void WinApp::Update() {
 }
 
 void WinApp::Finalize(){
-	CloseWindow(hwnd);
+	CloseWindow(hwnd_);
 	CoUninitialize();
 }

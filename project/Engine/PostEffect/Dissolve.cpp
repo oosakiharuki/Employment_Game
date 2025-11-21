@@ -19,53 +19,53 @@ void Dissolve::Initialize(DirectXCommon* dxCommon) {
 void Dissolve::RootSignature() {
 
 	//RootSignature
-	descriptionRootSignature.Flags =
+	descriptionRootSignature_.Flags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
 
-	descriptorRange[0].BaseShaderRegister = 0;
-	descriptorRange[0].NumDescriptors = 1;//t0
-	descriptorRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	descriptorRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	descriptorRange_[0].BaseShaderRegister = 0;
+	descriptorRange_[0].NumDescriptors = 1;//t0
+	descriptorRange_[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRange_[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	descriptorRangeDissolve[0].BaseShaderRegister = 1;
-	descriptorRangeDissolve[0].NumDescriptors = 1;//t1
-	descriptorRangeDissolve[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	descriptorRangeDissolve[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	descriptorRangeDissolve_[0].BaseShaderRegister = 1;
+	descriptorRangeDissolve_[0].NumDescriptors = 1;//t1
+	descriptorRangeDissolve_[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	descriptorRangeDissolve_[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	//RootParameter作成__
-	descriptionRootSignature.pParameters = rootParameters;
-	descriptionRootSignature.NumParameters = _countof(rootParameters);
+	descriptionRootSignature_.pParameters = rootParameters_;
+	descriptionRootSignature_.NumParameters = _countof(rootParameters_);
 
 
-	rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters[0].DescriptorTable.pDescriptorRanges = descriptorRange;
-	rootParameters[0].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange);
+	rootParameters_[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameters_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameters_[0].DescriptorTable.pDescriptorRanges = descriptorRange_;
+	rootParameters_[0].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange_);
 
-	rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters[1].DescriptorTable.pDescriptorRanges = descriptorRangeDissolve;
-	rootParameters[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeDissolve);
+	rootParameters_[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameters_[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameters_[1].DescriptorTable.pDescriptorRanges = descriptorRangeDissolve_;
+	rootParameters_[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeDissolve_);
 
-	rootParameters[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters[2].Descriptor.ShaderRegister = 0;//Object3d.PS.hlsl の b0
+	rootParameters_[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameters_[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameters_[2].Descriptor.ShaderRegister = 0;//Object3d.PS.hlsl の b0
 
 
 	//2でまとめる
 	//Sampler s0
-	staticSamplers[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	staticSamplers[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;//clamp = そのテクスチャが伸びる
-	staticSamplers[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-	staticSamplers[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-	staticSamplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-	staticSamplers[0].MaxLOD = D3D12_FLOAT32_MAX;
-	staticSamplers[0].ShaderRegister = 0;
-	staticSamplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	staticSamplers_[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	staticSamplers_[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;//clamp = そのテクスチャが伸びる
+	staticSamplers_[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+	staticSamplers_[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+	staticSamplers_[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+	staticSamplers_[0].MaxLOD = D3D12_FLOAT32_MAX;
+	staticSamplers_[0].ShaderRegister = 0;
+	staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
-	descriptionRootSignature.pStaticSamplers = staticSamplers;
-	descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers);
+	descriptionRootSignature_.pStaticSamplers = staticSamplers_;
+	descriptionRootSignature_.NumStaticSamplers = _countof(staticSamplers_);
 
 }
 
@@ -77,14 +77,14 @@ void Dissolve::GraphicsPipeline() {
 	//シリアライズしてバイナリにする
 	ID3DBlob* signatureBlob = nullptr;
 	ID3DBlob* errorBlob = nullptr;
-	HRESULT hr = D3D12SerializeRootSignature(&descriptionRootSignature,
+	HRESULT hr = D3D12SerializeRootSignature(&descriptionRootSignature_,
 		D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob, &errorBlob);
 	if (FAILED(hr)) {
 		log(reinterpret_cast<char*>(errorBlob->GetBufferPointer()));
 		assert(false);
 	}
 	//バイナリを元に生成
-	hr = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature));
+	hr = dxCommon_->GetDevice()->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(&rootSignature_));
 	assert(SUCCEEDED(hr));
 
 
@@ -125,7 +125,7 @@ void Dissolve::GraphicsPipeline() {
 
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-	graphicsPipelineStateDesc.pRootSignature = rootSignature.Get();
+	graphicsPipelineStateDesc.pRootSignature = rootSignature_.Get();
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
 	graphicsPipelineStateDesc.VS = { vertexShaderBlob->GetBufferPointer(),vertexShaderBlob->GetBufferSize() };
 	graphicsPipelineStateDesc.PS = { pixelShaderBlob->GetBufferPointer(),pixelShaderBlob->GetBufferSize() };
@@ -153,44 +153,43 @@ void Dissolve::GraphicsPipeline() {
 
 	//PSOここ絶対最後
 
-	hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState));
+	hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr));
 
-	srvIndex = SrvManager::GetInstance()->Allocate();
-	srvHandleCPU = SrvManager::GetInstance()->GetCPUDescriptorHandle(srvIndex);
-	srvHandleGPU = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex);
+	srvIndex_ = SrvManager::GetInstance()->Allocate();
+	srvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(srvIndex_);
+	srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_);
 
 
-	SrvManager::GetInstance()->CreateSRVforTexture2D(srvIndex, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
+	SrvManager::GetInstance()->CreateSRVforTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
-	textureFileName = "resource/Sprite/noise0.png";
-	TextureManager::GetInstance()->LoadTexture(textureFileName);
+	textureFileName_ = "resource/Sprite/noise0.png";
+	TextureManager::GetInstance()->LoadTexture(textureFileName_);
 
-	dissolveResource = dxCommon_->CreateBufferResource(sizeof(Threshold));
-	dissolveResource->Map(0, nullptr, reinterpret_cast<void**>(&threshold));
+	dissolveResource_ = dxCommon_->CreateBufferResource(sizeof(Threshold));
+	dissolveResource_->Map(0, nullptr, reinterpret_cast<void**>(&threshold_));
 
-	threshold->degress = 0.5f;
-	threshold->egdeSize = 0.02f;
-	//threshold->egdeColor = { 1.0f, 1.0f, 1.0f };//なぜか反映できない
+	threshold_->degress = 0.5f;
+	threshold_->egdeSize = 0.02f;
 }
 
 void Dissolve::Command() {
-	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature.Get());
-	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState.Get());
+	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
 	//通常の描画
 	
-	if (isFade) {
+	if (isFade_) {
 		//特定のテクスチャ
-		dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(0, TextureGPU);
+		dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(0, TextureGPU_);
 	}
 	else {
-		dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU);
+		dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
 	}
 	
 	//Dissolveの描画
-	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(1, TextureManager::GetInstance()->GetSrvHandleGPU(textureFileName));
+	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(1, TextureManager::GetInstance()->GetSrvHandleGPU(textureFileName_));
 	//溶ける度合
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(2, dissolveResource->GetGPUVirtualAddress());
+	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(2, dissolveResource_->GetGPUVirtualAddress());
 	dxCommon_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
 }
 
@@ -199,14 +198,14 @@ void Dissolve::EffectUpdate() {
 #ifdef USE_IMGUI
 
 	ImGui::Text("Dissolve");
-	ImGui::SliderFloat("溶かし度合", &threshold->degress, 0.0f, 1.0f);
-	ImGui::SliderFloat("egdeのサイズ", &threshold->egdeSize, 0.0f, 0.1f);
+	ImGui::SliderFloat("溶かし度合", &threshold_->degress, 0.0f, 1.0f);
+	ImGui::SliderFloat("egdeのサイズ", &threshold_->egdeSize, 0.0f, 0.1f);
 	//ImGui::SliderFloat3("egdeColor", &threshold->egdeColor.x, 0.0f, 1.0f);
 
-	ImGui::Checkbox("マスク画像変更",&isChangeMask);
+	ImGui::Checkbox("マスク画像変更",&isChangeMask_);
 
 	ImGui::Text("現在のマスク画像");
-	if (isChangeMask) {
+	if (isChangeMask_) {
 		ImGui::Text("noise1");
 	}
 	else {
@@ -215,50 +214,50 @@ void Dissolve::EffectUpdate() {
 #endif
 	//溶かし具合
 	if (Input::GetInstance()->PushKey(DIK_D)) {
-		threshold->degress += 0.01f;
+		threshold_->degress += 0.01f;
 	}
 	else if (Input::GetInstance()->PushKey(DIK_A)) {
-		threshold->degress -= 0.01f;
+		threshold_->degress -= 0.01f;
 	}
-	threshold->degress = std::clamp(threshold->degress, 0.0f, 1.0f);
+	threshold_->degress = std::clamp(threshold_->degress, 0.0f, 1.0f);
 
 	//Edge調節
 	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
-		threshold->egdeSize += 0.001f;
+		threshold_->egdeSize += 0.001f;
 	}
 	else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-		threshold->egdeSize -= 0.001f;
+		threshold_->egdeSize -= 0.001f;
 	}
-	threshold->egdeSize = std::clamp(threshold->egdeSize, 0.0f, 0.1f);
+	threshold_->egdeSize = std::clamp(threshold_->egdeSize, 0.0f, 0.1f);
 
 	//マスク変更
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
-		isChangeMask = !isChangeMask;
+		isChangeMask_ = !isChangeMask_;
 	}
 
-	if (isChangeMask) {
-		textureFileName = "resource/Sprite/noise1.png";
-		TextureManager::GetInstance()->LoadTexture(textureFileName);
+	if (isChangeMask_) {
+		textureFileName_ = "resource/Sprite/noise1.png";
+		TextureManager::GetInstance()->LoadTexture(textureFileName_);
 	}
 	else {
-		textureFileName = "resource/Sprite/noise0.png";
-		TextureManager::GetInstance()->LoadTexture(textureFileName);
+		textureFileName_ = "resource/Sprite/noise0.png";
+		TextureManager::GetInstance()->LoadTexture(textureFileName_);
 	}
 }
 
 void Dissolve::SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu, const std::string textureFile) {
 
-	TextureGPU = gpu;
-	isFade = true;
+	TextureGPU_ = gpu;
+	isFade_ = true;
 
-	textureFileName = "resource/Sprite/" + textureFile;
-	TextureManager::GetInstance()->LoadTexture(textureFileName);
+	textureFileName_ = "resource/Sprite/" + textureFile;
+	TextureManager::GetInstance()->LoadTexture(textureFileName_);
 }
 
 void Dissolve::Degress(float value) {
-	threshold->degress = value;
+	threshold_->degress = value;
 }
 
 void Dissolve::EgdeSize(float value) {
-	threshold->egdeSize = value;
+	threshold_->egdeSize = value;
 }

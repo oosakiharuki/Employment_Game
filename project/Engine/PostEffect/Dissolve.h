@@ -17,7 +17,6 @@ public:
 	struct Threshold {
 		float degress;
 		float egdeSize;
-		//Vector3 egdeColor;
 	};
 
 private:
@@ -28,22 +27,22 @@ private:
 	void EffectUpdate() override;
 
 	//RootSignature
-	D3D12_DESCRIPTOR_RANGE descriptorRange[1] = {};
-	D3D12_DESCRIPTOR_RANGE descriptorRangeDissolve[1] = {};
-	D3D12_ROOT_PARAMETER rootParameters[3] = {};
-	D3D12_STATIC_SAMPLER_DESC staticSamplers[1] = {};
+	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};
+	D3D12_DESCRIPTOR_RANGE descriptorRangeDissolve_[1] = {};
+	D3D12_ROOT_PARAMETER rootParameters_[3] = {};
+	D3D12_STATIC_SAMPLER_DESC staticSamplers_[1] = {};
 
-	std::string textureFileName;
+	std::string textureFileName_;
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> dissolveResource;
+	Microsoft::WRL::ComPtr<ID3D12Resource> dissolveResource_;
 	
-	Microsoft::WRL::ComPtr<ID3D12Resource> backGroundResource;
+	Microsoft::WRL::ComPtr<ID3D12Resource> backGroundResource_;
 
-	D3D12_CPU_DESCRIPTOR_HANDLE TextureCPU;
-	D3D12_GPU_DESCRIPTOR_HANDLE TextureGPU;
-	bool isFade = false;
+	D3D12_CPU_DESCRIPTOR_HANDLE TextureCPU_;
+	D3D12_GPU_DESCRIPTOR_HANDLE TextureGPU_;
+	bool isFade_ = false;
 
 
-	Threshold* threshold;
-	bool isChangeMask = false;
+	Threshold* threshold_;
+	bool isChangeMask_ = false;
 };

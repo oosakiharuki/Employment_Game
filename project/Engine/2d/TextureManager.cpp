@@ -17,7 +17,7 @@ TextureManager* TextureManager::GetInstance() {
 void TextureManager::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager) {
 	dxCommon_ = dxCommon;
 	srvManager_ = srvManager;
-	textureDatas_.reserve(SrvManager::sMaxSRVCount);
+	textureDatas_.reserve(SrvManager::sMaxSRVCount_);
 }
 
 
