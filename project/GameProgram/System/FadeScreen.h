@@ -71,7 +71,7 @@ private:
 	float degress_ = 0.0f;
 	//edgeサイズ
 	const float kEdgeSize = 0.01f;
-
+	//解け具合最大値
 	const float kDegressMax = 1.0f;
 
 

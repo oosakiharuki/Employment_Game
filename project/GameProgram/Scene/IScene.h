@@ -169,12 +169,12 @@ private:
 
 	//操作ガイドに必要な総数
 	const uint32_t maxGuide = 7;
-	//変更する場所
-	const float kChangePointJump_ = -60.0f;
-	const float kChangePointFire_ = 0.0f;
-	const float kChangePointShield_ = 16.0f;
-	const float kChangePointBrink_ = 80.0f;
-	const float kChangePointKakku_ = 105.0f;
+	//変更する場所(ジャンプ説明前は移動の説明)
+	const float kChangePointJump_ = -60.0f;  //ジャンプの説明
+	const float kChangePointFire_ = 0.0f;    //攻撃の説明
+	const float kChangePointShield_ = 16.0f; //守るの説明
+	const float kChangePointBrink_ = 80.0f;  //ブリンクの説明
+	const float kChangePointKakku_ = 105.0f; //滑空の説明
 
 	//ゴール時前を向くように
 	const Vector3 kPlayerForntAngle_ = { 0.0f,180.0f,0.0f };

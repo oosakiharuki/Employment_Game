@@ -13,24 +13,36 @@ public:
 	void Draw() override;
 	void Finalize() override;
 private:
+	//スプライト描画
 	std::unique_ptr<Sprite> sprite_;//ゲームクリアの文字
 	std::unique_ptr<Sprite> spriteSpace_;//Spaceでもどるの文字
 
-	std::unique_ptr<Object_glTF> playerGltf_;
-	std::unique_ptr<Object_glTF> stageGltf_;
+	//プレイヤー
+	std::unique_ptr<Object_glTF> playerGltf_;	
 	WorldTransform wt_;
 
+	//演出用のステージ
+	std::unique_ptr<Object_glTF> stageGltf_;
+
+	//紙吹雪のパーティクルたち
 	std::vector<std::unique_ptr<Particle>> particle_fanfares_;
 
+	//クリアシーンのカメラ座標
 	const Vector3 kCameraTranslate_ = { 0.0f,2.0f,-18.0f };
 
-	const Vector2 kSpritePosition_ = { 800,10 };
-	const Vector2 kSpriteSize_ = { 256,64 };
+	//スプライト
+	const Vector2 kSpritePositionGameClear_ = { 100, 100 };//[ゲームクリア]文字の座標
+	const Vector2 kSpritePositionBotton_ = { 800,10 };//[ボタンで戻る]文字の座標
+	const Vector2 kSpriteSizeBotton_ = { 256,64 };//[ボタンで戻る]文字のサイズ
 
+	//プレイヤーを前に向かす
 	const float kPlayerFrontRange_ = 180.0f;
 
+	//紙吹雪パーティクルたちの座標をずらす
 	const float kFanfareX_ = 3.0f;
+	//紙吹雪パーティクルの[左側]の座標
 	const Vector3 kFanfareInitTranslate_ = { -kFanfareX_,2,0 };
+	//紙吹雪パーティクルの座標
 	Vector3 fanfareTranslate_ = kFanfareInitTranslate_;
 
 };

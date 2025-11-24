@@ -106,7 +106,7 @@ private:
 	//固定する高さ
 	const float kFixedY_ = 6.0f;
 
-	//固定する
+	//固定する値
 	bool isFixedMode_ = false;
 	Vector3 fixedPos_;
 
@@ -118,8 +118,11 @@ private:
 
 	//カメラズーム
 	Segment cameraSegment_ = {};
+
 	float zoomTimer_ = 0.0f;
+	//ズーム時間最大値
 	const float kMaxZoomTime_ = 1.0f;
+	//ズーム中
 	bool isZoom_ = false;
 
 	//imgui

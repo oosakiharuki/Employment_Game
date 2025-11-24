@@ -12,6 +12,6 @@ namespace UseEveryOne {
 	//0.5倍(2除算)
 	const float kDivideByTwo_ = 0.5f;
 
-
+	//元の大きさ
 	const Vector3 kDefaultScale_ = { 1,1,1 };
 }

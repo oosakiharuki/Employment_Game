@@ -6,13 +6,13 @@ void ClearScene::Initialize() {
 	//クリアロゴ作成
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize("Moji_GameClear.png");
-	sprite_->SetPosition({ 100,100 });
+	sprite_->SetPosition(kSpritePositionGameClear_);
 
 	//戻る
 	spriteSpace_ = std::make_unique<Sprite>();
 	spriteSpace_->Initialize("Moji_botton.png");
-	spriteSpace_->SetPosition(kSpritePosition_);
-	spriteSpace_->SetSize(kSpriteSize_);
+	spriteSpace_->SetPosition(kSpritePositionBotton_);
+	spriteSpace_->SetSize(kSpriteSizeBotton_);
 
 	camera_ = std::make_unique<Camera>();
 

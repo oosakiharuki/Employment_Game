@@ -29,7 +29,7 @@ public:
 	/// </summary>
 	void Vanish();
 private:
-
+	//次のステージの名前
 	std::string fileName_;
 
 	//小さくする

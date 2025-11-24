@@ -58,8 +58,10 @@ public:
 	AABB GetAABB();
 
 private:
+	//オブジェクト
 	std::unique_ptr<Object3d> object_ = nullptr;
 	WorldTransform wt_;
+	//速さ
 	Vector3 velocity_;
 
 	//消えるまでの処理

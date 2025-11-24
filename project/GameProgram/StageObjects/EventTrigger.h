@@ -95,19 +95,24 @@ private:
 	std::unique_ptr<Object_glTF> object_;
 	WorldTransform wt_;
 
+	//読み取ったcsv
 	std::stringstream enemyPopCsvFile_;
 
+	//ウェーブで一度読み込みを停止する
 	bool isEventWave_ = false;
+	//csvを読み取る
 	bool isLoadCsv_ = true;
-
+	//イベント終了
 	bool isEventEnd_ = false;
 
 	//敵を生んだ・倒した数
 	uint32_t enemyBornCount_ = 0;
 	uint32_t enemyDeadCount_ = 0;
 
+	//登場する敵たち
 	std::vector<std::shared_ptr<IEnemy>> popEnemies_;
 
+	//イベントのデータ
 	EventData eventData_;
 
 	//パーティクル
