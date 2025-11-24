@@ -11,7 +11,7 @@ public:
 	void Draw() override;
 	void Finalize() override;
 private:
-
+	//BGM
 	SoundData soundData_;
 
 	//残機
@@ -20,10 +20,18 @@ private:
 	//スタート演出(水たまりから飛び出る感じに)
 	bool isStartStage_ = true;
 	Vector3 playerPoint_{};
-	float startPointY_ = 0.0f;
-
+	float startPointY_ = -10.0f;
 	//スタート時のワープゲート
 	std::unique_ptr<WarpGate> startWarp_;
+	//スタート時にプレイヤーを上げる変数
+	const float kPlayerUp_ = 0.1f;
+	//重ならないように影より上にする変数
+	const float kWarpGateUpThanShadow_ = 0.02f;
+
+	//落ちる限界
+	const float kFallEndY_ = -10.0f;
+
+
 
 
 	/// <summary>

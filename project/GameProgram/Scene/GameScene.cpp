@@ -40,11 +40,11 @@ void GameScene::Update() {
 	//演出用のワープゲート出口
 	startWarp_->Update();
 
-	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->MaxZoom()) {
+	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->ZoomEnd()) {
 		NextSceneFadeInStart("NextStage");
 	}
 
-	if (CollisionManager::GetInstance()->IsGoal() && cameraControl_->MaxZoom()) {
+	if (CollisionManager::GetInstance()->IsGoal() && cameraControl_->ZoomEnd()) {
 		NextSceneFadeInStart("Clear");
 	}
 
@@ -81,7 +81,7 @@ void GameScene::Update() {
 			return;
 		}
 
-		startPointY_ += 0.1f;
+		startPointY_ += kPlayerUp_;
 		player_->SetTranslate({ playerPoint_.x,startPointY_,playerPoint_.z });
 	}
 
@@ -118,7 +118,7 @@ void GameScene::Update() {
 	CollisionCommon();
 
 	//落ちた場合
-	if (player_->GetTranslate().y < -10.0f) {
+	if (player_->GetTranslate().y < kFallEndY_) {
 		player_->IsFall();
 	}
 
@@ -194,22 +194,21 @@ void GameScene::WarterWarpExit() {
 	startWarp_ = std::make_unique<WarpGate>();
 	startWarp_->Initialize();
 	isStartStage_ = true;
-	startPointY_ = 10.0f;
 
 	playerPoint_ = player_->GetTranslate();
-	startPointY_ = playerPoint_.y - startPointY_;//プレイヤーが真下からくるように設定する
+	startPointY_ = playerPoint_.y + startPointY_;//プレイヤーが真下からくるように設定する
 
 	//ワープゲート出口の位置決め
 	Vector3 warpPosition = player_->GetTranslate();
 
 	//当たり判定
 	AABB startWarpAABB;
-	startWarpAABB.max = warpPosition + Vector3{ 0,1,0 };
-	startWarpAABB.min = warpPosition + Vector3{ 0,-10,0 };
+	startWarpAABB.max = warpPosition;
+	startWarpAABB.min = warpPosition + Vector3{ 0,startPointY_,0 };
 
 	//プレイヤー初期位置の真下に
 	warpPosition = CollisionManager::GetInstance()->UnderCollision(stagesAABB_, startWarpAABB, playerPoint_);
-	warpPosition.y += 0.02f;//重ならないように影より上にする
+	warpPosition.y += kWarpGateUpThanShadow_;//重ならないように影より上にする
 
 	startWarp_->SetPosition(warpPosition);//playerの真下に
 	startWarp_->SetRotation({ 90.0f,0.0f,0.0f });//下向きにして水たまりに

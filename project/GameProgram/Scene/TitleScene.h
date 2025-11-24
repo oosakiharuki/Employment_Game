@@ -79,6 +79,4 @@ private:
 	const float kShadowPositionY_ = -3.79f;//(-3.8f + 0.01f)
 
 
-
-	const float kDeltaTime_ = 1.0f / 60.0f;
 };

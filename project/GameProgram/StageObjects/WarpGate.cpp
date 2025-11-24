@@ -27,7 +27,7 @@ void WarpGate::Draw() {
 
 void WarpGate::Vanish() {
 	if (wt_.scale_.x > 0 && wt_.scale_.y > 0 && wt_.scale_.z > 0) {
-		timer_ += 0.1f;
-		wt_.scale_ -= EaseIn(0.1f, kLittleLarge_ + timer_);
+		smallingTimer_ += 0.1f;
+		wt_.scale_ -= EaseIn(0.1f, kLittleLarge_ + smallingTimer_);
 	}
 }

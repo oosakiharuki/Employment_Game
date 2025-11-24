@@ -1,6 +1,8 @@
 #include "TitleScene.h"
+#include "UseEveryOne.h"
 
 using namespace MyMath;
+using namespace UseEveryOne;
 
 void TitleScene::Initialize() {
 
@@ -111,7 +113,7 @@ void TitleScene::Update() {
 		wts_[0].translation_.y = kLandingPointY_;
 		//Maxになるまでタイマーを進ませる
 		if (titleFallingTimer_ < kTitleFallingTimeMax_) {
-			titleFallingTimer_ += kDeltaTime_;
+			titleFallingTimer_ += kDeltaTime;
 		}
 		else {
 			titleFallingTimer_ = kTitleFallingTimeMax_;
@@ -138,7 +140,7 @@ void TitleScene::Update() {
 			wts_[3].translation_.x += kMoveSelectMoji_;
 		}
 
-		bulletTimer_ += kDeltaTime_;
+		bulletTimer_ += kDeltaTime;
 		if (bulletTimer_ >= kBulletTimeMax_) {
 			NextSceneFadeInStart("Select");
 		}

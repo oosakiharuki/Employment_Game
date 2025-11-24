@@ -28,12 +28,12 @@ void SelectScene::Update() {
 	}
 
 	//ワープするflag && カメラがズームし終わった
-	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->MaxZoom()) {
+	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->ZoomEnd()) {
 		NextSceneFadeInStart("Game");
 	}
 
 	//ワープするflag && カメラがズームし終わった
-	if (CollisionManager::GetInstance()->IsGoal() && cameraControl_->MaxZoom()) {
+	if (CollisionManager::GetInstance()->IsGoal() && cameraControl_->ZoomEnd()) {
 		NextSceneFadeInStart("Clear");
 	}
 

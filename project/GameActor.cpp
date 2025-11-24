@@ -1,5 +1,6 @@
 #include "GameActor.h"
 
+using namespace UseEveryOne;
 using namespace MyMath;
 
 void GameActor::Actor_InitializeCommon() {
@@ -46,7 +47,7 @@ void GameActor::ScaleUpdate(bool* mosionOn, Vector3 scale, const float& maxTime)
 	else {
 		wt_.scale_ += scale;
 	}
-	scaleTimer_ += kDeltaTime_;
+	scaleTimer_ += kDeltaTime;
 }
 
 void GameActor::RespawnCommon() {

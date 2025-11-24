@@ -11,13 +11,13 @@ void ClearScene::Initialize() {
 	//戻る
 	spriteSpace_ = std::make_unique<Sprite>();
 	spriteSpace_->Initialize("Moji_botton.png");
-	spriteSpace_->SetPosition({ 800,10 });
-	spriteSpace_->SetSize({ 256,64 });
+	spriteSpace_->SetPosition(kSpritePosition_);
+	spriteSpace_->SetSize(kSpriteSize_);
 
 	camera_ = std::make_unique<Camera>();
 
-	cameraTranslate_ = { 0,2.0f,-18.0f };
-	cameraRotate_ = { 0,0.0f,0 };
+	cameraTranslate_ = kCameraTranslate_;
+	cameraRotate_ = { 0,0,0 };
 
 	camera_->SetTranslate(cameraTranslate_);
 	camera_->SetRotate(cameraRotate_);
@@ -30,7 +30,7 @@ void ClearScene::Initialize() {
 	playerGltf_->SetModelFile("player_clear.gltf");
 
 	wt_.Initialize();
-	wt_.rotation_.y = 180.0f;
+	wt_.rotation_.y = kPlayerFrontRange_;
 
 	//地面
 	stageGltf_ = std::make_unique<Object_glTF>();
@@ -62,22 +62,19 @@ void ClearScene::Update() {
 
 	wt_.UpdateMatrix();
 	playerGltf_->Update(wt_);
-
-	Vector3 gTranslate = { -3,2,0 };
+	
+	//初期値に戻す
+	fanfareTranslate_ = kFanfareInitTranslate_;
 	for (auto& gParticle : particle_fanfares_) {
-		if (setFrequencyTime_) {
-			gParticle->SetParticleBorn(ParticleBorn::TimerMode);
-		}
-		gParticle->SetTranslate(gTranslate);
+		gParticle->SetParticleBorn(ParticleBorn::TimerMode);
+		gParticle->SetTranslate(fanfareTranslate_);
 		gParticle->Update();
-
-		gTranslate.x += 3.0f;
+		//左->中央->右の順に配置
+		fanfareTranslate_.x += kFanfareX_;
 	}
 
+	//周りのステージ
 	stageGltf_->Update();
-
-
-	setFrequencyTime_ = true;
 
 	//フェード中でないか && 次のシーンに変更フラグが立ったか
 	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {

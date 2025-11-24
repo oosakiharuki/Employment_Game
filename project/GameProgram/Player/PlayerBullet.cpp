@@ -1,6 +1,8 @@
 #include "PlayerBullet.h"
+#include "UseEveryOne.h"
 
 using namespace MyMath;
+using namespace UseEveryOne;
 
 PlayerBullet::~PlayerBullet() {}
 
@@ -18,7 +20,7 @@ void PlayerBullet::Initialize() {
 
 void PlayerBullet::Update() {
 
-	deathTimer_ += kDeltaTime_;
+	deathTimer_ += kDeltaTime;
 	
 	//弾丸速度
 	//徐々に減速する

@@ -62,9 +62,6 @@ private:
 	//使用するスプライト
 	std::unique_ptr<Sprite> sprite_;
 
-	//秒数時間
-	const float kDeltaTime_ = 1.0f / 60.0f;
-
 	//フェード中フラグ
 	bool isFading_ = true;
 	//フェードのタイプ
@@ -72,6 +69,11 @@ private:
 
 	//Dissolve(ポストエフェクト)で溶け具合の変数
 	float degress_ = 0.0f;
+	//edgeサイズ
+	const float kEdgeSize = 0.01f;
+
+	const float kDegressMax = 1.0f;
+
 
 	//使用するポストエフェクト
 	//std::unique_ptr<IPostEffects> postEffect_ = nullptr;

@@ -4,18 +4,21 @@ void GameOverScene::Initialize() {
 	//ゲームオーバーロゴ作成
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize("Moji_GameOver.png");
-	sprite_->SetPosition({ 100,100 });
+	sprite_->SetPosition(kSpritePositionGameOver_);
 
 	//戻る
 	spriteSpace_ = std::make_unique<Sprite>();
 	spriteSpace_->Initialize("Moji_botton.png");
-	spriteSpace_->SetPosition({ 800,10 });
-	spriteSpace_->SetSize({256,64});
+	spriteSpace_->SetPosition(kSpritePositionBotton_);
+	spriteSpace_->SetSize(kSpriteSizeBotton_);
+
+	cameraTranslate_ = kCameraTranslate_;
+	cameraRotate_ = kCameraRotate_;
 
 	//カメラ設定
 	camera_ = std::make_unique<Camera>();
-	camera_->SetTranslate({0,5,-15});
-	camera_->SetRotate({15.0f,0,0});
+	camera_->SetTranslate(cameraTranslate_);
+	camera_->SetRotate(cameraRotate_);
 
 	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
 
@@ -53,7 +56,7 @@ void GameOverScene::Update() {
 		FadeScreen::GetInstance()->SetBackGround("fadeTexture.png");
 	}
 
-	wt_.rotation_.y += 0.5f;
+	wt_.rotation_.y += kRotate_;
 	wt_.UpdateMatrix();
 
 	//ライトのスイッチ

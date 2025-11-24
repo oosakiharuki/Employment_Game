@@ -186,22 +186,28 @@ void IScene::DrawGuide() {
 		spriteGuide_[6]->Draw();
 	}
 	else if (stageFileName_ == "stage_0") {
-		if (player_->GetTranslate().x >= 105.0f) {
+		if (player_->GetTranslate().x >= kChangePointKakku_) {
+			//滑空
 			spriteGuide_[5]->Draw();
 		}
-		else if (player_->GetTranslate().x >= 80.0f) {
+		else if (player_->GetTranslate().x >= kChangePointBrink_) {
+			//ブリンク
 			spriteGuide_[4]->Draw();
 		}
-		else if (player_->GetTranslate().x >= 16.0f) {
+		else if (player_->GetTranslate().x >= kChangePointShield_) {
+			//守る
 			spriteGuide_[3]->Draw();
 		}
-		else if (player_->GetTranslate().x >= 0.0f) {
+		else if (player_->GetTranslate().x >= kChangePointFire_) {
+			//攻撃
 			spriteGuide_[2]->Draw();
 		}
-		else if (player_->GetTranslate().x >= -60.0f) {
+		else if (player_->GetTranslate().x >= kChangePointJump_) {
+			//ジャンプ
 			spriteGuide_[1]->Draw();
 		}
 		else {
+			//動く
 			spriteGuide_[0]->Draw();
 		}
 	}

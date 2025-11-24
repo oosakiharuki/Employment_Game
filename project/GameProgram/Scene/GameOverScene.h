@@ -19,4 +19,14 @@ private:
 	WorldTransform wt_;
 	
 	std::unique_ptr<Object_glTF> stageGltf_;
+
+	const Vector3 kCameraTranslate_ = { 0.0f,5.0f,-15.0f };
+	const Vector3 kCameraRotate_ = { 15.0f,0.0f,0.0f };
+
+	const Vector2 kSpritePositionGameOver_ = { 100.0f,100.0f };
+	const Vector2 kSpritePositionBotton_ = { 800.0f,10.0f };
+	const Vector2 kSpriteSizeBotton_ = { 256.0f, 64.0f };
+
+
+	const float kRotate_ = 0.5f;
 };

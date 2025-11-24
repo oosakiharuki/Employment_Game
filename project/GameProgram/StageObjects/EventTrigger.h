@@ -122,6 +122,16 @@ private:
 	//頻度
 	const float kFrequency_ = kSummonMaxTime_ / 15.0f;
 
-	//秒数時間
-	const float kDeltaTime_ = 1.0f / 60.f;
+	//パーティクルサイズ
+	const float gSize = 0.25f;
+
+	//動ける範囲
+	const float kMoveX = 3.0f;
+
+	//AABBのサイズ
+	const Vector3 kAABBSize_ = { 2.0f,2.0f,3.0f };
+
+	//向き(左右)
+	const float kDirectionRight_ = 90.0f;
+	const float kDirectionLeft_ = -90.0f;
 };

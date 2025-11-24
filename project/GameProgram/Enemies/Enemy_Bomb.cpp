@@ -1,6 +1,7 @@
 #include "Enemy_Bomb.h"
 #include "Object3dCommon.h"
 
+using namespace UseEveryOne;
 using namespace MyMath;
 
 Enemy_Bomb::~Enemy_Bomb() {}
@@ -77,7 +78,7 @@ void Enemy_Bomb::Attack() {
 
 void Enemy_Bomb::TimeRimmit() {
 	//爆弾タイマー
-	bombTimer_ += kDeltaTime_;
+	bombTimer_ += kDeltaTime;
 
 	//プレイヤーに追淳
 	wt_.translation_ += distance_ * Vector3{ -0.03f,0,0 } *3;

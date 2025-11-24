@@ -8,6 +8,8 @@
 #include "Shadow.h"
 #include "Sprite.h"
 
+#include "UseEveryOne.h"
+
 /// <summary>
 /// プレイヤー、敵の関数変数を使う基盤クラス
 /// </summary>
@@ -167,9 +169,6 @@ protected:
 	//演出中フラグ
 	bool isPerformance_ = false;
 
-	//秒数時間
-	const float kDeltaTime_ = 1.0f / 60.0f;
-
 	///影
 	std::unique_ptr<Shadow> shadow_;
 	
@@ -179,7 +178,6 @@ protected:
 	//ダメージリアクション
 	float scaleTimer_ = 0.0f;
 	Vector3 damageScale_ = { 0.1f, 0.1f, 0.1f };
-	const Vector3 kDefaultScale_ = { 1,1,1 };//元の大きさ
 	const float kDamageMaxTime_ = 0.14f;
 
 

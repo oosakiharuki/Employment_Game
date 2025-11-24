@@ -8,6 +8,7 @@
 #include <numbers>
 
 using namespace MyMath;
+using namespace UseEveryOne;
 
 Player::Player(){}
 
@@ -161,7 +162,7 @@ void Player::Update() {
 		infinityTimer_ = kInfinityTimeMax_;//Maxになったら無敵時間終了
 	}
 	else {
-		infinityTimer_ += kDeltaTime_;
+		infinityTimer_ += kDeltaTime;
 	}
 
 	//移動しているとパーティクルを発生
@@ -351,7 +352,7 @@ void Player::PlayUpdate() {
 		}
 		isShield_ = true;
 
-		pariTime_ -= kDeltaTime_;
+		pariTime_ -= kDeltaTime;
 		//パリィ時間がすぎるとき+ダメージを食らていたらパリィできない
 		if (pariTime_ > 0.0f && infinityTimer_ >= kInfinityTimeMax_) {
 			isPari_ = true;
@@ -365,7 +366,7 @@ void Player::PlayUpdate() {
 	}
 	else {
 		isShield_ = false;
-		pariCoolTime_ += kDeltaTime_;
+		pariCoolTime_ += kDeltaTime;
 	}
 	//連打してもすぐにパリィできないようにする
 	if (pariCoolTime_ >= kPariTimeMax_) {
@@ -375,13 +376,13 @@ void Player::PlayUpdate() {
 	if (isBrink_) {
 		//ブリンクの時は傘は開いたまま
 		isShield_ = true;
-		brinkTimer_ += kDeltaTime_;
+		brinkTimer_ += kDeltaTime;
 
 		isOneBrink_ = true;
 		wt_.translation_ += EaseOut(TransformNormal(playerFront_, wtGun_.matWorld_), brinkTimer_, kBrinkTimeMax_);
 
 		//飛んだ瞬間後ろにパーティクルをだす
-		if (brinkTimer_ <= kDeltaTime_) {
+		if (brinkTimer_ <= kDeltaTime) {
 			Vector3 gTranslate = wt_.translation_ + TransformNormal(-playerFront_, wtGun_.matWorld_);
 			particleBrink_->SetTranslate(gTranslate);
 			particleBrink_->SetRotate({ wtGun_.rotation_.x + kNinetyAngle_,wtGun_.rotation_.y,wtGun_.rotation_.z });
@@ -397,7 +398,7 @@ void Player::PlayUpdate() {
 		brinkTimer_ = 0.0f;
 	}
 
-	coolTimer_ += kDeltaTime_;
+	coolTimer_ += kDeltaTime;
 	if ((input_->TriggerKey(DIK_K) || input_->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_X)) && !isShield_) {
 		if (coolTimer_ >= kCoolTimeMax_) {
 			ShootBullet();
@@ -422,7 +423,7 @@ void Player::PlayUpdate() {
 			isKnockback_ = false;
 		}
 		else {
-			knockBackTimer_ += kDeltaTime_;
+			knockBackTimer_ += kDeltaTime;
 
 			wt_.translation_ -= EaseOut(backPower_, knockBackTimer_, knockBackTimeMax_);
 			if (knockBackTimer_ >= knockBackTimeMax_) {
@@ -569,7 +570,7 @@ void Player::KnockBackUmbrella(const Vector3 Power, const float TimerMax) {
 
 void Player::DeadPlayer() {
 
-	deadTimer_ += kDeltaTime_;
+	deadTimer_ += kDeltaTime;
 	isDead_ = true;
 	
 	//少しディレイを挟む(カメラのシェイクが終わったら)

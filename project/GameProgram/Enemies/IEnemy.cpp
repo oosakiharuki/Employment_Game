@@ -2,6 +2,7 @@
 #include "ImGuiManager.h"
 
 using namespace MyMath;
+using namespace UseEveryOne;
 IEnemy::IEnemy() {}
 
 IEnemy::~IEnemy(){}
@@ -71,7 +72,7 @@ void IEnemy::UpdateCommon() {
 			//攻撃し終わるとisBulletがfalseに
 			Attack();
 			//!マーク表示時間
-			markTimer_ += kDeltaTime_;
+			markTimer_ += kDeltaTime;
 		}
 		else if(!isBullet_){
 			//攻撃、見つけたマークのタイマーリセット
@@ -79,7 +80,7 @@ void IEnemy::UpdateCommon() {
 			rapidFireTime_ = 0;
 			coolTime_ = 0;
 			isLostPlayer_ = true;//見失うフラグ
-			markTimer_ -= kDeltaTime_;
+			markTimer_ -= kDeltaTime;
 		}		
 				
 		if (isLostPlayer_ && markTimer_ <= 0.0f)

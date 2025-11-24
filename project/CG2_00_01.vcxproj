@@ -192,6 +192,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\StageObjects\WarpGate.cpp" />
     <ClCompile Include="GameProgram\Scene\LoadingStageScene.cpp" />
     <ClCompile Include="GameProgram\System\NextStageSave.cpp" />
+    <ClCompile Include="UseEveryOne.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameActor.h" />
@@ -276,6 +277,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\StageObjects\WarpGate.h" />
     <ClInclude Include="GameProgram\Scene\LoadingStageScene.h" />
     <ClInclude Include="GameProgram\System\NextStageSave.h" />
+    <ClInclude Include="UseEveryOne.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

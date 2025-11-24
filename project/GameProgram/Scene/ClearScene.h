@@ -22,5 +22,15 @@ private:
 
 	std::vector<std::unique_ptr<Particle>> particle_fanfares_;
 
-	bool setFrequencyTime_ = false;
+	const Vector3 kCameraTranslate_ = { 0.0f,2.0f,-18.0f };
+
+	const Vector2 kSpritePosition_ = { 800,10 };
+	const Vector2 kSpriteSize_ = { 256,64 };
+
+	const float kPlayerFrontRange_ = 180.0f;
+
+	const float kFanfareX_ = 3.0f;
+	const Vector3 kFanfareInitTranslate_ = { -kFanfareX_,2,0 };
+	Vector3 fanfareTranslate_ = kFanfareInitTranslate_;
+
 };
