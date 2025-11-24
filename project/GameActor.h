@@ -151,13 +151,18 @@ protected:
 
 	bool isDead_ = false;//倒れたフラグ
 
-	//向き
-	float direction_ = 90.0f;
+	//向き(左右)
+	const float kDirectionRight_ = 90.0f;
+	const float kDirectionLeft_ = -90.0f;
+	
+	//最大角度(360度)
+	const float kMaxAngle = 360.0f;
 
 	//地面判定
 	bool isGround_ = false;
 	//重力
 	float grabity_ = 0.0f;
+	const float kGrabityPower_ = 0.01f;//重力の質量
 
 	//演出中フラグ
 	bool isPerformance_ = false;

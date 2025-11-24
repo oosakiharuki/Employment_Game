@@ -1,11 +1,6 @@
 #pragma once
 #include <cstdint>
 
-#include "Sprite.h"
-#include "Object3d.h"
-#include "Object_glTF.h"
-#include "Particle.h" 
-#include "Audio.h"
 #include "MyMath.h"
 #include "Framework.h"
 
@@ -29,7 +24,7 @@
 /// <summary>
 /// シーン共有処理
 /// </summary>
-class IScene{
+class IScene {
 protected:
 	//現在のシーン
 	static std::string sceneNo_;
@@ -61,7 +56,7 @@ protected:
 	std::vector<std::shared_ptr<IEnemy>> enemies_;
 	//ステージオブジェクトたち
 	std::list<std::shared_ptr<IStageObject>> stageObjects_;
-	
+
 	//ステージ全体のオブジェクト
 	std::unique_ptr<Object3d> stageobj_;
 	//ステージ全体の当たり判定AABB
@@ -74,9 +69,6 @@ protected:
 	SoundData BGMData_;
 	float volume_ = 0.07f;//音量調節機能
 
-	//スカイボックス
-	std::unique_ptr<BoxModel> skyBox_ = nullptr;
-
 	/// <summary>
 	/// レベルエディタで配置
 	/// </summary>
@@ -88,6 +80,7 @@ protected:
 	/// </summary>
 	void PreviousSceneData();
 
+	//前ステージデータ
 	SceneSaveData data_;
 
 	/// <summary>
@@ -115,12 +108,28 @@ protected:
 	/// </summary>
 	void ChangeScene();
 
-	
+	/// <summary>
+	/// ワープする時の処理
+	/// </summary>
 	void WarpNextScene();
 
-	void DrawCommon();
+	/// <summary>
+	/// プレイヤーがゴールする時の処理
+	/// </summary>
+	void PlayerGoal();
 
-	std::vector<std::unique_ptr<Sprite>> setumei_;
+	/// <summary>
+	/// カメラがプレイヤーにズームする
+	/// </summary>
+	void CameraZoomPlayer();
+
+	/// <summary>
+	/// 共通の描画
+	/// </summary>
+	void DrawGuide();
+
+	//操作ガイドのスプライト
+	std::vector<std::unique_ptr<Sprite>> spriteGuide_;
 
 public:
 	/// <summary>
@@ -157,4 +166,10 @@ public:
 private:
 	//ステージの.jsonファイル名
 	std::string stageFileName_;
+
+	//操作ガイドに必要な総数
+	const uint32_t maxGuide = 7;
+
+	//ゴール時前を向くように
+	const Vector3 kPlayerForntAngle_ = { 0.0f,180.0f,0.0f };
 };

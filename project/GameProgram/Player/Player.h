@@ -166,6 +166,10 @@ public:
 	/// <param name="direction"></param>回転角度
 	void UmbrellaRange(const float& direction);
 
+	/// <summary>
+	/// 演出中か
+	/// </summary>
+	/// <returns></returns>
 	const bool Performancing() { return isPerformance_; }
 
 private:
@@ -174,23 +178,26 @@ private:
 
 	//input
 	Input* input_ = nullptr;
-	XINPUT_STATE state_, preState_;
+	XINPUT_STATE state_, preState_;//パット用変数
 	//プレイヤーの速さ
-	const float kStandardSpeed_ = 0.14f;
+	const float kStandardSpeed_ = 0.14f;//通常の速さ
 	float speed_ = kStandardSpeed_;
 	//ジャンプフラグ
 	bool isJump_ = false;
 
 	//重力
+	
+	/// <summary>
+	/// 重力のみ更新処理
+	/// </summary>
 	void GravityUpdate();
-	const float kStandardGrabity_ = 0.01f;//重力の質量
-	const float kFixedGrabity_ = -0.05f;//滑空時重力値を固定
+	const float kFixedGrabityPower_ = -0.05f;//滑空時重力値を固定
 
 	/// 弾丸
 	std::list<std::shared_ptr<PlayerBullet>> bullets_;
-	float coolTimer_ = 0.0f;//クールタイム
-	const float kCoolTimeMax_ = 0.5f;
-	uint32_t bulletCount_ = 3;//一度に出る弾丸数
+	float coolTimer_ = 0.0f;//クールタイマー
+	const float kCoolTimeMax_ = 0.5f;//クールタイム最大時間
+	const uint32_t kBulletCount_ = 3;//一度に出る弾丸数
 
 	//ボタン
 	bool isPushA_ = false;
@@ -200,11 +207,14 @@ private:
 	
 	//向き
 	const float kUpDis_ = 270.0f;//上
-	const float kDowntDis_ = 90.0f;//下
+	const float kDownDis_ = 90.0f;//下
 	const float kLeftDis_ = 180.0f;//左
 	const float kRightDis_ = 360.0f;//右
 
 	const float kNanameValue_ = 45.0f;//斜めにする変数
+
+	//パーティクルを横向きにするため
+	const float kNinetyAngle_ = 90.0f;
 
 	//傘銃
 	std::unique_ptr<Umbrella> umbrella_ = nullptr;
@@ -216,18 +226,18 @@ private:
 	bool isPari_ = false;
 	const float kPariTimeMax_ = 0.1f;//パリィする時間
 	float pariTime_ = kPariTimeMax_;
-	float pariCoolTime_ = 0.0f;
+	float pariCoolTime_ = 0.0f;//連打ではされないように
 	const Vector3 playerFront_ = { 0,0,1.5f };//プレイヤーの前方
 
 	/// ノックバック
 	bool isKnockback_ = false;
 	Vector3 backPower_ = { 0,0,0 };
 	float knockBackTimer_ = 0.0f;
-	float knockBackTimeMax_ = 0.5f;
+	float knockBackTimeMax_ = 0.0f;//最大ノックバック時間
 
 	///ブリンク
-	bool isBrink_ = false;
-	bool isOneBrink_ = false;
+	bool isBrink_ = false;//ブリンク中
+	bool isOneBrink_ = false;//一回のみ
 	float brinkTimer_ = 0.0f;
 	const float kBrinkTimeMax_ = 0.5f;
 
@@ -237,12 +247,12 @@ private:
 	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
 	//ダメージを食らった後の無敵時間
 	float infinityTimer_ = 0.0f;
-	const float kInfinityTimeMax_ = 1.0f;
+	const float kInfinityTimeMax_ = 1.0f;//最大無敵時間
 
 	//倒された
 	float deadTimer_ = 0.0f;
-	const float kHitStopTime_ = 1.0f;
-	const float kDeadTimeMax_ = 3.0f;
+	const float kHitStopTime_ = 1.0f;//ヒットストップ
+	const float kDeadTimeMax_ = 3.0f;//死んだ演出用時間
 
 	//復活
 	bool isRespawn_ = false;
@@ -250,7 +260,7 @@ private:
 	//サウンド
 	SoundData hitSound_;//ダメージを食らった
 	SoundData pariSound_;//パリィに成功
-	const float kVolume_ = 0.07f;
+	const float kVolume_ = 0.07f;//ボリューム
 
 	//パーティクル
 	std::unique_ptr<Particle> particleWalk_;//歩く
@@ -261,7 +271,9 @@ private:
 	std::unique_ptr<Particle> particleDead_;//倒された演出
 
 	//前回座標の保存場所
-	Vector3 PrePosition;
+	Vector3 prePosition_;
+	//動いているか判定
+	const bool IsMovePosition();
 
 	//オブジェクトたち
 	std::unordered_map<std::string, std::string> objectMosions_;

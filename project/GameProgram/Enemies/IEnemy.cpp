@@ -79,7 +79,7 @@ void IEnemy::UpdateCommon() {
 			rapidFireTime_ = 0;
 			coolTime_ = 0;
 			isLostPlayer_ = true;//見失うフラグ
-			markTimer_ -= kDeltaTime_ * 0.5f;
+			markTimer_ -= kDeltaTime_;
 		}		
 				
 		if (isLostPlayer_ && markTimer_ <= 0.0f)
@@ -117,7 +117,7 @@ void IEnemy::UpdateBehind() {
 	if (isDead_) return;//死んでるなら読み取らない
 
 	wtMark_.translation_ = wt_.translation_;
-	wtMark_.translation_.y += 2.0f;
+	wtMark_.translation_.y += kMarkPositionY_;
 
 	wtMark_.UpdateMatrix();
 	objectFound_->Update(wtMark_);
@@ -146,13 +146,14 @@ void IEnemy::IsDamage() {
 	if (hp_ == 0) {
 		return;
 	}
-	hp_ -= 1;
+	//体力 -1
+	hp_--;
 }
 
 
 void IEnemy::GrabityUpdate() {
 	
-	grabity_ -= 0.01f;
+	grabity_ -= kGrabityPower_;
 	//重力
 	if (!isGround_) {
 		wt_.translation_.y += grabity_;
@@ -178,12 +179,12 @@ void IEnemy::PlayerTarget() {
 }
 
 void IEnemy::SearchRange() {
-	if (direction_ == kDirectionRight_) {
+	if (wt_.rotation_.y == kDirectionRight_) {
 		eyeAABB_.min = wt_.translation_ + Vector3(0, -eyeReach_.y, -eyeReach_.z);
 		eyeAABB_.max = wt_.translation_ + eyeReach_;
 		speed_.x = kMoveX_;
 	}
-	else if (direction_ == kDirectionLeft_) {
+	else if (wt_.rotation_.y == kDirectionLeft_) {
 		eyeAABB_.min = wt_.translation_ + -eyeReach_;
 		eyeAABB_.max = wt_.translation_ + Vector3(0, eyeReach_.y, eyeReach_.z);
 		speed_.x = -kMoveX_;
@@ -197,15 +198,12 @@ void IEnemy::MoveEnemy() {
 	//移動ポイントの端だと向きを変える
 	//右端に行ったら左に旋回
 	if (move_.x > routePointRight_.x) {
-		direction_ = kDirectionLeft_;
+		wt_.rotation_.y = kDirectionLeft_;
 	}
 	//左端に行ったら右に旋回
 	if (move_.x < routePointLeft_.x) {
-		direction_ = kDirectionRight_;
+		wt_.rotation_.y = kDirectionRight_;
 	}
-
-
-	wt_.rotation_.y = direction_;
 }
 
 void IEnemy::RespawnEnemyCommon() {
@@ -243,20 +241,17 @@ void IEnemy::DeadUpdate() {
 void IEnemy::DirectionDegree() {
 
 	//0~360にする
-	wt_.rotation_.y = std::fmod(wt_.rotation_.y, 360.0f);
+	wt_.rotation_.y = std::fmod(wt_.rotation_.y, kMaxAngle);
 	//-の場合
 	if (wt_.rotation_.y < 0) wt_.rotation_.y += 360.0;
 
 	///0~180は右
 	if (wt_.rotation_.y >= 0.0f && wt_.rotation_.y < 180.0f) {
-		direction_ = kDirectionRight_;
+		wt_.rotation_.y = kDirectionRight_;
 	}///180~360は左
-	else if (wt_.rotation_.y <= 360.0f) {
-		direction_ = kDirectionLeft_;
+	else if (wt_.rotation_.y <= kMaxAngle) {
+		wt_.rotation_.y = kDirectionLeft_;
 	}
-
-	wt_.rotation_.y = direction_;
-
 }
 
 AABB IEnemy::GetBombAABB() { 
@@ -270,6 +265,8 @@ Vector3 IEnemy::GetDistance(){
 }
 
 bool IEnemy::IsExplosion() { return false; }
+
+void IEnemy::ExplosionEnd() {}
 
 void IEnemy::Fire() {
 	

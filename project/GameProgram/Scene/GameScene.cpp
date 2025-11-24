@@ -55,18 +55,16 @@ void GameScene::Update() {
 	//更新処理
 	cameraControl_->Update(&*camera_.get());
 
-	//ゴールしたとき
-	if (CollisionManager::GetInstance()->IsGoal() || player_->GetPerformanceMode()) {
-		cameraControl_->ZoomStart(player_->GetTranslate() + kPlayerAwayPos_);
-		player_->IsPerformanceFlag(true);
-		player_->SetRotate({ 0,180.0f,0 });//向きを前に
-	}
+	//プレイヤーがゴールした
+	PlayerGoal();
 
+	//プレイヤー更新処理
 	player_->Update();
 	
 	//次のシーンに移動する演出
 	WarpNextScene();
 
+	//ステージの更新処理
 	stageobj_->Update();
 
 	if (isStartStage_) {
@@ -124,8 +122,8 @@ void GameScene::Update() {
 		player_->IsFall();
 	}
 
-	for (auto& a : setumei_) {
-		a->Update();
+	for (auto& guide : spriteGuide_) {
+		guide->Update();
 	}
 
 #ifdef  USE_IMGUI
@@ -184,8 +182,8 @@ void GameScene::Draw() {
 
 	//スプライト描画処理(UI用)
 	SpriteCommon::GetInstance()->Command();
-	
-	DrawCommon();
+	//説明ガイド
+	DrawGuide();
 }
 
 void GameScene::Finalize() {}

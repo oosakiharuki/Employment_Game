@@ -73,8 +73,13 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 		//ボムの敵 : 爆発範囲
 		if (IsCollisionAABB(enemy->GetBombAABB(), player_->GetAABB()) && 
 			enemy->GetIsDead() && !enemy->IsExplosion()) {
-			player_->IsDamage(enemy->GetDistance());//プレイヤーにダメージ
+			player_->IsDamage(enemy->GetDistance());//プレイヤーにダメージ	
 		}
+		
+		if (enemy->GetIsDead() && !enemy->IsExplosion()) {
+			enemy->ExplosionEnd();
+		}
+
 	}
 
 	// - ステージの当たり判定 -

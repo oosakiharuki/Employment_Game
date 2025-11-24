@@ -125,7 +125,7 @@ void Player::Update() {
 			isJump_ = false;
 		}
 		//重力を固定することでゆっくり落ちる
-		grabity_ = kFixedGrabity_;
+		grabity_ = kFixedGrabityPower_;
 		//ブリンクが終了した時
 		if (!isBrink_) {
 			//滑空中は上向きのみ(斜めにはならない)
@@ -165,7 +165,7 @@ void Player::Update() {
 	}
 
 	//移動しているとパーティクルを発生
-	if (isGround_ && (wt_.translation_.x != PrePosition.x || wt_.translation_.y != PrePosition.y)) {
+	if (isGround_ && IsMovePosition()) {
 		// 通常のパーティクル
 		particleWalk_->SetParticleCount(5);
 		particleWalk_->SetFrequency(0.15f);
@@ -189,7 +189,7 @@ void Player::Update() {
 	if (isShield_) {
 		mosionName_ = "shield";
 	}//前回の座標と現在の座標が違う = 動いた場合
-	else if (wt_.translation_.x != PrePosition.x || wt_.translation_.y != PrePosition.y) {
+	else if (IsMovePosition()) {
 		mosionName_ = "move";
 	}
 	else {
@@ -207,7 +207,7 @@ void Player::Update() {
 	}
 
 	//現在座標に前回座標を代入
-	PrePosition = wt_.translation_;
+	prePosition_ = wt_.translation_;
 	
 	object_->Update(wt_);
 
@@ -219,9 +219,9 @@ void Player::Update() {
 	ImGui::SliderFloat3("worldTransform.translateSlider", &wt_.translation_.x, -30.0f, 30.0f);
 
 	ImGui::InputFloat3("Rotate", &wt_.rotation_.x);
-	ImGui::SliderFloat("RotateX", &wt_.rotation_.x, -360.0f, 360.0f);
-	ImGui::SliderFloat("RotateY", &wt_.rotation_.y, -360.0f, 360.0f);
-	ImGui::SliderFloat("RotateZ", &wt_.rotation_.z, -360.0f, 360.0f);
+	ImGui::SliderFloat("RotateX", &wt_.rotation_.x, -kMaxAngle, kMaxAngle);
+	ImGui::SliderFloat("RotateY", &wt_.rotation_.y, -kMaxAngle, kMaxAngle);
+	ImGui::SliderFloat("RotateZ", &wt_.rotation_.z, -kMaxAngle, kMaxAngle);
 
 	ImGui::Text("体力:%d", hp_);
 
@@ -304,30 +304,33 @@ void Player::PlayUpdate() {
 		}
 	}
 
-	//元の速さ
-	speed_ = kStandardSpeed_;
-
 	//シールド中足が遅くなる
 	//(滑空中は影響しない)
 	if (isShield_ && isGround_) {
-		speed_ = kStandardSpeed_ / 2.0f;
+		//スピードを半減させる
+		const float gSlowSpeed = 0.5f;//半減する数値
+		speed_ = kStandardSpeed_ * gSlowSpeed;
+	}
+	else {
+		//元の速さ
+		speed_ = kStandardSpeed_;
 	}
 
 	if (isPushA_) {
 		wt_.translation_.x -= speed_;//左に移動
-		wt_.rotation_.y = -direction_;//左が正面に
+		wt_.rotation_.y = kDirectionLeft_;//左が正面に
 		UmbrellaRange(kLeftDis_);//傘を左に
 	}
 	else if (isPushD_) {
 		wt_.translation_.x += speed_;//右に移動
-		wt_.rotation_.y = direction_;//右が正面に
+		wt_.rotation_.y = kDirectionRight_;//右が正面に
 		UmbrellaRange(kRightDis_);//傘を右に
 	}
 	else if (isPushW_) {
 		UmbrellaRange(kUpDis_);//傘を上に
 	}
 	else if (isPushS_) {
-		UmbrellaRange(kDowntDis_);//傘を下に
+		UmbrellaRange(kDownDis_);//傘を下に
 	}
 
 	//ジャンプ
@@ -340,9 +343,10 @@ void Player::PlayUpdate() {
 
 	//傘シールド
 	if (input_->PushKey(DIK_L) || input_->PushBotton(state_, XINPUT_GAMEPAD_B)) {
-		//押した瞬間に移動キーを押している場合ブリンクが発動 + 一度ブリンクしていないとき
+		//押した瞬間に移動キーを押している場合 + すでにブリンクを一度している場合
 		if ((input_->TriggerKey(DIK_L) || input_->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_B))
 			&& (isPushA_ || isPushD_ || isPushW_ || isPushS_) && !isOneBrink_) {
+			//ブリンクが発動
 			isBrink_ = true;
 		}
 		isShield_ = true;
@@ -378,9 +382,9 @@ void Player::PlayUpdate() {
 
 		//飛んだ瞬間後ろにパーティクルをだす
 		if (brinkTimer_ <= kDeltaTime_) {
-			Vector3 translate = wt_.translation_ + TransformNormal(-playerFront_, wtGun_.matWorld_);
-			particleBrink_->SetTranslate(translate);
-			particleBrink_->SetRotate({ wtGun_.rotation_.x + 90.0f,wtGun_.rotation_.y,wtGun_.rotation_.z });
+			Vector3 gTranslate = wt_.translation_ + TransformNormal(-playerFront_, wtGun_.matWorld_);
+			particleBrink_->SetTranslate(gTranslate);
+			particleBrink_->SetRotate({ wtGun_.rotation_.x + kNinetyAngle_,wtGun_.rotation_.y,wtGun_.rotation_.z });
 			particleBrink_->SetParticleBorn(ParticleBorn::MomentMode);
 		}
 	}
@@ -476,7 +480,7 @@ void Player::ShootBullet() {
 	Vector3 translate = umbrella_->GetTranslate();
 
 	//真ん中を0にする値(3の場合、1,0,-1 | 5の場合、2,1,0,-1,-2)
-	float halfCount = (float(bulletCount_) - 1) / 2;
+	float halfCount = float((kBulletCount_ - 1) / 2);
 
 	for (float i = -(halfCount); i <= halfCount; ++i) {
 		//弾が分散するように
@@ -493,7 +497,7 @@ void Player::ShootBullet() {
 
 	//攻撃パーティクル発生
 	particleFire_->SetTranslate(translate);
-	particleFire_->SetRotate({ wtGun_.rotation_.x + 90.0f,wtGun_.rotation_.y,wtGun_.rotation_.z });
+	particleFire_->SetRotate({ wtGun_.rotation_.x + kNinetyAngle_,wtGun_.rotation_.y,wtGun_.rotation_.z });
 	particleFire_->SetParticleBorn(ParticleBorn::MomentMode);
 
 	///ノックバック
@@ -615,7 +619,7 @@ void Player::PariSuccess() {
 	translate.x += TransformNormal({0,0,2}, wtGun_.matWorld_).x;
 
 	particlePari_->SetTranslate(translate);
-	particlePari_->SetRotate({ wtGun_.rotation_.x + 90.0f,wtGun_.rotation_.y,wtGun_.rotation_.z });
+	particlePari_->SetRotate({ wtGun_.rotation_.x + kNinetyAngle_,wtGun_.rotation_.y,wtGun_.rotation_.z });
 	particlePari_->SetScale({2.0f,0.2f,2.0f});
 
 	particlePari_->SetParticleBorn(ParticleBorn::MomentMode);
@@ -624,12 +628,12 @@ void Player::PariSuccess() {
 void Player::SpriteUpdate() {
 	float i = 0;
 	for (auto& hp : spritesHp_) {
-		//現在の体力状態
+		//Hpに応じてテクスチャを変化させる
 		if (i >= hp_) {
 			hp->SetTextureFile("NoHp.png");
-		}//以上なら体力ある状態に
+		}//テクスチャ体力ない状態なら変更
 		else if (hp->GetTextureFile() == "NoHp.png") {
-			hp->SetTextureFile("Hp.png");
+			hp->SetTextureFile("Hp.png");//体力ある状態
 		}
 		i++;
 	}
@@ -653,13 +657,20 @@ void Player::UmbrellaRange(const float& direction) {
 	}
 
 	//360度を超えたらマイナスする
-	if (wtGun_.rotation_.x > 360.0f) {
-		wtGun_.rotation_.x -= 360.0f;
+	if (wtGun_.rotation_.x > kMaxAngle) {
+		wtGun_.rotation_.x -= kMaxAngle;
 	}
 }
 
 void Player::GravityUpdate() {
 	//重力
-	grabity_ -= kStandardGrabity_;
+	grabity_ -= kGrabityPower_;
 	wt_.translation_.y += grabity_;
+}
+
+const bool Player::IsMovePosition() {
+	if (wt_.translation_.x != prePosition_.x || wt_.translation_.y != prePosition_.y) {
+		return true;
+	}
+	return false;
 }
