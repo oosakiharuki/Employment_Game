@@ -7,7 +7,7 @@ void GameScene::Initialize() {
 	PreviousSceneData();
 
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting("stage_2");
+	LevelEditorObjectSetting("stage_1");
 
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");
@@ -178,6 +178,9 @@ void GameScene::Draw() {
 
 	//パーティクル描画処理
 	ParticleCommon::GetInstance()->Command();
+	for (auto& enemy : enemies_) {
+		enemy->DrawParticle();
+	}
 	player_->DrawP();
 
 	//スプライト描画処理(UI用)

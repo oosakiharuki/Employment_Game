@@ -11,6 +11,7 @@ public:
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
+	void DrawParticle() override;
 	void Attack() override;
 	bool IsExplosion()override { return isExplosion_; }
 	void ExplosionEnd()override { isExplosion_ = true; }

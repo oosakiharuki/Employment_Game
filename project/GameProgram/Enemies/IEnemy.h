@@ -44,6 +44,11 @@ public:
 	void DrawCommon();
 
 	/// <summary>
+	/// パーティクル用の描画処理
+	/// </summary>
+	virtual void DrawParticle();
+
+	/// <summary>
 	/// 攻撃処理
 	/// </summary>
 	virtual void Attack() = 0;
@@ -230,5 +235,7 @@ private:
 
 	WorldTransform wtMark_;
 	const float kMarkPositionY_ = 2.0f;
+
+	uint32_t i = 0;
 };
 

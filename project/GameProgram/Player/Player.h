@@ -224,7 +224,7 @@ private:
 	bool isShield_ = false;
 	//パリィ
 	bool isPari_ = false;
-	const float kPariTimeMax_ = 0.1f;//パリィする時間
+	const float kPariTimeMax_ = 0.5f;//パリィする時間//ちょっと簡単に
 	float pariTime_ = kPariTimeMax_;
 	float pariCoolTime_ = 0.0f;//連打ではされないように
 	const Vector3 playerFront_ = { 0,0,1.5f };//プレイヤーの前方

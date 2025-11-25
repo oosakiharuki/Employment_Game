@@ -194,7 +194,7 @@ void DepthBasedOutline::GraphicsPipeline() {
 	//書き込むためのアドレス
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&depthOutlineFunction_));
 	//色の設定
-	depthOutlineFunction_->projectionInverse = 100.0f;
+	depthOutlineFunction_->projectionInverse = 150.0f;
 
 }
 

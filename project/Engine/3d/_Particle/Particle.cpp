@@ -113,26 +113,27 @@ void Particle::Update() {
 	switch (particleBorn_)
 	{
 	case ParticleBorn::TimerMode:
-
+		//時間を経過させる
 		emitter_.frequencyTime += kDeltaTime;
-
+		//時間が特定数を上回ったら
 		if (emitter_.frequency <= emitter_.frequencyTime) {
 			//発生処理
 			ParticleManager::GetInstance()->Emit(fileName_, emitter_);
-			emitter_.frequencyTime -= emitter_.frequency;
+			emitter_.frequencyTime -= emitter_.frequency;//時間を元に戻す
 		}
 		break;
 	case ParticleBorn::MomentMode:
 		//発生処理
 		ParticleManager::GetInstance()->Emit(fileName_, emitter_);
-		particleBorn_ = ParticleBorn::Stop;
+		particleBorn_ = ParticleBorn::Stop;//すぐに止める
 		break;
 	case ParticleBorn::Stop:
 		break;
 	}
 
+	//出てきたパーティクルの更新処理
 	ParticleManager::GetInstance()->Update(fileName_, wvpData_);
-
+	//出ているパーティクルの数(インスタンス)をコピー
 	numInstance_ = ParticleManager::GetInstance()->GetNum(fileName_);
 
 	// directionalLightSphereDataのnullチェック

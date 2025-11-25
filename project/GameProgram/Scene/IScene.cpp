@@ -1,9 +1,8 @@
 #include "IScene.h"
 using namespace MyMath;
 
-std::string IScene::sceneNo_ = "Select";
-
-std::string IScene::nextSceneNo_ = "Select";
+std::string IScene::sceneNo_ = "Game";
+std::string IScene::nextSceneNo_ = sceneNo_;
 
 IScene::~IScene(){}
 
@@ -165,7 +164,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	stageobj_->SetModelFile(stageFileName_ + ".obj");
 
 	//チュートリアル用の
-	if (stageFileName_ == "stage_0" || "stage_select_test") {
+	if (stageFileName_ == "stage_0" || stageFileName_ == "stage_select_test") {
 
 		Vector2 gSpriteSize = { 128,64 };
 		Vector2 gSpriteTranslate = { 300,20 };
@@ -174,6 +173,19 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 			iterator->Initialize("setumei_" + std::to_string(i) + ".png");
 			iterator->SetSize(gSpriteSize);
 			iterator->SetPosition(gSpriteTranslate);
+			spriteGuide_.push_back(std::move(iterator));
+		}
+	}
+	else if (stageFileName_ == "stage_1") {
+		Vector2 gSpriteSize = { 64,32 };
+		Vector2 gSpriteTranslate = { 1200,20 };
+		const float gBetween = 64.0f;
+		for (uint32_t i = 0; i < maxGuide; i++) {
+			std::unique_ptr<Sprite> iterator = std::make_unique<Sprite>();
+			iterator->Initialize("setumei_" + std::to_string(i) + ".png");
+			iterator->SetSize(gSpriteSize);
+			iterator->SetPosition(gSpriteTranslate);
+			gSpriteTranslate.y += gBetween;
 			spriteGuide_.push_back(std::move(iterator));
 		}
 	}
@@ -209,6 +221,11 @@ void IScene::DrawGuide() {
 		else {
 			//動く
 			spriteGuide_[0]->Draw();
+		}
+	}
+	else if (stageFileName_ == "stage_1") {
+		for (auto& sprite : spriteGuide_) {
+			sprite->Draw();
 		}
 	}
 }

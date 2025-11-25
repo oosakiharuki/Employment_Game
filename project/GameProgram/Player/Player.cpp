@@ -45,7 +45,9 @@ void Player::Initialize() {
 	//パーティクル初期化
 	//歩く
 	particleWalk_ = std::make_unique<Particle>();
-	particleWalk_->Initialize("player_walk", "resource/Sprite/ground.png", PrimitiveType::box);
+	particleWalk_->Initialize("player_walk", "resource/Sprite/white.png", PrimitiveType::box);
+	particleWalk_->SetParticleCount(5);
+	particleWalk_->SetFrequency(0.15f);
 	//ブリンク
 	particleBrink_ = std::make_unique<Particle>();
 	particleBrink_->Initialize("player_brink", "resource/Sprite/cone.png", PrimitiveType::cone);
@@ -61,14 +63,16 @@ void Player::Initialize() {
 	particleDamage_ = std::make_unique<Particle>();
 	particleDamage_->Initialize("player_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
 	particleDamage_->SetParticleCount(20);
-	particleDamage_->SetFrequency(1.0f);
+	particleDamage_->SetFrequency(0.6f);
 	//パリィ
 	particlePari_ = std::make_unique<Particle>();
-	particlePari_->Initialize("player_pari", "resource/Sprite/uvChecker.png", PrimitiveType::cone);
+	particlePari_->Initialize("player_pari", "resource/Sprite/white.png", PrimitiveType::cone);
+	particleFire_->SetParticleCount(1);
 	particleFire_->SetFrequency(0.5f);
 	//死んだとき
 	particleDead_ = std::make_unique<Particle>();
-	particleDead_->Initialize("player_dead", "resource/Sprite/ground.png", PrimitiveType::sphere);
+	particleDead_->Initialize("player_dead", "resource/Sprite/white.png", PrimitiveType::sphere);
+	particleDead_->SetParticleCount(3);
 	particleDead_->SetFrequency(0.1f);
 	particleDead_->SetScale({ 0.5f,0.5f,0.5f });
 
@@ -161,9 +165,7 @@ void Player::Update() {
 
 	//移動しているとパーティクルを発生
 	if (isGround_ && IsMovePosition()) {
-		// 通常のパーティクル
-		particleWalk_->SetParticleCount(5);
-		particleWalk_->SetFrequency(0.15f);
+		// 歩く煙パーティクル
 		particleWalk_->SetParticleBorn(ParticleBorn::TimerMode);
 		particleWalk_->SetTranslate(wt_.translation_ + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.matWorld_));
 		particleWalk_->SetScale({ 0.5f,0.5f,0.5f });
@@ -508,7 +510,7 @@ void Player::IsDamage(const Vector3& hitPoint) {
 			return;
 		}
 		//体力 -1
-		hp_--;
+		//hp_--;//一度無敵に
 		//ダメージのパーティクル発生
 		particleDamage_->SetTranslate(wt_.translation_ + Normalize(hitPoint));
 		particleDamage_->SetParticleBorn(ParticleBorn::MomentMode);
@@ -611,12 +613,10 @@ void Player::PariSuccess() {
 	Audio::GetInstance()->SoundPlayWave(pariSound_, kVolume_);
 
 	Vector3 translate = umbrella_->GetTranslate();
-	translate.x += TransformNormal({0,0,2}, wtGun_.matWorld_).x;
-
+	translate.x += TransformNormal({ 0,0,2 }, wtGun_.matWorld_).x;
 	particlePari_->SetTranslate(translate);
 	particlePari_->SetRotate({ wtGun_.rotation_.x + kNinetyAngle_,wtGun_.rotation_.y,wtGun_.rotation_.z });
-	particlePari_->SetScale({2.0f,0.2f,2.0f});
-
+	particlePari_->SetScale({ 2.0f,0.2f,2.0f });
 	particlePari_->SetParticleBorn(ParticleBorn::MomentMode);
 }
 
