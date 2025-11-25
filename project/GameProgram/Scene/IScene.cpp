@@ -33,7 +33,8 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 
 	//カメラコントロール設定
 	cameraControl_ = std::make_unique<CameraControl>();
-	cameraControl_->Initialize();
+	cameraControl_->Initialize();//初期化
+	//メインのカメラ
 	cameraControl_->CameraSetting(levelediter_.GetLevelData()->cameraInit["MainCamera"], false);
 
 	//各デフォルトカメラの設定
@@ -145,9 +146,9 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 				stageObject = std::make_unique<Goal>();
 			}
 			stageObject->SetObjectName(stageObjectData.ObjectName);//オブジェクトの名前保存
-			stageObject->Initialize();
-			stageObject->SetPosition(stageObjectData.translation);
-			stageObject->SetAABB(stageObjectData.colliderAABB);
+			stageObject->Initialize();//初期化
+			stageObject->SetPosition(stageObjectData.translation);//座標位置
+			stageObject->SetAABB(stageObjectData.colliderAABB);//AABB
 
 			stageObjects_.push_back(std::move(stageObject));
 		}
@@ -166,40 +167,48 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	//チュートリアル用の
 	if (stageFileName_ == "stage_0" || "stage_select_test") {
 
-		for (uint32_t i = 0; i < 7; i++) {
+		Vector2 gSpriteSize = { 128,64 };
+		Vector2 gSpriteTranslate = { 300,20 };
+		for (uint32_t i = 0; i < maxGuide; i++) {
 			std::unique_ptr<Sprite> iterator = std::make_unique<Sprite>();
 			iterator->Initialize("setumei_" + std::to_string(i) + ".png");
-			iterator->SetSize({ 128,64 });
-			iterator->SetPosition({300,20});
-			setumei_.push_back(std::move(iterator));
+			iterator->SetSize(gSpriteSize);
+			iterator->SetPosition(gSpriteTranslate);
+			spriteGuide_.push_back(std::move(iterator));
 		}
 	}
 }
 
-void IScene::DrawCommon() {
+void IScene::DrawGuide() {
 	//チュートリアルの出る順番
-	if (stageFileName_ == "stage_select_test") {
-		setumei_[0]->Draw();
-		setumei_[6]->Draw();
+	if (stageFileName_ == "stage_select") {
+		spriteGuide_[0]->Draw();
+		spriteGuide_[6]->Draw();
 	}
 	else if (stageFileName_ == "stage_0") {
-		if (player_->GetTranslate().x >= 105.0f) {
-			setumei_[5]->Draw();
+		if (player_->GetTranslate().x >= kChangePointKakku_) {
+			//滑空
+			spriteGuide_[5]->Draw();
 		}
-		else if (player_->GetTranslate().x >= 80.0f) {
-			setumei_[4]->Draw();
+		else if (player_->GetTranslate().x >= kChangePointBrink_) {
+			//ブリンク
+			spriteGuide_[4]->Draw();
 		}
-		else if (player_->GetTranslate().x >= 16.0f) {
-			setumei_[3]->Draw();
+		else if (player_->GetTranslate().x >= kChangePointShield_) {
+			//守る
+			spriteGuide_[3]->Draw();
 		}
-		else if (player_->GetTranslate().x >= 0.0f) {
-			setumei_[2]->Draw();
+		else if (player_->GetTranslate().x >= kChangePointFire_) {
+			//攻撃
+			spriteGuide_[2]->Draw();
 		}
-		else if (player_->GetTranslate().x >= -60.0f) {
-			setumei_[1]->Draw();
+		else if (player_->GetTranslate().x >= kChangePointJump_) {
+			//ジャンプ
+			spriteGuide_[1]->Draw();
 		}
 		else {
-			setumei_[0]->Draw();
+			//動く
+			spriteGuide_[0]->Draw();
 		}
 	}
 }
@@ -207,12 +216,27 @@ void IScene::DrawCommon() {
 
 void IScene::WarpNextScene() {
 	//ワープするとき && プレイヤーが演出判定でない
+	//「!player_->Performancing()」は何度もplayer_のGetTranslateを読み取ることで予定の速度より速くなるため
 	if (CollisionManager::GetInstance()->IsWarp() && !player_->Performancing()) {
-		//何度もplayer_のGetTranslateを読み取ると予定より早くなるため
-		cameraControl_->ZoomStart(player_->GetTranslate() + kPlayerAwayPos_);
-		player_->IsPerformanceFlag(true);//演出モード
-		player_->SetRotate({ 0,0,0 });//向きを前に
+		//プレイヤーにカメラズーム
+		CameraZoomPlayer();
+		player_->SetRotate({ 0,0,0 });//向きを前に(Z方向)
 	}
+}
+
+void IScene::PlayerGoal() {
+	//ゴールしたとき
+	if (CollisionManager::GetInstance()->IsGoal()) {
+		//プレイヤーにカメラズーム
+		CameraZoomPlayer();
+		player_->SetRotate(kPlayerForntAngle_);//向きをカメラのほうに(-Z方向)
+	}
+}
+
+void IScene::CameraZoomPlayer() {
+	//ズーム開始(カメラ現在地点 -> プレイヤー座標 + 少し離れた場所)
+	cameraControl_->ZoomStart(player_->GetTranslate() + kPlayerAwayPos_);
+	player_->IsPerformanceFlag(true);//演出モード
 }
 
 void IScene::CollisionCommon() {
@@ -222,7 +246,9 @@ void IScene::CollisionCommon() {
 }
 
 void IScene::NextSceneFadeInStart(const std::string& name) {
+	//フェードイン開始
 	FadeScreen::GetInstance()->FadeStart(type_fadeIn);
+	//次のステージ名
 	nextSceneNo_ = name;
 }
 

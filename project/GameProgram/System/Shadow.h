@@ -43,4 +43,10 @@ private:
 	std::unique_ptr<Object3d> object_;
 	WorldTransform wt_;
 	AABB shadowAABB_;
+	//プレイヤーの真下最大値
+	const float kShadowMinY_ = -1000.0f;
+	//プレイヤー横幅
+	const float kShadowWidth_ = 0.1f;
+	//色
+	const Vector4 kColor_ = { 0,0,0,1 };
 };

@@ -12,11 +12,11 @@ public:
 
 	void SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu,const std::string textureFile);
 	void Degress(float value);
-	void EgdeSize(float value);
+	void EdgeSize(float value);
 
 	struct Threshold {
 		float degress;
-		float egdeSize;
+		float edgeSize;
 	};
 
 private:

@@ -12,13 +12,14 @@ void Shadow::Initialize() {
 	object_ = std::make_unique<Object3d>();
 	object_->Initialize();
 	object_->SetModelFile("shadow.obj");
-	object_->SetColor({0,0,0,1});
+	//色を黒に
+	object_->SetColor(kColor_);
 
 	wt_.Initialize();
 
 	shadowAABB_ = {
-		{ -0.1f,-1000.0f,-0.1f },
-		{ -0.1f,0.0f,-0.1f }
+		{ kShadowWidth_,kShadowMinY_,kShadowWidth_ },
+		{ -kShadowWidth_,0.0f,-kShadowWidth_ }
 	};
 }
 
@@ -28,10 +29,7 @@ void Shadow::Update() {
 #ifdef USE_IMGUI
 
 	ImGui::Begin("player_shadow");
-
-	ImGui::InputFloat3("worldTransform.translate", &wt_.translation_.x);
-	ImGui::SliderFloat3("worldTransform.translateSlider", &wt_.translation_.x, -30.0f, 30.0f);
-
+	ImGui::Text("worldTransform.translate : %f, %f, %f", &wt_.translation_.x, &wt_.translation_.y, &wt_.translation_.z);
 	ImGui::End();
 
 #endif // USE_IMGUI
@@ -41,12 +39,8 @@ void Shadow::Update() {
 }
 
 void Shadow::Draw() {
-	if (object_) {
-
-		Object3dCommon::GetInstance()->Command();
-		object_->Draw();
-
-	}
+	Object3dCommon::GetInstance()->Command();
+	object_->Draw();
 }
 
 AABB Shadow::GetAABB() {

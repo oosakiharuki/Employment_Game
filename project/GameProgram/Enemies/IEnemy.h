@@ -103,6 +103,10 @@ public:
 	/// </summary>
 	void DirectionDegree();
 
+	/// <summary>
+	/// setter_ステージ当たり判定
+	/// </summary>
+	/// <param name="aabb"></param>
 	void SetStages(std::vector<AABB> aabb) { stages_ = aabb; }
 
 	/// <summary>
@@ -110,7 +114,10 @@ public:
 	/// </summary>
 	/// <param name="position"></param>代入する座標位置(プレイヤーに一番近い床)
 	void SetShadowPosition(Vector3 position) { shadow_->SetTranslate(position); }
-
+	
+	/// <summary>
+	/// 見える範囲
+	/// </summary>
 	void SearchRange();
 
 	/// <summary>
@@ -124,6 +131,10 @@ public:
 	/// <returns></returns>
 	AABB GetEyeAABB() { return eyeAABB_; }
 
+	/// <summary>
+	/// プレイヤーを見つけたフラグ
+	/// </summary>
+	/// <param name="result"></param>
 	void IsFoundTarget(bool result) { isFoundTarget_ = result; }
 
 	/// <summary>
@@ -144,8 +155,19 @@ public:
 	/// <returns></returns>爆発フラグ
 	virtual bool IsExplosion();
 
+	/// <summary>
+	/// 爆発し終わったら
+	/// </summary>
+	virtual void ExplosionEnd();
+
+	/// <summary>
+	/// 発泡
+	/// </summary>
 	void Fire();
 
+	/// <summary>
+	/// 発泡弾
+	/// </summary>
 	virtual void FireBullet();
 
 protected:
@@ -165,9 +187,6 @@ protected:
 
 	//敵を倒した時のUpdate関数
 	void DeadUpdate();
-
-	const float kDirectionRight_ = 90.0f;
-	const float kDirectionLeft_ = -90.0f;
 
 	//倒された時フラグ
 	bool isDeleteEnemy_ = false;//完全に削除フラグ
@@ -210,5 +229,6 @@ private:
 	std::unique_ptr<Object3d> objectNoFound_;
 
 	WorldTransform wtMark_;
+	const float kMarkPositionY_ = 2.0f;
 };
 

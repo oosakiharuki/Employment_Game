@@ -1,6 +1,8 @@
 #include "TitleScene.h"
+#include "UseEveryOne.h"
 
 using namespace MyMath;
+using namespace UseEveryOne;
 
 void TitleScene::Initialize() {
 
@@ -12,70 +14,15 @@ void TitleScene::Initialize() {
 	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
 	ParticleCommon::GetInstance()->SetDefaultCamera(camera_.get());
 
-	//プレイヤー初期化処理
-	objectAutoPlayer_ = std::make_unique<Object_glTF>();
-	objectAutoPlayer_->Initialize();
-	objectAutoPlayer_->SetModelFile("NewPlayer.gltf");
-	objectAutoPlayer_->SetEnvironment("resource/rostock_laage_airport_4k.dds");
-
-	//playerワールド座標系
-	wts[0].Initialize();
-	wts[0].rotation_ = { 0,180,0 };
-	wts[0].translation_ = { -4.5f,10.0f,0 };
+	//オブジェクトを読み込む
+	ObjectLoading();
 
 	//影
 	playerShadow_ = std::make_unique<Shadow>();
 	playerShadow_->Initialize();
-
-	//手動
-	Vector3 shadowPos = wts[0].translation_;
-	shadowPos.y = -3.8f;
-	shadowPos.y += 0.01f;//少し上に上げてにしない
-
+	Vector3 shadowPos = wts_[0].translation_;//影位置
+	shadowPos.y = kShadowPositionY_;//影位置Y
 	playerShadow_->SetTranslate(shadowPos);
-
-	//傘の初期化
-	objectUmbrella_ = std::make_unique<Object_glTF>();
-	objectUmbrella_->Initialize();
-	objectUmbrella_->SetModelFile("umbrella_Open.gltf");
-	objectUmbrella_->SetEnvironment("resource/rostock_laage_airport_4k.dds");
-
-	//umbrellaワールド座標系
-	wts[1].Initialize();
-	wts[1].parent_ = &wts[0];//プレイヤーを親としてついていく
-	wts[1].translation_ = { 0,2,0 };
-	wts[1].rotation_ = { -90.0f,0,0 };
-
-	//ゲームスタート文字の初期化
-	objectMojiStart_ = std::make_unique<Object_glTF>();
-	objectMojiStart_->Initialize();
-	objectMojiStart_->SetModelFile("Select_Start.gltf");
-	objectMojiStart_->SetEnvironment("resource/rostock_laage_airport_4k.dds");
-
-
-	//ゲームスタート文字のワールド座標系
-	wts[2].Initialize();
-	wts[2].rotation_.y = rotateSelectMoji_;
-	wts[2].translation_ = { 3,-0.5f,0 };
-	wts[2].scale_ = { 1.5f,1.5f,1.5f };
-
-	//ゲーム終了文字の初期化
-	objectMojiEnd_ = std::make_unique<Object_glTF>();
-	objectMojiEnd_->Initialize();
-	objectMojiEnd_->SetModelFile("Select_End.gltf");
-	objectMojiEnd_->SetEnvironment("resource/rostock_laage_airport_4k.dds");
-	
-	//ゲーム終了文字のワールド座標系
-	wts[3].Initialize();
-	wts[3].rotation_.y = rotateSelectMoji_;
-	wts[3].translation_ = { 3,-2.5,0 };
-	wts[3].scale_ = { 1.5f,1.5f,1.5f };
-
-	//ステージ全体のオブジェクト初期化
-	objectStage_ = std::make_unique<Object_glTF>();
-	objectStage_->Initialize();
-	objectStage_->SetModelFile("Title_stage.gltf");
-	objectStage_->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 
 	//タイトル名スプライトの初期化
 	spriteMojiTitle_ = std::make_unique<Sprite>();
@@ -86,19 +33,69 @@ void TitleScene::Initialize() {
 	particleBullet_ = std::make_unique<Particle>();
 	particleBullet_->Initialize("title_bullet", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particleBullet_->SetParticleCount(1);
-	particleBullet_->SetParticleMosion(ParticleMosion::Fixed);
 	particleBullet_->SetFrequency(0.5f);
 
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
 
+void TitleScene::ObjectLoading() {
+	//playerワールド座標系
+	for (uint32_t i = 0; i < kMaxWt_; i++) {
+		//ワールド行列作成
+		WorldTransform gwt;
+		gwt.Initialize();
+
+		//オブジェクト作成
+		std::unique_ptr<Object_glTF> gObject;
+		gObject = std::make_unique<Object_glTF>();
+		gObject->Initialize();
+
+		//オブジェクト読み込みとワールド行列の初期値
+		if (i == 0) {
+			//プレイヤー
+			gwt.rotation_.y = kRotatePlayer_;
+			gwt.translation_ = kPlayerInitPoint_;
+			gObject->SetModelFile("player_standby.gltf");
+		}
+		else if (i == 1) {
+			//傘
+			gwt.translation_ = kUmbrellaInitPoint_;
+			gwt.rotation_.x = kUmbrellaRange_;
+			gObject->SetModelFile("umbrella_Open.gltf");
+		}
+		else if (i == 2) {
+			//ゲームスタートの文字
+			gwt.rotation_.y = kRotateSelectMoji_;
+			gwt.translation_ = kSelectMojiPosition_;
+			gwt.scale_ = kScaleSelectMoji_;
+			gObject->SetModelFile("Select_Start.gltf");
+		}
+		else if (i == 3) {
+			//ゲーム終了の文字
+			gwt.rotation_.y = kRotateSelectMoji_;
+			gwt.translation_ = kSelectMojiPosition_;
+			gwt.translation_.y = kSelectEndPositionY_;//Y座標のみ変更
+			gwt.scale_ = kScaleSelectMoji_;
+			gObject->SetModelFile("Select_End.gltf");
+		}
+		else if (i == 4) {
+			gObject->SetModelFile("Title_stage.gltf");
+		}
+		wts_.push_back(gwt);
+		objects_.push_back(std::move(gObject));
+	}
+	//傘がプレイヤーを親としてついていく
+	wts_[1].parent_ = &wts_[0];
+
+}
+
 void TitleScene::Update() {
 	//次のシーンに移動
 	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {
-		if (wts[1].translation_.y == wts[2].translation_.y) {
+		if (wts_[1].translation_.y == wts_[2].translation_.y) {
 			ChangeScene();
 		}
-		else if (wts[1].translation_.y == wts[3].translation_.y) {
+		else if (wts_[1].translation_.y == wts_[3].translation_.y) {
 			isGameEnd_ = true;
 		}
 	}
@@ -110,76 +107,71 @@ void TitleScene::Update() {
 	camera_->Update();
 
 	//プレイヤーが降ってくるところ
-	if (wts[0].translation_.y <= -2.0f) {
+	if (wts_[0].translation_.y <= kLandingPointY_) {
 		//座標を維持
-		wts[0].translation_.y = -2.0f;
+		wts_[0].translation_.y = kLandingPointY_;
 		//Maxになるまでタイマーを進ませる
-		if (timer_ < kTimeMax_) {
-			timer_ += 1.0f / 60.0f;
+		if (titleFallingTimer_ < kTitleFallingTimeMax_) {
+			titleFallingTimer_ += kDeltaTime;
 		}
 		else {
-			timer_ = kTimeMax_;
-			move_ += 0.01f;
+			titleFallingTimer_ = kTitleFallingTimeMax_;
 		}
-		//タイトルが上からくる
-		start_.y = end_.y + EaseOut(start_.y, timer_, kTimeMax_);
-		titlePos_.y = start_.y + 10.0f * std::sin(move_);
+		//タイトルが上からくる(最終的にStartY_がEndY_と同じ値になる)
+		appearsePointStartY_ = appearsePointEndY_ + EaseOut(appearsePointStartY_, titleFallingTimer_, kTitleFallingTimeMax_);
+		titlePos_.y = appearsePointStartY_;
 
 	}
 	else {
 		//重力でゆっくり落ちる
-		wts[0].translation_.y -= gravity_;
+		wts_[0].translation_.y -= kGravity_;
 	}
 
 	//タイトル更新処理
 	spriteMojiTitle_->SetPosition(titlePos_);//常時場所設定
 	spriteMojiTitle_->Update();
 
-	if (isbullet) {
-		if (wts[1].translation_.y == wts[2].translation_.y) {
-			wts[2].translation_.x += 0.5f;
+	if (isSelect_) {
+		if (wts_[1].translation_.y == wts_[2].translation_.y) {
+			wts_[2].translation_.x += kMoveSelectMoji_;
 		}
-		else if (wts[1].translation_.y == wts[3].translation_.y) {
-			wts[3].translation_.x += 0.5f;
+		else if (wts_[1].translation_.y == wts_[3].translation_.y) {
+			wts_[3].translation_.x += kMoveSelectMoji_;
 		}
 
-		bulletTimer_ += 1.0f / 60.0f;
+		bulletTimer_ += kDeltaTime;
 		if (bulletTimer_ >= kBulletTimeMax_) {
 			NextSceneFadeInStart("Select");
 		}
 	}
 
 	//フェードが終わったら押せる
-	if (timer_ >= kTimeMax_ && !isbullet) {
+	if (titleFallingTimer_ >= kTitleFallingTimeMax_ && !isSelect_) {
 
 		//選択できるようになったら傘を親子関係をなくす
-		if (wts[1].parent_) {
-			wts[1].parent_ = nullptr;
-			wts[1].rotation_ = { 0,90,0 };
-			wts[1].translation_ = { -1.0f,wts[2].translation_.y,0 };
-			objectUmbrella_->ChangeAnimation("umbrella_Close.gltf");
-			objectUmbrella_->SetEnvironment("resource/rostock_laage_airport_4k.dds");
+		if (wts_[1].parent_) {
+			wts_[1].parent_ = nullptr;
+			wts_[1].rotation_.z = kUmbrellaRange_;
+			wts_[1].translation_ = { kUmbrellaArrowModePositionX_,wts_[2].translation_.y,0 };
+			objects_[1]->ChangeAnimation("umbrella_Close.gltf");
 		}
 
-		wts[1].translation_.x = -1.0f + std::sin(move_) / 4.0f;
-
-
-		if (wts[2].rotation_.y <= 0.0f && wts[3].rotation_.y <= 0.0f) {
-			wts[2].rotation_.y = 0.0f;
-			wts[3].rotation_.y = 0.0f;
+		if (wts_[2].rotation_.y <= 0.0f && wts_[3].rotation_.y <= 0.0f) {
+			wts_[2].rotation_.y = 0.0f;
+			wts_[3].rotation_.y = 0.0f;
 		}
 		else {
-			wts[2].rotation_.y -= 30.0f;
-			wts[3].rotation_.y -= 30.0f;
+			wts_[2].rotation_.y -= kRotating_;
+			wts_[3].rotation_.y -= kRotating_;
 		}
 
 		//キーボード操作
 
 		if (Input::GetInstance()->TriggerKey(DIK_W)) {
-			wts[1].translation_.y = wts[2].translation_.y;//ゲームスタート
+			wts_[1].translation_.y = wts_[2].translation_.y;//ゲームスタート
 		}
 		if (Input::GetInstance()->TriggerKey(DIK_S)) {
-			wts[1].translation_.y = wts[3].translation_.y;//ゲーム終了
+			wts_[1].translation_.y = wts_[3].translation_.y;//ゲーム終了
 		}
 
 		//ゲームパット操作
@@ -189,20 +181,20 @@ void TitleScene::Update() {
 			float padY = static_cast<float>(state_.Gamepad.sThumbLY) / 32768.0f;
 
 			if (padY > 0.5f) {
-				wts[1].translation_.y = wts[2].translation_.y;//ゲームスタート
+				wts_[1].translation_.y = wts_[2].translation_.y;//ゲームスタート
 			}
 			else if (padY < -0.5f) {
-				wts[1].translation_.y = wts[3].translation_.y;//ゲーム終了
+				wts_[1].translation_.y = wts_[3].translation_.y;//ゲーム終了
 			}
 		}
 
 		//spaceもしくはAボタンを押したら実行
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE) || 
 			Input::GetInstance()->TriggerBotton(state_,preState_, XINPUT_GAMEPAD_A)) {
-			isbullet = true;
+			isSelect_ = true;
 			particleBullet_->SetParticleBorn(ParticleBorn::MomentMode);
-			particleBullet_->SetTranslate(wts[1].translation_);
-			particleBullet_->SetRotate({0.0f,0.0f,-90.0f});
+			particleBullet_->SetTranslate(wts_[1].translation_);
+			particleBullet_->SetRotate({0.0f,0.0f,kUmbrellaRange_ });
 		}
 	}
 	//パーティクル更新
@@ -230,17 +222,10 @@ void TitleScene::Update() {
 #endif // USE_IMGUI
 
 	//ワールド座標系更新
-	for (uint32_t i = 0; i < 4; i++) {
-		wts[i].UpdateMatrix();
+	for (uint32_t i = 0; i < kMaxWt_; i++) {
+		wts_[i].UpdateMatrix();
+		objects_[i]->Update(wts_[i]);
 	}
-
-	objectAutoPlayer_->Update(wts[0]);
-	objectUmbrella_->Update(wts[1]);
-
-	objectMojiStart_->Update(wts[2]);
-	objectMojiEnd_->Update(wts[3]);
-
-	objectStage_->Update();
 
 	playerShadow_->Update();
 }
@@ -253,13 +238,9 @@ void TitleScene::Draw() {
 
 	GLTFCommon::GetInstance()->Command();
 
-	objectUmbrella_->Draw();
-	objectAutoPlayer_->Draw();	
-	objectMojiStart_->Draw();
-	objectMojiEnd_->Draw();
-	objectStage_->Draw();
-
-	SkinningCommon::GetInstance()->Command();
+	for (auto& object : objects_) {
+		object->Draw();
+	}
 
 	SpriteCommon::GetInstance()->Command();
 

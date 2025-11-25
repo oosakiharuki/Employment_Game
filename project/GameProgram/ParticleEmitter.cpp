@@ -165,45 +165,47 @@ Particles ParticleEmitter::MakeNewParticleFanfare(std::mt19937& randomEngine, co
 	return gParticle;
 }
 
-std::list<Particles> ParticleEmitter::MakeEmit(const Emitter& emitter, std::mt19937& randomEngine, ParticleMosion mosion) {
+std::list<Particles> ParticleEmitter::MakeEmit(const std::string& particleName, const Emitter& emitter, std::mt19937& randomEngine) {
 	std::list<Particles> particles;
 
-	switch (mosion)
-	{
-	case ParticleMosion::Normal:
-		for (uint32_t count = 0; count < emitter.count; ++count) {
-			particles.push_back(MakeNewParticle(randomEngine, emitter));
-		}
-		break;
-	case ParticleMosion::Fixed:
-		for (uint32_t count = 0; count < emitter.count; ++count) {
-			particles.push_back(MakeNewParticleFixed(emitter));
-		}
-		break;
-	case ParticleMosion::Smaller:
-		for (uint32_t count = 0; count < emitter.count; ++count) {
+	for (uint32_t count = 0; count < emitter.count; ++count) {
+		if (particleName == "player_walk") {
 			particles.push_back(MakeNewParticleSmaller(randomEngine, emitter));
 		}
-		break;
-	case ParticleMosion::Spike:
-		for (uint32_t count = 0; count < emitter.count; ++count) {
-			particles.push_back(MakeNewParticleSpike(randomEngine, emitter));
+		else if (particleName == "player_dead") {
+			particles.push_back(MakeNewParticleSmaller(randomEngine, emitter));
 		}
-		break;
-	case ParticleMosion::Exprosion:
-		for (uint32_t count = 0; count < emitter.count; ++count) {
+		else if (particleName == "player_fire") {
+			particles.push_back(MakeNewParticleFixed(emitter));
+		}
+		else if (particleName == "player_brink") {
+			particles.push_back(MakeNewParticleFixed(emitter));
+		}
+		else if (particleName == "player_pari") {
+			particles.push_back(MakeNewParticleFixed(emitter));
+		}
+		else if (particleName == "enemy_fire") {
+			particles.push_back(MakeNewParticleFixed(emitter));
+		}
+		else if (particleName == "tullet_laser") {
+			particles.push_back(MakeNewParticleFixed(emitter));
+		}
+		else if (particleName == "player_damage") {
 			particles.push_back(MakeNewParticleExprosion(randomEngine, emitter));
 		}
-		break;
-	case ParticleMosion::Fanfare:
-		for (uint32_t count = 0; count < emitter.count; ++count) {
+		else if(particleName == "enemy_damage"){
+			particles.push_back(MakeNewParticleExprosion(randomEngine, emitter));
+		}
+		else if (particleName == "enemies_summon") {
+			particles.push_back(MakeNewParticleExprosion(randomEngine, emitter));
+		}
+		else if (particleName == "title_bullet") {
+			particles.push_back(MakeNewParticleFixed(emitter));
+		}
+		else if (particleName == "clear_fanfare") {
 			particles.push_back(MakeNewParticleFanfare(randomEngine, emitter));
 		}
-		break;
-	default:
-		break;
 	}
-
 
 	return particles;
 }

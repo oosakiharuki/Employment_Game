@@ -58,8 +58,10 @@ public:
 	AABB GetAABB();
 
 private:
+	//オブジェクト
 	std::unique_ptr<Object3d> object_ = nullptr;
 	WorldTransform wt_;
+	//速さ
 	Vector3 velocity_;
 
 	//消えるまでの処理
@@ -67,8 +69,5 @@ private:
 	const float kEndTime_ = 0.7f;
 	bool isDead_ = false;
 
-	//秒数時間
-	const float kDeltaTime_ = 1.0f / 60.0f;
-	
 	AABB bulletAABB_;
 };

@@ -1,5 +1,8 @@
 #include "EventTrigger.h"
+#include "UseEveryOne.h"
+
 using namespace MyMath;
+using namespace UseEveryOne;
 
 void EventTrigger::Initialize() {
 	wt_.Initialize();
@@ -21,7 +24,7 @@ void EventTrigger::Update() {
 		
 		//範囲のオブジェクト
 		wt_.translation_ = eventData_.center;
-		wt_.scale_ = eventData_.size * 0.5f;
+		wt_.scale_ = eventData_.size * kDivideByTwo_;
 		wt_.UpdateMatrix();
 		object_->Update(wt_);
 
@@ -162,10 +165,10 @@ void EventTrigger::PopEventEneies() {
 
 			getline(line_stream, word, ',');
 			if (word.find("right") == 0) {
-				enemyPopData.rotate.y = 90.0f;
+				enemyPopData.rotate.y = kDirectionRight_;
 			}
 			else if (word.find("left") == 0) {
-				enemyPopData.rotate.y = -90.0f;
+				enemyPopData.rotate.y = kDirectionRight_;
 			}
 
 			enemyPopDatas_.push_back(enemyPopData);
@@ -174,12 +177,9 @@ void EventTrigger::PopEventEneies() {
 			std::unique_ptr<Particle> gParticle;
 			gParticle = std::make_unique<Particle>();
 			gParticle->Initialize("enemies_summon","resource/Sprite/white.png",PrimitiveType::sphere);
-			gParticle->SetParticleMosion(ParticleMosion::Exprosion);
 			gParticle->SetParticleBorn(ParticleBorn::TimerMode);
 			gParticle->SetFrequency(kFrequency_);
 			gParticle->SetTranslate(enemyPopData.position);
-
-			const float gSize = 0.25f;
 			gParticle->SetScale({gSize,gSize,gSize});
 
 			summon_particles_.push_back(std::move(gParticle));
@@ -189,7 +189,7 @@ void EventTrigger::PopEventEneies() {
 }
 
 void EventTrigger::EnemyPop() {
-	summonTimer_ -= kDeltaTime_;
+	summonTimer_ -= kDeltaTime;
 
 	if (summonTimer_ > 0.0f) {
 		return;
@@ -215,15 +215,15 @@ void EventTrigger::EnemyPop() {
 
 		//敵の当たり判定更新
 		AABB aabb;
-		aabb.min = { -1.0f,-1.0f,-1.5f };
-		aabb.max = { 1.0f,1.0f,1.5f };
+		aabb.min = -kAABBSize_ * kDivideByTwo_;
+		aabb.max = kAABBSize_ * kDivideByTwo_;
 
 		//少しだけ動けるように
-		Vector3 center = { 3,0,0 };
+		Vector3 move = { kMoveX,0,0 };
 
 		popEnemy->SetAABB(aabb);
-		popEnemy->SetRoutePoint1(enemyPopData.position - center);
-		popEnemy->SetRoutePoint2(enemyPopData.position + center);
+		popEnemy->SetRoutePoint1(enemyPopData.position - move);
+		popEnemy->SetRoutePoint2(enemyPopData.position + move);
 		popEnemy->SetMoveInit(enemyPopData.position);
 
 		popEnemy->DirectionDegree();

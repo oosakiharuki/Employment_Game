@@ -170,7 +170,7 @@ void Dissolve::GraphicsPipeline() {
 	dissolveResource_->Map(0, nullptr, reinterpret_cast<void**>(&threshold_));
 
 	threshold_->degress = 0.5f;
-	threshold_->egdeSize = 0.02f;
+	threshold_->edgeSize = 0.02f;
 }
 
 void Dissolve::Command() {
@@ -199,7 +199,7 @@ void Dissolve::EffectUpdate() {
 
 	ImGui::Text("Dissolve");
 	ImGui::SliderFloat("溶かし度合", &threshold_->degress, 0.0f, 1.0f);
-	ImGui::SliderFloat("egdeのサイズ", &threshold_->egdeSize, 0.0f, 0.1f);
+	ImGui::SliderFloat("egdeのサイズ", &threshold_->edgeSize, 0.0f, 0.1f);
 	//ImGui::SliderFloat3("egdeColor", &threshold->egdeColor.x, 0.0f, 1.0f);
 
 	ImGui::Checkbox("マスク画像変更",&isChangeMask_);
@@ -223,12 +223,12 @@ void Dissolve::EffectUpdate() {
 
 	//Edge調節
 	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
-		threshold_->egdeSize += 0.001f;
+		threshold_->edgeSize += 0.001f;
 	}
 	else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-		threshold_->egdeSize -= 0.001f;
+		threshold_->edgeSize -= 0.001f;
 	}
-	threshold_->egdeSize = std::clamp(threshold_->egdeSize, 0.0f, 0.1f);
+	threshold_->edgeSize = std::clamp(threshold_->edgeSize, 0.0f, 0.1f);
 
 	//マスク変更
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
@@ -258,6 +258,6 @@ void Dissolve::Degress(float value) {
 	threshold_->degress = value;
 }
 
-void Dissolve::EgdeSize(float value) {
-	threshold_->egdeSize = value;
+void Dissolve::EdgeSize(float value) {
+	threshold_->edgeSize = value;
 }

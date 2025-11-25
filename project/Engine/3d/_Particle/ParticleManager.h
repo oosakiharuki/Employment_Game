@@ -37,9 +37,9 @@ public:
 	
 	const uint32_t& GetNum(const std::string& filePath);
 
-	void Update(const std::string filePath, ParticleForGPU* wvpData, const ParticleMosion& particleMosion);
+	void Update(const std::string filePath, ParticleForGPU* wvpData);
 
-	void Emit(const std::string filePath,const Emitter& emitter,const ParticleMosion& mosion);
+	void Emit(const std::string filePath,const Emitter& emitter);
 
 	void SetCamera(Camera* camera_) { camera = camera_; }
 

@@ -69,11 +69,13 @@ private:
 	//オブジェクト設定
 	std::unique_ptr<Object_glTF> object_;
 	WorldTransform wt_;
+
+	//AABB
 	AABB umbrellaAABB_;
+	//AABBのサイズ
+	const Vector3 kAABBSize_ = { 1,2,1 };
 	//シールドモード
 	bool isShieldMode_ = false;
-	//秒数時間
-	const float kDeltaTime_ = 1.0f / 60.0f;
 	//リアクションのタイマー
 	float scaleTimer_ = 0.0f;
 };

@@ -87,9 +87,6 @@ private:
 	const float kEndTime = 2.0f;
 	bool isDead_ = false;
 
-	//秒数時間
-	const float kDeltaTime = 1.0f / 60.0f;
-
 	//当たり判定
 	AABB bulletAABB;
 

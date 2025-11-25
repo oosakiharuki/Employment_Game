@@ -1,7 +1,10 @@
 #include "FadeScreen.h"
 #include "MyMath.h"
 #include "SpriteCommon.h"
+#include "UseEveryOne.h"
+
 using namespace MyMath;
+using namespace UseEveryOne;
 
 FadeScreen* FadeScreen::sInstance= nullptr;
 
@@ -16,7 +19,7 @@ void FadeScreen::Initialize() {
 	//フェードのテクスチャ
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize("fadeTexture.png");
-	sprite_->SetSize({ 1280,720 });
+	sprite_->SetSize({ WinApp::kClientWidth_,WinApp::kClientHeight_ });
 
 	//解け具合
 	dissolve_ = std::make_unique<Dissolve>();
@@ -49,7 +52,7 @@ void FadeScreen::Update() {
 
 	//溶かす度合
 	dissolve_->Degress(degress_);
-	dissolve_->EgdeSize(0.01f);
+	dissolve_->EdgeSize(kEdgeSize);
 }
 
 void FadeScreen::Draw() {
@@ -68,16 +71,16 @@ void FadeScreen::FadeIn() {
 		return;
 	}
 
-	degress_ -= kDeltaTime_;
+	degress_ -= kDeltaTime;
 }
 
 void FadeScreen::FadeOut() {
-	if (degress_ >= 1.0f) {
-		degress_ = 1.0f;
+	if (degress_ >= kDegressMax) {
+		degress_ = kDegressMax;
 		isFading_ = false;
 		return;
 	}
 
-	degress_ += kDeltaTime_;
+	degress_ += kDeltaTime;
 }
 

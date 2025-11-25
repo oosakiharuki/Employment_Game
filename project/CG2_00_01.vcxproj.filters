@@ -255,9 +255,6 @@
     <ClCompile Include="Engine\3d\_Particle\ParticleCommon.cpp">
       <Filter>ソース ファイル\Engine\3d\_Particle</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\_Particle\ParticleEmitter.cpp">
-      <Filter>ソース ファイル\Engine\3d\_Particle</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\3d\_Particle\ParticleManager.cpp">
       <Filter>ソース ファイル\Engine\3d\_Particle</Filter>
     </ClCompile>
@@ -372,8 +369,14 @@
     <ClCompile Include="GameProgram\System\NextStageSave.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="GameActor.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\ParticleEmitter.cpp">
+      <Filter>ソース ファイル\GameProgram</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor.cpp">
+      <Filter>ソース ファイル\GameProgram</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\UseEveryOne.cpp">
+      <Filter>ソース ファイル\GameProgram</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -432,9 +435,6 @@
       <Filter>ヘッダー ファイル\Engine\3d\_Particle</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\_Particle\ParticleCommon.h">
-      <Filter>ヘッダー ファイル\Engine\3d\_Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\_Particle\ParticleEmitter.h">
       <Filter>ヘッダー ファイル\Engine\3d\_Particle</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\_Particle\ParticleManager.h">
@@ -620,8 +620,14 @@
     <ClInclude Include="GameProgram\System\NextStageSave.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="GameActor.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\GameActor.h">
+      <Filter>ヘッダー ファイル\GameProgram</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\UseEveryOne.h">
+      <Filter>ヘッダー ファイル\GameProgram</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\ParticleEmitter.h">
+      <Filter>ヘッダー ファイル\GameProgram</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

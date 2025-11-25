@@ -1,7 +1,9 @@
 #include "Umbrella.h"
 #include "ImGuiManager.h"
+#include "UseEveryOne.h"
 
 using namespace MyMath;
+using namespace UseEveryOne;
 
 Umbrella::~Umbrella() {}
 
@@ -12,8 +14,8 @@ void Umbrella::Initialize() {
 	object_->Initialize();
 	object_->SetModelFile("umbrella_Close.gltf");
 
-	umbrellaAABB_.min = { -0.5f,-1,-0.5f };
-	umbrellaAABB_.max = { 0.5f,1,0.5f };
+	umbrellaAABB_.min = -kAABBSize_ * kDivideByTwo_;
+	umbrellaAABB_.max = kAABBSize_ * kDivideByTwo_;
 }
 
 void Umbrella::Update() {
@@ -64,7 +66,7 @@ void Umbrella::ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime) {
 		wt_.scale_ -= scale;
 		if (scaleTimer_ >= maxTime) {
 			scaleTimer_ = 0.0f;
-			wt_.scale_ = { 1,1,1 };
+			wt_.scale_ = kDefaultScale_;
 			//モーションを終了する
 			*mosionOn = false;
 		}
@@ -72,5 +74,5 @@ void Umbrella::ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime) {
 	else {
 		wt_.scale_ += scale;
 	}
-	scaleTimer_ += kDeltaTime_;
+	scaleTimer_ += kDeltaTime;
 }

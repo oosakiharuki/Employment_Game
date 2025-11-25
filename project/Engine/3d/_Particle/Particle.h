@@ -43,17 +43,6 @@ enum class ParticleBorn {
 };
 
 /// <summary>
-/// Emitterで動きを変化させる
-/// </summary>
-enum ParticleMosion {
-	Normal,  //あちこち動く
-	Fixed,   //固定
-	Smaller, //小さくなって消える
-	Spike,   //とげとげ (HitEffect)
-	Exprosion,//爆発っぽい感じ(ring)
-	Fanfare,  //紙吹雪っぽいやつ
-};
-/// <summary>
 /// パーティクル
 /// </summary>
 class Particle{
@@ -117,12 +106,6 @@ public:
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
 	/// <summary>
-	/// パーティクルのモーション
-	/// </summary>
-	/// <param name="mosion"></param>
-	void SetParticleMosion(ParticleMosion mosion) { particleMosion_ = mosion; }
-
-	/// <summary>
 	/// パーティクル発動モード
 	/// </summary>
 	/// <param name="mode"></param>時間で出る/一度だけ/出さない
@@ -174,7 +157,6 @@ private:
 	Emitter emitter_{};
 
 	ParticleBorn particleBorn_ = ParticleBorn::TimerMode;
-	ParticleMosion particleMosion_ = ParticleMosion::Normal;
 
 	uint32_t number_ = 0;
 

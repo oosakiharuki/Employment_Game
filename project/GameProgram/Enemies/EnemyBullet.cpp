@@ -1,7 +1,9 @@
 #include "EnemyBullet.h"
 #include "Player.h"
+#include "UseEveryOne.h"
 
 using namespace MyMath;
+using namespace UseEveryOne;
 
 EnemyBullet::~EnemyBullet() {}
 

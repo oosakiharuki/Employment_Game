@@ -4,11 +4,11 @@
 #include "ImGuiManager.h"
 
 using namespace MyMath;
+using namespace UseEveryOne;
 
 void CameraControl::Initialize() {
 	wt_.Initialize();
 	isFixedMode_ = false;
-
 }
 
 void CameraControl::Update(Camera* camera) {
@@ -84,7 +84,7 @@ void CameraControl::Zoom() {
 	if (isZoom_) {
 		if (zoomTimer_ < kMaxZoomTime_) {
 			wt_.translation_ = cameraSegment_.diff + EaseOut(cameraSegment_.origin - cameraSegment_.diff, zoomTimer_, kMaxZoomTime_);
-			zoomTimer_ += 1.0f / 60.0f;
+			zoomTimer_ += kDeltaTime;
 		}
 		else {
 			wt_.translation_ = cameraSegment_.diff;
@@ -109,7 +109,7 @@ void CameraControl::Shaking() {
 		}
 
 
-		shakeTimer_ -= 1.0f / 60.0f;
+		shakeTimer_ -= kDeltaTime;
 
 		std::random_device seed;
 		std::mt19937 random(seed());
@@ -121,8 +121,8 @@ void CameraControl::Shaking() {
 	}
 }
 
-
-bool CameraControl::MaxZoom() {
+const bool CameraControl::ZoomEnd() {
+	//zoomTimer_がkMaxZoomTime_と同じ値ならTrue
 	if (zoomTimer_ >= kMaxZoomTime_) {
 		return true;
 	}

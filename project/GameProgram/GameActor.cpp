@@ -1,5 +1,6 @@
 #include "GameActor.h"
 
+using namespace UseEveryOne;
 using namespace MyMath;
 
 void GameActor::Actor_InitializeCommon() {
@@ -31,11 +32,13 @@ void GameActor::ShadowUpdate() {
 }
 
 void GameActor::ScaleUpdate(bool* mosionOn, Vector3 scale, const float& maxTime) {
-	if (scaleTimer_ >= maxTime / 2.0f) {
+	const float kDivideByTwo = 2.0f;//2で除算する
+
+	if (scaleTimer_ >= maxTime / kDivideByTwo) {
 		wt_.scale_ -= scale;
 		if (scaleTimer_ >= maxTime) {
 			scaleTimer_ = 0.0f;
-			wt_.scale_ = { 1,1,1 };
+			wt_.scale_ = kDefaultScale_;
 
 			//モーションを終了する
 			*mosionOn = false;
@@ -44,7 +47,7 @@ void GameActor::ScaleUpdate(bool* mosionOn, Vector3 scale, const float& maxTime)
 	else {
 		wt_.scale_ += scale;
 	}
-	scaleTimer_ += kDeltaTime_;
+	scaleTimer_ += kDeltaTime;
 }
 
 void GameActor::RespawnCommon() {

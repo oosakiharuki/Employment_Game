@@ -1,6 +1,7 @@
 #include "Enemy_Bomb.h"
 #include "Object3dCommon.h"
 
+using namespace UseEveryOne;
 using namespace MyMath;
 
 Enemy_Bomb::~Enemy_Bomb() {}
@@ -29,11 +30,7 @@ void Enemy_Bomb::Update() {
 	}
 
 	//死んだとき
-	if (isDead_) {
-		//爆発するフラグ
-		isExplosion_ = true;
-	}
-	else {
+	if (!isDead_) {
 		//通常処理
 		
 		//それぞれの座標位置
@@ -81,27 +78,28 @@ void Enemy_Bomb::Attack() {
 
 void Enemy_Bomb::TimeRimmit() {
 	//爆弾タイマー
-	bombTimer_ += kDeltaTime_;
+	bombTimer_ += kDeltaTime;
 
 	//プレイヤーに追淳
 	wt_.translation_ += distance_ * Vector3{ -0.03f,0,0 } *3;
 
 	//向きを合わせる
 	if (distance_.x < 0) {
-		wt_.rotation_.y = 90.0f;
+		wt_.rotation_.y = kDirectionRight_;
 	}
 	if (distance_.x >= 0) {
-		wt_.rotation_.y = -90.0f;
+		wt_.rotation_.y = kDirectionLeft_;
 	}
 
 	//リアクション
-	if (bombTimer_ >= kBombTimeMax_ / 1.5f) {
+
+	if (bombTimer_ >= kOnTheVerge) {
 		//爆発寸前だと揺れが細かくなる
-		ScaleUpdate(&isStart_, bombScale_ * 2, 0.2f / 2);
+		ScaleUpdate(&isStart_, bombScale_ * kScaleSpeedUp_, kScaleMax_ / kScaleSpeedUp_);
 	}
 	else {
 		//爆発しそうな演出
-		ScaleUpdate(&isStart_, bombScale_, 0.2f);
+		ScaleUpdate(&isStart_, bombScale_, kScaleMax_);
 	}
 }
 

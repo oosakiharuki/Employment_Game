@@ -95,19 +95,24 @@ private:
 	std::unique_ptr<Object_glTF> object_;
 	WorldTransform wt_;
 
+	//読み取ったcsv
 	std::stringstream enemyPopCsvFile_;
 
+	//ウェーブで一度読み込みを停止する
 	bool isEventWave_ = false;
+	//csvを読み取る
 	bool isLoadCsv_ = true;
-
+	//イベント終了
 	bool isEventEnd_ = false;
 
 	//敵を生んだ・倒した数
 	uint32_t enemyBornCount_ = 0;
 	uint32_t enemyDeadCount_ = 0;
 
+	//登場する敵たち
 	std::vector<std::shared_ptr<IEnemy>> popEnemies_;
 
+	//イベントのデータ
 	EventData eventData_;
 
 	//パーティクル
@@ -122,6 +127,16 @@ private:
 	//頻度
 	const float kFrequency_ = kSummonMaxTime_ / 15.0f;
 
-	//秒数時間
-	const float kDeltaTime_ = 1.0f / 60.f;
+	//パーティクルサイズ
+	const float gSize = 0.25f;
+
+	//動ける範囲
+	const float kMoveX = 3.0f;
+
+	//AABBのサイズ
+	const Vector3 kAABBSize_ = { 2.0f,2.0f,3.0f };
+
+	//向き(左右)
+	const float kDirectionRight_ = 90.0f;
+	const float kDirectionLeft_ = -90.0f;
 };

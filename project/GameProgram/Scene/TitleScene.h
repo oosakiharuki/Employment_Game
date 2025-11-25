@@ -13,41 +13,68 @@ public:
 	void Draw() override;
 	void Finalize() override;
 private:
+	//タイトルで使うワールド行列たち
+	std::vector<WorldTransform> wts_;
+	//タイトルで使うオブジェクトたち
+	std::vector<std::unique_ptr<Object_glTF>> objects_;
+	//必要なワールド行列
+	const uint32_t kMaxWt_ = 5;
 
-	WorldTransform wts[4];
-
-	//タイトルで使うオブジェクト
-	std::unique_ptr<Object_glTF> objectAutoPlayer_ = nullptr;
-	std::unique_ptr<Object_glTF> objectUmbrella_;//傘+矢印
-	std::unique_ptr<Object_glTF> objectMojiStart_;//スタートする
-	std::unique_ptr<Object_glTF> objectMojiEnd_;//ゲーム終了する
-	std::unique_ptr<Object_glTF> objectStage_;//タイトル用のステージ
+	/// <summary>
+	/// オブジェクトたちを読み込む
+	/// </summary>
+	void ObjectLoading();
 
 	std::unique_ptr<Shadow> playerShadow_;//プレイヤー影
-
 	std::unique_ptr<Sprite> spriteMojiTitle_;//タイトル名
-
 	std::unique_ptr<Particle> particleBullet_;//決定した時にパーティクルを出す
 
-	bool isbullet = false;
-
-	//時間
-	float timer_ = 0.0f;
-	const float kTimeMax_ = 1.0f;
-	
-	//上下に移動する
-	float move_ = 0.0f;
-	Vector3 start_ = {-2.0f,-100.0f,0.0f};
-	Vector3 end_ = { -2.0f,32.0f,0.0f};
-
+	//決定したら弾を発射
+	bool isSelect_ = false;
 	float bulletTimer_ = 0.0f;
 	const float kBulletTimeMax_ = 1.0f;
 
-	Vector2 titlePos_ = { 430,-300 };
+	//時間
+	float titleFallingTimer_ = 0.0f;
+	const float kTitleFallingTimeMax_ = 1.0f;
+	
+	//タイトルロゴが登場する移動
+	float appearsePointStartY_ = -300.0f;//スタート
+	float appearsePointEndY_ = 32.0f;//ゴール
+	//タイトル座標
+	Vector2 titlePos_ = { 430,appearsePointStartY_ };
 
 	//通常プレイと同じ重力
-	float gravity_ = 0.05f;
+	const float kGravity_ = 0.05f;
+
+	//プレイヤー初期値
+	const Vector3 kPlayerInitPoint_ = { -4.5f,10.0f,0 };
+	//プレイヤー着地地点
+	const float kLandingPointY_ = -2.0f;
+	//プレイヤー前に向かす
+	const float kRotatePlayer_ = 180.0f;
 
 	//最初、文字をふせておく
-	float rotateSelectMoji_ = 180.0f;
+	const float kRotateSelectMoji_ = 180.0f;
+	//回転速度
+	const float kRotating_ = 30.0f;
+
+	//セレクトの文字の大きさ
+	const Vector3 kScaleSelectMoji_ = { 1.5f,1.5f ,1.5f };
+	//選択後に飛ばされる強さ
+	const float kMoveSelectMoji_ = 0.5f;
+
+	const Vector3 kSelectMojiPosition_ = { 3.0f,-0.5f,0.0f };
+	const float kSelectEndPositionY_ = -2.5f;
+	
+	//傘
+	const Vector3 kUmbrellaInitPoint_ = { 0.0f,2.0f,0.0f };
+	//傘の向き
+	const float kUmbrellaRange_ = -90.0f;//プレイヤーが降ってくるとき
+	const float kUmbrellaRangeArrowMode_ = 90.0f;//矢印の時
+	//場所
+	const float kUmbrellaArrowModePositionX_ = -1.0f;
+
+	//影
+	const float kShadowPositionY_ = -3.79f;//(-3.8f + 0.01f)
 };

@@ -134,7 +134,7 @@ std::list<Particles> ParticleManager::GetParticle(const std::string filePath) {
 	return particleG.particles;
 }
 
-void ParticleManager::Update(const std::string filePath, ParticleForGPU* wvpData,const ParticleMosion& particleMosion) {
+void ParticleManager::Update(const std::string filePath, ParticleForGPU* wvpData) {
 
 	assert(srvManager->Max());
 
@@ -163,12 +163,12 @@ void ParticleManager::Update(const std::string filePath, ParticleForGPU* wvpData
 
 		(*particleIterator).transform.translate += (*particleIterator).velocity * kDeltaTime;
 
-		if (particleMosion == ParticleMosion::Fanfare) {
+		if (filePath == "clear_fanfare") {
 			(*particleIterator).transform.rotate += (*particleIterator).velocity;
 			(*particleIterator).velocity.y -= 0.1f;
 		}
 
-		if (particleMosion == ParticleMosion::Smaller) {
+		if (filePath == "player_walk" || filePath == "player_dead") {
 			if ((*particleIterator).transform.scale.x > 0) {
 				(*particleIterator).transform.scale.x -= 0.5f * kDeltaTime;
 			}
@@ -223,7 +223,7 @@ void ParticleManager::Update(const std::string filePath, ParticleForGPU* wvpData
 	
 }
 
-void ParticleManager::Emit(const std::string filePath, const Emitter& emitter, const ParticleMosion& mosion) {
+void ParticleManager::Emit(const std::string filePath, const Emitter& emitter) {
 
 	assert(srvManager->Max());
 
@@ -232,7 +232,7 @@ void ParticleManager::Emit(const std::string filePath, const Emitter& emitter, c
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
 
-	particleG.particles.splice(particleG.particles.end(), ParticleEmitter::GetInstance()->MakeEmit(emitter, randomEngine, mosion));
+	particleG.particles.splice(particleG.particles.end(), ParticleEmitter::GetInstance()->MakeEmit(filePath ,emitter, randomEngine));
 }
 
 const uint32_t& ParticleManager::GetNum(const std::string& filePath) {

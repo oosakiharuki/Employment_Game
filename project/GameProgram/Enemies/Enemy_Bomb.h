@@ -12,9 +12,8 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Attack() override;
-
 	bool IsExplosion()override { return isExplosion_; }
-
+	void ExplosionEnd()override { isExplosion_ = true; }
 	void RespawnEnemy() override;
 
 	/// <summary>
@@ -47,13 +46,17 @@ private:
 
 	//リアクション
 	Vector3 bombScale_ = { 0.05f, 0.05f, 0.05f };
-
-
+	const float kScaleMax_ = 0.2f;//スケール最大値
+	const float kOnTheVerge = 4.0f;//爆発寸前までのタイマー
+	const float kScaleSpeedUp_ = 2.0f;
 	/// <summary>
 	/// 爆発する
 	/// </summary>
 	void Exprosion();
 
+	/// <summary>
+	/// タイムリミット
+	/// </summary>
 	void TimeRimmit();
 };
 
