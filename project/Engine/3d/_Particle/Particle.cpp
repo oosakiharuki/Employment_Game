@@ -118,20 +118,20 @@ void Particle::Update() {
 
 		if (emitter_.frequency <= emitter_.frequencyTime) {
 			//発生処理
-			ParticleManager::GetInstance()->Emit(fileName_, emitter_, particleMosion_);
+			ParticleManager::GetInstance()->Emit(fileName_, emitter_);
 			emitter_.frequencyTime -= emitter_.frequency;
 		}
 		break;
 	case ParticleBorn::MomentMode:
 		//発生処理
-		ParticleManager::GetInstance()->Emit(fileName_, emitter_, particleMosion_);
+		ParticleManager::GetInstance()->Emit(fileName_, emitter_);
 		particleBorn_ = ParticleBorn::Stop;
 		break;
 	case ParticleBorn::Stop:
 		break;
 	}
 
-	ParticleManager::GetInstance()->Update(fileName_, wvpData_,particleMosion_);
+	ParticleManager::GetInstance()->Update(fileName_, wvpData_);
 
 	numInstance_ = ParticleManager::GetInstance()->GetNum(fileName_);
 

@@ -46,35 +46,29 @@ void Player::Initialize() {
 	//歩く
 	particleWalk_ = std::make_unique<Particle>();
 	particleWalk_->Initialize("player_walk", "resource/Sprite/ground.png", PrimitiveType::box);
-	particleWalk_->SetParticleMosion(ParticleMosion::Smaller);
 	//ブリンク
 	particleBrink_ = std::make_unique<Particle>();
 	particleBrink_->Initialize("player_brink", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particleBrink_->SetParticleCount(1);
-	particleBrink_->SetParticleMosion(ParticleMosion::Fixed);
 	particleBrink_->SetFrequency(1.0f);//時間
 	particleBrink_->SetScale({2,2,2});
 	//攻撃
 	particleFire_ = std::make_unique<Particle>();
 	particleFire_->Initialize("player_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particleFire_->SetParticleCount(1);
-	particleFire_->SetParticleMosion(ParticleMosion::Fixed);
 	particleFire_->SetFrequency(0.1f);
 	//ダメージ
 	particleDamage_ = std::make_unique<Particle>();
 	particleDamage_->Initialize("player_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
 	particleDamage_->SetParticleCount(20);
-	particleDamage_->SetParticleMosion(ParticleMosion::Exprosion);
 	particleDamage_->SetFrequency(1.0f);
 	//パリィ
 	particlePari_ = std::make_unique<Particle>();
 	particlePari_->Initialize("player_pari", "resource/Sprite/uvChecker.png", PrimitiveType::cone);
-	particlePari_->SetParticleMosion(ParticleMosion::Fixed);
 	particleFire_->SetFrequency(0.5f);
 	//死んだとき
 	particleDead_ = std::make_unique<Particle>();
 	particleDead_->Initialize("player_dead", "resource/Sprite/ground.png", PrimitiveType::sphere);
-	particleDead_->SetParticleMosion(ParticleMosion::Smaller);
 	particleDead_->SetFrequency(0.1f);
 	particleDead_->SetScale({ 0.5f,0.5f,0.5f });
 

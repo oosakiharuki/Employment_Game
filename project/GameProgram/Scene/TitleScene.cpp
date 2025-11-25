@@ -33,7 +33,6 @@ void TitleScene::Initialize() {
 	particleBullet_ = std::make_unique<Particle>();
 	particleBullet_->Initialize("title_bullet", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particleBullet_->SetParticleCount(1);
-	particleBullet_->SetParticleMosion(ParticleMosion::Fixed);
 	particleBullet_->SetFrequency(0.5f);
 
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);

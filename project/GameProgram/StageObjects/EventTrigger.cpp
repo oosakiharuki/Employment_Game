@@ -177,7 +177,6 @@ void EventTrigger::PopEventEneies() {
 			std::unique_ptr<Particle> gParticle;
 			gParticle = std::make_unique<Particle>();
 			gParticle->Initialize("enemies_summon","resource/Sprite/white.png",PrimitiveType::sphere);
-			gParticle->SetParticleMosion(ParticleMosion::Exprosion);
 			gParticle->SetParticleBorn(ParticleBorn::TimerMode);
 			gParticle->SetFrequency(kFrequency_);
 			gParticle->SetTranslate(enemyPopData.position);

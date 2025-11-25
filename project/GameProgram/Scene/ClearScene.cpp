@@ -42,7 +42,6 @@ void ClearScene::Initialize() {
 		gParticle = std::make_unique<Particle>();
 		gParticle->Initialize("clear_fanfare", "resource/Sprite/white.png", PrimitiveType::plane);
 		gParticle->SetParticleBorn(ParticleBorn::MomentMode);
-		gParticle->SetParticleMosion(ParticleMosion::Fanfare);
 		gParticle->SetFrequency(1.5f);
 		gParticle->SetParticleCount(10);
 		particle_fanfares_.push_back(std::move(gParticle));

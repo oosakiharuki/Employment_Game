@@ -21,7 +21,7 @@ public:
 	/// <param name="randomEngine"></param>
 	/// <param name="mosion"></param>
 	/// <returns></returns>
-	std::list<Particles> MakeEmit(const Emitter& emitter, std::mt19937& randomEngine, ParticleMosion mosion);
+	std::list<Particles> MakeEmit(const std::string& particleName, const Emitter& emitter, std::mt19937& randomEngine);
 
 private:
 	static ParticleEmitter* sInstance_;

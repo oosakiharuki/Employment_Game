@@ -28,7 +28,6 @@ void Enemy_Turret::Initialize() {
 	particleLaser_->SetFrequency(0.001f);
 	particleLaser_->SetParticleCount(1);
 	particleLaser_->SetParticleBorn(ParticleBorn::TimerMode);
-	particleLaser_->SetParticleMosion(ParticleMosion::Fixed);
 	particleLaser_->SetScale({ eyeReach_.x * 0.5f,0.1f,0.1f });
 
 	//ちょっと大きく

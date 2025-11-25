@@ -23,18 +23,16 @@ void IEnemy::Enemy_InitializeCommon() {
 
 
 	particleFire_ = std::make_unique<Particle>();
-	particleFire_->Initialize("enemySoldier_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
+	particleFire_->Initialize("enemy_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particleFire_->SetParticleCount(1);
 	particleFire_->SetParticleBorn(ParticleBorn::Stop);
-	particleFire_->SetParticleMosion(ParticleMosion::Fixed);
 	particleFire_->SetFrequency(0.1f);
 
 
 	particleDamage_ = std::make_unique<Particle>();
-	particleDamage_->Initialize("enemySoldier_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
+	particleDamage_->Initialize("enemy_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
 	particleDamage_->SetParticleCount(10);
 	particleDamage_->SetParticleBorn(ParticleBorn::Stop);
-	particleDamage_->SetParticleMosion(ParticleMosion::Exprosion);
 	particleDamage_->SetFrequency(0.7f);
 
 	wtMark_.Initialize();
