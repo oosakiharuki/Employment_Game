@@ -244,7 +244,7 @@ private:
 	//落下する時ふわふわできるように
 	bool isUmbrellaFall_ = false;
 
-	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
+	const uint32_t kPlayerMaxHp_ = 30;//設定する体力
 	//ダメージを食らった後の無敵時間
 	float infinityTimer_ = 0.0f;
 	const float kInfinityTimeMax_ = 1.0f;//最大無敵時間

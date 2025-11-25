@@ -29,16 +29,18 @@ void EventTrigger::Update() {
 		object_->Update(wt_);
 
 		for (auto& particle : summon_particles_) {
-			particle->SetParticleCount(10);
-			particle->Update();
-			//敵が出てきたので止める
-			if (summonTimer_ < 0) {
+			//敵が出るまで
+			if (summonTimer_ > 0) {
+				particle->SetParticleBorn(ParticleBorn::TimerMode);
+			}
+			else {
 				particle->SetParticleBorn(ParticleBorn::Stop);
 			}
+			particle->Update();
 		}
 
 		//敵が出終わった後ちょっとしてからリセットする
-		if (summonTimer_ <= -kSummonMaxTime_) {
+		if (summonTimer_ <= -kFrequencySummon_ * 2.0f) {
 			summon_particles_.clear();
 		}
 
@@ -168,7 +170,7 @@ void EventTrigger::PopEventEneies() {
 				enemyPopData.rotate.y = kDirectionRight_;
 			}
 			else if (word.find("left") == 0) {
-				enemyPopData.rotate.y = kDirectionRight_;
+				enemyPopData.rotate.y = kDirectionLeft_;
 			}
 
 			enemyPopDatas_.push_back(enemyPopData);
@@ -176,9 +178,9 @@ void EventTrigger::PopEventEneies() {
 			//召喚パーティクル
 			std::unique_ptr<Particle> gParticle;
 			gParticle = std::make_unique<Particle>();
-			gParticle->Initialize("enemies_summon","resource/Sprite/white.png",PrimitiveType::sphere);
-			gParticle->SetParticleBorn(ParticleBorn::TimerMode);
-			gParticle->SetFrequency(kFrequency_);
+			gParticle->Initialize("enemies_summon", "resource/Sprite/white.png", PrimitiveType::sphere);
+			gParticle->SetParticleCount(10);
+			gParticle->SetFrequency(kFrequencySummon_);
 			gParticle->SetTranslate(enemyPopData.position);
 			gParticle->SetScale({gSize,gSize,gSize});
 

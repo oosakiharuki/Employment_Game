@@ -33,7 +33,7 @@ public:
 	ModelData GetModelData(const std::string filePath);
 	std::string GetTextureHandle(const std::string filePath);
 	Microsoft::WRL::ComPtr<ID3D12Resource> GetResource(const std::string filePath);
-	std::list<Particles> GetParticle(const std::string filePath);
+	std::list<ParticleData> GetParticle(const std::string filePath);
 	
 	const uint32_t& GetNum(const std::string& filePath);
 
@@ -67,7 +67,7 @@ private:
 		std::string textureFile;
 		ModelData modelData;
 
-		std::list<Particles> particles;
+		std::list<ParticleData> particles;
 		uint32_t srvIndex;
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
 		uint32_t kNumInstance = 100;

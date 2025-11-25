@@ -70,14 +70,9 @@ void ParticleManager::CreateParticleGroup(const std::string name, const std::str
 		break;
 	}
 
-	
-	
+	//テクスチャ読み込み
 	particleG.modelData.material.textureFilePath = textureFilePath;
-	
-
 	particleG.resource = particleCommon->GetDxCommon()->CreateBufferResource(sizeof(ParticleForGPU) * particleG.kNumInstance);
-	
-
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
@@ -127,7 +122,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> ParticleManager::GetResource(const std::s
 	return particleG.resource;
 }
 
-std::list<Particles> ParticleManager::GetParticle(const std::string filePath) {
+std::list<ParticleData> ParticleManager::GetParticle(const std::string filePath) {
 	assert(srvManager->Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
@@ -140,45 +135,45 @@ void ParticleManager::Update(const std::string filePath, ParticleForGPU* wvpData
 
 	ParticleGroup& particleG = particleGroups[filePath];
 
-	//すでに更新している場合
+	//複数ある場合、出ていない部分は描画されないように
+	particleG.numInstance = 0;
+
+	//filePath名ですでに更新している場合
 	if (particleG.Updated) {
 		return;
 	}
-	particleG.numInstance = 0;
 	particleG.Updated = true;
 
-	for (std::list<Particles>::iterator particleIterator = particleG.particles.begin();
+	for (std::list<ParticleData>::iterator particleIterator = particleG.particles.begin();
 		particleIterator != particleG.particles.end(); ) {
 
-		if ((*particleIterator).lifeTime <= (*particleIterator).currentTime) {
+		//生存時間を過ぎた or スケール(x,y,z)のいずれかが0以下の場合
+		if ((*particleIterator).lifeTime <= (*particleIterator).currentTime || 
+			((*particleIterator).transform.scale.x < 0 || (*particleIterator).transform.scale.y < 0 || (*particleIterator).transform.scale.z < 0)) {
 			particleIterator = particleG.particles.erase(particleIterator);
 			continue;
 		}
 
 		float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
 
-		//if (IsCollision(accelerationField.area, (*particleIterator).transform.translate)) {
-		//	//(*particleIterator).velocity += accelerationField.acceleration * kDeltaTime;
-		//}
-
-		(*particleIterator).transform.translate += (*particleIterator).velocity * kDeltaTime;
-
+		(*particleIterator).transform.translate += (*particleIterator).velocityTransform.translate * kDeltaTime;
+		
 		if (filePath == "clear_fanfare") {
-			(*particleIterator).transform.rotate += (*particleIterator).velocity;
-			(*particleIterator).velocity.y -= 0.1f;
+			(*particleIterator).velocityTransform.translate.y -= 0.1f;
+		}
+		
+		(*particleIterator).transform.rotate += (*particleIterator).velocityTransform.rotate;
+
+		if ((*particleIterator).transform.scale.x > 0) {
+			(*particleIterator).transform.scale.x += (*particleIterator).velocityTransform.scale.x * kDeltaTime;
+		}
+		if ((*particleIterator).transform.scale.y > 0) {
+			(*particleIterator).transform.scale.y += (*particleIterator).velocityTransform.scale.y * kDeltaTime;
+		}
+		if ((*particleIterator).transform.scale.z > 0) {
+			(*particleIterator).transform.scale.z += (*particleIterator).velocityTransform.scale.z * kDeltaTime;
 		}
 
-		if (filePath == "player_walk" || filePath == "player_dead") {
-			if ((*particleIterator).transform.scale.x > 0) {
-				(*particleIterator).transform.scale.x -= 0.5f * kDeltaTime;
-			}
-			if ((*particleIterator).transform.scale.y > 0) {
-				(*particleIterator).transform.scale.y -= 0.5f * kDeltaTime;
-			}
-			if ((*particleIterator).transform.scale.z > 0) {
-				(*particleIterator).transform.scale.z -= 0.5f * kDeltaTime;
-			}
-		}
 
 		(*particleIterator).currentTime += kDeltaTime;
 

@@ -87,15 +87,12 @@ void Enemy_Turret::Draw() {
 	for (auto* bullet : bullets_) {
 		bullet->Draw();
 	}
+}
 
-	ParticleCommon::GetInstance()->Command();
-
+void Enemy_Turret::DrawParticle() {
 	particleFire_->Draw();
 	particleDamage_->Draw();
 	particleLaser_->Draw();
-
-	Object3dCommon::GetInstance()->Command();
-
 }
 
 void Enemy_Turret::Attack() {

@@ -12,17 +12,26 @@ struct ParticleForGPU {
 	Matrix4x4 World;
 	Vector4 color;
 };
+/// <summary>
+/// Transform移動/回転/スケールそれぞれの速度の構造体
+/// </summary>
+struct VelocityTransform {
+	Vector3 scale;
+	Vector3 rotate;
+	Vector3 translate;
+};
 
 /// <summary>
 /// パーティクルのパラメータ
 /// </summary>
-struct Particles {
+struct ParticleData {
 	Transform transform;
-	Vector3 velocity;
+	VelocityTransform velocityTransform;
 	Vector4 color;
 	float lifeTime;
 	float currentTime;
 };
+
 /// <summary>
 /// エミッター
 /// </summary>
@@ -98,7 +107,10 @@ public:
 	/// setter_発生時間
 	/// </summary>
 	/// <param name="time"></param>発生させる時間
-	void SetFrequency(const float time) { emitter_.frequency = time; }
+	void SetFrequency(const float time) { 
+		emitter_.frequency = time;
+		emitter_.frequencyTime = time;
+	}
 	/// <summary>
 	/// setter_カメラ
 	/// </summary>
@@ -148,7 +160,7 @@ private:
 
 	static const uint32_t kNumMaxInstance_ = 100;
 
-	std::list<Particles> particles_;
+	std::list<ParticleData> particles_;
 	uint32_t numInstance_ = 0;
 
 	Camera* camera_ = nullptr;

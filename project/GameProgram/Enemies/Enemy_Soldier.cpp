@@ -67,15 +67,11 @@ void Enemy_Soldier::Draw() {
 	for (auto* bullet : bullets_) {
 		bullet->Draw();
 	}
+}
 
-
-	ParticleCommon::GetInstance()->Command();
-
+void Enemy_Soldier::DrawParticle() {
 	particleFire_->Draw();
 	particleDamage_->Draw();
-
-	Object3dCommon::GetInstance()->Command();
-	
 }
 
 void Enemy_Soldier::Attack() {

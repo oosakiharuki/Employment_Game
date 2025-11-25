@@ -63,12 +63,11 @@ void Enemy_Bomb::Draw() {
 		object_->Draw();
 		shadow_->Draw();
 	}
+}
 
-	ParticleCommon::GetInstance()->Command();
-	//ダメージのパーティクル
+void Enemy_Bomb::DrawParticle() {
+	particleFire_->Draw();
 	particleDamage_->Draw();
-
-	Object3dCommon::GetInstance()->Command();
 }
 
 void Enemy_Bomb::Attack() {

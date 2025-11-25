@@ -21,18 +21,18 @@ public:
 	/// <param name="randomEngine"></param>
 	/// <param name="mosion"></param>
 	/// <returns></returns>
-	std::list<Particles> MakeEmit(const std::string& particleName, const Emitter& emitter, std::mt19937& randomEngine);
+	std::list<ParticleData> MakeEmit(const std::string& particleName, const Emitter& emitter, std::mt19937& randomEngine);
 
 private:
 	static ParticleEmitter* sInstance_;
 
 	///パーティクル生成方法一覧
-	Particles MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter);//通常
-	Particles MakeNewParticleFixed(const Emitter& emitter);//固定
-	Particles MakeNewParticleSmaller(std::mt19937& randomEngine, const Emitter& emitter);//だんだん小さく消える
-	Particles MakeNewParticleSpike(std::mt19937& randomEngine, const Emitter& emitter);//トゲトゲしい
-	Particles MakeNewParticleExprosion(std::mt19937& randomEngine, const Emitter& emitter);//爆発っぽい
-	Particles MakeNewParticleFanfare(std::mt19937& randomEngine, const Emitter& emitter);//紙吹雪っぽい
+	ParticleData MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter);//通常
+	ParticleData MakeNewParticleFixed(const Emitter& emitter);//固定
+	ParticleData MakeNewParticleSmaller(std::mt19937& randomEngine, const Emitter& emitter);//だんだん小さく消える
+	ParticleData MakeNewParticleSpike(std::mt19937& randomEngine, const Emitter& emitter);//トゲトゲしい
+	ParticleData MakeNewParticleExprosion(std::mt19937& randomEngine, const Emitter& emitter);//爆発っぽい
+	ParticleData MakeNewParticleFanfare(std::mt19937& randomEngine, const Emitter& emitter);//紙吹雪っぽい
 	
 	static uint32_t sSRVIndexTop_;
 

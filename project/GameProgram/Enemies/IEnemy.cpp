@@ -25,15 +25,13 @@ void IEnemy::Enemy_InitializeCommon() {
 	particleFire_ = std::make_unique<Particle>();
 	particleFire_->Initialize("enemy_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
 	particleFire_->SetParticleCount(1);
-	particleFire_->SetParticleBorn(ParticleBorn::Stop);
 	particleFire_->SetFrequency(0.1f);
 
 
 	particleDamage_ = std::make_unique<Particle>();
 	particleDamage_->Initialize("enemy_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
-	particleDamage_->SetParticleCount(10);
-	particleDamage_->SetParticleBorn(ParticleBorn::Stop);
-	particleDamage_->SetFrequency(0.7f);
+	particleDamage_->SetParticleCount(20);
+	particleDamage_->SetFrequency(0.6f);
 
 	wtMark_.Initialize();
 }
@@ -132,6 +130,8 @@ void IEnemy::DrawCommon() {
 	if (isLostPlayer_ && markTimer_ > 0.0f)
 		objectNoFound_->Draw();
 }
+
+void IEnemy::DrawParticle() {}
 
 void IEnemy::IsDamage() {
 	particleDamage_->SetTranslate(wt_.translation_);

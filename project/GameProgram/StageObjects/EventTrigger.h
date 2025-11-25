@@ -125,10 +125,10 @@ private:
 	std::list<EnemyPopData> enemyPopDatas_;
 
 	//頻度
-	const float kFrequency_ = kSummonMaxTime_ / 15.0f;
+	const float kFrequencySummon_ = kSummonMaxTime_ / 6.0f;
 
 	//パーティクルサイズ
-	const float gSize = 0.25f;
+	const float gSize = 0.5f;
 
 	//動ける範囲
 	const float kMoveX = 3.0f;
