@@ -510,7 +510,7 @@ void Player::IsDamage(const Vector3& hitPoint) {
 			return;
 		}
 		//体力 -1
-		hp_--;
+		//hp_--;//一度無敵に
 		//ダメージのパーティクル発生
 		particleDamage_->SetTranslate(wt_.translation_ + Normalize(hitPoint));
 		particleDamage_->SetParticleBorn(ParticleBorn::MomentMode);
@@ -613,12 +613,10 @@ void Player::PariSuccess() {
 	Audio::GetInstance()->SoundPlayWave(pariSound_, kVolume_);
 
 	Vector3 translate = umbrella_->GetTranslate();
-	translate.x += TransformNormal({0,0,2}, wtGun_.matWorld_).x;
-
+	translate.x += TransformNormal({ 0,0,2 }, wtGun_.matWorld_).x;
 	particlePari_->SetTranslate(translate);
 	particlePari_->SetRotate({ wtGun_.rotation_.x + kNinetyAngle_,wtGun_.rotation_.y,wtGun_.rotation_.z });
-	particlePari_->SetScale({2.0f,0.2f,2.0f});
-
+	particlePari_->SetScale({ 2.0f,0.2f,2.0f });
 	particlePari_->SetParticleBorn(ParticleBorn::MomentMode);
 }
 

@@ -224,7 +224,7 @@ private:
 	bool isShield_ = false;
 	//パリィ
 	bool isPari_ = false;
-	const float kPariTimeMax_ = 0.1f;//パリィする時間
+	const float kPariTimeMax_ = 0.5f;//パリィする時間//ちょっと簡単に
 	float pariTime_ = kPariTimeMax_;
 	float pariCoolTime_ = 0.0f;//連打ではされないように
 	const Vector3 playerFront_ = { 0,0,1.5f };//プレイヤーの前方
@@ -244,7 +244,7 @@ private:
 	//落下する時ふわふわできるように
 	bool isUmbrellaFall_ = false;
 
-	const uint32_t kPlayerMaxHp_ = 30;//設定する体力
+	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
 	//ダメージを食らった後の無敵時間
 	float infinityTimer_ = 0.0f;
 	const float kInfinityTimeMax_ = 1.0f;//最大無敵時間
