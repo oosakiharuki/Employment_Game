@@ -32,7 +32,7 @@ void EnemyBullet::Update() {
 	}
 
 
-	deathTimer += kDeltaTime;
+	deathTimer += kDeltaTime_;
 
 	//時間がたったら消える
 	if (deathTimer >= kEndTime) {

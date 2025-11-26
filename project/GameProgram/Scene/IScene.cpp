@@ -1,5 +1,7 @@
 #include "IScene.h"
+
 using namespace MyMath;
+using namespace UseEveryOne;
 
 std::string IScene::sceneNo_ = "Game";
 std::string IScene::nextSceneNo_ = sceneNo_;
@@ -53,6 +55,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 		auto& playerData = levelediter_.GetLevelData()->players[0];
 		player_->SetTranslate(playerData.translation);//座標
 		player_->SetRotate(playerData.rotation);//向き
+		player_->SetUmbrellaRotate();//傘の向き
 		player_->SetAABB(playerData.colliderAABB);//当たり判定
 		//初期状態(位置、回転)設定
 		player_->SetInit_Position(playerData.translation,playerData.rotation);
@@ -166,19 +169,17 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	//チュートリアル用の
 	if (stageFileName_ == "stage_0" || stageFileName_ == "stage_select_test") {
 
-		Vector2 gSpriteSize = { 128,64 };
-		Vector2 gSpriteTranslate = { 300,20 };
 		for (uint32_t i = 0; i < maxGuide; i++) {
 			std::unique_ptr<Sprite> iterator = std::make_unique<Sprite>();
 			iterator->Initialize("setumei_" + std::to_string(i) + ".png");
-			iterator->SetSize(gSpriteSize);
-			iterator->SetPosition(gSpriteTranslate);
+			iterator->SetSize(kSpriteSize_);
+			iterator->SetPosition(kSpriteTranslate_);
 			spriteGuide_.push_back(std::move(iterator));
 		}
 	}
 	else if (stageFileName_ == "stage_1") {
-		Vector2 gSpriteSize = { 64,32 };
-		Vector2 gSpriteTranslate = { 1200,20 };
+		Vector2 gSpriteSize = kSpriteSize_ * kDivideByTwo_;
+		Vector2 gSpriteTranslate = { 1200,20 };//右端に
 		const float gBetween = 64.0f;
 		for (uint32_t i = 0; i < maxGuide; i++) {
 			std::unique_ptr<Sprite> iterator = std::make_unique<Sprite>();
@@ -237,7 +238,7 @@ void IScene::WarpNextScene() {
 	if (CollisionManager::GetInstance()->IsWarp() && !player_->Performancing()) {
 		//プレイヤーにカメラズーム
 		CameraZoomPlayer();
-		player_->SetRotate({ 0,0,0 });//向きを前に(Z方向)
+		player_->BackDirection();//向きを前に(Z方向)
 	}
 }
 
@@ -246,7 +247,7 @@ void IScene::PlayerGoal() {
 	if (CollisionManager::GetInstance()->IsGoal()) {
 		//プレイヤーにカメラズーム
 		CameraZoomPlayer();
-		player_->SetRotate(kPlayerForntAngle_);//向きをカメラのほうに(-Z方向)
+		player_->DirectionTheCamera();//向きをカメラのほうに(-Z方向)
 	}
 }
 

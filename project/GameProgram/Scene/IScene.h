@@ -38,8 +38,8 @@ protected:
 
 	//カメラ
 	std::unique_ptr<Camera> camera_ = nullptr;
-	Vector3 cameraRotate_;//回転
-	Vector3 cameraTranslate_;//座標
+	Vector3 cameraRotate_ = { 0.0f,0.0f,0.0f };//回転
+	Vector3 cameraTranslate_ = { 0.0f,0.0f,0.0f };///座標
 	//カメラ移動範囲
 	Vector3 cameraPointLeft_;//左端
 	Vector3 cameraPointRight_;//右端
@@ -176,6 +176,7 @@ private:
 	const float kChangePointBrink_ = 80.0f;  //ブリンクの説明
 	const float kChangePointKakku_ = 105.0f; //滑空の説明
 
-	//ゴール時前を向くように
-	const Vector3 kPlayerForntAngle_ = { 0.0f,180.0f,0.0f };
+	//説明ガイドの初期座標と大きさ
+	const Vector2 kSpriteSize_ = { 128,64 };
+	const Vector2 kSpriteTranslate_ = { 300,20 };
 };

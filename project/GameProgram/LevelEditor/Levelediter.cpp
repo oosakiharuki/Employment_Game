@@ -2,8 +2,10 @@
 #include <json.hpp>
 #include <fstream>
 #include <cassert>
+#include "UseEveryOne.h"
 
 using namespace MyMath;
+using namespace UseEveryOne;
 
 void Levelediter::LoadLevelediter(std::string jsonName) {
 	//json
@@ -89,8 +91,8 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				Vector3 size = { (float)collider["size"][0],(float)collider["size"][2], (float)collider["size"][1] };
 
 				//AABBに追加+objのサイズに合わせて
-				objectData.colliderAABB.min = center - (size * objectData.scaling / 2.0f);
-				objectData.colliderAABB.max = center + (size * objectData.scaling / 2.0f);
+				objectData.colliderAABB.min = center - (size * objectData.scaling * kDivideByTwo_);
+				objectData.colliderAABB.max = center + (size * objectData.scaling * kDivideByTwo_);
 			}
 
 			//イベントトリガー
@@ -111,8 +113,8 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				//オブジェクトサイズ(モデルでつかう)
 				eventTrigger.size = size;
 				//オブジェクトの真ん中 + eventTrigger自体の真ん中 ± サイズの半分
-				eventTrigger.collisionAABB.min = objectData.translation + center - size / 2;
-				eventTrigger.collisionAABB.max = objectData.translation + center + size / 2;
+				eventTrigger.collisionAABB.min = objectData.translation + center - size * kDivideByTwo_;
+				eventTrigger.collisionAABB.max = objectData.translation + center + size * kDivideByTwo_;
 
 				//Blenderで設定したcsvファイル名を入れる
 				eventTrigger.csvFile = "resource/csv/" + csvName + ".csv";
@@ -151,8 +153,8 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				Vector3 size = { (float)collider["size"][0],(float)collider["size"][2], (float)collider["size"][1] };
 
 				//AABBに追加
-				playerSpawnData.colliderAABB.min = center - (size / 2.0f);
-				playerSpawnData.colliderAABB.max = center + (size / 2.0f);
+				playerSpawnData.colliderAABB.min = center - (size * kDivideByTwo_);
+				playerSpawnData.colliderAABB.max = center + (size * kDivideByTwo_);
 			}
 		}//敵の配置
 		else if (type.compare("EnemySpawn") == 0) {
@@ -192,8 +194,8 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				Vector3 size = { (float)collider["size"][0],(float)collider["size"][2], (float)collider["size"][1] };
 
 				//AABBに追加
-				enemySpawnData.colliderAABB.min = center - (size / 2.0f);
-				enemySpawnData.colliderAABB.max = center + (size / 2.0f);
+				enemySpawnData.colliderAABB.min = center - (size * kDivideByTwo_);
+				enemySpawnData.colliderAABB.max = center + (size * kDivideByTwo_);
 			}
 
 			//移動ルート
@@ -279,8 +281,8 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 				Vector3 size = { (float)collider["size"][0],(float)collider["size"][2], (float)collider["size"][1] };
 
 				//AABBに追加
-				stageObjectData.colliderAABB.min = center - (size / 2.0f);
-				stageObjectData.colliderAABB.max = center + (size / 2.0f);
+				stageObjectData.colliderAABB.min = center - (size * kDivideByTwo_);
+				stageObjectData.colliderAABB.max = center + (size * kDivideByTwo_);
 			}
 		}
 	}

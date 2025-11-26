@@ -7,7 +7,7 @@ using namespace UseEveryOne;
 void TitleScene::Initialize() {
 
 	camera_ = std::make_unique<Camera>();
-	cameraTranslate_ = { 0,0.0f,-30.0f };
+	cameraTranslate_ = kCameraTranslate_;
 	camera_->SetTranslate(cameraTranslate_);
 
 	Object3dCommon::GetInstance()->SetDefaultCamera(camera_.get());
@@ -32,8 +32,8 @@ void TitleScene::Initialize() {
 	//パーティクル初期化
 	particleBullet_ = std::make_unique<Particle>();
 	particleBullet_->Initialize("title_bullet", "resource/Sprite/cone.png", PrimitiveType::cone);
-	particleBullet_->SetParticleCount(1);
-	particleBullet_->SetFrequency(0.5f);
+	particleBullet_->SetParticleCount(kParticleBulletCount_);
+	particleBullet_->SetFrequency(kParticleBulletFrequency_);
 
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
@@ -106,17 +106,19 @@ void TitleScene::Update() {
 	//カメラ更新
 	camera_->Update();
 
+	//Maxになるまでタイマーを進ませる
+	if (titleFallingTimer_ < kTitleFallingTimeMax_) {
+		titleFallingTimer_ += kDeltaTime_;
+	}
+	else {
+		//maxに
+		titleFallingTimer_ = kTitleFallingTimeMax_;
+	}
+
 	//プレイヤーが降ってくるところ
 	if (wts_[0].translation_.y <= kLandingPointY_) {
 		//座標を維持
 		wts_[0].translation_.y = kLandingPointY_;
-		//Maxになるまでタイマーを進ませる
-		if (titleFallingTimer_ < kTitleFallingTimeMax_) {
-			titleFallingTimer_ += kDeltaTime;
-		}
-		else {
-			titleFallingTimer_ = kTitleFallingTimeMax_;
-		}
 		//タイトルが上からくる(最終的にStartY_がEndY_と同じ値になる)
 		appearsePointStartY_ = appearsePointEndY_ + EaseOut(appearsePointStartY_, titleFallingTimer_, kTitleFallingTimeMax_);
 		titlePos_.y = appearsePointStartY_;
@@ -139,7 +141,7 @@ void TitleScene::Update() {
 			wts_[3].translation_.x += kMoveSelectMoji_;
 		}
 
-		bulletTimer_ += kDeltaTime;
+		bulletTimer_ += kDeltaTime_;
 		if (bulletTimer_ >= kBulletTimeMax_) {
 			NextSceneFadeInStart("Select");
 		}
@@ -180,10 +182,10 @@ void TitleScene::Update() {
 			//スティックの傾き度
 			float padY = static_cast<float>(state_.Gamepad.sThumbLY) / 32768.0f;
 
-			if (padY > 0.5f) {
+			if (padY > kStickPower_) {
 				wts_[1].translation_.y = wts_[2].translation_.y;//ゲームスタート
 			}
-			else if (padY < -0.5f) {
+			else if (padY < -kStickPower_) {
 				wts_[1].translation_.y = wts_[3].translation_.y;//ゲーム終了
 			}
 		}

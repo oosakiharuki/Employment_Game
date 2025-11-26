@@ -38,12 +38,16 @@ private:
 	//爆発するまでのタイマー
 	const float kBombTimeMax_ = 5.0f;//max
 	float bombTimer_ = 0.0f;
+	
+	//Hp
+	const uint32_t kHp_ = 1;
 
 	//爆発範囲AABB
 	AABB bombAABB_;
 	const Vector3 kExplosionRange_ = { 5,5,5 };//大きさ
 	//プレイヤーとの距離感
 	Vector3 distance_;
+	const float kSpeed_ = -0.15f;
 
 	//リアクション
 	Vector3 bombScale_ = { 0.05f, 0.05f, 0.05f };

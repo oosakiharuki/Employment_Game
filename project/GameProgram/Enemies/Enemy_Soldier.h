@@ -24,4 +24,12 @@ private:
 	//速度
 	Vector3 velocity_;
 
+	//Hp
+	const uint32_t kHp_ = 3;
+
+	//見える範囲初期化
+	const Vector3 kEyeReach_ = { 15, 10, 1 };
+
+	//最大弾丸数
+	const uint32_t kRapidCountMax_ = 3;
 };

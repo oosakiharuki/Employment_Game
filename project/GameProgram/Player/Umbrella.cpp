@@ -62,7 +62,7 @@ AABB Umbrella::GetAABB() {
 }
 
 void Umbrella::ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime) {
-	if (scaleTimer_ >= maxTime / 2.0f) {
+	if (scaleTimer_ >= maxTime * kDivideByTwo_) {
 		wt_.scale_ -= scale;
 		if (scaleTimer_ >= maxTime) {
 			scaleTimer_ = 0.0f;
@@ -74,5 +74,5 @@ void Umbrella::ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime) {
 	else {
 		wt_.scale_ += scale;
 	}
-	scaleTimer_ += kDeltaTime;
+	scaleTimer_ += kDeltaTime_;
 }

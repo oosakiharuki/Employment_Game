@@ -32,9 +32,7 @@ void GameActor::ShadowUpdate() {
 }
 
 void GameActor::ScaleUpdate(bool* mosionOn, Vector3 scale, const float& maxTime) {
-	const float kDivideByTwo = 2.0f;//2で除算する
-
-	if (scaleTimer_ >= maxTime / kDivideByTwo) {
+	if (scaleTimer_ >= maxTime * kDivideByTwo_) {
 		wt_.scale_ -= scale;
 		if (scaleTimer_ >= maxTime) {
 			scaleTimer_ = 0.0f;
@@ -47,7 +45,7 @@ void GameActor::ScaleUpdate(bool* mosionOn, Vector3 scale, const float& maxTime)
 	else {
 		wt_.scale_ += scale;
 	}
-	scaleTimer_ += kDeltaTime;
+	scaleTimer_ += kDeltaTime_;
 }
 
 void GameActor::RespawnCommon() {

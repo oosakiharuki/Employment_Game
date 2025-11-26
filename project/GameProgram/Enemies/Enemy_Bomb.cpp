@@ -13,7 +13,7 @@ void Enemy_Bomb::Initialize() {
 	object_->SetModelFile("enemy_bomb.obj");
 
 	//体力の初期化
-	HP_Initialize(1);
+	HP_Initialize(kHp_);
 
 	//見える範囲初期化
 	eyeReach_ = { 15, 2, 1 };
@@ -77,10 +77,10 @@ void Enemy_Bomb::Attack() {
 
 void Enemy_Bomb::TimeRimmit() {
 	//爆弾タイマー
-	bombTimer_ += kDeltaTime;
+	bombTimer_ += kDeltaTime_;
 
 	//プレイヤーに追淳
-	wt_.translation_ += distance_ * Vector3{ -0.03f,0,0 } *3;
+	wt_.translation_ += distance_ * Vector3{ kSpeed_,0.0f,0.0f };
 
 	//向きを合わせる
 	if (distance_.x < 0) {

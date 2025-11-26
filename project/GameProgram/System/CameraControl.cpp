@@ -84,7 +84,7 @@ void CameraControl::Zoom() {
 	if (isZoom_) {
 		if (zoomTimer_ < kMaxZoomTime_) {
 			wt_.translation_ = cameraSegment_.diff + EaseOut(cameraSegment_.origin - cameraSegment_.diff, zoomTimer_, kMaxZoomTime_);
-			zoomTimer_ += kDeltaTime;
+			zoomTimer_ += kDeltaTime_;
 		}
 		else {
 			wt_.translation_ = cameraSegment_.diff;
@@ -109,7 +109,7 @@ void CameraControl::Shaking() {
 		}
 
 
-		shakeTimer_ -= kDeltaTime;
+		shakeTimer_ -= kDeltaTime_;
 
 		std::random_device seed;
 		std::mt19937 random(seed());
