@@ -68,7 +68,7 @@ void IEnemy::UpdateCommon() {
 			//攻撃し終わるとisBulletがfalseに
 			Attack();
 			//!マーク表示時間
-			markTimer_ += kDeltaTime;
+			markTimer_ += kDeltaTime_;
 		}
 		else if(!isBullet_){
 			//攻撃、見つけたマークのタイマーリセット
@@ -76,7 +76,7 @@ void IEnemy::UpdateCommon() {
 			rapidFireTime_ = 0;
 			coolTime_ = 0;
 			isLostPlayer_ = true;//見失うフラグ
-			markTimer_ -= kDeltaTime;
+			markTimer_ -= kDeltaTime_;
 		}		
 				
 		if (isLostPlayer_ && markTimer_ <= 0.0f)

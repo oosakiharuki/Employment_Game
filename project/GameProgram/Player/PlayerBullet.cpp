@@ -20,7 +20,7 @@ void PlayerBullet::Initialize() {
 
 void PlayerBullet::Update() {
 
-	deathTimer_ += kDeltaTime;
+	deathTimer_ += kDeltaTime_;
 	
 	//弾丸速度
 	//徐々に減速する

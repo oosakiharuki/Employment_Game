@@ -15,9 +15,9 @@ void ClearScene::Initialize() {
 	spriteSpace_->SetSize(kSpriteSizeBotton_);
 
 	camera_ = std::make_unique<Camera>();
-
+	
+	//カメラを設定
 	cameraTranslate_ = kCameraTranslate_;
-	cameraRotate_ = { 0,0,0 };
 
 	camera_->SetTranslate(cameraTranslate_);
 	camera_->SetRotate(cameraRotate_);
@@ -37,13 +37,13 @@ void ClearScene::Initialize() {
 	stageGltf_->Initialize();
 	stageGltf_->SetModelFile("gameover_stage.gltf");
 
-	for (int32_t i = 0; i < 3; i++) {
+	for (uint32_t i = 0; i < kParticleMaxNum_; i++) {
 		std::unique_ptr<Particle > gParticle;
 		gParticle = std::make_unique<Particle>();
 		gParticle->Initialize("clear_fanfare", "resource/Sprite/white.png", PrimitiveType::plane);
 		gParticle->SetParticleBorn(ParticleBorn::MomentMode);
-		gParticle->SetFrequency(1.5f);
-		gParticle->SetParticleCount(10);
+		gParticle->SetParticleCount(kParticleFanfareCount_);
+		gParticle->SetFrequency(kParticleFanfareFrequency_);
 		particle_fanfares_.push_back(std::move(gParticle));
 	}
 	//フェードスタート

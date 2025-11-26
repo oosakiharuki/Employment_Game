@@ -40,7 +40,7 @@ void EventTrigger::Update() {
 		}
 
 		//敵が出終わった後ちょっとしてからリセットする
-		if (summonTimer_ <= -kFrequencySummon_ * 2.0f) {
+		if (summonTimer_ <= -kFrequencySummon_ * kTwice_) {
 			summon_particles_.clear();
 		}
 
@@ -191,7 +191,7 @@ void EventTrigger::PopEventEneies() {
 }
 
 void EventTrigger::EnemyPop() {
-	summonTimer_ -= kDeltaTime;
+	summonTimer_ -= kDeltaTime_;
 
 	if (summonTimer_ > 0.0f) {
 		return;

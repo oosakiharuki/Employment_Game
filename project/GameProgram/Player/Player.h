@@ -62,6 +62,8 @@ public:
 	/// <returns></returns>使用している傘クラス
 	Umbrella* GetUmbrella() { return umbrella_.get(); }
 
+	void SetUmbrellaRotate();
+
 	/// <summary>
 	/// getter_シールドフラグ
 	/// </summary>
@@ -90,6 +92,12 @@ public:
 	/// <param name="Power"></param>ノックバックの強さ
 	/// <param name="TimerMax"></param>ノックバックする時間(EaseInを仕様しているため)
 	void KnockBackUmbrella(const Vector3 Power,const float TimerMax);
+
+	/// <summary>
+	/// ノックバック共通部分
+	/// </summary>
+	/// <param name="TimeMax"></param>
+	void KnockBackCommon(const float TimeMax);
 
 	/// <summary>
 	/// 死んだときの処理
@@ -172,6 +180,20 @@ public:
 	/// <returns></returns>
 	const bool Performancing() { return isPerformance_; }
 
+	/// <summary>
+	/// プレイヤーの向きををカメラに
+	/// </summary>
+	void DirectionTheCamera(){
+		wt_.rotation_.y = kPlayerForntAngle_.y;//カメラのほうに向く;
+	}
+
+	/// <summary>
+	/// プレイヤーを後ろに向かす
+	/// </summary>
+	void BackDirection() {
+		wt_.rotation_ = { 0.0f,0.0f,0.0f };//初期状態が後ろを向いているため
+	}
+
 private:
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object_;
@@ -179,6 +201,8 @@ private:
 	//input
 	Input* input_ = nullptr;
 	XINPUT_STATE state_, preState_;//パット用変数
+	const float kStickPower_ = 0.5f;//スティックの倒し具合
+
 	//プレイヤーの速さ
 	const float kStandardSpeed_ = 0.14f;//通常の速さ
 	float speed_ = kStandardSpeed_;
@@ -198,6 +222,9 @@ private:
 	float coolTimer_ = 0.0f;//クールタイマー
 	const float kCoolTimeMax_ = 0.5f;//クールタイム最大時間
 	const uint32_t kBulletCount_ = 3;//一度に出る弾丸数
+	
+	const float kDisparsionBetween_ = 0.1f;//分散する間
+	const float kBulletSpeed_ = 0.5f;//弾丸の前方向の速さ
 
 	//ボタン
 	bool isPushA_ = false;
@@ -212,9 +239,15 @@ private:
 	const float kRightDis_ = 360.0f;//右
 
 	const float kNanameValue_ = 45.0f;//斜めにする変数
+	const float kPlayerFrontRange_ = 180.0f;//プレイヤーがカメラから見て正面を向く
 
-	//パーティクルを横向きにするため
+	//ゴール時前を向くように
+	const Vector3 kPlayerForntAngle_ = { 0.0f,180.0f,0.0f };
+
+	//円柱または円錐のパーティクルを横向きにするための角度
 	const float kNinetyAngle_ = 90.0f;
+	//パーティクル用傘の方向
+	Vector3 umbrellaRange_ = { 0.0f,0.0f,0.0f };
 
 	//傘銃
 	std::unique_ptr<Umbrella> umbrella_ = nullptr;
@@ -227,13 +260,14 @@ private:
 	const float kPariTimeMax_ = 0.5f;//パリィする時間//ちょっと簡単に
 	float pariTime_ = kPariTimeMax_;
 	float pariCoolTime_ = 0.0f;//連打ではされないように
-	const Vector3 playerFront_ = { 0,0,1.5f };//プレイヤーの前方
+	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
 
 	/// ノックバック
 	bool isKnockback_ = false;
 	Vector3 backPower_ = { 0,0,0 };
 	float knockBackTimer_ = 0.0f;
 	float knockBackTimeMax_ = 0.0f;//最大ノックバック時間
+	const Vector3 kBulletKnockbackPower_ = { 0.0f,0.0f,0.25f };//撃った場合のノックバックパワー
 
 	///ブリンク
 	bool isBrink_ = false;//ブリンク中
@@ -253,6 +287,8 @@ private:
 	float deadTimer_ = 0.0f;
 	const float kHitStopTime_ = 1.0f;//ヒットストップ
 	const float kDeadTimeMax_ = 3.0f;//死んだ演出用時間
+	const float kPlayerDeadRotating_ = 10.0f;//10度ずつ回る
+	const float kDeadLittleUp_ = 0.3f;
 
 	//復活
 	bool isRespawn_ = false;
@@ -263,12 +299,33 @@ private:
 	const float kVolume_ = 0.07f;//ボリューム
 
 	//パーティクル
-	std::unique_ptr<Particle> particleWalk_;//歩く
-	std::unique_ptr<Particle> particleFire_;//撃つ
-	std::unique_ptr<Particle> particleBrink_;//ブリンク
-	std::unique_ptr<Particle> particleDamage_;//ダメージを食らった
-	std::unique_ptr<Particle> particlePari_;//パリィ成功
-	std::unique_ptr<Particle> particleDead_;//倒された演出
+	//歩く
+	std::unique_ptr<Particle> particleWalk_;
+	const uint32_t kParticleWalkCount_ = 5;
+	const float kParticleWalkFrequency_ = 0.15f;
+	//ブリンク
+	std::unique_ptr<Particle> particleBrink_;
+	const uint32_t kParticleBrinkCount_ = 1;
+	const float kParticleBrinkFrequency_ = 1.0f;
+	const Vector3 kParticleBrinkSize_ = { 2.0f,2.0f,2.0f };	
+	//撃つ
+	std::unique_ptr<Particle> particleFire_;
+	const uint32_t kParticleFireCount_ = 1;
+	const float kParticleFireFrequency_ = 0.10f;
+	//ダメージを食らった
+	std::unique_ptr<Particle> particleDamage_;
+	const uint32_t kParticleDamageCount_ = 20;
+	const float kParticleDamageFrequency_ = 0.6f;
+	//パリィ成功
+	std::unique_ptr<Particle> particlePari_;
+	const uint32_t kParticlePariCount_ = 1;
+	const float kParticlePariFrequency_ = 0.5f;
+	const Vector3 kParticlePariSize_ = { 2.0f,0.2f,2.0f };
+	//倒された演出
+	std::unique_ptr<Particle> particleDead_;
+	const uint32_t kParticleDeadCount_ = 3;
+	const float kParticleDeadFrequency_ = 0.1f;
+	const Vector3 kParticleDeadSize_ = { 0.5f, 0.5f, 0.5f };
 
 	//前回座標の保存場所
 	Vector3 prePosition_;

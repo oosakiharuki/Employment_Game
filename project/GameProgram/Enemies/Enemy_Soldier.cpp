@@ -19,13 +19,13 @@ void Enemy_Soldier::Initialize() {
 	object_->SetModelFile("enemy.obj");
 
 	//体力の初期化
-	HP_Initialize(3);
+	HP_Initialize(kHp_);
 
 	//見える範囲初期化
-	eyeReach_ = { 15, 10, 1 };
+	eyeReach_ = kEyeReach_;
 
 	//最大弾丸数
-	rapidCountMax_ = 3;
+	rapidCountMax_ = kRapidCountMax_;
 }
 
 void Enemy_Soldier::Update() {
@@ -41,7 +41,7 @@ void Enemy_Soldier::Update() {
 	}
 
 	//コーンが上向きなので
-	particleFire_->SetRotate({ 0,0,-wt_.rotation_.y });
+	particleFire_->SetRotate({ 0.0f,0.0f,-wt_.rotation_.y });
 
 	//更新が終了
 	UpdateBehind();

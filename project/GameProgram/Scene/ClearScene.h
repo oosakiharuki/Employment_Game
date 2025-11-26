@@ -25,7 +25,10 @@ private:
 	std::unique_ptr<Object_glTF> stageGltf_;
 
 	//紙吹雪のパーティクルたち
+	const uint32_t kParticleMaxNum_ = 3;
 	std::vector<std::unique_ptr<Particle>> particle_fanfares_;
+	const uint32_t kParticleFanfareCount_ = 10;
+	const float kParticleFanfareFrequency_ = 1.5f;
 
 	//クリアシーンのカメラ座標
 	const Vector3 kCameraTranslate_ = { 0.0f,2.0f,-18.0f };

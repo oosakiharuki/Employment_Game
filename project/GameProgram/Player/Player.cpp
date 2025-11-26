@@ -18,6 +18,7 @@ void Player::Initialize() {
 
 	Actor_InitializeCommon();
 
+	//アニメーションを保管
 	objectMosions_["standby"] = "player_standby.gltf";
 	objectMosions_["move"] = "player_move.gltf";
 	objectMosions_["shield"] = "player_shield.gltf";
@@ -34,7 +35,6 @@ void Player::Initialize() {
 
 	//傘の行列
 	wtGun_.Initialize();
-	wtGun_.rotation_.y = 90.0f;
 
 	//SE
 	//ダメージ
@@ -46,35 +46,36 @@ void Player::Initialize() {
 	//歩く
 	particleWalk_ = std::make_unique<Particle>();
 	particleWalk_->Initialize("player_walk", "resource/Sprite/white.png", PrimitiveType::box);
-	particleWalk_->SetParticleCount(5);
-	particleWalk_->SetFrequency(0.15f);
+	particleWalk_->SetParticleCount(kParticleWalkCount_);
+	particleWalk_->SetFrequency(kParticleWalkFrequency_);
 	//ブリンク
 	particleBrink_ = std::make_unique<Particle>();
 	particleBrink_->Initialize("player_brink", "resource/Sprite/cone.png", PrimitiveType::cone);
-	particleBrink_->SetParticleCount(1);
-	particleBrink_->SetFrequency(1.0f);//時間
-	particleBrink_->SetScale({2,2,2});
+	particleBrink_->SetParticleCount(kParticleBrinkCount_);
+	particleBrink_->SetFrequency(kParticleBrinkFrequency_);//時間
+	particleBrink_->SetScale(kParticleBrinkSize_);
 	//攻撃
 	particleFire_ = std::make_unique<Particle>();
 	particleFire_->Initialize("player_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
-	particleFire_->SetParticleCount(1);
-	particleFire_->SetFrequency(0.1f);
+	particleFire_->SetParticleCount(kParticleFireCount_);
+	particleFire_->SetFrequency(kParticleFireFrequency_);
 	//ダメージ
 	particleDamage_ = std::make_unique<Particle>();
 	particleDamage_->Initialize("player_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
-	particleDamage_->SetParticleCount(20);
-	particleDamage_->SetFrequency(0.6f);
+	particleDamage_->SetParticleCount(kParticleDamageCount_);
+	particleDamage_->SetFrequency(kParticleDamageFrequency_);
 	//パリィ
 	particlePari_ = std::make_unique<Particle>();
 	particlePari_->Initialize("player_pari", "resource/Sprite/white.png", PrimitiveType::cone);
-	particleFire_->SetParticleCount(1);
-	particleFire_->SetFrequency(0.5f);
+	particleFire_->SetParticleCount(kParticlePariCount_);
+	particleFire_->SetFrequency(kParticlePariFrequency_);
+	particlePari_->SetScale(kParticlePariSize_);
 	//死んだとき
 	particleDead_ = std::make_unique<Particle>();
 	particleDead_->Initialize("player_dead", "resource/Sprite/white.png", PrimitiveType::sphere);
-	particleDead_->SetParticleCount(3);
-	particleDead_->SetFrequency(0.1f);
-	particleDead_->SetScale({ 0.5f,0.5f,0.5f });
+	particleDead_->SetParticleCount(kParticleDeadCount_);
+	particleDead_->SetFrequency(kParticleDeadFrequency_);
+	particleDead_->SetScale(kParticleDeadSize_);
 
 	//MaxHp初期設定
 	maxHp_ = kPlayerMaxHp_;
@@ -160,7 +161,7 @@ void Player::Update() {
 		infinityTimer_ = kInfinityTimeMax_;//Maxになったら無敵時間終了
 	}
 	else {
-		infinityTimer_ += kDeltaTime;
+		infinityTimer_ += kDeltaTime_;
 	}
 
 	//移動しているとパーティクルを発生
@@ -234,7 +235,7 @@ void Player::Update() {
 	// - 傘の銃 -
 	//プレイヤーの手前に
 	umbrella_->SetTranslate(wt_.translation_ +
-		TransformNormal(playerFront_, wtGun_.matWorld_));
+		TransformNormal(kPlayerFront_, wtGun_.matWorld_));
 	//傘の方向
 	umbrella_->SetRotate(wtGun_.rotation_);
 	//防御状態か
@@ -282,20 +283,20 @@ void Player::PlayUpdate() {
 		float padX = static_cast<float>(state_.Gamepad.sThumbLX) / 32768.0f;
 		float padY = static_cast<float>(state_.Gamepad.sThumbLY) / 32768.0f;
 
-		if (padX > 0.5f) {
+		if (padX > kStickPower_) {
 			//左
 			isPushD_ = true;
 		}
-		else if (padX < -0.5f) {
+		else if (padX < -kStickPower_) {
 			//右
 			isPushA_ = true;
 		}
 
-		if (padY > 0.5f) {
+		if (padY > kStickPower_) {
 			//上
 			isPushW_ = true;
 		}
-		else if (padY < -0.5f) {
+		else if (padY < -kStickPower_) {
 			//下
 			isPushS_ = true;
 		}
@@ -348,7 +349,7 @@ void Player::PlayUpdate() {
 		}
 		isShield_ = true;
 
-		pariTime_ -= kDeltaTime;
+		pariTime_ -= kDeltaTime_;
 		//パリィ時間がすぎるとき+ダメージを食らていたらパリィできない
 		if (pariTime_ > 0.0f && infinityTimer_ >= kInfinityTimeMax_) {
 			isPari_ = true;
@@ -362,26 +363,31 @@ void Player::PlayUpdate() {
 	}
 	else {
 		isShield_ = false;
-		pariCoolTime_ += kDeltaTime;
+		pariCoolTime_ += kDeltaTime_;
 	}
 	//連打してもすぐにパリィできないようにする
 	if (pariCoolTime_ >= kPariTimeMax_) {
 		pariTime_ = kPariTimeMax_;
 	}
 
+	//傘の方向を読み取る
+	umbrellaRange_ = wtGun_.rotation_;
+	//円柱または円錐が縦のため、90度回転して横にする
+	umbrellaRange_.x += kNinetyAngle_;
+
 	if (isBrink_) {
 		//ブリンクの時は傘は開いたまま
 		isShield_ = true;
-		brinkTimer_ += kDeltaTime;
+		brinkTimer_ += kDeltaTime_;
 
 		isOneBrink_ = true;
-		wt_.translation_ += EaseOut(TransformNormal(playerFront_, wtGun_.matWorld_), brinkTimer_, kBrinkTimeMax_);
+		wt_.translation_ += EaseOut(TransformNormal(kPlayerFront_, wtGun_.matWorld_), brinkTimer_, kBrinkTimeMax_);
 
 		//飛んだ瞬間後ろにパーティクルをだす
-		if (brinkTimer_ <= kDeltaTime) {
-			Vector3 gTranslate = wt_.translation_ + TransformNormal(-playerFront_, wtGun_.matWorld_);
+		if (brinkTimer_ <= kDeltaTime_) {
+			Vector3 gTranslate = wt_.translation_ + TransformNormal(-kPlayerFront_, wtGun_.matWorld_);
 			particleBrink_->SetTranslate(gTranslate);
-			particleBrink_->SetRotate({ wtGun_.rotation_.x + kNinetyAngle_,wtGun_.rotation_.y,wtGun_.rotation_.z });
+			particleBrink_->SetRotate(umbrellaRange_);
 			particleBrink_->SetParticleBorn(ParticleBorn::MomentMode);
 		}
 	}
@@ -394,7 +400,7 @@ void Player::PlayUpdate() {
 		brinkTimer_ = 0.0f;
 	}
 
-	coolTimer_ += kDeltaTime;
+	coolTimer_ += kDeltaTime_;
 	if ((input_->TriggerKey(DIK_K) || input_->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_X)) && !isShield_) {
 		if (coolTimer_ >= kCoolTimeMax_) {
 			ShootBullet();
@@ -419,7 +425,7 @@ void Player::PlayUpdate() {
 			isKnockback_ = false;
 		}
 		else {
-			knockBackTimer_ += kDeltaTime;
+			knockBackTimer_ += kDeltaTime_;
 
 			wt_.translation_ -= EaseOut(backPower_, knockBackTimer_, knockBackTimeMax_);
 			if (knockBackTimer_ >= knockBackTimeMax_) {
@@ -471,35 +477,40 @@ void Player::DrawP() {
 
 }
 
+void Player::SetUmbrellaRotate() {
+	//プレイヤーと同じY方向
+	wtGun_.rotation_.y = wt_.rotation_.y;
+}
+
 void Player::ShootBullet() {	
 
 	//傘から出るため
 	Vector3 translate = umbrella_->GetTranslate();
 
 	//真ん中を0にする値(3の場合、1,0,-1 | 5の場合、2,1,0,-1,-2)
-	float halfCount = float((kBulletCount_ - 1) / 2);
+	float halfCount = float((kBulletCount_ - 1) * kDivideByTwo_);//二で割る
 
 	for (float i = -(halfCount); i <= halfCount; ++i) {
 		//弾が分散するように
-		Vector3 velocity = { 0.0f,float(i) * 0.1f,0.5f};
+		Vector3 velocity = { 0.0f,float(i) * kDisparsionBetween_ ,kBulletSpeed_ };
+		//飛ばす向きをwtGun_に合わせる
 		velocity = TransformNormal(velocity, wtGun_.matWorld_);
 
 		//弾丸を生み出す
 		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
 		bullet->Initialize();
-		bullet->SetTranslate(translate);
-		bullet->SetVelocty(velocity);
+		bullet->SetTranslate(translate);//発泡初期位置
+		bullet->SetVelocty(velocity);//速さ
 		bullets_.push_back(std::move(bullet));
 	}
 
 	//攻撃パーティクル発生
 	particleFire_->SetTranslate(translate);
-	particleFire_->SetRotate({ wtGun_.rotation_.x + kNinetyAngle_,wtGun_.rotation_.y,wtGun_.rotation_.z });
+	particleFire_->SetRotate(umbrellaRange_);
 	particleFire_->SetParticleBorn(ParticleBorn::MomentMode);
 
-	///ノックバック
-	Vector3 playerknockback = { 0.0f,0.0f,0.25f };
-	KnockBackUmbrella(playerknockback,0.5f);
+	///撃った方向と反対方向にノックバック
+	KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
 }
 
 void Player::IsDamage(const Vector3& hitPoint) {
@@ -510,15 +521,15 @@ void Player::IsDamage(const Vector3& hitPoint) {
 			return;
 		}
 		//体力 -1
-		//hp_--;//一度無敵に
+		hp_--;
 		//ダメージのパーティクル発生
 		particleDamage_->SetTranslate(wt_.translation_ + Normalize(hitPoint));
 		particleDamage_->SetParticleBorn(ParticleBorn::MomentMode);
 		//ダメージのSE再生
 		Audio::GetInstance()->SoundPlayWave(hitSound_, kVolume_);
 		infinityTimer_ = 0.0f;//無敵時間発動
-		//ノックバック
-		KnockBackPlayer(hitPoint , kInfinityTimeMax_ / 3);
+		//ノックバック(時間の三分の一ぶんまで)
+		KnockBackPlayer(hitPoint , kInfinityTimeMax_ * kDivideByThree_);
 	}
 
 	isDamageMosion_ = true;
@@ -526,7 +537,7 @@ void Player::IsDamage(const Vector3& hitPoint) {
 	//リアクション
 	//連続ヒット時、大きさを元に戻す
 	scaleTimer_ = 0.0f;
-	wt_.scale_ = { 1,1,1 };
+	wt_.scale_ = kDefaultScale_;
 
 }
 
@@ -543,30 +554,31 @@ void Player::IsFall() {
 void Player::KnockBackPlayer(const Vector3 Power, const float TimerMax) {
 	//威力を代入
 	backPower_ = Normalize(Power);
-	backPower_.z = 0.0f;//z方向はなし
-	//ノックバックするフラグ
-	isKnockback_ = true;
-	//ノックバック時間(EaseOutで使用する)
-	knockBackTimeMax_ = TimerMax;
+	KnockBackCommon(TimerMax);
+	//連続ヒット時、元に戻す
+	wt_.scale_ = kDefaultScale_;
 }
 
 void Player::KnockBackUmbrella(const Vector3 Power, const float TimerMax) {
-	//威力を代入
+	//威力を代入(傘の向きに沿って)
 	backPower_ = TransformNormal(Power, wtGun_.matWorld_);
+	KnockBackCommon(TimerMax);
+	//連続ヒット時、元に戻す
+	umbrella_->SetScale(kDefaultScale_);
+}
+
+void Player::KnockBackCommon(const float TimerMax) {
 	backPower_.z = 0.0f;//z方向はなし
 	//ノックバックするフラグ
 	isKnockback_ = true;
 	//ノックバック時間(EaseOutで使用する)
 	knockBackTimeMax_ = TimerMax;
-
-	//連続ヒット時、元に戻す
-	umbrella_->SetScale({ 1,1,1 });
-
 }
+
 
 void Player::DeadPlayer() {
 
-	deadTimer_ += kDeltaTime;
+	deadTimer_ += kDeltaTime_;
 	isDead_ = true;
 	
 	//少しディレイを挟む(カメラのシェイクが終わったら)
@@ -576,10 +588,10 @@ void Player::DeadPlayer() {
 		particleDead_->SetTranslate(wt_.translation_);
 		particleDead_->SetParticleBorn(ParticleBorn::TimerMode);
 
-		wt_.rotation_.y = 180.0f;//カメラのほうに向く
-		wt_.rotation_.z += 10.0f;//回転する
+		DirectionTheCamera();//カメラのほうに向く
+		wt_.rotation_.z += kPlayerDeadRotating_;//回転する
 		//少し浮く
-		wt_.translation_.y += 0.3f;
+		wt_.translation_.y += kDeadLittleUp_;
 		//重力
 		GravityUpdate();
 
@@ -611,12 +623,11 @@ void Player::PariSuccess() {
 
 	Audio::GetInstance()->StopWave(pariSound_);
 	Audio::GetInstance()->SoundPlayWave(pariSound_, kVolume_);
-
+	//傘のオブジェクト座標を読み取る
 	Vector3 translate = umbrella_->GetTranslate();
-	translate.x += TransformNormal({ 0,0,2 }, wtGun_.matWorld_).x;
+	translate += TransformNormal(kPlayerFront_, wtGun_.matWorld_);//出す場所をwtGun_の向きの前に
 	particlePari_->SetTranslate(translate);
-	particlePari_->SetRotate({ wtGun_.rotation_.x + kNinetyAngle_,wtGun_.rotation_.y,wtGun_.rotation_.z });
-	particlePari_->SetScale({ 2.0f,0.2f,2.0f });
+	particlePari_->SetRotate(umbrellaRange_);
 	particlePari_->SetParticleBorn(ParticleBorn::MomentMode);
 }
 

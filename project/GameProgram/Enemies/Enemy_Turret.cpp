@@ -3,6 +3,7 @@
 #include "Object3dCommon.h"
 
 using namespace MyMath;
+using namespace UseEveryOne;
 
 Enemy_Turret::~Enemy_Turret() {
 	for (auto* bullet : bullets_) {
@@ -17,24 +18,26 @@ void Enemy_Turret::Initialize() {
 	//モデル作成
 	object_->SetModelFile("cannon.obj");
 
-	HP_Initialize(6);
+	HP_Initialize(kHp_);
 
 	//見える範囲初期化
-	eyeReach_ = { 20, 0, 0 };
+	eyeReach_ = kEyeReach_;
+
+	//最大弾丸数
+	rapidCountMax_ = kRapidCountMax_;
+
+	particleLaserSize_.x = eyeReach_.x * kDivideByTwo_;
 
 	//レーザー(見える範囲)の初期化処理
 	particleLaser_ = std::make_unique<Particle>();
 	particleLaser_->Initialize("tullet_laser","resource/Sprite/3YvXH.png",PrimitiveType::beam);
-	particleLaser_->SetFrequency(0.001f);
-	particleLaser_->SetParticleCount(1);
+	particleLaser_->SetParticleCount(kParticleLaserCount_);
+	particleLaser_->SetFrequency(kParticleLaserFrequency_);
 	particleLaser_->SetParticleBorn(ParticleBorn::TimerMode);
-	particleLaser_->SetScale({ eyeReach_.x * 0.5f,0.1f,0.1f });
+	particleLaser_->SetScale(particleLaserSize_);
 
 	//ちょっと大きく
-	particleFire_->SetScale({ 1.5f,1.5f,1.5f });
-
-	//最大弾丸数
-	rapidCountMax_ = 6;
+	particleFire_->SetScale(kParticleFireSize_);
 }
 
 void Enemy_Turret::Update() {
@@ -44,8 +47,10 @@ void Enemy_Turret::Update() {
 
 	if (!isDead_) {
 		SearchRange();
-		Matrix4x4 a = MakeAffineMatrix(Vector3(1,1,1), wt_.rotation_, wt_.translation_);
-		particleLaser_->SetTranslate(wt_.translation_ + TransformNormal(Vector3{0,0,eyeReach_.x * 0.5f}, a));
+		//スケール以外の行列
+		Matrix4x4 matWorld = MakeAffineMatrix(kDefaultScale_, wt_.rotation_, wt_.translation_);
+		//レーザーサイズXはターレットの前に出すため
+		particleLaser_->SetTranslate(wt_.translation_ + TransformNormal(Vector3{0,0,particleLaserSize_.x}, matWorld));
 		particleLaser_->SetParticleBorn(ParticleBorn::TimerMode);
 	}
 	else {
@@ -104,14 +109,14 @@ void Enemy_Turret::FireBullet() {
 	
 	Vector3 translate = wt_.translation_;
 	//少し前から弾丸が出るように
-	translate.x -= 2.0f,
+	translate.x -= kBulletTranslate_,
 
 	//パーティクルの場所変更
 	particlePosition_ = wt_.translation_;
 	particleFire_->SetTranslate(particlePosition_);
-
-
-	Vector3 velocity = { 0.0f,0.0f,0.5f };
+	
+	//飛ばす方向
+	Vector3 velocity = { 0.0f,0.0f,kBulletSpeed_ };
 	velocity = TransformNormal(velocity, wt_.matWorld_);
 
 	EnemyBullet* bullet = new EnemyBullet();
