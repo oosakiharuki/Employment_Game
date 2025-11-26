@@ -145,7 +145,7 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 	for (auto& stageObject : stageObjects) {
 		if (IsCollisionAABB(player_->GetAABB(), stageObject->GetAABB())) {
 			//チェックポイント
-			if (stageObject->GetObjectName() == "CheckPoint") {
+			if (stageObject->GetObjectName() == "Checkpoint") {
 				player_->SetInit_Position(stageObject->GetPosition(), player_->GetRotate());
 			}
 			//ゴール

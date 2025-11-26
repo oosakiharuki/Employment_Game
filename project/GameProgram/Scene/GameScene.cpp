@@ -7,7 +7,7 @@ void GameScene::Initialize() {
 	PreviousSceneData();
 
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting("stage_1");
+	LevelEditorObjectSetting();
 
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");
@@ -214,7 +214,7 @@ void GameScene::WarterWarpExit() {
 	warpPosition.y += kWarpGateUpThanShadow_;//重ならないように影より上にする
 
 	startWarp_->SetPosition(warpPosition);//playerの真下に
-	startWarp_->SetRotation({ 90.0f,0.0f,0.0f });//下向きにして水たまりに
+	startWarp_->SetRotation({ kStartWarpGateRange_ ,0.0f,0.0f });//下向きにして水たまりに
 
 	player_->IsPerformanceFlag(true);
 }

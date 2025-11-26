@@ -20,6 +20,8 @@ private:
 	//スタート演出(水たまりから飛び出る感じに)
 	bool isStartStage_ = true;
 	Vector3 playerPoint_{};
+	const float kStartWarpGateRange_ = 90.0f;
+
 	float startPointY_ = -10.0f;
 	//スタート時のワープゲート
 	std::unique_ptr<WarpGate> startWarp_;
@@ -30,9 +32,6 @@ private:
 
 	//落ちる限界
 	const float kFallEndY_ = -10.0f;
-
-
-
 
 	/// <summary>
 	/// 水たまりのようなワープゲート出口

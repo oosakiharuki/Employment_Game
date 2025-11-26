@@ -3,7 +3,7 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-std::string IScene::sceneNo_ = "Game";
+std::string IScene::sceneNo_ = "Title";
 std::string IScene::nextSceneNo_ = sceneNo_;
 
 IScene::~IScene(){}
@@ -79,7 +79,6 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 				//兵隊(ソルジャー)
 				enemy = std::make_unique<Enemy_Soldier>();
 			}
-
 
 			enemy->Initialize();//初期設定
 
@@ -167,26 +166,12 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	stageobj_->SetModelFile(stageFileName_ + ".obj");
 
 	//チュートリアル用の
-	if (stageFileName_ == "stage_0" || stageFileName_ == "stage_select_test") {
-
+	if (stageFileName_ == "stage_0" || stageFileName_ == "stage_select") {
 		for (uint32_t i = 0; i < maxGuide; i++) {
 			std::unique_ptr<Sprite> iterator = std::make_unique<Sprite>();
 			iterator->Initialize("setumei_" + std::to_string(i) + ".png");
 			iterator->SetSize(kSpriteSize_);
 			iterator->SetPosition(kSpriteTranslate_);
-			spriteGuide_.push_back(std::move(iterator));
-		}
-	}
-	else if (stageFileName_ == "stage_1") {
-		Vector2 gSpriteSize = kSpriteSize_ * kDivideByTwo_;
-		Vector2 gSpriteTranslate = { 1200,20 };//右端に
-		const float gBetween = 64.0f;
-		for (uint32_t i = 0; i < maxGuide; i++) {
-			std::unique_ptr<Sprite> iterator = std::make_unique<Sprite>();
-			iterator->Initialize("setumei_" + std::to_string(i) + ".png");
-			iterator->SetSize(gSpriteSize);
-			iterator->SetPosition(gSpriteTranslate);
-			gSpriteTranslate.y += gBetween;
 			spriteGuide_.push_back(std::move(iterator));
 		}
 	}
