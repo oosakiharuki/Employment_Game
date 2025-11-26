@@ -106,19 +106,18 @@ void TitleScene::Update() {
 	//カメラ更新
 	camera_->Update();
 
-	//Maxになるまでタイマーを進ませる
-	if (titleFallingTimer_ < kTitleFallingTimeMax_) {
-		titleFallingTimer_ += kDeltaTime_;
-	}
-	else {
-		//maxに
-		titleFallingTimer_ = kTitleFallingTimeMax_;
-	}
-
 	//プレイヤーが降ってくるところ
 	if (wts_[0].translation_.y <= kLandingPointY_) {
 		//座標を維持
 		wts_[0].translation_.y = kLandingPointY_;
+		//Maxになるまでタイマーを進ませる
+		if (titleFallingTimer_ < kTitleFallingTimeMax_) {
+			titleFallingTimer_ += kDeltaTime_;
+		}
+		else {
+			//maxに
+			titleFallingTimer_ = kTitleFallingTimeMax_;
+		}
 		//タイトルが上からくる(最終的にStartY_がEndY_と同じ値になる)
 		appearsePointStartY_ = appearsePointEndY_ + EaseOut(appearsePointStartY_, titleFallingTimer_, kTitleFallingTimeMax_);
 		titlePos_.y = appearsePointStartY_;

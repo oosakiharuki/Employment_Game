@@ -311,7 +311,7 @@ private:
 	//撃つ
 	std::unique_ptr<Particle> particleFire_;
 	const uint32_t kParticleFireCount_ = 1;
-	const float kParticleFireFrequency_ = 0.10f;
+	const float kParticleFireFrequency_ = 0.1f;
 	//ダメージを食らった
 	std::unique_ptr<Particle> particleDamage_;
 	const uint32_t kParticleDamageCount_ = 20;

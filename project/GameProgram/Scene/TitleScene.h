@@ -29,8 +29,8 @@ private:
 	std::unique_ptr<Sprite> spriteMojiTitle_;//タイトル名
 
 	std::unique_ptr<Particle> particleBullet_;//決定した時にパーティクルを出す
-	const uint32_t kParticleBulletCount_ = 10;
-	const float kParticleBulletFrequency_ = 1.5f;
+	const uint32_t kParticleBulletCount_ = 1;
+	const float kParticleBulletFrequency_ = 0.5f;
 
 	//決定したら弾を発射
 	bool isSelect_ = false;
@@ -82,7 +82,7 @@ private:
 	const float kShadowPositionY_ = -3.79f;//(-3.8f + 0.01f)
 
 	//タイトルシーンのカメラ座標
-	const Vector3 kCameraTranslate_ = { 0.0f,2.0f,-18.0f };
+	const Vector3 kCameraTranslate_ = { 0.0f,0.0f,-30.0f };
 
 	const float kStickPower_ = 0.5f;//スティックの倒し具合
 };
