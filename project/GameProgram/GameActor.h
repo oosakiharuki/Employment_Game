@@ -49,7 +49,7 @@ public:
 	/// </summary>
 	/// <param name="rotate"></param>代入する各回転角度
 	void SetRotate(Vector3 rotate) { wt_.rotation_ = rotate; }
-	
+
 	/// <summary>
 	/// getter_座標位置
 	/// </summary>
@@ -96,8 +96,8 @@ public:
 	/// <param name="mosionOn"></param> リアクションフラグ
 	/// <param name="scale"></param> どのくらい大きくするか
 	/// <param name="maxTime"></param> リアクションタイマーの最大値
-	void ScaleUpdate(bool* mosionOn, Vector3 scale,const float& maxTime);
-	
+	void ScaleUpdate(bool* mosionOn, Vector3 scale, const float& maxTime);
+
 	/// <summary>
 	/// アニメーションのみを動かす関数(演出で使う)
 	/// </summary>
@@ -156,7 +156,7 @@ protected:
 	//向き(左右)
 	const float kDirectionRight_ = 90.0f;
 	const float kDirectionLeft_ = -90.0f;
-	
+
 	//最大角度(360度)
 	const float kMaxAngle = 360.0f;
 
@@ -171,7 +171,7 @@ protected:
 
 	///影
 	std::unique_ptr<Shadow> shadow_;
-	
+
 	//ダメージのリアクション
 	bool isDamageMosion_ = false;
 
@@ -185,6 +185,8 @@ protected:
 	//初期位置保管
 	Vector3 initTranslate_;
 	Vector3 initRotate_;
+
+	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
 
 private:
 

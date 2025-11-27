@@ -25,12 +25,17 @@ private:
 	/// </summary>
 	void ObjectLoading();
 
+	/// <summary>
+	/// 最後にする更新処理
+	/// </summary>
+	void UpdateBehind();
+
 	std::unique_ptr<Shadow> playerShadow_;//プレイヤー影
 	std::unique_ptr<Sprite> spriteMojiTitle_;//タイトル名
 
-	std::unique_ptr<Particle> particleBullet_;//決定した時にパーティクルを出す
-	const uint32_t kParticleBulletCount_ = 1;
-	const float kParticleBulletFrequency_ = 0.5f;
+	ParticleParametars particleBullet_ = {
+		"title_bullet", "resource/Sprite/cone.png", PrimitiveType::cone, 1, 0.5f, { 1,1,1 }
+	};
 
 	//決定したら弾を発射
 	bool isSelect_ = false;

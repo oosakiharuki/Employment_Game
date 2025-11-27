@@ -1,6 +1,7 @@
 #include "ClearScene.h"
 
 using namespace MyMath;
+using namespace UseEveryOne;
 
 void ClearScene::Initialize() {
 	//クリアロゴ作成
@@ -38,13 +39,10 @@ void ClearScene::Initialize() {
 	stageGltf_->SetModelFile("gameover_stage.gltf");
 
 	for (uint32_t i = 0; i < kParticleMaxNum_; i++) {
-		std::unique_ptr<Particle > gParticle;
-		gParticle = std::make_unique<Particle>();
-		gParticle->Initialize("clear_fanfare", "resource/Sprite/white.png", PrimitiveType::plane);
-		gParticle->SetParticleBorn(ParticleBorn::MomentMode);
-		gParticle->SetParticleCount(kParticleFanfareCount_);
-		gParticle->SetFrequency(kParticleFanfareFrequency_);
-		particle_fanfares_.push_back(std::move(gParticle));
+		//ファンファーレのパーティクル作成
+		sceneParticles_[particleFanfare_.name] = ParticleManager::GetInstance()->InitParticle(particleFanfare_);
+		//vectorに導入
+		particleFanfares_.push_back(std::move(sceneParticles_[particleFanfare_.name]));
 	}
 	//フェードスタート
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
@@ -64,7 +62,7 @@ void ClearScene::Update() {
 	
 	//初期値に戻す
 	fanfareTranslate_ = kFanfareInitTranslate_;
-	for (auto& gParticle : particle_fanfares_) {
+	for (auto& gParticle : particleFanfares_) {
 		gParticle->SetParticleBorn(ParticleBorn::TimerMode);
 		gParticle->SetTranslate(fanfareTranslate_);
 		gParticle->Update();
@@ -95,8 +93,8 @@ void ClearScene::Draw() {
 	stageGltf_->Draw();
 
 	ParticleCommon::GetInstance()->Command();
-	for (auto& gParticle : particle_fanfares_) {
-		gParticle->Draw();
+	for (auto& particle : particleFanfares_) {
+		particle->Draw();
 	}
 
 	SpriteCommon::GetInstance()->Command();

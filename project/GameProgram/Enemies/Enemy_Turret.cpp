@@ -1,6 +1,7 @@
 #include "Enemy_Turret.h"
 #include "ImGuiManager.h"
 #include "Object3dCommon.h"
+#include "ParticleManager.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -26,18 +27,15 @@ void Enemy_Turret::Initialize() {
 	//最大弾丸数
 	rapidCountMax_ = kRapidCountMax_;
 
+	//視野範囲に合わせるためサイズを変更
 	particleLaserSize_.x = eyeReach_.x * kDivideByTwo_;
+	//パラメータに代入する
+	particleLaser_.basicSize = particleLaserSize_;
 
 	//レーザー(見える範囲)の初期化処理
-	particleLaser_ = std::make_unique<Particle>();
-	particleLaser_->Initialize("tullet_laser","resource/Sprite/3YvXH.png",PrimitiveType::beam);
-	particleLaser_->SetParticleCount(kParticleLaserCount_);
-	particleLaser_->SetFrequency(kParticleLaserFrequency_);
-	particleLaser_->SetParticleBorn(ParticleBorn::TimerMode);
-	particleLaser_->SetScale(particleLaserSize_);
-
+	particles_[particleLaser_.name] = ParticleManager::GetInstance()->InitParticle(particleLaser_);
 	//ちょっと大きく
-	particleFire_->SetScale(kParticleFireSize_);
+	particles_[particleFire_.name]->SetScale(kParticleFireSize_);
 }
 
 void Enemy_Turret::Update() {
@@ -50,18 +48,15 @@ void Enemy_Turret::Update() {
 		//スケール以外の行列
 		Matrix4x4 matWorld = MakeAffineMatrix(kDefaultScale_, wt_.rotation_, wt_.translation_);
 		//レーザーサイズXはターレットの前に出すため
-		particleLaser_->SetTranslate(wt_.translation_ + TransformNormal(Vector3{0,0,particleLaserSize_.x}, matWorld));
-		particleLaser_->SetParticleBorn(ParticleBorn::TimerMode);
+		particles_[particleLaser_.name]->SetTranslate(wt_.translation_ + TransformNormal(Vector3{0,0,particleLaserSize_.x}, matWorld));
+		particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::TimerMode);
 	}
 	else {
-		particleLaser_->SetParticleBorn(ParticleBorn::Stop);
+		particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::Stop);
 	}
 
 	//コーンが上向きなので
-	particleFire_->SetRotate({ 0,0,-wt_.rotation_.y });
-	
-	//レーザー更新処理
-	particleLaser_->Update();
+	particles_[particleFire_.name]->SetRotate({ 0,0,-wt_.rotation_.y });
 
 	//更新が終了
 	UpdateBehind();
@@ -86,18 +81,12 @@ void Enemy_Turret::Draw() {
 
 	if (!isDeleteEnemy_) {
 		object_->Draw();
-		shadow_->Draw();
+		shadow_->Draw();//影
 	}
 
 	for (auto* bullet : bullets_) {
-		bullet->Draw();
+		bullet->Draw();//弾丸
 	}
-}
-
-void Enemy_Turret::DrawParticle() {
-	particleFire_->Draw();
-	particleDamage_->Draw();
-	particleLaser_->Draw();
 }
 
 void Enemy_Turret::Attack() {
@@ -113,7 +102,7 @@ void Enemy_Turret::FireBullet() {
 
 	//パーティクルの場所変更
 	particlePosition_ = wt_.translation_;
-	particleFire_->SetTranslate(particlePosition_);
+	particles_[particleFire_.name]->SetTranslate(particlePosition_);
 	
 	//飛ばす方向
 	Vector3 velocity = { 0.0f,0.0f,kBulletSpeed_ };

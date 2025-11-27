@@ -7,6 +7,8 @@
 #include "SkinningCommon.h"
 #include <numbers>
 
+#include "ParticleManager.h"
+
 using namespace MyMath;
 using namespace UseEveryOne;
 
@@ -43,39 +45,12 @@ void Player::Initialize() {
 	pariSound_ = Audio::GetInstance()->LoadWave("resource/Sound/bane.wav");
 
 	//パーティクル初期化
-	//歩く
-	particleWalk_ = std::make_unique<Particle>();
-	particleWalk_->Initialize("player_walk", "resource/Sprite/white.png", PrimitiveType::box);
-	particleWalk_->SetParticleCount(kParticleWalkCount_);
-	particleWalk_->SetFrequency(kParticleWalkFrequency_);
-	//ブリンク
-	particleBrink_ = std::make_unique<Particle>();
-	particleBrink_->Initialize("player_brink", "resource/Sprite/cone.png", PrimitiveType::cone);
-	particleBrink_->SetParticleCount(kParticleBrinkCount_);
-	particleBrink_->SetFrequency(kParticleBrinkFrequency_);//時間
-	particleBrink_->SetScale(kParticleBrinkSize_);
-	//攻撃
-	particleFire_ = std::make_unique<Particle>();
-	particleFire_->Initialize("player_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
-	particleFire_->SetParticleCount(kParticleFireCount_);
-	particleFire_->SetFrequency(kParticleFireFrequency_);
-	//ダメージ
-	particleDamage_ = std::make_unique<Particle>();
-	particleDamage_->Initialize("player_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
-	particleDamage_->SetParticleCount(kParticleDamageCount_);
-	particleDamage_->SetFrequency(kParticleDamageFrequency_);
-	//パリィ
-	particlePari_ = std::make_unique<Particle>();
-	particlePari_->Initialize("player_pari", "resource/Sprite/white.png", PrimitiveType::cone);
-	particleFire_->SetParticleCount(kParticlePariCount_);
-	particleFire_->SetFrequency(kParticlePariFrequency_);
-	particlePari_->SetScale(kParticlePariSize_);
-	//死んだとき
-	particleDead_ = std::make_unique<Particle>();
-	particleDead_->Initialize("player_dead", "resource/Sprite/white.png", PrimitiveType::sphere);
-	particleDead_->SetParticleCount(kParticleDeadCount_);
-	particleDead_->SetFrequency(kParticleDeadFrequency_);
-	particleDead_->SetScale(kParticleDeadSize_);
+	particles_[particleWalk_.name] = ParticleManager::GetInstance()->InitParticle(particleWalk_);
+	particles_[particleBrink_.name] = ParticleManager::GetInstance()->InitParticle(particleBrink_);
+	particles_[particleFire_.name] = ParticleManager::GetInstance()->InitParticle(particleFire_);
+	particles_[particleDamage_.name] = ParticleManager::GetInstance()->InitParticle(particleDamage_);
+	particles_[particlePari_.name] = ParticleManager::GetInstance()->InitParticle(particlePari_);
+	particles_[particleDead_.name] = ParticleManager::GetInstance()->InitParticle(particleDead_);
 
 	//MaxHp初期設定
 	maxHp_ = kPlayerMaxHp_;
@@ -167,21 +142,18 @@ void Player::Update() {
 	//移動しているとパーティクルを発生
 	if (isGround_ && IsMovePosition()) {
 		// 歩く煙パーティクル
-		particleWalk_->SetParticleBorn(ParticleBorn::TimerMode);
-		particleWalk_->SetTranslate(wt_.translation_ + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.matWorld_));
-		particleWalk_->SetScale({ 0.5f,0.5f,0.5f });
+		particles_[particleWalk_.name]->SetParticleBorn(ParticleBorn::TimerMode);
+		particles_[particleWalk_.name]->SetTranslate(wt_.translation_ + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.matWorld_));
+		particles_[particleWalk_.name]->SetScale({ 0.5f,0.5f,0.5f });
 	}
 	else {
-		particleWalk_->SetParticleBorn(ParticleBorn::Stop);
+		particles_[particleWalk_.name]->SetParticleBorn(ParticleBorn::Stop);
 	}
 
 	//パーティクル
-	particleWalk_->Update();
-	particleFire_->Update();
-	particleBrink_->Update();
-	particleDamage_->Update();
-	particlePari_->Update();
-	particleDead_->Update();
+	for (auto& p : particles_) {
+		p.second->Update();
+	}
 
 	///アニメーション
 	if (isShield_) {
@@ -386,9 +358,9 @@ void Player::PlayUpdate() {
 		//飛んだ瞬間後ろにパーティクルをだす
 		if (brinkTimer_ <= kDeltaTime_) {
 			Vector3 gTranslate = wt_.translation_ + TransformNormal(-kPlayerFront_, wtGun_.matWorld_);
-			particleBrink_->SetTranslate(gTranslate);
-			particleBrink_->SetRotate(umbrellaRange_);
-			particleBrink_->SetParticleBorn(ParticleBorn::MomentMode);
+			particles_[particleBrink_.name]->SetTranslate(gTranslate);
+			particles_[particleBrink_.name]->SetRotate(umbrellaRange_);
+			particles_[particleBrink_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 		}
 	}
 	//地面についている場合、下向きのブリンクは発動しない
@@ -462,12 +434,9 @@ void Player::Draw() {
 
 void Player::DrawP() {
 	//パーティクル
-	particleWalk_->Draw();
-	particleFire_->Draw();
-	particleBrink_->Draw();
-	particleDamage_->Draw();
-	particlePari_->Draw();
-	particleDead_->Draw();
+	for (auto& particle : particles_) {
+		particle.second->Draw();
+	}
 
 	SpriteCommon::GetInstance()->Command();
 	//UI
@@ -505,9 +474,9 @@ void Player::ShootBullet() {
 	}
 
 	//攻撃パーティクル発生
-	particleFire_->SetTranslate(translate);
-	particleFire_->SetRotate(umbrellaRange_);
-	particleFire_->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleFire_.name]->SetTranslate(translate);
+	particles_[particleFire_.name]->SetRotate(umbrellaRange_);
+	particles_[particleFire_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 
 	///撃った方向と反対方向にノックバック
 	KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
@@ -523,8 +492,8 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		//体力 -1
 		hp_--;
 		//ダメージのパーティクル発生
-		particleDamage_->SetTranslate(wt_.translation_ + Normalize(hitPoint));
-		particleDamage_->SetParticleBorn(ParticleBorn::MomentMode);
+		particles_[particleDamage_.name]->SetTranslate(wt_.translation_ + Normalize(hitPoint));
+		particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 		//ダメージのSE再生
 		Audio::GetInstance()->SoundPlayWave(hitSound_, kVolume_);
 		infinityTimer_ = 0.0f;//無敵時間発動
@@ -585,8 +554,8 @@ void Player::DeadPlayer() {
 	if (deadTimer_ >= kHitStopTime_) {
 		
 		//倒されたパーティクル配置+発動
-		particleDead_->SetTranslate(wt_.translation_);
-		particleDead_->SetParticleBorn(ParticleBorn::TimerMode);
+		particles_[particleDead_.name]->SetTranslate(wt_.translation_);
+		particles_[particleDead_.name]->SetParticleBorn(ParticleBorn::TimerMode);
 
 		DirectionTheCamera();//カメラのほうに向く
 		wt_.rotation_.z += kPlayerDeadRotating_;//回転する
@@ -599,7 +568,7 @@ void Player::DeadPlayer() {
 		if (deadTimer_ >= kDeadTimeMax_) {
 			isRespawn_ = true;
 			//パーティクル発動停止
-			particleDead_->SetParticleBorn(ParticleBorn::Stop);
+			particles_[particleDead_.name]->SetParticleBorn(ParticleBorn::Stop);
 		}
 	}
 	else {
@@ -626,9 +595,9 @@ void Player::PariSuccess() {
 	//傘のオブジェクト座標を読み取る
 	Vector3 translate = umbrella_->GetTranslate();
 	translate += TransformNormal(kPlayerFront_, wtGun_.matWorld_);//出す場所をwtGun_の向きの前に
-	particlePari_->SetTranslate(translate);
-	particlePari_->SetRotate(umbrellaRange_);
-	particlePari_->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particlePari_.name]->SetTranslate(translate);
+	particles_[particlePari_.name]->SetRotate(umbrellaRange_);
+	particles_[particlePari_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 }
 
 void Player::SpriteUpdate() {

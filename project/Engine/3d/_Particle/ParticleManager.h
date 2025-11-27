@@ -49,6 +49,12 @@ public:
 	/// </summary>
 	/// <param name="filePath"></param>パーティクルグループ名を選ぶ
 	void ResetParticle(const std::string& filePath);
+	
+	/// <summary>
+	/// パーティクルを作る
+	/// </summary>
+	/// <param name="parametars"></param>
+	std::unique_ptr<Particle> InitParticle(const ParticleParametars& parametars);
 
 private:
 	static ParticleManager* sInstance;
@@ -84,6 +90,9 @@ private:
 
 	const float kDeltaTime = 1.0f / 60.0f;
 	std::unordered_map<std::string, ParticleGroup> particleGroups;
+	
+	//パーティクルコンテナ
+	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
 
 	Camera* camera = nullptr;
 	static const uint32_t kNumMaxInstance = 100;
