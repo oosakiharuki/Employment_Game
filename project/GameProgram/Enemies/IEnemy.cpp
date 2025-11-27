@@ -1,8 +1,10 @@
 #include "IEnemy.h"
 #include "ImGuiManager.h"
+#include "ParticleManager.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
+
 IEnemy::IEnemy() {}
 
 IEnemy::~IEnemy(){}
@@ -21,17 +23,8 @@ void IEnemy::Enemy_InitializeCommon() {
 	objectNoFound_->Initialize();
 	objectNoFound_->SetModelFile("player_lost_mark.obj");
 
-
-	particleFire_ = std::make_unique<Particle>();
-	particleFire_->Initialize("enemy_fire", "resource/Sprite/cone.png", PrimitiveType::cone);
-	particleFire_->SetParticleCount(1);
-	particleFire_->SetFrequency(0.1f);
-
-
-	particleDamage_ = std::make_unique<Particle>();
-	particleDamage_->Initialize("enemy_damage", "resource/Sprite/circle.png", PrimitiveType::ring);
-	particleDamage_->SetParticleCount(20);
-	particleDamage_->SetFrequency(0.6f);
+	particles_[particleFire_.name] = ParticleManager::GetInstance()->InitParticle(particleFire_);
+	particles_[particleDamage_.name] = ParticleManager::GetInstance()->InitParticle(particleDamage_);
 
 	wtMark_.Initialize();
 }
@@ -108,14 +101,18 @@ void IEnemy::UpdateBehind() {
 	object_->Update(wt_);
 	wt_.UpdateMatrix();
 
-	particleDamage_->Update();
-	particleFire_->Update();
+	//設定した全てのパーティクル更新処理
+	for (auto& particle : particles_) {
+		particle.second->Update();
+	}
 
 	if (isDead_) return;//死んでるなら読み取らない
 
-	wtMark_.translation_ = wt_.translation_;
-	wtMark_.translation_.y += kMarkPositionY_;
-
+	// - マーク -
+	wtMark_.translation_ = wt_.translation_;  //敵の座標位置に
+	wtMark_.translation_.y += kMarkPositionY_;//敵の少し上の位置に
+	
+	//!,?マークの更新処理
 	wtMark_.UpdateMatrix();
 	objectFound_->Update(wtMark_);
 	objectNoFound_->Update(wtMark_);
@@ -131,11 +128,16 @@ void IEnemy::DrawCommon() {
 		objectNoFound_->Draw();
 }
 
-void IEnemy::DrawParticle() {}
+void IEnemy::DrawParticle() {
+	//設定した全てのパーティクル描画処理
+	for (auto& particle : particles_) {
+		particle.second->Draw();
+	}
+}
 
 void IEnemy::IsDamage() {
-	particleDamage_->SetTranslate(wt_.translation_);
-	particleDamage_->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleDamage_.name]->SetTranslate(wt_.translation_);
+	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 	isDamageMosion_ = true;
 
 	//連続ヒット時、元に戻す
@@ -277,7 +279,7 @@ void IEnemy::Fire() {
 		rapidFireTime_ += 1.0f / 60.0f;
 		if (rapidFireTime_ >= kRapidFireTimeMax_) {
 			FireBullet();//敵の発泡攻撃
-			particleFire_->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
+			particles_[particleFire_.name]->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
 			rapidCount_++;//カウント
 			rapidFireTime_ = 0;//もう一度
 		}

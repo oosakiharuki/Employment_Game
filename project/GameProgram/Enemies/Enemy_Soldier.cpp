@@ -41,7 +41,7 @@ void Enemy_Soldier::Update() {
 	}
 
 	//コーンが上向きなので
-	particleFire_->SetRotate({ 0.0f,0.0f,-wt_.rotation_.y });
+	particles_[particleFire_.name]->SetRotate({ 0.0f,0.0f,-wt_.rotation_.y });
 
 	//更新が終了
 	UpdateBehind();
@@ -67,11 +67,6 @@ void Enemy_Soldier::Draw() {
 	for (auto* bullet : bullets_) {
 		bullet->Draw();
 	}
-}
-
-void Enemy_Soldier::DrawParticle() {
-	particleFire_->Draw();
-	particleDamage_->Draw();
 }
 
 void Enemy_Soldier::Attack() {
@@ -105,7 +100,7 @@ void Enemy_Soldier::FireBullet() {
 
 		velocity_ = normal;
 	}
-	particleFire_->SetTranslate(enemyPosition);
+	particles_[particleFire_.name]->SetTranslate(enemyPosition);
 
 	//弾丸を生み出す
 	EnemyBullet* bullet = new EnemyBullet();

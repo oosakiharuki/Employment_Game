@@ -131,6 +131,9 @@ protected:
 	//操作ガイドのスプライト
 	std::vector<std::unique_ptr<Sprite>> spriteGuide_;
 
+	//パーティクルコンテナ
+	std::unordered_map<std::string, std::unique_ptr<Particle>> sceneParticles_;
+
 public:
 	/// <summary>
 	/// 初期化処理

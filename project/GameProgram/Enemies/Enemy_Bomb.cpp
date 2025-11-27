@@ -65,11 +65,6 @@ void Enemy_Bomb::Draw() {
 	}
 }
 
-void Enemy_Bomb::DrawParticle() {
-	particleFire_->Draw();
-	particleDamage_->Draw();
-}
-
 void Enemy_Bomb::Attack() {
 	//時限爆弾モードオン
 	isStart_ = true;
@@ -118,8 +113,8 @@ void Enemy_Bomb::Exprosion() {
 	bombAABB_.max = wt_.translation_ + kExplosionRange_;
 
 	//パーティクルの設定
-	particleDamage_->SetTranslate(wt_.translation_);
-	particleDamage_->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleDamage_.name]->SetTranslate(wt_.translation_);
+	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 
 	//爆発したら死んでしまう
 	isDead_ = true;

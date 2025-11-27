@@ -298,46 +298,47 @@ private:
 	SoundData pariSound_;//パリィに成功
 	const float kVolume_ = 0.07f;//ボリューム
 
-	//パーティクル
+	//-パーティクル-
 	//歩く
-	std::unique_ptr<Particle> particleWalk_;
-	const uint32_t kParticleWalkCount_ = 5;
-	const float kParticleWalkFrequency_ = 0.15f;
+	ParticleParametars particleWalk_ = {
+		"player_walk", "resource/Sprite/white.png", PrimitiveType::box, 5, 0.15f, {1,1,1}
+	};
 	//ブリンク
-	std::unique_ptr<Particle> particleBrink_;
-	const uint32_t kParticleBrinkCount_ = 1;
-	const float kParticleBrinkFrequency_ = 1.0f;
-	const Vector3 kParticleBrinkSize_ = { 2.0f,2.0f,2.0f };	
+	ParticleParametars particleBrink_ = {
+		"player_brink","resource/Sprite/cone.png", PrimitiveType::cone, 1, 1.0f, { 2.0f,2.0f,2.0f }
+	}; 
 	//撃つ
-	std::unique_ptr<Particle> particleFire_;
-	const uint32_t kParticleFireCount_ = 1;
-	const float kParticleFireFrequency_ = 0.1f;
+	ParticleParametars  particleFire_ = {
+		"player_fire","resource/Sprite/cone.png", PrimitiveType::cone , 1, 0.3f,{1,1,1}
+	};
 	//ダメージを食らった
-	std::unique_ptr<Particle> particleDamage_;
-	const uint32_t kParticleDamageCount_ = 20;
-	const float kParticleDamageFrequency_ = 0.6f;
+	ParticleParametars particleDamage_ = {
+		"player_damage", "resource/Sprite/circle.png", PrimitiveType::ring, 20, 0.6f,{1,1,1}
+	};
 	//パリィ成功
-	std::unique_ptr<Particle> particlePari_;
-	const uint32_t kParticlePariCount_ = 1;
-	const float kParticlePariFrequency_ = 0.5f;
-	const Vector3 kParticlePariSize_ = { 2.0f,0.2f,2.0f };
+	ParticleParametars particlePari_ = {
+		"player_pari", "resource/Sprite/white.png", PrimitiveType::cone, 1, 0.5f,{ 2.0f,0.2f,2.0f }
+	};
 	//倒された演出
-	std::unique_ptr<Particle> particleDead_;
-	const uint32_t kParticleDeadCount_ = 3;
-	const float kParticleDeadFrequency_ = 0.1f;
-	const Vector3 kParticleDeadSize_ = { 0.5f, 0.5f, 0.5f };
+	ParticleParametars particleDead_ = {
+		"player_dead", "resource/Sprite/white.png", PrimitiveType::sphere, 3,0.1f,{ 0.5f, 0.5f, 0.5f }
+	};
 
 	//前回座標の保存場所
 	Vector3 prePosition_;
-	//動いているか判定
+	
+	/// <summary>
+	/// プレイヤーが動いているか判定
+	/// </summary>
+	/// <returns></returns>
 	const bool IsMovePosition();
 
 	//オブジェクトたち
 	std::unordered_map<std::string, std::string> objectMosions_;
 
-	//アニメーション変更
-	std::string mosionName_ = "standby";
-	std::string preMosionName_ = "standby"; 
+	//オブジェクト / アニメーション
+	std::string mosionName_ = "standby";    //現在のアニメーション
+	std::string preMosionName_ = "standby"; //前回のアニメーション
 
 	//UI
 	std::vector<std::unique_ptr<Sprite>> spritesHp_;

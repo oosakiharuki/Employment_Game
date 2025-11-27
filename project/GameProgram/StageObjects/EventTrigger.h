@@ -124,9 +124,6 @@ private:
 	//敵を配置する変数
 	std::list<EnemyPopData> enemyPopDatas_;
 
-	//頻度
-	const float kFrequencySummon_ = kSummonMaxTime_ / 6.0f;
-
 	//パーティクルサイズ
 	const float gSize = 0.5f;
 
@@ -139,4 +136,12 @@ private:
 	//向き(左右)
 	const float kDirectionRight_ = 90.0f;
 	const float kDirectionLeft_ = -90.0f;
+
+	//召喚するとき
+	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
+
+	ParticleParametars particleSummon_ = {
+		"enemies_summon", "resource/Sprite/white.png", PrimitiveType::sphere, 10,
+		kSummonMaxTime_ / 6.0f, { gSize,gSize,gSize }
+	};
 };

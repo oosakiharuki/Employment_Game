@@ -30,10 +30,7 @@ void TitleScene::Initialize() {
 	spriteMojiTitle_->SetPosition(titlePos_);
 
 	//パーティクル初期化
-	particleBullet_ = std::make_unique<Particle>();
-	particleBullet_->Initialize("title_bullet", "resource/Sprite/cone.png", PrimitiveType::cone);
-	particleBullet_->SetParticleCount(kParticleBulletCount_);
-	particleBullet_->SetFrequency(kParticleBulletFrequency_);
+	sceneParticles_[particleBullet_.name] = ParticleManager::GetInstance()->InitParticle(particleBullet_);
 
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
@@ -142,64 +139,73 @@ void TitleScene::Update() {
 
 		bulletTimer_ += kDeltaTime_;
 		if (bulletTimer_ >= kBulletTimeMax_) {
-			NextSceneFadeInStart("Select");
+			NextSceneFadeInStart("Select");//セレクトシーンに移動
 		}
 	}
 
-	//フェードが終わったら押せる
-	if (titleFallingTimer_ >= kTitleFallingTimeMax_ && !isSelect_) {
+	//タイトルが出てくるまで選択部分は通さない
+	if (titleFallingTimer_ < kTitleFallingTimeMax_) {
+		UpdateBehind();
+		return;
+	}
 
-		//選択できるようになったら傘を親子関係をなくす
-		if (wts_[1].parent_) {
-			wts_[1].parent_ = nullptr;
-			wts_[1].rotation_.z = kUmbrellaRange_;
-			wts_[1].translation_ = { kUmbrellaArrowModePositionX_,wts_[2].translation_.y,0 };
-			objects_[1]->ChangeAnimation("umbrella_Close.gltf");
-		}
+	//-選択-
+	//選択できるようになったら傘を親子関係をなくす
+	if (wts_[1].parent_) {
+		wts_[1].parent_ = nullptr;
+		wts_[1].rotation_.z = kUmbrellaRange_;
+		wts_[1].translation_ = { kUmbrellaArrowModePositionX_,wts_[2].translation_.y,0 };
+		objects_[1]->ChangeAnimation("umbrella_Close.gltf");
+	}
+	
+	//文字が見えるまで回転する
+	if (wts_[2].rotation_.y <= 0.0f && wts_[3].rotation_.y <= 0.0f) {
+		//カメラの方向に文字が見える
+		wts_[2].rotation_.y = 0.0f;
+		wts_[3].rotation_.y = 0.0f;
+	}
+	else {
+		//回転
+		wts_[2].rotation_.y -= kRotating_;
+		wts_[3].rotation_.y -= kRotating_;
+	}
 
-		if (wts_[2].rotation_.y <= 0.0f && wts_[3].rotation_.y <= 0.0f) {
-			wts_[2].rotation_.y = 0.0f;
-			wts_[3].rotation_.y = 0.0f;
-		}
-		else {
-			wts_[2].rotation_.y -= kRotating_;
-			wts_[3].rotation_.y -= kRotating_;
-		}
+	//キーボード操作
 
-		//キーボード操作
+	if (Input::GetInstance()->TriggerKey(DIK_W)) {
+		wts_[1].translation_.y = wts_[2].translation_.y;//ゲームスタート
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_S)) {
+		wts_[1].translation_.y = wts_[3].translation_.y;//ゲーム終了
+	}
 
-		if (Input::GetInstance()->TriggerKey(DIK_W)) {
+	//ゲームパット操作
+
+	if (Input::GetInstance()->GetJoystickState(0, state_)) {
+		//スティックの傾き度
+		float padY = static_cast<float>(state_.Gamepad.sThumbLY) / 32768.0f;
+
+		if (padY > kStickPower_) {
 			wts_[1].translation_.y = wts_[2].translation_.y;//ゲームスタート
 		}
-		if (Input::GetInstance()->TriggerKey(DIK_S)) {
+		else if (padY < -kStickPower_) {
 			wts_[1].translation_.y = wts_[3].translation_.y;//ゲーム終了
 		}
-
-		//ゲームパット操作
-		
-		if (Input::GetInstance()->GetJoystickState(0, state_)) {
-			//スティックの傾き度
-			float padY = static_cast<float>(state_.Gamepad.sThumbLY) / 32768.0f;
-
-			if (padY > kStickPower_) {
-				wts_[1].translation_.y = wts_[2].translation_.y;//ゲームスタート
-			}
-			else if (padY < -kStickPower_) {
-				wts_[1].translation_.y = wts_[3].translation_.y;//ゲーム終了
-			}
-		}
-
-		//spaceもしくはAボタンを押したら実行
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE) || 
-			Input::GetInstance()->TriggerBotton(state_,preState_, XINPUT_GAMEPAD_A)) {
-			isSelect_ = true;
-			particleBullet_->SetParticleBorn(ParticleBorn::MomentMode);
-			particleBullet_->SetTranslate(wts_[1].translation_);
-			particleBullet_->SetRotate({0.0f,0.0f,kUmbrellaRange_ });
-		}
 	}
-	//パーティクル更新
-	particleBullet_->Update();
+
+	//spaceもしくはAボタンを押したら実行
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+		Input::GetInstance()->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_A)) {
+		isSelect_ = true;
+		sceneParticles_[particleBullet_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+		sceneParticles_[particleBullet_.name]->SetTranslate(wts_[1].translation_);
+		sceneParticles_[particleBullet_.name]->SetRotate({ 0.0f,0.0f,kUmbrellaRange_ });
+	}
+
+	UpdateBehind();
+}
+
+void TitleScene::UpdateBehind() {
 
 #ifdef USE_IMGUI
 
@@ -214,7 +220,7 @@ void TitleScene::Update() {
 	ImGui::SliderFloat("cameraRotateX", &cameraRotate_.x, -360.0f, 360.0f);
 	ImGui::SliderFloat("cameraRotateY", &cameraRotate_.y, -360.0f, 360.0f);
 	ImGui::SliderFloat("cameraRotateZ", &cameraRotate_.z, -360.0f, 360.0f);
-	
+
 	camera_->SetTranslate(cameraTranslate_);
 	camera_->SetRotate(cameraRotate_);
 
@@ -229,6 +235,11 @@ void TitleScene::Update() {
 	}
 
 	playerShadow_->Update();
+
+	//パーティクル更新
+	for (auto& particle : sceneParticles_) {
+		particle.second->Update();
+	}
 }
 
 void TitleScene::Draw() {
@@ -249,7 +260,9 @@ void TitleScene::Draw() {
 
 	ParticleCommon::GetInstance()->Command();
 
-	particleBullet_->Draw();
+	for (auto& particle : sceneParticles_) {
+		particle.second->Draw();
+	}
 }
 
 void TitleScene::Finalize() {}

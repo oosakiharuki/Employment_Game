@@ -250,3 +250,16 @@ void ParticleManager::ResetParticle(const std::string& filePath) {
 	ParticleGroup& particleG = particleGroups[filePath];
 	particleG.particles.clear();
 }
+
+std::unique_ptr<Particle> ParticleManager::InitParticle(const ParticleParametars& parametars) {
+
+	std::unique_ptr<Particle>& particle = particles_[parametars.name];
+
+	particle = std::make_unique<Particle>();
+	particle->Initialize(parametars.name, parametars.textureFile, parametars.primitive);
+	particle->SetParticleCount(parametars.count); //生成数を設定
+	particle->SetFrequency(parametars.frequency); //頻度 / 生存時間を設定
+	particle->SetScale(parametars.basicSize);     //基本サイズを設定
+
+	return std::move(particle);
+}

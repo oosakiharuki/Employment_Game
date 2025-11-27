@@ -52,6 +52,18 @@ enum class ParticleBorn {
 };
 
 /// <summary>
+/// パーティクルのパラメータ構造体
+/// </summary>
+struct ParticleParametars {
+	std::string name;        //パーティクルの名前
+	std::string textureFile; //テクスチャファイル名
+	PrimitiveType primitive; //パーティクルの形(プリミティブ)
+	uint32_t count;          //生成数
+	float frequency;         //頻度 / 生存時間
+	Vector3 basicSize;       //基本サイズ
+};
+
+/// <summary>
 /// パーティクル
 /// </summary>
 class Particle{

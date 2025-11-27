@@ -1,5 +1,6 @@
 #include "EventTrigger.h"
 #include "UseEveryOne.h"
+#include "ParticleManager.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -40,7 +41,7 @@ void EventTrigger::Update() {
 		}
 
 		//敵が出終わった後ちょっとしてからリセットする
-		if (summonTimer_ <= -kFrequencySummon_ * kTwice_) {
+		if (summonTimer_ <= -particleSummon_.frequency * kTwice_) {
 			summon_particles_.clear();
 		}
 
@@ -176,15 +177,9 @@ void EventTrigger::PopEventEneies() {
 			enemyPopDatas_.push_back(enemyPopData);
 
 			//召喚パーティクル
-			std::unique_ptr<Particle> gParticle;
-			gParticle = std::make_unique<Particle>();
-			gParticle->Initialize("enemies_summon", "resource/Sprite/white.png", PrimitiveType::sphere);
-			gParticle->SetParticleCount(10);
-			gParticle->SetFrequency(kFrequencySummon_);
-			gParticle->SetTranslate(enemyPopData.position);
-			gParticle->SetScale({gSize,gSize,gSize});
-
-			summon_particles_.push_back(std::move(gParticle));
+			particles_[particleSummon_.name] = ParticleManager::GetInstance()->InitParticle(particleSummon_);
+			particles_[particleSummon_.name]->SetTranslate(enemyPopData.position);
+			summon_particles_.push_back(std::move(particles_[particleSummon_.name]));
 		}
 	}
 

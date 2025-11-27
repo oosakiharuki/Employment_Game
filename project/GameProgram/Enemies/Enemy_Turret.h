@@ -11,7 +11,6 @@ public:
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
-	void DrawParticle() override;
 	void Attack() override;
 
 	/// <summary>
@@ -22,11 +21,13 @@ public:
 	void RespawnEnemy() override;
 
 private:
-	//見える範囲のエフェクト
-	std::unique_ptr<Particle> particleLaser_;
-	const uint32_t kParticleLaserCount_ = 1;
-	const float kParticleLaserFrequency_ = 0.001f;
+
 	Vector3 particleLaserSize_ = { 0.1f,0.1f,0.1f };
+
+	//見える範囲のパーティクルパラメータ
+	ParticleParametars particleLaser_ = {
+		"tullet_laser","resource/Sprite/3YvXH.png",PrimitiveType::beam, 1, 0.001f, particleLaserSize_
+	};
 
 	const Vector3 kParticleFireSize_ = { 1.5f, 1.5f, 1.5f };
 

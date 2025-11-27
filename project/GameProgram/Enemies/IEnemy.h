@@ -46,7 +46,7 @@ public:
 	/// <summary>
 	/// パーティクル用の描画処理
 	/// </summary>
-	virtual void DrawParticle();
+	void DrawParticle();
 
 	/// <summary>
 	/// 攻撃処理
@@ -214,8 +214,15 @@ protected:
 	uint32_t rapidCountMax_ = 3;
 
 	//パーティクル
-	std::unique_ptr<Particle> particleDamage_;//ダメージを食らったとき
-	std::unique_ptr<Particle> particleFire_;//攻撃するとき
+	//ダメージを食らったとき
+	ParticleParametars particleDamage_ = {
+		"enemy_damage", "resource/Sprite/circle.png", PrimitiveType::ring, 20, 0.6f, { 1 ,1 ,1 }
+
+	};
+	//攻撃するとき
+	ParticleParametars particleFire_ = {
+		"enemy_fire", "resource/Sprite/cone.png", PrimitiveType::cone, 1, 0.1f, { 1 ,1 ,1 }
+	};
 
 	//移動するとき
 	Vector3 speed_ = { 0,0,0 };
