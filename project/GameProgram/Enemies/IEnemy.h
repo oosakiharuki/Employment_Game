@@ -18,7 +18,7 @@ public:
 	/// <summary>
 	/// 共有する初期化処理
 	/// </summary>
-	void Enemy_InitializeCommon();
+	void Enemy_InitializeCommon(const std::string& objectName);
 
 	/// <summary>
 	/// 更新処理

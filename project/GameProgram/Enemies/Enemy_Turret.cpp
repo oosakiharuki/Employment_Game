@@ -14,11 +14,10 @@ Enemy_Turret::~Enemy_Turret() {
 
 
 void Enemy_Turret::Initialize() {
+	//敵の共通初期化処理
+	Enemy_InitializeCommon("cannon.obj");
 
-	Enemy_InitializeCommon();
-	//モデル作成
-	object_->SetModelFile("cannon.obj");
-
+	//体力の初期化
 	HP_Initialize(kHp_);
 
 	//見える範囲初期化

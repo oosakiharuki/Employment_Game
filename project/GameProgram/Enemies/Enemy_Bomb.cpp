@@ -7,16 +7,14 @@ using namespace MyMath;
 Enemy_Bomb::~Enemy_Bomb() {}
 
 void Enemy_Bomb::Initialize() {
-
-	Enemy_InitializeCommon();
-	//モデル作成
-	object_->SetModelFile("enemy_bomb.obj");
+	//敵の共通初期化処理
+	Enemy_InitializeCommon("enemy_bomb.obj");
 
 	//体力の初期化
 	HP_Initialize(kHp_);
 
 	//見える範囲初期化
-	eyeReach_ = { 15, 2, 1 };
+	eyeReach_ = kEyeReach_;
 }
 
 void Enemy_Bomb::Update() {

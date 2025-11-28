@@ -13,10 +13,8 @@ Enemy_Soldier::~Enemy_Soldier() {
 }
 
 void Enemy_Soldier::Initialize() {
-
-	Enemy_InitializeCommon();
-	//モデル作成
-	object_->SetModelFile("enemy.obj");
+	//敵の共通初期化処理
+	Enemy_InitializeCommon("enemy.obj");
 
 	//体力の初期化
 	HP_Initialize(kHp_);

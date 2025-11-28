@@ -51,13 +51,11 @@ void SelectScene::Update() {
 
 	CollisionCommon();
 
-	spriteGuide_[0]->SetPosition(kSpriteTranslateMove_);
-	spriteGuide_[6]->SetPosition(kSpriteTranslateEkey_);
+	spriteGuides_[kGuideMove_.name]->SetPosition(kSpriteTranslateMove_);
+	spriteGuides_[kGuideWarp_.name]->SetPosition(kSpriteTranslateEkey_);
 
-	for (auto& guide : spriteGuide_) {
-		guide->Update();
-	}
-
+	//ガイド更新処理
+	UpdateGuide();
 }
 
 void SelectScene::Draw() {

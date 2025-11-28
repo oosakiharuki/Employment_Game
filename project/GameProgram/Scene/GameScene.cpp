@@ -122,9 +122,8 @@ void GameScene::Update() {
 		player_->IsFall();
 	}
 
-	for (auto& guide : spriteGuide_) {
-		guide->Update();
-	}
+	//ガイド更新処理
+	UpdateGuide();
 
 #ifdef  USE_IMGUI
 

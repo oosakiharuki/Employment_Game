@@ -9,23 +9,31 @@ IEnemy::IEnemy() {}
 
 IEnemy::~IEnemy(){}
 
-void IEnemy::Enemy_InitializeCommon() {
+void IEnemy::Enemy_InitializeCommon(const std::string& objectName) {
+	//アクターの共通初期化処理
 	Actor_InitializeCommon();
 
 	object_ = std::make_unique<Object3d>();
 	object_->Initialize();
+	object_->SetModelFile(objectName);
 
+	//見つけたときの「!」マーク
 	objectFound_ = std::make_unique<Object3d>();
 	objectFound_->Initialize();
 	objectFound_->SetModelFile("player_found_mark.obj");
 
+	//見失ったときのの「?」マーク
 	objectNoFound_ = std::make_unique<Object3d>();
 	objectNoFound_->Initialize();
 	objectNoFound_->SetModelFile("player_lost_mark.obj");
 
+	//パーティクル
+	//攻撃(発泡)
 	particles_[particleFire_.name] = ParticleManager::GetInstance()->InitParticle(particleFire_);
+	//ダメージ
 	particles_[particleDamage_.name] = ParticleManager::GetInstance()->InitParticle(particleDamage_);
 
+	//マークのワールド座標
 	wtMark_.Initialize();
 }
 
@@ -34,8 +42,10 @@ void IEnemy::UpdateCommon() {
 		isDead_ = true;
 	}
 
+	//死んだときの処理
 	DeadUpdate();
 
+	//死んでいない、演出中でないとき
 	if (!isDead_ && !isPerformance_) {
 
 		//重力
@@ -121,9 +131,11 @@ void IEnemy::UpdateBehind() {
 void IEnemy::DrawCommon() {
 	if (isDead_) return;//死んでるなら読み取らない
 
+	//見つけたとき+マークが出る時間
 	if(isBullet_ && markTimer_ < kMarkMaxTime_)
 		objectFound_->Draw();
 
+	//見失った+マークが出る時間
 	if (isLostPlayer_ && markTimer_ > 0.0f)
 		objectNoFound_->Draw();
 }
@@ -136,14 +148,16 @@ void IEnemy::DrawParticle() {
 }
 
 void IEnemy::IsDamage() {
-	particles_[particleDamage_.name]->SetTranslate(wt_.translation_);
-	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+	//ダメージのパーティクルを出す
+	particles_[particleDamage_.name]->SetTranslate(wt_.translation_); //座標を読み取る
+	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode); // 発生モード(一度だけ)の変更
 	isDamageMosion_ = true;
 
 	//連続ヒット時、元に戻す
 	wt_.scale_ = kDefaultScale_;
 	scaleTimer_ = 0.0f;
 
+	//Hpが0なら
 	if (hp_ == 0) {
 		return;
 	}
@@ -153,13 +167,14 @@ void IEnemy::IsDamage() {
 
 
 void IEnemy::GrabityUpdate() {
-	
-	grabity_ -= kGrabityPower_;
 	//重力
+	grabity_ -= kGrabityPower_;
+	//地面についていない
 	if (!isGround_) {
 		wt_.translation_.y += grabity_;
 	}
 	else {
+		//重力パワーリセット
 		grabity_ = 0.0f;
 	}
 
@@ -167,34 +182,37 @@ void IEnemy::GrabityUpdate() {
 
 void IEnemy::PlayerTarget() {
 	Segment segment;
-	segment.origin = wt_.translation_;
-	segment.diff = player_->GetTranslate();
+	segment.origin = wt_.translation_;      //敵座標
+	segment.diff = player_->GetTranslate(); //プレイヤー座標
 
-	//playerと敵との間に壁があるならば
+	//ステージの当たり判定
 	for (auto& stage : stages_) {
+		//playerと敵との間に壁があるならば
 		if (IsCollisionAABB_Segment(stage, segment)) {
-			isFoundTarget_ = false;
+			isFoundTarget_ = false;//見つかってないフラグ
 			break;
 		}
 	}
 }
 
 void IEnemy::SearchRange() {
+	//敵が右向き
 	if (wt_.rotation_.y == kDirectionRight_) {
 		eyeAABB_.min = wt_.translation_ + Vector3(0, -eyeReach_.y, -eyeReach_.z);
 		eyeAABB_.max = wt_.translation_ + eyeReach_;
-		speed_.x = kMoveX_;
+		speed_.x = kMoveX_;//右に進む
 	}
+	//左向き
 	else if (wt_.rotation_.y == kDirectionLeft_) {
 		eyeAABB_.min = wt_.translation_ + -eyeReach_;
 		eyeAABB_.max = wt_.translation_ + Vector3(0, eyeReach_.y, eyeReach_.z);
-		speed_.x = -kMoveX_;
+		speed_.x = -kMoveX_;//左に進む
 	}
 }
 
 void IEnemy::MoveEnemy() {
-	wt_.translation_ += speed_;
-	move_ += speed_;
+	wt_.translation_ += speed_;//移動
+	move_ += speed_;           //移動ポイント
 
 	//移動ポイントの端だと向きを変える
 	//右端に行ったら左に旋回
@@ -208,6 +226,7 @@ void IEnemy::MoveEnemy() {
 }
 
 void IEnemy::RespawnEnemyCommon() {
+	//ゲームアクターの共通リスポーン処理
 	RespawnCommon();
 
 	isDeleteEnemy_ = false;

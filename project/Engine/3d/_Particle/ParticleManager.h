@@ -51,7 +51,7 @@ public:
 	void ResetParticle(const std::string& filePath);
 	
 	/// <summary>
-	/// パーティクルを作る
+	/// パーティクル初期化処理テンプレート
 	/// </summary>
 	/// <param name="parametars"></param>
 	std::unique_ptr<Particle> InitParticle(const ParticleParametars& parametars);
