@@ -12,8 +12,8 @@ std::string IScene::GetSceneNo() { return sceneNo_; }
 
 void IScene::PreviousSceneData() {
 	//前に残しておいたデータ
-	data_ = NextStageSave::GetInstance()->GetNextStageSaveData();
-	stageFileName_ = data_.nextStageFile;
+	sceneSaveData_ = NextStageSave::GetInstance()->GetNextStageSaveData();
+	stageFileName_ = sceneSaveData_.nextStageFile;//ステージの全体層(.obj)
 }
 
 void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
@@ -24,7 +24,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	if (leveleditor_file != "") {
 		//代入
 		stageFileName_ = leveleditor_file;
-		data_.playerHp = player_->GetMaxHp();
+		sceneSaveData_.playerHp = player_->GetMaxHp();
 	}
 
 	//ステージのjsonを読み取る
@@ -46,7 +46,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	Cubemap::GetInstance()->SetDefaultCamera(camera_.get());
 	
 	//プレイヤーの体力を上書き
-	player_->SetHp(data_.playerHp);
+	player_->SetHp(sceneSaveData_.playerHp);
 	player_->Initialize();//初期設定
 
 	//プレイヤー配置データがあるときプレイヤーを配置
@@ -167,55 +167,50 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 
 	//チュートリアル用の
 	if (stageFileName_ == "stage_0" || stageFileName_ == "stage_select") {
-		for (uint32_t i = 0; i < maxGuide; i++) {
-			std::unique_ptr<Sprite> iterator = std::make_unique<Sprite>();
-			iterator->Initialize("setumei_" + std::to_string(i) + ".png");
-			iterator->SetSize(kSpriteSize_);
-			iterator->SetPosition(kSpriteTranslate_);
-			spriteGuide_.push_back(std::move(iterator));
-		}
+		CreateGuide(kGuideMove_);
+		CreateGuide(kGuideJump_);
+		CreateGuide(kGuideFire_);
+		CreateGuide(kGuideshield_);
+		CreateGuide(kGuidebrink_);
+		CreateGuide(kGuideKakku_);
+		CreateGuide(kGuideWarp_);
+	}
+}
+
+void IScene::CreateGuide(const Guide& guide) {
+	std::unique_ptr<Sprite>& iterator = spriteGuides_[guide.name];
+	//guideを設定
+	iterator = std::make_unique<Sprite>();
+	iterator->Initialize(guide.name + ".png");//初期化
+	iterator->SetSize(kSpriteSize_);          //サイズ設定
+	iterator->SetPosition(kSpriteTranslate_); //座標設定
+
+	//vectorにまとめる
+	guides_.push_back(guide);
+}
+
+void IScene::UpdateGuide() {
+	for (auto& sprite : spriteGuides_) {
+		sprite.second->Update();
 	}
 }
 
 void IScene::DrawGuide() {
 	//チュートリアルの出る順番
 	if (stageFileName_ == "stage_select") {
-		spriteGuide_[0]->Draw();
-		spriteGuide_[6]->Draw();
+		spriteGuides_[kGuideMove_.name]->Draw();
+		spriteGuides_[kGuideWarp_.name]->Draw();
 	}
 	else if (stageFileName_ == "stage_0") {
-		if (player_->GetTranslate().x >= kChangePointKakku_) {
-			//滑空
-			spriteGuide_[5]->Draw();
-		}
-		else if (player_->GetTranslate().x >= kChangePointBrink_) {
-			//ブリンク
-			spriteGuide_[4]->Draw();
-		}
-		else if (player_->GetTranslate().x >= kChangePointShield_) {
-			//守る
-			spriteGuide_[3]->Draw();
-		}
-		else if (player_->GetTranslate().x >= kChangePointFire_) {
-			//攻撃
-			spriteGuide_[2]->Draw();
-		}
-		else if (player_->GetTranslate().x >= kChangePointJump_) {
-			//ジャンプ
-			spriteGuide_[1]->Draw();
-		}
-		else {
-			//動く
-			spriteGuide_[0]->Draw();
-		}
-	}
-	else if (stageFileName_ == "stage_1") {
-		for (auto& sprite : spriteGuide_) {
-			sprite->Draw();
+		for (auto& guide : guides_) {
+			//プレイヤーの座標Xが
+			if (player_->GetTranslate().x >= guide.lookPointX_left &&
+				player_->GetTranslate().x < guide.lookPointX_right){
+				spriteGuides_[guide.name]->Draw();
+			}
 		}
 	}
 }
-
 
 void IScene::WarpNextScene() {
 	//ワープするとき && プレイヤーが演出判定でない

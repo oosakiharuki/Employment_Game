@@ -158,7 +158,6 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 				isWarp_ = true;
 				//次のステージに持ってくる情報
 				NextStageSave::GetInstance()->SetNextStageFile(stageObject->GetNextStage());
-				NextStageSave::GetInstance()->SetPlayerHp(player_->GetHp());
 				player_->IsGround(true);
 				break;
 			}

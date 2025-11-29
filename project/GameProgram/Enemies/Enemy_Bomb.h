@@ -40,6 +40,8 @@ private:
 	
 	//Hp
 	const uint32_t kHp_ = 1;
+	//見える範囲初期化
+	const Vector3 kEyeReach_ = { 15, 2, 1 };
 
 	//爆発範囲AABB
 	AABB bombAABB_;

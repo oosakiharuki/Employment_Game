@@ -11,7 +11,8 @@
 #include "UseEveryOne.h"
 
 /// <summary>
-/// プレイヤー、敵の関数変数を使う基盤クラス
+/// プレイヤー、敵のような動く、攻撃すると
+/// ゲームで使う基盤クラス
 /// </summary>
 class GameActor
 {

@@ -14,9 +14,6 @@ private:
 	//BGM
 	SoundData soundData_;
 
-	//残機
-	uint32_t RemainingLife_ = 2;
-
 	//スタート演出(水たまりから飛び出る感じに)
 	bool isStartStage_ = true;
 	Vector3 playerPoint_{};

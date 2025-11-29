@@ -252,10 +252,11 @@ void ParticleManager::ResetParticle(const std::string& filePath) {
 }
 
 std::unique_ptr<Particle> ParticleManager::InitParticle(const ParticleParametars& parametars) {
-
+	//使用するパーティクルを選ぶ
 	std::unique_ptr<Particle>& particle = particles_[parametars.name];
-
+	//パーティクルを設定
 	particle = std::make_unique<Particle>();
+	//初期化(名前,テクスチャファイル,モデルの形)
 	particle->Initialize(parametars.name, parametars.textureFile, parametars.primitive);
 	particle->SetParticleCount(parametars.count); //生成数を設定
 	particle->SetFrequency(parametars.frequency); //頻度 / 生存時間を設定
