@@ -41,6 +41,9 @@ void GameScene::Update() {
 	startWarp_->Update();
 
 	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->ZoomEnd()) {
+		sceneSaveData_.playerHp = player_->GetHp();
+		sceneSaveData_.playerMaxHp = player_->GetMaxHp();
+		NextStageSave::GetInstance()->SetPlayerParameta(sceneSaveData_);
 		NextSceneFadeInStart("NextStage");
 	}
 
@@ -222,7 +225,7 @@ void GameScene::Respawn() {
 	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
 	if (player_->GetIsDead() && player_->GetIsRespawn()) {
 
-		if (RemainingLife_ == 0) {
+		if (sceneSaveData_.playerLife == 0) {
 			//残機が0で倒された場合ゲームオーバー
 			NextSceneFadeInStart("GameOver");
 			FadeScreen::GetInstance()->SetMaskTexture("fade02.png");
@@ -230,7 +233,7 @@ void GameScene::Respawn() {
 			return;
 		}
 		//残機が一つ減る
-		RemainingLife_--;
+		sceneSaveData_.playerLife--;
 
 		//敵が復活
 		for (auto& enemy : enemies_) {

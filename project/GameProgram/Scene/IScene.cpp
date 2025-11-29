@@ -12,8 +12,8 @@ std::string IScene::GetSceneNo() { return sceneNo_; }
 
 void IScene::PreviousSceneData() {
 	//前に残しておいたデータ
-	data_ = NextStageSave::GetInstance()->GetNextStageSaveData();
-	stageFileName_ = data_.nextStageFile;
+	sceneSaveData_ = NextStageSave::GetInstance()->GetNextStageSaveData();
+	stageFileName_ = sceneSaveData_.nextStageFile;//ステージの全体層(.obj)
 }
 
 void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
@@ -24,7 +24,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	if (leveleditor_file != "") {
 		//代入
 		stageFileName_ = leveleditor_file;
-		data_.playerHp = player_->GetMaxHp();
+		sceneSaveData_.playerHp = player_->GetMaxHp();
 	}
 
 	//ステージのjsonを読み取る
@@ -46,7 +46,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	Cubemap::GetInstance()->SetDefaultCamera(camera_.get());
 	
 	//プレイヤーの体力を上書き
-	player_->SetHp(data_.playerHp);
+	player_->SetHp(sceneSaveData_.playerHp);
 	player_->Initialize();//初期設定
 
 	//プレイヤー配置データがあるときプレイヤーを配置

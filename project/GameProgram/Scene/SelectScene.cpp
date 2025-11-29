@@ -3,8 +3,11 @@ using namespace MyMath;
 
 void SelectScene::Initialize() {
 
+	sceneSaveData_.playerLife = kPlayerLife_;
+	sceneSaveData_.nextStageFile = "stage_select";
+
 	//ステージシーンのゲームオブジェクト配置
-	LevelEditorObjectSetting("stage_select");
+	LevelEditorObjectSetting(sceneSaveData_.nextStageFile);
 
 	//ステージの全体層
 	stageobj_ = std::make_unique<Object3d>();
@@ -29,12 +32,15 @@ void SelectScene::Update() {
 
 	//ワープするflag && カメラがズームし終わった
 	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->ZoomEnd()) {
+		sceneSaveData_.playerHp = player_->GetHp();
+		sceneSaveData_.playerMaxHp = player_->GetMaxHp();
+		NextStageSave::GetInstance()->SetPlayerParameta(sceneSaveData_);
 		NextSceneFadeInStart("Game");
 	}
 
-	//ワープするflag && カメラがズームし終わった
-	if (CollisionManager::GetInstance()->IsGoal() && cameraControl_->ZoomEnd()) {
-		NextSceneFadeInStart("Clear");
+	//タイトルに戻る
+	if (input_->TriggerKey(DIK_ESCAPE)) {
+		NextSceneFadeInStart("Title");
 	}
 
 	//ステージオブジェクト更新

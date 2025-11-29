@@ -81,7 +81,7 @@ protected:
 	void PreviousSceneData();
 
 	//前ステージデータ
-	SceneSaveData data_;
+	SceneSaveData sceneSaveData_;
 
 	/// <summary>
 	/// 全シーンに共有できる当たり判定

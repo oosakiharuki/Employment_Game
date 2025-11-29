@@ -6,23 +6,37 @@
 /// 移行する前に保存するデータ
 /// </summary>
 struct SceneSaveData {
-	uint32_t playerMaxHp;//プレイヤーの体力
-	uint32_t playerHp;//プレイヤーの体力
-	std::string nextStageFile;//次のステージ名
+	uint32_t playerMaxHp;      //プレイヤーの体力
+	uint32_t playerHp;         //プレイヤーの体力
+	uint32_t playerLife;       //残り残機
+	std::string nextStageFile; //次のステージ名
 };
 
 class NextStageSave
 {
 public:
-
+	/// <summary>
+	/// インスタンス生成
+	/// </summary>
+	/// <returns></returns>
 	static std::shared_ptr<NextStageSave> GetInstance();
-
+	/// <summary>
+	/// getter_前に受け取ったデータを渡す
+	/// </summary>
+	/// <returns></returns> 前に受け取ったデータ
 	SceneSaveData GetNextStageSaveData() { return sceneSaveData_; }
-
+	/// <summary>
+	/// setter_次のステージの全体層
+	/// </summary>
+	/// <param name="nextStageFile"></param> 次のステージの全体層のファイルパス
 	void SetNextStageFile(const std::string nextStageFile) { sceneSaveData_.nextStageFile = nextStageFile; }
-
-	void SetPlayerHp(const uint32_t playerHp) { sceneSaveData_.playerHp = playerHp; }
-
+	
+	/// <summary>
+	/// setter_プレイヤーの最大体力
+	/// </summary>
+	/// <param name="playerHp"></param> 
+	void SetPlayerParameta(const SceneSaveData saveData);
+	
 private:
 
 	SceneSaveData sceneSaveData_;
