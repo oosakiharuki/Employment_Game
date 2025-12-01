@@ -10,7 +10,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static Object3dCommon* GetInstance();
+	static std::shared_ptr<Object3dCommon> GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -58,13 +58,5 @@ private:
 
 	Camera* defaultCamera_ = nullptr;
 
-	static Object3dCommon* sInstance_;
-
-	Object3dCommon() = default;
-	~Object3dCommon() = default;
-	Object3dCommon(Object3dCommon&) = default;
-	Object3dCommon& operator=(Object3dCommon&) = default;
-
-
-	static uint32_t sSRVIndexTop_;
+	static std::shared_ptr<Object3dCommon> sInstance_;
 };

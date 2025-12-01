@@ -25,7 +25,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static DirectXCommon* GetInstance();
+	static std::shared_ptr<DirectXCommon> GetInstance();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -279,15 +279,7 @@ private:
 	std::chrono::steady_clock::time_point reference_;
 
 
-	static DirectXCommon* sInstance_;
-
-	DirectXCommon() = default;
-	~DirectXCommon() = default;
-	DirectXCommon(DirectXCommon&) = default;
-	DirectXCommon& operator=(DirectXCommon&) = default;
-
-
-	static uint32_t sSRVIndexTop_;
+	static std::shared_ptr<DirectXCommon> sInstance_;
 
 	//書き込み可能なテクスチャ レンダーテクスチャ
 	Microsoft::WRL::ComPtr<ID3D12Resource> renderTextureResource_;

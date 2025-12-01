@@ -1,22 +1,19 @@
 #include "PostEffectManager.h"
 
+std::shared_ptr<PostEffectManager> PostEffectManager::sInstance_ = nullptr;
 
-PostEffectManager* PostEffectManager::sInstance_ = nullptr;
-
-uint32_t PostEffectManager::sSRVIndexTop_ = 1;
-
-PostEffectManager* PostEffectManager::GetInstance() {
+std::shared_ptr<PostEffectManager> PostEffectManager::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = new PostEffectManager;
+		sInstance_ = std::make_unique<PostEffectManager>();
 	}
 	return sInstance_;
 }
 
 void PostEffectManager::Finalize() {
 	effectArr_[currentNo_]->Finalize();
-	delete effectArr_[currentNo_];
+	effectArr_[currentNo_].reset();
 
-	delete sInstance_;
+	sInstance_.reset();
 	sInstance_ = nullptr;
 }
 
@@ -24,41 +21,41 @@ void PostEffectManager::Change(int prev, int current) {
 
 	//前のシーンの解放
 	effectArr_[prev]->Finalize();
-	delete effectArr_[prev];
+	effectArr_[prev].reset();
 	effectArr_[prev] = nullptr;
 
 	//scene_ = current;
 	switch (current)
 	{
 	case Mode_Normal_Image:
-		effectArr_[current] = new Normal_Image();
+		effectArr_[current] = std::make_unique<Normal_Image>();
 		break;
 	case Mode_BoxFillter:
-		effectArr_[current] = new BoxFilter();
+		effectArr_[current] = std::make_unique<BoxFilter>();
 		break;
 	case Mode_DepthBasedOutline:
-		effectArr_[current] = new DepthBasedOutline();
+		effectArr_[current] = std::make_unique<DepthBasedOutline>();
 		break;
 	case Mode_Dissolve:
-		effectArr_[current] = new Dissolve();
+		effectArr_[current] = std::make_unique<Dissolve>();
 		break;
 	case Mode_GaussianFillter:
-		effectArr_[current] = new GaussianFilter();
+		effectArr_[current] = std::make_unique<GaussianFilter>();
 		break;
 	case Mode_Grayscale:
-		effectArr_[current] = new Grayscale();
+		effectArr_[current] = std::make_unique<Grayscale>();
 		break;
 	case Mode_LuminanceBasedOutline:
-		effectArr_[current] = new LuminanceBasedOutline();
+		effectArr_[current] = std::make_unique<LuminanceBasedOutline>();
 		break;
 	case Mode_RadialBlur:
-		effectArr_[current] = new RadialBlur();
+		effectArr_[current] = std::make_unique<RadialBlur>();
 		break;
 	case Mode_Random:
-		effectArr_[current] = new Random();
+		effectArr_[current] = std::make_unique<Random>();
 		break;
 	case Mode_Vignette:
-		effectArr_[current] = new Vignette();
+		effectArr_[current] = std::make_unique<Vignette>();
 		break;
 	default:
 		break;
@@ -68,7 +65,7 @@ void PostEffectManager::Change(int prev, int current) {
 void PostEffectManager::Initialize(DirectXCommon* dxCommon) {
 	
 	
-	effectArr_[Mode_DepthBasedOutline] = new DepthBasedOutline();
+	effectArr_[Mode_DepthBasedOutline] = std::make_unique<DepthBasedOutline>();
 
 	prevNo_ = 0;
 	currentNo_ = Mode_DepthBasedOutline;

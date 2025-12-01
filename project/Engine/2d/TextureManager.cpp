@@ -2,14 +2,11 @@
 
 using namespace StringUtility;
 
-TextureManager* TextureManager::sInstance_ = nullptr;
+std::shared_ptr<TextureManager> TextureManager::sInstance_ = nullptr;
 
-uint32_t TextureManager::sSRVIndexTop_ = 1;
-
-
-TextureManager* TextureManager::GetInstance() {
+std::shared_ptr<TextureManager> TextureManager::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = new TextureManager;
+		sInstance_ = std::make_unique<TextureManager>();
 	}
 	return sInstance_;
 }
@@ -22,7 +19,7 @@ void TextureManager::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager)
 
 
 void TextureManager::Finalize() {
-	delete sInstance_;
+	sInstance_.reset();
 	sInstance_ = nullptr;
 }
 

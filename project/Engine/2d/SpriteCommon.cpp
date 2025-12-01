@@ -2,18 +2,16 @@
 
 using namespace Logger;
 
-SpriteCommon* SpriteCommon::sInstance_ = nullptr;
+std::shared_ptr<SpriteCommon> SpriteCommon::sInstance_ = nullptr;
 
-uint32_t SpriteCommon::sSRVIndexTop_ = 1;
-
-SpriteCommon* SpriteCommon::GetInstance() {
+std::shared_ptr<SpriteCommon> SpriteCommon::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = new SpriteCommon;
+		sInstance_ = std::make_unique<SpriteCommon>();
 	}
 	return sInstance_;
 }
 void SpriteCommon::Finalize() {
-	delete sInstance_;
+	sInstance_.reset();
 	sInstance_ = nullptr;
 }
 

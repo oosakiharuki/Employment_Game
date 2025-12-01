@@ -1,6 +1,7 @@
 #pragma once
 #include "MyMath.h"
 #include <unordered_map>
+#include <memory>
 
 //カメラの初期位置
 struct CameraInitData {
@@ -75,7 +76,7 @@ public:
 	/// getter‗レベルエディタ
 	/// </summary>
 	/// <returns></returns>作成したレベルエディタ
-	LevelData* GetLevelData() { return levelData_; }
+	LevelData* GetLevelData() { return levelData_.get(); }
 	/// <summary>
 	/// レベルエディタリセット
 	/// </summary>
@@ -83,5 +84,5 @@ public:
 
 private:
 	//レベルエディタ
-	LevelData* levelData_;
+	std::unique_ptr<LevelData> levelData_;
 };

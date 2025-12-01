@@ -92,13 +92,13 @@ void IEnemy::UpdateCommon() {
 		ScaleUpdate(isDamageMosion_, damageScale_, kDamageMaxTime_);
 	}
 
-	for (auto* bullet : bullets_) {
+	for (auto& bullet : bullets_) {
 		bullet->Update();
 	}
 
-	bullets_.remove_if([](EnemyBullet* bullet) {
+	bullets_.remove_if([](auto& bullet) {
 		if (bullet->IsDead()) {
-			delete bullet;
+			bullet.reset();
 			return true;
 		}
 		return false;
@@ -238,8 +238,8 @@ void IEnemy::RespawnEnemyCommon() {
 	move_ = { 0,0,0 };
 
 	//弾はすべて消す
-	bullets_.remove_if([](EnemyBullet* bullet) {
-		delete bullet;
+	bullets_.remove_if([](auto& bullet) {
+		bullet.reset();
 		return true;
 	});
 }

@@ -10,7 +10,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static Cubemap* GetInstance();
+	static std::shared_ptr<Cubemap> GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -54,13 +54,5 @@ private:
 
 	Camera* defaultCamera_ = nullptr;
 
-	static Cubemap* sInstance_;
-
-	Cubemap() = default;
-	~Cubemap() = default;
-	Cubemap(Cubemap&) = default;
-	Cubemap& operator=(Cubemap&) = default;
-
-
-	static uint32_t sSRVIndexTop_;
+	static std::shared_ptr<Cubemap> sInstance_;
 };

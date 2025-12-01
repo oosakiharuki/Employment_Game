@@ -5,7 +5,7 @@ using namespace MyMath;
 using namespace Primitive;
 
 void SphereModel::Initialize() {
-	this->debugWireframes_ = DebugWireframes::GetInstance();
+	this->debugWireframes_ = DebugWireframes::GetInstance().get();
 
 	modelData_ = CreateSphere();
 	modelData_.material.textureFilePath = "resource/Sprite/white.png";

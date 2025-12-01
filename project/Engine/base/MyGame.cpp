@@ -5,10 +5,10 @@ void MyGame::Initialize() {
 	Framework::Initialize();
 
 	//ゲームシーン初期化
-	gameScene_ = new SceneManager();
+	gameScene_ = std::make_unique<SceneManager>();
 	gameScene_->Initialize();
 
-	fadeScreen_ = FadeScreen::GetInstance();
+	fadeScreen_ = FadeScreen::GetInstance().get();
 	fadeScreen_->Initialize();
 }
 
@@ -69,7 +69,7 @@ void MyGame::Draw() {
 
 
 void MyGame::Finalize() {
-	delete gameScene_;
+	gameScene_.reset();
 	fadeScreen_->Finalize();
 
 #ifdef  USE_IMGUI

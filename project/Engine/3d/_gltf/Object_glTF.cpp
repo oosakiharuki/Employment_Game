@@ -23,7 +23,7 @@ Object_glTF::~Object_glTF(){
 }
 
 void Object_glTF::Initialize() {
-	object3dCommon_ = GLTFCommon::GetInstance();
+	object3dCommon_ = GLTFCommon::GetInstance().get();
 	camera_ = object3dCommon_->GetDefaultCamera();
 
 	//ライト用のリソース
@@ -368,10 +368,10 @@ void Object_glTF::SkinClusterUpdate(SkinCluster& skinCluster, const Skeleton& sk
 
 void Object_glTF::SetWireframe() {
 #ifdef _DEBUG
-	SphereModel* sphere = new SphereModel();
+	std::unique_ptr<SphereModel> sphere = std::make_unique<SphereModel>();
 	sphere->Initialize();
 
-	debugSpheres_.push_back(sphere);
+	debugSpheres_.push_back(std::move(sphere.get()));
 #endif // _DEBUG
 }
 

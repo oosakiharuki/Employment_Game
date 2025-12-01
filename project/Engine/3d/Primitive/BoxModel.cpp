@@ -5,7 +5,7 @@ using namespace MyMath;
 using namespace Primitive;
 
 void BoxModel::Initialize(std::string textureFile) {
-	this->cubemap_ = Cubemap::GetInstance();
+	this->cubemap_ = Cubemap::GetInstance().get();
 
 	modelData_ = CreateBox();
 	modelData_.material.textureFilePath = textureFile;

@@ -8,6 +8,8 @@
 #include <Xinput.h>
 
 #include "WinApp.h"
+#include <memory>
+
 /// <summary>
 /// 入力
 /// </summary>
@@ -17,7 +19,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static Input* GetInstance();
+	static std::shared_ptr<Input> GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -51,14 +53,7 @@ private:
 	BYTE keyPre_[256] = {};
 	WinApp* winApp_ = nullptr; //協力関係
 
-	static Input* sInstance_;
-
-	Input() = default;
-	~Input() = default;
-	Input(Input&) = default;
-	Input& operator=(Input&) = default;
-
-	static uint32_t sSRVIndexTop_;
+	static std::shared_ptr<Input> sInstance_;
 	
 	XINPUT_STATE prevState_ = {};
 };

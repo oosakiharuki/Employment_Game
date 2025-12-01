@@ -1,12 +1,10 @@
 #include "ImGuiManager.h"
 
-ImGuiManager* ImGuiManager::sInstance_ = nullptr;
+std::shared_ptr<ImGuiManager> ImGuiManager::sInstance_ = nullptr;
 
-uint32_t ImGuiManager::sSRVIndexTop_ = 1;
-
-ImGuiManager* ImGuiManager::GetInstance() {
+std::shared_ptr<ImGuiManager> ImGuiManager::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = new ImGuiManager();
+		sInstance_ = std::make_unique<ImGuiManager>();
 	}
 	return sInstance_;
 }
@@ -14,8 +12,8 @@ ImGuiManager* ImGuiManager::GetInstance() {
 void ImGuiManager::Initialize([[maybe_unused]]WinApp* winApp, DirectXCommon* dxCommon, [[maybe_unused]]SrvManager* srvManager) {
 #ifdef  USE_IMGUI
 
-	dxCommon_ = DirectXCommon::GetInstance();
-	srvManager_ = SrvManager::GetInstance();
+	dxCommon_ = DirectXCommon::GetInstance().get();
+	srvManager_ = SrvManager::GetInstance().get();
 
 	uint32_t srvIndex = srvManager_->Allocate();
 	srvHeap_ = srvManager_->GetDescriptorHeap();
@@ -76,7 +74,7 @@ void ImGuiManager::Finalize() {
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 
-	delete sInstance_;
+	sInstance_.reset();
 	sInstance_ = nullptr;
 
 #endif //  USE_IMGUI

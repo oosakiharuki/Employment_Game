@@ -15,7 +15,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static ParticleManager* GetInstance();
+	static std::shared_ptr<ParticleManager> GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -57,17 +57,10 @@ public:
 	std::unique_ptr<Particle> InitParticle(const ParticleParametars& parametars);
 
 private:
-	static ParticleManager* sInstance;
-
-	ParticleManager() = default;
-	~ParticleManager() = default;
-	ParticleManager(ParticleManager&) = delete;
-	ParticleManager& operator=(ParticleManager&) = delete;
+	static std::shared_ptr<ParticleManager> sInstance;
 
 	ParticleCommon* particleCommon = nullptr;
-
 	SrvManager* srvManager = nullptr;
-	static uint32_t sSRVIndexTop;
 
 	struct ParticleGroup {
 		std::string textureFile;

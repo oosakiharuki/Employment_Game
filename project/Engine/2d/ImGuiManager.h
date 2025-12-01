@@ -28,7 +28,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static ImGuiManager* GetInstance();
+	static std::shared_ptr<ImGuiManager> GetInstance();
 
 	/// <summary>
 	/// imgui 更新始め
@@ -51,14 +51,7 @@ public:
 	void Draw();
 
 private:
-	static ImGuiManager* sInstance_;
-
-	ImGuiManager() = default;
-	~ImGuiManager() = default;
-	ImGuiManager(ImGuiManager&) = default;
-	ImGuiManager& operator=(ImGuiManager&) = default;
-
-	static uint32_t sSRVIndexTop_;
+	static std::shared_ptr<ImGuiManager> sInstance_;
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;
 

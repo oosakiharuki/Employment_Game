@@ -27,13 +27,11 @@ using namespace StringUtility;
 const uint32_t DirectXCommon::kMaxSRVCount_ = 512;
 
 
-DirectXCommon* DirectXCommon::sInstance_ = nullptr;
+std::shared_ptr<DirectXCommon> DirectXCommon::sInstance_ = nullptr;
 
-uint32_t DirectXCommon::sSRVIndexTop_ = 1;
-
-DirectXCommon* DirectXCommon::GetInstance() {
+std::shared_ptr<DirectXCommon> DirectXCommon::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = new DirectXCommon;
+		sInstance_ = std::make_unique<DirectXCommon>();
 	}
 	return sInstance_;
 }
@@ -729,6 +727,6 @@ void DirectXCommon::RenderTexturePostDraw() {
 
 void DirectXCommon::Finalize() {
 	CloseHandle(fenceEvent_);
-	delete sInstance_;
+	sInstance_.reset();
 	sInstance_ = nullptr;
 }

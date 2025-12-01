@@ -16,7 +16,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static TextureManager* GetInstance();
+	static std::shared_ptr<TextureManager> GetInstance();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -49,12 +49,7 @@ public:
 	/// <returns></returns>
 	const DirectX::TexMetadata& GetMetaData(const std::string& filePath);
 private:
-	static TextureManager* sInstance_;
-
-	TextureManager() = default;
-	~TextureManager() = default;
-	TextureManager(TextureManager&) = default;
-	TextureManager& operator=(TextureManager&) = default;
+	static std::shared_ptr<TextureManager> sInstance_;
 
 	struct TextureData {
 		DirectX::TexMetadata metadata; //width,height
@@ -65,9 +60,6 @@ private:
 	};
 
 	std::unordered_map<std::string, TextureData> textureDatas_;
-
-
-	static uint32_t sSRVIndexTop_;
 
 	DirectXCommon* dxCommon_ = nullptr;
 	SrvManager* srvManager_ = nullptr;

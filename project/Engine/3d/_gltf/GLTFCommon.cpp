@@ -2,18 +2,16 @@
 
 using namespace Logger;
 
-GLTFCommon* GLTFCommon::sInstance_ = nullptr;
+std::shared_ptr<GLTFCommon> GLTFCommon::sInstance_ = nullptr;
 
-uint32_t GLTFCommon::sSRVIndexTop_ = 1;
-
-GLTFCommon* GLTFCommon::GetInstance() {
+std::shared_ptr<GLTFCommon> GLTFCommon::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = new GLTFCommon;
+		sInstance_ = std::make_unique<GLTFCommon>();
 	}
 	return sInstance_;
 }
 void GLTFCommon::Finalize() {
-	delete sInstance_;
+	sInstance_.reset();
 	sInstance_ = nullptr;
 }
 void GLTFCommon::Initialize(DirectXCommon* dxCommon) {

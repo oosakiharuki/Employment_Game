@@ -6,7 +6,7 @@
 using namespace MyMath;
 
 void Sprite::Initialize(std::string textureFilePath) {
-	this->spriteCommon_ = SpriteCommon::GetInstance();
+	this->spriteCommon_ = SpriteCommon::GetInstance().get();
 	//テクスチャ名
 	filePath_ = "resource/Sprite/" + textureFilePath;
 

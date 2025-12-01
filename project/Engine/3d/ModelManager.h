@@ -11,7 +11,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static ModelManager* GetInstance();
+	static std::shared_ptr<ModelManager> GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -33,14 +33,9 @@ public:
 	Model_obj* FindModel_obj(const std::string& filePath);
 
 private:
-	static ModelManager* sInstance_;
+	static std::shared_ptr<ModelManager> sInstance_;
 
-	ModelManager() = default;
-	~ModelManager() = default;
-	ModelManager(ModelManager&) = delete;
-	ModelManager& operator=(ModelManager&) = delete;
-
-	ModelCommon* modelCommon_ = nullptr;
+	std::unique_ptr<ModelCommon> modelCommon_ = nullptr;
 
 	//モデル別のコンテナ
 	//.obj用のコンテナ

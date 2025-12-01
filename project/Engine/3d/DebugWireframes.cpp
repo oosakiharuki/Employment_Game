@@ -2,18 +2,16 @@
 
 using namespace Logger;
 
-DebugWireframes* DebugWireframes::sInstance_ = nullptr;
+std::shared_ptr<DebugWireframes> DebugWireframes::sInstance_ = nullptr;
 
-uint32_t DebugWireframes::sSRVIndexTop_ = 1;
-
-DebugWireframes* DebugWireframes::GetInstance() {
+std::shared_ptr<DebugWireframes> DebugWireframes::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = new DebugWireframes;
+		sInstance_ = std::make_unique<DebugWireframes>();
 	}
 	return sInstance_;
 }
 void DebugWireframes::Finalize() {
-	delete sInstance_;
+	sInstance_.reset();
 	sInstance_ = nullptr;
 }
 void DebugWireframes::Initialize(DirectXCommon* dxCommon) {

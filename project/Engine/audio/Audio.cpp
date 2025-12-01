@@ -1,17 +1,20 @@
 #include "Audio.h"
 
-Audio* Audio::sInstance = nullptr;
+std::shared_ptr<Audio> Audio::sInstance_ = nullptr;
 
-Audio* Audio::GetInstance() {
-	if (sInstance == nullptr) {
-		sInstance = new Audio();
+std::shared_ptr<Audio> Audio::GetInstance() {
+	if (sInstance_ == nullptr) {
+		sInstance_ = std::make_unique<Audio>();
 	}
-	return sInstance;
+	return sInstance_;
 }
 
 void Audio::Finalize() {
 	xAudio2_.Reset();
 	SoundUnload(&soundData_);
+
+	sInstance_.reset();
+	sInstance_ = nullptr;
 }
 
 void Audio::Initialize() {

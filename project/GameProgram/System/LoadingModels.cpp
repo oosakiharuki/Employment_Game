@@ -1,20 +1,20 @@
 #include "LoadingModels.h"
 
-LoadingModels* LoadingModels::sInstance = nullptr;
+std::shared_ptr<LoadingModels> LoadingModels::sInstance = nullptr;
 
-LoadingModels* LoadingModels::GetInstance() {
+std::shared_ptr<LoadingModels> LoadingModels::GetInstance() {
 	if (sInstance == nullptr) {
-		sInstance = new LoadingModels;
+		sInstance = std::make_unique<LoadingModels>();
 	}
 	return sInstance;
 }
 void LoadingModels::Finalize() {
-	delete sInstance;
+	sInstance.reset();
 	sInstance = nullptr;
 }
 
 void LoadingModels::LoadObjects() {
-	modelManager = ModelManager::GetInstance();
+	modelManager = ModelManager::GetInstance().get();
 
 	LoadObj();
 	LoadGltf();

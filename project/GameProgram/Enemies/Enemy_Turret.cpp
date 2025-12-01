@@ -7,8 +7,8 @@ using namespace MyMath;
 using namespace UseEveryOne;
 
 Enemy_Turret::~Enemy_Turret() {
-	for (auto* bullet : bullets_) {
-		delete bullet;
+	for (auto& bullet : bullets_) {
+		bullet.reset();
 	}
 }
 
@@ -83,7 +83,7 @@ void Enemy_Turret::Draw() {
 		shadow_->Draw();//影
 	}
 
-	for (auto* bullet : bullets_) {
+	for (auto& bullet : bullets_) {
 		bullet->Draw();//弾丸
 	}
 }
@@ -107,12 +107,12 @@ void Enemy_Turret::FireBullet() {
 	Vector3 velocity = { 0.0f,0.0f,kBulletSpeed_ };
 	velocity = TransformNormal(velocity, wt_.matWorld_);
 
-	EnemyBullet* bullet = new EnemyBullet();
+	std::unique_ptr<EnemyBullet> bullet = std::make_unique<EnemyBullet>();
 	bullet->Initialize();
 	bullet->SetPlayer(player_);
 	bullet->SetTranslate(translate);
 	bullet->SetVelocty(velocity);
-	bullets_.push_back(bullet);
+	bullets_.push_back(std::move(bullet));
 }
 
 void Enemy_Turret::RespawnEnemy() {

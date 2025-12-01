@@ -65,7 +65,7 @@ void Player::Initialize() {
 	}
 
 	//入力処理
-	input_ = Input::GetInstance();
+	input_ = Input::GetInstance().get();
 }
 
 void Player::Update() {

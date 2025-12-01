@@ -60,7 +60,7 @@ public:
 	/// </summary>
 	void Run();
 private:
-	WinApp* winApp_ = nullptr;
+	std::unique_ptr<WinApp> winApp_ = nullptr;
 	Input* input_;
 	DirectXCommon* dxCommon_ = nullptr;
 	SrvManager* srvManager_ = nullptr;
@@ -69,7 +69,7 @@ private:
 	Object3dCommon* object3dCommon_ = nullptr;
 	GLTFCommon* glTFCommon_ = nullptr;
 	SkinningCommon* skinningCommon_ = nullptr;
-	ModelCommon* modelCommon_ = nullptr;
+	std::unique_ptr<ModelCommon> modelCommon_ = nullptr;
 	ParticleCommon* particleCommon_ = nullptr;
 	
 	PostEffectManager* postEffectM_ = nullptr;

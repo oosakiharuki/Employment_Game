@@ -2,18 +2,16 @@
 
 using namespace Logger;
 
-SkinningCommon* SkinningCommon::sInstance_ = nullptr;
+std::shared_ptr<SkinningCommon> SkinningCommon::sInstance_ = nullptr;
 
-uint32_t SkinningCommon::sSRVIndexTop_ = 1;
-
-SkinningCommon* SkinningCommon::GetInstance() {
+std::shared_ptr<SkinningCommon> SkinningCommon::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = new SkinningCommon;
+		sInstance_ = std::make_unique<SkinningCommon>();
 	}
 	return sInstance_;
 }
 void SkinningCommon::Finalize() {
-	delete sInstance_;
+	sInstance_.reset();
 	sInstance_ = nullptr;
 }
 void SkinningCommon::Initialize(DirectXCommon* dxCommon) {
