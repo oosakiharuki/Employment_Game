@@ -29,25 +29,25 @@ public:
 	void SetParent(const WorldTransform* parent) { worldTransform_.parent_ = parent; }
 
 	/// <summary>
-	/// setter_
+	/// setter_視野角
 	/// </summary>
 	/// <param name="ForY"></param>
-	void SetForY(const float& ForY) { forY_ = ForY; }
+	void SetForY(float ForY) { forY_ = ForY; }
 	/// <summary>
 	/// setter_アスペクト比
 	/// </summary>
 	/// <param name="aspectRatio"></param>
-	void SetAspectRatio(const float aspectRatio) { aspect_ = aspectRatio; }
+	void SetAspectRatio(float aspectRatio) { aspect_ = aspectRatio; }
 	/// <summary>
 	/// setter_描画範囲_near
 	/// </summary>
 	/// <param name="Clip"></param>
-	void SetNearClip(const float Clip) { nearClip_ = Clip; }
+	void SetNearClip(float Clip) { nearClip_ = Clip; }
 	/// <summary>
 	/// setter_描画範囲_far
 	/// </summary>
 	/// <param name="Clip"></param>
-	void SetFarClip(const float Clip) { farClip_ = Clip; }
+	void SetFarClip(float Clip) { farClip_ = Clip; }
 	/// <summary>
 	/// getter_ワールド行列
 	/// </summary>

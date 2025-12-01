@@ -67,7 +67,7 @@ public:
 	/// 銃弾の処理
 	/// </summary>
 	/// <returns></returns>銃弾リスト
-	std::list<EnemyBullet*> GetBullets() { return bullets_; }
+	std::list<std::shared_ptr<EnemyBullet>> GetBullets() { return bullets_; }
 
 	/// <summary>
 	/// Playerのクラス
@@ -180,7 +180,7 @@ protected:
 	std::unique_ptr<Object3d> object_;
 
 	//弾丸リスト
-	std::list<EnemyBullet*> bullets_;
+	std::list<std::shared_ptr<EnemyBullet>> bullets_;
 	//プレイヤークラス
 	Player* player_ = nullptr;
 	

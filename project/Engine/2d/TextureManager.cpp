@@ -2,14 +2,11 @@
 
 using namespace StringUtility;
 
-TextureManager* TextureManager::sInstance_ = nullptr;
+std::shared_ptr<TextureManager> TextureManager::sInstance_ = nullptr;
 
-uint32_t TextureManager::sSRVIndexTop_ = 1;
-
-
-TextureManager* TextureManager::GetInstance() {
+std::shared_ptr<TextureManager> TextureManager::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = new TextureManager;
+		sInstance_ = std::make_unique<TextureManager>();
 	}
 	return sInstance_;
 }
@@ -22,7 +19,7 @@ void TextureManager::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager)
 
 
 void TextureManager::Finalize() {
-	delete sInstance_;
+	sInstance_.reset();
 	sInstance_ = nullptr;
 }
 
@@ -91,21 +88,21 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	srvManager_->CreateSRVforStructureBuffer(srvDesc,textureData.srvIndex,textureData.resource.Get(), metadata.format, UINT(metadata.mipLevels));
 }
 
-uint32_t TextureManager::GetSrvIndex(const std::string filePath) {
+uint32_t TextureManager::GetSrvIndex(const std::string& filePath) {
 	assert(srvManager_->Max());
 
 	TextureData& textureData = textureDatas_[filePath];
 	return textureData.srvIndex;
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSrvHandleGPU(const std::string filePath) {
+D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSrvHandleGPU(const std::string& filePath) {
 	assert(srvManager_->Max());
 
 	TextureData& textureData = textureDatas_[filePath];
 	return textureData.srvHandleGPU;
 }
 
-const DirectX::TexMetadata& TextureManager::GetMetaData(const std::string filePath) {
+const DirectX::TexMetadata& TextureManager::GetMetaData(const std::string& filePath) {
 	assert(srvManager_->Max());
 
 	TextureData& textureData = textureDatas_[filePath];

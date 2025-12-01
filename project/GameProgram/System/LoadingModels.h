@@ -6,7 +6,7 @@
 /// </summary>
 class LoadingModels {
 public:
-	static LoadingModels* GetInstance();
+	static std::shared_ptr<LoadingModels> GetInstance();
 	
 	/// <summary>
 	/// ロード
@@ -20,7 +20,7 @@ private:
 
 	ModelManager* modelManager;
 
-	static LoadingModels* sInstance;
+	static std::shared_ptr<LoadingModels> sInstance;
 
 	/// <summary>
 	/// .objを読み取る
@@ -31,9 +31,4 @@ private:
 	/// </summary>
 	void LoadGltf();
 
-
-	LoadingModels() = default;
-	~LoadingModels() = default;
-	LoadingModels(LoadingModels&) = default;
-	LoadingModels& operator=(LoadingModels&) = default;
 };

@@ -10,7 +10,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static SkinningCommon* GetInstance();
+	static std::shared_ptr<SkinningCommon> GetInstance();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -61,13 +61,5 @@ private:
 
 	Camera* defaultCamera_ = nullptr;
 
-	static SkinningCommon* sInstance_;
-
-	SkinningCommon() = default;
-	~SkinningCommon() = default;
-	SkinningCommon(SkinningCommon&) = default;
-	SkinningCommon& operator=(SkinningCommon&) = default;
-
-
-	static uint32_t sSRVIndexTop_;
+	static std::shared_ptr<SkinningCommon> sInstance_;
 };

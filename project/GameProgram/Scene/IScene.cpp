@@ -3,7 +3,7 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-std::string IScene::sceneNo_ = "Title";
+std::string IScene::sceneNo_ = "Game";
 std::string IScene::nextSceneNo_ = sceneNo_;
 
 IScene::~IScene(){}
@@ -253,9 +253,9 @@ void IScene::NextSceneFadeInStart(const std::string& name) {
 bool IScene::NextSceneFlag() {
 	//現在のシーンと次のシーンが違う場合(例: Select , Game true / Select , Select false)
 	if (sceneNo_ != nextSceneNo_) {
-		return true;
+		return true;// 次のシーンに進む
 	}
-	return false;
+	return false;// シーン移動しない
 }
 
 void IScene::ChangeScene() {

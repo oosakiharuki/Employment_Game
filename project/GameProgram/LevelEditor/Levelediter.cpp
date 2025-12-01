@@ -9,7 +9,7 @@ using namespace UseEveryOne;
 
 void Levelediter::LoadLevelediter(std::string jsonName) {
 	//json
-	levelData_ = new LevelData();
+	levelData_ = std::make_unique<LevelData>();
 
 	//ファイルを選択
 	const std::string kFullpath = jsonName;
@@ -290,6 +290,5 @@ void Levelediter::LoadLevelediter(std::string jsonName) {
 }
 
 void Levelediter::ResetData() {
-	delete levelData_;
-	levelData_ = nullptr;
+	//levelData_.reset();
 }

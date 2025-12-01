@@ -65,7 +65,7 @@ void Player::Initialize() {
 	}
 
 	//入力処理
-	input_ = Input::GetInstance();
+	input_ = Input::GetInstance().get();
 }
 
 void Player::Update() {
@@ -382,11 +382,11 @@ void Player::PlayUpdate() {
 
 	//ダメージリアクション
 	if (isDamageMosion_) {
-		ScaleUpdate(&isDamageMosion_, damageScale_, kDamageMaxTime_);
+		ScaleUpdate(isDamageMosion_, damageScale_, kDamageMaxTime_);
 	}
 	//傘リアクション
 	if (isShildMosion_) {
-		umbrella_->ScaleUpdate(&isShildMosion_, damageScale_, kDamageMaxTime_);
+		umbrella_->ScaleUpdate(isShildMosion_, damageScale_, kDamageMaxTime_);
 	}
 
 	//ノックバック発動
@@ -520,7 +520,7 @@ void Player::IsFall() {
 	Audio::GetInstance()->SoundPlayWave(hitSound_, kVolume_);
 }
 
-void Player::KnockBackPlayer(const Vector3 Power, const float TimerMax) {
+void Player::KnockBackPlayer(const Vector3& Power, const float TimerMax) {
 	//威力を代入
 	backPower_ = Normalize(Power);
 	KnockBackCommon(TimerMax);
@@ -528,7 +528,7 @@ void Player::KnockBackPlayer(const Vector3 Power, const float TimerMax) {
 	wt_.scale_ = kDefaultScale_;
 }
 
-void Player::KnockBackUmbrella(const Vector3 Power, const float TimerMax) {
+void Player::KnockBackUmbrella(const Vector3& Power, const float TimerMax) {
 	//威力を代入(傘の向きに沿って)
 	backPower_ = TransformNormal(Power, wtGun_.matWorld_);
 	KnockBackCommon(TimerMax);
@@ -614,7 +614,7 @@ void Player::SpriteUpdate() {
 	}
 }
 
-void Player::UmbrellaRange(const float& direction) {
+void Player::UmbrellaRange(float direction) {
 	//ブリンク中は角度を変更しない
 	if (!isBrink_) {
 		//上下左右

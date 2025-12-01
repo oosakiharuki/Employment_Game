@@ -25,7 +25,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static DirectXCommon* GetInstance();
+	static std::shared_ptr<DirectXCommon> GetInstance();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -135,17 +135,17 @@ public:
 	/// getter_DSVのハンドル
 	/// </summary>
 	/// <returns></returns>
-	D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle() { return dsvHandle_; }
+	D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle() const { return dsvHandle_; }
 	/// <summary>
 	/// getter_fenceEvent
 	/// </summary>
 	/// <returns></returns>
-	HANDLE GetFenceEvent() { return fenceEvent_; }
+	HANDLE GetFenceEvent() const { return fenceEvent_; }
 	/// <summary>
 	/// getter_rtvDesc
 	/// </summary>
 	/// <returns></returns>
-	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc() { return rtvDesc_; }
+	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc() const { return rtvDesc_; }
 	/// <summary>
 	/// getter_デスクリプターヒープ
 	/// </summary>
@@ -155,7 +155,7 @@ public:
 	/// スワップチェーンのリソースナンバー
 	/// </summary>
 	/// <returns></returns>
-	size_t GetSwapChainResourceNum() { return swapChainDesc_.BufferCount; }
+	size_t GetSwapChainResourceNum() const { return swapChainDesc_.BufferCount; }
 
 	/// <summary>
 	/// RTVのリソース作成(device,width,heightは省略)
@@ -279,15 +279,7 @@ private:
 	std::chrono::steady_clock::time_point reference_;
 
 
-	static DirectXCommon* sInstance_;
-
-	DirectXCommon() = default;
-	~DirectXCommon() = default;
-	DirectXCommon(DirectXCommon&) = default;
-	DirectXCommon& operator=(DirectXCommon&) = default;
-
-
-	static uint32_t sSRVIndexTop_;
+	static std::shared_ptr<DirectXCommon> sInstance_;
 
 	//書き込み可能なテクスチャ レンダーテクスチャ
 	Microsoft::WRL::ComPtr<ID3D12Resource> renderTextureResource_;

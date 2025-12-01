@@ -2,18 +2,16 @@
 
 const uint32_t SrvManager::sMaxSRVCount_ = 512;
 
-SrvManager* SrvManager::sInstance_ = nullptr;
+std::shared_ptr<SrvManager> SrvManager::sInstance_ = nullptr;
 
-uint32_t SrvManager::sSRVIndexTop_ = 1;
-
-SrvManager* SrvManager::GetInstance() {
+std::shared_ptr<SrvManager> SrvManager::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = new SrvManager;
+		sInstance_ = std::make_unique<SrvManager>();
 	}
 	return sInstance_;
 }
 void SrvManager::Finalize() {
-	delete sInstance_;
+	sInstance_.reset();
 	sInstance_ = nullptr;
 }
 

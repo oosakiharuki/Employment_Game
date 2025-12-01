@@ -34,8 +34,8 @@ Particle::~Particle() {
 	}
 }
 
-void Particle::Initialize(const std::string& particleName, std::string textureFile , PrimitiveType type) {
-	this->particleCommon_ = ParticleCommon::GetInstance();
+void Particle::Initialize(const std::string& particleName, const std::string& textureFile , PrimitiveType type) {
+	this->particleCommon_ = ParticleCommon::GetInstance().get();
 	this->camera_ = particleCommon_->GetDefaultCamera();
 
 	//particleの設定

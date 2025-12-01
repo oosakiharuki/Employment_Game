@@ -6,11 +6,11 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-FadeScreen* FadeScreen::sInstance= nullptr;
+std::shared_ptr<FadeScreen> FadeScreen::sInstance= nullptr;
 
-FadeScreen* FadeScreen::GetInstance() {
+std::shared_ptr<FadeScreen> FadeScreen::GetInstance() {
 	if (sInstance== nullptr) {
-		sInstance= new FadeScreen;
+		sInstance= std::make_unique<FadeScreen>();
 	}
 	return sInstance;
 }
@@ -23,7 +23,7 @@ void FadeScreen::Initialize() {
 
 	//解け具合
 	dissolve_ = std::make_unique<Dissolve>();
-	dissolve_->Initialize(DirectXCommon::GetInstance());
+	dissolve_->Initialize(DirectXCommon::GetInstance().get());
 	
 	//マウスのテクスチャ
 	dissolveTexture_ = "fade01.png";
@@ -60,7 +60,7 @@ void FadeScreen::Draw() {
 }
 
 void FadeScreen::Finalize() {
-	delete sInstance;
+	sInstance.reset();
 	sInstance= nullptr;
 }
 

@@ -2,18 +2,16 @@
 
 using  namespace Logger;
 
-ParticleCommon* ParticleCommon::sInstance_ = nullptr;
+std::shared_ptr<ParticleCommon> ParticleCommon::sInstance_ = nullptr;
 
-uint32_t ParticleCommon::kSRVIndexTop_ = 1;
-
-ParticleCommon* ParticleCommon::GetInstance() {
+std::shared_ptr<ParticleCommon> ParticleCommon::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = new ParticleCommon;
+		sInstance_ = std::make_unique<ParticleCommon>();
 	}
 	return sInstance_;
 }
 void ParticleCommon::Finalize() {
-	delete sInstance_;
+	sInstance_.reset();
 	sInstance_ = nullptr;
 }
 

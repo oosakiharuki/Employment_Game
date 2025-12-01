@@ -10,7 +10,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static DebugWireframes* GetInstance();
+	static std::shared_ptr<DebugWireframes> GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -20,7 +20,7 @@ public:
 	/// </summary>
 	/// <param name="dxCommon"></param>
 	void Initialize(DirectXCommon* dxCommon);
-	DirectXCommon* GetDirectXCommon()const { return dxCommon_; }
+	DirectXCommon* GetDirectXCommon() const { return dxCommon_; }
 	/// <summary>
 	/// 描画コマンド
 	/// </summary>
@@ -54,14 +54,6 @@ private:
 
 	Camera* defaultCamera_ = nullptr;
 
-	static DebugWireframes* sInstance_;
-
-	DebugWireframes() = default;
-	~DebugWireframes() = default;
-	DebugWireframes(DebugWireframes&) = default;
-	DebugWireframes& operator=(DebugWireframes&) = default;
-
-
-	static uint32_t sSRVIndexTop_;
+	static std::shared_ptr<DebugWireframes> sInstance_;
 
 };

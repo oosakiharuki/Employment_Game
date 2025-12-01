@@ -2,18 +2,16 @@
 
 using namespace Logger;
 
-Cubemap* Cubemap::sInstance_ = nullptr;
+std::shared_ptr<Cubemap> Cubemap::sInstance_ = nullptr;
 
-uint32_t Cubemap::sSRVIndexTop_ = 1;
-
-Cubemap* Cubemap::GetInstance() {
+std::shared_ptr<Cubemap> Cubemap::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = new Cubemap;
+		sInstance_ = std::make_unique<Cubemap>();
 	}
 	return sInstance_;
 }
 void Cubemap::Finalize() {
-	delete sInstance_;
+	sInstance_.reset();
 	sInstance_ = nullptr;
 }
 void Cubemap::Initialize(DirectXCommon* dxCommon) {

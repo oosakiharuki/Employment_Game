@@ -48,7 +48,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static Audio* GetInstance();
+	static std::shared_ptr<Audio> GetInstance();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -70,7 +70,7 @@ public:
 	/// <param name="soundData"></param>流したい音声データ
 	/// <param name="volume"></param>音量
 	/// <param name="isLoop"></param>ループするか
-	void SoundPlayWave(SoundData soundData, const float volume, bool isLoop = false);
+	void SoundPlayWave(SoundData soundData, float volume, bool isLoop = false);
 	/// <summary>
 	/// 音声を停止
 	/// </summary>
@@ -81,20 +81,16 @@ public:
 	/// </summary>
 	/// <param name="soundData"></param>変えたい音声データ
 	/// <param name="volume"></param>音量
-	void ControlVolume(SoundData soundData, const float volume);
+	void ControlVolume(SoundData soundData, float volume);
 private:
 
-	static Audio* sInstance;
+	static std::shared_ptr<Audio> sInstance_;
 
-	Audio() = default;
-	~Audio() = default;
-	Audio(Audio&) = default;
-	Audio& operator=(Audio&) = default;
 	/// <summary>
-	/// 
+	/// サウンドを読み取る
 	/// </summary>
-	/// <param name="filename"></param>
-	/// <returns></returns>
+	/// <param name="filename">ファイルパス</param>
+	/// <returns>出来上がったデータ</returns>
 	SoundData SoundLoadWave(const char* filename);//string?
 
 	//音声データの解放 delete

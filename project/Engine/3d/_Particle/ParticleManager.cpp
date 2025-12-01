@@ -8,24 +8,22 @@
 using namespace MyMath;
 using namespace Primitive;
 
-ParticleManager* ParticleManager::sInstance = nullptr;
+std::shared_ptr<ParticleManager> ParticleManager::sInstance = nullptr;
 
-uint32_t ParticleManager::sSRVIndexTop = 1;
-
-ParticleManager* ParticleManager::GetInstance() {
+std::shared_ptr<ParticleManager> ParticleManager::GetInstance() {
 	if (sInstance == nullptr) {
-		sInstance = new ParticleManager();
+		sInstance = std::make_unique<ParticleManager>();
 	}
 	return sInstance;
 }
 
 void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager) {
-	particleCommon = ParticleCommon::GetInstance(); 
+	particleCommon = ParticleCommon::GetInstance().get(); 
 	this->srvManager = srvManager;
 }
 
 void ParticleManager::Finalize() {
-	delete sInstance;
+	sInstance.reset();
 	sInstance = nullptr;
 }
 
@@ -230,7 +228,7 @@ void ParticleManager::Emit(const std::string filePath, const Emitter& emitter) {
 	particleG.particles.splice(particleG.particles.end(), ParticleEmitter::GetInstance()->MakeEmit(filePath ,emitter, randomEngine));
 }
 
-const uint32_t& ParticleManager::GetNum(const std::string& filePath) {
+uint32_t& ParticleManager::GetNum(const std::string& filePath) {
 	assert(srvManager->Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];

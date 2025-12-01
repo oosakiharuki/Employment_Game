@@ -6,19 +6,17 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"Xinput.lib")
 
-Input* Input::sInstance_ = nullptr;
+std::shared_ptr<Input> Input::sInstance_ = nullptr;
 
-uint32_t Input::sSRVIndexTop_ = 1;
-
-Input* Input::GetInstance() {
+std::shared_ptr<Input> Input::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = new Input;
+		sInstance_ = std::make_unique<Input>();
 	}
 	return sInstance_;
 }
 
 void Input::Finalize() {
-	delete sInstance_;
+	sInstance_.reset();
 	sInstance_ = nullptr;
 }
 

@@ -9,7 +9,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static SpriteCommon* GetInstance();
+	static std::shared_ptr<SpriteCommon> GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -23,7 +23,7 @@ public:
 	/// getter_DirectX
 	/// </summary>
 	/// <returns></returns>
-	DirectXCommon* GetDirectXCommon()const { return dxCommon_; }
+	DirectXCommon* GetDirectXCommon() const { return dxCommon_; }
 
 	/// <summary>
 	/// 描画コマンド
@@ -52,12 +52,5 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_ = nullptr;
 
 
-	static SpriteCommon* sInstance_;
-
-	SpriteCommon() = default;
-	~SpriteCommon() = default;
-	SpriteCommon(SpriteCommon&) = default;
-	SpriteCommon& operator=(SpriteCommon&) = default;
-
-	static uint32_t sSRVIndexTop_;
+	static std::shared_ptr<SpriteCommon> sInstance_;
 };

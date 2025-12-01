@@ -10,7 +10,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static GLTFCommon* GetInstance();
+	static std::shared_ptr<GLTFCommon> GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -63,13 +63,6 @@ private:
 
 	Camera* defaultCamera_ = nullptr;
 
-	static GLTFCommon* sInstance_;
+	static std::shared_ptr<GLTFCommon> sInstance_;
 
-	GLTFCommon() = default;
-	~GLTFCommon() = default;
-	GLTFCommon(GLTFCommon&) = default;
-	GLTFCommon& operator=(GLTFCommon&) = default;
-
-
-	static uint32_t sSRVIndexTop_;
 };

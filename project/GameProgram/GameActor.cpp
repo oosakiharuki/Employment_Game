@@ -31,7 +31,7 @@ void GameActor::ShadowUpdate() {
 	shadow_->Update();
 }
 
-void GameActor::ScaleUpdate(bool* mosionOn, Vector3 scale, const float& maxTime) {
+void GameActor::ScaleUpdate(bool& mosionOn, Vector3 scale, float maxTime) {
 	if (scaleTimer_ >= maxTime * kDivideByTwo_) {
 		wt_.scale_ -= scale;
 		if (scaleTimer_ >= maxTime) {
@@ -39,7 +39,7 @@ void GameActor::ScaleUpdate(bool* mosionOn, Vector3 scale, const float& maxTime)
 			wt_.scale_ = kDefaultScale_;
 
 			//モーションを終了する
-			*mosionOn = false;
+			mosionOn = false;
 		}
 	}
 	else {
@@ -57,7 +57,7 @@ void GameActor::RespawnCommon() {
 	wt_.rotation_ = initRotate_;
 }
 
-void GameActor::HP_Initialize(const uint32_t& max) {
+void GameActor::HP_Initialize(uint32_t max) {
 	maxHp_ = max;//最大値を設定
 	hp_ = maxHp_;
 }

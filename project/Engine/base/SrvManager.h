@@ -6,7 +6,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static SrvManager* GetInstance();
+	static std::shared_ptr<SrvManager> GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -68,12 +68,5 @@ private:
 	uint32_t useIndex_ = 0;
 
 
-	static SrvManager* sInstance_;
-
-	SrvManager() = default;
-	~SrvManager() = default;
-	SrvManager(SrvManager&) = default;
-	SrvManager& operator=(SrvManager&) = default;
-
-	static uint32_t sSRVIndexTop_;
+	static std::shared_ptr<SrvManager> sInstance_;
 };

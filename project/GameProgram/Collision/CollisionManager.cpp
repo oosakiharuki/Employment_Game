@@ -18,7 +18,7 @@ std::shared_ptr<CollisionManager> CollisionManager::GetInstance() {
 
 void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_ptr<IEnemy>> enemies,
 	std::list<std::shared_ptr<IStageObject>> stageObjects, std::vector<AABB> stagesAABB,
-	std::vector<std::shared_ptr<EventTrigger>> eventTriggers, CameraControl* cameraControl_, Levelediter levelediter)
+	std::vector<std::shared_ptr<EventTrigger>> eventTriggers, CameraControl* cameraControl_, Levelediter& levelediter)
 {
 	// - プレイヤーと敵 -
 	for (auto& enemy : enemies) {
@@ -40,7 +40,7 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 		}
 
 		//弾丸
-		for (auto* bulletE : enemy->GetBullets()) {
+		for (auto& bulletE : enemy->GetBullets()) {
 
 			//傘の当たり判定
 			if (IsCollisionAABB(bulletE->GetAABB(), player_->GetUmbrella()->GetAABB()) && player_->GetIsShield()) {
@@ -101,7 +101,7 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 
 		//敵の弾丸
 		for (auto& enemy : enemies) {
-			for (EnemyBullet* bulletE : enemy->GetBullets()) {
+			for (auto& bulletE : enemy->GetBullets()) {
 				if (IsCollisionAABB(bulletE->GetAABB(), stage)) {
 					bulletE->IsHit();//弾の消滅
 				}

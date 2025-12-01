@@ -2,18 +2,16 @@
 
 using namespace Logger;
 
-Object3dCommon* Object3dCommon::sInstance_ = nullptr;
+std::shared_ptr<Object3dCommon> Object3dCommon::sInstance_ = nullptr;
 
-uint32_t Object3dCommon::sSRVIndexTop_ = 1;
-
-Object3dCommon* Object3dCommon::GetInstance() {
+std::shared_ptr<Object3dCommon> Object3dCommon::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = new Object3dCommon;
+		sInstance_ = std::make_unique<Object3dCommon>();
 	}
 	return sInstance_;
 }
 void Object3dCommon::Finalize() {
-	delete sInstance_;
+	sInstance_.reset();
 	sInstance_ = nullptr;
 }
 void Object3dCommon::Initialize(DirectXCommon* dxCommon) {

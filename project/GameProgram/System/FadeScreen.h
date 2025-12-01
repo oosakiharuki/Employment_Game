@@ -12,7 +12,7 @@ enum FadeType {
 /// </summary>
 class FadeScreen {
 public:
-	static FadeScreen* GetInstance();
+	static std::shared_ptr<FadeScreen> GetInstance();
 
 	/// <summary>
 	/// 初期化処理
@@ -57,7 +57,7 @@ private:
 	/// </summary>
 	void FadeOut();
 
-	static FadeScreen* sInstance;
+	static std::shared_ptr<FadeScreen> sInstance;
 
 	//使用するスプライト
 	std::unique_ptr<Sprite> sprite_;
@@ -80,8 +80,4 @@ private:
 	std::shared_ptr<Dissolve> dissolve_;
 	std::string dissolveTexture_;
 
-	FadeScreen() = default;
-	~FadeScreen() = default;
-	FadeScreen(FadeScreen&) = default;
-	FadeScreen& operator=(FadeScreen&) = default;
 };

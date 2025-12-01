@@ -10,7 +10,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static ParticleCommon* GetInstance();
+	static std::shared_ptr<ParticleCommon> GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -61,12 +61,5 @@ private:
 	Camera* defaultCamera_ = nullptr;
 
 
-	static ParticleCommon* sInstance_;
-
-	ParticleCommon() = default;
-	~ParticleCommon() = default;
-	ParticleCommon(ParticleCommon&) = default;
-	ParticleCommon& operator=(ParticleCommon&) = default;
-
-	static uint32_t kSRVIndexTop_;
+	static std::shared_ptr<ParticleCommon> sInstance_;
 };

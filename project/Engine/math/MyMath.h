@@ -227,11 +227,11 @@ namespace MyMath {
 	Vector2 operator*(const Vector2& v1, const Vector2& v2);
 	Vector2 operator/(const Vector2& v1, const Vector2& v2);
 
-	Vector2 operator*(const Vector2& v, const float f);
-	Vector2 operator*(const float f, const Vector2& v);
+	Vector2 operator*(const Vector2& v, float f);
+	Vector2 operator*(float f, const Vector2& v);
 
-	Vector2 operator/(const Vector2& v, const float f);
-	Vector2 operator/(const float f, const Vector2& v);
+	Vector2 operator/(const Vector2& v, float f);
+	Vector2 operator/(float f, const Vector2& v);
 
 	Vector2& operator+=(Vector2& v1, const Vector2& v2);
 	Vector2& operator-=(Vector2& v1, const Vector2& v2);
@@ -244,21 +244,21 @@ namespace MyMath {
 	Vector3 operator*(const Vector3& v1, const Vector3& v2);
 	Vector3 operator/(const Vector3& v1, const Vector3& v2);
 
-	Vector3 operator*(const Vector3& v, const float f);
-	Vector3 operator*(const float f, const Vector3& v);
+	Vector3 operator*(const Vector3& v, float f);
+	Vector3 operator*(float f, const Vector3& v);
 
-	Vector3 operator/(const Vector3& v, const float f);
-	Vector3 operator/(const float f, const Vector3& v);
+	Vector3 operator/(const Vector3& v, float f);
+	Vector3 operator/(float f, const Vector3& v);
 
 	Vector3& operator+=(Vector3& v1, const Vector3& v2);
 	Vector3& operator-=(Vector3& v1, const Vector3& v2);
 	Vector3& operator*=(Vector3& v1, const Vector3& v2);
 	Vector3& operator/=(Vector3& v1, const Vector3& v2);
 
-	Vector3& operator+=(Vector3& v, const float& f);
-	Vector3& operator-=(Vector3& v, const float& f);
-	Vector3& operator*=(Vector3& v, const float& f);
-	Vector3& operator/=(Vector3& v, const float& f);
+	Vector3& operator+=(Vector3& v, float f);
+	Vector3& operator-=(Vector3& v, float f);
+	Vector3& operator*=(Vector3& v, float f);
+	Vector3& operator/=(Vector3& v, float f);
 
 	Vector3 operator-(const Vector3& v);
 
@@ -280,13 +280,13 @@ namespace MyMath {
 	Vector3 OverAABB(const AABB& aabb1, const AABB& aabb2);
 	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 
-	float EaseIn(const float& f, const float t);
-	Vector2 EaseIn(const Vector2& v, const float t);
-	Vector3 EaseIn(const Vector3& v, const float t);
+	float EaseIn(float f, float t);
+	Vector2 EaseIn(const Vector2& v, float t);
+	Vector3 EaseIn(const Vector3& v, float t);
 
-	float EaseOut(const float& f, const float t, const float endt);
-	Vector2 EaseOut(const Vector2& v, const float t, const float endt);
-	Vector3 EaseOut(const Vector3& v, const float t, const float endt);
+	float EaseOut(float f, float t, float endt);
+	Vector2 EaseOut(const Vector2& v, float t, float endt);
+	Vector3 EaseOut(const Vector3& v, float t, float endt);
 
 	float Length(float start, float target);
 
@@ -320,7 +320,7 @@ namespace MyMath {
 	Quaternion Lerp(const Quaternion& p0, const Quaternion& p1, float t);
 
 	Quaternion operator-(const Quaternion& q);
-	Quaternion operator*(const float f, const Quaternion& q);
+	Quaternion operator*(float f, const Quaternion& q);
 	Quaternion operator+(const Quaternion& q0, const Quaternion& q1);
 
 	float MulctyQuaternion(const Quaternion& q1, const Quaternion& q2);

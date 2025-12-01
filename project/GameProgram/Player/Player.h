@@ -85,19 +85,19 @@ public:
 	/// </summary>
 	/// <param name="Power"></param>ノックバックの強さ
 	/// <param name="TimerMax"></param>ノックバックする時間(EaseInを仕様しているため)
-	void KnockBackPlayer(const Vector3 Power, const float TimerMax);
+	void KnockBackPlayer(const Vector3& Power, float TimerMax);
 	/// <summary>
 	/// 傘が当たったノックバック
 	/// </summary>
 	/// <param name="Power"></param>ノックバックの強さ
 	/// <param name="TimerMax"></param>ノックバックする時間(EaseInを仕様しているため)
-	void KnockBackUmbrella(const Vector3 Power,const float TimerMax);
+	void KnockBackUmbrella(const Vector3& Power,float TimerMax);
 
 	/// <summary>
 	/// ノックバック共通部分
 	/// </summary>
 	/// <param name="TimeMax"></param>
-	void KnockBackCommon(const float TimeMax);
+	void KnockBackCommon(float TimeMax);
 
 	/// <summary>
 	/// 死んだときの処理
@@ -172,7 +172,7 @@ public:
 	/// 傘の8方向の回転
 	/// </summary>
 	/// <param name="direction"></param>回転角度
-	void UmbrellaRange(const float& direction);
+	void UmbrellaRange(float direction);
 
 	/// <summary>
 	/// 演出中か

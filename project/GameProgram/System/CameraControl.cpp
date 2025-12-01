@@ -114,7 +114,7 @@ void CameraControl::Shaking() {
 		std::random_device seed;
 		std::mt19937 random(seed());
 
-		std::uniform_real_distribution<float> yure(-0.5f, 0.5f);
+		std::uniform_real_distribution<float> yure(-kShakePower, kShakePower);
 
 		//上下左右にシェイク(z軸は関係ない)
 		wt_.translation_ += Vector3{ yure(random), yure(random), 0.0f };

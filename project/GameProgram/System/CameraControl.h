@@ -20,20 +20,20 @@ public:
 	void Update(Camera* camera);
 
 	/// <summary>
-	/// setter_
+	/// setter_座標位置
 	/// </summary>
-	/// <param name="translate"></param>
+	/// <param name="translate">指定する座標</param>
 	void SetTranslation(const Vector3& translate) { wt_.translation_ = translate; }
 	/// <summary>
-	/// setter_
+	/// setter_回転
 	/// </summary>
 	/// <param name="rotation"></param>
 	void SetRotation(const Vector3& rotation) { wt_.rotation_ = rotation; }
 	/// <summary>
-	/// setter_
+	/// setter_カメラ移動範囲
 	/// </summary>
-	/// <param name="left"></param>
-	/// <param name="right"></param>
+	/// <param name="left">左端</param>
+	/// <param name="right">右端</param>
 	void SetEndPoint(const Vector3& left,const Vector3& right);
 	/// <summary>
 	/// setter_
@@ -59,7 +59,7 @@ public:
 	/// 固定モードであるか
 	/// </summary>
 	/// <returns></returns>
-	bool IsFixed() { return isFixedMode_; }
+	bool IsFixed() const { return isFixedMode_; }
 
 	/// <summary>
 	/// シェイクモード
@@ -115,6 +115,7 @@ private:
 	float shakeTimer_ = kShakeMaxTime_;
 	Vector3 preTranslate_{};
 	bool isShakeMode_ = false;
+	const float kShakePower = 0.5f;
 
 	//カメラズーム
 	Segment cameraSegment_ = {};

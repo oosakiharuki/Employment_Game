@@ -11,7 +11,7 @@
 using namespace MyMath;
 
 void Object3d::Initialize() {
-	this->object3dCommon_ = Object3dCommon::GetInstance();
+	this->object3dCommon_ = Object3dCommon::GetInstance().get();
 	this->camera_ = object3dCommon_->GetDefaultCamera();
 	wvpResource_ = object3dCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
 	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));

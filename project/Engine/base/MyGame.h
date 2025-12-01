@@ -25,6 +25,6 @@ public:
 	void Draw() override;
 
 private:
-	SceneManager* gameScene_ = nullptr;
+	std::unique_ptr<SceneManager> gameScene_ = nullptr;
 	FadeScreen* fadeScreen_ = nullptr;
 };

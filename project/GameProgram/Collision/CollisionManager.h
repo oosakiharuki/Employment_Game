@@ -36,7 +36,7 @@ public:
 	/// <param name="levelediter"></param> レベルエディタ(同じく)
 	void AllCollisions(Player* player_, std::vector<std::shared_ptr<IEnemy>> enemies,
 		std::list<std::shared_ptr<IStageObject>> stageObjects, std::vector<AABB> stagesAABB,
-		std::vector<std::shared_ptr<EventTrigger>> eventTriggers, CameraControl* cameraControl_, Levelediter levelediter);
+		std::vector<std::shared_ptr<EventTrigger>> eventTriggers, CameraControl* cameraControl_, Levelediter& levelediter);
 
 
 	/// <summary>

@@ -38,7 +38,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static PostEffectManager* GetInstance();
+	static std::shared_ptr<PostEffectManager> GetInstance();
 
 private:
 	/// <summary>
@@ -51,19 +51,12 @@ private:
 	//最大数
 	static const uint32_t kEffectNum_ = Max;
 
-	IPostEffects* effectArr_[kEffectNum_];
+	std::unique_ptr<IPostEffects> effectArr_[kEffectNum_];
 
 	int currentNo_;//現在シーン
 	int prevNo_;//前シーン
 
-	static PostEffectManager* sInstance_;
-
-	PostEffectManager() = default;
-	~PostEffectManager() = default;
-	PostEffectManager(PostEffectManager&) = default;
-	PostEffectManager& operator=(PostEffectManager&) = default;
-
-	static uint32_t sSRVIndexTop_;
+	static std::shared_ptr<PostEffectManager> sInstance_;
 
 	DirectXCommon* dxCommon_;
 };

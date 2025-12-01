@@ -7,8 +7,8 @@
 using namespace MyMath;
 
 Enemy_Soldier::~Enemy_Soldier() {
-	for (auto* bullet : bullets_) {
-		delete bullet;
+	for (auto& bullet : bullets_) {
+		bullet.reset();
 	}
 }
 
@@ -62,7 +62,7 @@ void Enemy_Soldier::Draw() {
 		object_->Draw();
 		shadow_->Draw();
 	}
-	for (auto* bullet : bullets_) {
+	for (auto& bullet : bullets_) {
 		bullet->Draw();
 	}
 }
@@ -101,12 +101,12 @@ void Enemy_Soldier::FireBullet() {
 	particles_[particleFire_.name]->SetTranslate(enemyPosition);
 
 	//弾丸を生み出す
-	EnemyBullet* bullet = new EnemyBullet();
+	std::unique_ptr<EnemyBullet> bullet = std::make_unique<EnemyBullet>();
 	bullet->Initialize();
 	bullet->SetPlayer(player_);//プレイヤーと当たりノックバックパラメータで使う
 	bullet->SetTranslate(enemyPosition);
 	bullet->SetVelocty(velocity_);
-	bullets_.push_back(bullet);
+	bullets_.push_back(std::move(bullet));
 }
 
 void Enemy_Soldier::RespawnEnemy() {

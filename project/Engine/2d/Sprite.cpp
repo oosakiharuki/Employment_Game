@@ -6,7 +6,7 @@
 using namespace MyMath;
 
 void Sprite::Initialize(std::string textureFilePath) {
-	this->spriteCommon_ = SpriteCommon::GetInstance();
+	this->spriteCommon_ = SpriteCommon::GetInstance().get();
 	//テクスチャ名
 	filePath_ = "resource/Sprite/" + textureFilePath;
 
@@ -160,6 +160,6 @@ std::string Sprite::GetTextureFile() {
 }
 
 
-D3D12_GPU_DESCRIPTOR_HANDLE Sprite::GetResource() {
+const D3D12_GPU_DESCRIPTOR_HANDLE Sprite::GetResource() const {
 	return TextureManager::GetInstance()->GetSrvHandleGPU(filePath_);
 }

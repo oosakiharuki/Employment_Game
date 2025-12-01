@@ -61,14 +61,14 @@ AABB Umbrella::GetAABB() {
 	return aabb;
 }
 
-void Umbrella::ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime) {
+void Umbrella::ScaleUpdate(bool& mosionOn, Vector3 scale, float maxTime) {
 	if (scaleTimer_ >= maxTime * kDivideByTwo_) {
 		wt_.scale_ -= scale;
 		if (scaleTimer_ >= maxTime) {
 			scaleTimer_ = 0.0f;
 			wt_.scale_ = kDefaultScale_;
 			//モーションを終了する
-			*mosionOn = false;
+			mosionOn = false;
 		}
 	}
 	else {
