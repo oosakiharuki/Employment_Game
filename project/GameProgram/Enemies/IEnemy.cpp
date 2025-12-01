@@ -89,7 +89,7 @@ void IEnemy::UpdateCommon() {
 	shadow_->SetTranslate(wt_.translation_);
 
 	if (isDamageMosion_) {
-		ScaleUpdate(&isDamageMosion_, damageScale_, kDamageMaxTime_);
+		ScaleUpdate(isDamageMosion_, damageScale_, kDamageMaxTime_);
 	}
 
 	for (auto* bullet : bullets_) {

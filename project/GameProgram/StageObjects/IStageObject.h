@@ -27,7 +27,7 @@ public:
 	/// getter_座標位置
 	/// </summary>
 	/// <returns></returns>現在の座標位置
-	const Vector3& GetPosition() { return wt_.translation_; }
+	const Vector3& GetPosition() const { return wt_.translation_; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
@@ -38,7 +38,7 @@ public:
 	/// getter_回転
 	/// </summary>
 	/// <returns></returns>現在の回転角度
-	const Vector3& GetRotation() { return wt_.rotation_; }
+	const Vector3& GetRotation() const { return wt_.rotation_; }
 
 	/// <summary>
 	/// setter_回転

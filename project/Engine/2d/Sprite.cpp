@@ -160,6 +160,6 @@ std::string Sprite::GetTextureFile() {
 }
 
 
-D3D12_GPU_DESCRIPTOR_HANDLE Sprite::GetResource() {
+const D3D12_GPU_DESCRIPTOR_HANDLE Sprite::GetResource() const {
 	return TextureManager::GetInstance()->GetSrvHandleGPU(filePath_);
 }

@@ -97,14 +97,14 @@ public:
 	/// <param name="mosionOn"></param> リアクションフラグ
 	/// <param name="scale"></param> どのくらい大きくするか
 	/// <param name="maxTime"></param> リアクションタイマーの最大値
-	void ScaleUpdate(bool* mosionOn, Vector3 scale, const float& maxTime);
+	void ScaleUpdate(bool& mosionOn, Vector3 scale, float maxTime);
 
 	/// <summary>
 	/// アニメーションのみを動かす関数(演出で使う)
 	/// </summary>
 	/// <param name="anser"></param>
 	/// trueならアニメーションのみ / falseなら操作可能
-	void IsPerformanceFlag(const bool& result) { isPerformance_ = result; }
+	void IsPerformanceFlag(bool result) { isPerformance_ = result; }
 
 	bool GetPerformanceMode() { return isPerformance_; }
 
@@ -140,7 +140,7 @@ public:
 	/// 体力の設定
 	/// </summary>
 	/// <param name="max"></param>最大体力
-	void HP_Initialize(const uint32_t& max);
+	void HP_Initialize(uint32_t max);
 
 protected:
 

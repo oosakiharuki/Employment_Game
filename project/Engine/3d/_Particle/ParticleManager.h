@@ -35,7 +35,7 @@ public:
 	Microsoft::WRL::ComPtr<ID3D12Resource> GetResource(const std::string filePath);
 	std::list<ParticleData> GetParticle(const std::string filePath);
 	
-	const uint32_t& GetNum(const std::string& filePath);
+	uint32_t& GetNum(const std::string& filePath);
 
 	void Update(const std::string filePath, ParticleForGPU* wvpData);
 

@@ -35,19 +35,19 @@ public:
 	/// </summary>
 	/// <param name="filePath"></param>
 	/// <returns></returns>
-	uint32_t GetSrvIndex(const std::string filePath);
+	uint32_t GetSrvIndex(const std::string& filePath);
 	/// <summary>
 	/// getter_srvHandle
 	/// </summary>
 	/// <param name="filePath"></param>
 	/// <returns></returns>
-	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(const std::string filePath);
+	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(const std::string& filePath);
 	/// <summary>
 	/// getter_メタデータ
 	/// </summary>
 	/// <param name="filePath"></param>
 	/// <returns></returns>
-	const DirectX::TexMetadata& GetMetaData(const std::string filePath);
+	const DirectX::TexMetadata& GetMetaData(const std::string& filePath);
 private:
 	static TextureManager* sInstance_;
 

@@ -70,7 +70,7 @@ public:
 	/// <param name="soundData"></param>流したい音声データ
 	/// <param name="volume"></param>音量
 	/// <param name="isLoop"></param>ループするか
-	void SoundPlayWave(SoundData soundData, const float volume, bool isLoop = false);
+	void SoundPlayWave(SoundData soundData, float volume, bool isLoop = false);
 	/// <summary>
 	/// 音声を停止
 	/// </summary>
@@ -81,7 +81,7 @@ public:
 	/// </summary>
 	/// <param name="soundData"></param>変えたい音声データ
 	/// <param name="volume"></param>音量
-	void ControlVolume(SoundData soundData, const float volume);
+	void ControlVolume(SoundData soundData, float volume);
 private:
 
 	static Audio* sInstance;

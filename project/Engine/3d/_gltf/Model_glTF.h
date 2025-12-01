@@ -82,12 +82,12 @@ public:
 	/// スキニングデータを使用しているか
 	/// </summary>
 	/// <returns></returns>
-	const bool IsSkinning() { return isSkinning_; }
+	bool IsSkinning() const { return isSkinning_; }
 	/// <summary>
 	/// アニメーションを使用しているか
 	/// </summary>
 	/// <returns></returns>
-	const bool IsAnimation() { return isAnimation_; }
+	bool IsAnimation() const { return isAnimation_; }
 
 	/// <summary>
 	/// マルチメッシュで使う用のカウントをリセット

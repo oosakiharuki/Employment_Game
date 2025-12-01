@@ -230,7 +230,7 @@ void ParticleManager::Emit(const std::string filePath, const Emitter& emitter) {
 	particleG.particles.splice(particleG.particles.end(), ParticleEmitter::GetInstance()->MakeEmit(filePath ,emitter, randomEngine));
 }
 
-const uint32_t& ParticleManager::GetNum(const std::string& filePath) {
+uint32_t& ParticleManager::GetNum(const std::string& filePath) {
 	assert(srvManager->Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];

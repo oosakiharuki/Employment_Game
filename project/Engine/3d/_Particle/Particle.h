@@ -75,7 +75,7 @@ public:
 	/// <param name="particleName"></param>パーティクルの名前
 	/// <param name="textureFile"></param>使用するテクスチャ名
 	/// <param name="type"></param>形(Primitive)
-	void Initialize(const std::string& particleName,std::string textureFile, PrimitiveType type);
+	void Initialize(const std::string& particleName,const std::string& textureFile, PrimitiveType type);
 	/// <summary>
 	/// 更新処理
 	/// </summary>
@@ -119,7 +119,7 @@ public:
 	/// setter_発生時間
 	/// </summary>
 	/// <param name="time"></param>発生させる時間
-	void SetFrequency(const float time) { 
+	void SetFrequency(float time) { 
 		emitter_.frequency = time;
 		emitter_.frequencyTime = time;
 	}

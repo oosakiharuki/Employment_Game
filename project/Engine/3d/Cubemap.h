@@ -20,7 +20,7 @@ public:
 	/// </summary>
 	/// <param name="dxCommon"></param>
 	void Initialize(DirectXCommon* dxCommon);
-	DirectXCommon* GetDirectXCommon()const { return dxCommon_; }
+	DirectXCommon* GetDirectXCommon() const { return dxCommon_; }
 	/// <summary>
 	/// 描画コマンド
 	/// </summary>

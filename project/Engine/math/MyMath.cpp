@@ -31,26 +31,26 @@ namespace MyMath {
 		return result;
 	}
 
-	Vector2 operator*(const Vector2& v, const float f) {
+	Vector2 operator*(const Vector2& v, float f) {
 		Vector2 result{};
 		result.x = v.x * f;
 		result.y = v.y * f;
 		return result;
 	}
 
-	Vector2 operator*(const float f, const Vector2& v) {
+	Vector2 operator*(float f, const Vector2& v) {
 		return v * f;
 	}
 
 
-	Vector2 operator/(const Vector2& v, const float f) {
+	Vector2 operator/(const Vector2& v, float f) {
 		Vector2 result{};
 		result.x = v.x / f;
 		result.y = v.y / f;
 		return result;
 	}
 
-	Vector2 operator/(const float f, const Vector2& v) {
+	Vector2 operator/(float f, const Vector2& v) {
 		return v / f;
 	}
 
@@ -112,7 +112,7 @@ namespace MyMath {
 		return result;
 	}
 
-	Vector3 operator*(const Vector3& v, const float f) {
+	Vector3 operator*(const Vector3& v, float f) {
 		Vector3 result;
 		result.x = v.x * f;
 		result.y = v.y * f;
@@ -120,11 +120,11 @@ namespace MyMath {
 		return result;
 	}
 
-	Vector3 operator*(const float f, const Vector3& v) {
+	Vector3 operator*(float f, const Vector3& v) {
 		return v * f;
 	}
 
-	Vector3 operator/(const Vector3& v, const float f) {
+	Vector3 operator/(const Vector3& v, float f) {
 		Vector3 result;
 		result.x = v.x / f;
 		result.y = v.y / f;
@@ -132,7 +132,7 @@ namespace MyMath {
 		return result;
 	}
 
-	Vector3 operator/(const float f, const Vector3& v) {
+	Vector3 operator/(float f, const Vector3& v) {
 		return v / f;
 	}
 
@@ -174,28 +174,28 @@ namespace MyMath {
 	}
 
 
-	Vector3& operator+=(Vector3& v, const float& f) {
+	Vector3& operator+=(Vector3& v, float f) {
 		v.x += f;
 		v.y += f;
 		v.z += f;
 		return v;
 	}
 
-	Vector3& operator-=(Vector3& v, const float& f) {
+	Vector3& operator-=(Vector3& v, float f) {
 		v.x -= f;
 		v.y -= f;
 		v.z -= f;
 		return v;
 	}
 
-	Vector3& operator*=(Vector3& v, const float& f) {
+	Vector3& operator*=(Vector3& v, float f) {
 		v.x *= f;
 		v.y *= f;
 		v.z *= f;
 		return v;
 	}
 
-	Vector3& operator/=(Vector3& v, const float& f) {
+	Vector3& operator/=(Vector3& v,float f) {
 		v.x /= f;
 		v.y /= f;
 		v.z /= f;
@@ -427,11 +427,11 @@ namespace MyMath {
 	}
 
 
-	float EaseIn(const float& f, const float t) {
+	float EaseIn(float f, float t) {
 		return f * t;
 	}
 
-	Vector2 EaseIn(const Vector2& v, const float t) {
+	Vector2 EaseIn(const Vector2& v, float t) {
 		Vector2 result{};
 
 		result.x = EaseIn(v.x, t);
@@ -440,7 +440,7 @@ namespace MyMath {
 		return result;
 	}
 
-	Vector3 EaseIn(const Vector3& v, const float t) {	
+	Vector3 EaseIn(const Vector3& v, float t) {	
 		Vector3 result{};	
 
 		result.x = EaseIn(v.x, t);
@@ -450,7 +450,7 @@ namespace MyMath {
 		return result;
 	}
 
-	float EaseOut(const float& f, const float t, const float endt) {
+	float EaseOut(float f, float t, float endt) {
 		//0のとき
 		if (t == endt) {
 			return 0.0f;
@@ -458,14 +458,14 @@ namespace MyMath {
 		return (endt - t) * f;
 	}
 
-	Vector2 EaseOut(const Vector2& v, const float t, const float endt) {
+	Vector2 EaseOut(const Vector2& v, float t, float endt) {
 		Vector2 result;
 		result.x = EaseOut(v.x, t, endt);
 		result.y = EaseOut(v.y, t, endt);
 		return result;
 	}
 
-	Vector3 EaseOut(const Vector3& v,const float t, const float endt) {
+	Vector3 EaseOut(const Vector3& v,float t, float endt) {
 		Vector3 result;
 		result.x = EaseOut(v.x, t, endt);
 		result.y = EaseOut(v.y, t, endt);
@@ -949,7 +949,7 @@ namespace MyMath {
 		return result;
 	}
 
-	Quaternion operator*(const float f, const Quaternion& q) {
+	Quaternion operator*(float f, const Quaternion& q) {
 		Quaternion result;
 		result.x = f * q.x;
 		result.y = f * q.y;

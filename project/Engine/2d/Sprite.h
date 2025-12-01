@@ -13,44 +13,134 @@ class SpriteCommon;
 /// </summary>
 class Sprite{
 public:
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="textureFilePath"></param>
 	void Initialize(std::string textureFilePath);
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update();
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw();
 
-
+	/// <summary>
+	/// getter_座標
+	/// </summary>
+	/// <returns></returns>
 	const Vector2& GetPosition()const { return position_; }
+	/// <summary>
+	/// setter_座標
+	/// </summary>
+	/// <param name="position"></param>
 	void SetPosition(const Vector2& position) { this->position_ = position; }
 
-	float GetRotate() { return rotation_; }
+	/// <summary>
+	/// getter_回転角度
+	/// </summary>
+	/// <returns></returns>
+	float GetRotate() const { return rotation_; }
+	/// <summary>
+	/// setter_回転角度
+	/// </summary>
+	/// <param name="rotation"></param>
 	void SetRotate(float rotation) { this->rotation_ = rotation; }
 
+	/// <summary>
+	/// getter_色
+	/// </summary>
+	/// <returns></returns>
 	const Vector4& GetColor()const { return materialData_->color; }
+	/// <summary>
+	/// setter_色
+	/// </summary>
+	/// <param name="color"></param>
 	void SetColor(const Vector4& color) { materialData_->color = color; }
 
 	const Vector2& GetSize()const { return size_; }
 	void SetSize(const Vector2& size) { this->size_ = size; }
 
-
+	/// <summary>
+	/// getter_アンカーポイント
+	/// </summary>
+	/// <returns></returns>
 	const Vector2& GetAnchorPoint()const { return anchorPoint_; }
+	
+	/// <summary>
+	/// setter_アンカーポイント
+	/// </summary>
+	/// <param name="anchorPoint"></param>
 	void SetAnchorPoint(const Vector2& anchorPoint) { this->anchorPoint_ = anchorPoint; }
 
+	/// <summary>
+	/// getter_テクスチャ反転横
+	/// </summary>
+	/// <returns></returns>
 	const bool& GetFlipX() const { return isFlipX_; }
-	const bool& GetFlipY() const { return isFlipY_; }
-	
+
+	/// <summary>
+	/// setter_テクスチャ反転横
+	/// </summary>
+	/// <returns></returns>
 	void SetFlipX(const bool& isFlipX) { this->isFlipX_ = isFlipX; }
+
+	/// <summary>
+	/// getter_テクスチャ反転縦
+	/// </summary>
+	/// <returns></returns>
+	const bool& GetFlipY() const { return isFlipY_; }
+
+	/// <summary>
+	/// setter_テクスチャ反転縦
+	/// </summary>
+	/// <returns></returns>
 	void SetFlipY(const bool& isFlipY) { this->isFlipY_ = isFlipY; }
 
-
+	/// <summary>
+	/// getter_左上の位置
+	/// </summary>
+	/// <returns></returns>
 	const Vector2& GetTextureLT() const { return textureLeftTop_; }
+
+	/// <summary>
+	/// setter_左上の位置
+	/// </summary>
+	/// <param name="textureLeftTop"></param>
+	void SetTextureLT(const Vector2& textureLeftTop) { this->textureLeftTop_ = textureLeftTop; }
+	
+	/// <summary>
+	/// getter_テクスチャサイズ
+	/// </summary>
+	/// <returns></returns>
 	const Vector2& GetTextureSize() const { return textureSize_; }
 
-	void SetTextureLT(const Vector2& textureLeftTop) { this->textureLeftTop_ = textureLeftTop; }
+	/// <summary>
+	/// setter_テクスチャサイズ
+	/// </summary>
+	/// <param name="textureSize"></param>
 	void SetTextureSize(const Vector2& textureSize) { this->textureSize_ = textureSize; }
 
-	void SetTextureFile(const std::string textureFile);
+	/// <summary>
+	/// getter_テクスチャファイル
+	/// </summary>
+	/// <returns></returns>
 	std::string GetTextureFile();
 
-	D3D12_GPU_DESCRIPTOR_HANDLE GetResource();
+	/// <summary>
+	/// setter_テクスチャファイル
+	/// </summary>
+	/// <param name="textureFile"></param>
+	void SetTextureFile(const std::string textureFile);
+
+
+	/// <summary>
+	/// getter_SpriteのResource
+	/// </summary>
+	/// <returns></returns>
+	const D3D12_GPU_DESCRIPTOR_HANDLE GetResource() const ;
 
 private:
 	SpriteCommon* spriteCommon_ = nullptr;

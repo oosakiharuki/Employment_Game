@@ -64,7 +64,7 @@ public:
 	/// <param name="mosionOn"></param>モーションフラグ
 	/// <param name="scale"></param>どのくらい大きくするか
 	/// <param name="maxTime"></param>リアクションタイマーの最大値
-	void ScaleUpdate(bool* mosionOn, Vector3 scale, const float maxTime);
+	void ScaleUpdate(bool& mosionOn, Vector3 scale, float maxTime);
 private:
 	//オブジェクト設定
 	std::unique_ptr<Object_glTF> object_;

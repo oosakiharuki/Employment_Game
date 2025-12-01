@@ -7,7 +7,7 @@ void GameScene::Initialize() {
 	PreviousSceneData();
 
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting();
+	LevelEditorObjectSetting("stage_1");
 
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");
@@ -41,9 +41,9 @@ void GameScene::Update() {
 	startWarp_->Update();
 
 	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->ZoomEnd()) {
-		sceneSaveData_.playerHp = player_->GetHp();
-		sceneSaveData_.playerMaxHp = player_->GetMaxHp();
-		NextStageSave::GetInstance()->SetPlayerParameta(sceneSaveData_);
+		//次のステージに進む時Hpなどパラメータがリセットされないようにする
+		sceneSaveData_.playerHp = player_->GetHp(); //体力
+		NextStageSave::GetInstance()->SetPlayerParameta(sceneSaveData_); //代入する
 		NextSceneFadeInStart("NextStage");
 	}
 

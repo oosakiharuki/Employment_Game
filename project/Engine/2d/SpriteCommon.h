@@ -23,7 +23,7 @@ public:
 	/// getter_DirectX
 	/// </summary>
 	/// <returns></returns>
-	DirectXCommon* GetDirectXCommon()const { return dxCommon_; }
+	DirectXCommon* GetDirectXCommon() const { return dxCommon_; }
 
 	/// <summary>
 	/// 描画コマンド

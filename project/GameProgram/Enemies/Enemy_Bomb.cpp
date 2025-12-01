@@ -87,11 +87,11 @@ void Enemy_Bomb::TimeRimmit() {
 
 	if (bombTimer_ >= kOnTheVerge) {
 		//爆発寸前だと揺れが細かくなる
-		ScaleUpdate(&isStart_, bombScale_ * kScaleSpeedUp_, kScaleMax_ / kScaleSpeedUp_);
+		ScaleUpdate(isStart_, bombScale_ * kScaleSpeedUp_, kScaleMax_ / kScaleSpeedUp_);
 	}
 	else {
 		//爆発しそうな演出
-		ScaleUpdate(&isStart_, bombScale_, kScaleMax_);
+		ScaleUpdate(isStart_, bombScale_, kScaleMax_);
 	}
 }
 

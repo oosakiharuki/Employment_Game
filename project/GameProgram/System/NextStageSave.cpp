@@ -9,7 +9,7 @@ std::shared_ptr<NextStageSave> NextStageSave::GetInstance() {
 	return sInstance;
 }
 
-void NextStageSave::SetPlayerParameta(const SceneSaveData saveData) {
+void NextStageSave::SetPlayerParameta(const SceneSaveData& saveData) {
 	sceneSaveData_.playerHp = saveData.playerHp;
 	sceneSaveData_.playerMaxHp = saveData.playerMaxHp;
 	sceneSaveData_.playerLife = saveData.playerLife;

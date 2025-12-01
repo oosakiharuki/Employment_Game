@@ -3,6 +3,7 @@ using namespace MyMath;
 
 void SelectScene::Initialize() {
 
+	//次のシーン進むデータ初期化
 	sceneSaveData_.playerLife = kPlayerLife_;
 	sceneSaveData_.nextStageFile = "stage_select";
 
@@ -32,9 +33,9 @@ void SelectScene::Update() {
 
 	//ワープするflag && カメラがズームし終わった
 	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->ZoomEnd()) {
-		sceneSaveData_.playerHp = player_->GetHp();
-		sceneSaveData_.playerMaxHp = player_->GetMaxHp();
-		NextStageSave::GetInstance()->SetPlayerParameta(sceneSaveData_);
+		//次のステージに進む時Hpなどパラメータがリセットされないようにする
+		sceneSaveData_.playerHp = player_->GetHp(); //体力
+		NextStageSave::GetInstance()->SetPlayerParameta(sceneSaveData_); //代入する
 		NextSceneFadeInStart("Game");
 	}
 

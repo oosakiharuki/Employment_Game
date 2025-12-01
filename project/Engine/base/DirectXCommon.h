@@ -135,17 +135,17 @@ public:
 	/// getter_DSVのハンドル
 	/// </summary>
 	/// <returns></returns>
-	D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle() { return dsvHandle_; }
+	D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle() const { return dsvHandle_; }
 	/// <summary>
 	/// getter_fenceEvent
 	/// </summary>
 	/// <returns></returns>
-	HANDLE GetFenceEvent() { return fenceEvent_; }
+	HANDLE GetFenceEvent() const { return fenceEvent_; }
 	/// <summary>
 	/// getter_rtvDesc
 	/// </summary>
 	/// <returns></returns>
-	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc() { return rtvDesc_; }
+	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc() const { return rtvDesc_; }
 	/// <summary>
 	/// getter_デスクリプターヒープ
 	/// </summary>
@@ -155,7 +155,7 @@ public:
 	/// スワップチェーンのリソースナンバー
 	/// </summary>
 	/// <returns></returns>
-	size_t GetSwapChainResourceNum() { return swapChainDesc_.BufferCount; }
+	size_t GetSwapChainResourceNum() const { return swapChainDesc_.BufferCount; }
 
 	/// <summary>
 	/// RTVのリソース作成(device,width,heightは省略)

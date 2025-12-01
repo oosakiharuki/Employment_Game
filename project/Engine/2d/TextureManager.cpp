@@ -91,21 +91,21 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	srvManager_->CreateSRVforStructureBuffer(srvDesc,textureData.srvIndex,textureData.resource.Get(), metadata.format, UINT(metadata.mipLevels));
 }
 
-uint32_t TextureManager::GetSrvIndex(const std::string filePath) {
+uint32_t TextureManager::GetSrvIndex(const std::string& filePath) {
 	assert(srvManager_->Max());
 
 	TextureData& textureData = textureDatas_[filePath];
 	return textureData.srvIndex;
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSrvHandleGPU(const std::string filePath) {
+D3D12_GPU_DESCRIPTOR_HANDLE TextureManager::GetSrvHandleGPU(const std::string& filePath) {
 	assert(srvManager_->Max());
 
 	TextureData& textureData = textureDatas_[filePath];
 	return textureData.srvHandleGPU;
 }
 
-const DirectX::TexMetadata& TextureManager::GetMetaData(const std::string filePath) {
+const DirectX::TexMetadata& TextureManager::GetMetaData(const std::string& filePath) {
 	assert(srvManager_->Max());
 
 	TextureData& textureData = textureDatas_[filePath];

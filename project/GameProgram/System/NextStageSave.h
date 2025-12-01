@@ -29,13 +29,13 @@ public:
 	/// setter_次のステージの全体層
 	/// </summary>
 	/// <param name="nextStageFile"></param> 次のステージの全体層のファイルパス
-	void SetNextStageFile(const std::string nextStageFile) { sceneSaveData_.nextStageFile = nextStageFile; }
+	void SetNextStageFile(const std::string& nextStageFile) { sceneSaveData_.nextStageFile = nextStageFile; }
 	
 	/// <summary>
 	/// setter_プレイヤーの最大体力
 	/// </summary>
 	/// <param name="playerHp"></param> 
-	void SetPlayerParameta(const SceneSaveData saveData);
+	void SetPlayerParameta(const SceneSaveData& saveData);
 	
 private:
 
