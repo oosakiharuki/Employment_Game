@@ -38,7 +38,7 @@ public:
 	/// getter_ワールド座標系の位置
 	/// </summary>
 	/// <returns></returns>平行移動成分を搭載したプレイヤー座標
-	Vector3 GetWorldPosition();
+	Vector3 GetWorldPosition() const;
 
 	/// <summary>
 	/// getter_回転
@@ -150,7 +150,7 @@ protected:
 
 	//体力
 	uint32_t maxHp_;//最大値
-	uint32_t hp_;
+	uint32_t hp_;//現在の体力
 
 	bool isDead_ = false;//倒れたフラグ
 

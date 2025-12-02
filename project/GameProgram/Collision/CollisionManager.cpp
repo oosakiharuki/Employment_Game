@@ -6,6 +6,7 @@
 #include <NextStageSave.h>
 
 using namespace MyMath;
+using namespace UseEveryOne;
 
 std::shared_ptr<CollisionManager> CollisionManager::sInstance = nullptr;
 
@@ -84,10 +85,10 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 
 	// - ステージの当たり判定 -
 	//プレイヤーとステージ
-	GameActorAndStageCollision(player_, stagesAABB);
+	GameActorAndStageCollision(*player_, stagesAABB);
 	//敵とステージ
 	for (auto& enemy : enemies) {
-		GameActorAndStageCollision(enemy.get(), stagesAABB);
+		GameActorAndStageCollision(*enemy.get(), stagesAABB);
 	}
 
 	// - 弾とステージ -
@@ -181,7 +182,7 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 	}
 }
 
-Vector3 CollisionManager::UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position) {
+Vector3 CollisionManager::UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position) const {
 
 	float minY = 1000.0f;
 	float lengthMax = Length(position.y, minY);
@@ -204,75 +205,74 @@ Vector3 CollisionManager::UnderCollision(std::vector<AABB> stageAABB, AABB shado
 	return result;
 }
 
-void CollisionManager::GameActorAndStageCollision(GameActor* gameActor, std::vector<AABB> stagesAABB) {
+void CollisionManager::GameActorAndStageCollision(GameActor& gameActor, const std::vector<AABB>& stagesAABB) {
 	CollisionOverlap collisionOverlap;
-	collisionOverlap = SetTarget(gameActor->GetTranslate(), gameActor->GetAABB());
+	collisionOverlap = SetTarget(gameActor.GetTranslate(), gameActor.GetAABB());
 	//演出や死んだときは発動しない
-	if (!gameActor->GetIsDead() && !gameActor->GetPerformanceMode()) {
-		StageCollisions(&collisionOverlap, stagesAABB);
+	if (!gameActor.GetIsDead() && !gameActor.GetPerformanceMode()) {
+		StageCollisions(collisionOverlap, stagesAABB);
 	}
 	//地面にいる判定(床の判定がtrueの場合)
-	gameActor->IsGround(collisionOverlap.isGround);
+	gameActor.IsGround(collisionOverlap.isGround);
 	//戻った場所を代入
-	gameActor->SetTranslate(collisionOverlap.position);
+	gameActor.SetTranslate(collisionOverlap.position);
 }
 
-void CollisionManager::StageCollisions(CollisionOverlap* collisionOverlap , std::vector<AABB> stagesAABB) {
+void CollisionManager::StageCollisions(CollisionOverlap& collisionOverlap , const std::vector<AABB>& stagesAABB) {
 
 	//プレイヤーとステージ
 	for (auto& stage : stagesAABB) {
 		//当たり判定AABBが作動した時
-		if (IsCollisionAABB(collisionOverlap->targetAABB, stage)) {
+		if (IsCollisionAABB(collisionOverlap.targetAABB, stage)) {
 
 			//ステージ判定代入
-			collisionOverlap->stageAABB = stage;
+			collisionOverlap.stageAABB = stage;
 			//重なった部分
-			collisionOverlap->overlap = OverAABB(collisionOverlap->targetAABB, stage);
+			collisionOverlap.overlap = OverAABB(collisionOverlap.targetAABB, stage);
 			//場所を戻す・壁と床の判定
 			BackPosition(collisionOverlap);
 
 			//両方ともtrueの時
-			if (collisionOverlap->isWall && collisionOverlap->isGround) {
+			if (collisionOverlap.isWall && collisionOverlap.isGround) {
 				break;
 			}
 		}
 	}
 }
 
-void CollisionManager::BackPosition(CollisionOverlap* collisionOverlap) {
-	float half = 0.5f;//中心を求める用に使う
+void CollisionManager::BackPosition(CollisionOverlap& collisionOverlap) {
 
 	// 重なりが一番小さい軸の押し戻しを行う	
-	if (collisionOverlap->overlap.x < collisionOverlap->overlap.y) {
+	if (collisionOverlap.overlap.x < collisionOverlap.overlap.y) {
 		//真ん中の座標を代入
-		float targetCenterX = (collisionOverlap->targetAABB.min.x + collisionOverlap->targetAABB.max.x) * half;
-		float areaCenterX = (collisionOverlap->stageAABB.min.x + collisionOverlap->stageAABB.max.x) * half;
+		float targetCenterX = (collisionOverlap.targetAABB.min.x + collisionOverlap.targetAABB.max.x) * kDivideByTwo_;
+		float areaCenterX = (collisionOverlap.stageAABB.min.x + collisionOverlap.stageAABB.max.x) * kDivideByTwo_;
 		//真ん中から 右の場合 - / 左の場合 +
-		float push = (targetCenterX < areaCenterX) ? -collisionOverlap->overlap.x : collisionOverlap->overlap.x;
+		float push = (targetCenterX < areaCenterX) ? -collisionOverlap.overlap.x : collisionOverlap.overlap.x;
 
-		collisionOverlap->position.x += push;
-		collisionOverlap->isWall = true;
+		collisionOverlap.position.x += push;
+		collisionOverlap.isWall = true;
 	}
-	else if (collisionOverlap->overlap.y < collisionOverlap->overlap.x) {
+	else if (collisionOverlap.overlap.y < collisionOverlap.overlap.x) {
 		// 真ん中の座標を代入
-		float targetCenterY = (collisionOverlap->targetAABB.min.y + collisionOverlap->targetAABB.max.y) * half;
-		float areaCenterY = (collisionOverlap->stageAABB.min.y + collisionOverlap->stageAABB.max.y) * half;
+		float targetCenterY = (collisionOverlap.targetAABB.min.y + collisionOverlap.targetAABB.max.y) * kDivideByTwo_;
+		float areaCenterY = (collisionOverlap.stageAABB.min.y + collisionOverlap.stageAABB.max.y) * kDivideByTwo_;
 		//真ん中から 下の場合 - / 上の場合 +
-		float push = (targetCenterY < areaCenterY) ? -collisionOverlap->overlap.y : collisionOverlap->overlap.y;
+		float push = (targetCenterY < areaCenterY) ? -collisionOverlap.overlap.y : collisionOverlap.overlap.y;
 
 
 		//床 or 天井 (0以上は床、0未満は天井)
 		if (push >= 0.0f) {
 			// 着地判定を立てる
-			collisionOverlap->isGround = true;
+			collisionOverlap.isGround = true;
 		}
-		collisionOverlap->position.y += push;
+		collisionOverlap.position.y += push;
 	}
 	//z軸はいらない
 
 }
 
-CollisionOverlap CollisionManager::SetTarget(Vector3 position, AABB aabb) {
+CollisionOverlap CollisionManager::SetTarget(const Vector3& position, const AABB& aabb) {
 	CollisionOverlap result;
 
 	result.position = position;

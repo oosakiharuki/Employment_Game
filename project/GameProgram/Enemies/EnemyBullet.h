@@ -89,6 +89,7 @@ private:
 
 	//当たり判定
 	AABB bulletAABB;
+	const Vector3 kBulletSize_ = { 1.0f ,1.0f ,1.0f };
 
 	//パリィされたら敵のほうにダメージになる
 	bool isPari = false;

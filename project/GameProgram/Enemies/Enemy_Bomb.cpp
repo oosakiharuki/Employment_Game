@@ -29,8 +29,7 @@ void Enemy_Bomb::Update() {
 
 	//死んだとき
 	if (!isDead_) {
-		//通常処理
-		
+		//- プレイヤー追尾処理 -
 		//それぞれの座標位置
 		Vector3 enemyPosition = GetWorldPosition();
 		Vector3 playerPosition = player_->GetWorldPosition();
@@ -39,14 +38,14 @@ void Enemy_Bomb::Update() {
 		//ノーマライズ
 		distance_ = Normalize(distance_);
 
-		if (!isStart_) {
+		//爆発開始じゃないとき
+		if (!isTuibiStart_) {
+			//動く
 			MoveEnemy();
-
-			if (!isFoundTarget_) {
-				SearchRange();
-			}
+			SearchRange();
 		}
 		else {
+			//爆弾までの制限時間カウント
 			TimeRimmit();
 		}
 	}
@@ -64,8 +63,8 @@ void Enemy_Bomb::Draw() {
 }
 
 void Enemy_Bomb::Attack() {
-	//時限爆弾モードオン
-	isStart_ = true;
+	//追尾モードオン
+	isTuibiStart_ = true;
 }
 
 void Enemy_Bomb::TimeRimmit() {
@@ -77,29 +76,29 @@ void Enemy_Bomb::TimeRimmit() {
 
 	//向きを合わせる
 	if (distance_.x < 0) {
-		wt_.rotation_.y = kDirectionRight_;
+		wt_.rotation_.y = kDirectionRight_;//右向き
 	}
 	if (distance_.x >= 0) {
-		wt_.rotation_.y = kDirectionLeft_;
+		wt_.rotation_.y = kDirectionLeft_;//左向き
 	}
 
 	//リアクション
 
 	if (bombTimer_ >= kOnTheVerge) {
 		//爆発寸前だと揺れが細かくなる
-		ScaleUpdate(isStart_, bombScale_ * kScaleSpeedUp_, kScaleMax_ / kScaleSpeedUp_);
+		ScaleUpdate(isTuibiStart_, bombScale_ * kScaleSpeedUp_, kScaleMax_ / kScaleSpeedUp_);
 	}
 	else {
 		//爆発しそうな演出
-		ScaleUpdate(isStart_, bombScale_, kScaleMax_);
+		ScaleUpdate(isTuibiStart_, bombScale_, kScaleMax_);
 	}
 }
 
 void Enemy_Bomb::RespawnEnemy() {
 	RespawnEnemyCommon();
 	
-	//時限爆弾モードオフ
-	isStart_ = false;
+	//追尾モードオフ
+	isTuibiStart_ = false;
 	//爆発してない
 	isExplosion_ = false;
 	bombTimer_ = 0.0f;

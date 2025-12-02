@@ -47,7 +47,7 @@ public:
 	/// <param name="shadowAABB"></param>対象の影
 	/// <param name="position"></param>対象の場所
 	/// <returns></returns>対象から一番近い地面の上
-	Vector3 UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position);
+	Vector3 UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position) const;
 	
 	/// <summary>
 	/// getter_ワープして次のステージに
@@ -74,16 +74,16 @@ private:
 	/// 現在の対象の位置、重なった部分、壁/床のフラグが入ってある構造体
 	/// <returns></returns>
 	/// 現在の位置から重なる部分を引いた位置に、重なった部分が横なら壁で下なら床のフラグがtrueになる
-	void BackPosition(CollisionOverlap* collisionBack);
+	void BackPosition(CollisionOverlap& collisionBack);
 
 	/// <summary>
 	/// ステージで作成する当たり判定
 	/// </summary>
 	/// <param name="collisionOverlap"></param>
 	/// <param name="stageAABB"></param>
-	void StageCollisions(CollisionOverlap* collisionOverlap, std::vector<AABB> stageAABB);
+	void StageCollisions(CollisionOverlap& collisionOverlap, const std::vector<AABB>& stageAABB);
 
-	void GameActorAndStageCollision(GameActor* gameactor, std::vector<AABB> stageAABB);
+	void GameActorAndStageCollision(GameActor& gameactor, const std::vector<AABB>& stageAABB);
 
 	/// <summary>
 	/// CollisionOverlapのターゲット(player,enemy)の設定
@@ -91,7 +91,7 @@ private:
 	/// <param name="position"></param>ターゲットの座標
 	/// <param name="aabb"></param>ターゲット自体の当たり判定
 	/// <returns></returns>
-	CollisionOverlap SetTarget(Vector3 position,AABB aabb);
+	CollisionOverlap SetTarget(const Vector3& position,const AABB& aabb);
 
 
 	//傘のノックバックの値

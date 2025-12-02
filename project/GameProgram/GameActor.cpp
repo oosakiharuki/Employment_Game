@@ -62,7 +62,7 @@ void GameActor::HP_Initialize(uint32_t max) {
 	hp_ = maxHp_;
 }
 
-Vector3 GameActor::GetWorldPosition() {
+Vector3 GameActor::GetWorldPosition() const {
 	Vector3 worldPos;
 
 	worldPos.x = wt_.matWorld_.m[3][0];

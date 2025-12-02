@@ -29,8 +29,8 @@ public:
 	Vector3 GetDistance()override { return distance_; }
 
 private:
-	//爆発開始
-	bool isStart_ = false;
+	//追尾開始
+	bool isTuibiStart_ = false;
 	//爆発
 	bool isExplosion_ = false;
 

@@ -81,7 +81,9 @@ protected:
 	void PreviousSceneData();
 
 	//前ステージデータ
-	SceneSaveData sceneSaveData_;
+	SceneSaveData sceneSaveData_ = {
+		3,3,2,"stage_0" //初期設定
+	};
 
 	/// <summary>
 	/// 全シーンに共有できる当たり判定
@@ -109,9 +111,9 @@ protected:
 	void ChangeScene();
 
 	/// <summary>
-	/// ワープする時の処理
+	/// ワープして次のシーンに進む処理
 	/// </summary>
-	void WarpNextScene();
+	void WarpNextScene(const std::string& nextScene);
 
 	/// <summary>
 	/// プレイヤーがゴールする時の処理
@@ -196,7 +198,10 @@ private:
 	//操作ガイドに必要な総数
 	const uint32_t maxGuide = 7;
 
-
+	/// <summary>
+	/// 操作説明スプライトを作る
+	/// </summary>
+	/// <param name="guide">名前や座標が入った構造体</param>
 	void CreateGuide(const Guide& guide);
 
 	std::vector<Guide> guides_;

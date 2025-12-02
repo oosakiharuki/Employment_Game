@@ -7,7 +7,7 @@ void GameScene::Initialize() {
 	PreviousSceneData();
 
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting("stage_1");
+	LevelEditorObjectSetting();
 
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");
@@ -40,17 +40,6 @@ void GameScene::Update() {
 	//演出用のワープゲート出口
 	startWarp_->Update();
 
-	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->ZoomEnd()) {
-		//次のステージに進む時Hpなどパラメータがリセットされないようにする
-		sceneSaveData_.playerHp = player_->GetHp(); //体力
-		NextStageSave::GetInstance()->SetPlayerParameta(sceneSaveData_); //代入する
-		NextSceneFadeInStart("NextStage");
-	}
-
-	if (CollisionManager::GetInstance()->IsGoal() && cameraControl_->ZoomEnd()) {
-		NextSceneFadeInStart("Clear");
-	}
-
 	//カメラコントロール
 	cameraControl_->SetPlayerPosition(player_->GetTranslate());
 	//プレイヤーが倒されたらシェイク
@@ -65,7 +54,7 @@ void GameScene::Update() {
 	player_->Update();
 	
 	//次のシーンに移動する演出
-	WarpNextScene();
+	WarpNextScene("NextStage");
 
 	//ステージの更新処理
 	stageobj_->Update();
@@ -222,18 +211,16 @@ void GameScene::WarterWarpExit() {
 }
 
 void GameScene::Respawn() {
-	//プレイヤーが死んで、リスポーン地点が変更していないとき敵は復活する
+	//死んでしまった、復活(リスポーン)する時
 	if (player_->GetIsDead() && player_->GetIsRespawn()) {
 
-		if (sceneSaveData_.playerLife == 0) {
+		if (player_->GetZanki() == 0) {
 			//残機が0で倒された場合ゲームオーバー
 			NextSceneFadeInStart("GameOver");
 			FadeScreen::GetInstance()->SetMaskTexture("fade02.png");
 			FadeScreen::GetInstance()->SetBackGround("black.png");
 			return;
 		}
-		//残機が一つ減る
-		sceneSaveData_.playerLife--;
 
 		//敵が復活
 		for (auto& enemy : enemies_) {
