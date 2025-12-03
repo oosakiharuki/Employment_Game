@@ -234,7 +234,7 @@ namespace MyMath {
 		return result;
 	}
 
-	Matrix4x4 MakeScaleMatrix(Vector3 scale) {
+	Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
 		Matrix4x4 result{};
 		result.m[0][0] = scale.x;
 		result.m[0][1] = 0.0f;
@@ -318,7 +318,7 @@ namespace MyMath {
 
 		return result;
 	}
-	Matrix4x4 MakeTranslateMatrix(Vector3 translate) {
+	Matrix4x4 MakeTranslateMatrix(const Vector3& translate) {
 		Matrix4x4 result{};
 
 		result.m[0][0] = 1.0f;
@@ -475,7 +475,7 @@ namespace MyMath {
 
 #pragma region Affine
 
-	Matrix4x4 Multiply(Matrix4x4 m1, Matrix4x4 m2) {
+	Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 		Matrix4x4 result{};
 		result.m[0][0] = m1.m[0][0] * m2.m[0][0] + m1.m[0][1] * m2.m[1][0] + m1.m[0][2] * m2.m[2][0] + m1.m[0][3] * m2.m[3][0];
 		result.m[0][1] = m1.m[0][0] * m2.m[0][1] + m1.m[0][1] * m2.m[1][1] + m1.m[0][2] * m2.m[2][1] + m1.m[0][3] * m2.m[3][1];
@@ -1011,7 +1011,7 @@ namespace MyMath {
 	}
 
 
-	Matrix4x4 Transpose(Matrix4x4 m) {
+	Matrix4x4 Transpose(const Matrix4x4& m) {
 		Matrix4x4 result{};
 
 		result.m[0][0] = m.m[0][0];
@@ -1101,7 +1101,7 @@ namespace MyMath {
 		return false;
 	}
 
-	bool Intersect(Vector2 a1, Vector2 a2, Vector2 b1, Vector2 b2) {
+	bool Intersect(const Vector2& a1, const Vector2& a2, const Vector2& b1, const Vector2& b2) {
 
 		float d = (a2.x - a1.x) * (b2.y - b1.y) - (a2.y - a1.y) * (b2.x - b1.x);//クロス積
 		if (d == 0) {

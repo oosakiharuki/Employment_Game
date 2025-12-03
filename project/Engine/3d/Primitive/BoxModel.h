@@ -13,8 +13,8 @@ public:
 	/// 初期化処理
 	/// </summary>
 	/// <param name="textureFile"></param>
-	void Initialize(std::string textureFile);
-	void Update(Matrix4x4 matworld);
+	void Initialize(const std::string& textureFile);
+	void Update(const Matrix4x4& matworld);
 	/// <summary>
 	/// 描画処理
 	/// </summary>
@@ -23,7 +23,7 @@ public:
 	/// setter_色
 	/// </summary>
 	/// <param name="color"></param>
-	void SetColor(Vector4 color) { color_ = color; }
+	void SetColor(const Vector4& color) { color_ = color; }
 
 private:
 

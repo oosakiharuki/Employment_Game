@@ -39,7 +39,7 @@ public:
 	/// setter_
 	/// </summary>
 	/// <param name="pos"></param>
-	void SetPlayerPosition(Vector3 pos) { playerPos_ = pos; }
+	void SetPlayerPosition(const Vector3& pos) { playerPos_ = pos; }
 	/// <summary>
 	/// ズーム開始(現在カメラ位置から特定位置まで)
 	/// </summary>
@@ -54,7 +54,7 @@ public:
 	/// 固定モード
 	/// </summary>
 	/// <param name="result"></param> trueでオン / falseでオフ
-	void FixedMode(const bool result) { isFixedMode_ = result; }
+	void FixedMode(bool result) { isFixedMode_ = result; }
 	/// <summary>
 	/// 固定モードであるか
 	/// </summary>
@@ -77,7 +77,7 @@ public:
 	/// </summary>
 	/// <param name="data"></param>レベルエディタのカメラデータ(cameraInit)
 	/// <param name="fixed_Mode_"></param>trueでカメラを固定する
-	void CameraSetting(const CameraInitData& data, const bool& fixed_Mode_);
+	void CameraSetting(const CameraInitData& data, bool fixed_Mode_);
 
 private:
 	/// <summary>

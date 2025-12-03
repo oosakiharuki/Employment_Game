@@ -53,7 +53,7 @@ void SphereModel::Initialize() {
 
 }
 
-void SphereModel::Update(Matrix4x4 matworld) {
+void SphereModel::Update(const Matrix4x4& matworld) {
 
 	Matrix4x4 WorldViewProjectionMatrix;
 	if (camera_) {

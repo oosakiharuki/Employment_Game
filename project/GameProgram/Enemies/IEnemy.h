@@ -91,13 +91,13 @@ public:
 	/// 移動ルートのポイント設定(現在2つ)
 	/// </summary>
 	/// <param name="point1"></param>
-	void SetRoutePoint1(Vector3 point1) { routePointLeft_ = point1; }
-	void SetRoutePoint2(Vector3 point2) { routePointRight_ = point2; }
+	void SetRoutePoint1(const Vector3& point1) { routePointLeft_ = point1; }
+	void SetRoutePoint2(const Vector3& point2) { routePointRight_ = point2; }
 	/// <summary>
 	/// 移動ルート中心の場合(Eventで使う)
 	/// </summary>
 	/// <param name="init"></param>真ん中にする場所
-	void SetMoveInit(Vector3 init) { move_ = init; }
+	void SetMoveInit(const Vector3& init) { move_ = init; }
 
 	/// <summary>
 	/// 角度で向きを変更
@@ -108,13 +108,13 @@ public:
 	/// setter_ステージ当たり判定
 	/// </summary>
 	/// <param name="aabb"></param>
-	void SetStages(std::vector<AABB> aabb) { stages_ = aabb; }
+	void SetStages(const std::vector<AABB>& aabb) { stages_ = aabb; }
 
 	/// <summary>
 	/// 影の座標位置
 	/// </summary>
 	/// <param name="position"></param>代入する座標位置(プレイヤーに一番近い床)
-	void SetShadowPosition(Vector3 position) { shadow_->SetTranslate(position); }
+	void SetShadowPosition(const Vector3& position) { shadow_->SetTranslate(position); }
 	
 	/// <summary>
 	/// 見える範囲

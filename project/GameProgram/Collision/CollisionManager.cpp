@@ -182,7 +182,7 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 	}
 }
 
-Vector3 CollisionManager::UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position) const {
+Vector3 CollisionManager::UnderCollision(const std::vector<AABB>& stageAABB, const AABB& shadowAABB, const Vector3& position) const {
 
 	//できる限り下の値
 	float underY = kMaxUnder;

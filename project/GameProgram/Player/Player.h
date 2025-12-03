@@ -165,7 +165,7 @@ public:
 	/// setter_影の位置
 	/// </summary>
 	/// <param name="position"></param>影の位置の登録
-	void SetShadowPosition(Vector3 position) { shadow_->SetTranslate(position); }
+	void SetShadowPosition(const Vector3& position) { shadow_->SetTranslate(position); }
 
 	//スプライトの変化
 	void SpriteUpdate();

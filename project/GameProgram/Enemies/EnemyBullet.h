@@ -34,13 +34,13 @@ public:
 	/// setter_座標位置
 	/// </summary>
 	/// <param name="translate">指定する座標</param>
-	void SetTranslate(Vector3 translate) { wt_.translation_ = translate; }
+	void SetTranslate(const Vector3& translate) { wt_.translation_ = translate; }
 	
 	/// <summary>
 	/// setter_弾丸速度、方向
 	/// </summary>
 	/// <param name="velocity"></param>FireBulletで設定したvelocity
-	void SetVelocty(Vector3 velocity) { velocity_ = velocity; }
+	void SetVelocty(const Vector3& velocity) { velocity_ = velocity; }
 
 	/// <summary>
 	/// 消滅フラグ

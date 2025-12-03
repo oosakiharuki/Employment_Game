@@ -25,7 +25,7 @@ public:
 	void Draw(const std::string& textureFilePath);
 
 	void LightOn(bool Light) { materialData_->enableLighting = Light; }
-	void SetColor(Vector4 color) { materialData_->color = color; }
+	void SetColor(const Vector4& color) { materialData_->color = color; }
 
 private:	
 	

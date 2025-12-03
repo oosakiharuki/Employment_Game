@@ -25,7 +25,7 @@ public:
 	void SetModel(Model_obj* model) { this->model_ = model; }
 	void SetModelFile(const std::string& filePath);
 	void LightSwitch(bool isLight);
-	void SetColor(Vector4 color);
+	void SetColor(const Vector4& color);
 
 private:
 	Object3dCommon* object3dCommon_ = nullptr;

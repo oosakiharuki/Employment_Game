@@ -26,12 +26,12 @@ public:
 	/// setter_座標位置
 	/// </summary>
 	/// <param name="position"></param>代入する座標位置
-	void SetTranslate(Vector3 position) { wt_.translation_ = position; }
+	void SetTranslate(const Vector3& position) { wt_.translation_ = position; }
 	/// <summary>
 	/// setter_サイズ
 	/// </summary>
 	/// <param name="scale"></param>代入する大きさ
-	void SetScale(Vector3 scale) { wt_.scale_ = scale; }
+	void SetScale(const Vector3& scale) { wt_.scale_ = scale; }
 
 	/// <summary>
 	/// getter_当たり判定AABB
