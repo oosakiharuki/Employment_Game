@@ -27,19 +27,19 @@ public:
 	/// <param name="srvManager"></param>
 	void Initialize(DirectXCommon* dxCommon, SrvManager* srvManager);
 
-	void CreateParticleGroup(const std::string name, const std::string textureFilePath, PrimitiveType primitiveType);
+	void CreateParticleGroup(const std::string& name, const std::string& textureFilePath, PrimitiveType primitiveType);
 
-	D3D12_GPU_DESCRIPTOR_HANDLE  GetSrvHandleGPU(const std::string filePath);
-	ModelData GetModelData(const std::string filePath);
-	std::string GetTextureHandle(const std::string filePath);
-	Microsoft::WRL::ComPtr<ID3D12Resource> GetResource(const std::string filePath);
-	std::list<ParticleData> GetParticle(const std::string filePath);
+	D3D12_GPU_DESCRIPTOR_HANDLE  GetSrvHandleGPU(const std::string& filePath);
+	ModelData GetModelData(const std::string& filePath);
+	std::string GetTextureHandle(const std::string& filePath);
+	Microsoft::WRL::ComPtr<ID3D12Resource> GetResource(const std::string& filePath);
+	std::list<ParticleData> GetParticle(const std::string& filePath);
 	
 	uint32_t& GetNum(const std::string& filePath);
 
-	void Update(const std::string filePath, ParticleForGPU* wvpData);
+	void Update(const std::string& filePath, ParticleForGPU* wvpData);
 
-	void Emit(const std::string filePath,const Emitter& emitter);
+	void Emit(const std::string& filePath,const Emitter& emitter);
 
 	void SetCamera(Camera* camera_) { camera = camera_; }
 

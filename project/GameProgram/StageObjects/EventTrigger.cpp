@@ -62,7 +62,7 @@ void EventTrigger::Draw() {
 	GLTFCommon::GetInstance()->Command();
 }
 
-void EventTrigger::LoadEventCSV(std::string fileName) {
+void EventTrigger::LoadEventCSV(const std::string& fileName) {
 
 	std::ifstream file;
 

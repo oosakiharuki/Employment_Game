@@ -521,7 +521,7 @@ void Player::IsFall() {
 	Audio::GetInstance()->SoundPlayWave(hitSound_, kVolume_);
 }
 
-void Player::KnockBackPlayer(const Vector3& Power, const float TimerMax) {
+void Player::KnockBackPlayer(const Vector3& Power, float TimerMax) {
 	//威力を代入
 	backPower_ = Normalize(Power);
 	KnockBackCommon(TimerMax);
@@ -529,7 +529,7 @@ void Player::KnockBackPlayer(const Vector3& Power, const float TimerMax) {
 	wt_.scale_ = kDefaultScale_;
 }
 
-void Player::KnockBackUmbrella(const Vector3& Power, const float TimerMax) {
+void Player::KnockBackUmbrella(const Vector3& Power, float TimerMax) {
 	//威力を代入(傘の向きに沿って)
 	backPower_ = TransformNormal(Power, wtGun_.matWorld_);
 	KnockBackCommon(TimerMax);
@@ -537,7 +537,7 @@ void Player::KnockBackUmbrella(const Vector3& Power, const float TimerMax) {
 	umbrella_->SetScale(kDefaultScale_);
 }
 
-void Player::KnockBackCommon(const float TimerMax) {
+void Player::KnockBackCommon(float TimerMax) {
 	backPower_.z = 0.0f;//z方向はなし
 	//ノックバックするフラグ
 	isKnockback_ = true;

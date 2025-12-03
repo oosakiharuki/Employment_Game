@@ -43,8 +43,8 @@ public:
 	/// <returns></returns>フェード中ならtrue
 	bool GetIsFadeing() const{ return isFading_; }
 	
-	void SetMaskTexture(const std::string textureFile) { dissolveTexture_ = textureFile; }
-	void SetBackGround(const std::string textureFile) { sprite_->SetTextureFile(textureFile); }
+	void SetMaskTexture( const std::string& textureFile) { dissolveTexture_ = textureFile; }
+	void SetBackGround( const std::string& textureFile) { sprite_->SetTextureFile(textureFile); }
 
 private:
 

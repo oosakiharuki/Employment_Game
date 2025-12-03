@@ -7,7 +7,7 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-void Levelediter::LoadLevelediter(std::string jsonName) {
+void Levelediter::LoadLevelediter(const std::string& jsonName) {
 	//json
 	levelData_ = std::make_unique<LevelData>();
 

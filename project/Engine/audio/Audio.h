@@ -67,21 +67,21 @@ public:
 	/// <summary>
 	/// 音声を再生
 	/// </summary>
-	/// <param name="soundData"></param>流したい音声データ
-	/// <param name="volume"></param>音量
-	/// <param name="isLoop"></param>ループするか
-	void SoundPlayWave(SoundData soundData, float volume, bool isLoop = false);
+	/// <param name="soundData">流したい音声データ</param>
+	/// <param name="volume">音量</param>
+	/// <param name="isLoop">ループするか</param>
+	void SoundPlayWave(const SoundData& soundData, float volume, bool isLoop = false);
 	/// <summary>
 	/// 音声を停止
 	/// </summary>
-	/// <param name="soundData"></param>止めたい音声データ
-	void StopWave(SoundData soundData);
+	/// <param name="soundData">止めたい音声データ</param>
+	void StopWave(const SoundData& soundData);
 	/// <summary>
 	/// 音声のボリューム
 	/// </summary>
-	/// <param name="soundData"></param>変えたい音声データ
-	/// <param name="volume"></param>音量
-	void ControlVolume(SoundData soundData, float volume);
+	/// <param name="soundData">変えたい音声データ</param>
+	/// <param name="volume">音量</param>
+	void ControlVolume(const SoundData& soundData, float volume);
 private:
 
 	static std::shared_ptr<Audio> sInstance_;

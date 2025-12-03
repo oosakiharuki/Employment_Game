@@ -6,7 +6,7 @@
 #include "GameOverScene.h"
 #include "LoadingStageScene.h"
 
-void SceneFactory::MakeScene(const std::string preScene) {
+void SceneFactory::MakeScene(const std::string& preScene) {
 	
 	// シーンの名前が同じであれば
 	//タイトル

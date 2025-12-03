@@ -245,7 +245,7 @@ void Dissolve::EffectUpdate() {
 	}
 }
 
-void Dissolve::SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu, const std::string textureFile) {
+void Dissolve::SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu,  const std::string& textureFile) {
 
 	TextureGPU_ = gpu;
 	isFade_ = true;

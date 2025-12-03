@@ -15,7 +15,7 @@ struct CameraInitData {
 class Levelediter {
 public:
 
-	void LoadLevelediter(std::string jsonName);
+	void LoadLevelediter(const std::string& jsonName);
 
 	//LevelData型
 	struct LevelData {

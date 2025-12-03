@@ -28,7 +28,7 @@ void ParticleManager::Finalize() {
 }
 
 
-void ParticleManager::CreateParticleGroup(const std::string name, const std::string textureFilePath, PrimitiveType primitiveType) {
+void ParticleManager::CreateParticleGroup(const std::string& name, const std::string& textureFilePath, const PrimitiveType primitiveType) {
 
 	assert(srvManager->Max());
 	
@@ -92,42 +92,42 @@ void ParticleManager::CreateParticleGroup(const std::string name, const std::str
 	particleG.numInstance = 0;
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE  ParticleManager::GetSrvHandleGPU(const std::string filePath) {
+D3D12_GPU_DESCRIPTOR_HANDLE  ParticleManager::GetSrvHandleGPU( const std::string& filePath) {
 	assert(srvManager->Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 	return particleG.srvHandleGPU;
 }
 
-ModelData ParticleManager::GetModelData(const std::string filePath) {
+ModelData ParticleManager::GetModelData( const std::string& filePath) {
 	assert(srvManager->Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 	return particleG.modelData;
 }
 
-std::string ParticleManager::GetTextureHandle(const std::string filePath) {
+std::string ParticleManager::GetTextureHandle( const std::string& filePath) {
 	assert(srvManager->Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 	return particleG.textureFile;
 }
 
-Microsoft::WRL::ComPtr<ID3D12Resource> ParticleManager::GetResource(const std::string filePath) {
+Microsoft::WRL::ComPtr<ID3D12Resource> ParticleManager::GetResource( const std::string& filePath) {
 	assert(srvManager->Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 	return particleG.resource;
 }
 
-std::list<ParticleData> ParticleManager::GetParticle(const std::string filePath) {
+std::list<ParticleData> ParticleManager::GetParticle( const std::string& filePath) {
 	assert(srvManager->Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 	return particleG.particles;
 }
 
-void ParticleManager::Update(const std::string filePath, ParticleForGPU* wvpData) {
+void ParticleManager::Update( const std::string& filePath, ParticleForGPU* wvpData) {
 
 	assert(srvManager->Max());
 
@@ -216,7 +216,7 @@ void ParticleManager::Update(const std::string filePath, ParticleForGPU* wvpData
 	
 }
 
-void ParticleManager::Emit(const std::string filePath, const Emitter& emitter) {
+void ParticleManager::Emit( const std::string& filePath, const Emitter& emitter) {
 
 	assert(srvManager->Max());
 

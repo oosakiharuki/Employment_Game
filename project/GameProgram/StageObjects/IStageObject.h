@@ -71,7 +71,7 @@ public:
 	/// setter_次のステージ
 	/// </summary>
 	/// <param name="fileName"></param>ステージ名(例:stage_01)
-	virtual void SetNextStage(std::string fileName);
+	virtual void SetNextStage(const std::string& fileName);
 
 	/// <summary>
 	/// getter_次のステージ
