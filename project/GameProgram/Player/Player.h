@@ -220,6 +220,7 @@ private:
 	float speed_ = kStandardSpeed_;
 	//ジャンプフラグ
 	bool isJump_ = false;
+	const float kJumpUp_ = 0.25f;//上がる高さ
 
 	//重力
 	
@@ -302,7 +303,7 @@ private:
 	const float kHitStopTime_ = 1.0f;//ヒットストップ
 	const float kDeadTimeMax_ = 3.0f;//死んだ演出用時間
 	const float kPlayerDeadRotating_ = 10.0f;//10度ずつ回る
-	const float kDeadLittleUp_ = 0.3f;
+	const float kDeadLittleUp_ = 0.4f;
 
 	//復活
 	bool isRespawn_ = false;

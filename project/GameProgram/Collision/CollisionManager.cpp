@@ -184,23 +184,29 @@ void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_pt
 
 Vector3 CollisionManager::UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position) const {
 
-	float minY = 1000.0f;
-	float lengthMax = Length(position.y, minY);
+	//できる限り下の値
+	float underY = kMaxUnder;
+	//プレイヤーとその値の距離(基準点)
+	float lengthMin = Length(position.y, underY);
 
 	for (auto& stage : stageAABB) {
-
+		//影の範囲がステージ部分と衝突判定を取った時
 		if (IsCollisionAABB(shadowAABB, stage)) {
+			//プレイヤーとステージの上の長さ
 			float length = Length(position.y, stage.max.y);
 
-			//プレイヤーと足場の長さが短いところを影に
-			if (length < lengthMax) {
-				lengthMax = length;
-				minY = stage.max.y + kShadowUp_;
+			//プレイヤーと足場の長さが一番短いところを影の場所とする
+			if (length < lengthMin) {
+				//値が変更
+				lengthMin = length;
+				underY = stage.max.y + kShadowUp_;
 			}
 		}
 	}
+	//x,z軸は現在のプレイヤー位置と同じ
 	Vector3 result = position;
-	result.y = minY;
+	//決定した影の位置を代入
+	result.y = underY;
 
 	return result;
 }
@@ -275,10 +281,10 @@ void CollisionManager::BackPosition(CollisionOverlap& collisionOverlap) {
 CollisionOverlap CollisionManager::SetTarget(const Vector3& position, const AABB& aabb) {
 	CollisionOverlap result;
 
-	result.position = position;
-	result.targetAABB = aabb;
-	result.isGround = false;
-	result.isWall = false;
+	result.position = position;//座標
+	result.targetAABB = aabb;  //当たり判定AABB
+	result.isGround = false;   //地面判定フラグ
+	result.isWall = false;     //壁判定フラグ
 
 	return result;
 }

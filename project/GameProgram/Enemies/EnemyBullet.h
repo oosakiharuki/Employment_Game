@@ -28,12 +28,12 @@ public:
 	/// <summary>
 	/// getter_座標位置
 	/// </summary>
-	/// <returns></returns>現在の座標位置
-	Vector3 GetTranslate() { return wt_.translation_; }
+	/// <returns>現在の座標位置</returns>
+	const Vector3& GetTranslate() const { return wt_.translation_; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
-	/// <param name="translate"></param>指定する座標
+	/// <param name="translate">指定する座標</param>
 	void SetTranslate(Vector3 translate) { wt_.translation_ = translate; }
 	
 	/// <summary>
@@ -55,7 +55,7 @@ public:
 	/// getter_当たり判定AABB
 	/// </summary>
 	/// <returns></returns>
-	AABB GetAABB();
+	AABB GetAABB() const;
 
 	/// <summary>
 	/// 跳ね返す(パリィ)処理
@@ -64,22 +64,24 @@ public:
 	/// <summary>
 	/// getter_パリィフラグ
 	/// </summary>
-	/// <returns></returns>現在のパリィフラグ
+	/// <returns>現在のパリィフラグ</returns>
 	bool GetIsPari() { return isPari; }
 	/// <summary>
 	/// getter_direction
 	/// </summary>
-	/// <returns></returns>プレイヤーと弾の距離
-	Vector3 GetDistance() { return distance; }
+	/// <returns>プレイヤーと弾の距離</returns>
+	const Vector3& GetDistance() const { return distance; }
 	/// <summary>
 	/// setter_プレイヤー
 	/// </summary>
-	/// <param name="player"></param>使っているプレイヤー
+	/// <param name="player">プレイヤークラス</param>
 	void SetPlayer(Player* player) { player_ = player; }
 
 private:
+	//
 	std::unique_ptr<Object3d> object = nullptr;
 	WorldTransform wt_;
+	//弾丸速度
 	Vector3 velocity_;
 
 	//消えるまでの処理

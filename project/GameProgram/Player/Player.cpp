@@ -110,7 +110,7 @@ void Player::Update() {
 
 	//ジャンプ
 	if (isJump_) {
-		wt_.translation_.y += 0.25f;
+		wt_.translation_.y += kJumpUp_;
 	}
 
 	//演出時は関係なし

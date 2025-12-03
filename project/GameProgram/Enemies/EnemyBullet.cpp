@@ -47,7 +47,7 @@ void EnemyBullet::Draw() {
 	object->Draw();
 }
 
-AABB EnemyBullet::GetAABB() {
+AABB EnemyBullet::GetAABB() const {
 	AABB aabb;
 	aabb.min = wt_.translation_ + bulletAABB.min;
 	aabb.max = wt_.translation_ + bulletAABB.max;

@@ -8,14 +8,14 @@ using namespace UseEveryOne;
 Umbrella::~Umbrella() {}
 
 void Umbrella::Initialize() {
-	wt_.Initialize();
+	Actor_InitializeCommon();
 
 	object_ = std::make_unique<Object_glTF>();
 	object_->Initialize();
 	object_->SetModelFile("umbrella_Close.gltf");
 
-	umbrellaAABB_.min = -kAABBSize_ * kDivideByTwo_;
-	umbrellaAABB_.max = kAABBSize_ * kDivideByTwo_;
+	actorAABB_.min = -kAABBSize_ * kDivideByTwo_;
+	actorAABB_.max = kAABBSize_ * kDivideByTwo_;
 }
 
 void Umbrella::Update() {
@@ -48,31 +48,6 @@ void Umbrella::Update() {
 	wt_.UpdateMatrix();
 }
 
-
 void Umbrella::Draw() {
 	object_->Draw();
-}
-
-
-AABB Umbrella::GetAABB() {
-	AABB aabb;
-	aabb.min = wt_.translation_ + umbrellaAABB_.min;
-	aabb.max = wt_.translation_ + umbrellaAABB_.max;
-	return aabb;
-}
-
-void Umbrella::ScaleUpdate(bool& mosionOn, Vector3 scale, float maxTime) {
-	if (scaleTimer_ >= maxTime * kDivideByTwo_) {
-		wt_.scale_ -= scale;
-		if (scaleTimer_ >= maxTime) {
-			scaleTimer_ = 0.0f;
-			wt_.scale_ = kDefaultScale_;
-			//モーションを終了する
-			mosionOn = false;
-		}
-	}
-	else {
-		wt_.scale_ += scale;
-	}
-	scaleTimer_ += kDeltaTime_;
 }

@@ -20,7 +20,7 @@ void GameActor::IsGround(bool result) {
 	}
 }
 
-AABB GameActor::GetAABB() {
+AABB GameActor::GetAABB() const {
 	AABB aabb;
 	aabb.min = wt_.translation_ + actorAABB_.min;
 	aabb.max = wt_.translation_ + actorAABB_.max;
@@ -31,11 +31,16 @@ void GameActor::ShadowUpdate() {
 	shadow_->Update();
 }
 
-void GameActor::ScaleUpdate(bool& mosionOn, Vector3 scale, float maxTime) {
+void GameActor::ScaleUpdate(bool& mosionOn, const Vector3& scale, float maxTime) {
+	//時間が半分になったら
 	if (scaleTimer_ >= maxTime * kDivideByTwo_) {
+		//スケールを小さくする
 		wt_.scale_ -= scale;
+		//経過時間がたったら終了
 		if (scaleTimer_ >= maxTime) {
+			//時間を初期値(0)にする
 			scaleTimer_ = 0.0f;
+			//元の大きさに{1,1,1}
 			wt_.scale_ = kDefaultScale_;
 
 			//モーションを終了する
@@ -43,23 +48,25 @@ void GameActor::ScaleUpdate(bool& mosionOn, Vector3 scale, float maxTime) {
 		}
 	}
 	else {
+		//スケールを大きくする
 		wt_.scale_ += scale;
 	}
+	//時間がが進む
 	scaleTimer_ += kDeltaTime_;
 }
 
 void GameActor::RespawnCommon() {
-	isDead_ = false;
-	hp_ = maxHp_;//体力を満タンに
+	isDead_ = false; //死亡フラグをなしに
+	hp_ = maxHp_;    //体力を満タンに
 
 	//blenderで配置した設定に戻る
-	wt_.translation_ = initTranslate_;
-	wt_.rotation_ = initRotate_;
+	wt_.translation_ = initTranslate_; //座標位置
+	wt_.rotation_ = initRotate_;       //回転角度
 }
 
 void GameActor::HP_Initialize(uint32_t max) {
 	maxHp_ = max;//最大値を設定
-	hp_ = maxHp_;
+	hp_ = maxHp_;//体力を設定
 }
 
 Vector3 GameActor::GetWorldPosition() const {
