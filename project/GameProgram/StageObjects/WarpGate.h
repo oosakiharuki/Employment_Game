@@ -16,7 +16,7 @@ public:
 	/// setter_次のステージ
 	/// </summary>
 	/// <param name="fileName"></param>ステージ名(例:stage_01)
-	void SetNextStage(std::string fileName) override { fileName_ = fileName; }
+	void SetNextStage(const std::string& fileName) override { fileName_ = fileName; }
 
 	/// <summary>
 	/// getter_次のステージ

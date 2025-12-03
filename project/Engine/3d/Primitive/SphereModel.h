@@ -24,7 +24,7 @@ public:
 	/// setter_色
 	/// </summary>
 	/// <param name="color"></param>
-	void SetColor(Vector4 color) { color_ = color; }
+	void SetColor(const Vector4& color) { color_ = color; }
 
 private:
 

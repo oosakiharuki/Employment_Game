@@ -43,7 +43,7 @@ public:
 	/// 環境マップの設定
 	/// </summary>
 	/// <param name="mapFile"></param>
-	void SetEnvironment(const std::string mapFile);
+	void SetEnvironment(const std::string& mapFile);
 
 	/// <summary>
 	/// 

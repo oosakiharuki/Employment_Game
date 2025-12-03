@@ -7,7 +7,7 @@ public:
 	/// <summary>
 	/// 追加するシーンを設定
 	/// </summary>
-	void MakeScene(const std::string preScene);
+	void MakeScene(const std::string& preScene);
 
 	/// <summary>
 	/// 使用するシーン

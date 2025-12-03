@@ -384,6 +384,6 @@ SkinCluster Model_glTF::CreateSkinCluster(const Skeleton& skeleton,const ModelDa
 }
 
 //環境マップのテクスチャをもらう
-void Model_glTF::SetEnvironment(const std::string mapFile) {
+void Model_glTF::SetEnvironment(const std::string& mapFile) {
 	EnvironmentFile_ = mapFile;
 }

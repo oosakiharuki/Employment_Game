@@ -10,7 +10,7 @@ public:
 	void Initialize(DirectXCommon* dxCommon) override;
 	void Command() override;
 
-	void SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu,const std::string textureFile);
+	void SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu, const std::string& textureFile);
 	void Degress(float value);
 	void EdgeSize(float value);
 

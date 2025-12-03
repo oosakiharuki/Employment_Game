@@ -5,7 +5,7 @@
 
 using namespace MyMath;
 
-void Sprite::Initialize(std::string textureFilePath) {
+void Sprite::Initialize(const std::string& textureFilePath) {
 	this->spriteCommon_ = SpriteCommon::GetInstance().get();
 	//テクスチャ名
 	filePath_ = "resource/Sprite/" + textureFilePath;
@@ -146,12 +146,12 @@ void Sprite::Draw() {
 	spriteCommon_->GetDirectXCommon()->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 
-void Sprite::SetTextureFile(const std::string textureFile) {
+void Sprite::SetTextureFile(const std::string& textureFile) {
 	filePath_ = "resource/Sprite/" + textureFile;
 	TextureManager::GetInstance()->LoadTexture(filePath_);
 }
 
-std::string Sprite::GetTextureFile() {
+std::string Sprite::GetTextureFile() const {
 	std::string result = filePath_;
 	size_t fileName = result.rfind("/");// Sprite "/" ○○.png
 	//ファイル名を入れる

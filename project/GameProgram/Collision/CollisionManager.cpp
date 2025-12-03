@@ -17,9 +17,9 @@ std::shared_ptr<CollisionManager> CollisionManager::GetInstance() {
 	return sInstance;
 }
 
-void CollisionManager::AllCollisions(Player* player_, std::vector<std::shared_ptr<IEnemy>> enemies,
-	std::list<std::shared_ptr<IStageObject>> stageObjects, std::vector<AABB> stagesAABB,
-	std::vector<std::shared_ptr<EventTrigger>> eventTriggers, CameraControl* cameraControl_, Levelediter& levelediter)
+void CollisionManager::AllCollisions(Player* player_, const std::vector<std::shared_ptr<IEnemy>>& enemies,
+	const std::list<std::shared_ptr<IStageObject>>& stageObjects, const std::vector<AABB>& stagesAABB,
+	const std::vector<std::shared_ptr<EventTrigger>>& eventTriggers, CameraControl* cameraControl_, Levelediter& levelediter)
 {
 	// - プレイヤーと敵 -
 	for (auto& enemy : enemies) {

@@ -17,7 +17,7 @@ public:
 	/// 初期化処理
 	/// </summary>
 	/// <param name="textureFilePath"></param>
-	void Initialize(std::string textureFilePath);
+	void Initialize(const std::string& textureFilePath);
 	/// <summary>
 	/// 更新処理
 	/// </summary>
@@ -85,7 +85,7 @@ public:
 	/// setter_テクスチャ反転横
 	/// </summary>
 	/// <returns></returns>
-	void SetFlipX(const bool& isFlipX) { this->isFlipX_ = isFlipX; }
+	void SetFlipX(bool isFlipX) { this->isFlipX_ = isFlipX; }
 
 	/// <summary>
 	/// getter_テクスチャ反転縦
@@ -97,7 +97,7 @@ public:
 	/// setter_テクスチャ反転縦
 	/// </summary>
 	/// <returns></returns>
-	void SetFlipY(const bool& isFlipY) { this->isFlipY_ = isFlipY; }
+	void SetFlipY(bool isFlipY) { this->isFlipY_ = isFlipY; }
 
 	/// <summary>
 	/// getter_左上の位置
@@ -127,13 +127,13 @@ public:
 	/// getter_テクスチャファイル
 	/// </summary>
 	/// <returns></returns>
-	std::string GetTextureFile();
+	std::string GetTextureFile() const;
 
 	/// <summary>
 	/// setter_テクスチャファイル
 	/// </summary>
 	/// <param name="textureFile"></param>
-	void SetTextureFile(const std::string textureFile);
+	void SetTextureFile(const std::string& textureFile);
 
 
 	/// <summary>

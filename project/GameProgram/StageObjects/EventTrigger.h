@@ -36,7 +36,7 @@ public:
 	/// .csvを読み取る
 	/// </summary>
 	/// <param name="file"></param>読み込む.csv
-	void LoadEventCSV(std::string file);
+	void LoadEventCSV(const std::string& file);
 
 	/// <summary>
 	/// 敵をcsvで召喚設備
@@ -64,7 +64,7 @@ public:
 	/// eventDataを導入(Levelediterで設定したやつの代入に使う)
 	/// </summary>
 	/// <param name="data"></param>
-	void SetEventData(EventData data) { eventData_ = data; }
+	void SetEventData(const EventData& data) { eventData_ = data; }
 
 	/// <summary>
 	/// eventDataの関数を使う
@@ -81,8 +81,8 @@ public:
 	/// GameSceneにある
 	/// </summary>
 	/// <param name="E"></param>
-	void SetPopEnemies(std::vector<std::shared_ptr<IEnemy>> enemies) { popEnemies_ = enemies; }
-	std::vector<std::shared_ptr<IEnemy>> GetPopEnemy() { return popEnemies_; }
+	void SetPopEnemies(const std::vector<std::shared_ptr<IEnemy>>& enemies) { popEnemies_ = enemies; }
+	std::vector<std::shared_ptr<IEnemy>> GetPopEnemy() const { return popEnemies_; }
 
 	/// <summary>
 	/// イベント終了

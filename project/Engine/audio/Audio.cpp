@@ -107,7 +107,7 @@ SoundData Audio::SoundLoadWave(const char* filename)//string?
 	return soundData;
 }
 
-void Audio::SoundPlayWave(SoundData soundData, float volume, bool isLoop) {
+void Audio::SoundPlayWave(const SoundData& soundData, float volume, bool isLoop) {
 
 	XAUDIO2_VOICE_STATE state;
 	soundData.pSourceVoice->GetState(&state);
@@ -140,12 +140,12 @@ void Audio::SoundUnload(SoundData* soundData) {
 	soundData->wfex = {};
 }
 
-void Audio::StopWave(SoundData soundData) {
+void Audio::StopWave(const SoundData& soundData) {
 	result_ = soundData.pSourceVoice->Stop(); //音源を止める
 	result_ = soundData.pSourceVoice->FlushSourceBuffers(); //音源のリセット
 }
 
-void Audio::ControlVolume(SoundData soundData, float volume) {
+void Audio::ControlVolume(const SoundData& soundData, float volume) {
 	//音量調節
 	result_ = soundData.pSourceVoice->SetVolume(volume);
 }
