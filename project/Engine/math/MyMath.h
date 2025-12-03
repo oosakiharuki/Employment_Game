@@ -266,11 +266,11 @@ namespace MyMath {
 	Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2);
 
 	Matrix4x4 MakeIdentity4x4();
-	Matrix4x4 MakeScaleMatrix(Vector3 scale);
+	Matrix4x4 MakeScaleMatrix(const Vector3& scale);
 	Matrix4x4 MakeRotateXMatrix(float radian);
 	Matrix4x4 MakeRotateYMatrix(float radian);
 	Matrix4x4 MakeRotateZMatrix(float radian);
-	Matrix4x4 MakeTranslateMatrix(Vector3 translate);
+	Matrix4x4 MakeTranslateMatrix(const Vector3& translate);
 
 
 	Vector3 Normalize(const Vector3& v);
@@ -292,7 +292,7 @@ namespace MyMath {
 
 #pragma region Affine
 
-	Matrix4x4 Multiply(Matrix4x4 m1, Matrix4x4 m2);
+	Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2);
 
 	Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Vector3& translate);
 	
@@ -329,10 +329,10 @@ namespace MyMath {
 	Skeleton CreateSkeltion(const Node& rootNode);
 	int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
 
-	Matrix4x4 Transpose(Matrix4x4 m);
+	Matrix4x4 Transpose(const Matrix4x4& m);
 
 	VertexData AddVert(const VertexData& v1, const VertexData& v2);
 
 	bool IsCollisionAABB_Segment(const AABB& aabb, const Segment& segment);
-	bool Intersect(Vector2 a1, Vector2 a2,Vector2 b1, Vector2 b2);
+	bool Intersect(const Vector2& a1, const Vector2& a2,const Vector2& b1, const Vector2& b2);
 }

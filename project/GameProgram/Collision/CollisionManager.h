@@ -52,7 +52,7 @@ public:
 	/// <param name="shadowAABB">対象の影</param>
 	/// <param name="position">対象の場所</param>
 	/// <returns>対象から一番近い地面の上</returns>
-	Vector3 UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position) const;
+	Vector3 UnderCollision(const std::vector<AABB>& stageAABB, const AABB& shadowAABB, const Vector3& position) const;
 	
 	/// <summary>
 	/// getter_ワープして次のステージに

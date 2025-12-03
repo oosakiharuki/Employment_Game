@@ -4,7 +4,7 @@
 using namespace MyMath;
 using namespace Primitive;
 
-void BoxModel::Initialize(std::string textureFile) {
+void BoxModel::Initialize(const std::string& textureFile) {
 	this->cubemap_ = Cubemap::GetInstance().get();
 
 	modelData_ = CreateBox();
@@ -42,7 +42,7 @@ void BoxModel::Initialize(std::string textureFile) {
 	wvpData_->WVP = MakeIdentity4x4();
 }
 
-void BoxModel::Update(Matrix4x4 matworld) {
+void BoxModel::Update(const Matrix4x4& matworld) {
 
 	Matrix4x4 WorldViewProjectionMatrix;
 	if (camera_) {

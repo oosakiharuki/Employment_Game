@@ -49,14 +49,14 @@ public:
 	/// <summary>
 	/// getter_当たり判定AABB
 	/// </summary>
-	/// <returns></returns>座標位置が真ん中のAABB
+	/// <returns>座標位置が真ん中のAABB</returns>
 	AABB GetAABB();
 
 	/// <summary>
 	/// setter_当たり判定AABB
 	/// </summary>
-	/// <param name="aabb"></param>代入するAABB
-	void SetAABB(AABB aabb) { aabb_ = aabb; }
+	/// <param name="aabb">代入するAABB</param>
+	void SetAABB(const AABB& aabb) { aabb_ = aabb; }
 
 	/// <summary>
 	/// オブジェクトのクラスを知るための名前

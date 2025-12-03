@@ -27,18 +27,18 @@ public:
 	/// getter_座標位置
 	/// </summary>
 	/// <returns>現在の座標位置</returns>
-	Vector3 GetTranslate() { return wt_.translation_; }
+	Vector3 GetTranslate() const { return wt_.translation_; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
 	/// <param name="translate">代入する座標位置</param>
-	void SetTranslate(Vector3 translate) { wt_.translation_ = translate; }
+	void SetTranslate(const Vector3& translate) { wt_.translation_ = translate; }
 
 	/// <summary>
 	/// setter_弾丸速度
 	/// </summary>
 	/// <param name="velocity">代入する弾丸速度</param>
-	void SetVelocty(Vector3 velocity) { velocity_ = velocity; }
+	void SetVelocty(const Vector3& velocity) { velocity_ = velocity; }
 
 	/// <summary>
 	/// 弾がなくなるフラグ

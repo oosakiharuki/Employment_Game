@@ -135,7 +135,7 @@ void CameraControl::ZoomStart(const Vector3& goal) {
 	isZoom_ = true;
 }
 
-void CameraControl::CameraSetting(const CameraInitData& data, const bool& fixed_Mode_) {
+void CameraControl::CameraSetting(const CameraInitData& data, bool fixed_Mode_) {
 	//座標と回転
 	wt_.rotation_ = data.rotation;
 	wt_.translation_ = data.translation;

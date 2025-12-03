@@ -15,7 +15,7 @@ public:
 	/// 更新処理
 	/// </summary>
 	/// <param name="matworld"></param>
-	void Update(Matrix4x4 matworld);
+	void Update(const Matrix4x4& matworld);
 	/// <summary>
 	/// 描画処理
 	/// </summary>

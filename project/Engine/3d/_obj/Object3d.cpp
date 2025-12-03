@@ -123,7 +123,7 @@ void Object3d::SetModelFile(const std::string& filePath) {
 	model_ = ModelManager::GetInstance()->FindModel_obj(filePath);
 }
 
-void Object3d::SetColor(Vector4 color) {
+void Object3d::SetColor(const Vector4& color) {
 	if (model_) {
 		model_->SetColor(color);
 	}
