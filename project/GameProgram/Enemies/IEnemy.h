@@ -21,13 +21,9 @@ public:
 	void Enemy_InitializeCommon(const std::string& objectName);
 
 	/// <summary>
-	/// 更新処理
-	/// </summary>
-	virtual void Update() = 0;
-	/// <summary>
 	/// 共有する更新処理
 	/// </summary>
-	void UpdateCommon();
+	void Update();
 
 	/// <summary>
 	/// 最後にオブジェクト更新処理
@@ -175,7 +171,39 @@ public:
 	/// </summary>
 	virtual void FireBullet();
 
+	/// <summary>
+	/// 行動パターン
+	/// </summary>
+	enum class Action {
+		normal, //通常
+		attack, //攻撃
+		dead,   //死亡
+		stop    //停止
+	};
+
+
 protected:
+
+	/// <summary>
+	/// 生きている時の更新処理
+	/// </summary>
+	virtual void UpdateNormal() = 0;
+
+	/// <summary>
+	/// 攻撃中の更新処理
+	/// </summary>
+	virtual void UpdateAttack() = 0;
+
+	/// <summary>
+	/// 死んだ時の更新処理
+	/// </summary>
+	virtual void UpdateDead() = 0;
+
+	/// <summary>
+	/// imguiの更新処理
+	/// </summary>
+	virtual void UpdateImgui() = 0;
+
 	//オブジェクト
 	std::unique_ptr<Object3d> object_;
 
@@ -190,11 +218,13 @@ protected:
 	Vector3 eyeReach_{};
 	bool isFoundTarget_ = false;
 
-	//敵を倒した時のUpdate関数
-	void DeadUpdate();
+	//ゲームに移さないフラグ
+	bool isDeleteEnemy_ = false;
+	//倒された時の回転リアクション
+	const float kDeadRotation_ = 3.0f;
+	//回転リアクションの最大値
+	const float kDeadRotationMax_ = 90.0f;
 
-	//倒された時フラグ
-	bool isDeleteEnemy_ = false;//完全に削除フラグ
 
 	//動く範囲
 	Vector3 routePointRight_;
@@ -233,6 +263,8 @@ protected:
 	const float kMarkMaxTime_ = 1.0f;
 	float markTimer_ = 0.0f;
 	bool isLostPlayer_ = false;
+
+	Action action_ = Action::stop;
 
 private:
 	std::vector<AABB> stages_;

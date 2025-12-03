@@ -187,12 +187,6 @@ public:
 	void UmbrellaRange(float direction);
 
 	/// <summary>
-	/// 演出中か
-	/// </summary>
-	/// <returns></returns>
-	const bool Performancing() { return isPerformance_; }
-
-	/// <summary>
 	/// プレイヤーの向きををカメラに
 	/// </summary>
 	void DirectionTheCamera(){

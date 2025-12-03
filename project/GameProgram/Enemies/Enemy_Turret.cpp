@@ -37,28 +37,33 @@ void Enemy_Turret::Initialize() {
 	particles_[particleFire_.name]->SetScale(kParticleFireSize_);
 }
 
-void Enemy_Turret::Update() {
+void Enemy_Turret::UpdateNormal() {
 
-	//敵の共有処理
-	UpdateCommon();
+	//スケール以外の行列
+	Matrix4x4 matWorld = MakeAffineMatrix(kDefaultScale_, wt_.rotation_, wt_.translation_);
+	//レーザーサイズXはターレットの前に出すため
+	particles_[particleLaser_.name]->SetTranslate(wt_.translation_ + TransformNormal(Vector3{ 0,0,particleLaserSize_.x }, matWorld));
+	particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::TimerMode);
 
-	if (!isDead_) {
-		SearchRange();
-		//スケール以外の行列
-		Matrix4x4 matWorld = MakeAffineMatrix(kDefaultScale_, wt_.rotation_, wt_.translation_);
-		//レーザーサイズXはターレットの前に出すため
-		particles_[particleLaser_.name]->SetTranslate(wt_.translation_ + TransformNormal(Vector3{0,0,particleLaserSize_.x}, matWorld));
-		particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::TimerMode);
-	}
-	else {
-		particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::Stop);
-	}
+}
 
+void Enemy_Turret::UpdateAttack(){
 	//コーンが上向きなので
 	particles_[particleFire_.name]->SetRotate({ 0,0,-wt_.rotation_.y });
+}
 
-	//更新が終了
-	UpdateBehind();
+void Enemy_Turret::UpdateDead() {
+	//レーザーのパーティクル停止
+	particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::Stop);
+	
+	wt_.rotation_.z += kDeadRotation_;
+
+	if (wt_.rotation_.z > kDeadRotationMax_) {
+		isDeleteEnemy_ = true;
+	}
+}
+
+void Enemy_Turret::UpdateImgui() {
 
 #ifdef USE_IMGUI
 
@@ -73,7 +78,6 @@ void Enemy_Turret::Update() {
 	ImGui::End();
 
 #endif // USE_IMGUI
-
 }
 
 void Enemy_Turret::Draw() {

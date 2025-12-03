@@ -13,13 +13,14 @@ std::string IScene::GetSceneNo() { return sceneNo_; }
 void IScene::PreviousSceneData() {
 	//前に残しておいたデータ
 	sceneSaveData_ = NextStageSave::GetInstance()->GetNextStageSaveData();
-	stageFileName_ = sceneSaveData_.nextStageFile;//ステージの全体層(.obj)
 }
 
-void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
+void IScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
 	
 	//- プレイヤー配置 -
 	player_ = std::make_unique<Player>();
+
+	stageFileName_ = sceneSaveData_.nextStageFile;//ステージの全体層(.obj)
 
 	//値が入っている場合
 	if (leveleditor_file != "") {
@@ -29,7 +30,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 	}
 
 	//ステージのjsonを読み取る
-	levelediter_.LoadLevelediter("resource/Levelediter/" + sceneSaveData_.nextStageFile + ".json");
+	levelediter_.LoadLevelediter("resource/Levelediter/" + stageFileName_ + ".json");
 
 	//- カメラ配置 -
 	camera_ = std::make_unique<Camera>();
@@ -62,7 +63,7 @@ void IScene::LevelEditorObjectSetting(const std::string leveleditor_file) {
 		//初期状態(位置、回転)設定
 		player_->SetInit_Position(playerData.translation,playerData.rotation);
 	}
-
+	
 	//- 敵配置 -
 	//敵配置データがあるとき
 	if (!levelediter_.GetLevelData()->spawnEnemies.empty()) {
@@ -228,8 +229,8 @@ void IScene::WarpNextScene(const std::string& nextScene) {
 	}
 
 	//プレイヤーが演出判定でない
-	//「!player_->Performancing()」は何度もplayer_のGetTranslateを読み取ることで予定の速度より速くならないようにするため
-	if (!player_->Performancing()) {
+	//「!player_->GetPerformanceMode()」は何度もplayer_のGetTranslateを読み取ることで予定の速度より速くならないようにするため
+	if (!player_->GetPerformanceMode()) {
 		//プレイヤーにカメラズーム
 		CameraZoomPlayer();
 		player_->BackDirection();//向きを前に(Z方向)

@@ -178,7 +178,7 @@ protected:
 	//ダメージリアクション
 	float scaleTimer_ = 0.0f;
 	//足して大きくする値
-	Vector3 damageScale_ = { 0.1f, 0.1f, 0.1f };
+	Vector3 damageScale_ = { 0.15f, 0.15f, 0.15f };
 	const float kDamageMaxTime_ = 0.14f;
 
 

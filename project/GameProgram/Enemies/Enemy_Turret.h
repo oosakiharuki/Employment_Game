@@ -8,9 +8,33 @@ class Enemy_Turret : public IEnemy {
 public:
 
 	~Enemy_Turret() override;
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize() override;
-	void Update() override;
+	/// <summary>
+	/// 更新処理_通常
+	/// </summary>
+	void UpdateNormal() override;
+	/// <summary>
+	/// 更新処理_攻撃中
+	/// </summary>
+	void UpdateAttack() override;
+	/// <summary>
+	/// 更新処理_死亡中
+	/// </summary>
+	void UpdateDead() override;
+	/// <summary>
+	/// 更新処理_Imgui
+	/// </summary>
+	void UpdateImgui() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw() override;
+	/// <summary>
+	/// 攻撃
+	/// </summary>
 	void Attack() override;
 
 	/// <summary>

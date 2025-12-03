@@ -8,10 +8,35 @@
 class Enemy_Bomb : public IEnemy {
 public:
 	~Enemy_Bomb() override;
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize() override;
-	void Update() override;
+	/// <summary>
+	/// 更新処理_通常
+	/// </summary>
+	void UpdateNormal() override;
+	/// <summary>
+	/// 更新処理_攻撃中
+	/// </summary>
+	void UpdateAttack() override;
+	/// <summary>
+	/// 更新処理_死亡中
+	/// </summary>
+	void UpdateDead() override;
+	/// <summary>
+	/// 更新処理_Imgui
+	/// </summary>
+	void UpdateImgui() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw() override;
+	/// <summary>
+	/// 攻撃
+	/// </summary>
 	void Attack() override;
+
 	bool IsExplosion()override { return isExplosion_; }
 	void ExplosionEnd()override { isExplosion_ = true; }
 	void RespawnEnemy() override;
@@ -27,6 +52,8 @@ public:
 	/// </summary>
 	/// <returns></returns>プレイヤーからボムの距離
 	Vector3 GetDistance()override { return distance_; }
+
+	void DirectionPlayer();
 
 private:
 	//追尾開始
@@ -55,6 +82,10 @@ private:
 	const float kScaleMax_ = 0.2f;//スケール最大値
 	const float kOnTheVerge = 4.0f;//爆発寸前までのタイマー
 	const float kScaleSpeedUp_ = 2.0f;
+
+	float deadTimer_ = 0.0f;
+	const float kDeadTimeMax_ = 1.0f;
+
 	/// <summary>
 	/// 爆発する
 	/// </summary>
