@@ -110,7 +110,7 @@ void Player::Update() {
 
 	//ジャンプ
 	if (isJump_) {
-		wt_.translation_.y += 0.25f;
+		wt_.translation_.y += kJumpUp_;
 	}
 
 	//演出時は関係なし
@@ -194,6 +194,7 @@ void Player::Update() {
 	ImGui::SliderFloat("RotateZ", &wt_.rotation_.z, -kMaxAngle, kMaxAngle);
 
 	ImGui::Text("体力:%d", hp_);
+	ImGui::Text("残機 %d", zanki_);
 
 	ImGui::End();
 
@@ -579,6 +580,12 @@ void Player::DeadPlayer() {
 }
 
 void Player::RespawnPlayer() {
+	if (zanki_ == 0) {
+		return;
+	}
+	//残機を減らす
+	zanki_--;
+
 	RespawnCommon();
 
 	deadTimer_ = 0.0f;
@@ -590,9 +597,10 @@ void Player::PariSuccess() {
 	//パリィ時間延長(連続弾でも跳ね返せるように)
 	pariTime_ = kPariTimeMax_;
 
-	Audio::GetInstance()->StopWave(pariSound_);
-	Audio::GetInstance()->SoundPlayWave(pariSound_, kVolume_);
-	//傘のオブジェクト座標を読み取る
+	//SE
+	Audio::GetInstance()->StopWave(pariSound_);//パリィが続くとき一度止めてから再生させるようにする
+	Audio::GetInstance()->SoundPlayWave(pariSound_, kVolume_);//SE再生:パリィ
+	//傘の座標を読み取る
 	Vector3 translate = umbrella_->GetTranslate();
 	translate += TransformNormal(kPlayerFront_, wtGun_.matWorld_);//出す場所をwtGun_の向きの前に
 	particles_[particlePari_.name]->SetTranslate(translate);

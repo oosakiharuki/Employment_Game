@@ -26,28 +26,32 @@ void Enemy_Soldier::Initialize() {
 	rapidCountMax_ = kRapidCountMax_;
 }
 
-void Enemy_Soldier::Update() {
+void Enemy_Soldier::UpdateNormal() {
+	//
+	MoveEnemy();
+}
 
-	//敵の共有処理
-	UpdateCommon();
-
-	if (!isDead_) {
-		if (!isFoundTarget_ && !isBullet_ && !isLostPlayer_) {
-			SearchRange();
-			MoveEnemy();
-		}
-	}
-
+void Enemy_Soldier::UpdateAttack() {
 	//コーンが上向きなので
 	particles_[particleFire_.name]->SetRotate({ 0.0f,0.0f,-wt_.rotation_.y });
+}
 
-	//更新が終了
-	UpdateBehind();
+void Enemy_Soldier::UpdateDead() {
+	wt_.rotation_.z += kDeadRotation_;
 
+	if (wt_.rotation_.z > kDeadRotationMax_) {
+		isDeleteEnemy_ = true;
+	}
+}
+
+void Enemy_Soldier::UpdateImgui() {
 
 #ifdef USE_IMGUI
 
 	ImGui::Begin("Enemy_soldier");
+
+	ImGui::Text("translate : %f,%f,%f", wt_.translation_.x, wt_.translation_.y, wt_.translation_.z);
+	ImGui::Text("translate : %f,%f,%f", wt_.rotation_.x, wt_.rotation_.y, wt_.rotation_.z);
 
 	ImGui::Text("routePointLeft : %f,%f,%f", routePointLeft_.x, routePointLeft_.y, routePointLeft_.z);
 	ImGui::Text("routePointRight : %f,%f,%f", routePointRight_.x, routePointRight_.y, routePointRight_.z);

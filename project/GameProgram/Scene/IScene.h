@@ -43,8 +43,10 @@ protected:
 	//カメラ移動範囲
 	Vector3 cameraPointLeft_;//左端
 	Vector3 cameraPointRight_;//右端
+	//カメラのコントロール
 	std::unique_ptr<CameraControl> cameraControl_;
 
+	//ズームするときのプレイヤーと少し離れた位置
 	const Vector3 kPlayerAwayPos_ = { 0, 2, -15.0f };
 
 	//レベルエディタ(オブジェクトの配置を.jsonでできる)
@@ -70,10 +72,10 @@ protected:
 	float volume_ = 0.07f;//音量調節機能
 
 	/// <summary>
-	/// レベルエディタで配置
+	/// レベルエディタで配置処理
 	/// </summary>
-	/// <param name="leveleditor_file"></param>指定したい場合は名前を入れることも可能
-	void LevelEditorObjectSetting(const std::string leveleditor_file = "");
+	/// <param name="leveleditor_file">指定したい場合は名前を入れることも可能</param>
+	void LevelEditorObjectSetting(const std::string& leveleditor_file = "");
 
 	/// <summary>
 	/// 前のステージのデータ引継ぎ
@@ -81,7 +83,9 @@ protected:
 	void PreviousSceneData();
 
 	//前ステージデータ
-	SceneSaveData sceneSaveData_;
+	SceneSaveData sceneSaveData_ = {
+		3,3,2,"stage_0" //初期設定
+	};
 
 	/// <summary>
 	/// 全シーンに共有できる当たり判定
@@ -94,7 +98,7 @@ protected:
 	/// <summary>
 	/// 次のシーンの選択+フェードインを始める
 	/// </summary>
-	/// <param name="進めたいシーン"></param>
+	/// <param name="name">進めたいシーン</param>
 	void NextSceneFadeInStart(const std::string& name);
 
 	/// <summary>
@@ -109,9 +113,9 @@ protected:
 	void ChangeScene();
 
 	/// <summary>
-	/// ワープする時の処理
+	/// ワープして次のシーンに進む処理
 	/// </summary>
-	void WarpNextScene();
+	void WarpNextScene(const std::string& nextScene);
 
 	/// <summary>
 	/// プレイヤーがゴールする時の処理
@@ -149,12 +153,12 @@ protected:
 
 	//変更する場所(ジャンプ説明前は移動の説明)
 	Guide kGuideMove_ = { "guide_move", -100.0f,-70.0f };   //移動の説明
-	Guide kGuideJump_ = { "guide_jump", -65.0f, -10.0f };    //ジャンプの説明
-	Guide kGuideFire_ = { "guide_fire", -5.0f, 16.0f };      //攻撃の説明
+	Guide kGuideJump_ = { "guide_jump", -65.0f, -10.0f };   //ジャンプの説明
+	Guide kGuideFire_ = { "guide_fire", -5.0f, 16.0f };     //攻撃の説明
 	Guide kGuideshield_ = { "guide_shield", 16.0f, 70.0f }; //守るの説明
-	Guide kGuidebrink_ = { "guide_brink", 90.0f, 105.0f };   //ブリンクの説明
-	Guide kGuideKakku_ = { "guide_kakku", 105.0f, 130.0f };  //滑空の説明
-	Guide kGuideWarp_ = { "guide_warp", 140.0f, 200.0f };  //滑空の説明
+	Guide kGuidebrink_ = { "guide_brink", 90.0f, 105.0f };  //ブリンクの説明
+	Guide kGuideKakku_ = { "guide_kakku", 105.0f, 130.0f }; //滑空の説明
+	Guide kGuideWarp_ = { "guide_warp", 140.0f, 200.0f };   //滑空の説明
 
 
 public:
@@ -196,7 +200,10 @@ private:
 	//操作ガイドに必要な総数
 	const uint32_t maxGuide = 7;
 
-
+	/// <summary>
+	/// 操作説明スプライトを作る
+	/// </summary>
+	/// <param name="guide">名前や座標が入った構造体</param>
 	void CreateGuide(const Guide& guide);
 
 	std::vector<Guide> guides_;

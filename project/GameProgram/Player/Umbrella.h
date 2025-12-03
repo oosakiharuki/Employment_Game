@@ -1,11 +1,12 @@
 #pragma once
 #include "Object_glTF.h"
 #include "MyMath.h"
+#include "GameActor.h"
 
 /// <summary>
 /// 傘(発泡、守が使える)
 /// </summary>
-class Umbrella {
+class Umbrella : public GameActor{
 public:
 	~Umbrella();
 	/// <summary>
@@ -24,59 +25,38 @@ public:
 	/// <summary>
 	/// getter_座標
 	/// </summary>
-	/// <returns></returns>現在の座標
+	/// <returns>現在の座標</returns>
 	Vector3 GetTranslate() { return wt_.translation_; }
 	/// <summary>
 	/// setter‗座標
 	/// </summary>
-	/// <param name="translate"></param>代入する座標
+	/// <param name="translate">代入する座標</param>
 	void SetTranslate(Vector3 translate) { wt_.translation_ = translate; }
 
 	/// <summary>
 	/// setter‗回転
 	/// </summary>
-	/// <param name="rotate"></param>代入する各回転角度
+	/// <param name="rotate">代入する各回転角度</param>
 	void SetRotate(Vector3 rotate) { wt_.rotation_ = rotate; }
 
 	/// <summary>
 	/// setter‗スケール
 	/// </summary>
-	/// <param name="scale"></param>代入するスケール
-	void SetScale(Vector3 scale) { 
-		wt_.scale_ = scale;
-		scaleTimer_ = 0.0f;
-	}
+	/// <param name="scale">代入するスケール</param>
+	void SetScale(Vector3 scale) { wt_.scale_ = scale; }
 
-	/// <summary>
-	/// getter‗当たり判定AABB
-	/// </summary>
-	/// <returns></returns>座標が中心のAABB
-	AABB GetAABB();
 	/// <summary>
 	/// シールドモード
 	/// </summary>
-	/// <param name="isShield"></param>trueはシールドモードに変更
+	/// <param name="isShield">trueはシールドモードに変更</param>
 	void ShieldMode(bool isShield) { isShieldMode_ = isShield; }
 
-	/// <summary>
-	/// 当たったリアクション(拡大縮小)
-	/// </summary>
-	/// <param name="mosionOn"></param>モーションフラグ
-	/// <param name="scale"></param>どのくらい大きくするか
-	/// <param name="maxTime"></param>リアクションタイマーの最大値
-	void ScaleUpdate(bool& mosionOn, Vector3 scale, float maxTime);
 private:
 	//オブジェクト設定
 	std::unique_ptr<Object_glTF> object_;
-	WorldTransform wt_;
-
-	//AABB
-	AABB umbrellaAABB_;
 	//AABBのサイズ
 	const Vector3 kAABBSize_ = { 1,2,1 };
 	//シールドモード
 	bool isShieldMode_ = false;
-	//リアクションのタイマー
-	float scaleTimer_ = 0.0f;
 };
 

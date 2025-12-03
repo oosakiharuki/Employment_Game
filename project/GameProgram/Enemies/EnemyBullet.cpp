@@ -17,8 +17,8 @@ void EnemyBullet::Initialize() {
 	wt_.Initialize();
 
 	//弾の当たり判定の大きさ
-	bulletAABB.min = { -0.5f,-0.5f,-0.5f };
-	bulletAABB.max = { 0.5f,0.5f,0.5f };
+	bulletAABB.min = -kBulletSize_ * kDivideByTwo_;
+	bulletAABB.max = kBulletSize_ * kDivideByTwo_;
 }
 
 void EnemyBullet::Update() {
@@ -47,7 +47,7 @@ void EnemyBullet::Draw() {
 	object->Draw();
 }
 
-AABB EnemyBullet::GetAABB() {
+AABB EnemyBullet::GetAABB() const {
 	AABB aabb;
 	aabb.min = wt_.translation_ + bulletAABB.min;
 	aabb.max = wt_.translation_ + bulletAABB.max;

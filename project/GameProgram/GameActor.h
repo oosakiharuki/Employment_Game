@@ -26,84 +26,83 @@ public:
 	/// <summary>
 	/// getter_座標位置
 	/// </summary>
-	/// <returns></returns>現在の座標位置
-	Vector3 GetTranslate() { return wt_.translation_; }
+	/// <returns>現在の座標位置</returns>
+	Vector3 GetTranslate() const { return wt_.translation_; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
-	/// <param name="translate"></param>代入する座標位置
-	void SetTranslate(Vector3 translate) { wt_.translation_ = translate; }
+	/// <param name="translate">代入する座標位置</param>
+	void SetTranslate(const Vector3& translate) { wt_.translation_ = translate; }
 
 	/// <summary>
 	/// getter_ワールド座標系の位置
 	/// </summary>
-	/// <returns></returns>平行移動成分を搭載したプレイヤー座標
-	Vector3 GetWorldPosition();
+	/// <returns>平行移動成分を搭載したプレイヤー座標</returns>
+	Vector3 GetWorldPosition() const;
 
 	/// <summary>
 	/// getter_回転
 	/// </summary>
-	/// <returns></returns>現在の回転
-	Vector3 GetRotate() { return wt_.rotation_; }
+	/// <returns>現在の回転</returns>
+	Vector3 GetRotate() const { return wt_.rotation_; }
 	/// <summary>
 	/// setter_回転
 	/// </summary>
-	/// <param name="rotate"></param>代入する各回転角度
-	void SetRotate(Vector3 rotate) { wt_.rotation_ = rotate; }
+	/// <param name="rotate">代入する各回転角度</param>
+	void SetRotate(const Vector3& rotate) { wt_.rotation_ = rotate; }
 
 	/// <summary>
 	/// getter_座標位置
 	/// </summary>
-	/// <returns></returns>現在の座標位置
-	Vector3 GetSize() { return wt_.scale_; }
+	/// <returns>現在の座標位置</returns>
+	Vector3 GetSize() const { return wt_.scale_; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
-	/// <param name="translate"></param>代入する座標位置
-	void SetSize(Vector3 size) { wt_.scale_ = size; }
+	/// <param name="translate">代入する座標位置</param>
+	void SetSize(const Vector3& size) { wt_.scale_ = size; }
 
 	/// <summary>
 	/// getter_当たり判定AABB
 	/// </summary>
-	/// <returns></returns>座標が中心のAABB
-	AABB GetAABB();
+	/// <returns>座標が中心のAABB</returns>
+	AABB GetAABB() const;
 	/// <summary>
 	/// setter_当たり判定AABB
 	/// </summary>
-	/// <param name="aabb"></param>AABB
-	void SetAABB(AABB aabb) { actorAABB_ = aabb; }
+	/// <param name="aabb">AABB</param>
+	void SetAABB(const AABB& aabb) { actorAABB_ = aabb; }
 
 	/// <summary>
 	/// 地面判定フラグ変更
 	/// </summary>
-	/// <param name="result"></param>trueは地面 / falseは空中
+	/// <param name="result">trueは地面 / falseは空中</param>
 	void IsGround(bool result);
 
 	/// <summary>
 	/// getter_地面判定
 	/// </summary>
-	/// <returns></returns>現在の地面判定
+	/// <returns>現在の地面判定</returns>
 	bool GetIsGround() { return isGround_; }
 
 	/// <summary>
 	/// getter_倒れた時
 	/// </summary>
-	/// <returns></returns>倒れたフラグ
+	/// <returns>倒れたフラグ</returns>
 	bool GetIsDead() { return isDead_; }
 
 	/// <summary>
 	/// リアクション(拡大縮小)
 	/// </summary>
-	/// <param name="mosionOn"></param> リアクションフラグ
-	/// <param name="scale"></param> どのくらい大きくするか
-	/// <param name="maxTime"></param> リアクションタイマーの最大値
-	void ScaleUpdate(bool& mosionOn, Vector3 scale, float maxTime);
+	/// <param name="mosionOn">リアクションフラグ</param>
+	/// <param name="scale">どのくらい大きくするか</param>
+	/// <param name="maxTime"><リアクションタイマーの最大値/param>
+	void ScaleUpdate(bool& mosionOn, const Vector3& scale, float maxTime);
 
 	/// <summary>
 	/// アニメーションのみを動かす関数(演出で使う)
 	/// </summary>
-	/// <param name="anser"></param>
-	/// trueならアニメーションのみ / falseなら操作可能
+	/// <param name="result">trueならアニメーションのみ / falseなら操作可能</param>
 	void IsPerformanceFlag(bool result) { isPerformance_ = result; }
 
 	bool GetPerformanceMode() { return isPerformance_; }
@@ -112,7 +111,7 @@ public:
 	/// <summary>
 	/// getter_影の当たり判定
 	/// </summary>
-	/// <returns></returns>影のAABB
+	/// <returns>影のAABB</returns>
 	AABB GetShadowAABB() { return shadow_->GetAABB(); }
 
 	/// <summary>
@@ -124,9 +123,9 @@ public:
 	/// <summary>
 	/// 復活用の初期位置のデータ
 	/// </summary>
-	/// <param name="translate"></param>座標位置
-	/// <param name="rotate"></param>各回転角度
-	void SetInit_Position(Vector3 translate, Vector3 rotate) {
+	/// <param name="translate">座標位置</param>
+	/// <param name="rotate">各回転角度</param>
+	void SetInit_Position(const Vector3& translate, const Vector3& rotate) {
 		initTranslate_ = translate;
 		initRotate_ = rotate;
 	}
@@ -139,7 +138,7 @@ public:
 	/// <summary>
 	/// 体力の設定
 	/// </summary>
-	/// <param name="max"></param>最大体力
+	/// <param name="max">最大体力</param>
 	void HP_Initialize(uint32_t max);
 
 protected:
@@ -150,7 +149,7 @@ protected:
 
 	//体力
 	uint32_t maxHp_;//最大値
-	uint32_t hp_;
+	uint32_t hp_;//現在の体力
 
 	bool isDead_ = false;//倒れたフラグ
 
@@ -179,7 +178,7 @@ protected:
 	//ダメージリアクション
 	float scaleTimer_ = 0.0f;
 	//足して大きくする値
-	Vector3 damageScale_ = { 0.1f, 0.1f, 0.1f };
+	Vector3 damageScale_ = { 0.15f, 0.15f, 0.15f };
 	const float kDamageMaxTime_ = 0.14f;
 
 
@@ -187,6 +186,7 @@ protected:
 	Vector3 initTranslate_;
 	Vector3 initRotate_;
 
+	//パーティクルのコンテナ
 	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
 
 private:

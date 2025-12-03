@@ -3,8 +3,7 @@ using namespace MyMath;
 
 void SelectScene::Initialize() {
 
-	//次のシーン進むデータ初期化
-	sceneSaveData_.playerLife = kPlayerLife_;
+	//移行データ初期化
 	sceneSaveData_.nextStageFile = "stage_select";
 
 	//ステージシーンのゲームオブジェクト配置
@@ -31,14 +30,6 @@ void SelectScene::Update() {
 		ChangeScene();
 	}
 
-	//ワープするflag && カメラがズームし終わった
-	if (CollisionManager::GetInstance()->IsWarp() && cameraControl_->ZoomEnd()) {
-		//次のステージに進む時Hpなどパラメータがリセットされないようにする
-		sceneSaveData_.playerHp = player_->GetHp(); //体力
-		NextStageSave::GetInstance()->SetPlayerParameta(sceneSaveData_); //代入する
-		NextSceneFadeInStart("Game");
-	}
-
 	//タイトルに戻る
 	if (input_->TriggerKey(DIK_ESCAPE)) {
 		NextSceneFadeInStart("Title");
@@ -50,7 +41,7 @@ void SelectScene::Update() {
 	}
 
 	cameraControl_->Update(&*camera_);
-	WarpNextScene();
+	WarpNextScene("Game");
 
 	player_->Update();
 

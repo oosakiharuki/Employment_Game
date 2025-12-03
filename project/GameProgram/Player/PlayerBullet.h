@@ -26,24 +26,24 @@ public:
 	/// <summary>
 	/// getter_座標位置
 	/// </summary>
-	/// <returns></returns>現在の座標位置
+	/// <returns>現在の座標位置</returns>
 	Vector3 GetTranslate() { return wt_.translation_; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
-	/// <param name="translate"></param>代入する座標位置
+	/// <param name="translate">代入する座標位置</param>
 	void SetTranslate(Vector3 translate) { wt_.translation_ = translate; }
 
 	/// <summary>
 	/// setter_弾丸速度
 	/// </summary>
-	/// <param name="velocity"></param>代入する弾丸速度
+	/// <param name="velocity">代入する弾丸速度</param>
 	void SetVelocty(Vector3 velocity) { velocity_ = velocity; }
 
 	/// <summary>
 	/// 弾がなくなるフラグ
 	/// </summary>
-	/// <returns></returns>trueなら消滅
+	/// <returns>trueなら消滅</returns>
 	bool IsDead() { return isDead_; }
 	/// <summary>
 	/// 弾が敵などに当たる
@@ -54,8 +54,8 @@ public:
 	/// <summary>
 	/// getter_当たり判定AABB
 	/// </summary>
-	/// <returns></returns>座標位置の真ん中のAABB
-	AABB GetAABB();
+	/// <returns>座標位置の真ん中のAABB</returns>
+	AABB GetAABB() const;
 
 private:
 	//オブジェクト
@@ -68,6 +68,8 @@ private:
 	float deathTimer_ = 0.0f;
 	const float kEndTime_ = 0.7f;
 	bool isDead_ = false;
+
+	const Vector3 kBulletSize_ = { 1,1,1 };
 
 	AABB bulletAABB_;
 };

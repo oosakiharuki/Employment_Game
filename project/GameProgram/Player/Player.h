@@ -141,13 +141,25 @@ public:
 	/// setter_体力
 	/// </summary>
 	/// <param name="preHp"></param>代入する体力数
-	const uint32_t GetMaxHp() { return kPlayerMaxHp_; }
+	void SetHp(uint32_t preHp) { hp_ = preHp; }
 
 	/// <summary>
 	/// setter_体力
 	/// </summary>
 	/// <param name="preHp"></param>代入する体力数
-	void SetHp(uint32_t preHp) { hp_ = preHp; }
+	const uint32_t GetMaxHp() { return kPlayerMaxHp_; }
+
+	/// <summary>
+	/// getter_残機
+	/// </summary>
+	/// <returns></returns>
+	const uint32_t GetZanki() { return zanki_; }
+
+	/// <summary>
+	/// setter_残機
+	/// </summary>
+	/// <param name="zanki"></param>
+	void SetZanki(uint32_t zanki) { zanki_ = zanki; }
 
 	/// <summary>
 	/// setter_影の位置
@@ -173,12 +185,6 @@ public:
 	/// </summary>
 	/// <param name="direction"></param>回転角度
 	void UmbrellaRange(float direction);
-
-	/// <summary>
-	/// 演出中か
-	/// </summary>
-	/// <returns></returns>
-	const bool Performancing() { return isPerformance_; }
 
 	/// <summary>
 	/// プレイヤーの向きををカメラに
@@ -208,6 +214,7 @@ private:
 	float speed_ = kStandardSpeed_;
 	//ジャンプフラグ
 	bool isJump_ = false;
+	const float kJumpUp_ = 0.25f;//上がる高さ
 
 	//重力
 	
@@ -279,6 +286,8 @@ private:
 	bool isUmbrellaFall_ = false;
 
 	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
+	uint32_t zanki_ = 2;
+
 	//ダメージを食らった後の無敵時間
 	float infinityTimer_ = 0.0f;
 	const float kInfinityTimeMax_ = 1.0f;//最大無敵時間
@@ -288,7 +297,7 @@ private:
 	const float kHitStopTime_ = 1.0f;//ヒットストップ
 	const float kDeadTimeMax_ = 3.0f;//死んだ演出用時間
 	const float kPlayerDeadRotating_ = 10.0f;//10度ずつ回る
-	const float kDeadLittleUp_ = 0.3f;
+	const float kDeadLittleUp_ = 0.4f;
 
 	//復活
 	bool isRespawn_ = false;

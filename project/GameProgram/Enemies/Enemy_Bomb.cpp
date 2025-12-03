@@ -1,5 +1,6 @@
 #include "Enemy_Bomb.h"
 #include "Object3dCommon.h"
+#include "ImGuiManager.h"
 
 using namespace UseEveryOne;
 using namespace MyMath;
@@ -17,42 +18,53 @@ void Enemy_Bomb::Initialize() {
 	eyeReach_ = kEyeReach_;
 }
 
-void Enemy_Bomb::Update() {
+void Enemy_Bomb::UpdateNormal() {
+	//動く
+	MoveEnemy();
 
-	//敵の共有処理
-	UpdateCommon();
+	//ボムとプレイヤーの距離
+	DirectionPlayer();
+}
 
-	//体力が0の時
-	if ((bombTimer_ >= kBombTimeMax_ || isDead_) && !isExplosion_) {
+void Enemy_Bomb::UpdateAttack() {
+	//制限時間がMaxを越した時
+	if (bombTimer_ >= kBombTimeMax_) {
+		//Hpが0になって爆発
+		hp_ = 0;
+	}
+
+	//ボムとプレイヤーの距離
+	DirectionPlayer();
+	
+	//爆弾までの制限時間カウント
+	TimeRimmit();
+}
+
+void Enemy_Bomb::UpdateDead() {
+	//プレイヤーに倒された場合
+	if (!isExplosion_) {
+		//強制爆発
 		Exprosion();
 	}
 
-	//死んだとき
-	if (!isDead_) {
-		//通常処理
-		
-		//それぞれの座標位置
-		Vector3 enemyPosition = GetWorldPosition();
-		Vector3 playerPosition = player_->GetWorldPosition();
-		//プレイヤーとボムの距離
-		distance_ = enemyPosition - playerPosition;
-		//ノーマライズ
-		distance_ = Normalize(distance_);
+	deadTimer_ += kDeltaTime_;
 
-		if (!isStart_) {
-			MoveEnemy();
-
-			if (!isFoundTarget_) {
-				SearchRange();
-			}
-		}
-		else {
-			TimeRimmit();
-		}
+	if (isExplosion_ &&  deadTimer_ >= kDeadTimeMax_) {
+		isDeleteEnemy_ = true;
 	}
+}
 
-	//更新が終了
-	UpdateBehind();
+void Enemy_Bomb::UpdateImgui() {
+#ifdef USE_IMGUI
+
+	ImGui::Begin("Enemy_soldier");
+
+	ImGui::Text("translate : %f,%f,%f", wt_.translation_.x, wt_.translation_.y, wt_.translation_.z);
+	ImGui::Text("translate : %f,%f,%f", wt_.rotation_.x, wt_.rotation_.y, wt_.rotation_.z);
+
+	ImGui::End();
+
+#endif // USE_IMGUI
 }
 
 void Enemy_Bomb::Draw() {
@@ -64,8 +76,8 @@ void Enemy_Bomb::Draw() {
 }
 
 void Enemy_Bomb::Attack() {
-	//時限爆弾モードオン
-	isStart_ = true;
+	//追尾モードオン
+	isTuibiStart_ = true;
 }
 
 void Enemy_Bomb::TimeRimmit() {
@@ -77,32 +89,46 @@ void Enemy_Bomb::TimeRimmit() {
 
 	//向きを合わせる
 	if (distance_.x < 0) {
-		wt_.rotation_.y = kDirectionRight_;
+		wt_.rotation_.y = kDirectionRight_;//右向き
 	}
 	if (distance_.x >= 0) {
-		wt_.rotation_.y = kDirectionLeft_;
+		wt_.rotation_.y = kDirectionLeft_;//左向き
 	}
 
 	//リアクション
 
 	if (bombTimer_ >= kOnTheVerge) {
 		//爆発寸前だと揺れが細かくなる
-		ScaleUpdate(isStart_, bombScale_ * kScaleSpeedUp_, kScaleMax_ / kScaleSpeedUp_);
+		ScaleUpdate(isTuibiStart_, bombScale_ * kScaleSpeedUp_, kScaleMax_ / kScaleSpeedUp_);
 	}
 	else {
 		//爆発しそうな演出
-		ScaleUpdate(isStart_, bombScale_, kScaleMax_);
+		ScaleUpdate(isTuibiStart_, bombScale_, kScaleMax_);
 	}
 }
+
+void Enemy_Bomb::DirectionPlayer() {
+	//- プレイヤー追尾処理 -
+	//それぞれの座標位置
+	Vector3 enemyPosition = GetWorldPosition();
+	Vector3 playerPosition = player_->GetWorldPosition();
+	//プレイヤーとボムの距離
+	distance_ = enemyPosition - playerPosition;
+	//ノーマライズ
+	distance_ = Normalize(distance_);
+}
+
 
 void Enemy_Bomb::RespawnEnemy() {
 	RespawnEnemyCommon();
 	
-	//時限爆弾モードオフ
-	isStart_ = false;
+	//追尾モードオフ
+	isTuibiStart_ = false;
 	//爆発してない
 	isExplosion_ = false;
 	bombTimer_ = 0.0f;
+	//死亡タイマーリセット
+	deadTimer_ = 0.0f;
 }
 
 void Enemy_Bomb::Exprosion() {
@@ -114,6 +140,4 @@ void Enemy_Bomb::Exprosion() {
 	particles_[particleDamage_.name]->SetTranslate(wt_.translation_);
 	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 
-	//爆発したら死んでしまう
-	isDead_ = true;
 }

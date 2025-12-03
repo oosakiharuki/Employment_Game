@@ -14,8 +14,9 @@ void PlayerBullet::Initialize() {
 
 	wt_.Initialize();
 
-	bulletAABB_.min = { -1,-1,-1 };
-	bulletAABB_.max = { 1,1,1 };
+	//AABBの大きさ設定
+	bulletAABB_.min = -kBulletSize_ * kDivideByTwo_;
+	bulletAABB_.max = kBulletSize_ * kDivideByTwo_;;
 }
 
 void PlayerBullet::Update() {
@@ -39,7 +40,7 @@ void PlayerBullet::Draw() {
 	object_->Draw();
 }
 
-AABB PlayerBullet::GetAABB() {
+AABB PlayerBullet::GetAABB() const {
 	AABB aabb;
 	aabb.min = wt_.translation_ + bulletAABB_.min;
 	aabb.max = wt_.translation_ + bulletAABB_.max;

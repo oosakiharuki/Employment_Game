@@ -17,23 +17,28 @@ struct CollisionOverlap {
 	AABB targetAABB = { { 0,0,0 }, { 0,0,0 } };
 	AABB stageAABB = { { 0,0,0 }, { 0,0,0 } };
 };
-
+/// <summary>
+/// ゲーム全体の当たり判定
+/// </summary>
 class CollisionManager
 {
 public:
-
+	/// <summary>
+	/// インスタンス生成
+	/// </summary>
+	/// <returns></returns>
 	static std::shared_ptr<CollisionManager> GetInstance();
 
 	/// <summary>
 	/// 当たり判定をまとめたもの
 	/// </summary>
-	/// <param name="player_"></param> プレイヤー
-	/// <param name="enemies"></param> エネミー(std::vector)
-	/// <param name="stageObjects"></param> ステージオブジェクト(list)
-	/// <param name="stagesAABB"></param> ステージの当たり判定
-	/// <param name="eventTriggers"></param> イベントトリガー
-	/// <param name="cameraControl_"></param> カメラコントロール(イベントトリガーで使う)
-	/// <param name="levelediter"></param> レベルエディタ(同じく)
+	/// <param name="player_">プレイヤー</param>
+	/// <param name="enemies">エネミー(std::vector)</param> 
+	/// <param name="stageObjects">ステージオブジェクト(list)</param> 
+	/// <param name="stagesAABB">ステージの当たり判定</param> 
+	/// <param name="eventTriggers">イベントトリガー</param> 
+	/// <param name="cameraControl_">カメラコントロール(イベントトリガーで使う)</param> 
+	/// <param name="levelediter">レベルエディタ(同じく)</param> 
 	void AllCollisions(Player* player_, std::vector<std::shared_ptr<IEnemy>> enemies,
 		std::list<std::shared_ptr<IStageObject>> stageObjects, std::vector<AABB> stagesAABB,
 		std::vector<std::shared_ptr<EventTrigger>> eventTriggers, CameraControl* cameraControl_, Levelediter& levelediter);
@@ -43,21 +48,21 @@ public:
 	/// 対象(プレイヤー、敵など)の真下の床の位置に
 	/// 影などで使用する
 	/// </summary>
-	/// <param name="stageAABB"></param>ステージ地面の全体
-	/// <param name="shadowAABB"></param>対象の影
-	/// <param name="position"></param>対象の場所
-	/// <returns></returns>対象から一番近い地面の上
-	Vector3 UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position);
+	/// <param name="stageAABB">ステージ地面の全体</param>
+	/// <param name="shadowAABB">対象の影</param>
+	/// <param name="position">対象の場所</param>
+	/// <returns>対象から一番近い地面の上</returns>
+	Vector3 UnderCollision(std::vector<AABB> stageAABB, AABB shadowAABB, Vector3 position) const;
 	
 	/// <summary>
 	/// getter_ワープして次のステージに
 	/// </summary>
-	/// <returns></returns>ワープフラグ
+	/// <returns>ワープフラグ</returns>
 	const bool IsWarp() { return isWarp_; }
 	/// <summary>
 	/// getter_ゴール
 	/// </summary>
-	/// <returns></returns>ゴールフラグ
+	/// <returns>ゴールフラグ</returns>
 	const bool IsGoal() { return isGoal_; }
 
 	/// <summary>
@@ -74,24 +79,29 @@ private:
 	/// 現在の対象の位置、重なった部分、壁/床のフラグが入ってある構造体
 	/// <returns></returns>
 	/// 現在の位置から重なる部分を引いた位置に、重なった部分が横なら壁で下なら床のフラグがtrueになる
-	void BackPosition(CollisionOverlap* collisionBack);
+	void BackPosition(CollisionOverlap& collisionBack);
+
+	/// <summary>
+	/// ゲームアクターとステージの当たり判定
+	/// </summary>
+	/// <param name="gameactor">ゲームアクター(player,enemy)</param>
+	/// <param name="stageAABB">ステージ全体当たり判定</param>
+	void GameActorAndStageCollision(GameActor& gameactor, const std::vector<AABB>& stageAABB);
 
 	/// <summary>
 	/// ステージで作成する当たり判定
 	/// </summary>
-	/// <param name="collisionOverlap"></param>
-	/// <param name="stageAABB"></param>
-	void StageCollisions(CollisionOverlap* collisionOverlap, std::vector<AABB> stageAABB);
-
-	void GameActorAndStageCollision(GameActor* gameactor, std::vector<AABB> stageAABB);
+	/// <param name="collisionOverlap">重なり部分</param>
+	/// <param name="stageAABB">ステージ全体当たり判定</param>
+	void StageCollisions(CollisionOverlap& collisionOverlap, const std::vector<AABB>& stageAABB);
 
 	/// <summary>
 	/// CollisionOverlapのターゲット(player,enemy)の設定
 	/// </summary>
-	/// <param name="position"></param>ターゲットの座標
-	/// <param name="aabb"></param>ターゲット自体の当たり判定
+	/// <param name="position">ターゲットの座標</param>
+	/// <param name="aabb">ターゲット自体の当たり判定</param>
 	/// <returns></returns>
-	CollisionOverlap SetTarget(Vector3 position,AABB aabb);
+	CollisionOverlap SetTarget(const Vector3& position,const AABB& aabb);
 
 
 	//傘のノックバックの値
@@ -100,6 +110,8 @@ private:
 
 	//影で少し上にあげる値
 	const float kShadowUp_ = 0.01f;
+	//一番真下の値
+	const float kMaxUnder = 1000.0f;
 
 	//インスタンス
 	static std::shared_ptr<CollisionManager> sInstance;
