@@ -1,6 +1,6 @@
 #pragma once
-#include "IScene.h"
-class LoadingStageScene : public IScene {
+#include "BaseScene.h"
+class LoadingStageScene : public BaseScene {
 public:
 	void Initialize() override;
 	void Update() override;

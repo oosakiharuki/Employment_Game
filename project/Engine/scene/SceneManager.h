@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include "IScene.h"
+#include "BaseScene.h"
 #include "GameScene.h"//geme
 #include "TitleScene.h"//title
 #include "SelectScene.h"
@@ -52,11 +52,11 @@ private:
 	/// </summary>
 	void BuildScene();
 
-	std::unique_ptr<IScene> sceneArr_;
+	std::unique_ptr<BaseScene> sceneArr_;
 	SceneFactory sceneFactory_;
 
 	std::string currentScene_;//現在シーン
 	std::string prevScene_;//前シーン
 
-	std::unique_ptr<IScene> settingScene_;
+	std::unique_ptr<BaseScene> settingScene_;
 };

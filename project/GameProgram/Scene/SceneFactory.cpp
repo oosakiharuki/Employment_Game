@@ -35,6 +35,6 @@ void SceneFactory::MakeScene(const std::string& preScene) {
 	}
 }
 
-std::unique_ptr<IScene> SceneFactory::GetSceneGroup(std::string name) {
+std::unique_ptr<BaseScene> SceneFactory::GetSceneGroup(std::string name) {
 	return std::move(sceneG_[name]);
 }

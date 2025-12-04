@@ -1,22 +1,22 @@
-#include "IScene.h"
+#include "BaseScene.h"
 #include "SceneManager.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
 
-std::string IScene::sceneNo_ = "Select";
-std::string IScene::nextSceneNo_ = sceneNo_;
+std::string BaseScene::sceneNo_ = "Select";
+std::string BaseScene::nextSceneNo_ = sceneNo_;
 
-IScene::~IScene(){}
+BaseScene::~BaseScene(){}
 
-std::string IScene::GetSceneNo() { return sceneNo_; }
+std::string BaseScene::GetSceneNo() { return sceneNo_; }
 
-void IScene::PreviousSceneData() {
+void BaseScene::PreviousSceneData() {
 	//前に残しておいたデータ
 	sceneSaveData_ = NextStageSave::GetInstance()->GetNextStageSaveData();
 }
 
-void IScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
+void BaseScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
 	
 	//- プレイヤー配置 -
 	player_ = std::make_unique<Player>();
@@ -188,7 +188,7 @@ void IScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
 	}
 }
 
-void IScene::CreateGuide(const Guide& guide) {
+void BaseScene::CreateGuide(const Guide& guide) {
 	std::unique_ptr<Sprite>& iterator = spriteGuides_[guide.name];
 	//guideを設定
 	iterator = std::make_unique<Sprite>();
@@ -200,13 +200,13 @@ void IScene::CreateGuide(const Guide& guide) {
 	guides_.push_back(guide);
 }
 
-void IScene::UpdateGuide() {
+void BaseScene::UpdateGuide() {
 	for (auto& sprite : spriteGuides_) {
 		sprite.second->Update();
 	}
 }
 
-void IScene::DrawGuide() {
+void BaseScene::DrawGuide() {
 	//チュートリアルの出る順番
 	if (stageFileName_ == "stage_select") {
 		spriteGuides_[kGuideMove_.name]->Draw();
@@ -223,7 +223,7 @@ void IScene::DrawGuide() {
 	}
 }
 
-void IScene::WarpNextScene(const std::string& nextScene) {
+void BaseScene::WarpNextScene(const std::string& nextScene) {
 	//ワープするときじゃないなら
 	if (!CollisionManager::GetInstance()->IsWarp()) {
 		return;
@@ -247,7 +247,7 @@ void IScene::WarpNextScene(const std::string& nextScene) {
 	}
 }
 
-void IScene::PlayerGoal() {
+void BaseScene::PlayerGoal() {
 	//ゴールしてないなら
 	if (!CollisionManager::GetInstance()->IsGoal()) {
 		return;
@@ -261,26 +261,26 @@ void IScene::PlayerGoal() {
 	}
 }
 
-void IScene::CameraZoomPlayer() {
+void BaseScene::CameraZoomPlayer() {
 	//ズーム開始(カメラ現在地点 -> プレイヤー座標 + 少し離れた場所)
 	cameraControl_->ZoomStart(player_->GetTranslate() + kPlayerAwayPos_);
 	player_->IsPerformanceFlag(true);//演出モード
 }
 
-void IScene::CollisionCommon() {
+void BaseScene::CollisionCommon() {
 	//ゲーム内で使用する当たり判定
 	CollisionManager::GetInstance()->AllCollisions(player_.get(),
 		enemies_,stageObjects_,stagesAABB_,eventTriggers_,cameraControl_.get(),levelediter_);
 }
 
-void IScene::NextSceneFadeInStart(const std::string& name) {
+void BaseScene::NextSceneFadeInStart(const std::string& name) {
 	//フェードイン開始
 	FadeScreen::GetInstance()->FadeStart(type_fadeIn);
 	//次のステージ名
 	nextSceneNo_ = name;
 }
 
-bool IScene::NextSceneFlag() {
+bool BaseScene::NextSceneFlag() {
 	//現在のシーンと次のシーンが違う場合(例: Select , Game true / Select , Select false)
 	if (sceneNo_ != nextSceneNo_) {
 		return true;// 次のシーンに進む
@@ -288,13 +288,13 @@ bool IScene::NextSceneFlag() {
 	return false;// シーン移動しない
 }
 
-void IScene::ChangeScene() {
+void BaseScene::ChangeScene() {
 	//ステージの変更
 	sceneNo_ = nextSceneNo_;
 }
 
-std::unique_ptr<IScene> IScene::SetCurrentScene() { 
-	std::unique_ptr<IScene> currentScene_ = nullptr;
+std::unique_ptr<BaseScene> BaseScene::SetCurrentScene() { 
+	std::unique_ptr<BaseScene> currentScene_ = nullptr;
 	SceneFactory sceneFactory;
 
 	sceneFactory.MakeScene(sceneNo_);
