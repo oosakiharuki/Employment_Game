@@ -24,7 +24,7 @@
 /// <summary>
 /// シーン共有処理
 /// </summary>
-class IScene {
+class BaseScene {
 protected:
 	//現在のシーン
 	static std::string sceneNo_;
@@ -179,7 +179,7 @@ public:
 	/// </summary>
 	virtual void Finalize() = 0;
 
-	virtual ~IScene();
+	virtual ~BaseScene();
 
 	/// <summary>
 	/// シーン名で
@@ -192,6 +192,12 @@ public:
 	/// </summary>
 	/// <returns></returns>trueで終了
 	bool GetIsGameEnd() { return isGameEnd_; }
+
+	/// <summary>
+	/// 次のシーンに進む処理
+	/// </summary>
+	/// <returns>作ったベースシーン</returns>
+	std::unique_ptr<BaseScene> SetCurrentScene();
 
 private:
 	//ステージの.jsonファイル名

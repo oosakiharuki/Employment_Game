@@ -1,11 +1,11 @@
 #pragma once
 #include "Framework.h"
-#include "IScene.h"
+#include "BaseScene.h"
 
 /// <summary>
-/// ゲームオーバーシーン(ISceneの派生クラス)
+/// ゲームオーバーシーン(BaseSceneの派生クラス)
 /// </summary>
-class GameOverScene : public IScene{
+class GameOverScene : public BaseScene{
 public:
 	void Initialize() override;
 	void Update() override;

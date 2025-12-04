@@ -5,8 +5,8 @@ void MyGame::Initialize() {
 	Framework::Initialize();
 
 	//ゲームシーン初期化
-	gameScene_ = std::make_unique<SceneManager>();
-	gameScene_->Initialize();
+	sceneManager_ = std::make_unique<SceneManager>();
+	sceneManager_->Initialize();
 
 	fadeScreen_ = FadeScreen::GetInstance().get();
 	fadeScreen_->Initialize();
@@ -21,11 +21,11 @@ void MyGame::Update() {
 #endif //  USE_IMGUI
 
 	//ゲームシーン更新
-	gameScene_->Update();
+	sceneManager_->Update();
 
 	//タイトル画面で終了を選択した時するとき
-	if (gameScene_->SetGameEnd()) {
-		Framework::SetIsEndRequst(gameScene_->SetGameEnd());
+	if (sceneManager_->SetGameEnd()) {
+		Framework::SetIsEndRequst(sceneManager_->SetGameEnd());
 	}
 
 	//フェード更新
@@ -45,7 +45,7 @@ void MyGame::Draw() {
 	DirectXCommon::GetInstance()->RenderTexturePreDraw();// 対 renderTexture
 	
 	//ゲームシーン描画
-	gameScene_->Draw();
+	sceneManager_->Draw();
 
 	DirectXCommon::GetInstance()->RenderTexturePostDraw();
 
@@ -69,7 +69,7 @@ void MyGame::Draw() {
 
 
 void MyGame::Finalize() {
-	gameScene_.reset();
+	sceneManager_.reset();
 	fadeScreen_->Finalize();
 
 #ifdef  USE_IMGUI

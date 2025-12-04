@@ -1,10 +1,10 @@
 #pragma once
-#include "IScene.h"
+#include "BaseScene.h"
 
 /// <summary>
-/// ゲームシーン(ISceneの派生クラス)
+/// ゲームシーン(BaseSceneの派生クラス)
 /// </summary>
-class GameScene : public IScene {
+class GameScene : public BaseScene {
 public:
 	void Initialize() override;
 	void Update() override;

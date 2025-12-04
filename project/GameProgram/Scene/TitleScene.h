@@ -1,12 +1,12 @@
 #pragma once
 #include "Sprite.h"
 #include "Framework.h"
-#include "IScene.h"
+#include "BaseScene.h"
 
 /// <summary>
-/// タイトルシーン(ISceneの派生クラス)
+/// タイトルシーン(BaseSceneの派生クラス)
 /// </summary>
-class TitleScene : public IScene{
+class TitleScene : public BaseScene{
 public:
 	void Initialize() override;
 	void Update() override;

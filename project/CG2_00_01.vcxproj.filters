@@ -336,7 +336,7 @@
     <ClCompile Include="GameProgram\LevelEditor\Levelediter.cpp">
       <Filter>ソース ファイル\GameProgram\LevelEditor</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Scene\IScene.cpp">
+    <ClCompile Include="GameProgram\Scene\BaseScene.cpp">
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\EventTrigger.cpp">
@@ -587,7 +587,7 @@
     <ClInclude Include="GameProgram\LevelEditor\Levelediter.h">
       <Filter>ヘッダー ファイル\GameProgram\LevelEditor</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Scene\IScene.h">
+    <ClInclude Include="GameProgram\Scene\BaseScene.h">
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\StageObjects\EventTrigger.h">
