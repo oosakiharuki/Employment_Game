@@ -111,6 +111,7 @@ void SelectScene::LevelEditorObjectSetting(const std::string& leveleditor_file) 
 
 	//ステージのjsonを読み取る
 	levelediter_.LoadLevelediter("resource/Levelediter/" + stageFileName_ + ".json");
+	spitOut_.SetLevelEditor(&levelediter_);
 
 	//- カメラ配置 -
 	camera_ = std::make_unique<Camera>();
@@ -130,74 +131,14 @@ void SelectScene::LevelEditorObjectSetting(const std::string& leveleditor_file) 
 	//プレイヤーの体力を上書き
 	player_->SetHp(sceneSaveData_.playerHp);
 	player_->SetZanki(sceneSaveData_.playerZanki);
-	player_->Initialize();//初期設定
+	
+	spitOut_.SpitOutPlayer(player_);
+	spitOut_.SpitOutStage(stageobj_, stageFileName_, stagesAABB_);
+	spitOut_.SpitOutStageObject(stageObjects_);
 
-	//プレイヤー配置データがあるときプレイヤーを配置
-	if (!levelediter_.GetLevelData()->players.empty()) {
-		//一番最初のデータ位置に配置する
-		auto& playerData = levelediter_.GetLevelData()->players[0];
-		player_->SetTranslate(playerData.translation);//座標
-		player_->SetRotate(playerData.rotation);//向き
-		player_->SetUmbrellaRotate();//傘の向き
-		player_->SetAABB(playerData.colliderAABB);//当たり判定
-		//初期状態(位置、回転)設定
-		player_->SetInit_Position(playerData.translation, playerData.rotation);
-	}
-
-	//- ステージ全体の当たり判定設定 -
-
-	//ステージ自体の見た目
-	stageobj_ = std::make_unique<Object3d>();
-	stageobj_->Initialize();
-	stageobj_->SetModelFile(stageFileName_ + ".obj");
-
-	//MESH配置データがある場合
-	if (!levelediter_.GetLevelData()->objects.empty()) {
-		for (auto& object : levelediter_.GetLevelData()->objects) {
-			//中心座標
-			Vector3 position = object.translation;
-			//aabbの大きさ
-			AABB aabb;
-			aabb.min = position + object.colliderAABB.min;
-			aabb.max = position + object.colliderAABB.max;
-
-			stagesAABB_.push_back(aabb);
-		}
-	}
-
-	//- ステージオブジェクト(ギミック)配置 -
-	//ステージオブジェクトの配置データがあるとき
-	if (!levelediter_.GetLevelData()->stageObjects.empty()) {
-		for (auto& stageObjectData : levelediter_.GetLevelData()->stageObjects) {
-			std::unique_ptr<IStageObject> stageObject;
-			//ステージオブジェクトの名前で変更する
-			if (stageObjectData.ObjectName == "WarpGate") {
-				//ワープゲート
-				stageObject = std::make_unique<WarpGate>();
-				stageObject->SetNextStage(stageObjectData.fileName);//次のステージ用の.json名
-			}
-			else if (stageObjectData.ObjectName == "Checkpoint") {
-				//チェックポイント
-				stageObject = std::make_unique<CheckPoint>();
-			}
-			else if (stageObjectData.ObjectName == "Goal") {
-				//ゴール
-				stageObject = std::make_unique<Goal>();
-			}
-			stageObject->SetObjectName(stageObjectData.ObjectName);//オブジェクトの名前保存
-			stageObject->Initialize();//初期化
-			stageObject->SetPosition(stageObjectData.translation);//座標位置
-			stageObject->SetAABB(stageObjectData.colliderAABB);//AABB
-
-			stageObjects_.push_back(std::move(stageObject));
-		}
-	}
-
-	//チュートリアル用の操作方法スプライト
-	if (stageFileName_ == "stage_0" || stageFileName_ == "stage_select") {
-		CreateGuide(kGuideMove_);
-		CreateGuide(kGuideWarp_);
-	}
+	//操作方法スプライト
+	CreateGuide(kGuideMove_);
+	CreateGuide(kGuideWarp_);
 }
 
 void SelectScene::CreateGuide(const Guide& guide) {
@@ -220,20 +161,8 @@ void SelectScene::UpdateGuide() {
 }
 
 void SelectScene::DrawGuide() {
-	//チュートリアルの出る順番
-	if (stageFileName_ == "stage_select") {
-		spriteGuides_[kGuideMove_.name]->Draw();
-		spriteGuides_[kGuideWarp_.name]->Draw();
-	}
-	else if (stageFileName_ == "stage_0") {
-		for (auto& guide : guides_) {
-			//プレイヤーの座標Xがガイドの設定した左端と右端の間にいるか
-			if (player_->GetTranslate().x >= guide.lookPointX_left &&
-				player_->GetTranslate().x < guide.lookPointX_right) {
-				spriteGuides_[guide.name]->Draw();
-			}
-		}
-	}
+	spriteGuides_[kGuideMove_.name]->Draw();
+	spriteGuides_[kGuideWarp_.name]->Draw();
 }
 
 void SelectScene::WarpNextScene(const std::string& nextScene) {

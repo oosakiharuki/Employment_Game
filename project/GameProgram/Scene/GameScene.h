@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseScene.h"
+#include "SpitOutLevelEditor.h"
 
 /// <summary>
 /// ゲームシーン(BaseSceneの派生クラス)
@@ -32,6 +33,8 @@ private:
 
 	//レベルエディタ(オブジェクトの配置を.jsonでできる)
 	Levelediter levelediter_;
+	
+	SpitOutLevelEditor spitOut_;
 
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;

@@ -137,12 +137,12 @@ void CameraControl::ZoomStart(const Vector3& goal) {
 
 void CameraControl::CameraSetting(const CameraInitData& data, bool fixed_Mode_) {
 	//座標と回転
-	wt_.rotation_ = data.rotation;
-	wt_.translation_ = data.translation;
+	wt_.rotation_ = data.transform.rotate;
+	wt_.translation_ = data.transform.translate;
 
 	//カメラの最小/最大地点
-	leftEndPoint_ = wt_.translation_ + data.Point1;
-	rightEndPoint_ = wt_.translation_ + data.Point2;
+	leftEndPoint_ = wt_.translation_ + data.leftPoint;
+	rightEndPoint_ = wt_.translation_ + data.rightPoint;
 
 	isFixedMode_ = fixed_Mode_;
 

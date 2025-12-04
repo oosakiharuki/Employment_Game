@@ -90,9 +90,9 @@ public:
 	/// <summary>
 	/// 移動ルートのポイント設定(現在2つ)
 	/// </summary>
-	/// <param name="point1"></param>
-	void SetRoutePoint1(const Vector3& point1) { routePointLeft_ = point1; }
-	void SetRoutePoint2(const Vector3& point2) { routePointRight_ = point2; }
+	/// <param name="leftPoint"></param>
+	void SetRouteleftPoint(const Vector3& leftPoint) { routePointLeft_ = leftPoint; }
+	void SetRouterightPoint(const Vector3& rightPoint) { routePointRight_ = rightPoint; }
 	/// <summary>
 	/// 移動ルート中心の場合(Eventで使う)
 	/// </summary>
