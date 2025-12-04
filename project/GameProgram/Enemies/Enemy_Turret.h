@@ -68,7 +68,7 @@ private:
 	const uint32_t kRapidCountMax_ = 6;
 
 	//弾丸の出る初期位置設定で使う
-	const float kBulletTranslate_ = 2.0f;
+	const float kBulletTranslate_ = 1.5f;
 
 	//弾丸速度
 	const float kBulletSpeed_ = 0.5f;

@@ -9,7 +9,7 @@ namespace UseEveryOne {
 	const float kDeltaTime_ = 1.0f / 60.0f;
 	//2倍( * 2)
 	const float kTwice_ = 2.0f;
-	//0.5倍(2除算)
+	//0.5倍(2除算) 半分にするときに有効利用
 	const float kDivideByTwo_ = 0.5f;
 	//0.33倍(3除算で小数点第二まで)
 	const float kDivideByThree_ = 0.33f;

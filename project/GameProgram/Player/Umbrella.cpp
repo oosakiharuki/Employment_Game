@@ -8,12 +8,14 @@ using namespace UseEveryOne;
 Umbrella::~Umbrella() {}
 
 void Umbrella::Initialize() {
+	//ゲームアクターの共通初期化処理
 	Actor_InitializeCommon();
 
 	object_ = std::make_unique<Object_glTF>();
 	object_->Initialize();
 	object_->SetModelFile("umbrella_Close.gltf");
 
+	//AABBの大きさ
 	actorAABB_.min = -kAABBSize_ * kDivideByTwo_;
 	actorAABB_.max = kAABBSize_ * kDivideByTwo_;
 }
@@ -44,10 +46,12 @@ void Umbrella::Update() {
 		object_->ChangeAnimation("umbrella_Close.gltf");//閉じた傘
 	}
 
+	//更新
 	object_->Update(wt_);
 	wt_.UpdateMatrix();
 }
 
 void Umbrella::Draw() {
+	//描画
 	object_->Draw();
 }

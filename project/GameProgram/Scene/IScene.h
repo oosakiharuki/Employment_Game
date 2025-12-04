@@ -145,8 +145,8 @@ protected:
 	/// </summary>
 	struct Guide {
 		std::string name;       //ガイドの名前(テクスチャ名)
-		float lookPointX_left;  //見える範囲_左端
-		float lookPointX_right; //見える範囲_右端
+		float lookPointX_left;  //見れる範囲_左端
+		float lookPointX_right; //見れる範囲_右端
 	};
 
 	std::unordered_map<std::string, std::unique_ptr<Sprite>> spriteGuides_;

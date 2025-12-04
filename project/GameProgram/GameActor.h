@@ -52,15 +52,15 @@ public:
 	void SetRotate(const Vector3& rotate) { wt_.rotation_ = rotate; }
 
 	/// <summary>
-	/// getter_座標位置
+	/// getter_スケール
 	/// </summary>
-	/// <returns>現在の座標位置</returns>
-	Vector3 GetSize() const { return wt_.scale_; }
+	/// <returns>現在の大きさ</returns>
+	Vector3 GetScale() const { return wt_.scale_; }
 	/// <summary>
-	/// setter_座標位置
+	/// setter_スケール
 	/// </summary>
-	/// <param name="translate">代入する座標位置</param>
-	void SetSize(const Vector3& size) { wt_.scale_ = size; }
+	/// <param name="translate">代入する大きさ</param>
+	void SetScale(const Vector3& size) { wt_.scale_ = size; }
 
 	/// <summary>
 	/// getter_当たり判定AABB
