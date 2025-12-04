@@ -30,18 +30,41 @@ public:
 	static std::shared_ptr<CollisionManager> GetInstance();
 
 	/// <summary>
-	/// 当たり判定をまとめたもの
+	/// プレイヤーと敵の当たり判定
 	/// </summary>
-	/// <param name="player_">プレイヤー</param>
-	/// <param name="enemies">エネミー(std::vector)</param> 
-	/// <param name="stageObjects">ステージオブジェクト(list)</param> 
-	/// <param name="stagesAABB">ステージの当たり判定</param> 
-	/// <param name="eventTriggers">イベントトリガー</param> 
-	/// <param name="cameraControl_">カメラコントロール(イベントトリガーで使う)</param> 
-	/// <param name="levelediter">レベルエディタ(同じく)</param> 
-	void AllCollisions(Player* player_, const std::vector<std::shared_ptr<IEnemy>>& enemies,
-		const std::list<std::shared_ptr<IStageObject>>& stageObjects, const std::vector<AABB>& stagesAABB,
-		const std::vector<std::shared_ptr<EventTrigger>>& eventTriggers, CameraControl* cameraControl_, Levelediter& levelediter);
+	/// <param name="player">プレイヤー</param>
+	/// <param name="enemies">敵たち</param>
+	void PlayerAndEnemy(Player* player, const std::vector<std::shared_ptr<IEnemy>>& enemies);
+	
+	/// <summary>
+	/// プレイヤーとステージオブジェクト
+	/// </summary>
+	/// <param name="player">プレイヤー</param>
+	/// <param name="stageObjects">ステージオブジェクト</param>
+	void PlayerAndStageObject(Player* player, const std::list<std::shared_ptr<IStageObject>>& stageObjects);
+	
+	/// <summary>
+	/// プレイヤーとステージ自体
+	/// </summary>
+	/// <param name="player">プレイヤー</param>
+	/// <param name="stagesAABB">ステージ</param>
+	void PlayerAndStage(Player* player, const std::vector<AABB>& stagesAABB);
+	
+	/// <summary>
+	/// 敵とステージ自体
+	/// </summary>
+	/// <param name="enemies">敵たち</param>
+	/// <param name="stagesAABB">ステージ</param>
+	void EnemyAndStage(const std::vector<std::shared_ptr<IEnemy>>& enemies, const std::vector<AABB>& stagesAABB);
+
+	/// <summary>
+	/// プレイヤーとイベントトリガー
+	/// </summary>
+	/// <param name="player">プレイヤー</param>
+	/// <param name="eventTriggers">イベントトリガー</param>
+	/// <param name="cameraControl_">カメラコントロールクラス</param>
+	/// <param name="levelediter">レベルエディタクラス</param>
+	void PlayerAndEventTrigger(Player* player, const std::vector<std::shared_ptr<EventTrigger>>& eventTriggers, CameraControl* cameraControl_, Levelediter& levelediter);
 
 
 	/// <summary>

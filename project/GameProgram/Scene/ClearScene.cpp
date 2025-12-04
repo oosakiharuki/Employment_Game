@@ -70,6 +70,10 @@ void ClearScene::Update() {
 		fanfareTranslate_.x += kFanfareX_;
 	}
 
+	//ライトのスイッチオフ
+	stageGltf_->LightSwitch(false);
+	playerGltf_->LightSwitch(false);
+
 	//周りのステージ
 	stageGltf_->Update();
 
