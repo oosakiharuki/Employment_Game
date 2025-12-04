@@ -101,7 +101,7 @@ void Enemy_Turret::FireBullet() {
 	
 	Vector3 translate = wt_.translation_;
 	//少し前から弾丸が出るように
-	translate.x -= kBulletTranslate_,
+	translate += TransformNormal(Vector3{ 0,0,kBulletTranslate_ }, wt_.matWorld_);//タレットの前向きから
 
 	//パーティクルの場所変更
 	particlePosition_ = wt_.translation_;

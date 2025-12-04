@@ -128,7 +128,7 @@ void CollisionManager::AllCollisions(Player* player_, const std::vector<std::sha
 		//イベントが発動している時(順番2)
 		else if (data.isEvent) {
 			Vector3 move_range = player_->GetTranslate();
-			Vector3 size = player_->GetSize();
+			Vector3 size = player_->GetScale();
 			//動ける範囲制限
 			move_range.x = std::clamp(move_range.x, data.aabb.min.x + size.x, data.aabb.max.x - size.x);
 			move_range.y = std::clamp(move_range.y, data.aabb.min.y + size.y, data.aabb.max.y - size.y);

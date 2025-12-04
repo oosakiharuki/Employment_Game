@@ -22,6 +22,7 @@ void SelectScene::Initialize() {
 
 void SelectScene::Update() {
 	
+	//ゲームパットの更新
 	input_->JoystickUpdate(state_, preState_);
 
 	//フェーズインが完了した時
@@ -40,15 +41,22 @@ void SelectScene::Update() {
 		stageObject->Update();
 	}
 
+	//カメラコントロールの更新
 	cameraControl_->Update(&*camera_);
+
+	//ワープしてゲームシーンに移動
 	WarpNextScene("Game");
 
+	//プレイヤー更新
 	player_->Update();
-
+	
+	//ステージ更新
 	stageobj_->Update();
 
+	//当たり判定
 	CollisionCommon();
 
+	//表示する操作説明
 	spriteGuides_[kGuideMove_.name]->SetPosition(kSpriteTranslateMove_);
 	spriteGuides_[kGuideWarp_.name]->SetPosition(kSpriteTranslateEkey_);
 
@@ -62,17 +70,21 @@ void SelectScene::Draw() {
 
 	Object3dCommon::GetInstance()->Command();
 
+	//ステージ描画
 	stageobj_->Draw();
 
+	//ステージオブジェクト描画
 	for (auto& stageObject : stageObjects_) {
 		stageObject->Draw();
 	}
 
 	GLTFCommon::GetInstance()->Command();
+	//プレイヤー描画
 	player_->Draw();
 
 	//パーティクル描画処理
 	ParticleCommon::GetInstance()->Command();
+	//プレイヤーパーティクル描画
 	player_->DrawP();
 
 	SpriteCommon::GetInstance()->Command();
