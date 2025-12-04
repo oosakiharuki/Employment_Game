@@ -28,9 +28,9 @@ void SceneManager::SceneChange() {
 
 void SceneManager::BuildScene() {
 	//シーンを作成
-	sceneFactory_.MakeScene(currentScene_);
+	settingScene_ = sceneArr_->SetCurrentScene();
 	//代入
-	sceneArr_ = sceneFactory_.GetSceneGroup(currentScene_);
+	sceneArr_ = std::move(settingScene_);
 }
 
 void SceneManager::Initialize() {

@@ -193,6 +193,12 @@ public:
 	/// <returns></returns>trueで終了
 	bool GetIsGameEnd() { return isGameEnd_; }
 
+	/// <summary>
+	/// 次のシーンに進む処理
+	/// </summary>
+	/// <returns>作ったベースシーン</returns>
+	std::unique_ptr<IScene> SetCurrentScene();
+
 private:
 	//ステージの.jsonファイル名
 	std::string stageFileName_;

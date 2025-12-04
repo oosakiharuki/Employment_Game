@@ -58,4 +58,5 @@ private:
 	std::string currentScene_;//現在シーン
 	std::string prevScene_;//前シーン
 
+	std::unique_ptr<IScene> settingScene_;
 };

@@ -1,4 +1,5 @@
 #include "IScene.h"
+#include "SceneManager.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -291,3 +292,13 @@ void IScene::ChangeScene() {
 	//ステージの変更
 	sceneNo_ = nextSceneNo_;
 }
+
+std::unique_ptr<IScene> IScene::SetCurrentScene() { 
+	std::unique_ptr<IScene> currentScene_ = nullptr;
+	SceneFactory sceneFactory;
+
+	sceneFactory.MakeScene(sceneNo_);
+	currentScene_ = sceneFactory.GetSceneGroup(sceneNo_);
+
+	return currentScene_;
+};
