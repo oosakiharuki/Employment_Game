@@ -36,23 +36,24 @@ void GameActor::ScaleUpdate(bool& mosionOn, const Vector3& scale, float maxTime)
 	if (scaleTimer_ >= maxTime * kDivideByTwo_) {
 		//スケールを小さくする
 		wt_.scale_ -= scale;
-		//経過時間がたったら終了
-		if (scaleTimer_ >= maxTime) {
-			//時間を初期値(0)にする
-			scaleTimer_ = 0.0f;
-			//元の大きさに{1,1,1}
-			wt_.scale_ = kDefaultScale_;
-
-			//モーションを終了する
-			mosionOn = false;
-		}
 	}
 	else {
 		//スケールを大きくする
 		wt_.scale_ += scale;
 	}
+
+	//経過時間がたったら終了
+	if (scaleTimer_ >= maxTime) {
+		//時間を初期値(0)にする
+		scaleTimer_ = 0.0f;
+		//元の大きさに{1,1,1}
+		wt_.scale_ = kDefaultScale_;
+		//モーションを終了する
+		mosionOn = false;
+	}	
+
 	//時間がが進む
-	scaleTimer_ += kDeltaTime_;
+	scaleTimer_ += kDeltaTime_;		
 }
 
 void GameActor::RespawnCommon() {

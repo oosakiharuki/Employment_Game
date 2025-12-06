@@ -56,12 +56,8 @@ void SelectScene::Update() {
 	//当たり判定
 	CollisionCommon();
 
-	//表示する操作説明
-	spriteGuides_[kGuideMove_.name]->SetPosition(kSpriteTranslateMove_);
-	spriteGuides_[kGuideWarp_.name]->SetPosition(kSpriteTranslateEkey_);
-
 	//ガイド更新処理
-	UpdateGuide();
+	UI::GetInstance()->Update();
 }
 
 void SelectScene::Draw() {
@@ -89,10 +85,13 @@ void SelectScene::Draw() {
 
 	SpriteCommon::GetInstance()->Command();
 	//説明ガイド
-	DrawGuide();
+	UI::GetInstance()->Draw();
+	UI::GetInstance()->GuideDraw();
 }
 
-void SelectScene::Finalize() {}
+void SelectScene::Finalize() {
+	UI::GetInstance()->Finalize();
+}
 
 
 void SelectScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
@@ -137,32 +136,8 @@ void SelectScene::LevelEditorObjectSetting(const std::string& leveleditor_file) 
 	spitOut_.SpitOutStageObject(stageObjects_);
 
 	//操作方法スプライト
-	CreateGuide(kGuideMove_);
-	CreateGuide(kGuideWarp_);
-}
-
-void SelectScene::CreateGuide(const Guide& guide) {
-	std::unique_ptr<Sprite>& iterator = spriteGuides_[guide.name];
-	//guideを設定
-	iterator = std::make_unique<Sprite>();
-	iterator->Initialize(guide.name + ".png");//初期化
-	iterator->SetSize(kSpriteSize_);          //サイズ設定
-	iterator->SetPosition(kSpriteTranslate_); //座標設定
-
-	//Guide構造体をvectorにまとめる
-	guides_.push_back(guide);
-}
-
-
-void SelectScene::UpdateGuide() {
-	for (auto& sprite : spriteGuides_) {
-		sprite.second->Update();
-	}
-}
-
-void SelectScene::DrawGuide() {
-	spriteGuides_[kGuideMove_.name]->Draw();
-	spriteGuides_[kGuideWarp_.name]->Draw();
+	UI::GetInstance()->CreateGuide(kGuideMove_);
+	UI::GetInstance()->CreateGuide(kGuideWarp_);
 }
 
 void SelectScene::WarpNextScene(const std::string& nextScene) {
@@ -197,7 +172,9 @@ void SelectScene::CameraZoomPlayer() {
 
 void SelectScene::CollisionCommon() {
 	//ゲーム内で使用する当たり判定
+	//プレイヤーとステージ自体
 	CollisionManager::GetInstance()->PlayerAndStage(player_.get(), stagesAABB_);
+	//プレイヤーとステージオブジェクト
 	CollisionManager::GetInstance()->PlayerAndStageObject(player_.get(), stageObjects_);
 }
 

@@ -2,6 +2,8 @@
 #include "BaseScene.h"
 #include "SpitOutLevelEditor.h"
 
+#include "UI.h"
+
 /// <summary>
 /// セレクト(ステージ選択)シーン(BaseSceneの派生クラス)
 /// </summary>
@@ -76,47 +78,14 @@ private:
 	void CameraZoomPlayer();
 
 
-
-	/// <summary>
-	/// 共通の更新
-	/// </summary>
-	void UpdateGuide();
-
-	/// <summary>
-	/// 共通の描画
-	/// </summary>
-	void DrawGuide();
-
-
-	/// <summary>
-	/// 構造体_操作説明(ガイド)の設定
-	/// </summary>
-	struct Guide {
-		std::string name;       //ガイドの名前(テクスチャ名)
-		float lookPointX_left;  //見れる範囲_左端
-		float lookPointX_right; //見れる範囲_右端
-	};
-
-	/// <summary>
-	/// 操作説明スプライトを作る
-	/// </summary>
-	/// <param name="guide">名前や座標が入った構造体</param>
-	void CreateGuide(const Guide& guide);
-
-	std::vector<Guide> guides_;
-
 	//説明ガイドの初期座標と大きさ
 	const Vector2 kSpriteSize_ = { 128,64 };
-	const Vector2 kSpriteTranslate_ = { 300,20 };
-
-
-	std::unordered_map<std::string, std::unique_ptr<Sprite>> spriteGuides_;
-
-	//変更する場所(ジャンプ説明前は移動の説明)
-	Guide kGuideMove_ = { "guide_move", 0.0f,0.0f };   //移動の説明
-	Guide kGuideWarp_ = { "guide_warp", 0.0f, 0.0f };   //滑空の説明
-
 
 	const Vector2 kSpriteTranslateMove_ = { 300,20 };
 	const Vector2 kSpriteTranslateEkey_ = { 600,20 };
+
+	//変更する場所(ジャンプ説明前は移動の説明)
+	Guide kGuideMove_ = { "guide_move","guide_move", kSpriteTranslateMove_, kSpriteSize_, -100.0f, 100.0f };  //移動の説明
+	Guide kGuideWarp_ = { "guide_warp","guide_warp",kSpriteTranslateEkey_, kSpriteSize_, -100.0f, 100.0f };  //ワープに入る説明
+
 };

@@ -51,14 +51,18 @@ void GameScene::Update() {
 	//更新処理
 	cameraControl_->Update(&*camera_.get());
 
-	//プレイヤーがゴールした
-	PlayerGoal();
 
 	//プレイヤー更新処理
 	player_->Update();
-	
-	//次のシーンに移動する演出
-	WarpNextScene("NextStage");
+
+	//プレイヤーがゴールした
+	if (CollisionManager::GetInstance()->IsGoal()) {
+		PlayerGoal();
+	}
+	//次のシーンに移動する
+	if (CollisionManager::GetInstance()->IsWarp()) {
+		WarpNextScene();
+	}
 
 	//ステージの更新処理
 	stageobj_->Update();
@@ -74,52 +78,33 @@ void GameScene::Update() {
 			for (auto& enemy : enemies_) {
 				enemy->IsPerformanceFlag(false);
 			}
-			return;
 		}
-
-		startPointY_ += kPlayerUp_;
-		player_->SetTranslate({ playerPoint_.x,startPointY_,playerPoint_.z });
+		else {
+			startPointY_ += kPlayerUp_;
+			player_->SetTranslate({ playerPoint_.x,startPointY_,playerPoint_.z });
+		}
 	}
 
 	Respawn();
 
-	//敵やオブジェクトを止める(時間停止)
-	if (player_->GetIsDead()) {
-		return;
-	}
-	
-	for (auto& enemy : enemies_) {
-		enemy->SetPlayer(player_.get());
-		enemy->Update();
-	}
-
-	for (auto& stageObject : stageObjects_) {
-		stageObject->Update();
-	}
-
-	for (auto& eventTrigger : eventTriggers_) {
-
-		if (eventTrigger->GetEventData().isEvent) {
-			eventTrigger->SetPopEnemies(enemies_);
-			eventTrigger->Update();
-
-			enemies_ = std::move(eventTrigger->GetPopEnemy());
-		}
+	//プレイヤーが死んでしまったら通らない(停止)
+	if (!player_->GetIsDead()) {
+		PlayerAliveUpdate();
 	}
 
 	if (!isStartStage_) {
 		startWarp_->Vanish();//出てきた後消えるようにする	
 	}
 
-	CollisionCommon();
-
 	//落ちた場合
 	if (player_->GetTranslate().y < kFallEndY_) {
 		player_->IsFall();
 	}
 
-	//ガイド更新処理
-	UpdateGuide();
+	//プレイヤーが移動したら変更
+	UI::GetInstance()->SetPlayerTranslate(player_->GetTranslate());
+	//スプライト更新処理
+	UI::GetInstance()->Update();
 
 #ifdef  USE_IMGUI
 
@@ -137,6 +122,34 @@ void GameScene::Update() {
 #endif //  USE_IMGUI
 
 	Audio::GetInstance()->ControlVolume(BGMData_, volume_);
+}
+
+void GameScene::PlayerAliveUpdate() {
+	//敵の更新
+	for (auto& enemy : enemies_) {
+		enemy->SetPlayer(player_.get());
+		enemy->Update();
+	}
+
+	//ステージオブジェクトの更新
+	for (auto& stageObject : stageObjects_) {
+		stageObject->Update();
+	}
+
+	//イベントトリガーの更新
+	for (auto& eventTrigger : eventTriggers_) {
+
+		if (eventTrigger->GetEventData().isEvent) {
+			eventTrigger->SetPopEnemies(enemies_);
+			eventTrigger->Update();
+
+			enemies_ = std::move(eventTrigger->GetPopEnemy());
+		}
+	}
+
+	//使用する当たり判定
+	CollisionCommon();
+
 }
 
 void GameScene::Draw() {
@@ -180,11 +193,15 @@ void GameScene::Draw() {
 
 	//スプライト描画処理(UI用)
 	SpriteCommon::GetInstance()->Command();
+
+	UI::GetInstance()->Draw();	
 	//説明ガイド
-	DrawGuide();
+	UI::GetInstance()->GuideDraw();
 }
 
-void GameScene::Finalize() {}
+void GameScene::Finalize() {
+	UI::GetInstance()->Finalize();
+}
 
 
 void GameScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
@@ -237,51 +254,17 @@ void GameScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
 
 	//チュートリアル用の操作方法スプライト
 	if (stageFileName_ == "stage_0") {
-		CreateGuide(kGuideMove_);
-		CreateGuide(kGuideJump_);
-		CreateGuide(kGuideFire_);
-		CreateGuide(kGuideshield_);
-		CreateGuide(kGuidebrink_);
-		CreateGuide(kGuideKakku_);
-		CreateGuide(kGuideWarp_);
+		UI::GetInstance()->CreateGuide(kGuideMove_);
+		UI::GetInstance()->CreateGuide(kGuideJump_);
+		UI::GetInstance()->CreateGuide(kGuideFire_);
+		UI::GetInstance()->CreateGuide(kGuideshield_);
+		UI::GetInstance()->CreateGuide(kGuidebrink_);
+		UI::GetInstance()->CreateGuide(kGuideKakku_);
+		UI::GetInstance()->CreateGuide(kGuideWarp_);
 	}
 }
 
-void GameScene::CreateGuide(const Guide& guide) {
-	std::unique_ptr<Sprite>& iterator = spriteGuides_[guide.name];
-	//guideを設定
-	iterator = std::make_unique<Sprite>();
-	iterator->Initialize(guide.name + ".png");//初期化
-	iterator->SetSize(kSpriteSize_);          //サイズ設定
-	iterator->SetPosition(kSpriteTranslate_); //座標設定
-
-	//Guide構造体をvectorにまとめる
-	guides_.push_back(guide);
-}
-
-void GameScene::UpdateGuide() {
-	for (auto& sprite : spriteGuides_) {
-		sprite.second->Update();
-	}
-}
-
-void GameScene::DrawGuide() {
-	//チュートリアルの出る順番
-	for (auto& guide : guides_) {
-		//プレイヤーの座標Xがガイドの設定した左端と右端の間にいるか
-		if (player_->GetTranslate().x >= guide.lookPointX_left &&
-			player_->GetTranslate().x < guide.lookPointX_right) {
-			spriteGuides_[guide.name]->Draw();
-		}
-	}
-}
-
-void GameScene::WarpNextScene(const std::string& nextScene) {
-	//ワープするときじゃないなら
-	if (!CollisionManager::GetInstance()->IsWarp()) {
-		return;
-	}
-
+void GameScene::WarpNextScene() {
 	//プレイヤーが演出判定でない
 	//「!player_->GetPerformanceMode()」は何度もplayer_のGetTranslateを読み取ることで予定の速度より速くならないようにするため
 	if (!player_->GetPerformanceMode()) {
@@ -296,15 +279,11 @@ void GameScene::WarpNextScene(const std::string& nextScene) {
 		sceneSaveData_.playerZanki = player_->GetZanki(); //現在のプレイヤー残機を保存
 		NextStageSave::GetInstance()->SetPlayerParameta(sceneSaveData_); //移行データを代入する
 		//フェードインした後、次のシーンに
-		NextSceneFadeInStart(nextScene);
+		NextSceneFadeInStart("NextStage");
 	}
 }
 
 void GameScene::PlayerGoal() {
-	//ゴールしてないなら
-	if (!CollisionManager::GetInstance()->IsGoal()) {
-		return;
-	}
 	//プレイヤーにカメラズーム
 	CameraZoomPlayer();           //何度も読み取ってワープより早く移動する
 	player_->DirectionTheCamera();//向きをカメラのほうに(-Z方向)
@@ -322,24 +301,18 @@ void GameScene::CameraZoomPlayer() {
 
 void GameScene::CollisionCommon() {
 	//ゲーム内で使用する当たり判定
+	//プレイヤーと敵
 	CollisionManager::GetInstance()->PlayerAndEnemy(player_.get(), enemies_);
+	//プレイヤーとステージ自体
 	CollisionManager::GetInstance()->PlayerAndStage(player_.get(), stagesAABB_);
+	//プレイヤーとステージオブジェクト
 	CollisionManager::GetInstance()->PlayerAndStageObject(player_.get(), stageObjects_);
-	
+	//プレイヤーとイベントトリガー
 	CollisionManager::GetInstance()->PlayerAndEventTrigger(player_.get(), 
 		eventTriggers_, cameraControl_.get(),levelediter_);
-
+	//敵とステージ自体
 	CollisionManager::GetInstance()->EnemyAndStage(enemies_,stagesAABB_);
-
 }
-
-
-
-
-
-
-
-
 
 void GameScene::WarterWarpExit() {
 	

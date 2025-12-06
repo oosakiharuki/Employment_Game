@@ -57,11 +57,12 @@ void Player::Initialize() {
 
 	//UI_体力
 	for (uint32_t i = 0; i < maxHp_; i++) {
-		std::unique_ptr <Sprite> sprite = std::make_unique<Sprite>();
-		sprite->Initialize("Hp.png");
-		sprite->SetPosition({ kInitializePointHp_.x + kTextureSizeHp_.x * i , kInitializePointHp_.y - i * kDistanceYHp_ });
-		sprite->SetSize(kTextureSizeHp_);
-		spritesHp_.push_back(std::move(sprite));
+		SpriteData iterator;
+		iterator.name = "playerHp" + std::to_string(i);
+		iterator.texturePath = "Hp";
+		iterator.position = { kInitializePointHp_.x + kTextureSizeHp_.x * i , kInitializePointHp_.y - i * kDistanceYHp_ };
+		iterator.size = kTextureSizeHp_;
+		UI::GetInstance()->CreateSprite(iterator);
 	}
 
 	//入力処理
@@ -219,9 +220,6 @@ void Player::Update() {
 	// - UI -
 	//スプライト更新
 	SpriteUpdate();
-	for (auto& sprite : spritesHp_) {
-		sprite->Update();
-	}
 }
 
 void Player::PlayUpdate() {
@@ -438,13 +436,6 @@ void Player::DrawP() {
 	for (auto& particle : particles_) {
 		particle.second->Draw();
 	}
-
-	SpriteCommon::GetInstance()->Command();
-	//UI
-	for (auto& sprite : spritesHp_) {
-		sprite->Draw();
-	}
-
 }
 
 void Player::SetUmbrellaRotate() {
@@ -609,16 +600,15 @@ void Player::PariSuccess() {
 }
 
 void Player::SpriteUpdate() {
-	float i = 0;
-	for (auto& hp : spritesHp_) {
+
+	for (uint32_t i = 0; i < kPlayerMaxHp_; i++) {
 		//Hpに応じてテクスチャを変化させる
 		if (i >= hp_) {
-			hp->SetTextureFile("NoHp.png");
+			UI::GetInstance()->SetSpriteTexture("playerHp" + std::to_string(i), "NoHp");
 		}//テクスチャ体力ない状態なら変更
-		else if (hp->GetTextureFile() == "NoHp.png") {
-			hp->SetTextureFile("Hp.png");//体力ある状態
+		else if (UI::GetInstance()->GetSpriteTexture("playerHp" + std::to_string(i)) == "NoHp.png") {
+			UI::GetInstance()->SetSpriteTexture("playerHp" + std::to_string(i), "Hp");
 		}
-		i++;
 	}
 }
 

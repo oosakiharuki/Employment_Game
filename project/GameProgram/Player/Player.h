@@ -7,6 +7,8 @@
 
 #include "GameActor.h"
 
+#include "UI.h"
+
 /// <summary>
 /// プレイヤー
 /// </summary>
@@ -350,7 +352,6 @@ private:
 	std::string preMosionName_ = "standby"; //前回のアニメーション
 
 	//UI
-	std::vector<std::unique_ptr<Sprite>> spritesHp_;
 	const Vector2 kTextureSizeHp_ = { 64,64 };//スプライトサイズ
 	const Vector2 kInitializePointHp_ = { 20.0f,45.0f };//スプライトの初期位置
 	const float kDistanceYHp_ = 10.0f;//スプライトのY軸幅
