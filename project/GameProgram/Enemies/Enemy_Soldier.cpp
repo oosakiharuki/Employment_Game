@@ -32,6 +32,9 @@ void Enemy_Soldier::UpdateNormal() {
 }
 
 void Enemy_Soldier::UpdateAttack() {
+	//見つけたリアクション
+	FoundRiaction();
+
 	//コーンが上向きなので
 	particles_[particleFire_.name]->SetRotate({ 0.0f,0.0f,-wt_.rotation_.y });
 }

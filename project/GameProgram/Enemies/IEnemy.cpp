@@ -57,14 +57,15 @@ void IEnemy::Update() {
 		//プレイヤーの発見
 		PlayerTarget();
 	}
+	
+	//捜索範囲更新
+	SearchRange();
 
 	switch (action_)
 	{
 	case IEnemy::Action::normal: // 通常
 		//角度
 		DirectionDegree();
-		//捜索範囲更新
-		SearchRange();
 
 		//通常の更新処理
 		UpdateNormal();
@@ -121,6 +122,10 @@ void IEnemy::Update() {
 			isLostPlayer_ = false;
 			markTimer_ = 0.0f;
 		}
+	}
+	//見つかった瞬間だけtrueに
+	if (isBullet_ && markTimer_ < kMarkMaxTime_ / 5.0f) {
+		isFoundReaction_ = true;
 	}
 
 	//[!,?]のマーク表示時間の間
@@ -351,3 +356,13 @@ void IEnemy::Fire() {
 }
 
 void IEnemy::FireBullet(){}
+
+void IEnemy::FoundRiaction() {
+
+	//伸びる強さ(y軸のみ)
+	Vector3 reaction = { 0,damageScale_.y,0 };
+
+	if (isFoundReaction_) {
+		ScaleUpdate(isFoundReaction_, reaction, kMarkMaxTime_ / 5.0f);
+	}
+}

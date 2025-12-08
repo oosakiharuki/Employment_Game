@@ -77,11 +77,16 @@ private:
 	Vector3 distance_;
 	const float kSpeed_ = -0.15f;
 
-	//リアクション
+	//リアクション(拡大縮小)
 	Vector3 bombScale_ = { 0.05f, 0.05f, 0.05f };
 	const float kScaleMax_ = 0.2f;//スケール最大値
-	const float kOnTheVerge = 4.0f;//爆発寸前までのタイマー
+	const float kOnTheVerge = 3.5f;//爆発寸前のタイマー
 	const float kScaleSpeedUp_ = 2.0f;
+	//リアクション(色)
+	Vector4 color_ = { 1,1,1,1 };
+	float colorTimer_ = 0.0f;//時間
+	float colorTimeMax_ = 0.2f;//色変化の最大時間
+	const float kColorChangePower_ = 0.1f;//足し引きするパワー
 
 	float deadTimer_ = 0.0f;
 	const float kDeadTimeMax_ = 1.0f;

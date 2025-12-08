@@ -38,16 +38,17 @@ void Enemy_Turret::Initialize() {
 }
 
 void Enemy_Turret::UpdateNormal() {
-
-	//スケール以外の行列
-	Matrix4x4 matWorld = MakeAffineMatrix(kDefaultScale_, wt_.rotation_, wt_.translation_);
-	//レーザーサイズXはターレットの前に出すため
-	particles_[particleLaser_.name]->SetTranslate(wt_.translation_ + TransformNormal(Vector3{ 0,0,particleLaserSize_.x }, matWorld));
-	particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::TimerMode);
-
+	//レーザーポイント
+	LeserPoint();
 }
 
 void Enemy_Turret::UpdateAttack(){
+	//見つけたリアクション
+	FoundRiaction();
+
+	//レーザーポイント
+	LeserPoint();
+
 	//コーンが上向きなので
 	particles_[particleFire_.name]->SetRotate({ 0,0,-wt_.rotation_.y });
 }
@@ -117,6 +118,14 @@ void Enemy_Turret::FireBullet() {
 	bullet->SetTranslate(translate);
 	bullet->SetVelocty(velocity);
 	bullets_.push_back(std::move(bullet));
+}
+
+void Enemy_Turret::LeserPoint() {
+	//スケール以外の行列
+	Matrix4x4 matWorld = MakeAffineMatrix(kDefaultScale_, wt_.rotation_, wt_.translation_);
+	//レーザーサイズXはターレットの前に出すため
+	particles_[particleLaser_.name]->SetTranslate(wt_.translation_ + TransformNormal(Vector3{ 0,0,particleLaserSize_.x }, matWorld));
+	particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::TimerMode);
 }
 
 void Enemy_Turret::RespawnEnemy() {

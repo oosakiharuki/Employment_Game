@@ -266,6 +266,15 @@ protected:
 
 	Action action_ = Action::stop;
 
+	/// <summary>
+	/// 見つかけた時のリアクション処理
+	/// </summary>
+	void FoundRiaction();
+
+	//見つかけたリアクションのパラメータ
+	bool isFoundReaction_ = false;
+	const float kFoundReactionMaxTime_ = kMarkMaxTime_ / 5.0f;//リアクションで伸び縮みする時間
+
 private:
 	std::vector<AABB> stages_;
 

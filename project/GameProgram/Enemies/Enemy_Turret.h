@@ -46,6 +46,9 @@ public:
 
 private:
 
+	//レーザーポイントパーティクル
+	void LeserPoint();
+
 	Vector3 particleLaserSize_ = { 0.1f,0.1f,0.1f };
 
 	//見える範囲のパーティクルパラメータ
