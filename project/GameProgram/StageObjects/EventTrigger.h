@@ -28,9 +28,23 @@ struct EnemyPopData {
 class EventTrigger {
 public:
 
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize();
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update();
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw();
+
+	/// <summary>
+	/// 描画処理_パーティクル
+	/// </summary>
+	void DrawParticle();
 
 	/// <summary>
 	/// .csvを読み取る
