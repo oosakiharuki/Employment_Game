@@ -1,4 +1,0 @@
-//敵の名前,座標x,座標y,向き(right/left)
-pop,bomb,10,1,left
-wave
-end

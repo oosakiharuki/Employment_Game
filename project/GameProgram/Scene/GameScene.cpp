@@ -186,10 +186,17 @@ void GameScene::Draw() {
 
 	//パーティクル描画処理
 	ParticleCommon::GetInstance()->Command();
+
+	//敵のパーティクル描画
 	for (auto& enemy : enemies_) {
 		enemy->DrawParticle();
 	}
+	//プレイヤーのパーティクル描画
 	player_->DrawP();
+	//イベントトリガーのパーティクル描画
+	for (auto& eventTrigger : eventTriggers_) {
+		eventTrigger->DrawParticle();
+	}
 
 	//スプライト描画処理(UI用)
 	SpriteCommon::GetInstance()->Command();

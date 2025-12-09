@@ -52,14 +52,12 @@ void EventTrigger::Draw() {
 	if (eventData_.isEvent) {
 		object_->Draw();
 	}
+}
 
-	ParticleCommon::GetInstance()->Command();
-	
+void EventTrigger::DrawParticle() {
 	for (auto& particle : summon_particles_) {
 		particle->Draw();
 	}
-
-	GLTFCommon::GetInstance()->Command();
 }
 
 void EventTrigger::LoadEventCSV(const std::string& fileName) {
@@ -162,6 +160,10 @@ void EventTrigger::PopEventEneies() {
 			//召喚位置.y
 			getline(line_stream, word, ',');
 			enemyPopData.position.y = (float)std::atof(word.c_str());
+
+			//召喚位置.z
+			getline(line_stream, word, ',');
+			enemyPopData.position.z = (float)std::atof(word.c_str());
 
 			//トリガーの中心地点から足していく
 			enemyPopData.position += eventData_.center;
