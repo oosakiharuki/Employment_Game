@@ -381,11 +381,11 @@ void Player::PlayUpdate() {
 
 	//ダメージリアクション
 	if (isDamageMosion_) {
-		ScaleUpdate(isDamageMosion_, damageScale_, kDamageMaxTime_);
+		reaction_->ScaleReaction(wt_.scale_, isDamageMosion_, damageScale_,scaleTimer_, kDamageMaxTime_);
 	}
 	//傘リアクション
 	if (isShildMosion_) {
-		umbrella_->ScaleUpdate(isShildMosion_, damageScale_, kDamageMaxTime_);
+		umbrella_->HitReaction(isShildMosion_);
 	}
 
 	//ノックバック発動
@@ -436,6 +436,17 @@ void Player::DrawP() {
 	for (auto& particle : particles_) {
 		particle.second->Draw();
 	}
+}
+
+
+Vector3 Player::GetWorldPosition() const {
+	Vector3 worldPos;
+
+	worldPos.x = wt_.matWorld_.m[3][0];
+	worldPos.y = wt_.matWorld_.m[3][1];
+	worldPos.z = wt_.matWorld_.m[3][2];
+
+	return worldPos;
 }
 
 void Player::SetUmbrellaRotate() {
@@ -492,14 +503,8 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		//ノックバック(時間の三分の一ぶんまで)
 		KnockBackPlayer(hitPoint , kInfinityTimeMax_ * kDivideByThree_);
 	}
-
+	//リアクションフラグ
 	isDamageMosion_ = true;
-	
-	//リアクション
-	//連続ヒット時、大きさを元に戻す
-	scaleTimer_ = 0.0f;
-	wt_.scale_ = kDefaultScale_;
-
 }
 
 void Player::IsFall() {
@@ -515,8 +520,10 @@ void Player::IsFall() {
 void Player::KnockBackPlayer(const Vector3& Power, float TimerMax) {
 	//威力を代入
 	backPower_ = Normalize(Power);
-	KnockBackCommon(TimerMax);
-	//連続ヒット時、元に戻す
+	KnockBackCommon(TimerMax);	
+	//リアクション
+	//連続ヒット時、大きさを元に戻す
+	scaleTimer_ = 0.0f;
 	wt_.scale_ = kDefaultScale_;
 }
 
@@ -536,6 +543,11 @@ void Player::KnockBackCommon(float TimerMax) {
 	knockBackTimeMax_ = TimerMax;
 }
 
+void Player::IsShildMosion() {
+	isShildMosion_ = true;
+	umbrella_->ResetScaleTimer();
+	umbrella_->SetScale(kDefaultScale_);
+}
 
 void Player::DeadPlayer() {
 

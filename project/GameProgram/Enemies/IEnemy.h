@@ -221,9 +221,7 @@ protected:
 	//ゲームに移さないフラグ
 	bool isDeleteEnemy_ = false;
 	//倒された時の回転リアクション
-	const float kDeadRotation_ = 3.0f;
-	//回転リアクションの最大値
-	const float kDeadRotationMax_ = 90.0f;
+	const float kDeadRotation_ = 4.0f;
 
 
 	//動く範囲
@@ -274,6 +272,10 @@ protected:
 	//見つかけたリアクションのパラメータ
 	bool isFoundReaction_ = false;
 	const float kFoundReactionMaxTime_ = kMarkMaxTime_ / 5.0f;//リアクションで伸び縮みする時間
+	Vector3 preTranslate_;//リアクション前の座標
+	float foundTimer_ = 0.0f;//見つけるモーションの時間
+
+	void DeadReaction();
 
 private:
 	std::vector<AABB> stages_;

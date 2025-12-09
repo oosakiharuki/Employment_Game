@@ -10,6 +10,9 @@ void GameActor::Actor_InitializeCommon() {
 	//影の初期化
 	shadow_ = std::make_unique<Shadow>();
 	shadow_->Initialize();
+
+	//リアクションクラス
+	reaction_ = std::make_unique<Reaction>();
 }
 
 void GameActor::IsGround(bool result) {
@@ -29,31 +32,6 @@ AABB GameActor::GetAABB() const {
 
 void GameActor::ShadowUpdate() {
 	shadow_->Update();
-}
-
-void GameActor::ScaleUpdate(bool& mosionOn, const Vector3& scale, float maxTime) {
-	//時間が半分になったら
-	if (scaleTimer_ >= maxTime * kDivideByTwo_) {
-		//スケールを小さくする
-		wt_.scale_ -= scale;
-	}
-	else {
-		//スケールを大きくする
-		wt_.scale_ += scale;
-	}
-
-	//経過時間がたったら終了
-	if (scaleTimer_ >= maxTime) {
-		//時間を初期値(0)にする
-		scaleTimer_ = 0.0f;
-		//元の大きさに{1,1,1}
-		wt_.scale_ = kDefaultScale_;
-		//モーションを終了する
-		mosionOn = false;
-	}	
-
-	//時間がが進む
-	scaleTimer_ += kDeltaTime_;		
 }
 
 void GameActor::RespawnCommon() {

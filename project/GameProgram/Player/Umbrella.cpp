@@ -8,16 +8,18 @@ using namespace UseEveryOne;
 Umbrella::~Umbrella() {}
 
 void Umbrella::Initialize() {
-	//ゲームアクターの共通初期化処理
-	Actor_InitializeCommon();
+	
+	wt_.Initialize();
 
 	object_ = std::make_unique<Object_glTF>();
 	object_->Initialize();
 	object_->SetModelFile("umbrella_Close.gltf");
 
 	//AABBの大きさ
-	actorAABB_.min = -kAABBSize_ * kDivideByTwo_;
-	actorAABB_.max = kAABBSize_ * kDivideByTwo_;
+	umbrellaAABB_.min = -kAABBSize_ * kDivideByTwo_;
+	umbrellaAABB_.max = kAABBSize_ * kDivideByTwo_;
+
+	reaction_ = std::make_unique<Reaction>();
 }
 
 void Umbrella::Update() {
@@ -54,4 +56,15 @@ void Umbrella::Update() {
 void Umbrella::Draw() {
 	//描画
 	object_->Draw();
+}
+
+AABB Umbrella::GetAABB() const {
+	AABB aabb;
+	aabb.min = wt_.translation_ + umbrellaAABB_.min;
+	aabb.max = wt_.translation_ + umbrellaAABB_.max;
+	return aabb;
+}
+
+void Umbrella::HitReaction(bool& isShieldMode) {
+	reaction_->ScaleReaction(wt_.scale_,isShieldMode,kScalePower_, scaleTimer_,kReactionMaxTime_);
 }

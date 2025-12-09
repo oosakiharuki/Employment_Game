@@ -102,12 +102,12 @@ void Enemy_Bomb::TimeRimmit() {
 
 	if (bombTimer_ >= kOnTheVerge) {
 		//爆発寸前だと揺れが細かくなる
-		ScaleUpdate(isTuibiStart_, bombScale_ * kScaleSpeedUp_, kScaleMax_ / kScaleSpeedUp_);
+		reaction_->ScaleReaction(wt_.scale_,isTuibiStart_, bombScale_ * kScaleSpeedUp_, scaleTimer_, kScaleMax_ / kScaleSpeedUp_);
 		colorTimeMax_ = kScaleMax_ / kScaleSpeedUp_;//点滅時間変更
 	}
 	else {
 		//爆発しそうな演出
-		ScaleUpdate(isTuibiStart_, bombScale_, kScaleMax_);
+		reaction_->ScaleReaction(wt_.scale_, isTuibiStart_, bombScale_, scaleTimer_, kScaleMax_);
 		colorTimeMax_ = kScaleMax_;//点滅時間
 	}
 

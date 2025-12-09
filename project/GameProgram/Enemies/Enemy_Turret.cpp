@@ -56,12 +56,9 @@ void Enemy_Turret::UpdateAttack(){
 void Enemy_Turret::UpdateDead() {
 	//レーザーのパーティクル停止
 	particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::Stop);
-	
-	wt_.rotation_.z += kDeadRotation_;
 
-	if (wt_.rotation_.z > kDeadRotationMax_) {
-		isDeleteEnemy_ = true;
-	}
+	//死んだリアクション
+	DeadReaction();
 }
 
 void Enemy_Turret::UpdateImgui() {
@@ -102,7 +99,8 @@ void Enemy_Turret::FireBullet() {
 	
 	Vector3 translate = wt_.translation_;
 	//少し前から弾丸が出るように
-	translate += TransformNormal(Vector3{ 0,0,kBulletTranslate_ }, wt_.matWorld_);//タレットの前向きから
+	//ダメージリアクションで大きくなった時発射位置が変ってしまうためスケールはDefaultに
+	translate += TransformNormal(Vector3{ 0,0,kBulletTranslate_ }, MakeAffineMatrix(kDefaultScale_,wt_.rotation_,wt_.translation_));//タレットの前向きから
 
 	//パーティクルの場所変更
 	particlePosition_ = wt_.translation_;
@@ -110,7 +108,8 @@ void Enemy_Turret::FireBullet() {
 	
 	//飛ばす方向
 	Vector3 velocity = { 0.0f,0.0f,kBulletSpeed_ };
-	velocity = TransformNormal(velocity, wt_.matWorld_);
+	//ダメージリアクションで大きくなった時弾が速くなるためスケールはDefaultに
+	velocity = TransformNormal(velocity, MakeAffineMatrix(kDefaultScale_, wt_.rotation_, wt_.translation_));
 
 	std::unique_ptr<EnemyBullet> bullet = std::make_unique<EnemyBullet>();
 	bullet->Initialize();

@@ -5,6 +5,7 @@
 #include "Object3dCommon.h"
 
 using namespace MyMath;
+using namespace UseEveryOne;
 
 Enemy_Soldier::~Enemy_Soldier() {
 	for (auto& bullet : bullets_) {
@@ -40,11 +41,8 @@ void Enemy_Soldier::UpdateAttack() {
 }
 
 void Enemy_Soldier::UpdateDead() {
-	wt_.rotation_.z += kDeadRotation_;
-
-	if (wt_.rotation_.z > kDeadRotationMax_) {
-		isDeleteEnemy_ = true;
-	}
+	//死んだリアクション
+	DeadReaction();
 }
 
 void Enemy_Soldier::UpdateImgui() {

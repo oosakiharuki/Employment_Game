@@ -35,15 +35,16 @@ public:
 	void DrawP();
 
 	/// <summary>
-	/// 操作できるときの処理()
-	/// </summary>
-	void PlayUpdate();
-
-	/// <summary>
 	/// getter_ワールド座標系
 	/// </summary>
 	/// <returns></returns>プレイヤー本体のワールド座標系
 	const WorldTransform& GetWorldTransform() { return wt_; }
+	
+	/// <summary>
+	/// getter_ワールド座標系の位置
+	/// </summary>
+	/// <returns>平行移動成分を搭載したプレイヤー座標</returns>
+	Vector3 GetWorldPosition() const;
 
 	/// <summary>
 	/// 弾を発射する(ショットガン風)
@@ -175,7 +176,7 @@ public:
 	/// <summary>
 	/// 傘が当たったリアクションフラグ
 	/// </summary>
-	void IsShildMosion() { isShildMosion_ = true; }
+	void IsShildMosion();
 
 	/// <summary>
 	/// 強制的にジャンプさせる(演出等で使う)
@@ -205,6 +206,11 @@ public:
 private:
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object_;
+
+	/// <summary>
+	/// 操作できるときの処理()
+	/// </summary>
+	void PlayUpdate();
 
 	//input
 	Input* input_ = nullptr;

@@ -64,7 +64,7 @@ void CollisionManager::PlayerAndEnemy(Player* player,
 			}
 
 			//跳ね返った弾の当たり判定
-			if (IsCollisionAABB(bulletE->GetAABB(), enemy->GetAABB()) && bulletE->GetIsPari()) {
+			if (IsCollisionAABB(bulletE->GetAABB(), enemy->GetAABB()) && bulletE->GetIsPari() && !enemy->GetIsDead()) {
 				bulletE->IsHit();//当たって消える
 				enemy->IsDamage();//敵にダメージ
 			}

@@ -10,6 +10,8 @@
 
 #include "UseEveryOne.h"
 
+#include "Reaction.h"
+
 /// <summary>
 /// プレイヤー、敵のような動く、攻撃すると
 /// ゲームで使う基盤クラス
@@ -92,19 +94,15 @@ public:
 	bool GetIsDead() { return isDead_; }
 
 	/// <summary>
-	/// リアクション(拡大縮小)
-	/// </summary>
-	/// <param name="mosionOn">リアクションフラグ</param>
-	/// <param name="scale">どのくらい大きくするか</param>
-	/// <param name="maxTime"><リアクションタイマーの最大値/param>
-	void ScaleUpdate(bool& mosionOn, const Vector3& scale, float maxTime);
-
-	/// <summary>
 	/// アニメーションのみを動かす関数(演出で使う)
 	/// </summary>
 	/// <param name="result">trueならアニメーションのみ / falseなら操作可能</param>
 	void IsPerformanceFlag(bool result) { isPerformance_ = result; }
 
+	/// <summary>
+	/// 演出中であるか
+	/// </summary>
+	/// <returns></returns>
 	bool GetPerformanceMode() { return isPerformance_; }
 
 
@@ -178,8 +176,8 @@ protected:
 	//ダメージリアクション
 	float scaleTimer_ = 0.0f;
 	//足して大きくする値
-	Vector3 damageScale_ = { 0.15f, 0.15f, 0.15f };
-	const float kDamageMaxTime_ = 0.14f;
+	Vector3 damageScale_ = { 0.1f, 0.1f, 0.1f };
+	const float kDamageMaxTime_ = 0.3f;
 
 
 	//初期位置保管
@@ -188,6 +186,9 @@ protected:
 
 	//パーティクルのコンテナ
 	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
+
+	//リアクションクラス
+	std::unique_ptr<Reaction> reaction_;
 
 private:
 
