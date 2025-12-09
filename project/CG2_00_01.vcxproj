@@ -193,6 +193,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\Scene\LoadingStageScene.cpp" />
     <ClCompile Include="GameProgram\System\NextStageSave.cpp" />
     <ClCompile Include="GameProgram\UseEveryOne.cpp" />
+    <ClCompile Include="Reaction.cpp" />
+    <ClCompile Include="SpitOutLevelEditor.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameProgram\GameActor.h" />
@@ -278,6 +281,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\Scene\LoadingStageScene.h" />
     <ClInclude Include="GameProgram\System\NextStageSave.h" />
     <ClInclude Include="GameProgram\UseEveryOne.h" />
+    <ClInclude Include="Reaction.h" />
+    <ClInclude Include="SpitOutLevelEditor.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

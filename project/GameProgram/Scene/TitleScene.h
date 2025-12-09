@@ -13,6 +13,21 @@ public:
 	void Draw() override;
 	void Finalize() override;
 private:
+
+	//入力処理
+	Input* input_ = Input::GetInstance().get();
+	//ゲームパット用の入力変数
+	XINPUT_STATE state_, preState_;
+
+	//カメラ
+	std::unique_ptr<Camera> camera_ = nullptr;
+	Vector3 cameraRotate_ = { 0.0f,0.0f,0.0f };//回転
+	Vector3 cameraTranslate_ = { 0.0f,0.0f,0.0f };///座標
+
+	//パーティクルコンテナ
+	std::unordered_map<std::string, std::unique_ptr<Particle>> sceneParticles_;
+
+
 	//タイトルで使うワールド行列たち
 	std::vector<WorldTransform> wts_;
 	//タイトルで使うオブジェクトたち

@@ -57,14 +57,15 @@ void IEnemy::Update() {
 		//プレイヤーの発見
 		PlayerTarget();
 	}
+	
+	//捜索範囲更新
+	SearchRange();
 
 	switch (action_)
 	{
 	case IEnemy::Action::normal: // 通常
 		//角度
 		DirectionDegree();
-		//捜索範囲更新
-		SearchRange();
 
 		//通常の更新処理
 		UpdateNormal();
@@ -90,8 +91,13 @@ void IEnemy::Update() {
 
 		//見失ってから少したってから通常処理に戻す
 		if (isLostPlayer_ && markTimer_ <= 0.0f) {
-			isLostPlayer_ = false;
+			isLostPlayer_ = false;   //見失ってない
 			action_ = Action::normal;//通常処理に戻す
+		}
+		//途中でまた見つかったら
+		else if (isLostPlayer_ && isFoundTarget_) {
+			isLostPlayer_ = false;//見失ってない
+			markTimer_ = 0.0f;    //タイマーリセット(!マークとリアクションをさせる)
 		}
 
 		//攻撃中の更新処理(攻撃は除く)
@@ -116,11 +122,13 @@ void IEnemy::Update() {
 	//見つかったら
 	if (isFoundTarget_) {
 		isBullet_ = true;
-		action_ = Action::attack;
-		if (isLostPlayer_) {
-			isLostPlayer_ = false;
-			markTimer_ = 0.0f;
-		}
+		action_ = Action::attack;//攻撃態勢
+	}
+
+	//見つかった瞬間だけtrueに
+	if (isBullet_ && markTimer_ < kMarkMaxTime_ / 5.0f) {
+		isFoundReaction_ = true;
+		preTranslate_ = wt_.translation_;
 	}
 
 	//[!,?]のマーク表示時間の間
@@ -130,7 +138,7 @@ void IEnemy::Update() {
 
 	//リアクション
 	if (isDamageMosion_) {
-		ScaleUpdate(isDamageMosion_, damageScale_, kDamageMaxTime_);
+		reaction_->ScaleReaction(wt_.scale_,isDamageMosion_, damageScale_, scaleTimer_, kDamageMaxTime_);
 	}
 	//弾丸更新処理
 	for (auto& bullet : bullets_) {
@@ -351,3 +359,30 @@ void IEnemy::Fire() {
 }
 
 void IEnemy::FireBullet(){}
+
+void IEnemy::FoundRiaction() {
+
+	//伸びる強さ(y軸のみ)
+	Vector3 reaction = { 0,damageScale_.y * kDivideByTwo_,0 };
+
+	if (isFoundReaction_) {
+		reaction_->ScaleReaction(wt_.scale_, isFoundReaction_, reaction, scaleTimer_, kMarkMaxTime_ / 5.0f);
+		reaction_->FoundReaction(wt_.translation_,isFoundReaction_, reaction, foundTimer_, kMarkMaxTime_ / 5.0f, preTranslate_);
+	}
+}
+
+void IEnemy::DeadReaction() {
+	wt_.rotation_ -= TransformNormal(Vector3{ kDeadRotation_,0,0 }, wt_.matWorld_);
+
+	//リアクションフラグ
+	bool isReaction = true;
+
+	//伸びる強さ(y軸のみ)
+	Vector3 reaction = { 0,damageScale_.y * kDivideByTwo_,0 };
+	reaction_->FoundReaction(wt_.translation_, isReaction, reaction, foundTimer_, kMarkMaxTime_ * kDivideByTwo_, preTranslate_);
+
+	//リアクションが終わったら
+	if (!isReaction) {
+		isDeleteEnemy_ = true;
+	}
+}

@@ -2,14 +2,14 @@
 #include "MyMath.h"
 #include <unordered_map>
 #include <memory>
+#include <json.hpp>
 
 //カメラの初期位置
 struct CameraInitData {
-	Vector3 translation;
-	Vector3 rotation;
+	Transform transform;
 	//移動ルート
-	Vector3 Point1;
-	Vector3 Point2;
+	Vector3 leftPoint;
+	Vector3 rightPoint;
 };
 
 class Levelediter {
@@ -22,35 +22,31 @@ public:
 		//通常オブジェクト
 		struct ObjectData {
 			std::string fileName;
-			Vector3 translation;
-			Vector3 rotation;
-			Vector3 scaling;
+			Transform transform;
 			AABB colliderAABB;
 		};
 		//プレイヤーのスポーン場所
 		struct PlayerSpawnData {
 			std::string fileName;
-			Vector3 translation;
-			Vector3 rotation;
+			Transform transform;
 			AABB colliderAABB;
 		};
 		//敵の生成場所
 		struct EnemySpawnData {
 			std::string EnemyName;
 			std::string fileName;
-			Vector3 translation;
-			Vector3 rotation;
+			Transform transform;
 			AABB colliderAABB;
 			//移動ルート
-			Vector3 Point1;
-			Vector3 Point2;
+			Vector3 leftPoint;
+			Vector3 rightPoint;
 		};
 
 		//ステージオブジェクトの生成場所
 		struct StageObjectData {
 			std::string ObjectName;
 			std::string fileName;
-			Vector3 translation;
+			Transform transform;
 			AABB colliderAABB;
 		};
 
@@ -77,12 +73,73 @@ public:
 	/// </summary>
 	/// <returns></returns>作成したレベルエディタ
 	LevelData* GetLevelData() { return levelData_.get(); }
-	/// <summary>
-	/// レベルエディタリセット
-	/// </summary>
-	void ResetData();
 
 private:
+
+	/// <summary>
+	/// ステージの当たり判定設定
+	/// </summary>
+	/// <param name="object">オブジェクトのデータ配列</param>
+	void LoadStage(nlohmann::json& object);
+
+	/// <summary>
+	/// カメラの配置、使用するカメラ設定
+	/// </summary>
+	/// <param name="object">オブジェクトのデータ配列</param>
+	void LoadCamera(nlohmann::json& object);
+
+	/// <summary>
+	/// プレイヤーの配置
+	/// </summary>
+	/// <param name="object">オブジェクトのデータ配列</param>
+	void LoadPlayer(nlohmann::json& object);
+
+	/// <summary>
+	/// 敵の配置
+	/// </summary>
+	/// <param name="object">オブジェクトのデータ配列</param>
+	void LoadEnemies(nlohmann::json& object);
+
+	/// <summary>
+	/// ステージオブジェクトの配置
+	/// </summary>
+	/// <param name="object">オブジェクトのデータ配列</param>
+	void LoadStageObject(nlohmann::json& object);
+
+	/// <summary>
+	/// イベントトリガーの配置
+	/// </summary>
+	/// <param name="object">オブジェクトのデータ配列</param>
+	/// <param name="translate">オブジェクト自体の中心</param>
+	void LoadEventTrigger(nlohmann::json& object,const Vector3& translate);
+
+	/// <summary>
+	/// トランスフォームの設定
+	/// </summary>
+	/// <param name="object">オブジェクトのデータ配列</param>
+	/// <param name="objecttransform">導入するトランスフォーム</param>
+	void SetTransform(nlohmann::json& object, Transform& objectTransform);
+
+	/// <summary>
+	/// コライダーの設定
+	/// </summary>
+	/// <param name="object">オブジェクトのデータ配列</param>
+	/// <param name="objectAABB">導入するコライダーAABB</param>
+	/// <param name="objectSize">オブジェクトの大きさ</param>
+	void SetCollider(nlohmann::json& object,AABB& objectAABB,const Vector3& objectSize);
+
+	/// <summary>
+	/// 移動ルートの設定
+	/// </summary>
+	/// <param name="object">オブジェクトのデータ配列</param>
+	/// <param name="leftPoint">導入する左端</param>
+	/// <param name="rightPoint">導入する右端</param>
+	void SetTravelRoute(nlohmann::json& object, Vector3& leftPoint, Vector3& rightPoint);
+
+
 	//レベルエディタ
 	std::unique_ptr<LevelData> levelData_;
+
+	//Blenderのカメラは0度だと真下を向くため補正
+	const float kAdjustRange_ = 90.0f;
 };

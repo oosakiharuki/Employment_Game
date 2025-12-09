@@ -90,9 +90,9 @@ public:
 	/// <summary>
 	/// 移動ルートのポイント設定(現在2つ)
 	/// </summary>
-	/// <param name="point1"></param>
-	void SetRoutePoint1(const Vector3& point1) { routePointLeft_ = point1; }
-	void SetRoutePoint2(const Vector3& point2) { routePointRight_ = point2; }
+	/// <param name="leftPoint"></param>
+	void SetRouteleftPoint(const Vector3& leftPoint) { routePointLeft_ = leftPoint; }
+	void SetRouterightPoint(const Vector3& rightPoint) { routePointRight_ = rightPoint; }
 	/// <summary>
 	/// 移動ルート中心の場合(Eventで使う)
 	/// </summary>
@@ -221,9 +221,7 @@ protected:
 	//ゲームに移さないフラグ
 	bool isDeleteEnemy_ = false;
 	//倒された時の回転リアクション
-	const float kDeadRotation_ = 3.0f;
-	//回転リアクションの最大値
-	const float kDeadRotationMax_ = 90.0f;
+	const float kDeadRotation_ = 4.0f;
 
 
 	//動く範囲
@@ -265,6 +263,19 @@ protected:
 	bool isLostPlayer_ = false;
 
 	Action action_ = Action::stop;
+
+	/// <summary>
+	/// 見つかけた時のリアクション処理
+	/// </summary>
+	void FoundRiaction();
+
+	//見つかけたリアクションのパラメータ
+	bool isFoundReaction_ = false;
+	const float kFoundReactionMaxTime_ = kMarkMaxTime_ / 5.0f;//リアクションで伸び縮みする時間
+	Vector3 preTranslate_;//リアクション前の座標
+	float foundTimer_ = 0.0f;//見つけるモーションの時間
+
+	void DeadReaction();
 
 private:
 	std::vector<AABB> stages_;

@@ -12,6 +12,17 @@ public:
 	void Draw() override;
 	void Finalize() override;
 private:
+	//入力処理
+	Input* input_ = Input::GetInstance().get();
+	//ゲームパット用の入力変数
+	XINPUT_STATE state_, preState_;
+
+	//カメラ
+	std::unique_ptr<Camera> camera_ = nullptr;
+	Vector3 cameraRotate_ = { 0.0f,0.0f,0.0f };//回転
+	Vector3 cameraTranslate_ = { 0.0f,0.0f,0.0f };///座標
+
+
 	//スプライト
 	std::unique_ptr<Sprite> sprite_;//ゲームオーバーの文字
 	std::unique_ptr<Sprite> spriteSpace_;//Spaceでもどるの文字
