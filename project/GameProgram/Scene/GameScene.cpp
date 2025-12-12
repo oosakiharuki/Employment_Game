@@ -102,9 +102,9 @@ void GameScene::Update() {
 	}
 
 	//プレイヤーが移動したら変更
-	UI::GetInstance()->SetPlayerTranslate(player_->GetTranslate());
+	UIManager::GetInstance()->SetPlayerTranslate(player_->GetTranslate());
 	//スプライト更新処理
-	UI::GetInstance()->Update();
+	UIManager::GetInstance()->Update();
 
 #ifdef  USE_IMGUI
 
@@ -201,13 +201,13 @@ void GameScene::Draw() {
 	//スプライト描画処理(UI用)
 	SpriteCommon::GetInstance()->Command();
 
-	UI::GetInstance()->Draw();	
+	UIManager::GetInstance()->Draw();
 	//説明ガイド
-	UI::GetInstance()->GuideDraw();
+	UIManager::GetInstance()->GuideDraw();
 }
 
 void GameScene::Finalize() {
-	UI::GetInstance()->Finalize();
+	UIManager::GetInstance()->Finalize();
 }
 
 
@@ -261,13 +261,13 @@ void GameScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
 
 	//チュートリアル用の操作方法スプライト
 	if (stageFileName_ == "stage_0") {
-		UI::GetInstance()->CreateGuide(kGuideMove_);
-		UI::GetInstance()->CreateGuide(kGuideJump_);
-		UI::GetInstance()->CreateGuide(kGuideFire_);
-		UI::GetInstance()->CreateGuide(kGuideshield_);
-		UI::GetInstance()->CreateGuide(kGuidebrink_);
-		UI::GetInstance()->CreateGuide(kGuideKakku_);
-		UI::GetInstance()->CreateGuide(kGuideWarp_);
+		UIManager::GetInstance()->CreateGuide(kGuideMove_);
+		UIManager::GetInstance()->CreateGuide(kGuideJump_);
+		UIManager::GetInstance()->CreateGuide(kGuideFire_);
+		UIManager::GetInstance()->CreateGuide(kGuideshield_);
+		UIManager::GetInstance()->CreateGuide(kGuidebrink_);
+		UIManager::GetInstance()->CreateGuide(kGuideKakku_);
+		UIManager::GetInstance()->CreateGuide(kGuideWarp_);
 	}
 }
 

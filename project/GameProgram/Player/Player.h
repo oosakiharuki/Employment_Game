@@ -7,7 +7,7 @@
 
 #include "GameActor.h"
 
-#include "UI.h"
+#include "UIManager.h"
 
 /// <summary>
 /// プレイヤー

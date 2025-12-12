@@ -369,23 +369,23 @@
     <ClCompile Include="GameProgram\System\NextStageSave.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\ParticleEmitter.cpp">
-      <Filter>ソース ファイル\GameProgram</Filter>
+    <ClCompile Include="GameProgram\System\GameActor.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor.cpp">
-      <Filter>ソース ファイル\GameProgram</Filter>
+    <ClCompile Include="GameProgram\System\ParticleEmitter.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\UseEveryOne.cpp">
-      <Filter>ソース ファイル\GameProgram</Filter>
+    <ClCompile Include="GameProgram\System\UseEveryOne.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="SpitOutLevelEditor.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\System\Reaction.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\System\SpitOutLevelEditor.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="Reaction.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\System\UIManager.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -629,23 +629,23 @@
     <ClInclude Include="GameProgram\System\NextStageSave.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor.h">
-      <Filter>ヘッダー ファイル\GameProgram</Filter>
+    <ClInclude Include="GameProgram\System\GameActor.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\UseEveryOne.h">
-      <Filter>ヘッダー ファイル\GameProgram</Filter>
+    <ClInclude Include="GameProgram\System\ParticleEmitter.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\ParticleEmitter.h">
-      <Filter>ヘッダー ファイル\GameProgram</Filter>
+    <ClInclude Include="GameProgram\System\UseEveryOne.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="SpitOutLevelEditor.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\System\UIManager.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\System\SpitOutLevelEditor.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="Reaction.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\System\Reaction.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

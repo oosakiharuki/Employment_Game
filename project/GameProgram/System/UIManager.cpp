@@ -1,28 +1,28 @@
-#include "UI.h"
+#include "UIManager.h"
 
-std::shared_ptr<UI> UI::sInstance_ = nullptr;
+std::shared_ptr<UIManager> UIManager::sInstance_ = nullptr;
 
-std::shared_ptr<UI> UI::GetInstance() {
+std::shared_ptr<UIManager> UIManager::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = std::make_unique<UI>();
+		sInstance_ = std::make_unique<UIManager>();
 	}
 	return sInstance_;
 }
 
-void UI::Finalize() {
+void UIManager::Finalize() {
 	guides_.clear();
 	sprites_.clear();
 	
 	sInstance_.reset();
 }
 
-void UI::CreateSprite(const SpriteData& spriteData) {
+void UIManager::CreateSprite(const SpriteData& spriteData) {
 	std::unique_ptr<Sprite>& iterator = sprites_[spriteData.name];
 
 	InitSprite(iterator, spriteData);
 }
 
-void UI::CreateGuide(const Guide& guide) {
+void UIManager::CreateGuide(const Guide& guide) {
 	std::unique_ptr<Sprite>& iterator = spriteGuides_[guide.spriteData.name];
 	
 	InitSprite(iterator,guide.spriteData);
@@ -31,14 +31,14 @@ void UI::CreateGuide(const Guide& guide) {
 	guides_.push_back(guide);
 }
 
-void UI::InitSprite(std::unique_ptr<Sprite>& sprite, const SpriteData& spriteData) {
+void UIManager::InitSprite(std::unique_ptr<Sprite>& sprite, const SpriteData& spriteData) {
 	sprite = std::make_unique<Sprite>();
 	sprite->Initialize(spriteData.texturePath + ".png");//初期化
 	sprite->SetSize(spriteData.size);          //サイズ設定
 	sprite->SetPosition(spriteData.position); //座標設定
 }
 
-void UI::Update() {
+void UIManager::Update() {
 	for (auto& sprite : sprites_) {
 		sprite.second->Update();
 	}
@@ -48,13 +48,13 @@ void UI::Update() {
 	}
 }
 
-void UI::Draw() {
+void UIManager::Draw() {
 	for (auto& sprite : sprites_) {
 		sprite.second->Draw();
 	}
 }
 
-void UI::GuideDraw() {
+void UIManager::GuideDraw() {
 	//チュートリアルの出る順番
 	for (auto& guide : guides_) {
 		//プレイヤーの座標Xがガイドの設定した左端と右端の間にいるか
@@ -65,7 +65,7 @@ void UI::GuideDraw() {
 	}
 }
 
-void UI::SetSpriteTexture(const std::string name, const std::string& texturePath) {
+void UIManager::SetSpriteTexture(const std::string name, const std::string& texturePath) {
 	std::unique_ptr<Sprite>& iterator = sprites_[name];
 
 	if (iterator->GetTextureFile() != texturePath + ".png") {
@@ -73,7 +73,7 @@ void UI::SetSpriteTexture(const std::string name, const std::string& texturePath
 	}
 }
 
-std::string UI::GetSpriteTexture(const std::string name) {
+std::string UIManager::GetSpriteTexture(const std::string name) {
 	std::unique_ptr<Sprite>& iterator = sprites_[name];
 
 	return iterator->GetTextureFile();
