@@ -57,7 +57,7 @@ void SelectScene::Update() {
 	CollisionCommon();
 
 	//ガイド更新処理
-	UI::GetInstance()->Update();
+	UIManager::GetInstance()->Update();
 }
 
 void SelectScene::Draw() {
@@ -85,12 +85,12 @@ void SelectScene::Draw() {
 
 	SpriteCommon::GetInstance()->Command();
 	//説明ガイド
-	UI::GetInstance()->Draw();
-	UI::GetInstance()->GuideDraw();
+	UIManager::GetInstance()->Draw();
+	UIManager::GetInstance()->GuideDraw();
 }
 
 void SelectScene::Finalize() {
-	UI::GetInstance()->Finalize();
+	UIManager::GetInstance()->Finalize();
 }
 
 
@@ -136,8 +136,8 @@ void SelectScene::LevelEditorObjectSetting(const std::string& leveleditor_file) 
 	spitOut_.SpitOutStageObject(stageObjects_);
 
 	//操作方法スプライト
-	UI::GetInstance()->CreateGuide(kGuideMove_);
-	UI::GetInstance()->CreateGuide(kGuideWarp_);
+	UIManager::GetInstance()->CreateGuide(kGuideMove_);
+	UIManager::GetInstance()->CreateGuide(kGuideWarp_);
 }
 
 void SelectScene::WarpNextScene(const std::string& nextScene) {

@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseScene.h"
 #include "SpitOutLevelEditor.h"
-#include "UI.h"
+#include "UIManager.h"
 
 /// <summary>
 /// ゲームシーン(BaseSceneの派生クラス)

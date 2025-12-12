@@ -2,7 +2,7 @@
 #include "BaseScene.h"
 #include "SpitOutLevelEditor.h"
 
-#include "UI.h"
+#include "UIManager.h"
 
 /// <summary>
 /// セレクト(ステージ選択)シーン(BaseSceneの派生クラス)

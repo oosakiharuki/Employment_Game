@@ -62,7 +62,7 @@ void Player::Initialize() {
 		iterator.texturePath = "Hp";
 		iterator.position = { kInitializePointHp_.x + kTextureSizeHp_.x * i , kInitializePointHp_.y - i * kDistanceYHp_ };
 		iterator.size = kTextureSizeHp_;
-		UI::GetInstance()->CreateSprite(iterator);
+		UIManager::GetInstance()->CreateSprite(iterator);
 	}
 
 	//入力処理
@@ -616,10 +616,10 @@ void Player::SpriteUpdate() {
 	for (uint32_t i = 0; i < kPlayerMaxHp_; i++) {
 		//Hpに応じてテクスチャを変化させる
 		if (i >= hp_) {
-			UI::GetInstance()->SetSpriteTexture("playerHp" + std::to_string(i), "NoHp");
+			UIManager::GetInstance()->SetSpriteTexture("playerHp" + std::to_string(i), "NoHp");
 		}//テクスチャ体力ない状態なら変更
-		else if (UI::GetInstance()->GetSpriteTexture("playerHp" + std::to_string(i)) == "NoHp.png") {
-			UI::GetInstance()->SetSpriteTexture("playerHp" + std::to_string(i), "Hp");
+		else if (UIManager::GetInstance()->GetSpriteTexture("playerHp" + std::to_string(i)) == "NoHp.png") {
+			UIManager::GetInstance()->SetSpriteTexture("playerHp" + std::to_string(i), "Hp");
 		}
 	}
 }

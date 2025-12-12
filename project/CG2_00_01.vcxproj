@@ -107,7 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GameProgram\GameActor.cpp" />
+    <ClCompile Include="GameProgram\System\GameActor.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionManager.cpp" />
     <ClCompile Include="Engine\3d\_gltf\SkinningCommon.cpp" />
     <ClCompile Include="GameProgram\System\CameraControl.cpp" />
@@ -134,7 +134,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\_gltf\Object_glTF.cpp" />
     <ClCompile Include="Engine\3d\_Particle\Particle.cpp" />
     <ClCompile Include="Engine\3d\_Particle\ParticleCommon.cpp" />
-    <ClCompile Include="GameProgram\ParticleEmitter.cpp" />
+    <ClCompile Include="GameProgram\System\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\3d\_Particle\ParticleManager.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\D3DResorceLeakChecker.cpp" />
@@ -192,13 +192,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\StageObjects\WarpGate.cpp" />
     <ClCompile Include="GameProgram\Scene\LoadingStageScene.cpp" />
     <ClCompile Include="GameProgram\System\NextStageSave.cpp" />
-    <ClCompile Include="GameProgram\UseEveryOne.cpp" />
-    <ClCompile Include="Reaction.cpp" />
-    <ClCompile Include="SpitOutLevelEditor.cpp" />
-    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="GameProgram\System\UseEveryOne.cpp" />
+    <ClCompile Include="GameProgram\System\Reaction.cpp" />
+    <ClCompile Include="GameProgram\System\SpitOutLevelEditor.cpp" />
+    <ClCompile Include="GameProgram\System\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameProgram\GameActor.h" />
+    <ClInclude Include="GameProgram\System\GameActor.h" />
     <ClInclude Include="GameProgram\Collision\CollisionManager.h" />
     <ClInclude Include="Engine\3d\_gltf\SkinningCommon.h" />
     <ClInclude Include="GameProgram\System\CameraControl.h" />
@@ -225,7 +225,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\_gltf\Object_glTF.h" />
     <ClInclude Include="Engine\3d\_Particle\Particle.h" />
     <ClInclude Include="Engine\3d\_Particle\ParticleCommon.h" />
-    <ClInclude Include="GameProgram\ParticleEmitter.h" />
+    <ClInclude Include="GameProgram\System\ParticleEmitter.h" />
     <ClInclude Include="Engine\3d\_Particle\ParticleManager.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\D3DResorceLeakChecker.h" />
@@ -280,10 +280,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\StageObjects\WarpGate.h" />
     <ClInclude Include="GameProgram\Scene\LoadingStageScene.h" />
     <ClInclude Include="GameProgram\System\NextStageSave.h" />
-    <ClInclude Include="GameProgram\UseEveryOne.h" />
-    <ClInclude Include="Reaction.h" />
-    <ClInclude Include="SpitOutLevelEditor.h" />
-    <ClInclude Include="UI.h" />
+    <ClInclude Include="GameProgram\System\UseEveryOne.h" />
+    <ClInclude Include="GameProgram\System\Reaction.h" />
+    <ClInclude Include="GameProgram\System\SpitOutLevelEditor.h" />
+    <ClInclude Include="GameProgram\System\UIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

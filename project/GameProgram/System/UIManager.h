@@ -22,7 +22,7 @@ struct Guide {
 /// <summary>
 /// 操作ガイド
 /// </summary>
-class UI
+class UIManager
 {
 public:
 
@@ -30,7 +30,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static std::shared_ptr<UI> GetInstance();
+	static std::shared_ptr<UIManager> GetInstance();
 
 	void CreateSprite(const SpriteData& spriteData);
 
@@ -68,7 +68,7 @@ public:
 	std::string GetSpriteTexture(const std::string name);
 
 private:
-	static std::shared_ptr<UI> sInstance_;
+	static std::shared_ptr<UIManager> sInstance_;
 
 	std::vector<Guide> guides_;
 	
