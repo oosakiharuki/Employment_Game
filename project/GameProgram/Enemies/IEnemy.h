@@ -286,6 +286,6 @@ private:
 	WorldTransform wtMark_;
 	const float kMarkPositionY_ = 2.0f;
 
-	uint32_t i = 0;
+	const float kFoundMosionMaxTime_ = kMarkMaxTime_ / 5.0f;
 };
 
