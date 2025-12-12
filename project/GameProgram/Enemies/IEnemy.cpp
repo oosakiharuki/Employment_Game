@@ -39,8 +39,10 @@ void IEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 
 void IEnemy::Update() {
 
+	//演出中の場合
 	if (player_->GetPerformanceMode()) {
 		shadow_->SetTranslate(wt_.translation_);//影描画がおかしくならないように
+		//オブジェクトのみの更新
 		UpdateBehind();
 		return;
 	}
@@ -126,7 +128,7 @@ void IEnemy::Update() {
 	}
 
 	//見つかった瞬間だけtrueに
-	if (isBullet_ && markTimer_ < kMarkMaxTime_ / 5.0f) {
+	if (isBullet_ && markTimer_ < kFoundMosionMaxTime_) {
 		isFoundReaction_ = true;
 		preTranslate_ = wt_.translation_;
 	}
@@ -306,13 +308,15 @@ void IEnemy::RespawnEnemyCommon() {
 
 void IEnemy::DirectionDegree() {
 
-	//0~360にする
+	//360度以上の場合 [360除算のあまり]
 	wt_.rotation_.y = std::fmod(wt_.rotation_.y, kMaxAngle);
-	//-の場合
-	if (wt_.rotation_.y < 0) wt_.rotation_.y += 360.0;
+	//-の場合 [0以上になるまで360加算]
+	while (wt_.rotation_.y < 0) {
+		wt_.rotation_.y += kMaxAngle;
+	}
 
-	///0~180は右
-	if (wt_.rotation_.y >= 0.0f && wt_.rotation_.y < 180.0f) {
+	///0~179は右
+	if (wt_.rotation_.y >= 0.0f && wt_.rotation_.y < kMaxAngle * kDivideByTwo_) {
 		wt_.rotation_.y = kDirectionRight_;
 	}///180~360は左
 	else if (wt_.rotation_.y <= kMaxAngle) {
@@ -337,11 +341,11 @@ void IEnemy::ExplosionEnd() {}
 void IEnemy::Fire() {
 	
 	//クールタイム
-	coolTime_ += 1.0f / 60.0f;
+	coolTime_ += kDeltaTime_;
 	if (coolTime_ >= kCoolTimeMax_) {
 
 		//連射で時間を開ける
-		rapidFireTime_ += 1.0f / 60.0f;
+		rapidFireTime_ += kDeltaTime_;
 		if (rapidFireTime_ >= kRapidFireTimeMax_) {
 			FireBullet();//敵の発泡攻撃
 			particles_[particleFire_.name]->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
@@ -366,8 +370,8 @@ void IEnemy::FoundRiaction() {
 	Vector3 reaction = { 0,damageScale_.y * kDivideByTwo_,0 };
 
 	if (isFoundReaction_) {
-		reaction_->ScaleReaction(wt_.scale_, isFoundReaction_, reaction, scaleTimer_, kMarkMaxTime_ / 5.0f);
-		reaction_->FoundReaction(wt_.translation_,isFoundReaction_, reaction, foundTimer_, kMarkMaxTime_ / 5.0f, preTranslate_);
+		reaction_->ScaleReaction(wt_.scale_, isFoundReaction_, reaction, scaleTimer_, kFoundMosionMaxTime_);
+		reaction_->FoundReaction(wt_.translation_,isFoundReaction_, reaction, foundTimer_, kFoundMosionMaxTime_, preTranslate_);
 	}
 }
 
