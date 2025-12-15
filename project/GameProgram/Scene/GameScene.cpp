@@ -192,7 +192,7 @@ void GameScene::Draw() {
 		enemy->DrawParticle();
 	}
 	//プレイヤーのパーティクル描画
-	player_->DrawP();
+	player_->DrawParticle();
 	//イベントトリガーのパーティクル描画
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->DrawParticle();

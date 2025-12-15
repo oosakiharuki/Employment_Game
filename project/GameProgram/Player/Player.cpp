@@ -431,7 +431,7 @@ void Player::Draw() {
 
 }
 
-void Player::DrawP() {
+void Player::DrawParticle() {
 	//パーティクル
 	for (auto& particle : particles_) {
 		particle.second->Draw();

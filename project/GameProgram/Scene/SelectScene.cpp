@@ -81,7 +81,7 @@ void SelectScene::Draw() {
 	//パーティクル描画処理
 	ParticleCommon::GetInstance()->Command();
 	//プレイヤーパーティクル描画
-	player_->DrawP();
+	player_->DrawParticle();
 
 	SpriteCommon::GetInstance()->Command();
 	//説明ガイド

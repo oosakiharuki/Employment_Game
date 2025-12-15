@@ -32,7 +32,7 @@ public:
 	/// <summary>
 	/// パーティクル処理
 	/// </summary>
-	void DrawP();
+	void DrawParticle();
 
 	/// <summary>
 	/// getter_ワールド座標系
