@@ -2,6 +2,7 @@
 #include <sstream>
 #include <random>
 #include "ImGuiManager.h"
+#include "Input.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -13,9 +14,17 @@ void CameraControl::Initialize() {
 
 void CameraControl::Update(Camera* camera) {
 
+	if (Input::GetInstance()->TriggerKey(DIK_P)) {
+		isFreeMode_ = !isFreeMode_;
+	}
+
 	//固定モードでないなら
 	if (!isFixedMode_ && !isFreeMode_) {
 		Move();
+	}
+
+	if (isFreeMode_) {
+		DebugMove();
 	}
 
 	//ズーム
@@ -38,6 +47,7 @@ void CameraControl::Update(Camera* camera) {
 	ImGui::SliderFloat("cameraRotateZ", &wt_.rotation_.z, -360.0f, 360.0f);
 
 	ImGui::Checkbox("free_Mode",&isFreeMode_);
+	ImGui::InputFloat("cameraRotate", &movePower_);
 
 	ImGui::End();
 
@@ -79,6 +89,34 @@ void CameraControl::Move() {
 	}
 
 }
+
+void CameraControl::DebugMove() {
+	//上に移動
+	if (Input::GetInstance()->PushKey(DIK_UP)) {
+		wt_.translation_.y += movePower_;
+	}
+	//下に移動
+	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
+		wt_.translation_.y -= movePower_;
+	}
+	//左に移動
+	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+		wt_.translation_.x -= movePower_;
+	}
+	//右に移動
+	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+		wt_.translation_.x += movePower_;
+	}
+	//後ろに移動
+	if (Input::GetInstance()->PushKey(DIK_Y)) {
+		wt_.translation_.z -= movePower_;
+	}
+	//前に移動
+	if (Input::GetInstance()->PushKey(DIK_U)) {
+		wt_.translation_.z += movePower_;
+	}
+}
+
 
 void CameraControl::Zoom() {
 	if (isZoom_) {

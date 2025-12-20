@@ -103,11 +103,6 @@ public:
 	void KnockBackCommon(float TimeMax);
 
 	/// <summary>
-	/// 死んだときの処理
-	/// </summary>
-	void DeadPlayer();
-
-	/// <summary>
 	/// getter_復活
 	/// </summary>
 	/// <returns></returns>復活フラグ
@@ -211,6 +206,20 @@ private:
 	/// 操作できるときの処理()
 	/// </summary>
 	void PlayUpdate();
+
+	/// <summary>
+	/// 死んだときの処理
+	/// </summary>
+	void DeadPlayer();
+
+	
+	std::string statePattern_ = "";
+
+	/// <summary>
+	/// ステートパターン
+	/// </summary>
+	void StatePattern();
+
 
 	//input
 	Input* input_ = nullptr;

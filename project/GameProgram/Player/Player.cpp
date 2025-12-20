@@ -73,52 +73,16 @@ void Player::Update() {
 
 	//倒された時
 	if (hp_ == 0) {
-		//ノックバック、ダメージリアクション、ブリンクをリセット
-		isKnockback_ = false;
-		isDamageMosion_ = false;
-		isBrink_ = false;
-		DeadPlayer();
+		statePattern_ = "dead";
+	}
+	else if (isPerformance_) {
+		statePattern_ = "performance";
+	}
+	else {
+		statePattern_ = "normal";
 	}
 
-	if (!isDead_ && !isPerformance_) {
-		//プレイヤー操作/アクション
-		PlayUpdate();
-	}
-
-	//地面にいるとき
-	if (isGround_) {
-		isJump_ = false;//ジャンプ可能
-		isOneBrink_ = false;//ブリンク可能
-	}
-
-	// - 滑空 - 
-	//開いた状態で地面についていない
-	//傘が上向き(斜め上も)の場合かつプレイヤーが倒されていないとき
-	if (isShield_ && !isGround_ && 
-		(wtGun_.rotation_.x >= kUpDis_ - kNanameValue_ && wtGun_.rotation_.x <= kUpDis_ + kNanameValue_) && !isDead_) {
-		//ジャンプ後だとずっと浮くためfalseに
-		if (isJump_) {
-			isJump_ = false;
-		}
-		//重力を固定することでゆっくり落ちる
-		grabity_ = kFixedGrabityPower_;
-		//ブリンクが終了した時
-		if (!isBrink_) {
-			//滑空中は上向きのみ(斜めにはならない)
-			wtGun_.rotation_.x = kUpDis_;
-		}
-	}
-
-	//ジャンプ
-	if (isJump_) {
-		wt_.translation_.y += kJumpUp_;
-	}
-
-	//演出時は関係なし
-	if (!isPerformance_ && !isDead_) {
-		//重力
-		GravityUpdate();
-	}
+	StatePattern();
 
 	//弾丸
 	for (auto& bullet : bullets_) {
@@ -140,15 +104,14 @@ void Player::Update() {
 		infinityTimer_ += kDeltaTime_;
 	}
 
-	//移動しているとパーティクルを発生
-	if (isGround_ && IsMovePosition()) {
-		// 歩く煙パーティクル
-		particles_[particleWalk_.name]->SetParticleBorn(ParticleBorn::TimerMode);
-		particles_[particleWalk_.name]->SetTranslate(wt_.translation_ + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.matWorld_));
-		particles_[particleWalk_.name]->SetScale({ 0.5f,0.5f,0.5f });
+
+	//ダメージリアクション
+	if (isDamageMosion_) {
+		reaction_->ScaleReaction(wt_.scale_, isDamageMosion_, damageScale_, scaleTimer_, kDamageMaxTime_);
 	}
-	else {
-		particles_[particleWalk_.name]->SetParticleBorn(ParticleBorn::Stop);
+	//傘リアクション
+	if (isShildMosion_) {
+		umbrella_->HitReaction(isShildMosion_);
 	}
 
 	//パーティクル
@@ -220,6 +183,68 @@ void Player::Update() {
 	// - UI -
 	//スプライト更新
 	SpriteUpdate();
+}
+
+
+void Player::StatePattern() {
+
+	if (statePattern_ == "normal") {
+		//プレイヤー操作/アクション
+		PlayUpdate();
+
+		//地面にいるとき
+		if (isGround_) {
+			isJump_ = false;//ジャンプ可能
+			isOneBrink_ = false;//ブリンク可能
+		}
+
+		// - 滑空 - 
+		//開いた状態で地面についていない
+		//傘が上向き(斜め上も)の場合かつプレイヤーが倒されていないとき
+		if (isShield_ && !isGround_ &&
+			(wtGun_.rotation_.x >= kUpDis_ - kNanameValue_ && wtGun_.rotation_.x <= kUpDis_ + kNanameValue_) && !isDead_) {
+			//ジャンプ後だとずっと浮くためfalseに
+			if (isJump_) {
+				isJump_ = false;
+			}
+			//重力を固定することでゆっくり落ちる
+			grabity_ = kFixedGrabityPower_;
+			//ブリンクが終了した時
+			if (!isBrink_) {
+				//滑空中は上向きのみ(斜めにはならない)
+				wtGun_.rotation_.x = kUpDis_;
+			}
+		}
+
+		//ジャンプ
+		if (isJump_) {
+			wt_.translation_.y += kJumpUp_;
+		}
+
+		//演出時は関係なし
+		if (!isPerformance_ && !isDead_) {
+			//重力
+			GravityUpdate();
+		}
+
+		//移動しているとパーティクルを発生
+		if (isGround_ && IsMovePosition()) {
+			// 歩く煙パーティクル
+			particles_[particleWalk_.name]->SetParticleBorn(ParticleBorn::TimerMode);
+			particles_[particleWalk_.name]->SetTranslate(wt_.translation_ + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.matWorld_));
+			particles_[particleWalk_.name]->SetScale({ 0.5f,0.5f,0.5f });
+		}
+		else {
+			particles_[particleWalk_.name]->SetParticleBorn(ParticleBorn::Stop);
+		}
+	}
+	else if (statePattern_ == "dead") {
+		//倒された時
+		DeadPlayer();
+	}
+	else if (statePattern_ == "performance") {
+
+	}
 }
 
 void Player::PlayUpdate() {
@@ -377,15 +402,6 @@ void Player::PlayUpdate() {
 			ShootBullet();
 			coolTimer_ = 0;
 		}
-	}
-
-	//ダメージリアクション
-	if (isDamageMosion_) {
-		reaction_->ScaleReaction(wt_.scale_, isDamageMosion_, damageScale_,scaleTimer_, kDamageMaxTime_);
-	}
-	//傘リアクション
-	if (isShildMosion_) {
-		umbrella_->HitReaction(isShildMosion_);
 	}
 
 	//ノックバック発動
@@ -550,6 +566,10 @@ void Player::IsShildMosion() {
 }
 
 void Player::DeadPlayer() {
+	//ノックバック、ダメージリアクション、ブリンクをリセット
+	isKnockback_ = false;
+	isDamageMosion_ = false;
+	isBrink_ = false;
 
 	deadTimer_ += kDeltaTime_;
 	isDead_ = true;
@@ -612,7 +632,6 @@ void Player::PariSuccess() {
 }
 
 void Player::SpriteUpdate() {
-
 	for (uint32_t i = 0; i < kPlayerMaxHp_; i++) {
 		//Hpに応じてテクスチャを変化させる
 		if (i >= hp_) {

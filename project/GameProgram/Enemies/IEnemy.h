@@ -289,3 +289,10 @@ private:
 	const float kFoundMosionMaxTime_ = kMarkMaxTime_ / 5.0f;
 };
 
+
+class ActionPattarn {
+public:
+
+private:
+
+};

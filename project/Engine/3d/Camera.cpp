@@ -6,7 +6,7 @@ Camera::Camera() {
 	forY_ = 0.45f;
 	aspect_ = float(WinApp::kClientWidth_) / float(WinApp::kClientHeight_);
 	nearClip_ = 0.1f;
-	farClip_ = 100.0f;
+	farClip_ = 1000.0f;
 	worldMatrix_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 	viewMatrix_ = Inverse(worldMatrix_);
 	projectionMatrix_ = MakePerspectiveFovMatrix(forY_, aspect_, nearClip_, farClip_);

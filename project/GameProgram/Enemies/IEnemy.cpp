@@ -63,17 +63,14 @@ void IEnemy::Update() {
 	//捜索範囲更新
 	SearchRange();
 
-	switch (action_)
-	{
-	case IEnemy::Action::normal: // 通常
+	if (action_ == Action::normal) { // 通常
 		//角度
 		DirectionDegree();
 
 		//通常の更新処理
 		UpdateNormal();
-
-		break;
-	case IEnemy::Action::attack: // 攻撃
+	}
+	else if (action_ == Action::attack) { // 攻撃
 		if (isBullet_) {
 			//攻撃処理 (攻撃し終わるとisBulletがfalseに)
 			Attack();
@@ -105,20 +102,19 @@ void IEnemy::Update() {
 		//攻撃中の更新処理(攻撃は除く)
 		UpdateAttack();
 
-		break;
-	case IEnemy::Action::dead: // 死亡
+	}
+	else if (action_ == Action::dead) { // 死亡
 		//死んだときの処理
 		UpdateDead();
-		break;
-	case IEnemy::Action::stop: // 停止
+	}
+	else if (action_ == Action::stop) { // 停止
 		//演出中は動かない
 		if (!isPerformance_) {
 			action_ = Action::normal;
 		}
-		break;
-	default:
+	}
+	else {
 		action_ = Action::normal;
-		break;
 	}
 
 	//見つかったら
