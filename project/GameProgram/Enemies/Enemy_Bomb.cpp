@@ -36,6 +36,11 @@ void Enemy_Bomb::UpdateAttack() {
 		hp_ = 0;
 	}
 
+	//追尾モードオン
+	isTuibiStart_ = true;
+	//!マーク表示時間
+	markTimer_ += kDeltaTime_;
+
 	//ボムとプレイヤーの距離
 	DirectionPlayer();
 	
@@ -78,11 +83,6 @@ void Enemy_Bomb::Draw() {
 	}
 }
 
-void Enemy_Bomb::Attack() {
-	//追尾モードオン
-	isTuibiStart_ = true;
-}
-
 void Enemy_Bomb::TimeRimmit() {
 	//爆弾タイマー
 	bombTimer_ += kDeltaTime_;
@@ -102,7 +102,7 @@ void Enemy_Bomb::TimeRimmit() {
 
 	if (bombTimer_ >= kOnTheVerge) {
 		//爆発寸前だと揺れが細かくなる
-		reaction_->ScaleReaction(wt_.scale_,isTuibiStart_, bombScale_ * kScaleSpeedUp_, scaleTimer_, kScaleMax_ / kScaleSpeedUp_);
+		reaction_->ScaleReaction(wt_.scale_, isTuibiStart_, bombScale_ * kScaleSpeedUp_, scaleTimer_, kScaleMax_ / kScaleSpeedUp_);
 		colorTimeMax_ = kScaleMax_ / kScaleSpeedUp_;//点滅時間変更
 	}
 	else {

@@ -49,6 +49,9 @@ void Enemy_Turret::UpdateAttack(){
 	//レーザーポイント
 	LeserPoint();
 
+	//発砲処理
+	EnemyFire();
+
 	//コーンが上向きなので
 	particles_[particleFire_.name]->SetRotate({ 0,0,-wt_.rotation_.y });
 }
@@ -88,11 +91,6 @@ void Enemy_Turret::Draw() {
 	for (auto& bullet : bullets_) {
 		bullet->Draw();//弾丸
 	}
-}
-
-void Enemy_Turret::Attack() {
-	//発泡処理
-	Fire();
 }
 
 void Enemy_Turret::FireBullet() {
