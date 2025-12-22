@@ -67,22 +67,15 @@ void Player::Initialize() {
 
 	//入力処理
 	input_ = Input::GetInstance().get();
+
+	//ステートパターン
+	playerState_ = std::make_unique<PlayerLifeState>();
 }
 
 void Player::Update() {
 
-	//倒された時
-	if (hp_ == 0) {
-		statePattern_ = "dead";
-	}
-	else if (isPerformance_) {
-		statePattern_ = "performance";
-	}
-	else {
-		statePattern_ = "normal";
-	}
-
-	StatePattern();
+	//ステートの更新処理
+	playerState_->Update(*this);
 
 	//弾丸
 	for (auto& bullet : bullets_) {
@@ -140,6 +133,17 @@ void Player::Update() {
 		preMosionName_ = mosionName_;
 	}
 
+	//移動しているとパーティクルを発生
+	if (isGround_ && IsMovePosition()) {
+		// 歩く煙パーティクル
+		particles_[particleWalk_.name]->SetParticleBorn(ParticleBorn::TimerMode);
+		particles_[particleWalk_.name]->SetTranslate(wt_.translation_ + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.matWorld_));
+		particles_[particleWalk_.name]->SetScale({ 0.5f,0.5f,0.5f });
+	}
+	else {
+		particles_[particleWalk_.name]->SetParticleBorn(ParticleBorn::Stop);
+	}
+
 	//現在座標に前回座標を代入
 	prePosition_ = wt_.translation_;
 	
@@ -185,66 +189,38 @@ void Player::Update() {
 	SpriteUpdate();
 }
 
+void Player::LifeUpdate() {
+	//地面にいるとき
+	if (isGround_) {
+		isJump_ = false;//ジャンプ可能
+		isOneBrink_ = false;//ブリンク可能
+	}
 
-void Player::StatePattern() {
-
-	if (statePattern_ == "normal") {
-		//プレイヤー操作/アクション
-		PlayUpdate();
-
-		//地面にいるとき
-		if (isGround_) {
-			isJump_ = false;//ジャンプ可能
-			isOneBrink_ = false;//ブリンク可能
-		}
-
-		// - 滑空 - 
-		//開いた状態で地面についていない
-		//傘が上向き(斜め上も)の場合かつプレイヤーが倒されていないとき
-		if (isShield_ && !isGround_ &&
-			(wtGun_.rotation_.x >= kUpDis_ - kNanameValue_ && wtGun_.rotation_.x <= kUpDis_ + kNanameValue_) && !isDead_) {
-			//ジャンプ後だとずっと浮くためfalseに
-			if (isJump_) {
-				isJump_ = false;
-			}
-			//重力を固定することでゆっくり落ちる
-			grabity_ = kFixedGrabityPower_;
-			//ブリンクが終了した時
-			if (!isBrink_) {
-				//滑空中は上向きのみ(斜めにはならない)
-				wtGun_.rotation_.x = kUpDis_;
-			}
-		}
-
-		//ジャンプ
+	// - 滑空 - 
+	//開いた状態で地面についていない
+	//傘が上向き(斜め上も)の場合かつプレイヤーが倒されていないとき
+	if (isShield_ && !isGround_ &&
+		(wtGun_.rotation_.x >= kUpDis_ - kNanameValue_ && wtGun_.rotation_.x <= kUpDis_ + kNanameValue_) && !isDead_) {
+		//ジャンプ後だとずっと浮くためfalseに
 		if (isJump_) {
-			wt_.translation_.y += kJumpUp_;
+			isJump_ = false;
 		}
-
-		//演出時は関係なし
-		if (!isPerformance_ && !isDead_) {
-			//重力
-			GravityUpdate();
-		}
-
-		//移動しているとパーティクルを発生
-		if (isGround_ && IsMovePosition()) {
-			// 歩く煙パーティクル
-			particles_[particleWalk_.name]->SetParticleBorn(ParticleBorn::TimerMode);
-			particles_[particleWalk_.name]->SetTranslate(wt_.translation_ + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.matWorld_));
-			particles_[particleWalk_.name]->SetScale({ 0.5f,0.5f,0.5f });
-		}
-		else {
-			particles_[particleWalk_.name]->SetParticleBorn(ParticleBorn::Stop);
+		//重力を固定することでゆっくり落ちる
+		grabity_ = kFixedGrabityPower_;
+		//ブリンクが終了した時
+		if (!isBrink_) {
+			//滑空中は上向きのみ(斜めにはならない)
+			wtGun_.rotation_.x = kUpDis_;
 		}
 	}
-	else if (statePattern_ == "dead") {
-		//倒された時
-		DeadPlayer();
-	}
-	else if (statePattern_ == "performance") {
 
+	//ジャンプ
+	if (isJump_) {
+		wt_.translation_.y += kJumpUp_;
 	}
+
+	//重力
+	GravityUpdate();
 }
 
 void Player::PlayUpdate() {
@@ -677,4 +653,9 @@ const bool Player::IsMovePosition() {
 		return true;
 	}
 	return false;
+}
+
+void Player::ChangeStatePattern(std::unique_ptr<BasePlayerState> playerState) {
+	playerState_.reset();
+	playerState_ = std::move(playerState);
 }

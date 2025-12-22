@@ -9,6 +9,8 @@
 
 #include "UIManager.h"
 
+#include "BasePlayerState.h"
+
 /// <summary>
 /// プレイヤー
 /// </summary>
@@ -198,27 +200,27 @@ public:
 		wt_.rotation_ = { 0.0f,0.0f,0.0f };//初期状態が後ろを向いているため
 	}
 
-private:
-	//オブジェクト
-	std::unique_ptr<Object_glTF> object_;
-
 	/// <summary>
 	/// 操作できるときの処理()
 	/// </summary>
 	void PlayUpdate();
+
+	void LifeUpdate();
 
 	/// <summary>
 	/// 死んだときの処理
 	/// </summary>
 	void DeadPlayer();
 
-	
-	std::string statePattern_ = "";
-
 	/// <summary>
-	/// ステートパターン
+	/// ステートパターン変更
 	/// </summary>
-	void StatePattern();
+	/// <param name="enemyState">次のステートパターン</param>
+	void ChangeStatePattern(std::unique_ptr<BasePlayerState> playerState);
+
+private:
+	//オブジェクト
+	std::unique_ptr<Object_glTF> object_;
 
 
 	//input
@@ -373,4 +375,6 @@ private:
 
 	//傘がリアクションするflag
 	bool isShildMosion_ = false;
+
+	std::unique_ptr<BasePlayerState> playerState_;
 };
