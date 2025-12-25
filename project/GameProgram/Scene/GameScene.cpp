@@ -1,13 +1,16 @@
 #include "GameScene.h"
 #include <sstream>
+#include "StageObjectFunction.h"
+
 using namespace MyMath;
+using namespace StageObjectFunction;
 
 void GameScene::Initialize() {
 	//ゲームデータ引継ぎ(Hp,ステージ面)
 	sceneSaveData_ = NextStageSave::GetInstance()->GetNextStageSaveData();
 
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting("stage_1");
+	LevelEditorObjectSetting();
 
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");
@@ -31,16 +34,7 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-	
-	if (input_->TriggerKey(DIK_F2)) {
-		NextSceneFadeInStart("Clear");
-	}
 
-	//フェード中でないか && 次のシーンに変更フラグが立ったか
-	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {
-		ChangeScene();
-		Audio::GetInstance()->StopWave(BGMData_);//BGM停止
-	}
 	//演出用のワープゲート出口
 	startWarp_->Update();
 
@@ -51,9 +45,9 @@ void GameScene::Update() {
 	//更新処理
 	cameraControl_->Update(&*camera_.get());
 
-
 	//プレイヤー更新処理
 	player_->Update();
+
 
 	//プレイヤーがゴールした
 	if (CollisionManager::GetInstance()->IsGoal()) {
@@ -61,7 +55,7 @@ void GameScene::Update() {
 	}
 	//次のシーンに移動する
 	if (CollisionManager::GetInstance()->IsWarp()) {
-		WarpNextScene();
+		WarpNextScene(*player_.get(),cameraControl_.get(), isNextLoadingStageScene);
 	}
 
 	//ステージの更新処理
@@ -84,8 +78,11 @@ void GameScene::Update() {
 			player_->SetTranslate({ playerPoint_.x,startPointY_,playerPoint_.z });
 		}
 	}
-
-	Respawn();
+	
+	//死んでしまった、復活(リスポーン)する時
+	if (player_->GetIsDead() && player_->GetIsRespawn()) {
+		Respawn();
+	}
 
 	//プレイヤーが死んでしまったら通らない(停止)
 	if (!player_->GetIsDead()) {
@@ -192,7 +189,7 @@ void GameScene::Draw() {
 		enemy->DrawParticle();
 	}
 	//プレイヤーのパーティクル描画
-	player_->DrawP();
+	player_->DrawParticle();
 	//イベントトリガーのパーティクル描画
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->DrawParticle();
@@ -242,9 +239,9 @@ void GameScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
 	Cubemap::GetInstance()->SetDefaultCamera(camera_.get());
 
 	//プレイヤーの体力を上書き
+	player_->Initialize();//初期設定
 	player_->SetHp(sceneSaveData_.playerHp);
 	player_->SetZanki(sceneSaveData_.playerZanki);
-	player_->Initialize();//初期設定
 
 	spitOut_.SpitOutPlayer(player_);
 
@@ -271,39 +268,16 @@ void GameScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
 	}
 }
 
-void GameScene::WarpNextScene() {
-	//プレイヤーが演出判定でない
-	//「!player_->GetPerformanceMode()」は何度もplayer_のGetTranslateを読み取ることで予定の速度より速くならないようにするため
-	if (!player_->GetPerformanceMode()) {
-		//プレイヤーにカメラズーム
-		CameraZoomPlayer();
-		player_->BackDirection();//向きを前に(Z方向)
-	}
-	//カメラがズームし終わった
-	if (cameraControl_->ZoomEnd()) {
-		//次のステージに進む時Hpなどパラメータがリセットされないようにする
-		sceneSaveData_.playerHp = player_->GetHp(); //現在のプレイヤー体力を保存
-		sceneSaveData_.playerZanki = player_->GetZanki(); //現在のプレイヤー残機を保存
-		NextStageSave::GetInstance()->SetPlayerParameta(sceneSaveData_); //移行データを代入する
-		//フェードインした後、次のシーンに
-		NextSceneFadeInStart("NextStage");
-	}
-}
-
 void GameScene::PlayerGoal() {
 	//プレイヤーにカメラズーム
-	CameraZoomPlayer();           //何度も読み取ってワープより早く移動する
+	//何度も読み取ってワープより早く移動する
+	cameraControl_->ZoomStart(player_->GetTranslate() + kPlayerAwayPos_);
+	player_->IsPerformanceFlag(true);//演出モード           
 	player_->DirectionTheCamera();//向きをカメラのほうに(-Z方向)
 
 	if (cameraControl_->ZoomEnd()) {
-		NextSceneFadeInStart("Clear");//クリアシーンに移動
+		isNextClearScene = true;
 	}
-}
-
-void GameScene::CameraZoomPlayer() {
-	//ズーム開始(カメラ現在地点 -> プレイヤー座標 + 少し離れた場所)
-	cameraControl_->ZoomStart(player_->GetTranslate() + kPlayerAwayPos_);
-	player_->IsPerformanceFlag(true);//演出モード
 }
 
 void GameScene::CollisionCommon() {
@@ -315,8 +289,7 @@ void GameScene::CollisionCommon() {
 	//プレイヤーとステージオブジェクト
 	CollisionManager::GetInstance()->PlayerAndStageObject(player_.get(), stageObjects_);
 	//プレイヤーとイベントトリガー
-	CollisionManager::GetInstance()->PlayerAndEventTrigger(player_.get(), 
-		eventTriggers_, cameraControl_.get(),levelediter_);
+	CollisionManager::GetInstance()->PlayerAndEventTrigger(player_.get(), eventTriggers_,cameraControl_.get(), levelediter_);
 	//敵とステージ自体
 	CollisionManager::GetInstance()->EnemyAndStage(enemies_,stagesAABB_);
 }
@@ -350,27 +323,47 @@ void GameScene::WarterWarpExit() {
 }
 
 void GameScene::Respawn() {
-	//死んでしまった、復活(リスポーン)する時
-	if (player_->GetIsDead() && player_->GetIsRespawn()) {
-
-		if (player_->GetZanki() == 0) {
-			//残機が0で倒された場合ゲームオーバー
-			NextSceneFadeInStart("GameOver");
-			FadeScreen::GetInstance()->SetMaskTexture("fade02.png");
-			FadeScreen::GetInstance()->SetBackGround("black.png");
-			return;
-		}
-
-		//敵が復活
-		for (auto& enemy : enemies_) {
-			enemy->RespawnEnemy();
-		}
-		//プレイヤー復活
-		player_->RespawnPlayer();
-		//突破できてないならやり直し
-		for (auto& eventTrigger : eventTriggers_) {
-			eventTrigger->FailureEvent();
-			cameraControl_->CameraSetting(levelediter_.GetLevelData()->cameraInit["MainCamera"], false);
-		}
+	if (player_->GetZanki() == 0) {
+		//残機が0で倒された場合ゲームオーバー
+		isNextGameOverScene = true;
+		FadeScreen::GetInstance()->SetMaskTexture("fade02.png");
+		FadeScreen::GetInstance()->SetBackGround("black.png");
+		return;
 	}
+
+	//敵が復活
+	for (auto& enemy : enemies_) {
+		enemy->RespawnEnemy();
+	}
+	//プレイヤー復活
+	player_->RespawnPlayer();
+	//突破できてないならやり直し
+	for (auto& eventTrigger : eventTriggers_) {
+		eventTrigger->FailureEvent();
+		cameraControl_->CameraSetting(levelediter_.GetLevelData()->cameraInit["MainCamera"], false);
+	}
+}
+
+void GameScene::SceneUpdate() {
+
+	if (input_->TriggerKey(DIK_F2)) {
+		nextSceneNo_ = "Clear";//クリアシーンに移動
+	}
+
+	if (isNextClearScene) {
+		nextSceneNo_ = "Clear";//クリアシーンに移動
+	}
+	else if (isNextLoadingStageScene) {
+		nextSceneNo_ = "NextStage";//次のステージに移動
+	}
+	else if (isNextGameOverScene) {
+		nextSceneNo_ = "GameOver";//ゲームオーバーシーンに移動
+	}
+
+	// 前回のシーンが現在のシーンと異なっている時
+	if (NextSceneFlag()) {
+		Audio::GetInstance()->StopWave(BGMData_);//BGM停止
+	}
+
+	ChangeSceneNo();
 }

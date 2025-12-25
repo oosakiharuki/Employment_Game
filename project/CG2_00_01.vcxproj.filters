@@ -115,9 +115,6 @@
     <Filter Include="ソース ファイル\GameProgram\Scene">
       <UniqueIdentifier>{c5623b3f-5406-4d21-a960-cfc3601e4865}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GameProgram\StageObjects">
-      <UniqueIdentifier>{e7200600-3803-4831-a1a7-5b8eee728d58}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\GameProgram\LevelEditor">
       <UniqueIdentifier>{9d3be0b2-740f-4b21-b1be-24756f276d2e}</UniqueIdentifier>
     </Filter>
@@ -138,6 +135,9 @@
     </Filter>
     <Filter Include="ソース ファイル\GameProgram\Collsion">
       <UniqueIdentifier>{a22a70f0-37ea-4c15-9a1e-03fee3d2eaa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\StageObjects">
+      <UniqueIdentifier>{e7200600-3803-4831-a1a7-5b8eee728d58}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -386,6 +386,15 @@
     </ClCompile>
     <ClCompile Include="GameProgram\System\UIManager.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseEnemyState.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="BasePlayerState.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="StageObjectFunction.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -646,6 +655,15 @@
     </ClInclude>
     <ClInclude Include="GameProgram\System\Reaction.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEnemyState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BasePlayerState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="StageObjectFunction.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1113,7 +1113,7 @@
             "transform": {
                 "translation": [
                     29.5,
-                    7.0,
+                    0.0,
                     25.0
                 ],
                 "rotation": [
@@ -1130,7 +1130,7 @@
             "event_trigger": {
                 "center": [
                     0.0,
-                    -7.0,
+                    0.0,
                     0.0
                 ],
                 "size": [

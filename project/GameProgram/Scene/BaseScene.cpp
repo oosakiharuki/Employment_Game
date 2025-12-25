@@ -4,19 +4,12 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-std::string BaseScene::sceneNo_ = "Game";
+std::string BaseScene::sceneNo_ = "Title";
 std::string BaseScene::nextSceneNo_ = sceneNo_;
 
 BaseScene::~BaseScene(){}
 
 std::string BaseScene::GetSceneNo() { return sceneNo_; }
-
-void BaseScene::NextSceneFadeInStart(const std::string& name) {
-	//フェードイン開始
-	FadeScreen::GetInstance()->FadeStart(type_fadeIn);
-	//次のステージ名
-	nextSceneNo_ = name;
-}
 
 bool BaseScene::NextSceneFlag() {
 	//現在のシーンと次のシーンが違う場合(例: Select , Game true / Select , Select false)
@@ -26,9 +19,24 @@ bool BaseScene::NextSceneFlag() {
 	return false;// シーン移動しない
 }
 
-void BaseScene::ChangeScene() {
-	//ステージの変更
-	sceneNo_ = nextSceneNo_;
+void BaseScene::ChangeSceneNo() {
+	//フェードイン開始
+	if (NextSceneFlag() && !isFade_) {
+		FadeScreen::GetInstance()->FadeStart(type_fadeIn);
+		isFade_ = true;
+	}
+
+	//フェード中でないか && 次のシーンに変更フラグが立ったか
+	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {
+		//シーンの変更
+		sceneNo_ = nextSceneNo_;
+		isFade_ = false;
+	}
+
+	//"End"の場合ゲーム終了
+	if (sceneNo_ == "End") {
+		isGameEnd_ = true;
+	}
 }
 
 std::unique_ptr<BaseScene> BaseScene::SetCurrentScene() { 

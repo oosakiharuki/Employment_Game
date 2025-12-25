@@ -31,10 +31,6 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw() override;
-	/// <summary>
-	/// 攻撃
-	/// </summary>
-	void Attack() override;
 
 	/// <summary>
 	/// 弾丸発射処理

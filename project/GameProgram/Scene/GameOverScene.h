@@ -11,6 +11,7 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Finalize() override;
+	void SceneUpdate() override;
 private:
 	//入力処理
 	Input* input_ = Input::GetInstance().get();

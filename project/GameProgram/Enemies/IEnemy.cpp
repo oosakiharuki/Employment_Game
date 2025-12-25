@@ -41,102 +41,22 @@ void IEnemy::Update() {
 
 	//演出中の場合
 	if (player_->GetPerformanceMode()) {
-		shadow_->SetTranslate(wt_.translation_);//影描画がおかしくならないように
 		//オブジェクトのみの更新
 		UpdateBehind();
 		return;
 	}
 
+	//hpが0の時
 	if (hp_ == 0) {
 		isDead_ = true;
-		action_ = Action::dead;
-	}
-
-	//動く、攻撃の時のみ発動
-	if (action_ == Action::normal || action_ == Action::attack) {
-		//重力
-		GrabityUpdate();
-		//プレイヤーの発見
-		PlayerTarget();
+		ChangeStatePattern(std::make_unique<EnemyDeadState>());
 	}
 	
 	//捜索範囲更新
 	SearchRange();
 
-	switch (action_)
-	{
-	case IEnemy::Action::normal: // 通常
-		//角度
-		DirectionDegree();
-
-		//通常の更新処理
-		UpdateNormal();
-
-		break;
-	case IEnemy::Action::attack: // 攻撃
-		if (isBullet_) {
-			//攻撃処理 (攻撃し終わるとisBulletがfalseに)
-			Attack();
-			//!マーク表示時間
-			markTimer_ += kDeltaTime_;
-		}
-		else if (!isBullet_) {
-			//連射タイマー、クールタイマーリセット
-			rapidCount_ = 0;
-			rapidFireTime_ = 0;
-			coolTime_ = 0;
-			//見失うフラグ
-			isLostPlayer_ = true;
-			//?マーク表示時間
-			markTimer_ -= kDeltaTime_;
-		}
-
-		//見失ってから少したってから通常処理に戻す
-		if (isLostPlayer_ && markTimer_ <= 0.0f) {
-			isLostPlayer_ = false;   //見失ってない
-			action_ = Action::normal;//通常処理に戻す
-		}
-		//途中でまた見つかったら
-		else if (isLostPlayer_ && isFoundTarget_) {
-			isLostPlayer_ = false;//見失ってない
-			markTimer_ = 0.0f;    //タイマーリセット(!マークとリアクションをさせる)
-		}
-
-		//攻撃中の更新処理(攻撃は除く)
-		UpdateAttack();
-
-		break;
-	case IEnemy::Action::dead: // 死亡
-		//死んだときの処理
-		UpdateDead();
-		break;
-	case IEnemy::Action::stop: // 停止
-		//演出中は動かない
-		if (!isPerformance_) {
-			action_ = Action::normal;
-		}
-		break;
-	default:
-		action_ = Action::normal;
-		break;
-	}
-
-	//見つかったら
-	if (isFoundTarget_) {
-		isBullet_ = true;
-		action_ = Action::attack;//攻撃態勢
-	}
-
-	//見つかった瞬間だけtrueに
-	if (isBullet_ && markTimer_ < kFoundMosionMaxTime_) {
-		isFoundReaction_ = true;
-		preTranslate_ = wt_.translation_;
-	}
-
-	//[!,?]のマーク表示時間の間
-	markTimer_ = std::clamp(markTimer_, 0.0f, kMarkMaxTime_);
-
-	shadow_->SetTranslate(wt_.translation_);
+	//ステートパターンの更新処理
+	currentEnemyState_->Update(*this);
 
 	//リアクション
 	if (isDamageMosion_) {
@@ -167,6 +87,9 @@ void IEnemy::Update() {
 }
 
 void IEnemy::UpdateBehind() {
+	//影
+	shadow_->SetTranslate(wt_.translation_);
+
 	object_->Update(wt_);
 	wt_.UpdateMatrix();
 
@@ -174,8 +97,12 @@ void IEnemy::UpdateBehind() {
 	for (auto& particle : particles_) {
 		particle.second->Update();
 	}
+}
 
-	if (isDead_) return;//死んでるなら読み取らない
+void IEnemy::MarkUpdate() {
+
+	//!,?のマーク表示時間の間
+	markTimer_ = std::clamp(markTimer_, 0.0f, kMarkMaxTime_);//0 ～ kMarkMaxTime
 
 	// - マーク -
 	wtMark_.translation_ = wt_.translation_;  //敵の座標位置に
@@ -187,9 +114,7 @@ void IEnemy::UpdateBehind() {
 	objectNoFound_->Update(wtMark_);
 }
 
-void IEnemy::DrawCommon() {
-	if (isDead_) return;//死んでるなら読み取らない
-
+void IEnemy::MarkDraw() {
 	//見つけたとき+マークが出る時間
 	if(isBullet_ && markTimer_ < kMarkMaxTime_)
 		objectFound_->Draw();
@@ -197,6 +122,11 @@ void IEnemy::DrawCommon() {
 	//見失った+マークが出る時間
 	if (isLostPlayer_ && markTimer_ > 0.0f)
 		objectNoFound_->Draw();
+}
+
+void IEnemy::DrawCommon() {
+	if (isDead_) return;
+	MarkDraw();
 }
 
 void IEnemy::DrawParticle() {
@@ -240,6 +170,12 @@ void IEnemy::GrabityUpdate() {
 }
 
 void IEnemy::PlayerTarget() {
+	//見つかった瞬間だけtrueに
+	if (isBullet_ && markTimer_ < kFoundMosionMaxTime_) {
+		isFoundReaction_ = true;
+		preTranslate_ = wt_.translation_;
+	}
+
 	Segment segment;
 	segment.origin = wt_.translation_;      //敵座標
 	segment.diff = player_->GetTranslate(); //プレイヤー座標
@@ -290,7 +226,7 @@ void IEnemy::RespawnEnemyCommon() {
 
 	isDeleteEnemy_ = false;
 	isBullet_ = false;//攻撃はしない
-	action_ = Action::normal;
+	ChangeStatePattern(std::make_unique<EnemyMoveState>());
 
 	//向きリセット
 	DirectionDegree();
@@ -389,4 +325,47 @@ void IEnemy::DeadReaction() {
 	if (!isReaction) {
 		isDeleteEnemy_ = true;
 	}
+}
+
+bool IEnemy::IsLostFound() {
+	//見失ってから少したってから通常処理に戻す
+	if (isLostPlayer_ && markTimer_ <= 0.0f) {
+		isLostPlayer_ = false;//リセット
+		return true;
+	}
+	//途中でまた見つかったら
+	else if (isLostPlayer_ && isFoundTarget_) {
+		isLostPlayer_ = false;//リセット
+		markTimer_ = 0.0f;    //タイマーリセット(!マークとリアクションをさせる)
+	}
+	return false;
+}
+
+void IEnemy::EnemyFire() {
+	if (isFoundTarget_) {
+		isBullet_ = true;
+	}
+
+	if (isBullet_) {
+		//発泡処理
+		Fire();
+		//!マーク表示時間
+		markTimer_ += kDeltaTime_;
+	}
+	else if (!isBullet_) {
+		//連射タイマー、クールタイマーリセット
+		rapidCount_ = 0;
+		rapidFireTime_ = 0;
+		coolTime_ = 0;
+		//見失うフラグ
+		isLostPlayer_ = true;
+		//?マーク表示時間
+		markTimer_ -= kDeltaTime_;
+	}
+
+}
+
+void IEnemy::ChangeStatePattern(std::unique_ptr<BaseEnemyState> enemyState) {
+	currentEnemyState_.reset();
+	currentEnemyState_ = std::move(enemyState);
 }

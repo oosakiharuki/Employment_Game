@@ -44,18 +44,6 @@ void GameOverScene::Update() {
 	sprite_->Update();
 	spriteSpace_->Update();
 
-	if (!FadeScreen::GetInstance()->GetIsFadeing()) {
-		ChangeScene();
-	}
-
-	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
-	if ((Input::GetInstance()->TriggerKey(DIK_SPACE) ||
-		Input::GetInstance()->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance()->GetIsFadeing()) {
-		NextSceneFadeInStart("Select");
-		FadeScreen::GetInstance()->SetMaskTexture("fade01.png");
-		FadeScreen::GetInstance()->SetBackGround("fadeTexture.png");
-	}
-
 	wt_.rotation_.y += kRotate_;
 	wt_.UpdateMatrix();
 
@@ -85,3 +73,15 @@ void GameOverScene::Draw() {
 }
 
 void GameOverScene::Finalize() {}
+
+void GameOverScene::SceneUpdate() {
+	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
+	if ((Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+		Input::GetInstance()->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance()->GetIsFadeing()) {
+		nextSceneNo_ = "Select";
+		FadeScreen::GetInstance()->SetMaskTexture("fade01.png");
+		FadeScreen::GetInstance()->SetBackGround("fadeTexture.png");
+	}
+
+	ChangeSceneNo();
+}

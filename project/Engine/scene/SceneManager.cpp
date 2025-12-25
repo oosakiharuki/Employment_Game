@@ -51,6 +51,9 @@ void SceneManager::Update() {
 
 	//更新処理
 	sceneArr_->Update();
+
+	//現在シーン更新処理
+	sceneArr_->SceneUpdate();
 }
 
 void SceneManager::Draw() {

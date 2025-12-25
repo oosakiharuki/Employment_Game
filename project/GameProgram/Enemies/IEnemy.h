@@ -3,6 +3,8 @@
 #include "Player.h"
 #include "GameActor.h"
 
+#include "BaseEnemyState.h"
+
 /// <summary>
 /// 敵の基盤クラス
 /// </summary>
@@ -43,11 +45,6 @@ public:
 	/// パーティクル用の描画処理
 	/// </summary>
 	void DrawParticle();
-
-	/// <summary>
-	/// 攻撃処理
-	/// </summary>
-	virtual void Attack() = 0;
 
 	/// <summary>
 	/// ダメージ
@@ -133,10 +130,16 @@ public:
 	AABB GetEyeAABB() { return eyeAABB_; }
 
 	/// <summary>
+	/// setter_プレイヤーを見つけたフラグ
+	/// </summary>
+	/// <param name="result">true:見つけた / false:見つかってない</param>
+	void SetFoundTarget(bool result) { isFoundTarget_ = result; }	
+	
+	/// <summary>
 	/// プレイヤーを見つけたフラグ
 	/// </summary>
-	/// <param name="result"></param>
-	void IsFoundTarget(bool result) { isFoundTarget_ = result; }
+	/// <returns></returns>
+	bool IsFoundTarget() { return isFoundTarget_; }
 
 	/// <summary>
 	/// getter‗爆発範囲AABB
@@ -170,19 +173,13 @@ public:
 	/// 発泡弾
 	/// </summary>
 	virtual void FireBullet();
+	
+	void BulletFlag() { isBullet_ = true; }
 
 	/// <summary>
-	/// 行動パターン
+	/// 見失うフラグ
 	/// </summary>
-	enum class Action {
-		normal, //通常
-		attack, //攻撃
-		dead,   //死亡
-		stop    //停止
-	};
-
-
-protected:
+	bool IsLostFound();
 
 	/// <summary>
 	/// 生きている時の更新処理
@@ -198,6 +195,30 @@ protected:
 	/// 死んだ時の更新処理
 	/// </summary>
 	virtual void UpdateDead() = 0;
+	
+	/// <summary>
+	/// playerを見つけたとき 
+	/// </summary>
+	void PlayerTarget();
+
+	/// <summary>
+	/// !,?のマークの更新処理
+	/// </summary>
+	void MarkUpdate();
+	/// <summary>
+	/// !,?のマークの描画処理
+	/// </summary>
+	void MarkDraw();
+
+	/// <summary>
+	/// ステートパターン変更
+	/// </summary>
+	/// <param name="enemyState">次のステートパターン</param>
+	void ChangeStatePattern(std::unique_ptr<BaseEnemyState> enemyState);
+
+	void EnemyFire();
+
+protected:
 
 	/// <summary>
 	/// imguiの更新処理
@@ -211,9 +232,7 @@ protected:
 	std::list<std::shared_ptr<EnemyBullet>> bullets_;
 	//プレイヤークラス
 	Player* player_ = nullptr;
-	
-	//playerを見つけたとき
-	void PlayerTarget();
+
 	AABB eyeAABB_;//見える範囲
 	Vector3 eyeReach_{};
 	bool isFoundTarget_ = false;
@@ -262,8 +281,6 @@ protected:
 	float markTimer_ = 0.0f;
 	bool isLostPlayer_ = false;
 
-	Action action_ = Action::stop;
-
 	/// <summary>
 	/// 見つかけた時のリアクション処理
 	/// </summary>
@@ -287,5 +304,8 @@ private:
 	const float kMarkPositionY_ = 2.0f;
 
 	const float kFoundMosionMaxTime_ = kMarkMaxTime_ / 5.0f;
-};
 
+	//ステートパターン
+	std::unique_ptr<BaseEnemyState> currentEnemyState_ = std::make_unique<EnemyMoveState>();
+
+};

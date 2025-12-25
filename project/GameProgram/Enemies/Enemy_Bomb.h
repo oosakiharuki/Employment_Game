@@ -32,10 +32,6 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw() override;
-	/// <summary>
-	/// 攻撃
-	/// </summary>
-	void Attack() override;
 
 	bool IsExplosion()override { return isExplosion_; }
 	void ExplosionEnd()override { isExplosion_ = true; }

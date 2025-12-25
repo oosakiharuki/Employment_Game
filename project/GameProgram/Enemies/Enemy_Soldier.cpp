@@ -35,6 +35,9 @@ void Enemy_Soldier::UpdateNormal() {
 void Enemy_Soldier::UpdateAttack() {
 	//見つけたリアクション
 	FoundRiaction();
+	
+	//発砲処理
+	EnemyFire();
 
 	//コーンが上向きなので
 	particles_[particleFire_.name]->SetRotate({ 0.0f,0.0f,-wt_.rotation_.y });
@@ -70,11 +73,6 @@ void Enemy_Soldier::Draw() {
 	for (auto& bullet : bullets_) {
 		bullet->Draw();
 	}
-}
-
-void Enemy_Soldier::Attack() {
-	//発泡処理
-	Fire();
 }
 
 void Enemy_Soldier::FireBullet() {

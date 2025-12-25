@@ -12,6 +12,7 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Finalize() override;
+	void SceneUpdate() override;
 private:
 
 	//入力処理
@@ -105,4 +106,7 @@ private:
 	const Vector3 kCameraTranslate_ = { 0.0f,0.0f,-30.0f };
 
 	const float kStickPower_ = 0.5f;//スティックの倒し具合
+
+	bool isNextSelectScene = false;
+	bool isNextGameEnd = false;
 };

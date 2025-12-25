@@ -25,10 +25,10 @@ void CollisionManager::PlayerAndEnemy(Player* player,
 
 		//見える範囲にプレイヤーがいたら
 		if (IsCollisionAABB(player->GetAABB(), enemy->GetEyeAABB()) && !player->GetIsDead()) {
-			enemy->IsFoundTarget(true);//見える
+			enemy->SetFoundTarget(true);//見える
 		}
 		else {
-			enemy->IsFoundTarget(false);//見えない
+			enemy->SetFoundTarget(false);//見えない
 		}
 
 		//プレイヤーが敵の弾に当たったら

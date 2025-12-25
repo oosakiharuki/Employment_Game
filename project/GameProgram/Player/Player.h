@@ -9,6 +9,8 @@
 
 #include "UIManager.h"
 
+#include "BasePlayerState.h"
+
 /// <summary>
 /// プレイヤー
 /// </summary>
@@ -32,7 +34,7 @@ public:
 	/// <summary>
 	/// パーティクル処理
 	/// </summary>
-	void DrawP();
+	void DrawParticle();
 
 	/// <summary>
 	/// getter_ワールド座標系
@@ -101,11 +103,6 @@ public:
 	/// </summary>
 	/// <param name="TimeMax"></param>
 	void KnockBackCommon(float TimeMax);
-
-	/// <summary>
-	/// 死んだときの処理
-	/// </summary>
-	void DeadPlayer();
 
 	/// <summary>
 	/// getter_復活
@@ -203,14 +200,28 @@ public:
 		wt_.rotation_ = { 0.0f,0.0f,0.0f };//初期状態が後ろを向いているため
 	}
 
-private:
-	//オブジェクト
-	std::unique_ptr<Object_glTF> object_;
-
 	/// <summary>
 	/// 操作できるときの処理()
 	/// </summary>
 	void PlayUpdate();
+
+	void LifeUpdate();
+
+	/// <summary>
+	/// 死んだときの処理
+	/// </summary>
+	void DeadPlayer();
+
+	/// <summary>
+	/// ステートパターン変更
+	/// </summary>
+	/// <param name="enemyState">次のステートパターン</param>
+	void ChangeStatePattern(std::unique_ptr<BasePlayerState> playerState);
+
+private:
+	//オブジェクト
+	std::unique_ptr<Object_glTF> object_;
+
 
 	//input
 	Input* input_ = nullptr;
@@ -364,4 +375,6 @@ private:
 
 	//傘がリアクションするflag
 	bool isShildMosion_ = false;
+
+	std::unique_ptr<BasePlayerState> playerState_;
 };

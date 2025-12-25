@@ -79,6 +79,11 @@ public:
 	/// <param name="fixed_Mode_"></param>trueでカメラを固定する
 	void CameraSetting(const CameraInitData& data, bool fixed_Mode_);
 
+	/// <summary>
+	/// 十字キーで移動する
+	/// </summary>
+	void DebugMove();
+
 private:
 	/// <summary>
 	/// 通常(動く)
@@ -128,4 +133,6 @@ private:
 
 	//imgui
 	bool isFreeMode_ = false;
+
+	float movePower_ = 0.2f;
 };
