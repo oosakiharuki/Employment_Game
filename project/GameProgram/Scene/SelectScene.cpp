@@ -1,5 +1,8 @@
 #include "SelectScene.h"
+#include "StageObjectFunction.h"
+
 using namespace MyMath;
+using namespace StageObjectFunction;
 
 void SelectScene::Initialize() {
 
@@ -25,31 +28,22 @@ void SelectScene::Update() {
 	//ゲームパットの更新
 	input_->JoystickUpdate(state_, preState_);
 
-	//フェーズインが完了した時
-	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {
-		//ゲームシーンに移動
-		ChangeScene();
-	}
-
-	//タイトルに戻る
-	if (input_->TriggerKey(DIK_ESCAPE)) {
-		NextSceneFadeInStart("Title");
-	}
-
 	//ステージオブジェクト更新
 	for (auto& stageObject : stageObjects_) {
 		stageObject->Update();
 	}
 
+	//ワープしてゲームシーンに移動
+	if (CollisionManager::GetInstance()->IsWarp()) {
+		WarpNextScene(*player_.get(),cameraControl_.get(), isNextGameScene);
+	}
+	
 	//カメラコントロールの更新
 	cameraControl_->Update(&*camera_);
 
-	//ワープしてゲームシーンに移動
-	WarpNextScene("Game");
-
 	//プレイヤー更新
 	player_->Update();
-	
+
 	//ステージ更新
 	stageobj_->Update();
 
@@ -114,11 +108,7 @@ void SelectScene::LevelEditorObjectSetting(const std::string& leveleditor_file) 
 
 	//- カメラ配置 -
 	camera_ = std::make_unique<Camera>();
-	//カメラコントロール設定
-	cameraControl_ = std::make_unique<CameraControl>();
-	cameraControl_->Initialize();//初期化
-	//メインのカメラ
-	cameraControl_->CameraSetting(levelediter_.GetLevelData()->cameraInit["MainCamera"], false);
+	spitOut_.SpitOutCamera(cameraControl_);
 
 	//各デフォルトカメラの設定
 	Object3dCommon::GetInstance()->SetDefaultCamera(camera_.get());
@@ -128,6 +118,7 @@ void SelectScene::LevelEditorObjectSetting(const std::string& leveleditor_file) 
 	Cubemap::GetInstance()->SetDefaultCamera(camera_.get());
 
 	//プレイヤーの体力を上書き
+	player_->Initialize();//初期設定
 	player_->SetHp(sceneSaveData_.playerHp);
 	player_->SetZanki(sceneSaveData_.playerZanki);
 	
@@ -140,36 +131,6 @@ void SelectScene::LevelEditorObjectSetting(const std::string& leveleditor_file) 
 	UIManager::GetInstance()->CreateGuide(kGuideWarp_);
 }
 
-void SelectScene::WarpNextScene(const std::string& nextScene) {
-	//ワープするときじゃないなら
-	if (!CollisionManager::GetInstance()->IsWarp()) {
-		return;
-	}
-
-	//プレイヤーが演出判定でない
-	//「!player_->GetPerformanceMode()」は何度もplayer_のGetTranslateを読み取ることで予定の速度より速くならないようにするため
-	if (!player_->GetPerformanceMode()) {
-		//プレイヤーにカメラズーム
-		CameraZoomPlayer();
-		player_->BackDirection();//向きを前に(Z方向)
-	}
-	//カメラがズームし終わった
-	if (cameraControl_->ZoomEnd()) {
-		//次のステージに進む時Hpなどパラメータがリセットされないようにする
-		sceneSaveData_.playerHp = player_->GetHp(); //現在のプレイヤー体力を保存
-		sceneSaveData_.playerZanki = player_->GetZanki(); //現在のプレイヤー残機を保存
-		NextStageSave::GetInstance()->SetPlayerParameta(sceneSaveData_); //移行データを代入する
-		//フェードインした後、次のシーンに
-		NextSceneFadeInStart(nextScene);
-	}
-}
-
-void SelectScene::CameraZoomPlayer() {
-	//ズーム開始(カメラ現在地点 -> プレイヤー座標 + 少し離れた場所)
-	cameraControl_->ZoomStart(player_->GetTranslate() + kPlayerAwayPos_);
-	player_->IsPerformanceFlag(true);//演出モード
-}
-
 void SelectScene::CollisionCommon() {
 	//ゲーム内で使用する当たり判定
 	//プレイヤーとステージ自体
@@ -178,3 +139,17 @@ void SelectScene::CollisionCommon() {
 	CollisionManager::GetInstance()->PlayerAndStageObject(player_.get(), stageObjects_);
 }
 
+void SelectScene::SceneUpdate() {
+
+	//タイトルに戻る
+	if (input_->TriggerKey(DIK_ESCAPE)) {
+		nextSceneNo_ = "Title";
+	}
+
+	if (isNextGameScene) {
+		nextSceneNo_ = "Game";
+	}
+
+	//ゲームシーンに移動
+	ChangeSceneNo();
+}

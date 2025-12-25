@@ -35,12 +35,6 @@ protected:
 	bool isGameEnd_ = false;
 
 	/// <summary>
-	/// 次のシーンの選択+フェードインを始める
-	/// </summary>
-	/// <param name="name">進めたいシーン</param>
-	void NextSceneFadeInStart(const std::string& name);
-
-	/// <summary>
 	/// 次のシーンに進むフラグ(フェードなど間を開けたい時)
 	/// </summary>
 	/// <returns></returns>
@@ -49,7 +43,7 @@ protected:
 	/// <summary>
 	/// sceneNo = nextSceneNoに
 	/// </summary>
-	void ChangeScene();
+	void ChangeSceneNo();
 
 public:
 	/// <summary>
@@ -72,6 +66,11 @@ public:
 	virtual ~BaseScene();
 
 	/// <summary>
+	/// シーン更新処理(状態遷移)
+	/// </summary>
+	virtual void SceneUpdate() = 0;
+
+	/// <summary>
 	/// シーン名で
 	/// </summary>
 	/// <returns></returns>現在のシーン
@@ -90,4 +89,5 @@ public:
 	std::unique_ptr<BaseScene> SetCurrentScene();
 
 private:
+	bool isFade_ = false;
 };

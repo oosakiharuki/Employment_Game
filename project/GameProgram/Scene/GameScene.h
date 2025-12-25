@@ -12,6 +12,7 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Finalize() override;
+	void SceneUpdate() override;
 private:
 
 	//入力処理
@@ -30,7 +31,7 @@ private:
 	std::unique_ptr<CameraControl> cameraControl_;
 
 	//ズームするときのプレイヤーと少し離れた位置
-	const Vector3 kPlayerAwayPos_ = { 0, 2, -15.0f };
+	//const Vector3 kPlayerAwayPos_ = { 0, 2, -15.0f };
 
 	//レベルエディタ(オブジェクトの配置を.jsonでできる)
 	Levelediter levelediter_;
@@ -73,19 +74,9 @@ private:
 	void CollisionCommon();
 
 	/// <summary>
-	/// ワープして次のシーンに進む処理
-	/// </summary>
-	void WarpNextScene();
-
-	/// <summary>
 	/// プレイヤーがゴールする時の処理
 	/// </summary>
 	void PlayerGoal();
-
-	/// <summary>
-	/// カメラがプレイヤーにズームする
-	/// </summary>
-	void CameraZoomPlayer();
 
 	//パーティクルコンテナ
 	std::unordered_map<std::string, std::unique_ptr<Particle>> sceneParticles_;
@@ -141,4 +132,8 @@ private:
 	/// </summary>
 	void PlayerAliveUpdate();
 
+	//シーンが変更するフラグ
+	bool isNextLoadingStageScene = false;
+	bool isNextClearScene = false;
+	bool isNextGameOverScene = false;
 };

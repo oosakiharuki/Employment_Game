@@ -32,11 +32,22 @@ public:
 	void SetNextStageFile(const std::string& nextStageFile) { sceneSaveData_.nextStageFile = nextStageFile; }
 	
 	/// <summary>
-	/// setter_プレイヤーの最大体力
+	/// setter_体力
 	/// </summary>
 	/// <param name="playerHp"></param> 
-	void SetPlayerParameta(const SceneSaveData& saveData);
-	
+	void SetPlayerHp(uint32_t playerHp);
+
+	/// <summary>
+	/// setter_残機
+	/// </summary>
+	/// <param name="zanki"></param>
+	void SetPlayerZanki(uint32_t zanki);
+
+	/// <summary>
+	/// setter_最大体力
+	/// </summary>
+	/// <param name="maxHp"></param>
+	void SetPlayerMaxHp(uint32_t maxHp);
 private:
 
 	SceneSaveData sceneSaveData_ = {

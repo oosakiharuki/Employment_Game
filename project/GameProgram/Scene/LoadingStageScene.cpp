@@ -6,14 +6,7 @@ void LoadingStageScene::Initialize() {
 }
 
 void LoadingStageScene::Update() {
-
-	if (NextSceneFlag()) {
-		ChangeScene();
-	}
 	sprite_->Update();
-
-	//すぐさまゲームシーンに
-	NextSceneFadeInStart("Game");
 }
 
 void LoadingStageScene::Draw() {
@@ -23,3 +16,9 @@ void LoadingStageScene::Draw() {
 
 void LoadingStageScene::Finalize() {}
 
+void LoadingStageScene::SceneUpdate() {
+	//すぐさまゲームシーンに
+	nextSceneNo_ = "Game";
+	//番号変更
+	ChangeSceneNo();
+}

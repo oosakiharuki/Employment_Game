@@ -198,6 +198,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\System\Reaction.cpp" />
     <ClCompile Include="GameProgram\System\SpitOutLevelEditor.cpp" />
     <ClCompile Include="GameProgram\System\UIManager.cpp" />
+    <ClCompile Include="StageObjectFunction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseEnemyState.h" />
@@ -288,6 +289,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\System\Reaction.h" />
     <ClInclude Include="GameProgram\System\SpitOutLevelEditor.h" />
     <ClInclude Include="GameProgram\System\UIManager.h" />
+    <ClInclude Include="StageObjectFunction.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

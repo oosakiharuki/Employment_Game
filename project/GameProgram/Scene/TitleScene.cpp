@@ -87,15 +87,6 @@ void TitleScene::ObjectLoading() {
 }
 
 void TitleScene::Update() {
-	//次のシーンに移動
-	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {
-		if (wts_[1].translation_.y == wts_[2].translation_.y) {
-			ChangeScene();
-		}
-		else if (wts_[1].translation_.y == wts_[3].translation_.y) {
-			isGameEnd_ = true;
-		}
-	}
 
 	//ゲームパット用操作処理設定
 	input_->JoystickUpdate(state_, preState_);
@@ -139,7 +130,15 @@ void TitleScene::Update() {
 
 		bulletTimer_ += kDeltaTime_;
 		if (bulletTimer_ >= kBulletTimeMax_) {
-			NextSceneFadeInStart("Select");//セレクトシーンに移動
+			if (wts_[1].translation_.y == wts_[2].translation_.y) {
+				//セレクトシーンに移動
+				isNextSelectScene = true;
+			}
+			else if (wts_[1].translation_.y == wts_[3].translation_.y) {
+				//ゲーム終了
+				isNextGameEnd = true;
+			}
+			nextSceneNo_ = "Select";//セレクトシーンに移動
 		}
 	}
 
@@ -266,3 +265,16 @@ void TitleScene::Draw() {
 }
 
 void TitleScene::Finalize() {}
+
+void TitleScene::SceneUpdate() {
+	if (isNextSelectScene) {
+		nextSceneNo_ = "Select";
+	}
+
+	if (isNextGameEnd) {
+		nextSceneNo_ = "End";
+	}
+
+	ChangeSceneNo();
+
+}

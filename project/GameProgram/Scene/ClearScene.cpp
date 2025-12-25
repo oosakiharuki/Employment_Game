@@ -77,17 +77,6 @@ void ClearScene::Update() {
 	//周りのステージ
 	stageGltf_->Update();
 
-	//フェード中でないか && 次のシーンに変更フラグが立ったか
-	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {
-		ChangeScene();
-	}
-
-	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE) || 
-		Input::GetInstance()->TriggerBotton(state_,preState_,XINPUT_GAMEPAD_A) && !FadeScreen::GetInstance()->GetIsFadeing()) {
-		NextSceneFadeInStart("Select");
-	}
-
 }
 
 void ClearScene::Draw() {
@@ -109,4 +98,15 @@ void ClearScene::Draw() {
 
 void ClearScene::Finalize() {
 	ParticleManager::GetInstance()->ResetParticle("clear_fanfare");
+}
+
+void ClearScene::SceneUpdate() {
+
+	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
+	if ((Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+		Input::GetInstance()->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance()->GetIsFadeing()) {
+		nextSceneNo_ = "Select";
+	}
+
+	ChangeSceneNo();
 }

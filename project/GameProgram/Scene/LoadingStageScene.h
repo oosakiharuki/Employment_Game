@@ -6,7 +6,7 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Finalize() override;
-
+	void SceneUpdate() override;
 private:
 	std::unique_ptr<Sprite> sprite_;
 };
