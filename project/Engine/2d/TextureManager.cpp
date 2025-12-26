@@ -32,8 +32,25 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 
 	assert(srvManager_->Max());
 
+	//ミップマップ作成
+	MipMap(filePath);
+
+	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
+	
+	//filePath名義のテクスチャデータを設定
+	TextureData& textureData = textureDatas_[filePath];
+	textureData.metadata = metadata;
+	textureData.resource = dxCommon_->CreateTextureResource(textureData.metadata);
+	Microsoft::WRL::ComPtr<ID3D12Resource> val = dxCommon_->UploadTextureData(textureData.resource, mipImages);
+	intermediateResources_.push_back(val);
+
+	//SRVの設定
+	CreateSRV(textureData, metadata);
+}
+
+
+void TextureManager::Byte(const std::string filePath) {
 	//テクスチャファイル // byte関連
-	DirectX::ScratchImage image{};
 	std::wstring filePathW = ConvertString(filePath);
 	HRESULT hr;
 	if (filePathW.ends_with(L".dds")) {
@@ -44,9 +61,15 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 		hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
 	}
 	assert(SUCCEEDED(hr));
+}
 
+void TextureManager::MipMap(const std::string filePath) {
+	
+	//画像をロード
+	Byte(filePath);
+	
+	HRESULT hr;
 	//ミップマップ　//拡大縮小で使う
-	DirectX::ScratchImage mipImages{};
 	if (DirectX::IsCompressed(image.GetMetadata().format)) {
 		mipImages = std::move(image);
 	}
@@ -54,17 +77,10 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 		hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 4, mipImages);
 		assert(SUCCEEDED(hr));
 	}
+}
 
-	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	
-	//最後尾を取得
-	TextureData& textureData = textureDatas_[filePath];
-
-	textureData.metadata = metadata;
-	textureData.resource = dxCommon_->CreateTextureResource(textureData.metadata);
-	Microsoft::WRL::ComPtr<ID3D12Resource> val = dxCommon_->UploadTextureData(textureData.resource, mipImages);
-	intermediateResources_.push_back(val);
-
+void TextureManager::CreateSRV(TextureData& textureData, const DirectX::TexMetadata metadata){
+	//SRVDesc作成
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -85,8 +101,9 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 	textureData.srvHandleGPU = srvManager_->GetGPUDescriptorHandle(textureData.srvIndex);
 
 	//SRVの生成
-	srvManager_->CreateSRVforStructureBuffer(srvDesc,textureData.srvIndex,textureData.resource.Get(), metadata.format, UINT(metadata.mipLevels));
+	srvManager_->CreateSRVforStructureBuffer(srvDesc, textureData.srvIndex, textureData.resource.Get(), metadata.format, UINT(metadata.mipLevels));
 }
+
 
 uint32_t TextureManager::GetSrvIndex(const std::string& filePath) {
 	assert(srvManager_->Max());

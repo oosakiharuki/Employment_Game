@@ -51,6 +51,12 @@ public:
 	void Draw();
 
 private:
+
+	/// <summary>
+	/// 日本語表記
+	/// </summary>
+	void JapaneseNotation();
+
 	static std::shared_ptr<ImGuiManager> sInstance_;
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;

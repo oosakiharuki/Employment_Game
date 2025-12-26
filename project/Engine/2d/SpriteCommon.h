@@ -1,9 +1,11 @@
 #pragma once
 #include "DirectXCommon.h"
+#include "Pipeline.h" 
+
 /// <summary>
 /// スプライトの共有部分
 /// </summary>
-class SpriteCommon {
+class SpriteCommon : public Pipeline{
 public:
 	/// <summary>
 	/// インスタンス生成
@@ -30,27 +32,23 @@ public:
 	/// </summary>
 	void Command();
 
+	void CreateInputLayout() override;
+
+	void CreateBlend() override;
+
 private:
 	//PSO
 	void RootSignature();
 	void GraphicsPipeline();
 
-
-	DirectXCommon* dxCommon_;
-
 	//RootSignature
-	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_{};
 	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};
 	D3D12_ROOT_PARAMETER rootParameters_[4] = {};
 	D3D12_STATIC_SAMPLER_DESC staticSamplers_[1] = {};
 
 
-	//バイナリを元に生成
-	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;
-
-	//PSO
-	Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_ = nullptr;
-
-
 	static std::shared_ptr<SpriteCommon> sInstance_;
+
+	//InputLayout
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
 };
