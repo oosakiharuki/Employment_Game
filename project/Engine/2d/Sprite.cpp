@@ -11,7 +11,24 @@ void Sprite::Initialize(const std::string& textureFilePath) {
 	filePath_ = "resource/Sprite/" + textureFilePath;
 
 	TextureManager::GetInstance()->LoadTexture(filePath_);
+	
+	//vertexResourceの初期化
+	InitVertexResource();
 
+	//vertexDataの初期化
+	InitVertexData();
+
+	//indexDataの初期化
+	InitIndexData();
+
+	//マテリアルの初期化
+	InitMaterial();
+
+	//座標変換行列の初期化
+	InitTransformationMatrix();
+}
+
+void Sprite::InitVertexResource() {
 	//Sprite
 	vertexResource_ = spriteCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(VertexData) * 4);
 
@@ -22,10 +39,10 @@ void Sprite::Initialize(const std::string& textureFilePath) {
 	//頂点サイズ
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
-
 	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+}
 
-	
+void Sprite::InitVertexData() {
 	float left = 0.0f - anchorPoint_.x;
 	float right = 1.0f - anchorPoint_.x;
 	float top = 0.0f - anchorPoint_.y;
@@ -58,16 +75,17 @@ void Sprite::Initialize(const std::string& textureFilePath) {
 	vertexData_[1].texcoord = { tex_left,tex_top };
 	vertexData_[1].normal = { 0.0f,0.0f,-1.0f };
 
-
 	vertexData_[2].position = { right,bottom,0.0f,1.0f };//2,5
 	vertexData_[2].texcoord = { tex_right,tex_bottom };
 	vertexData_[2].normal = { 0.0f,0.0f,-1.0f };
 
-
 	vertexData_[3].position = { right,top,0.0f,1.0f };//4
 	vertexData_[3].texcoord = { tex_right,tex_top };
 	vertexData_[3].normal = { 0.0f,0.0f,-1.0f };
-	
+}
+
+void Sprite::InitIndexData() {
+
 	//Index
 	indexResource_ = spriteCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(uint32_t) * 6);
 
@@ -86,8 +104,9 @@ void Sprite::Initialize(const std::string& textureFilePath) {
 	indexData_[3] = 1;
 	indexData_[4] = 3;
 	indexData_[5] = 2;
+}
 
-
+void Sprite::InitMaterial() {
 	//spriteのリソース
 	materialResource_ = spriteCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(Material));
 
@@ -97,19 +116,16 @@ void Sprite::Initialize(const std::string& textureFilePath) {
 	materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	materialData_->enableLighting = false;
 	materialData_->uvTransform = MakeIdentity4x4();
+}
 
-
-
-
+void Sprite::InitTransformationMatrix() {
 	//座標変換行列	
-	
 	transformationMatrixResource_ = spriteCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
-	
+
 	transformationMatrixResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixData_));
-	
+
 	transformationMatrixData_->WVP = MakeIdentity4x4();
 	transformationMatrixData_->World = MakeIdentity4x4();
-
 }
 
 void Sprite::AdjustTextureSize() {

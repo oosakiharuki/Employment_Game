@@ -17,27 +17,33 @@ void ImGuiManager::Initialize([[maybe_unused]]WinApp* winApp, DirectXCommon* dxC
 
 	uint32_t srvIndex = srvManager_->Allocate();
 	srvHeap_ = srvManager_->GetDescriptorHeap();
-	
+
 	//ImGui初期化
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(winApp->GetHwnd());
 	ImGui_ImplDX12_Init(
-		dxCommon_->GetDevice(), 
+		dxCommon_->GetDevice(),
 		static_cast<int>(dxCommon_->GetSwapChainResourceNum()),
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
 		srvHeap_.Get(),
 		srvManager_->GetCPUDescriptorHandle(srvIndex),
 		srvManager_->GetGPUDescriptorHandle(srvIndex));
 
+	//日本語表記
+	JapaneseNotation();
+
+#endif //  USE_IMGUI
+}
+
+void ImGuiManager::JapaneseNotation() {
+#ifdef USE_IMGUI
 	///日本語作成用
 	ImGuiIO& io = ImGui::GetIO();
 	static ImWchar const glyph_ranges[] = { 0x0020, 0xfffd,0, };
 	ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\meiryo.ttc", 18.0f, NULL, glyph_ranges);
-
-
-#endif //  USE_IMGUI
+#endif // USE_IMGUI
 }
 
 void ImGuiManager::Begin() {

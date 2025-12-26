@@ -204,4 +204,30 @@ private:
 	void AdjustTextureSize();
 
 	std::string filePath_;
+
+	/// <summary>
+	/// vertexResourceの初期化
+	/// </summary>
+	void InitVertexResource();
+
+	/// <summary>
+	/// vertexDataの初期化
+	/// </summary>
+	void InitVertexData();
+
+	/// <summary>
+	/// indexDataの初期化
+	/// </summary>
+	void InitIndexData();
+
+	/// <summary>
+	/// マテリアルの初期化
+	/// </summary>
+	void InitMaterial();
+
+	/// <summary>
+	/// 座標変換行列の初期化
+	/// </summary>
+	void InitTransformationMatrix();
+
 };

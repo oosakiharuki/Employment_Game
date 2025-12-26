@@ -51,6 +51,18 @@ public:
 private:
 	static std::shared_ptr<TextureManager> sInstance_;
 
+	/// <summary>
+	/// ミップマップ作成
+	/// </summary>
+	/// <param name="filePath">ファイルパス</param>
+	void MipMap(const std::string filePath);
+
+	/// <summary>
+	/// 画像ロード方法設定
+	/// </summary>
+	/// <param name="filePath">ファイルパス</param>
+	void Byte(const std::string filePath);
+
 	struct TextureData {
 		DirectX::TexMetadata metadata; //width,height
 		Microsoft::WRL::ComPtr<ID3D12Resource>resource; // テクスチャリソース
@@ -59,10 +71,19 @@ private:
 		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;
 	};
 
+	void CreateSRV(TextureData& textureData, const DirectX::TexMetadata metadata);
+
 	std::unordered_map<std::string, TextureData> textureDatas_;
 
 	DirectXCommon* dxCommon_ = nullptr;
 	SrvManager* srvManager_ = nullptr;
 
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> intermediateResources_;
+
+	//画像
+	DirectX::ScratchImage image{};
+
+	//ミップマップ
+	DirectX::ScratchImage mipImages{};
+
 };
