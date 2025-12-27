@@ -15,48 +15,64 @@ void Model_obj::Initialize(ModelCommon* modelCommon, const std::string& director
 	int i = 0;
 	//全ての頂点数
 	for (auto& modelData : modelData_.Data) {
-		Microsoft::WRL::ComPtr<ID3D12Resource> vertexR;
-		D3D12_VERTEX_BUFFER_VIEW vertexB;
 
+		InitVertexResource(modelData);
 
-		std::vector<VertexData> vertexDatas = modelData.vertices;
-
-		vertexR = modelCommon_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * vertexDatas.size());
-
-		vertexB.BufferLocation = vertexR->GetGPUVirtualAddress();
-		vertexB.SizeInBytes = UINT(sizeof(VertexData) * vertexDatas.size());
-		vertexB.StrideInBytes = sizeof(VertexData);
-
-		vertexR->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-		std::memcpy(vertexData_, vertexDatas.data(), sizeof(VertexData) * vertexDatas.size());
-
-		vertexResource_.push_back(vertexR);
-		vertexBufferView_.push_back(vertexB);
-
-		MaterialData materialData = modelData.materialData;
-
-		//テクスチャ読み込み
-		TextureManager::GetInstance()->LoadTexture(materialData.textureFilePath);
-		materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(materialData.textureFilePath);
-
-		//Model用マテリアル
-		//マテリアル用のリソース
-		Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
-		materialResource = modelCommon_->GetDxCommon()->CreateBufferResource(sizeof(Material));
-		//書き込むためのアドレス
-		materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-		//色の設定
-		materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-		materialData_->enableLighting = false;
-		materialData_->uvTransform = MakeIdentity4x4();
-		materialData_->shininess = 70;
-		
-		//vector
-		materialResources_.push_back(materialResource);
+		InitMaterialResource(modelData);
 	}
 }
 
+void Model_obj::InitVertexResource(ModelData modelData) {
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexR;
+	D3D12_VERTEX_BUFFER_VIEW vertexB;
+
+
+	std::vector<VertexData> vertexDatas = modelData.vertices;
+
+	vertexR = modelCommon_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * vertexDatas.size());
+
+	vertexB.BufferLocation = vertexR->GetGPUVirtualAddress();
+	vertexB.SizeInBytes = UINT(sizeof(VertexData) * vertexDatas.size());
+	vertexB.StrideInBytes = sizeof(VertexData);
+
+	vertexR->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	std::memcpy(vertexData_, vertexDatas.data(), sizeof(VertexData) * vertexDatas.size());
+
+	vertexResource_.push_back(vertexR);
+	vertexBufferView_.push_back(vertexB);
+}
+
+void Model_obj::InitMaterialResource(ModelData modelData) {
+
+	MaterialData materialData = modelData.materialData;
+
+	//テクスチャ読み込み
+	TextureManager::GetInstance()->LoadTexture(materialData.textureFilePath);
+	materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(materialData.textureFilePath);
+
+	//Model用マテリアル
+	//マテリアル用のリソース
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
+	materialResource = modelCommon_->GetDxCommon()->CreateBufferResource(sizeof(Material));
+	//書き込むためのアドレス
+	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	//色の設定
+	materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	materialData_->enableLighting = false;
+	materialData_->uvTransform = MakeIdentity4x4();
+	materialData_->shininess = 70;
+
+	//vector
+	materialResources_.push_back(materialResource);
+}
+
+void Model_obj::InitIndexResource(ModelData modelData) {}
+
 void Model_obj::Draw() {
+
+	//元々のデータを読み取る
+	modelData_ = InitialData_;
+
 	int i = 0;
 	for (auto& multi : modelData_.Data) {
 		modelCommon_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_[i]);
@@ -68,12 +84,11 @@ void Model_obj::Draw() {
 }
 
 void Model_obj::Draw(const std::string& textureFilePath) {
-	//for (auto& material : modelData_.material) {
-	//	material.textureFilePath = textureFilePath;
-	//}
-
 	int i = 0;
 	for (auto& multi : modelData_.Data) {
+		//テクスチャを変更
+		multi.materialData.textureFilePath = textureFilePath;
+
 		modelCommon_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_[i]);
 		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResources_[i]->GetGPUVirtualAddress());
 		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(multi.materialData.textureFilePath));

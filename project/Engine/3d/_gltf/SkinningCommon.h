@@ -1,10 +1,12 @@
 #pragma once
 #include "DirectXCommon.h"
+#include "Pipeline.h"
+
 class Camera;
 /// <summary>
 /// スキニングの共有
 /// </summary>
-class SkinningCommon {
+class SkinningCommon : public Pipeline{
 public:
 	/// <summary>
 	/// インスタンス生成
@@ -36,28 +38,29 @@ public:
 	/// <param name="camera"></param>
 	Camera* GetDefaultCamera() const { return defaultCamera_; }
 
+	/// <summary>
+	/// InputLayoutを作成
+	/// </summary>
+	void CreateInputLayout() override;
+
+	/// <summary>
+	/// Blendを作成
+	/// </summary>
+	void CreateBlend() override;
+
 private:
 	//PSO
 	void RootSignature();
 	void GraphicsPipeline();
 
-	DirectXCommon* dxCommon_ = nullptr;
-
 	//RootSignature
-	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_{};
 	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};
 	D3D12_DESCRIPTOR_RANGE descriptorRangeIBL_[1] = {};//iamge_based_lighting
 	D3D12_ROOT_PARAMETER rootParameters_[9] = {};
 	D3D12_STATIC_SAMPLER_DESC staticSamplers_[1] = {};
 
-
-
-	//バイナリを元に生成
-	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;
-
-	//PSO
-	Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_ = nullptr;
-
+	//InputLayout
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[6] = {};
 
 	Camera* defaultCamera_ = nullptr;
 

@@ -14,69 +14,31 @@ void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directo
 
 	//.gltf
 	modelData_ = LoadModelFile(directorypath, fileName);
-	if (isAnimation_) {
-		animation_ = LoadAnimationFile(directorypath, fileName, uint32_t(modelData_.Data.size()));
-	}
 
 	InitialData_ = modelData_;
 
 	//vertex
 	for (auto& modelData : modelData_.Data) {	
-		D3D12_VERTEX_BUFFER_VIEW vertexB;
-		Microsoft::WRL::ComPtr<ID3D12Resource> vertexR;
 
-		vertexR = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
-
-		vertexB.BufferLocation = vertexR->GetGPUVirtualAddress();
-		vertexB.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
-		vertexB.StrideInBytes = sizeof(VertexData);
-
-		vertexR->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-		std::memcpy(vertexData_, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
-
-		vertexResource_.push_back(vertexR);
-		vertexBufferView_.push_back(vertexB);
+		InitVertexResource(modelData);
 
 		//index
-		D3D12_INDEX_BUFFER_VIEW indexB;
-		Microsoft::WRL::ComPtr<ID3D12Resource> indexR;
-
-		indexR = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * modelData.indices.size());
-
-		indexB.BufferLocation = indexR->GetGPUVirtualAddress();
-		indexB.SizeInBytes = UINT(sizeof(uint32_t) * modelData.indices.size());
-		indexB.Format= DXGI_FORMAT_R32_UINT;
-
-		indexR->Map(0, nullptr, reinterpret_cast<void**>(&mappedIndex_));
-		std::memcpy(mappedIndex_, modelData.indices.data(), sizeof(uint32_t) * modelData.indices.size());
-
-		indexBufferView_.push_back(indexB);
-		indexResource_.push_back(indexR);
+		InitIndexResource(modelData);
 
 		//Model用マテリアル
-		//マテリアル用のリソース
-		Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
-		materialResource = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(Material));
-		//書き込むためのアドレス
-		materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-		//色の設定
-		if (modelData.materialData.materialColor.s) {
-			//baseColor設定
-			materialData_->color = modelData.materialData.materialColor;
-		}
-		else {
-			materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-		}
-		materialData_->enableLighting = false;
-		materialData_->uvTransform = MakeIdentity4x4();
-		materialData_->shininess = 70;
-		materialData_->environmentCoefficient = 0.0f;
+		InitMaterialResource(modelData);
+	}
 
-		materialResources_.push_back(materialResource);
-		
-		//テクスチャ読み込み
-		TextureManager::GetInstance()->LoadTexture(modelData.materialData.textureFilePath);
-		modelData.materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData.materialData.textureFilePath);
+	//環境マップ
+	EnvironmentFile_ ="resource/rostock_laage_airport_4k.dds";
+}
+
+void Model_glTF::InitAnimation(const std::string& directorypath, const std::string& fileName, bool isAnimation, bool isSkinning) {
+	isAnimation_ = isAnimation;
+	isSkinning_ = isSkinning;
+
+	if (isAnimation_) {
+		animation_ = LoadAnimationFile(directorypath, fileName, uint32_t(modelData_.Data.size()));
 	}
 
 	if (isSkinning_) {
@@ -86,19 +48,72 @@ void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directo
 			skeletons_.push_back(skeleton);
 		}
 
-
 		SkinCluster skinCluster;
 		skinCluster = CreateSkinCluster(skeletons_[1], modelData_);
 		skinClusters_.push_back(skinCluster);
 	}
-
-	EnvironmentFile_ ="resource/rostock_laage_airport_4k.dds";
-
 }
 
-void Model_glTF::InitAnimation(bool isAnimation, bool isSkinning) {
-	isAnimation_ = isAnimation;
-	isSkinning_ = isSkinning;
+void Model_glTF::InitVertexResource(ModelData modelData) {
+	D3D12_VERTEX_BUFFER_VIEW vertexB{};
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexR;
+
+	vertexR = modelCommon_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
+
+	vertexB.BufferLocation = vertexR->GetGPUVirtualAddress();
+	vertexB.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
+	vertexB.StrideInBytes = sizeof(VertexData);
+
+	vertexR->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	std::memcpy(vertexData_, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
+
+	vertexResource_.push_back(vertexR);
+	vertexBufferView_.push_back(vertexB);
+}
+
+void Model_glTF::InitMaterialResource(ModelData modelData) {	
+	
+	//マテリアル用のリソース
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
+	materialResource = modelCommon_->GetDxCommon()->CreateBufferResource(sizeof(Material));
+	//書き込むためのアドレス
+	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	//色の設定
+	if (modelData.materialData.materialColor.s) {
+		//baseColor設定
+		materialData_->color = modelData.materialData.materialColor;
+	}
+	else {
+		materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+	materialData_->enableLighting = false;
+	materialData_->uvTransform = MakeIdentity4x4();
+	materialData_->shininess = 70;
+	materialData_->environmentCoefficient = 0.0f;
+
+	materialResources_.push_back(materialResource);
+
+	//テクスチャ読み込み
+	TextureManager::GetInstance()->LoadTexture(modelData.materialData.textureFilePath);
+	modelData.materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData.materialData.textureFilePath);
+}
+
+void Model_glTF::InitIndexResource(ModelData modelData) {
+	
+	Microsoft::WRL::ComPtr<ID3D12Resource> indexR;
+	D3D12_INDEX_BUFFER_VIEW indexB{};
+
+	indexR = modelCommon_->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * modelData.indices.size());
+
+	indexB.BufferLocation = indexR->GetGPUVirtualAddress();
+	indexB.SizeInBytes = UINT(sizeof(uint32_t) * modelData.indices.size());
+	indexB.Format = DXGI_FORMAT_R32_UINT;
+
+	indexR->Map(0, nullptr, reinterpret_cast<void**>(&mappedIndex_));
+	std::memcpy(mappedIndex_, modelData.indices.data(), sizeof(uint32_t) * modelData.indices.size());
+
+	indexResource_.push_back(indexR);
+	indexBufferView_.push_back(indexB);
 }
 
 

@@ -2,6 +2,9 @@
 #include <map>
 #include <string>
 #include <memory>
+
+#include "BaseModel.h"
+
 #include "Model_obj.h"
 #include "Model_glTF.h"
 
@@ -29,6 +32,7 @@ public:
 	/// <param name="isAnimation"></param>アニメーションがあるか
 	/// <param name="isSkinning"></param>スキニングがあるか
 	void LoadModel(const std::string& filePath, const std::string& objType, bool isAnimation = false, bool isSkinning = false);
+	
 	Model_glTF* FindModel_gltf(const std::string& filePath);
 	Model_obj* FindModel_obj(const std::string& filePath);
 

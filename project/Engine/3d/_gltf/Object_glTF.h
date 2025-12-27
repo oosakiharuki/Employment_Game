@@ -1,21 +1,13 @@
 #pragma once
-#include "MyMath.h"
 #include "Model_glTF.h"
-
-//ComPtr
-#include <wrl.h>
-#include "d3d12.h"
-
-#include "Camera.h"
-#include "WorldTransform.h"
-
 #include "SphereModel.h"
+#include "BaseObject.h"
 
 class GLTFCommon;
 /// <summary>
 /// .gltf版のオブジェクト
 /// </summary>
-class Object_glTF
+class Object_glTF : public BaseObject
 {
 public:
 	Object_glTF();
@@ -24,47 +16,59 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize();
+	void Initialize() override;
 	/// <summary>
 	/// 更新処理
 	/// </summary>
 	/// <param name="worldTransform"></param> ワールド座標系
-	void Update(const WorldTransform& worldTransform);
+	void Update(const WorldTransform& worldTransform) override;
 	/// <summary>
 	/// 更新処理
 	/// </summary>	
-	void Update();
+	void Update() override;
 	/// <summary>
 	/// 描画処理
 	/// </summary>	
-	void Draw();
+	void Draw() override;
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	/// <param name="textureData"></param> テクスチャ変更
-	void Draw(const std::string& textureData);
+	void Draw(const std::string& textureData) override;
 	/// <summary>
 	/// アニメーションの更新処理
 	/// </summary>
 	void AnimationUpdate();
+
 	/// <summary>
-	/// setter_modelのファイル名
+	/// setter_modelの選択
 	/// </summary>
-	/// <param name="filePath"></param>
-	void SetModelFile(const std::string& filePath);
+	/// <param name="filePath">ファイル名</param>
+	void SetModelFile(const std::string& filePath) override;
+
 	/// <summary>
 	/// ライトのon/off
 	/// </summary>
 	/// <param name="isLight"></param>
-	void LightSwitch(bool isLight);
+	void LightSwitch(bool isLight)override;
+
+	/// <summary>
+	/// 色の変更
+	/// </summary>
+	/// <param name="color">変更カラー</param>
+	void SetColor(const Vector4& color) override;
+
 	/// <summary>
 	/// 環境マップ用
 	/// </summary>
 	/// <param name="filePath"></param>
 	void SetEnvironment(const std::string& filePath);
 
+	/// <summary>
+	/// アニメーションを変更
+	/// </summary>
+	/// <param name="filePath">変更するファイルパス</param>
 	void ChangeAnimation(const std::string& filePath);
-	Material* GetMaterial() { return material_; };
 
 private:	
 	/// <summary>
@@ -105,28 +109,7 @@ private:
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> wvpResources_;
 	std::vector<TransformationMatrix*> wvpDatas_;
 
-	//ライト用のリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightSphereResource_;
-	//マテリアルにデータを書き込む
-	DirectionalLight* directionalLightSphereData_ = nullptr;
-
-	//カメラ用のリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> cameraResource_;
-	//カメラデータを書き込む
-	CameraForGPU* cameraData_ = nullptr;
-
-	//ポイントライト用のリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> pointLightResource_;
-	//マテリアルにデータを書き込む
-	PointLight* pointLightData_ = nullptr;
-
-	//スポットライト用のリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> spotLightResource_;
-	//マテリアルにデータを書き込む
-	SpotLight* spotLightData_ = nullptr;
-
 	Model_glTF* model_ = nullptr;
-	Camera* camera_ = nullptr;
 
 	ModelDataMulti modelData_;
 
@@ -148,8 +131,5 @@ private:
 	//変更前のアニメーション
 	std::vector<Animation> preAnimations_;
 
-	Material* material_;
-
-	Matrix4x4 worldMatrix_;
 	std::vector<Matrix4x4> localMatrices_;
 };

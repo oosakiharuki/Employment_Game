@@ -19,13 +19,29 @@ public:
 	void Draw() override;
 
 	/// <summary>
+	/// VertexResource作成(初期化)
+	/// </summary>
+	/// <param name="modelData">モデルデータ</param>
+	void InitVertexResource(ModelData modelData) override;
+
+	/// <summary>
+	/// MaterialResource作成(初期化)
+	/// </summary>
+	/// <param name="modelData">モデルデータ</param>
+	void InitMaterialResource(ModelData modelData) override;
+
+	/// <summary>
+	/// IndexResource作成(初期化)
+	/// </summary>
+	/// <param name="modelData">モデルデータ</param>
+	void InitIndexResource(ModelData modelData) override;
+
+
+	/// <summary>
 	/// 描画処理
 	/// </summary>
 	/// <param name="textureFilePath"></param>テクスチャ変更
 	void Draw(const std::string& textureFilePath);
-
-	void LightOn(bool Light) { materialData_->enableLighting = Light; }
-	void SetColor(const Vector4& color) { materialData_->color = color; }
 
 private:	
 	

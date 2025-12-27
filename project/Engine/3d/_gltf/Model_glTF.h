@@ -20,30 +20,39 @@ public:
 	/// </summary>
 	/// <param name="isAnimation">アニメーションを入れるか</param>
 	/// <param name="isSkinning">スキニングであるか</param>
-	void InitAnimation(bool isAnimation, bool isSkinning);
+	void InitAnimation(const std::string& directorypath, const std::string& fileName, bool isAnimation, bool isSkinning);
 
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	void Draw() override;
 
+
+	/// <summary>
+	/// VertexResource作成(初期化)
+	/// </summary>
+	/// <param name="modelData">モデルデータ</param>
+	void InitVertexResource(ModelData modelData) override;
+
+	/// <summary>
+	/// MaterialResource作成(初期化)
+	/// </summary>
+	/// <param name="modelData">モデルデータ</param>
+	void InitMaterialResource(ModelData modelData) override;
+
+	/// <summary>
+	/// MaterialResource作成(初期化)
+	/// </summary>
+	/// <param name="modelData">モデルデータ</param>
+	void InitIndexResource(ModelData modelData) override;
+
+
+
 	//gltf用
 	static ModelDataMulti LoadModelFile(const std::string& directoryPath, const std::string& filename);
 	static std::vector<Animation> LoadAnimationFile(const std::string& directoryPath, const std::string& filename,uint32_t Number);
-
-	/// <summary>
-	/// ライト設定
-	/// </summary>
-	/// <param name="Light"></param>
-	void LightOn(bool Light) {
-		for (auto& material : materialResources_) {
-			//書き込むためのアドレス
-			material->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-			//全てのライトを on/off
-			materialData_->enableLighting = Light;
-		}
-	}
 	
+
 	/// <summary>
 	/// 環境マップの設定
 	/// </summary>

@@ -237,7 +237,6 @@ void Object_glTF::Draw(const std::string& textureData) {
 void Object_glTF::SetModelFile(const std::string& filePath) {
 
 	model_ = ModelManager::GetInstance()->FindModel_gltf(filePath);
-	material_ = model_->GetMaterial();
 	modelData_ = model_->GetModelData();
 
 
@@ -309,6 +308,12 @@ void Object_glTF::LightSwitch(bool isLight) {
 	ImGui::End();
 #endif // USE_IMGUI
 
+}
+
+void Object_glTF::SetColor(const Vector4& color) {
+	if (model_) {
+		model_->SetColor(color);
+	}
 }
 
 //環境マップのファイルパス
