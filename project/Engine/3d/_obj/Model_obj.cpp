@@ -5,74 +5,79 @@
 
 using namespace MyMath;
 
-void Model_obj::Initialize(ModelCommon* modelCommon, const std::string& directorypath, const std::string& fileName, const std::string& objName) {
+void Model_obj::Initialize(ModelCommon* modelCommon, const std::string& directorypath, const std::string& fileName) {
 	this->modelCommon_ = modelCommon;
 	// (resource) / (Object / モデルファイル) / (オブジェクト名.obj)
-	modelData_ = LoadObjFile(directorypath, fileName, objName);
+	modelData_ = LoadObjFile(directorypath, fileName, ".obj");
 
 	InitialData_ = modelData_;
 
 	int i = 0;
 	//全ての頂点数
-	for (auto& multi : modelData_.vertices) {
+	for (auto& modelData : modelData_.Data) {
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexR;
 		D3D12_VERTEX_BUFFER_VIEW vertexB;
 
-		vertexR = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * multi.size());
+
+		std::vector<VertexData> vertexDatas = modelData.vertices;
+
+		vertexR = modelCommon_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * vertexDatas.size());
 
 		vertexB.BufferLocation = vertexR->GetGPUVirtualAddress();
-		vertexB.SizeInBytes = UINT(sizeof(VertexData) * multi.size());
+		vertexB.SizeInBytes = UINT(sizeof(VertexData) * vertexDatas.size());
 		vertexB.StrideInBytes = sizeof(VertexData);
 
 		vertexR->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-		std::memcpy(vertexData_, multi.data(), sizeof(VertexData) * multi.size());
+		std::memcpy(vertexData_, vertexDatas.data(), sizeof(VertexData) * vertexDatas.size());
 
 		vertexResource_.push_back(vertexR);
 		vertexBufferView_.push_back(vertexB);
 
+		MaterialData materialData = modelData.materialData;
 
-	}
-	for (auto& material : modelData_.material) {
 		//テクスチャ読み込み
-		TextureManager::GetInstance()->LoadTexture(material.textureFilePath);
-		material.textureIndex = TextureManager::GetInstance()->GetSrvIndex(material.textureFilePath);
+		TextureManager::GetInstance()->LoadTexture(materialData.textureFilePath);
+		materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(materialData.textureFilePath);
+
+		//Model用マテリアル
+		//マテリアル用のリソース
+		Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
+		materialResource = modelCommon_->GetDxCommon()->CreateBufferResource(sizeof(Material));
+		//書き込むためのアドレス
+		materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+		//色の設定
+		materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		materialData_->enableLighting = false;
+		materialData_->uvTransform = MakeIdentity4x4();
+		materialData_->shininess = 70;
+		
+		//vector
+		materialResources_.push_back(materialResource);
 	}
-
-	//Model用マテリアル
-	//マテリアル用のリソース
-	materialResource_ = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(Material));
-	//書き込むためのアドレス
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	//色の設定
-	materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	materialData_->enableLighting = false;
-	materialData_->uvTransform = MakeIdentity4x4();
-	materialData_->shininess = 70;
-
 }
 
 void Model_obj::Draw() {
 	int i = 0;
-	for (auto& multi : modelData_.vertices) {
+	for (auto& multi : modelData_.Data) {
 		modelCommon_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_[i]);
-		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.material[i].textureFilePath));
-		modelCommon_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(multi.size()), 1, 0, 0);
+		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResources_[i]->GetGPUVirtualAddress());
+		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(multi.materialData.textureFilePath));
+		modelCommon_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(multi.vertices.size()), 1, 0, 0);
 		i++;
 	}
 }
 
 void Model_obj::Draw(const std::string& textureFilePath) {
-	for (auto& material : modelData_.material) {
-		material.textureFilePath = textureFilePath;
-	}
+	//for (auto& material : modelData_.material) {
+	//	material.textureFilePath = textureFilePath;
+	//}
 
 	int i = 0;
-	for (auto& multi : modelData_.vertices) {
+	for (auto& multi : modelData_.Data) {
 		modelCommon_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_[i]);
-		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress());
-		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.material[i].textureFilePath));
-		modelCommon_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(multi.size()), 1, 0, 0);
+		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResources_[i]->GetGPUVirtualAddress());
+		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(multi.materialData.textureFilePath));
+		modelCommon_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(multi.vertices.size()), 1, 0, 0);
 		i++;
 	}
 }
@@ -80,7 +85,7 @@ void Model_obj::Draw(const std::string& textureFilePath) {
 MaterialData Model_obj::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename, const std::string& usemtl) {
 	MaterialData materialData;
 	std::string line;
-	std::ifstream file(directoryPath + "/" + filename);
+	std::ifstream file(directoryPath + "/Object/" + filename);
 	assert(file.is_open());
 
 	bool isSame = false;
@@ -120,15 +125,22 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 	//ファイルから読んだ1行を格納する
 	std::string line;
 	//ファイルを読み取る
-	std::ifstream file(directoryPath + "/" + filename + "/" + objName);
+	std::ifstream file(directoryPath + "/Object/" + filename + "/" + filename + objName);
 	assert(file.is_open());
 
 	//mtlファイルを読み取る
 	std::string materialFilename;
 
+
+	ModelData iModelData;
+
+
 	//マテリアルの頂点情報を別々に作る
 	std::vector<VertexData> iVertices;
 	bool firstMaterial = false;
+
+	uint32_t vertexNum = 0;
+	uint32_t materialNum = 0;
 
 	//構築
 	while (std::getline(file, line)) {
@@ -200,7 +212,8 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 		else if (identifier == "o") {
 			//各マテリアルの頂点情報を取得
 			if (firstMaterial) {
-				modelData.vertices.push_back(iVertices);
+				iModelData.vertices = iVertices;
+				vertexNum++;
 				iVertices.clear();
 			} else {
 				//最初の o はパス
@@ -213,12 +226,20 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 			MaterialData material;
 
 			material = LoadMaterialTemplateFile(directoryPath, filename + "/" + materialFilename, mtlName);
-			modelData.material.push_back(material);
+			iModelData.materialData = material;
+			materialNum++;
 		}
+
+		if (materialNum == vertexNum && materialNum > 0) {
+			modelData.Data.push_back(iModelData);
+		}
+
 	}
 
+	iModelData.vertices = iVertices;
+
 	//最後のマテリアル頂点情報を取得
-	modelData.vertices.push_back(iVertices);
+	modelData.Data.push_back(iModelData);
 
 	return modelData;
 }

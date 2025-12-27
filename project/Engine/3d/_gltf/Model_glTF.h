@@ -1,12 +1,11 @@
 #pragma once
-#include "MyMath.h"
-#include "ModelCommon.h"
+#include "BaseModel.h"
 #include <assimp/scene.h>
 
 /// <summary>
 /// .gltf版のモデル
 /// </summary>
-class Model_glTF{
+class Model_glTF : public BaseModel{
 public:
 	/// <summary>
 	/// 初期化処理
@@ -14,16 +13,22 @@ public:
 	/// <param name="modelCommon"></param>
 	/// <param name="directorypath"></param>
 	/// <param name="fileName"></param>
-	/// <param name="isAnimation"></param>
-	/// <param name="isSkinning"></param>
-	void Initialize(ModelCommon* modelCommon,const std::string& directorypath,const std::string& fileName, bool isAnimation, bool isSkinning);
+	void Initialize(ModelCommon* modelCommon,const std::string& directorypath,const std::string& fileName) override;
+	
+	/// <summary>
+	/// アニメーション
+	/// </summary>
+	/// <param name="isAnimation">アニメーションを入れるか</param>
+	/// <param name="isSkinning">スキニングであるか</param>
+	void InitAnimation(bool isAnimation, bool isSkinning);
+
 	/// <summary>
 	/// 描画処理
 	/// </summary>
-	void Draw();
+	void Draw() override;
 
 	//gltf用
-	static ModelData_glTF LoadModelFile(const std::string& directoryPath, const std::string& filename);
+	static ModelDataMulti LoadModelFile(const std::string& directoryPath, const std::string& filename);
 	static std::vector<Animation> LoadAnimationFile(const std::string& directoryPath, const std::string& filename,uint32_t Number);
 
 	/// <summary>
@@ -56,7 +61,7 @@ public:
 	/// getter_オブジェクトデータ
 	/// </summary>
 	/// <returns></returns>
-	ModelData_glTF GetModelData() { return modelData_; }
+	ModelDataMulti GetModelData() { return modelData_; }
 
 	/// <summary>
 	/// getter_アニメーションデータ
@@ -75,7 +80,7 @@ public:
 	/// <returns></returns>	
 	std::vector<SkinCluster> GetSkinCluster() { return skinClusters_; }
 
-	SkinCluster CreateSkinCluster(const Skeleton& skeleton, const ModelData_glTF& modelData);
+	SkinCluster CreateSkinCluster(const Skeleton& skeleton, const ModelDataMulti& modelData);
 
 	Material* GetMaterial() { return materialData_; }
 	/// <summary>
@@ -97,21 +102,13 @@ public:
 private:
 	ModelCommon* modelCommon_ = nullptr;
 
-	ModelData_glTF modelData_;
-
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexResource_;
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource_; //index
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> materialResources_;
 
-
-	VertexData* vertexData_ = nullptr;
 	uint32_t* mappedIndex_ = nullptr;
-	Material* materialData_ = nullptr;
 
-	std::vector<D3D12_VERTEX_BUFFER_VIEW> vertexBufferView_;
 	std::vector<D3D12_INDEX_BUFFER_VIEW> indexBufferView_; //index
 
-	ModelData_glTF InitialData_;
+	ModelDataMulti InitialData_;
 	
 	//アニメーション
 	std::vector<Animation> animation_;

@@ -79,8 +79,8 @@ void Particle::Initialize(const std::string& particleName, const std::string& te
 	materialData_->uvTransform = MakeIdentity4x4();
 
 	//テクスチャ読み込み
-	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
-	modelData_.material.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData_.material.textureFilePath);
+	TextureManager::GetInstance()->LoadTexture(modelData_.materialData.textureFilePath);
+	modelData_.materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData_.materialData.textureFilePath);
 
 
 	//ライト用のリソース

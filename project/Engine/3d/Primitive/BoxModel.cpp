@@ -8,7 +8,7 @@ void BoxModel::Initialize(const std::string& textureFile) {
 	this->cubemap_ = Cubemap::GetInstance().get();
 
 	modelData_ = CreateBox();
-	modelData_.material.textureFilePath = textureFile;
+	modelData_.materialData.textureFilePath = textureFile;
 
 	vertexResource_ = cubemap_->GetDirectXCommon()->CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 
@@ -31,8 +31,8 @@ void BoxModel::Initialize(const std::string& textureFile) {
 	materialData_->shininess = 70;
 
 	//テクスチャ読み込み
-	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
-	modelData_.material.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData_.material.textureFilePath);
+	TextureManager::GetInstance()->LoadTexture(modelData_.materialData.textureFilePath);
+	modelData_.materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData_.materialData.textureFilePath);
 
 	camera_ = cubemap_->GetDefaultCamera();
 	wvpResource_ = cubemap_->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
@@ -65,7 +65,7 @@ void BoxModel::Draw() {
 	cubemap_->GetDirectXCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	cubemap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
 	cubemap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	cubemap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.material.textureFilePath));
+	cubemap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.materialData.textureFilePath));
 	//cubemap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource->GetGPUVirtualAddress());
 	cubemap_->GetDirectXCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
