@@ -1,23 +1,23 @@
 #pragma once
-#include "MyMath.h"
-#include "ModelCommon.h"
+#include "BaseModel.h"
+
 /// <summary>
 /// .obj版のモデル
 /// </summary>
-class Model_obj{
+class Model_obj : public BaseModel{
 public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="modelCommon"></param>
 	/// <param name="directorypath"></param>
 	/// <param name="fileName"></param>
-	/// <param name="objName"></param>
-	void Initialize(ModelCommon* modelCommon,const std::string& directorypath,const std::string& fileName,const std::string& objName);
+	void Initialize(ModelCommon* modelCommon, const std::string& directorypath, const std::string& fileName) override;
+
 	/// <summary>
 	/// 描画処理
 	/// </summary>
-	void Draw();
+	void Draw() override;
+
 	/// <summary>
 	/// 描画処理
 	/// </summary>
@@ -47,17 +47,6 @@ private:
 	static ModelDataMulti LoadObjFile(const std::string& directoryPath, const std::string& filename, const std::string& objName);
 	
 	ModelCommon* modelCommon_ = nullptr;
-
-	ModelDataMulti modelData_;
-
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexResource_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
-
-
-	VertexData* vertexData_ = nullptr;
-	Material* materialData_ = nullptr;
-
-	std::vector<D3D12_VERTEX_BUFFER_VIEW> vertexBufferView_;
 
 	ModelDataMulti InitialData_;
 };

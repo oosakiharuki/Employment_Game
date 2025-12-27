@@ -9,65 +9,60 @@
 
 using namespace MyMath;
 
-void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directorypath, const std::string& fileName, bool isAnimation, bool isSkinning) {
+void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directorypath, const std::string& fileName) {
 	this->modelCommon_ = modelCommon;
 
 	//.gltf
 	modelData_ = LoadModelFile(directorypath, fileName);
-	if (isAnimation) {
-		animation_ = LoadAnimationFile(directorypath, fileName,uint32_t(modelData_.indices.size()));
+	if (isAnimation_) {
+		animation_ = LoadAnimationFile(directorypath, fileName, uint32_t(modelData_.Data.size()));
 	}
 
 	InitialData_ = modelData_;
 
 	//vertex
-	for (auto& vertices : modelData_.vertices) {
+	for (auto& modelData : modelData_.Data) {	
 		D3D12_VERTEX_BUFFER_VIEW vertexB;
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexR;
 
-		vertexR = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * vertices.size());
+		vertexR = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
 
 		vertexB.BufferLocation = vertexR->GetGPUVirtualAddress();
-		vertexB.SizeInBytes = UINT(sizeof(VertexData) * vertices.size());
+		vertexB.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
 		vertexB.StrideInBytes = sizeof(VertexData);
 
 		vertexR->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-		std::memcpy(vertexData_, vertices.data(), sizeof(VertexData) * vertices.size());
+		std::memcpy(vertexData_, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
 
 		vertexResource_.push_back(vertexR);
 		vertexBufferView_.push_back(vertexB);
 
-	}
-
-	//index
-	for (auto& indices : modelData_.indices) {
+		//index
 		D3D12_INDEX_BUFFER_VIEW indexB;
 		Microsoft::WRL::ComPtr<ID3D12Resource> indexR;
 
-		indexR = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * indices.size());
+		indexR = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(uint32_t) * modelData.indices.size());
 
 		indexB.BufferLocation = indexR->GetGPUVirtualAddress();
-		indexB.SizeInBytes = UINT(sizeof(uint32_t) * indices.size());
+		indexB.SizeInBytes = UINT(sizeof(uint32_t) * modelData.indices.size());
 		indexB.Format= DXGI_FORMAT_R32_UINT;
 
 		indexR->Map(0, nullptr, reinterpret_cast<void**>(&mappedIndex_));
-		std::memcpy(mappedIndex_, indices.data(), sizeof(uint32_t) * indices.size());
+		std::memcpy(mappedIndex_, modelData.indices.data(), sizeof(uint32_t) * modelData.indices.size());
 
 		indexBufferView_.push_back(indexB);
 		indexResource_.push_back(indexR);
-	}
 
-	//Model用マテリアル
-	//マテリアル用のリソース
-	for (auto& material : modelData_.material) {
+		//Model用マテリアル
+		//マテリアル用のリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
 		materialResource = modelCommon->GetDxCommon()->CreateBufferResource(sizeof(Material));
 		//書き込むためのアドレス
 		materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定
-		if (material.materialColor.s) {
+		if (modelData.materialData.materialColor.s) {
 			//baseColor設定
-			materialData_->color = material.materialColor;
+			materialData_->color = modelData.materialData.materialColor;
 		}
 		else {
 			materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -78,15 +73,13 @@ void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directo
 		materialData_->environmentCoefficient = 0.0f;
 
 		materialResources_.push_back(materialResource);
+		
+		//テクスチャ読み込み
+		TextureManager::GetInstance()->LoadTexture(modelData.materialData.textureFilePath);
+		modelData.materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData.materialData.textureFilePath);
 	}
 
-	//テクスチャ読み込み
-	for (auto& material : modelData_.material) {
-		TextureManager::GetInstance()->LoadTexture(material.textureFilePath);
-		material.textureIndex = TextureManager::GetInstance()->GetSrvIndex(material.textureFilePath);
-	}
-
-	if (isSkinning) {
+	if (isSkinning_) {
 		for (auto& child : modelData_.rootNode.children) {
 			Skeleton skeleton;
 			skeleton = CreateSkeltion(child);
@@ -99,17 +92,21 @@ void Model_glTF::Initialize(ModelCommon* modelCommon, const std::string& directo
 		skinClusters_.push_back(skinCluster);
 	}
 
-	isAnimation_ = isAnimation;
-	isSkinning_ = isSkinning;
-
 	EnvironmentFile_ ="resource/rostock_laage_airport_4k.dds";
 
 }
 
+void Model_glTF::InitAnimation(bool isAnimation, bool isSkinning) {
+	isAnimation_ = isAnimation;
+	isSkinning_ = isSkinning;
+}
+
+
 void Model_glTF::Draw() {
 	//objファイルに元々あったテクスチャ
-	modelData_ = InitialData_;
+	//modelData_ = InitialData_;
 	vbvs_[0] = vertexBufferView_[multiMeshCount_];
+
 
 	if (isSkinning_) {
 		vbvs_[1] = skinClusters_[multiMeshCount_].influenceBufferView;
@@ -121,28 +118,60 @@ void Model_glTF::Draw() {
 	}
 	modelCommon_->GetDxCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_[multiMeshCount_]);
 	modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResources_[multiMeshCount_]->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
-	modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.material[multiMeshCount_].textureFilePath));
+	modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.Data[multiMeshCount_].materialData.textureFilePath));
 	modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(7, TextureManager::GetInstance()->GetSrvHandleGPU(EnvironmentFile_));
-	modelCommon_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.indices[multiMeshCount_].size()), 1, 0, 0, 0);
+	modelCommon_->GetDxCommon()->GetCommandList()->DrawIndexedInstanced(UINT(modelData_.Data[multiMeshCount_].indices.size()), 1, 0, 0, 0);
 	multiMeshCount_++;
+
 }
 
 
-ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const std::string& filename) {
-	ModelData_glTF modelData;
+ModelDataMulti Model_glTF::LoadModelFile(const std::string& directoryPath, const std::string& filename) {
+	ModelDataMulti modelData;
+
+	ModelData iModelData;
 
 	Assimp::Importer importer;
-	std::string filePath = directoryPath + "/" + filename;
+	std::string filePath = directoryPath + "/Object/" + filename;
 
 	const aiScene* kScene = importer.ReadFile(filePath.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 	assert(kScene->HasMeshes()); //メッシュがないのは対応なし
 
-	std::vector<VertexData> vertices;
+	//使用するマテリアル番号
+	uint32_t materialNum = 0;
+	std::vector<MaterialData> materialDatas;
+
+	//MaterialData
+	for (uint32_t materialIndex = 0; materialIndex < kScene->mNumMaterials; ++materialIndex) {
+		aiMaterial* material = kScene->mMaterials[materialIndex];
+		MaterialData materialData;
+
+		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
+			aiString textureFilePath;
+			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
+			materialData.textureFilePath = directoryPath + "/Sprite/" + textureFilePath.C_Str();
+			materialData.materialColor = { 1.0f,1.0f,1.0f,1.0f };
+		}
+		else {
+			aiColor4D color;
+			material->Get(AI_MATKEY_BASE_COLOR, color);
+			//Blender初期のベースカラー
+			materialData.textureFilePath = directoryPath + "/Sprite/white.png";
+			materialData.materialColor = { (float)color.r,(float)color.g,(float)color.b,(float)color.a };
+		}
+		//マテリアルデータを導入
+		materialDatas.push_back(materialData);
+	}
+
+
 
 	//VertexDataを読み取る
 	for (uint32_t meshIndex = 0; meshIndex < kScene->mNumMeshes; ++meshIndex) {
 		aiMesh* mesh = kScene->mMeshes[meshIndex];
 		assert(mesh->HasNormals());//法線があるか
+
+		//頂点データ
+		std::vector<VertexData> vertices;
 
 		vertices.resize(mesh->mNumVertices);//頂点数分のメモリ確保
 
@@ -164,7 +193,8 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 			}
 		}
 
-		modelData.vertices.push_back(vertices);
+		//頂点データの塊を導入
+		iModelData.vertices = vertices;
 
 
 		std::vector<uint32_t> indices;
@@ -179,7 +209,8 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 			}
 		}
 
-		modelData.indices.push_back(indices);
+		//頂点インデックスの塊を導入
+		iModelData.indices = indices;
 
 		for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex) {
 
@@ -203,31 +234,14 @@ ModelData_glTF Model_glTF::LoadModelFile(const std::string& directoryPath, const
 				jointWeightData.vertexWeights.push_back({ bone->mWeights[weightIndex].mWeight,bone->mWeights[weightIndex].mVertexId });
 			}
 		}
+
+		//使用するマテリアルを導入
+		iModelData.materialData = materialDatas[materialNum];
+
+		modelData.Data.push_back(iModelData);
+		materialNum++;
 	}
 
-	//MaterialData
-	for (uint32_t materialIndex = 0; materialIndex < kScene->mNumMaterials; ++materialIndex) {
-		aiMaterial* material = kScene->mMaterials[materialIndex];
-		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
-			aiString textureFilePath;
-			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-
-			MaterialData materialData;
-			materialData.textureFilePath = directoryPath + "/Sprite/" + textureFilePath.C_Str();
-			materialData.materialColor = { 1.0f,1.0f,1.0f,1.0f };
-			modelData.material.push_back(materialData);
-		}
-		else {
-			aiColor4D color;
-			material->Get(AI_MATKEY_BASE_COLOR, color);
-			//Blender初期のベースカラー
-			MaterialData materialData;
-			materialData.textureFilePath = directoryPath + "/Sprite/white.png";
-			materialData.materialColor = { (float)color.r,(float)color.g,(float)color.b,(float)color.a };
-			modelData.material.push_back(materialData);
-		}
-
-	}
 
 	modelData.rootNode = ReadNode(kScene->mRootNode);
 
@@ -262,7 +276,7 @@ std::vector<Animation>  Model_glTF::LoadAnimationFile(const std::string& directo
 	std::vector<Animation> animations_;
 
 	Assimp::Importer importer;
-	std::string filePath = directoryPath + "/" + filename;
+	std::string filePath = directoryPath + "/Object/" + filename;
 	const aiScene* scene = importer.ReadFile(filePath.c_str(), 0);
 	assert(scene->mNumAnimations != 0);//アニメーションがないとき
 
@@ -305,7 +319,7 @@ std::vector<Animation>  Model_glTF::LoadAnimationFile(const std::string& directo
 	return animations_;
 }
 
-SkinCluster Model_glTF::CreateSkinCluster(const Skeleton& skeleton,const ModelData_glTF& modelData) {
+SkinCluster Model_glTF::CreateSkinCluster(const Skeleton& skeleton,const ModelDataMulti& modelData) {
 
 
 	SkinCluster skinCluster;
@@ -338,8 +352,8 @@ SkinCluster Model_glTF::CreateSkinCluster(const Skeleton& skeleton,const ModelDa
 	//influenceResource確保
 
 	uint32_t all_vertex = 0;
-	for (auto& v : modelData.vertices) {
-		all_vertex += uint32_t(v.size());
+	for (auto& v : modelData.Data) {
+		all_vertex += uint32_t(v.vertices.size());
 	}
 
 	skinCluster.influenceResource  = modelCommon_->GetDxCommon()->CreateBufferResource(sizeof(VertexInfluence) * all_vertex);

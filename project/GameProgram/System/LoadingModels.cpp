@@ -43,7 +43,7 @@ void LoadingModels::LoadObj() {
 
 void LoadingModels::LoadGltf() {
 	//gltfの設定
-	modelManager->LoadModel("player_standby", ".gltf", true);
+	modelManager->LoadModel("player_standby", ".gltf",true);
 	modelManager->LoadModel("player_move", ".gltf", true);
 	modelManager->LoadModel("player_shield", ".gltf");
 	modelManager->LoadModel("player_GameOver", ".gltf");

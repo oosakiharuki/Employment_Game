@@ -128,7 +128,7 @@ private:
 	Model_glTF* model_ = nullptr;
 	Camera* camera_ = nullptr;
 
-	ModelData_glTF modelData_;
+	ModelDataMulti modelData_;
 
 
 	std::vector<Animation> animations_;

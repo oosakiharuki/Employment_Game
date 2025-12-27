@@ -8,10 +8,10 @@ void SphereModel::Initialize() {
 	this->debugWireframes_ = DebugWireframes::GetInstance().get();
 
 	modelData_ = CreateSphere();
-	modelData_.material.textureFilePath = "resource/Sprite/white.png";
+	modelData_.materialData.textureFilePath = "resource/Sprite/white.png";
 	//テクスチャ読み込み
-	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
-	modelData_.material.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData_.material.textureFilePath);
+	TextureManager::GetInstance()->LoadTexture(modelData_.materialData.textureFilePath);
+	modelData_.materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData_.materialData.textureFilePath);
 
 
 	vertexResource_ = debugWireframes_ ->GetDirectXCommon()->CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
@@ -35,8 +35,8 @@ void SphereModel::Initialize() {
 	materialData_->shininess = 70;
 
 	//テクスチャ読み込み
-	TextureManager::GetInstance()->LoadTexture(modelData_.material.textureFilePath);
-	modelData_.material.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData_.material.textureFilePath);
+	TextureManager::GetInstance()->LoadTexture(modelData_.materialData.textureFilePath);
+	modelData_.materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData_.materialData.textureFilePath);
 
 	this->camera_ = debugWireframes_->GetDefaultCamera();
 	wvpResource_ = debugWireframes_->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
@@ -76,7 +76,7 @@ void SphereModel::Draw() {
 	debugWireframes_->GetDirectXCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	debugWireframes_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
 	debugWireframes_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	debugWireframes_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.material.textureFilePath));
+	debugWireframes_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.materialData.textureFilePath));
 	debugWireframes_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
 	debugWireframes_->GetDirectXCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }

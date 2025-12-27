@@ -69,7 +69,7 @@ void ParticleManager::CreateParticleGroup(const std::string& name, const std::st
 	}
 
 	//テクスチャ読み込み
-	particleG.modelData.material.textureFilePath = textureFilePath;
+	particleG.modelData.materialData.textureFilePath = textureFilePath;
 	particleG.resource = particleCommon->GetDxCommon()->CreateBufferResource(sizeof(ParticleForGPU) * particleG.kNumInstance);
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};

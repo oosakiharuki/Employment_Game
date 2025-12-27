@@ -76,8 +76,13 @@ void Object_glTF::Update(const WorldTransform& worldTransform) {
 	AnimationUpdate();
 
 
-	for (uint32_t i = 0; i < modelData_.indices.size(); i++) {
-		wvpDatas_[i]->World = modelData_.rootNode.localMatrix * worldTransform.matWorld_;
+	for (uint32_t i = 0; i < modelData_.Data.size(); i++) {
+		if (model_->IsAnimation()) {
+			wvpDatas_[i]->World = modelData_.rootNode.children[i].localMatrix * worldTransform.matWorld_;
+		}
+		else {
+			wvpDatas_[i]->World = modelData_.rootNode.localMatrix * worldTransform.matWorld_;
+		}
 	}
 
 	directionalLightSphereData_->direction = Normalize(directionalLightSphereData_->direction);
@@ -89,8 +94,13 @@ void Object_glTF::Update() {
 
 	AnimationUpdate();
 
-	for (uint32_t i = 0; i < modelData_.indices.size(); i++) {
-		wvpDatas_[i]->World = modelData_.rootNode.localMatrix * worldMatrix_;
+	for (uint32_t i = 0; i < modelData_.Data.size(); i++) {
+		if (model_->IsAnimation()) {
+			wvpDatas_[i]->World = localMatrices_[i] * worldMatrix_;
+		}
+		else {
+			wvpDatas_[i]->World = modelData_.rootNode.localMatrix * worldMatrix_;
+		}		
 	}
 
 	directionalLightSphereData_->direction = Normalize(directionalLightSphereData_->direction);
@@ -137,10 +147,10 @@ void Object_glTF::AnimationUpdate() {
 	localMatrices_.clear();
 
 	if (!model_->IsSkinning() && model_->IsAnimation()) {
-		for (uint32_t i = 0; i < modelData_.indices.size(); i++) {
+		for (uint32_t i = 0; i < modelData_.Data.size(); i++) {
 			Matrix4x4 localMatrix;
 
-			if (modelData_.indices.size() <= 1) {
+			if (modelData_.rootNode.children.size() <= 1) {
 				NodeAnimation& rootNodeAnimation = animations_[i].nodeAnimations[modelData_.rootNode.name];
 				Vector3 translate = CalculateValue(rootNodeAnimation.translate, animationTime_);//nextと逆にする()
 				Quaternion rotate = CalculateValueQuaternion(rootNodeAnimation.rotate, animationTime_);
@@ -178,7 +188,7 @@ void Object_glTF::Draw() {
 		WorldViewProjectionMatrix = worldMatrix_;
 	}
 
-	for (uint32_t i = 0; i < modelData_.indices.size(); i++) {
+	for (uint32_t i = 0; i < modelData_.Data.size(); i++) {
 		if (model_->IsSkinning()) {
 			//スキニングのアニメーションの場合
 			wvpDatas_[i]->WVP = WorldViewProjectionMatrix;
@@ -194,7 +204,7 @@ void Object_glTF::Draw() {
 	}
 
 	//モデル
-	for (uint32_t i = 0; i < modelData_.indices.size();i++) {
+	for (uint32_t i = 0; i < modelData_.Data.size();i++) {
 		object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResources_[i]->GetGPUVirtualAddress());
 		object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource_->GetGPUVirtualAddress());
 		object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
@@ -204,6 +214,7 @@ void Object_glTF::Draw() {
 			model_->Draw();
 		}
 	}
+
 	model_->ResetMeshCount();
 
 #ifdef _DEBUG
@@ -230,7 +241,7 @@ void Object_glTF::SetModelFile(const std::string& filePath) {
 	modelData_ = model_->GetModelData();
 
 
-	for (auto& i : modelData_.indices) {
+	for (auto& i : modelData_.Data) {
 		Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource;
 		TransformationMatrix* wvpData;
 		wvpResource = object3dCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
