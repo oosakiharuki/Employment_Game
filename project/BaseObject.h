@@ -24,15 +24,40 @@ public:
 	virtual void SetColor(const Vector4& color) = 0;
 
 protected:
+
+	/// <summary>
+	/// カメラ初期化処理
+	/// </summary>
+	void InitCamera();
+
+	/// <summary>
+	/// ライト初期化処理
+	/// </summary>
+	void InitLight();
+
+	/// <summary>
+	/// ディレクショナルライト設定
+	/// </summary>
+	void CreateDirectionalLight();
+	/// <summary>
+	/// ポイントライト設定
+	/// </summary>
+	void CreatePointLight();
+	/// <summary>
+	/// スポットライト設定
+	/// </summary>
+	void CreateSpotLight();
+
+
 	//カメラ用のリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource> cameraResource_;
 	//カメラデータを書き込む
 	CameraForGPU* cameraData_ = nullptr;
 
 	//ライト用のリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightSphereResource_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> directionalLightResource_;
 	//マテリアルにデータを書き込む
-	DirectionalLight* directionalLightSphereData_ = nullptr;
+	DirectionalLight* directionalLightData_ = nullptr;
 
 	//ポイントライト用のリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource> pointLightResource_;

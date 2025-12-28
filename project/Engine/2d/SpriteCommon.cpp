@@ -72,38 +72,6 @@ void SpriteCommon::RootSignature() {
 
 }
 
-void SpriteCommon::GraphicsPipeline() {
-
-	RootSignature();
-
-	CreateRootSignature();
-
-	//InputLayout
-	CreateInputLayout();
-
-	//Blend
-	CreateBlend();
-
-	//RasterizerState
-	CreateRasterizer(D3D12_CULL_MODE_NONE, D3D12_FILL_MODE_SOLID);
-
-	//shaderのコンパイラ
-	CreateVertexSharder(L"Sprite.VS.hlsl");
-	CreatePixelSharder(L"Sprite.PS.hlsl");
-	
-	//DepthStencilState
-	CreateDepthStencil(false, D3D12_DEPTH_WRITE_MASK_ALL, D3D12_COMPARISON_FUNC_LESS_EQUAL);
-
-	//PSO最終部分
-	CreateGraphicsPipelineState();
-}
-
-void SpriteCommon::Command() {
-	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
-	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-}
-
 void SpriteCommon::CreateInputLayout() {
 
 	inputElementDescs[0].SemanticName = "POSITION";
@@ -137,4 +105,31 @@ void SpriteCommon::CreateBlend() {
 	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D12_BLEND_ONE;
 	blendDesc.RenderTarget[0].BlendOpAlpha = D3D12_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].DestBlendAlpha = D3D12_BLEND_ZERO;
+}
+
+void SpriteCommon::CreateRasterizer() {
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;//表裏表示
+	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
+}
+
+void SpriteCommon::CreateVertexSharder() {
+	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Sprite.VS.hlsl", L"vs_6_0");
+	assert(vertexShaderBlob != nullptr);
+}
+
+void SpriteCommon::CreatePixelSharder() {
+	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Sprite.PS.hlsl", L"ps_6_0");
+	assert(pixelShaderBlob != nullptr);
+}
+
+void SpriteCommon::CreateDepthStencil() {
+	depthStencilDesc.DepthEnable = false;
+	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+}
+
+void SpriteCommon::Command() {
+	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

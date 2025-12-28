@@ -14,9 +14,10 @@ void GLTFCommon::Finalize() {
 	sInstance_.reset();
 	sInstance_ = nullptr;
 }
+
 void GLTFCommon::Initialize(DirectXCommon* dxCommon) {
 	dxCommon_ = dxCommon;
-	
+
 	GraphicsPipeline();
 }
 
@@ -89,32 +90,6 @@ void GLTFCommon::RootSignature() {
 
 }
 
-void GLTFCommon::GraphicsPipeline() {
-
-	RootSignature();
-
-	CreateRootSignature();
-
-	//InputLayout
-	CreateInputLayout();
-
-	//BlendState
-	CreateBlend();
-
-	//RasterizerState
-	CreateRasterizer(D3D12_CULL_MODE_BACK,D3D12_FILL_MODE_SOLID);
-
-	//shaderのコンパイラ
-	CreateVertexSharder(L"Object3d.VS.hlsl");
-	CreatePixelSharder(L"Object3d_glTF.PS.hlsl");
-
-	//DepthStencilState
-	CreateDepthStencil(true, D3D12_DEPTH_WRITE_MASK_ALL, D3D12_COMPARISON_FUNC_LESS_EQUAL);
-
-	//PSOここ絶対最後
-	CreateGraphicsPipelineState();
-}
-
 void GLTFCommon::CreateInputLayout() {
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
@@ -142,6 +117,27 @@ void GLTFCommon::CreateInputLayout() {
 
 void GLTFCommon::CreateBlend() {
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+}
+
+void GLTFCommon::CreateRasterizer() {
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;//表裏表示
+	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
+}
+
+void GLTFCommon::CreateVertexSharder() {
+	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
+	assert(vertexShaderBlob != nullptr);
+}
+
+void GLTFCommon::CreatePixelSharder() {
+	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d_glTF.PS.hlsl", L"ps_6_0");
+	assert(pixelShaderBlob != nullptr);
+}
+
+void GLTFCommon::CreateDepthStencil() {
+	depthStencilDesc.DepthEnable = true;
+	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 }
 
 void GLTFCommon::Command() {

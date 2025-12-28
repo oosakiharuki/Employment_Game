@@ -35,10 +35,6 @@ public:
 	/// </summary>
 	/// <param name="textureData"></param> テクスチャ変更
 	void Draw(const std::string& textureData) override;
-	/// <summary>
-	/// アニメーションの更新処理
-	/// </summary>
-	void AnimationUpdate();
 
 	/// <summary>
 	/// setter_modelの選択
@@ -70,7 +66,24 @@ public:
 	/// <param name="filePath">変更するファイルパス</param>
 	void ChangeAnimation(const std::string& filePath);
 
-private:	
+private:
+
+	/// <summary>
+	/// アニメーションの更新処理
+	/// </summary>
+	void AnimationUpdate();
+	/// <summary>
+	/// フレームアニメーションの更新
+	/// </summary>
+	void FrameAnimation();
+
+	/// <summary>
+	/// カメラ更新処理
+	/// </summary>
+	void CameraUpdate();
+
+	void CreateWVP();
+
 	/// <summary>
 	/// アニメーション
 	/// </summary>
@@ -124,6 +137,9 @@ private:
 	std::vector<SkinCluster> skinClusters_;
 
 	std::vector<SphereModel*> debugSpheres_;
+	/// <summary>
+	/// デバッグ用のワイヤーフレームを作成
+	/// </summary>
 	void SetWireframe();
 
 	bool isChange_ = false;
@@ -132,4 +148,6 @@ private:
 	std::vector<Animation> preAnimations_;
 
 	std::vector<Matrix4x4> localMatrices_;
+
+	Matrix4x4 WorldViewProjectionMatrix;
 };

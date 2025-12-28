@@ -14,6 +14,7 @@ void SkinningCommon::Finalize() {
 	sInstance_.reset();
 	sInstance_ = nullptr;
 }
+
 void SkinningCommon::Initialize(DirectXCommon* dxCommon) {
 	dxCommon_ = dxCommon;
 
@@ -97,32 +98,6 @@ void SkinningCommon::RootSignature() {
 	descriptionRootSignature_.NumStaticSamplers = _countof(staticSamplers_);
 }
 
-void SkinningCommon::GraphicsPipeline() {
-
-	RootSignature();
-
-	CreateRootSignature();
-
-	//InputLayout
-	CreateInputLayout();
-
-	//BlendState
-	CreateBlend();
-
-	//RasterizerState
-	CreateRasterizer(D3D12_CULL_MODE_BACK, D3D12_FILL_MODE_SOLID);
-
-	//shaderのコンパイラ
-	CreateVertexSharder(L"SkinningObject3d.VS.hlsl");
-	CreatePixelSharder(L"Object3d_glTF.PS.hlsl");
-
-	//DepthStencilState
-	CreateDepthStencil(true,D3D12_DEPTH_WRITE_MASK_ALL,D3D12_COMPARISON_FUNC_LESS_EQUAL);
-	
-	//PSOここ絶対最後
-	CreateGraphicsPipelineState();
-}
-
 void SkinningCommon::CreateInputLayout() {
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
@@ -162,6 +137,28 @@ void SkinningCommon::CreateInputLayout() {
 
 void SkinningCommon::CreateBlend() {
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+}
+
+
+void SkinningCommon::CreateRasterizer() {
+	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;//表裏表示
+	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
+}
+
+void SkinningCommon::CreateVertexSharder() {
+	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
+	assert(vertexShaderBlob != nullptr);
+}
+
+void SkinningCommon::CreatePixelSharder() {
+	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.PS.hlsl", L"ps_6_0");
+	assert(pixelShaderBlob != nullptr);
+}
+
+void SkinningCommon::CreateDepthStencil() {
+	depthStencilDesc.DepthEnable = true;
+	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 }
 
 void SkinningCommon::Command() {
