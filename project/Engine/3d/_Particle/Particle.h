@@ -57,7 +57,7 @@ enum class ParticleBorn {
 struct ParticleParametars {
 	std::string name;        //パーティクルの名前
 	std::string textureFile; //テクスチャファイル名
-	PrimitiveType primitive; //パーティクルの形(プリミティブ)
+	ModelData primitive; //パーティクルの形(プリミティブ)
 	uint32_t count;          //生成数
 	float frequency;         //頻度 / 生存時間
 	Vector3 basicSize;       //基本サイズ
@@ -75,7 +75,7 @@ public:
 	/// <param name="particleName"></param>パーティクルの名前
 	/// <param name="textureFile"></param>使用するテクスチャ名
 	/// <param name="type"></param>形(Primitive)
-	void Initialize(const std::string& particleName,const std::string& textureFile, PrimitiveType type);
+	void Initialize(const std::string& particleName,const std::string& textureFile, const ModelData& modelData);
 	/// <summary>
 	/// 更新処理
 	/// </summary>
@@ -187,4 +187,21 @@ private:
 	//ワールド行列
 	Matrix4x4 worldMatrix_;
 
+	const float kDeltaTime = 1.0f / 60.0f;
+
+	/// <summary>
+	/// 座標
+	/// </summary>
+	void InitVertex();
+
+
+	/// <summary>
+	/// マテリアル作成
+	/// </summary>
+	void InitMaterial();
+
+
+	void InitParameta();
+
+	void InitLight();
 };

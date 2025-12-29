@@ -27,33 +27,77 @@ public:
 	/// <param name="srvManager"></param>
 	void Initialize(DirectXCommon* dxCommon, SrvManager* srvManager);
 
-	void CreateParticleGroup(const std::string& name, const std::string& textureFilePath, PrimitiveType primitiveType);
-
+	/// <summary>
+	/// パーティクルグループ作成
+	/// </summary>
+	/// <param name="name">パーティクルの名前</param>
+	/// <param name="textureFilePath">テクスチャファイルパス</param>
+	/// <param name="modelData">パーティクルの形(PrimitiveクラスにCreate○○()のモデルデータ項目がある)</param>
+	void CreateParticleGroup(const std::string& name, const std::string& textureFilePath, const ModelData& modelData);
+	/// <summary>
+	/// getter_GPU
+	/// </summary>
+	/// <param name="filePath">パーティクルの名前</param>
+	/// <returns></returns>
 	D3D12_GPU_DESCRIPTOR_HANDLE  GetSrvHandleGPU(const std::string& filePath);
+	/// <summary>
+	/// getter_ModelData
+	/// </summary>
+	/// <param name="filePath">パーティクルの名前</param>
+	/// <returns></returns>
 	ModelData GetModelData(const std::string& filePath);
-	std::string GetTextureHandle(const std::string& filePath);
+	/// <summary>
+	/// getter_texture名
+	/// </summary>
+	/// <param name="filePath">パーティクルの名前</param>
+	/// <returns></returns>
+	std::string GetTextureFile(const std::string& filePath);
+	/// <summary>
+	/// getter_Resource
+	/// </summary>
+	/// <param name="filePath">パーティクルの名前</param>
+	/// <returns></returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> GetResource(const std::string& filePath);
+	/// <summary>
+	/// getter_パーティクルデータ
+	/// </summary>
+	/// <param name="filePath">パーティクルの名前</param>
+	/// <returns></returns>
 	std::list<ParticleData> GetParticle(const std::string& filePath);
 	
 	uint32_t& GetNum(const std::string& filePath);
 
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="filePath">グループの名前を選択</param>
+	/// <param name="wvpData">座標WVP</param>
 	void Update(const std::string& filePath, ParticleForGPU* wvpData);
 
+	/// <summary>
+	/// エミッタ
+	/// </summary>
+	/// <param name="filePath">グループの名前</param>
+	/// <param name="emitter">使用しているエミッタ</param>
 	void Emit(const std::string& filePath,const Emitter& emitter);
 
+	/// <summary>
+	/// setter_カメラ
+	/// </summary>
+	/// <param name="camera_">カメラ</param>
 	void SetCamera(Camera* camera_) { camera = camera_; }
 
 	void ResetNum(const std::string& filePath);
 	/// <summary>
 	/// パーティクルを一度消す
 	/// </summary>
-	/// <param name="filePath"></param>パーティクルグループ名を選ぶ
+	/// <param name="filePath">パーティクルグループ名を選ぶ</param>
 	void ResetParticle(const std::string& filePath);
 	
 	/// <summary>
 	/// パーティクル初期化処理テンプレート
 	/// </summary>
-	/// <param name="parametars"></param>
+	/// <param name="parametars">パーティクルのパラメータをまとめたもの</param>
 	std::unique_ptr<Particle> InitParticle(const ParticleParametars& parametars);
 
 private:
@@ -90,4 +134,14 @@ private:
 	Camera* camera = nullptr;
 	static const uint32_t kNumMaxInstance = 100;
 
+
+	void VelocityMove(ParticleData& particleData);
+
+	Matrix4x4 CreateWorldMatrix(ParticleData& particleData);
+
+	Matrix4x4 CreateBillBoardMatrix(const Matrix4x4& scaleMatrix, const Matrix4x4& rotateMatrix, const Matrix4x4& translateMatrix);
+
+	void Timer(ParticleData& particleData);
+
+	float alpha = 0.0f;
 };

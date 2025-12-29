@@ -34,81 +34,34 @@ Particle::~Particle() {
 	}
 }
 
-void Particle::Initialize(const std::string& particleName, const std::string& textureFile , PrimitiveType type) {
+void Particle::Initialize(const std::string& particleName, const std::string& textureFile , const ModelData& modelData) {
 	this->particleCommon_ = ParticleCommon::GetInstance().get();
 	this->camera_ = particleCommon_->GetDefaultCamera();
 
 	//particleの設定
-	ParticleManager::GetInstance()->CreateParticleGroup(particleName, textureFile, type);
+	ParticleManager::GetInstance()->CreateParticleGroup(particleName, textureFile, modelData);
 
-	//
 	this->fileName_ = particleName;
 	this->textureFile_ = textureFile;
 
 	modelData_ = ParticleManager::GetInstance()->GetModelData(fileName_);
-	
-	vertexResource_ = particleCommon_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 
-	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
-	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
-	vertexBufferView_.StrideInBytes = sizeof(VertexData);
-
-
-	wvpResource_ = ParticleManager::GetInstance()->GetResource(fileName_);
-	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
-	
-	for (uint32_t index = 0; index < kNumMaxInstance_; ++index) {
-		wvpData_[index].World = MakeIdentity4x4();
-		wvpData_[index].WVP = MakeIdentity4x4();
-		wvpData_[index].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	}
-
-
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-	std::memcpy(vertexData_, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
-
+	//vertexResourceを作成
+	InitVertex();
 
 	//Particle用マテリアル
-	//マテリアル用のリソース
-	materialResource_ = particleCommon_->GetDxCommon()->CreateBufferResource(sizeof(Material));
-	//書き込むためのアドレス
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	//色の設定
-	materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	materialData_->enableLighting = true;
-	materialData_->uvTransform = MakeIdentity4x4();
-
-	//テクスチャ読み込み
-	TextureManager::GetInstance()->LoadTexture(modelData_.materialData.textureFilePath);
-	modelData_.materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData_.materialData.textureFilePath);
-
+	InitMaterial();
 
 	//ライト用のリソース
-	directionalLightSphereResource_ = particleCommon_->GetDxCommon()->CreateBufferResource(sizeof(DirectionalLight));
-	//書き込むためのアドレス
-	directionalLightSphereResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightSphereData_));
-	//色の設定
-	directionalLightSphereData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightSphereData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightSphereData_->intensity = 1.0f;
+	InitLight();
 
-	//エミッター
-	emitter_.transform.translate = { 0.0f,0.0f,-3.0f };
-	emitter_.transform.rotate = { 0.0f,0.0f,0.0f };
-	emitter_.transform.scale = { 1.0f,1.0f,1.0f };
-	emitter_.count = 3;
-	emitter_.frequency = 0.5f;
-	emitter_.frequencyTime = 0.0f;
-
-	//パーティクル発生
-	particleBorn_ = ParticleBorn::Stop;
+	//
+	InitParameta();
 
 	ParticleManager::GetInstance()->SetCamera(camera_);
 }
 
 void Particle::Update() {
-
-	const float kDeltaTime = 1.0f / 60.0f;
 
 	switch (particleBorn_)
 	{
@@ -140,7 +93,6 @@ void Particle::Update() {
 	if (directionalLightSphereData_) {
 		directionalLightSphereData_->direction = Normalize(directionalLightSphereData_->direction);
 	}
-
 }
 
 void Particle::Draw() {
@@ -155,7 +107,6 @@ void Particle::Draw() {
 		else {
 			WorldViewProjectionMatrix = wvpData_[i].World;
 		}
-
 		wvpData_[i].WVP = WorldViewProjectionMatrix;
 	}
 
@@ -169,10 +120,68 @@ void Particle::Draw() {
 
 		//4のやつ particle専用
 		particleCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(4, ParticleManager::GetInstance()->GetSrvHandleGPU(fileName_));
-
 		particleCommon_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), numInstance_, 0, 0);
 	}
 	numInstance_ = 0;
 
 	ParticleManager::GetInstance()->ResetNum(fileName_);
+}
+
+void Particle::InitVertex() {
+
+	vertexResource_ = particleCommon_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+
+	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
+	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+
+	wvpResource_ = ParticleManager::GetInstance()->GetResource(fileName_);
+	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
+
+	for (uint32_t index = 0; index < kNumMaxInstance_; ++index) {
+		wvpData_[index].World = MakeIdentity4x4();
+		wvpData_[index].WVP = MakeIdentity4x4();
+		wvpData_[index].color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+	std::memcpy(vertexData_, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
+}
+
+void Particle::InitMaterial() {
+	//マテリアル用のリソース
+	materialResource_ = particleCommon_->GetDxCommon()->CreateBufferResource(sizeof(Material));
+	//書き込むためのアドレス
+	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+	//色の設定
+	materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+	materialData_->enableLighting = true;
+	materialData_->uvTransform = MakeIdentity4x4();
+
+	//テクスチャ読み込み
+	TextureManager::GetInstance()->LoadTexture(modelData_.materialData.textureFilePath);
+	modelData_.materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData_.materialData.textureFilePath);
+}
+
+void Particle::InitParameta() {
+	//エミッター初期化
+	emitter_.transform.translate = { 0.0f,0.0f,-3.0f };
+	emitter_.transform.rotate = { 0.0f,0.0f,0.0f };
+	emitter_.transform.scale = { 1.0f,1.0f,1.0f };
+	emitter_.count = 3;
+	emitter_.frequency = 0.5f;
+	emitter_.frequencyTime = 0.0f;
+
+	//パーティクル発生初期設定
+	particleBorn_ = ParticleBorn::Stop;
+}
+
+void Particle::InitLight() {
+	directionalLightSphereResource_ = particleCommon_->GetDxCommon()->CreateBufferResource(sizeof(DirectionalLight));
+	//書き込むためのアドレス
+	directionalLightSphereResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightSphereData_));
+	//色の設定
+	directionalLightSphereData_->color = { 1.0f,1.0f,1.0f,1.0f };
+	directionalLightSphereData_->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightSphereData_->intensity = 1.0f;
 }

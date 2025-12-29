@@ -28,7 +28,7 @@ void ParticleManager::Finalize() {
 }
 
 
-void ParticleManager::CreateParticleGroup(const std::string& name, const std::string& textureFilePath, const PrimitiveType primitiveType) {
+void ParticleManager::CreateParticleGroup(const std::string& name, const std::string& textureFilePath, const ModelData& modelData) {
 
 	assert(srvManager->Max());
 	
@@ -40,33 +40,7 @@ void ParticleManager::CreateParticleGroup(const std::string& name, const std::st
 
 	particleG.textureFile = textureFilePath;
 
-	//モデル -プリミティブ	
-	switch (primitiveType)
-	{
-	case box:
-		particleG.modelData = CreateBox();
-		break;
-	case plane:
-		particleG.modelData = CreatePlane();
-		break;
-	case ring:
-		particleG.modelData = CreateRing();
-		break;
-	case cylineder:
-		particleG.modelData = CreateCylinder();
-		break;
-	case sphere:
-		particleG.modelData = CreateSphere();
-		break;
-	case cone:
-		particleG.modelData = CreateCone();
-		break;
-	case beam:
-		particleG.modelData = CreateBeam();
-		break;
-	default:
-		break;
-	}
+	particleG.modelData = modelData;
 
 	//テクスチャ読み込み
 	particleG.modelData.materialData.textureFilePath = textureFilePath;
@@ -106,7 +80,7 @@ ModelData ParticleManager::GetModelData( const std::string& filePath) {
 	return particleG.modelData;
 }
 
-std::string ParticleManager::GetTextureHandle( const std::string& filePath) {
+std::string ParticleManager::GetTextureFile( const std::string& filePath) {
 	assert(srvManager->Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
@@ -128,7 +102,6 @@ std::list<ParticleData> ParticleManager::GetParticle( const std::string& filePat
 }
 
 void ParticleManager::Update( const std::string& filePath, ParticleForGPU* wvpData) {
-
 	assert(srvManager->Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
@@ -137,67 +110,25 @@ void ParticleManager::Update( const std::string& filePath, ParticleForGPU* wvpDa
 	particleG.numInstance = 0;
 
 	//filePath名ですでに更新している場合
-	if (particleG.Updated) {
-		return;
-	}
+	if (particleG.Updated) { return; }
 	particleG.Updated = true;
 
-	for (std::list<ParticleData>::iterator particleIterator = particleG.particles.begin();
-		particleIterator != particleG.particles.end(); ) {
-
+	for (std::list<ParticleData>::iterator particleIterator = particleG.particles.begin(); particleIterator != particleG.particles.end(); ) {
 		//生存時間を過ぎた or スケール(x,y,z)のいずれかが0以下の場合
-		if ((*particleIterator).lifeTime <= (*particleIterator).currentTime || 
-			((*particleIterator).transform.scale.x < 0 || (*particleIterator).transform.scale.y < 0 || (*particleIterator).transform.scale.z < 0)) {
+		if ((*particleIterator).lifeTime <= (*particleIterator).currentTime || ((*particleIterator).transform.scale.x < 0 || (*particleIterator).transform.scale.y < 0 || (*particleIterator).transform.scale.z < 0)) {
 			particleIterator = particleG.particles.erase(particleIterator);
 			continue;
 		}
+		//時間
+		Timer(*particleIterator);
+		//移動
+		VelocityMove(*particleIterator);
 
-		float alpha = 1.0f - ((*particleIterator).currentTime / (*particleIterator).lifeTime);
-
-		(*particleIterator).transform.translate += (*particleIterator).velocityTransform.translate * kDeltaTime;
-		
 		if (filePath == "clear_fanfare") {
 			(*particleIterator).velocityTransform.translate.y -= 0.1f;
 		}
-		
-		(*particleIterator).transform.rotate += (*particleIterator).velocityTransform.rotate;
 
-		if ((*particleIterator).transform.scale.x > 0) {
-			(*particleIterator).transform.scale.x += (*particleIterator).velocityTransform.scale.x * kDeltaTime;
-		}
-		if ((*particleIterator).transform.scale.y > 0) {
-			(*particleIterator).transform.scale.y += (*particleIterator).velocityTransform.scale.y * kDeltaTime;
-		}
-		if ((*particleIterator).transform.scale.z > 0) {
-			(*particleIterator).transform.scale.z += (*particleIterator).velocityTransform.scale.z * kDeltaTime;
-		}
-
-
-		(*particleIterator).currentTime += kDeltaTime;
-
-		Matrix4x4 scaleMatrix = MakeScaleMatrix((*particleIterator).transform.scale);
-		Matrix4x4 translateMatrix = MakeTranslateMatrix((*particleIterator).transform.translate);
-
-		//回転行列
-		Matrix4x4 rotateX = MakeRotateXMatrix((*particleIterator).transform.rotate.x * (float(M_PI) / 180.0f));
-		Matrix4x4 rotateY = MakeRotateYMatrix((*particleIterator).transform.rotate.y * (float(M_PI) / 180.0f));
-		Matrix4x4 rotateZ = MakeRotateZMatrix((*particleIterator).transform.rotate.z * (float(M_PI) / 180.0f));
-		//全てまとめた
-		Matrix4x4 rotateXYZ = Multiply(Multiply(rotateX, rotateY), rotateZ);
-
-		//ビルボード
-		Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
-
-		Matrix4x4 billboardMatrix = Multiply(Multiply(backToFrontMatrix, rotateXYZ), camera->GetWorldMatrix());
-		billboardMatrix.m[3][0] = 0.0f;
-		billboardMatrix.m[3][1] = 0.0f;
-		billboardMatrix.m[3][2] = 0.0f;
-
-
-		//ビルボード
-		//worldMatrix = Multiply(scaleMatrix, Multiply(billboardMatrix, translateMatrix));
-		//通常
-		Matrix4x4 worldMatrix = MakeAffineMatrix((*particleIterator).transform.scale, (*particleIterator).transform.rotate, (*particleIterator).transform.translate);
+		Matrix4x4 worldMatrix = CreateWorldMatrix(*particleIterator);
 
 		// wvpDataのnullチェック
 		if (wvpData) {
@@ -213,7 +144,70 @@ void ParticleManager::Update( const std::string& filePath, ParticleForGPU* wvpDa
 		}
 		++particleIterator;
 	}
+}
+
+void ParticleManager::VelocityMove(ParticleData& particleData) {
+	particleData.transform.translate += particleData.velocityTransform.translate * kDeltaTime;
+
+	particleData.transform.rotate += particleData.velocityTransform.rotate;
+
+	if (particleData.transform.scale.x > 0) {
+		particleData.transform.scale.x += particleData.velocityTransform.scale.x * kDeltaTime;
+	}
+	if (particleData.transform.scale.y > 0) {
+		particleData.transform.scale.y += particleData.velocityTransform.scale.y * kDeltaTime;
+	}
+	if (particleData.transform.scale.z > 0) {
+		particleData.transform.scale.z += particleData.velocityTransform.scale.z * kDeltaTime;
+	}
+}
+
+Matrix4x4 ParticleManager::CreateWorldMatrix(ParticleData& particleData) {
+	//スケール行列
+	Matrix4x4 scaleMatrix = MakeScaleMatrix(particleData.transform.scale);
+
+	//回転行列
+	Matrix4x4 rotateX = MakeRotateXMatrix(particleData.transform.rotate.x * (float(M_PI) / 180.0f));
+	Matrix4x4 rotateY = MakeRotateYMatrix(particleData.transform.rotate.y * (float(M_PI) / 180.0f));
+	Matrix4x4 rotateZ = MakeRotateZMatrix(particleData.transform.rotate.z * (float(M_PI) / 180.0f));
+	//全てまとめた
+	Matrix4x4 rotateXYZ = Multiply(Multiply(rotateX, rotateY), rotateZ);
 	
+	//変換座標
+	Matrix4x4 translateMatrix = MakeTranslateMatrix(particleData.transform.translate);
+
+	Matrix4x4 result;
+	if (false) {
+		//ビルボード
+		result = CreateBillBoardMatrix(scaleMatrix, rotateXYZ, translateMatrix);
+	}
+	else {
+		//アフィン変換
+		result = MakeAffineMatrix(particleData.transform.scale, particleData.transform.rotate, particleData.transform.translate);
+	}
+
+	return result;
+}
+
+Matrix4x4 ParticleManager::CreateBillBoardMatrix(const Matrix4x4& scaleMatrix, const Matrix4x4& rotateMatrix, const Matrix4x4& translateMatrix) {
+
+	//ビルボード
+	Matrix4x4 backToFrontMatrix = MakeRotateYMatrix(std::numbers::pi_v<float>);
+
+	Matrix4x4 billboardMatrix = Multiply(Multiply(backToFrontMatrix, rotateMatrix), camera->GetWorldMatrix());
+	billboardMatrix.m[3][0] = 0.0f;
+	billboardMatrix.m[3][1] = 0.0f;
+	billboardMatrix.m[3][2] = 0.0f;
+
+	//全て結合
+	Matrix4x4 result = Multiply(scaleMatrix, Multiply(billboardMatrix, translateMatrix));
+
+	return result;
+}
+
+void ParticleManager::Timer(ParticleData& particleData) {
+	alpha = 1.0f - (particleData.currentTime / particleData.lifeTime);
+	particleData.currentTime += kDeltaTime;
 }
 
 void ParticleManager::Emit( const std::string& filePath, const Emitter& emitter) {

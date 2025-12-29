@@ -155,7 +155,7 @@ private:
 	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
 
 	ParticleParametars particleSummon_ = {
-		"enemies_summon", "resource/Sprite/white.png", PrimitiveType::sphere, 10,
+		"enemies_summon", "resource/Sprite/white.png", Primitive::CreateSphere(), 10,
 		kSummonMaxTime_ / 6.0f, { gSize,gSize,gSize }
 	};
 };
