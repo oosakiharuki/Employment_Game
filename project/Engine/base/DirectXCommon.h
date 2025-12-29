@@ -196,7 +196,24 @@ public:
 
 private:
 
-	HRESULT hr;
+	/// <summary>
+	/// ファクトリー生成
+	/// </summary>
+	void Factory();
+	/// <summary>
+	/// アダプタ生成
+	/// </summary>
+	void Adapter();
+	/// <summary>
+	/// ドライブ生成
+	/// </summary>
+	void CreateDevice();
+	/// <summary>
+	/// エラー処理でストップ
+	/// </summary>
+	void ErrerStop();
+
+	Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter = nullptr;
 
 	//デバイス
 	Microsoft::WRL::ComPtr<ID3D12Device> device_;
@@ -243,8 +260,6 @@ private:
 	//RTV
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
 
-	D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle_;
-
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[kMaxResource_];
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandlesRT_;
 
@@ -259,6 +274,41 @@ private:
 	Microsoft::WRL::ComPtr <IDxcUtils> dxcUtils_ = nullptr;
 	Microsoft::WRL::ComPtr <IDxcCompiler3> dxcCompiler_ = nullptr;
 	Microsoft::WRL::ComPtr <IDxcIncludeHandler> includeHandler_ = nullptr;
+
+	/// <summary>
+	/// hlslを読み取る
+	/// </summary>
+	/// <param name="filePath">hlslパス</param>
+	/// <param name="profile">プロファイル</param>
+	void LoadHLSL(const std::wstring& filePath,const wchar_t* profile);
+	/// <summary>
+	/// 警告エラー
+	/// </summary>
+	void CompileErrer();
+	/// <summary>
+	/// コンパイルが完了した
+	/// </summary>
+	/// <param name="filePath">hlslパス</param>
+	/// <param name="profile">プロファイル</param>
+	void CompileSucces(const std::wstring& filePath, const wchar_t* profile);
+
+	Microsoft::WRL::ComPtr<IDxcResult> shaderResult = nullptr;
+	Microsoft::WRL::ComPtr<IDxcBlob> shaderBlob = nullptr;
+
+	/// <summary>
+	/// バリア設定
+	/// </summary>
+	/// <param name="resource">バリアを貼る対象のリソース</param>
+	/// <param name="stateBefore">前のリソースステート</param>
+	/// <param name="stateAfter">後のリソースステート</param>
+	void SetBarrier(ID3D12Resource* resource,D3D12_RESOURCE_STATES stateBefore,D3D12_RESOURCE_STATES stateAfter);
+
+	/// <summary>
+	/// 共有描画処理
+	/// </summary>
+	/// <param name="handle">CPUハンドル</param>
+	/// <param name="color">クリアカラー</param>
+	void DrawCommon(D3D12_CPU_DESCRIPTOR_HANDLE handle, float color[]);
 
 	//Update
 

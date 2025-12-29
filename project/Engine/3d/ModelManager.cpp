@@ -39,14 +39,14 @@ void ModelManager::LoadModel(const std::string& filePath, const std::string& obj
 	}
 	else if (objType == ".gltf") {
 		std::unique_ptr<Model_glTF> model = std::make_unique<Model_glTF>();
-		model->InitAnimation(isAnimation, isSkinning);//アニメーションが必要な場合
 		model->Initialize(modelCommon_.get(), "resource", filePath + "/" + fileName);//model,file名,OBJ本体
+		model->InitAnimation("resource", filePath + "/" + fileName, isAnimation, isSkinning);//アニメーションが必要な場合
 		glTFs_.insert(std::make_pair(fileName, std::move(model)));
 	}
 }
 
 Model_glTF* ModelManager::FindModel_gltf(const std::string& filePath) {
-	if(glTFs_.contains(filePath)){
+	if (glTFs_.contains(filePath)) {
 		return glTFs_.at(filePath).get();
 	}
 

@@ -3,6 +3,9 @@
 #include "MyMath.h"
 #include <memory>
 
+/// <summary>
+/// Modelの基盤クラス
+/// </summary>
 class BaseModel
 {
 public:
@@ -17,6 +20,36 @@ public:
 	/// 描画処理
 	/// </summary>
 	virtual void Draw() = 0;
+
+	/// <summary>
+	/// VertexResource作成(初期化)
+	/// </summary>
+	/// <param name="modelData">モデルデータ</param>
+	virtual void InitVertexResource(ModelData modelData) = 0;
+
+	/// <summary>
+	/// MaterialResource作成(初期化)
+	/// </summary>
+	/// <param name="modelData">モデルデータ</param>
+	virtual void InitMaterialResource(ModelData modelData) = 0;
+
+	/// <summary>
+	/// IndexResource作成(初期化)
+	/// </summary>
+	/// <param name="modelData">モデルデータ</param>
+	virtual void InitIndexResource(ModelData modelData) = 0;
+
+	/// <summary>
+	/// マテリアルの色を変更
+	/// </summary>
+	/// <param name="color">変更カラー</param>
+	void SetColor(const Vector4& color);
+
+	/// <summary>
+	/// ライト設定
+	/// </summary>
+	/// <param name="Light"></param>
+	void LightOn(bool Light);
 
 protected:
 	

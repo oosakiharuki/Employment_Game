@@ -329,27 +329,27 @@ private:
 	//-パーティクル-
 	//歩く
 	ParticleParametars particleWalk_ = {
-		"player_walk", "resource/Sprite/white.png", PrimitiveType::box, 5, 0.15f, {1,1,1}
+		"player_walk", "resource/Sprite/white.png", Primitive::CreateBox(), 5, 0.15f, {1,1,1}
 	};
 	//ブリンク
 	ParticleParametars particleBrink_ = {
-		"player_brink","resource/Sprite/cone.png", PrimitiveType::cone, 1, 1.0f, { 2.0f,2.0f,2.0f }
+		"player_brink","resource/Sprite/cone.png", Primitive::CreateCone(), 1, 1.0f, {2.0f,2.0f,2.0f}
 	}; 
 	//撃つ
 	ParticleParametars  particleFire_ = {
-		"player_fire","resource/Sprite/cone.png", PrimitiveType::cone , 1, 0.3f,{1,1,1}
+		"player_fire","resource/Sprite/cone.png", Primitive::CreateCone(), 1, 0.3f,{1,1,1}
 	};
 	//ダメージを食らった
 	ParticleParametars particleDamage_ = {
-		"player_damage", "resource/Sprite/circle.png", PrimitiveType::ring, 20, 0.6f,{1,1,1}
+		"player_damage", "resource/Sprite/circle.png", Primitive::CreateRing(), 20, 0.6f,{1,1,1}
 	};
 	//パリィ成功
 	ParticleParametars particlePari_ = {
-		"player_pari", "resource/Sprite/white.png", PrimitiveType::cone, 1, 0.5f,{ 2.0f,0.2f,2.0f }
+		"player_pari", "resource/Sprite/white.png", Primitive::CreateCone(), 1, 0.5f,{2.0f,0.2f,2.0f}
 	};
 	//倒された演出
 	ParticleParametars particleDead_ = {
-		"player_dead", "resource/Sprite/white.png", PrimitiveType::sphere, 3,0.1f,{ 0.5f, 0.5f, 0.5f }
+		"player_dead", "resource/Sprite/white.png", Primitive::CreateSphere(), 3,0.1f,{0.5f, 0.5f, 0.5f}
 	};
 
 	//前回座標の保存場所

@@ -4,16 +4,6 @@
 /// <summary>
 /// Primitive
 /// </summary>
-enum PrimitiveType {
-	box,
-	plane,
-	ring,
-	cylineder,
-	sphere,
-	cone,
-	beam
-};
-
 namespace Primitive {
 
 	ModelData CreateBox();

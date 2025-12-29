@@ -20,7 +20,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize(DirectXCommon* dxCommon);
+	void Initialize(DirectXCommon* dxCommon) override;
 	/// <summary>
 	/// 描画コマンド
 	/// </summary>
@@ -42,14 +42,41 @@ public:
 	/// <returns></returns>
 	Camera* GetDefaultCamera() const { return defaultCamera_; }
 
+private:
+	/// <summary>
+	/// ルートシグネチャ
+	/// </summary>
+	void RootSignature() override;
+
+	/// <summary>
+	/// InputLayoutを作成
+	/// </summary>
 	void CreateInputLayout() override;
 
+	/// <summary>
+	/// Blendを作成
+	/// </summary>
 	void CreateBlend() override;
 
-private:
-	//PSO
-	void RootSignature();
-	void GraphicsPipeline();
+	/// <summary>
+	/// Rasterizerを作成
+	/// </summary>
+	void CreateRasterizer() override;
+
+	/// <summary>
+	/// VertexSharderを作成
+	/// </summary>
+	void CreateVertexSharder() override;
+
+	/// <summary>
+	/// PixelSharderを作成
+	/// </summary>
+	void CreatePixelSharder() override;
+
+	/// <summary>
+	/// DepthStencilの作成
+	/// </summary>
+	void CreateDepthStencil() override;
 
 	//RootSignature
 	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};

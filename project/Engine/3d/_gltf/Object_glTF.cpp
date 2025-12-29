@@ -26,55 +26,19 @@ void Object_glTF::Initialize() {
 	object3dCommon_ = GLTFCommon::GetInstance().get();
 	camera_ = object3dCommon_->GetDefaultCamera();
 
-	//ライト用のリソース
-	directionalLightSphereResource_ = object3dCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(DirectionalLight));
-	//書き込むためのアドレス
-	directionalLightSphereResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightSphereData_));
-	//色の設定
-	directionalLightSphereData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightSphereData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightSphereData_->intensity = 0.0f;//明るすぎたため
+	//カメラ初期化
+	InitCamera();
 
-
-	//Phong Reflection Model
-	cameraResource_ = object3dCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(CameraForGPU));
-	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraData_));
-
-	cameraData_->worldPosition = { 0,0,0 };
-
-	//ライト用のリソース
-	pointLightResource_ = object3dCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(PointLight));
-	//書き込むためのアドレス
-	pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
-	//設定
-	pointLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	pointLightData_->position = { 0.0f,-1.0f,0.0f };
-	pointLightData_->intensity = 1.0f;
-	pointLightData_->radius = 5.0f;
-	pointLightData_->decay = 1.0f;
-
-
-	//ライト用のリソース
-	spotLightResource_ = object3dCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(SpotLight));
-	//書き込むためのアドレス
-	spotLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&spotLightData_));
-	//設定
-	spotLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	spotLightData_->position = { 2.0f,1.25f,0.0f };
-	spotLightData_->distance = 70.0f;
-	spotLightData_->direction = Normalize({ -1.0f,-1.0f,0.0f });
-	spotLightData_->intensity = 0.0f;
-	spotLightData_->decay = 2.0f;
-	spotLightData_->cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
-	spotLightData_->cosFalloffStart = std::cos(std::numbers::pi_v<float> / 4.0f);
+	//ライト初期化処理まとめ
+	InitLight();
 }
 
 void Object_glTF::Update(const WorldTransform& worldTransform) {
 
 	worldMatrix_ = worldTransform.matWorld_;
 
+	//アニメーション更新
 	AnimationUpdate();
-
 
 	for (uint32_t i = 0; i < modelData_.Data.size(); i++) {
 		if (model_->IsAnimation()) {
@@ -85,13 +49,14 @@ void Object_glTF::Update(const WorldTransform& worldTransform) {
 		}
 	}
 
-	directionalLightSphereData_->direction = Normalize(directionalLightSphereData_->direction);
+	directionalLightData_->direction = Normalize(directionalLightData_->direction);
 }
 
 void Object_glTF::Update() {
 
 	worldMatrix_ = MakeIdentity4x4();
 
+	//アニメーション更新
 	AnimationUpdate();
 
 	for (uint32_t i = 0; i < modelData_.Data.size(); i++) {
@@ -103,7 +68,7 @@ void Object_glTF::Update() {
 		}		
 	}
 
-	directionalLightSphereData_->direction = Normalize(directionalLightSphereData_->direction);
+	directionalLightData_->direction = Normalize(directionalLightData_->direction);
 }
 
 void Object_glTF::AnimationUpdate() {
@@ -143,10 +108,16 @@ void Object_glTF::AnimationUpdate() {
 		}
 	}
 
-	//一度リセット
-	localMatrices_.clear();
+	//フレームアニメーション
+	FrameAnimation();
+}
 
+void Object_glTF::FrameAnimation() {
+	//スキニングではないアニメーションの場合
 	if (!model_->IsSkinning() && model_->IsAnimation()) {
+		//一度リセット
+		localMatrices_.clear();
+
 		for (uint32_t i = 0; i < modelData_.Data.size(); i++) {
 			Matrix4x4 localMatrix;
 
@@ -172,10 +143,7 @@ void Object_glTF::AnimationUpdate() {
 	}
 }
 
-
-void Object_glTF::Draw() {
-	Matrix4x4 WorldViewProjectionMatrix;
-	
+void Object_glTF::CameraUpdate() {
 	if (camera_) {
 		Matrix4x4 ProjectionMatrix = camera_->GetViewProjectionMatrix();
 		WorldViewProjectionMatrix = worldMatrix_ * modelData_.rootNode.localMatrix * ProjectionMatrix;
@@ -187,6 +155,11 @@ void Object_glTF::Draw() {
 	else {
 		WorldViewProjectionMatrix = worldMatrix_;
 	}
+}
+
+void Object_glTF::Draw() {
+	//カメラ更新
+	CameraUpdate();
 
 	for (uint32_t i = 0; i < modelData_.Data.size(); i++) {
 		if (model_->IsSkinning()) {
@@ -194,7 +167,7 @@ void Object_glTF::Draw() {
 			wvpDatas_[i]->WVP = WorldViewProjectionMatrix;
 		}
 		else if (model_->IsAnimation()) {
-			//アニメーションの場合
+			//フレームアニメーションの場合
 			wvpDatas_[i]->WVP = localMatrices_[i] * WorldViewProjectionMatrix;
 		}
 		else {
@@ -206,7 +179,7 @@ void Object_glTF::Draw() {
 	//モデル
 	for (uint32_t i = 0; i < modelData_.Data.size();i++) {
 		object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResources_[i]->GetGPUVirtualAddress());
-		object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource_->GetGPUVirtualAddress());
+		object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
 		object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
 		object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
 		object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource_->GetGPUVirtualAddress());
@@ -214,7 +187,7 @@ void Object_glTF::Draw() {
 			model_->Draw();
 		}
 	}
-
+	//マルチメッシュで使用するカウントをリセット
 	model_->ResetMeshCount();
 
 #ifdef _DEBUG
@@ -226,7 +199,6 @@ void Object_glTF::Draw() {
 
 	GLTFCommon::GetInstance()->Command();
 #endif // _DEBUG
-
 }
 
 void Object_glTF::Draw(const std::string& textureData) {
@@ -234,13 +206,7 @@ void Object_glTF::Draw(const std::string& textureData) {
 
 }
 
-void Object_glTF::SetModelFile(const std::string& filePath) {
-
-	model_ = ModelManager::GetInstance()->FindModel_gltf(filePath);
-	material_ = model_->GetMaterial();
-	modelData_ = model_->GetModelData();
-
-
+void Object_glTF::CreateWVP() {
 	for (auto& i : modelData_.Data) {
 		Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource;
 		TransformationMatrix* wvpData;
@@ -254,7 +220,16 @@ void Object_glTF::SetModelFile(const std::string& filePath) {
 		wvpResources_.push_back(wvpResource);
 		wvpDatas_.push_back(wvpData);
 	}
+}
 
+
+void Object_glTF::SetModelFile(const std::string& filePath) {
+
+	model_ = ModelManager::GetInstance()->FindModel_gltf(filePath);
+	modelData_ = model_->GetModelData();
+
+	//wvpを作成
+	CreateWVP();
 
 	if (model_->IsAnimation()) {
 		animations_ = model_->GetAnimationData();
@@ -266,18 +241,16 @@ void Object_glTF::SetModelFile(const std::string& filePath) {
 				SkeletonUpdate(skeleton);
 			}
 
-			//デバッグワイヤーフレーム
 #ifdef _DEBUG
 			for (uint32_t i = 0; i < skeletons_.size(); i++) {
 				for (uint32_t childIndex = 0; childIndex < skeletons_[i].joints.size(); ++childIndex) {
+					//デバッグワイヤーフレーム
 					SetWireframe();
 				}
 			}
-
 #endif // _DEBUG	
 
 			int i = 0;
-
 			for (auto& skinCluster : skinClusters_) {
 				SkinClusterUpdate(skinCluster, skeletons_[i]);
 				i++;
@@ -295,20 +268,12 @@ void Object_glTF::LightSwitch(bool isLight) {
 	if (model_) {
 		model_->LightOn(isLight);
 	}
+}
 
-
-#ifdef USE_IMGUI
-	ImGui::Begin("PointLight");
-
-	ImGui::SliderFloat4("pointLight_Color", &pointLightData_->color.x, 0, 1);
-	ImGui::SliderFloat3("pointLight_pos", &pointLightData_->position.x,-20.0f,20.0f );
-	ImGui::SliderFloat("pointLight_intensity", &pointLightData_->intensity,0,1);
-	ImGui::SliderFloat("pointLight_radius", &pointLightData_->radius,0.1f,100.0f);
-	ImGui::SliderFloat("pointLight_decay", &pointLightData_->decay ,0.0f ,1.0f);
-
-	ImGui::End();
-#endif // USE_IMGUI
-
+void Object_glTF::SetColor(const Vector4& color) {
+	if (model_) {
+		model_->SetColor(color);
+	}
 }
 
 //環境マップのファイルパス

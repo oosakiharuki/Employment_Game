@@ -50,7 +50,7 @@ private:
 	std::unique_ptr<Sprite> spriteMojiTitle_;//タイトル名
 
 	ParticleParametars particleBullet_ = {
-		"title_bullet", "resource/Sprite/cone.png", PrimitiveType::cone, 1, 0.5f, { 1,1,1 }
+		"title_bullet", "resource/Sprite/cone.png", Primitive::CreateCone(), 1, 0.5f, {1,1,1}
 	};
 
 	//決定したら弾を発射

@@ -2,7 +2,34 @@
 
 using namespace Logger;
 
-void Pipeline::CreateRootSignature() {
+void Pipeline::GraphicsPipeline() {
+	//ルートシグネチャ
+	RootSignature();
+
+	//パイプライン最初の処理
+	ConvertBinary();
+
+	//InputLayout
+	CreateInputLayout();
+
+	//BlendState
+	CreateBlend();
+
+	//RasterizerState
+	CreateRasterizer();
+
+	//shaderのコンパイラ
+	CreateVertexSharder();
+	CreatePixelSharder();
+
+	//DepthStencilState
+	CreateDepthStencil();
+
+	//PSOここ絶対最後
+	CreateGraphicsPipelineState();
+}
+
+void Pipeline::ConvertBinary() {
 	//シリアライズしてバイナリにする
 	ID3DBlob* signatureBlob = nullptr;
 	ID3DBlob* errorBlob = nullptr;
@@ -41,25 +68,4 @@ void Pipeline::CreateGraphicsPipelineState() {
 	//PSOここ絶対最後
 	HRESULT hr = dxCommon_->GetDevice()->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&graphicsPipelineState_));
 	assert(SUCCEEDED(hr));
-}
-
-void Pipeline::CreateVertexSharder(const std::wstring filePath) {
-	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/" + filePath, L"vs_6_0");
-	assert(vertexShaderBlob != nullptr);
-}
-
-void Pipeline::CreatePixelSharder(const std::wstring filePath) {
-	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/" + filePath, L"ps_6_0");
-	assert(pixelShaderBlob != nullptr);
-}
-
-void Pipeline::CreateRasterizer(D3D12_CULL_MODE cullMode, D3D12_FILL_MODE fillMode) {
-	rasterizerDesc.CullMode = cullMode;//表裏表示
-	rasterizerDesc.FillMode = fillMode;
-}
-
-void Pipeline::CreateDepthStencil(bool isDepth, D3D12_DEPTH_WRITE_MASK depthWriteMask, D3D12_COMPARISON_FUNC depthFunc) {
-	depthStencilDesc.DepthEnable = isDepth;
-	depthStencilDesc.DepthWriteMask = depthWriteMask;
-	depthStencilDesc.DepthFunc = depthFunc;
 }
