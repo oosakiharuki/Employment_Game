@@ -1,5 +1,5 @@
 #pragma once
-#include "IPostEffects.h"
+#include "BasePostEffect.h"
 #include "RadialBlur.h"
 #include "Vignette.h"
 #include "BoxFilter.h"
@@ -51,7 +51,7 @@ private:
 	//最大数
 	static const uint32_t kEffectNum_ = Max;
 
-	std::unique_ptr<IPostEffects> effectArr_[kEffectNum_];
+	std::unique_ptr<BasePostEffect> effectArr_[kEffectNum_];
 
 	int currentNo_;//現在シーン
 	int prevNo_;//前シーン

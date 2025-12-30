@@ -25,7 +25,7 @@ enum EFFECT {
 /// <summary>
 /// ポストエフェクト(PostEffect)の基盤クラス
 /// </summary>
-class IPostEffects : public Pipeline {
+class BasePostEffect : public Pipeline {
 protected:
 	//postEffect特融処理
 
@@ -68,7 +68,7 @@ public:
 	/// </summary>
 	virtual void EffectUpdate() = 0;
 
-	virtual ~IPostEffects();
+	virtual ~BasePostEffect();
 	/// <summary>
 	/// ポストエフェクト変更処理
 	/// </summary>

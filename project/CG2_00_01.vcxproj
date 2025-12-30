@@ -107,10 +107,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseEnemyState.cpp" />
-    <ClCompile Include="BaseModel.cpp" />
-    <ClCompile Include="BaseObject.cpp" />
-    <ClCompile Include="BasePlayerState.cpp" />
+    <ClCompile Include="GameProgram\Enemies\BaseEnemyState.cpp" />
+    <ClCompile Include="Engine\3d\BaseModel.cpp" />
+    <ClCompile Include="Engine\3d\BaseObject.cpp" />
+    <ClCompile Include="GameProgram\Player\BasePlayerState.cpp" />
     <ClCompile Include="GameProgram\System\GameActor.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionManager.cpp" />
     <ClCompile Include="Engine\3d\_gltf\SkinningCommon.cpp" />
@@ -183,7 +183,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\MyGame.cpp" />
     <ClCompile Include="GameProgram\Scene\TitleScene.cpp" />
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
-    <ClCompile Include="Engine\PostEffect\IPostEffects.cpp" />
+    <ClCompile Include="Engine\PostEffect\BasePostEffect.cpp" />
     <ClCompile Include="GameProgram\Enemies\Enemy_Soldier.cpp" />
     <ClCompile Include="GameProgram\Player\Player.cpp" />
     <ClCompile Include="Engine\3d\Primitive\SphereModel.cpp" />
@@ -200,14 +200,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\System\Reaction.cpp" />
     <ClCompile Include="GameProgram\System\SpitOutLevelEditor.cpp" />
     <ClCompile Include="GameProgram\System\UIManager.cpp" />
-    <ClCompile Include="Pipeline.cpp" />
-    <ClCompile Include="StageObjectFunction.cpp" />
+    <ClCompile Include="Engine\base\Pipeline.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\StageObjectFunction.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseEnemyState.h" />
-    <ClInclude Include="BaseModel.h" />
-    <ClInclude Include="BaseObject.h" />
-    <ClInclude Include="BasePlayerState.h" />
+    <ClInclude Include="GameProgram\Enemies\BaseEnemyState.h" />
+    <ClInclude Include="Engine\3d\BaseModel.h" />
+    <ClInclude Include="Engine\3d\BaseObject.h" />
+    <ClInclude Include="GameProgram\Player\BasePlayerState.h" />
     <ClInclude Include="GameProgram\System\GameActor.h" />
     <ClInclude Include="GameProgram\Collision\CollisionManager.h" />
     <ClInclude Include="Engine\3d\_gltf\SkinningCommon.h" />
@@ -277,7 +277,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\MyGame.h" />
     <ClInclude Include="GameProgram\Scene\TitleScene.h" />
     <ClInclude Include="Engine\3d\WorldTransform.h" />
-    <ClInclude Include="Engine\PostEffect\IPostEffects.h" />
+    <ClInclude Include="Engine\PostEffect\BasePostEffect.h" />
     <ClInclude Include="GameProgram\Enemies\Enemy_Soldier.h" />
     <ClInclude Include="GameProgram\Player\Player.h" />
     <ClInclude Include="Engine\3d\Primitive\SphereModel.h" />
@@ -294,8 +294,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\System\Reaction.h" />
     <ClInclude Include="GameProgram\System\SpitOutLevelEditor.h" />
     <ClInclude Include="GameProgram\System\UIManager.h" />
-    <ClInclude Include="Pipeline.h" />
-    <ClInclude Include="StageObjectFunction.h" />
+    <ClInclude Include="Engine\base\Pipeline.h" />
+    <ClInclude Include="GameProgram\StageObjects\StageObjectFunction.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

@@ -76,7 +76,6 @@ private:
 
 
 	//使用するポストエフェクト
-	//std::unique_ptr<IPostEffects> postEffect_ = nullptr;
 	std::shared_ptr<Dissolve> dissolve_;
 	std::string dissolveTexture_;
 

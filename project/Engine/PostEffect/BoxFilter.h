@@ -1,9 +1,9 @@
 #pragma once
-#include "IPostEffects.h"
+#include "BasePostEffect.h"
 /// <summary>
 /// ポストエフェクト_BoxFillter(IPostEffectの派生クラス)
 /// </summary>
-class BoxFilter : public IPostEffects {
+class BoxFilter : public BasePostEffect {
 public:
 	void Finalize() override;
 	void Command() override;

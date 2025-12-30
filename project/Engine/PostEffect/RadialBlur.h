@@ -1,9 +1,9 @@
 #pragma once
-#include "IPostEffects.h"
+#include "BasePostEffect.h"
 /// <summary>
 /// ポストエフェクト_RadialBlur(IPostEffectの派生クラス)
 /// </summary>
-class  RadialBlur : public IPostEffects {
+class  RadialBlur : public BasePostEffect {
 public:	
 	void Finalize() override;
 	void Command() override;

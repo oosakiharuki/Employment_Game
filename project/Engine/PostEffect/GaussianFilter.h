@@ -1,9 +1,9 @@
 #pragma once
-#include "IPostEffects.h"
+#include "BasePostEffect.h"
 /// <summary>
 /// ポストエフェクト_GaussianFilter(IPostEffectの派生クラス)
 /// </summary>
-class GaussianFilter : public IPostEffects {
+class GaussianFilter : public BasePostEffect {
 public:
 	void Finalize() override;
 	void Command() override;

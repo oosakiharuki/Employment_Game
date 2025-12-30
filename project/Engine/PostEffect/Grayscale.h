@@ -1,11 +1,11 @@
 #pragma once
-#include "IPostEffects.h"
+#include "BasePostEffect.h"
 #include <Vector3.h>
 
 /// <summary>
 /// ポストエフェクト_GrayScale(IPostEffectの派生クラス)
 /// </summary>
-class Grayscale : public IPostEffects {
+class Grayscale : public BasePostEffect {
 public:
 	void Finalize() override;
 	void Command() override;

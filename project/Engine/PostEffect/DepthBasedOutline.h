@@ -1,10 +1,10 @@
 #pragma once
-#include "IPostEffects.h"
+#include "BasePostEffect.h"
 #include "MyMath.h"
 /// <summary>
 /// ポストエフェクト_DepthBasedOutline(IPostEffectの派生クラス)
 /// </summary>
-class DepthBasedOutline : public IPostEffects {
+class DepthBasedOutline : public BasePostEffect {
 public:
 	void Finalize() override;
 	void Command() override;
