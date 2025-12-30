@@ -106,6 +106,21 @@ public:
 
 private:
 
+	/// <summary>
+	/// 召喚した敵を数えて
+	/// 全て倒したら次のウェーブに進む処理
+	/// </summary>
+	void WaveEnemyCount();
+
+	void LoadCsvWord();
+
+	/// <summary>
+	/// popを読み込んだ時の処理
+	/// </summary>
+	/// <param name="line_stream">コードライン</param>
+	/// <param name="word">内容</param>
+	void LoadPopEnemy(std::istringstream& line_stream ,std::string& word);
+
 	std::unique_ptr<Object_glTF> object_;
 	WorldTransform wt_;
 

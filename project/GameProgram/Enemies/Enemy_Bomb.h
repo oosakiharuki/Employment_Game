@@ -49,6 +49,9 @@ public:
 	/// <returns></returns>プレイヤーからボムの距離
 	Vector3 GetDistance()override { return distance_; }
 
+	/// <summary>
+	/// プレイヤーの位置を測る
+	/// </summary>
 	void DirectionPlayer();
 
 private:
@@ -96,5 +99,10 @@ private:
 	/// タイムリミット
 	/// </summary>
 	void TimeRimmit();
+
+	/// <summary>
+	/// 赤の点滅
+	/// </summary>
+	void RedBilinking();
 };
 

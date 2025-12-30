@@ -6,6 +6,8 @@ class BaseEnemyState {
 public:
 	virtual void Update(IEnemy& enemy);
 	virtual void StateLog();
+protected:
+	void EnemyDead(IEnemy& enemy);
 };
 
 class EnemyMoveState : public BaseEnemyState {

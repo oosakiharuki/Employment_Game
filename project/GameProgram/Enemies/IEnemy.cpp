@@ -49,9 +49,8 @@ void IEnemy::Update() {
 	//hpが0の時
 	if (hp_ == 0) {
 		isDead_ = true;
-		ChangeStatePattern(std::make_unique<EnemyDeadState>());
 	}
-	
+
 	//捜索範囲更新
 	SearchRange();
 
@@ -62,18 +61,8 @@ void IEnemy::Update() {
 	if (isDamageMosion_) {
 		reaction_->ScaleReaction(wt_.scale_,isDamageMosion_, damageScale_, scaleTimer_, kDamageMaxTime_);
 	}
-	//弾丸更新処理
-	for (auto& bullet : bullets_) {
-		bullet->Update();
-	}
-
-	bullets_.remove_if([](auto& bullet) {
-		if (bullet->IsDead()) {
-			bullet.reset();
-			return true;
-		}
-		return false;
-		});
+	//弾丸更新
+	BulletUpdate();
 
 #ifdef USE_IMGUI
 	
@@ -125,7 +114,7 @@ void IEnemy::MarkDraw() {
 }
 
 void IEnemy::DrawCommon() {
-	if (isDead_) return;
+	if (hp_ == 0) return;
 	MarkDraw();
 }
 
@@ -135,6 +124,22 @@ void IEnemy::DrawParticle() {
 		particle.second->Draw();
 	}
 }
+
+void IEnemy::BulletUpdate() {
+	//弾丸更新処理
+	for (auto& bullet : bullets_) {
+		bullet->Update();
+	}
+	//消滅処理
+	bullets_.remove_if([](auto& bullet) {
+		if (bullet->IsDead()) {
+			bullet.reset();
+			return true;
+		}
+		return false;
+	});
+}
+
 
 void IEnemy::IsDamage() {
 	//ダメージのパーティクルを出す
@@ -154,7 +159,6 @@ void IEnemy::IsDamage() {
 	hp_--;
 }
 
-
 void IEnemy::GrabityUpdate() {
 	//重力
 	grabity_ -= kGrabityPower_;
@@ -166,7 +170,6 @@ void IEnemy::GrabityUpdate() {
 		//重力パワーリセット
 		grabity_ = 0.0f;
 	}
-
 }
 
 void IEnemy::PlayerTarget() {

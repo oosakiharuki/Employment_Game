@@ -68,6 +68,8 @@ public:
 	/// <param name="player"></param>代入するPlayerクラス
 	void SetPlayer(Player* player) { player_ = player; }
 
+	uint32_t GetHp() { return hp_; }
+
 	/// <summary>
 	/// 完全に削除する(チェックポイントで消せる)
 	/// </summary>
@@ -307,5 +309,10 @@ private:
 
 	//ステートパターン
 	std::unique_ptr<BaseEnemyState> currentEnemyState_ = std::make_unique<EnemyMoveState>();
+
+	/// <summary>
+	/// 弾丸更新処理
+	/// </summary>
+	void BulletUpdate();
 
 };

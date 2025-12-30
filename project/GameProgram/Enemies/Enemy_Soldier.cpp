@@ -78,10 +78,7 @@ void Enemy_Soldier::Draw() {
 void Enemy_Soldier::FireBullet() {
 	
 	Vector3 enemyPosition;
-
-	enemyPosition.x = wt_.matWorld_.m[3][0];
-	enemyPosition.y = wt_.matWorld_.m[3][1];
-	enemyPosition.z = wt_.matWorld_.m[3][2];
+	enemyPosition = { wt_.matWorld_.m[3][0],wt_.matWorld_.m[3][1],wt_.matWorld_.m[3][2] };
 
 	//プレイヤーの方向に向かう(最初に打つ弾にそって進む)
 	if (rapidCount_ == 0) {
@@ -95,10 +92,7 @@ void Enemy_Soldier::FireBullet() {
 		Vector3 normal = Normalize(distance);
 
 		//スピードを合わせる
-		normal.x *= kSpeed;
-		normal.y *= kSpeed;
-		normal.z *= kSpeed;
-
+		normal *= kSpeed;
 		velocity_ = normal;
 	}
 	particles_[particleFire_.name]->SetTranslate(enemyPosition);

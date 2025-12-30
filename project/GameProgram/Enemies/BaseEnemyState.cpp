@@ -4,6 +4,12 @@
 void BaseEnemyState::Update(IEnemy& enemy) {}
 void BaseEnemyState::StateLog() {}
 
+void BaseEnemyState::EnemyDead(IEnemy& enemy) {
+	if (enemy.GetHp() == 0) {
+		enemy.ChangeStatePattern(std::make_unique<EnemyDeadState>());
+	}
+}
+
 void EnemyMoveState::Update(IEnemy& enemy) {
 	//重力
 	enemy.GrabityUpdate();
@@ -23,6 +29,8 @@ void EnemyMoveState::Update(IEnemy& enemy) {
 		enemy.ChangeStatePattern(std::make_unique<EnemyAttackState>());
 	}
 
+	//hp = 0
+	EnemyDead(enemy);
 }
 void EnemyMoveState::StateLog() {
 	Logger::log("EnemyState : move");
@@ -44,6 +52,9 @@ void EnemyAttackState::Update(IEnemy& enemy) {
 	if (enemy.IsLostFound()) {
 		enemy.ChangeStatePattern(std::make_unique<EnemyMoveState>());
 	}
+
+	//hp = 0
+	EnemyDead(enemy);
 }
 void EnemyAttackState::StateLog() {
 	Logger::log("EnemyState : attack");

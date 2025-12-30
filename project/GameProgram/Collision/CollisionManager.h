@@ -95,6 +95,18 @@ public:
 
 private:
 
+	void LookPlayer(Player* player, std::shared_ptr<IEnemy> enemy);
+
+	void PlayerBulletAndEnemy(Player* player, std::shared_ptr<IEnemy> enemy);
+
+	void EnemyBulletAndPlayer(Player* player, std::shared_ptr<EnemyBullet> bulletE);
+
+	void EnemyAndPariBullet(std::shared_ptr<IEnemy> enemy, std::shared_ptr<EnemyBullet> bulletE);
+
+	void EnemyBombCollision(Player* player, std::shared_ptr<IEnemy> enemy);
+
+
+
 	/// <summary>
 	/// 対象の重なった分戻す
 	/// </summary>
