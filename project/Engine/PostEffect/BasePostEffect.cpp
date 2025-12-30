@@ -1,11 +1,11 @@
-#include "IPostEffects.h"
+#include "BasePostEffect.h"
 
-int IPostEffects::sEffectNo_ = Mode_DepthBasedOutline;
+int BasePostEffect::sEffectNo_ = Mode_DepthBasedOutline;
 
-IPostEffects::~IPostEffects() {}
+BasePostEffect::~BasePostEffect() {}
 
 //素早く変更可能
-void IPostEffects::ChangeNumber() {
+void BasePostEffect::ChangeNumber() {
 
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_F1)) {
@@ -18,14 +18,14 @@ void IPostEffects::ChangeNumber() {
 #endif // _DEBUG
 }
 
-void IPostEffects::Initialize(DirectXCommon* dxCommon) {
+void BasePostEffect::Initialize(DirectXCommon* dxCommon) {
 	dxCommon_ = dxCommon;
 
 	GraphicsPipeline();
 	EffectInit();
 }
 
-void IPostEffects::CreateInputLayout() {
+void BasePostEffect::CreateInputLayout() {
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
 	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -40,21 +40,21 @@ void IPostEffects::CreateInputLayout() {
 	inputLayoutDesc.NumElements = 0;
 }
 
-void IPostEffects::CreateBlend() {
+void BasePostEffect::CreateBlend() {
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 }
 
-void IPostEffects::CreateRasterizer() {
+void BasePostEffect::CreateRasterizer() {
 	rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;//表裏表示
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 }
 
-void IPostEffects::CreateVertexSharder() {
+void BasePostEffect::CreateVertexSharder() {
 	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Fullscreen.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 
-void IPostEffects::CreateDepthStencil() {
+void BasePostEffect::CreateDepthStencil() {
 	depthStencilDesc.DepthEnable = false;
 	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;

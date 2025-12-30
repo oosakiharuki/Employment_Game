@@ -1,9 +1,9 @@
 #pragma once
-#include "IPostEffects.h"
+#include "BasePostEffect.h"
 /// <summary>
 /// ポストエフェクト_通常、何もなし(IPostEffectの派生クラス)
 /// </summary>
-class Normal_Image : public IPostEffects {
+class Normal_Image : public BasePostEffect {
 public:
 	void Finalize() override;
 	void Command() override;

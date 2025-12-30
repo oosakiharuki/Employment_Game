@@ -195,7 +195,7 @@
     <ClCompile Include="Engine\main.cpp">
       <Filter>ソース ファイル\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PostEffect\IPostEffects.cpp">
+    <ClCompile Include="Engine\PostEffect\BasePostEffect.cpp">
       <Filter>ソース ファイル\Engine\PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PostEffect\RadialBlur.cpp">
@@ -533,7 +533,7 @@
     <ClInclude Include="Engine\PostEffect\Grayscale.h">
       <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PostEffect\IPostEffects.h">
+    <ClInclude Include="Engine\PostEffect\BasePostEffect.h">
       <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\LuminanceBasedOutline.h">
