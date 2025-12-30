@@ -79,4 +79,13 @@ private:
 	Cubemap* cubemap_ = nullptr;
 
 	bool isRequst_ = false;
+
+	/// <summary>
+	/// オブジェクト(2d)の共通処理のまとめ
+	/// </summary>
+	void SpriteCommons();
+	/// <summary>
+	/// スプライト(3d)の共通処理のまとめ
+	/// </summary>
+	void ObjectCommons();
 };

@@ -16,14 +16,9 @@ public://メンバ関数
 	/// </summary>
 	void Initialize();
 	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void Update();
-	/// <summary>
 	/// 解放処理
 	/// </summary>
 	void Finalize(); //API終了処理　(delete)
-
 
 	//クライアント領域のサイズ　横　縦
 	static const int32_t kClientWidth_ = 1280;

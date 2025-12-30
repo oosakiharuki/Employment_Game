@@ -6,29 +6,33 @@
 class Vignette : public IPostEffects {
 public:
 	void Finalize() override;
-
-	void Initialize(DirectXCommon* dxCommon) override;
-	DirectXCommon* GetDirectXCommon()const { return dxCommon_; }
-
 	void Command() override;
+	DirectXCommon* GetDirectXCommon()const { return dxCommon_; }
 private:
-	//PSO
+	/// <summary>
+	/// ルートシグネチャ
+	/// </summary>
 	void RootSignature() override;
-	void GraphicsPipeline() override;
 
+	/// <summary>
+	/// PixelSharderを作成(ポストエフェクトはこれ以外は共通)
+	/// </summary>
+	void CreatePixelSharder() override;
+
+	/// <summary>
+	/// ポストエフェクトの初期化処理
+	/// </summary>
+	void EffectInit() override;
+
+	/// <summary>
+	/// ポストエフェクトの更新処理
+	/// </summary>
 	void EffectUpdate() override;
 
-	DirectXCommon* dxCommon_;
-
 	//RootSignature
-	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_{};
 	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};
 	D3D12_ROOT_PARAMETER rootParameters_[2] = {};
 	D3D12_STATIC_SAMPLER_DESC staticSamplers_[1] = {};
-
-	Microsoft::WRL::ComPtr < ID3D12RootSignature> rootSignature_ = nullptr;
-	Microsoft::WRL::ComPtr < ID3D12PipelineState> graphicsPipelineState_ = nullptr;
-	Microsoft::WRL::ComPtr < ID3D12PipelineState> graphicsPipelineStateDepth_ = nullptr;
 
 	uint32_t srvIndex_;
 	D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU_;

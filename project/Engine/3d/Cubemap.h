@@ -1,10 +1,12 @@
 #pragma once
 #include "DirectXCommon.h"
+#include "Pipeline.h"
+
 class Camera;
 /// <summary>
 /// キューブマップ
 /// </summary>
-class Cubemap {
+class Cubemap : public Pipeline {
 public:
 	/// <summary>
 	/// インスタンス生成
@@ -32,27 +34,49 @@ public:
 	void SetDefaultCamera(Camera* camera) { defaultCamera_ = camera; }
 	Camera* GetDefaultCamera() const { return defaultCamera_; }
 private:
-	//PSO
-	void RootSignature();
-	void GraphicsPipeline();
+	/// <summary>
+	/// ルートシグネチャ
+	/// </summary>
+	void RootSignature() override;
 
+	/// <summary>
+	/// InputLayoutを作成
+	/// </summary>
+	void CreateInputLayout() override;
 
-	DirectXCommon* dxCommon_;
+	/// <summary>
+	/// Blendを作成
+	/// </summary>
+	void CreateBlend() override;
+
+	/// <summary>
+	/// Rasterizerを作成
+	/// </summary>
+	void CreateRasterizer() override;
+
+	/// <summary>
+	/// VertexSharderを作成
+	/// </summary>
+	void CreateVertexSharder() override;
+
+	/// <summary>
+	/// PixelSharderを作成
+	/// </summary>
+	void CreatePixelSharder() override;
+
+	/// <summary>
+	/// DepthStencilの作成
+	/// </summary>
+	void CreateDepthStencil() override;
 
 	//RootSignature
-	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature_{};
 	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};
 	D3D12_ROOT_PARAMETER rootParameters_[3] = {};
 	D3D12_STATIC_SAMPLER_DESC staticSamplers_[1] = {};
 
-
-	//バイナリを元に生成
-	Microsoft::WRL::ComPtr < ID3D12RootSignature> rootSignature_ = nullptr;
-
-	//PSO
-	Microsoft::WRL::ComPtr < ID3D12PipelineState> graphicsPipelineState_ = nullptr;
-
 	Camera* defaultCamera_ = nullptr;
 
 	static std::shared_ptr<Cubemap> sInstance_;
+
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[2] = {};
 };

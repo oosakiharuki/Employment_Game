@@ -6,13 +6,26 @@
 class Normal_Image : public IPostEffects {
 public:
 	void Finalize() override;
-	void Initialize(DirectXCommon* dxCommon) override;
 	void Command() override;
 private:
-	//PSO
+	/// <summary>
+	/// ルートシグネチャ
+	/// </summary>
 	void RootSignature() override;
-	void GraphicsPipeline() override;
 
+	/// <summary>
+	/// PixelSharderを作成(ポストエフェクトはこれ以外は共通)
+	/// </summary>
+	void CreatePixelSharder() override;
+
+	/// <summary>
+	/// ポストエフェクトの初期化処理
+	/// </summary>
+	void EffectInit() override;
+
+	/// <summary>
+	/// ポストエフェクトの更新処理
+	/// </summary>
 	void EffectUpdate() override;
 
 	//RootSignature

@@ -8,12 +8,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 #pragma comment(lib,"winmm.lib")
 
 void WinApp::Initialize() {
-
 	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
-
-
-#pragma region Windouの生成
-
 	//システムタイマー
 	timeBeginPeriod(1);
 
@@ -36,7 +31,7 @@ void WinApp::Initialize() {
 
 	hwnd_ = CreateWindow(
 		wc_.lpszClassName,
-		L"LE3B_05_オオサキ_ハルキ_パラソルジャー",
+		L"LE3B_05_オオサキ_ハルキ_パラソルジャー",//バーの名前
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
@@ -88,10 +83,6 @@ bool WinApp::ProcessMessage() {
 
 
 	return false;
-}
-
-void WinApp::Update() {
-	
 }
 
 void WinApp::Finalize(){
