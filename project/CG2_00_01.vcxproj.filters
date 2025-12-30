@@ -387,23 +387,23 @@
     <ClCompile Include="GameProgram\System\UIManager.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="BaseEnemyState.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\base\Pipeline.cpp">
+      <Filter>ソース ファイル\Engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="BasePlayerState.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\3d\BaseModel.cpp">
+      <Filter>ソース ファイル\Engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="StageObjectFunction.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\3d\BaseObject.cpp">
+      <Filter>ソース ファイル\Engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Pipeline.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\Enemies\BaseEnemyState.cpp">
+      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="BaseModel.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\Player\BasePlayerState.cpp">
+      <Filter>ソース ファイル\GameProgram\Player</Filter>
     </ClCompile>
-    <ClCompile Include="BaseObject.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\StageObjects\StageObjectFunction.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -665,23 +665,23 @@
     <ClInclude Include="GameProgram\System\Reaction.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="BaseEnemyState.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\base\Pipeline.h">
+      <Filter>ヘッダー ファイル\Engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="BasePlayerState.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\3d\BaseModel.h">
+      <Filter>ヘッダー ファイル\Engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="StageObjectFunction.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\3d\BaseObject.h">
+      <Filter>ヘッダー ファイル\Engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Pipeline.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\Enemies\BaseEnemyState.h">
+      <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="BaseModel.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\Player\BasePlayerState.h">
+      <Filter>ヘッダー ファイル\GameProgram\Player</Filter>
     </ClInclude>
-    <ClInclude Include="BaseObject.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\StageObjects\StageObjectFunction.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
