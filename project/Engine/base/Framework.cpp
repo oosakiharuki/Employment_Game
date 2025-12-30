@@ -7,7 +7,6 @@ void Framework::Initialize() {
 
 	//入力処理
 	input_ = Input::GetInstance().get();
-	//GetHInstance()GetHwnd()を入れず直接winAppのクラスのものを使える
 	input_->Initialize(winApp_.get());
 
 	//DirectX処理
@@ -19,6 +18,22 @@ void Framework::Initialize() {
 	srvManager_ = SrvManager::GetInstance().get();
 	srvManager_->Initialize(dxCommon_);
 
+	//スプライト(2d)の共通処理のまとめ
+	SpriteCommons();
+
+	//オブジェクト(3d)の共通処理のまとめ
+	ObjectCommons();
+
+	//ポストエフェクト共有処理
+	postEffectM_ = PostEffectManager::GetInstance().get();
+	postEffectM_->Initialize(dxCommon_);
+
+	//音声共有処理
+	audio_ = Audio::GetInstance().get();
+	audio_->Initialize();
+}
+
+void Framework::SpriteCommons() {
 	//imugi処理
 	ImGuiManager::GetInstance()->Initialize(winApp_.get(), dxCommon_, srvManager_);
 
@@ -27,15 +42,17 @@ void Framework::Initialize() {
 	spriteCommon_->Initialize(dxCommon_);
 	//テクスチャマネージャ初期化
 	TextureManager::GetInstance()->Initialize(dxCommon_, srvManager_);
-	
+}
+
+void Framework::ObjectCommons() {
 	//オブジェクト(.obj)共有処理
 	object3dCommon_ = Object3dCommon::GetInstance().get();
 	object3dCommon_->Initialize(dxCommon_);
-	
+
 	//オブジェクト(.gltf)共有処理
 	glTFCommon_ = GLTFCommon::GetInstance().get();
 	glTFCommon_->Initialize(dxCommon_);
-	
+
 	//スキニング共有処理
 	skinningCommon_ = SkinningCommon::GetInstance().get();
 	skinningCommon_->Initialize(dxCommon_);
@@ -59,14 +76,6 @@ void Framework::Initialize() {
 	//キューブマップ処理
 	cubemap_ = Cubemap::GetInstance().get();
 	cubemap_->Initialize(dxCommon_);
-
-	//ポストエフェクト共有処理
-	postEffectM_ = PostEffectManager::GetInstance().get();
-	postEffectM_->Initialize(dxCommon_);
-
-	//音声共有処理
-	audio_ = Audio::GetInstance().get();
-	audio_->Initialize();
 }
 
 void Framework::Update() {

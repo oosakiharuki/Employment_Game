@@ -6,14 +6,28 @@
 class LuminanceBasedOutline: public IPostEffects {
 public:
 	void Finalize() override;
-	void Initialize(DirectXCommon* dxCommon) override;
 	void Command() override;
 private:
-	//PSO
+	/// <summary>
+	/// ルートシグネチャ
+	/// </summary>
 	void RootSignature() override;
-	void GraphicsPipeline() override;
 
+	/// <summary>
+	/// PixelSharderを作成
+	/// </summary>
+	void CreatePixelSharder() override;
+
+	/// <summary>
+	/// ポストエフェクトの初期化処理
+	/// </summary>
+	void EffectInit() override;
+
+	/// <summary>
+	/// ポストエフェクトの更新処理
+	/// </summary>
 	void EffectUpdate() override;
+
 
 	//RootSignature
 	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};

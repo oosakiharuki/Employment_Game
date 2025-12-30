@@ -18,7 +18,7 @@ protected:
 	/// <summary>
 	/// グラフィックスパイプライン
 	/// </summary>
-	virtual void GraphicsPipeline();
+	void GraphicsPipeline();
 
 	/// <summary>
 	/// ルートシグネチャ
@@ -34,12 +34,6 @@ protected:
 	/// Blendを作成
 	/// </summary>
 	virtual void CreateBlend() = 0;
-
-	/// <summary>
-	/// RootSignatureをバイナリにして
-	/// パイプラインの基盤を生成する
-	/// </summary>
-	void ConvertBinary();
 
 	/// <summary>
 	/// Rasterizerを作成
@@ -60,11 +54,6 @@ protected:
 	/// DepthStencilの作成
 	/// </summary>
 	virtual void CreateDepthStencil() = 0;
-
-	/// <summary>
-	/// Stateにまとめる
-	/// </summary>
-	void CreateGraphicsPipelineState();
 
 	//InputLayout
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc;
@@ -94,6 +83,17 @@ protected:
 	D3D12_DEPTH_STENCIL_DESC depthStencilDesc{};
 
 private:
+
+	/// <summary>
+	/// RootSignatureをバイナリにして
+	/// パイプラインの基盤を生成する
+	/// </summary>
+	void ConvertBinary();
+
+	/// <summary>
+	/// Stateにまとめる
+	/// </summary>
+	void CreateGraphicsPipelineState();
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
 
