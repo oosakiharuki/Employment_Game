@@ -41,7 +41,7 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 	//敵たち
-	std::vector<std::shared_ptr<IEnemy>> enemies_;
+	std::vector<std::shared_ptr<BaseEnemy>> enemies_;
 	//ステージオブジェクトたち
 	std::list<std::shared_ptr<IStageObject>> stageObjects_;
 
@@ -131,6 +131,11 @@ private:
 	/// プレイヤーが生きている状態の場合の更新処理
 	/// </summary>
 	void PlayerAliveUpdate();
+	/// <summary>
+	/// ゲームオブジェクトの配置処理をまとめた
+	/// </summary>
+	void SpitOutGameObject();
+
 
 	//シーンが変更するフラグ
 	bool isNextLoadingStageScene = false;

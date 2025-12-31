@@ -98,6 +98,11 @@ private:
 	/// </summary>
 	void Shaking();
 
+	/// <summary>
+	/// imguiの更新処理
+	/// </summary>
+	void ImGuiUpdate();
+
 	//右端、左端
 	Vector3 leftEndPoint_;
 	Vector3 rightEndPoint_;

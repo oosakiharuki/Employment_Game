@@ -12,6 +12,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
+	/// <param name="modelCommon"></param>
 	/// <param name="directorypath"></param>
 	/// <param name="fileName"></param>
 	virtual void Initialize(ModelCommon* modelCommon, const std::string& directorypath, const std::string& fileName) = 0;

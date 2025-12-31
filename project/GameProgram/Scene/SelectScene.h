@@ -62,7 +62,11 @@ private:
 	/// </summary>
 	/// <param name="leveleditor_file">指定したい場合は名前を入れることも可能</param>
 	void LevelEditorObjectSetting(const std::string& leveleditor_file = "");
-
+	/// <summary>
+	/// ゲームオブジェクトの配置処理をまとめた
+	/// </summary>
+	void SpitOutGameObject();
+	
 	/// <summary>
 	/// 全シーンに共有できる当たり判定
 	/// </summary>

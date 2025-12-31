@@ -279,7 +279,7 @@
     <ClCompile Include="GameProgram\Enemies\EnemyBullet.cpp">
       <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Enemies\IEnemy.cpp">
+    <ClCompile Include="GameProgram\Enemies\BaseEnemy.cpp">
       <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Player\Player.cpp">
@@ -566,7 +566,7 @@
     <ClInclude Include="GameProgram\Enemies\EnemyBullet.h">
       <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Enemies\IEnemy.h">
+    <ClInclude Include="GameProgram\Enemies\BaseEnemy.h">
       <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\Player\Player.h">

@@ -14,7 +14,6 @@ void EventTrigger::Initialize() {
 }
 
 void EventTrigger::Update() {
-
 	if (eventData_.isEvent) {
 		if (isLoadCsv_) {
 			//Csvを読み込む
@@ -31,20 +30,13 @@ void EventTrigger::Update() {
 
 		for (auto& particle : summon_particles_) {
 			//敵が出るまで
-			if (summonTimer_ > 0) {
-				particle->SetParticleBorn(ParticleBorn::TimerMode);
-			}
-			else {
-				particle->SetParticleBorn(ParticleBorn::Stop);
-			}
+			(summonTimer_ > 0) ? particle->SetParticleBorn(ParticleBorn::TimerMode) : particle->SetParticleBorn(ParticleBorn::Stop);
 			particle->Update();
 		}
-
 		//敵が出終わった後ちょっとしてからリセットする
 		if (summonTimer_ <= -particleSummon_.frequency * kTwice_) {
 			summon_particles_.clear();
 		}
-
 	}
 }
 
@@ -78,7 +70,6 @@ void EventTrigger::LoadEventCSV(const std::string& fileName) {
 }
 
 void EventTrigger::PopEventEneies() {
-
 	//敵召喚		
 	EnemyPop();
 
@@ -86,6 +77,19 @@ void EventTrigger::PopEventEneies() {
 		return;
 	}
 
+	//ウェーブバトル
+	WaveEnemyCount();
+
+	//ウェーブ中はcsv読み取りを進行しない
+	if (isEventWave_) {
+		return;
+	}
+
+	//csvを読み取る
+	LoadCsvWord();
+}
+
+void EventTrigger::WaveEnemyCount() {
 	//敵の倒した数リセット(↓で無限に増えるから)
 	enemyDeadCount_ = 0;
 
@@ -112,11 +116,9 @@ void EventTrigger::PopEventEneies() {
 		//Maxに戻す
 		summonTimer_ = kSummonMaxTime_;
 	}
+}
 
-	if (isEventWave_) {
-		return;
-	}
-
+void EventTrigger::LoadCsvWord() {
 	std::string line;
 
 	while (getline(enemyPopCsvFile_, line)) {
@@ -147,44 +149,48 @@ void EventTrigger::PopEventEneies() {
 
 		//敵の配置
 		if (word.find("pop") == 0) {
-
-			EnemyPopData enemyPopData;
-			//敵の名前
-			getline(line_stream, word, ',');
-			enemyPopData.enemyName = word.c_str();
-			
-			//召喚位置.x
-			getline(line_stream, word, ',');
-			enemyPopData.position.x = (float)std::atof(word.c_str());
-
-			//召喚位置.y
-			getline(line_stream, word, ',');
-			enemyPopData.position.y = (float)std::atof(word.c_str());
-
-			//召喚位置.z
-			getline(line_stream, word, ',');
-			enemyPopData.position.z = (float)std::atof(word.c_str());
-
-			//トリガーの中心地点から足していく
-			enemyPopData.position += eventData_.center;
-
-			getline(line_stream, word, ',');
-			if (word.find("right") == 0) {
-				enemyPopData.rotate.y = kDirectionRight_;
-			}
-			else if (word.find("left") == 0) {
-				enemyPopData.rotate.y = kDirectionLeft_;
-			}
-
-			enemyPopDatas_.push_back(enemyPopData);
-
-			//召喚パーティクル
-			particles_[particleSummon_.name] = ParticleManager::GetInstance()->InitParticle(particleSummon_);
-			particles_[particleSummon_.name]->SetTranslate(enemyPopData.position);
-			summon_particles_.push_back(std::move(particles_[particleSummon_.name]));
+			LoadPopEnemy(line_stream, word);
 		}
 	}
+}
 
+
+void EventTrigger::LoadPopEnemy(std::istringstream& line_stream, std::string& word) {
+
+	EnemyPopData enemyPopData;
+	//敵の名前
+	getline(line_stream, word, ',');
+	enemyPopData.enemyName = word.c_str();
+
+	//召喚位置.x
+	getline(line_stream, word, ',');
+	enemyPopData.position.x = (float)std::atof(word.c_str());
+
+	//召喚位置.y
+	getline(line_stream, word, ',');
+	enemyPopData.position.y = (float)std::atof(word.c_str());
+
+	//召喚位置.z
+	getline(line_stream, word, ',');
+	enemyPopData.position.z = (float)std::atof(word.c_str());
+
+	//トリガーの中心地点から足していく
+	enemyPopData.position += eventData_.center;
+
+	getline(line_stream, word, ',');
+	if (word.find("right") == 0) {
+		enemyPopData.rotate.y = kDirectionRight_;
+	}
+	else if (word.find("left") == 0) {
+		enemyPopData.rotate.y = kDirectionLeft_;
+	}
+
+	enemyPopDatas_.push_back(enemyPopData);
+
+	//召喚パーティクル
+	particles_[particleSummon_.name] = ParticleManager::GetInstance()->InitParticle(particleSummon_);
+	particles_[particleSummon_.name]->SetTranslate(enemyPopData.position);
+	summon_particles_.push_back(std::move(particles_[particleSummon_.name]));
 }
 
 void EventTrigger::EnemyPop() {
@@ -196,7 +202,7 @@ void EventTrigger::EnemyPop() {
 
 	for (auto& enemyPopData : enemyPopDatas_) {
 
-		std::unique_ptr<IEnemy> popEnemy;
+		std::unique_ptr<BaseEnemy> popEnemy;
 		//名前によって変更
 		if (enemyPopData.enemyName == "soldier") {
 			popEnemy = std::make_unique<Enemy_Soldier>();

@@ -4,7 +4,7 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-std::string BaseScene::sceneNo_ = "Game";
+std::string BaseScene::sceneNo_ = "Title";
 std::string BaseScene::nextSceneNo_ = sceneNo_;
 
 BaseScene::~BaseScene(){}

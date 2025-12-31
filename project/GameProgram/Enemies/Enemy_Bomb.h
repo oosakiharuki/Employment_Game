@@ -1,11 +1,11 @@
 #pragma once
-#include "IEnemy.h"
+#include "BaseEnemy.h"
 #include "MyMath.h"
 
 /// <summary>
-/// ボムの敵(IEnemyの派生クラス)
+/// ボムの敵(BaseEnemyの派生クラス)
 /// </summary>
-class Enemy_Bomb : public IEnemy {
+class Enemy_Bomb : public BaseEnemy {
 public:
 	~Enemy_Bomb() override;
 	/// <summary>
@@ -49,6 +49,9 @@ public:
 	/// <returns></returns>プレイヤーからボムの距離
 	Vector3 GetDistance()override { return distance_; }
 
+	/// <summary>
+	/// プレイヤーの位置を測る
+	/// </summary>
 	void DirectionPlayer();
 
 private:
@@ -96,5 +99,10 @@ private:
 	/// タイムリミット
 	/// </summary>
 	void TimeRimmit();
+
+	/// <summary>
+	/// 赤の点滅
+	/// </summary>
+	void RedBilinking();
 };
 

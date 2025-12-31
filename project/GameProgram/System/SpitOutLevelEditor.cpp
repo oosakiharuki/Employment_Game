@@ -27,13 +27,13 @@ void SpitOutLevelEditor::SpitOutPlayer(std::unique_ptr<Player>& player) {
 	}
 }
 
-void SpitOutLevelEditor::SpitOutEnemies(std::vector<std::shared_ptr<IEnemy>>& enemies) {
+void SpitOutLevelEditor::SpitOutEnemies(std::vector<std::shared_ptr<BaseEnemy>>& enemies) {
 	//- 敵配置 -
 //敵配置データがあるとき
 	if (!levelEditor_->GetLevelData()->spawnEnemies.empty()) {
 		for (auto& enemyData : levelEditor_->GetLevelData()->spawnEnemies) {
 
-			std::unique_ptr<IEnemy> enemy;
+			std::unique_ptr<BaseEnemy> enemy;
 			//敵の名前で変更する
 			if (enemyData.EnemyName == "Turret") {
 				//固定大砲(タレット)

@@ -19,69 +19,85 @@ std::shared_ptr<CollisionManager> CollisionManager::GetInstance() {
 
 
 void CollisionManager::PlayerAndEnemy(Player* player,
-	const std::vector<std::shared_ptr<IEnemy>>& enemies) {
+	const std::vector<std::shared_ptr<BaseEnemy>>& enemies) {
 	// - プレイヤーと敵 -
 	for (auto& enemy : enemies) {
-
-		//見える範囲にプレイヤーがいたら
-		if (IsCollisionAABB(player->GetAABB(), enemy->GetEyeAABB()) && !player->GetIsDead()) {
-			enemy->SetFoundTarget(true);//見える
-		}
-		else {
-			enemy->SetFoundTarget(false);//見えない
-		}
+		//プレイヤーを見つける範囲
+		LookPlayer(player, enemy);
 
 		//プレイヤーが敵の弾に当たったら
-		for (auto& bullet : player->GetBullets()) {
-			if (IsCollisionAABB(bullet->GetAABB(), enemy->GetAABB()) && !enemy->GetIsDead()) {
-				enemy->IsDamage();//敵にダメージ
-				bullet->IsHit();//弾の消滅
-			}
-		}
+		PlayerBulletAndEnemy(player, enemy);
 
-		//弾丸
 		for (auto& bulletE : enemy->GetBullets()) {
-
-			//傘の当たり判定
-			if (IsCollisionAABB(bulletE->GetAABB(), player->GetUmbrella()->GetAABB()) && player->GetIsShield()) {
-
-				//パリィフラグが立ってるなら
-				if (player->GetIsPari()) {
-					bulletE->Pari_Mode();//弾が跳ね返る
-					player->PariSuccess();//パリィ成功
-				}
-				else {//跳ね返さず防ぐのみ
-					bulletE->IsHit();//当たって消える
-					player->KnockBackUmbrella(kUmbrellaKnockBackPower_, kUmbrellaKnockBackTime_);//ノックバックする
-				}
-				player->IsShildMosion();//傘のリアクションフラグをtrueに
-			}
-
-			//プレイヤーの当たり判定
-			if (IsCollisionAABB(bulletE->GetAABB(), player->GetAABB()) && !player->GetIsDead()) {
-				bulletE->IsHit();//当たって消える
-				player->IsDamage(bulletE->GetDistance());//プレイヤーにダメージ
-			}
-
-			//跳ね返った弾の当たり判定
-			if (IsCollisionAABB(bulletE->GetAABB(), enemy->GetAABB()) && bulletE->GetIsPari() && !enemy->GetIsDead()) {
-				bulletE->IsHit();//当たって消える
-				enemy->IsDamage();//敵にダメージ
-			}
+			//敵がプレイヤーの弾に当たったら
+			EnemyBulletAndPlayer(player, bulletE);
+			//敵が跳ね返った敵の弾に当たったら
+			EnemyAndPariBullet(enemy, bulletE);
 		}
 
 		//ボムの敵 : 爆発範囲
-		if (IsCollisionAABB(enemy->GetBombAABB(), player->GetAABB()) &&
-			enemy->GetIsDead() && !enemy->IsExplosion()) {
-			player->IsDamage(enemy->GetDistance());//プレイヤーにダメージ	
-		}
+		EnemyBombCollision(player, enemy);
+	}
+}
 
-		if (enemy->GetIsDead() && !enemy->IsExplosion()) {
-			enemy->ExplosionEnd();
-		}
+void CollisionManager::LookPlayer(Player* player, std::shared_ptr<BaseEnemy> enemy) {
+	//見える範囲にプレイヤーがいたら
+	if (IsCollisionAABB(player->GetAABB(), enemy->GetEyeAABB()) && !player->GetIsDead()) {
+		enemy->SetFoundTarget(true);//見える
+	}
+	else {
+		enemy->SetFoundTarget(false);//見えない
+	}
+}
 
+void CollisionManager::PlayerBulletAndEnemy(Player* player, std::shared_ptr<BaseEnemy> enemy) {
+	for (auto& bullet : player->GetBullets()) {
+		if (IsCollisionAABB(bullet->GetAABB(), enemy->GetAABB()) && !enemy->GetIsDead()) {
+			enemy->IsDamage();//敵にダメージ
+			bullet->IsHit();//弾の消滅
+		}
+	}
+}
+
+void CollisionManager::EnemyBulletAndPlayer(Player* player, std::shared_ptr<EnemyBullet> bulletE) {
+	//傘の当たり判定
+	if (IsCollisionAABB(bulletE->GetAABB(), player->GetUmbrella()->GetAABB()) && player->GetIsShield()) {
+		//パリィフラグが立ってるなら
+		if (player->GetIsPari()) {
+			bulletE->Pari_Mode();//弾が跳ね返る(敵に当たるとダメージ判定になる)
+			player->PariSuccess();//パリィ成功
+		}
+		else {//跳ね返さず防ぐのみ
+			bulletE->IsHit();//当たって消える
+			player->KnockBackUmbrella(kUmbrellaKnockBackPower_, kUmbrellaKnockBackTime_);//ノックバックする
+		}
+		player->IsShildMosion();//傘のリアクションフラグをtrueに
 	}
 
+	//プレイヤーの当たり判定
+	if (IsCollisionAABB(bulletE->GetAABB(), player->GetAABB()) && !player->GetIsDead()) {
+		bulletE->IsHit();//当たって消える
+		player->IsDamage(bulletE->GetDistance());//プレイヤーにダメージ
+	}
+}
+
+void CollisionManager::EnemyBombCollision(Player* player, std::shared_ptr<BaseEnemy> enemy) {
+	if (IsCollisionAABB(enemy->GetBombAABB(), player->GetAABB()) &&
+		enemy->GetIsDead() && !enemy->IsExplosion()) {
+		player->IsDamage(enemy->GetDistance());//プレイヤーにダメージ	
+	}
+
+	if (enemy->GetIsDead() && !enemy->IsExplosion()) {
+		enemy->ExplosionEnd();
+	}
+}
+
+void CollisionManager::EnemyAndPariBullet(std::shared_ptr<BaseEnemy> enemy, std::shared_ptr<EnemyBullet> bulletE) {
+	//跳ね返った弾の当たり判定
+	if (IsCollisionAABB(bulletE->GetAABB(), enemy->GetAABB()) && bulletE->GetIsPari() && !enemy->GetIsDead()) {
+		bulletE->IsHit();//当たって消える
+		enemy->IsDamage();//敵にダメージ
+	}
 }
 
 void CollisionManager::PlayerAndStageObject(Player* player,
@@ -131,7 +147,7 @@ void CollisionManager::PlayerAndStage(Player* player, const std::vector<AABB>& s
 	player->ShadowUpdate();
 }
 
-void CollisionManager::EnemyAndStage(const std::vector<std::shared_ptr<IEnemy>>& enemies,
+void CollisionManager::EnemyAndStage(const std::vector<std::shared_ptr<BaseEnemy>>& enemies,
 	const std::vector<AABB>& stagesAABB) {
 	// - 敵とステージ -
 	for (auto& enemy : enemies) {

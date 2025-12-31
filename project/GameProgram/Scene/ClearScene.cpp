@@ -4,6 +4,24 @@ using namespace MyMath;
 using namespace UseEveryOne;
 
 void ClearScene::Initialize() {
+	//スプライト初期化処理
+	InitSprite();
+	//カメラ初期化処理
+	InitCamera();
+	//オブジェクト初期化処理
+	InitObject();
+	//パーティクル生成
+	for (uint32_t i = 0; i < kParticleMaxNum_; i++) {
+		//ファンファーレのパーティクル作成
+		sceneParticles_[particleFanfare_.name] = ParticleManager::GetInstance()->InitParticle(particleFanfare_);
+		//vectorに導入
+		particleFanfares_.push_back(std::move(sceneParticles_[particleFanfare_.name]));
+	}
+	//フェードスタート
+	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
+}
+
+void ClearScene::InitSprite() {
 	//クリアロゴ作成
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize("Moji_GameClear.png");
@@ -14,18 +32,21 @@ void ClearScene::Initialize() {
 	spriteSpace_->Initialize("Moji_botton.png");
 	spriteSpace_->SetPosition(kSpritePositionBotton_);
 	spriteSpace_->SetSize(kSpriteSizeBotton_);
+}
 
+void ClearScene::InitCamera() {
 	camera_ = std::make_unique<Camera>();
-	
 	//カメラを設定
 	cameraTranslate_ = kCameraTranslate_;
-
 	camera_->SetTranslate(cameraTranslate_);
 	camera_->SetRotate(cameraRotate_);
 
 	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
 	ParticleCommon::GetInstance()->SetDefaultCamera(camera_.get());
 
+}
+
+void ClearScene::InitObject() {
 	playerGltf_ = std::make_unique<Object_glTF>();
 	playerGltf_->Initialize();
 	playerGltf_->SetModelFile("player_clear.gltf");
@@ -37,15 +58,6 @@ void ClearScene::Initialize() {
 	stageGltf_ = std::make_unique<Object_glTF>();
 	stageGltf_->Initialize();
 	stageGltf_->SetModelFile("gameover_stage.gltf");
-
-	for (uint32_t i = 0; i < kParticleMaxNum_; i++) {
-		//ファンファーレのパーティクル作成
-		sceneParticles_[particleFanfare_.name] = ParticleManager::GetInstance()->InitParticle(particleFanfare_);
-		//vectorに導入
-		particleFanfares_.push_back(std::move(sceneParticles_[particleFanfare_.name]));
-	}
-	//フェードスタート
-	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
 
 void ClearScene::Update() {

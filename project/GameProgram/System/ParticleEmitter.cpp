@@ -190,38 +190,15 @@ std::list<ParticleData> ParticleEmitter::MakeEmit(const std::string& particleNam
 	std::list<ParticleData> particles;
 
 	for (uint32_t count = 0; count < emitter.count; ++count) {
-		if (particleName == "player_walk") {
+		if (particleName == "player_walk" || particleName == "player_dead") {
 			particles.push_back(MakeNewParticleSmaller(randomEngine, emitter));
 		}
-		else if (particleName == "player_dead") {
-			particles.push_back(MakeNewParticleSmaller(randomEngine, emitter));
-		}
-		else if (particleName == "player_fire") {
+		else if (particleName == "player_fire" || particleName == "player_brink" || particleName == "player_pari" || 
+			particleName == "enemy_fire" || particleName == "tullet_laser" || particleName == "title_bullet") {
 			particles.push_back(MakeNewParticleFixed(emitter));
 		}
-		else if (particleName == "player_brink") {
-			particles.push_back(MakeNewParticleFixed(emitter));
-		}
-		else if (particleName == "player_pari") {
-			particles.push_back(MakeNewParticleFixed(emitter));
-		}
-		else if (particleName == "enemy_fire") {
-			particles.push_back(MakeNewParticleFixed(emitter));
-		}
-		else if (particleName == "tullet_laser") {
-			particles.push_back(MakeNewParticleFixed(emitter));
-		}
-		else if (particleName == "player_damage") {
+		else if (particleName == "player_damage" || particleName == "enemy_damage" || particleName == "enemies_summon") {
 			particles.push_back(MakeNewParticleExprosion(randomEngine, emitter));
-		}
-		else if(particleName == "enemy_damage"){
-			particles.push_back(MakeNewParticleExprosion(randomEngine, emitter));
-		}
-		else if (particleName == "enemies_summon") {
-			particles.push_back(MakeNewParticleExprosion(randomEngine, emitter));
-		}
-		else if (particleName == "title_bullet") {
-			particles.push_back(MakeNewParticleFixed(emitter));
 		}
 		else if (particleName == "clear_fanfare") {
 			particles.push_back(MakeNewParticleFanfare(randomEngine, emitter));

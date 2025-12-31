@@ -150,11 +150,6 @@ void GameScene::PlayerAliveUpdate() {
 }
 
 void GameScene::Draw() {
-	
-	Cubemap::GetInstance()->Command();
-	//skyBox->Draw();//見ずらいため一度コメントアウト
-	
-
 	//モデル描画処理
 	GLTFCommon::GetInstance()->Command();
 	
@@ -221,7 +216,22 @@ void GameScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
 		stageFileName_ = leveleditor_file;
 		sceneSaveData_.playerHp = player_->GetMaxHp();
 	}
+	//jsonファイルで設定したゲームオブジェクトの配置処理をまとめた
+	SpitOutGameObject();
 
+	//チュートリアル用の操作方法スプライト
+	if (stageFileName_ == "stage_0") {
+		UIManager::GetInstance()->CreateGuide(kGuideMove_);
+		UIManager::GetInstance()->CreateGuide(kGuideJump_);
+		UIManager::GetInstance()->CreateGuide(kGuideFire_);
+		UIManager::GetInstance()->CreateGuide(kGuideshield_);
+		UIManager::GetInstance()->CreateGuide(kGuidebrink_);
+		UIManager::GetInstance()->CreateGuide(kGuideKakku_);
+		UIManager::GetInstance()->CreateGuide(kGuideWarp_);
+	}
+}
+
+void GameScene::SpitOutGameObject() {
 	//ステージのjsonを読み取る
 	levelediter_.LoadLevelediter("resource/Levelediter/" + stageFileName_ + ".json");
 	spitOut_.SetLevelEditor(&levelediter_);
@@ -242,31 +252,23 @@ void GameScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
 	player_->Initialize();//初期設定
 	player_->SetHp(sceneSaveData_.playerHp);
 	player_->SetZanki(sceneSaveData_.playerZanki);
-
+	//プレイヤーを配置
 	spitOut_.SpitOutPlayer(player_);
-
+	//ステージの当たり判定を設定/配置
 	spitOut_.SpitOutStage(stageobj_, stageFileName_, stagesAABB_);
+	//ステージオブジェクトの配置
 	spitOut_.SpitOutStageObject(stageObjects_);
-	
+	//敵の配置
 	spitOut_.SpitOutEnemies(enemies_);
+	//イベントトリガーの配置
 	spitOut_.SpitOutEventTrigger(eventTriggers_);
 
 	//敵がステージ全体当たり判定をもらう(プレイヤーを見つける処理に使う)
 	for (auto& enemy : enemies_) {
 		enemy->SetStages(stagesAABB_);
 	}
-
-	//チュートリアル用の操作方法スプライト
-	if (stageFileName_ == "stage_0") {
-		UIManager::GetInstance()->CreateGuide(kGuideMove_);
-		UIManager::GetInstance()->CreateGuide(kGuideJump_);
-		UIManager::GetInstance()->CreateGuide(kGuideFire_);
-		UIManager::GetInstance()->CreateGuide(kGuideshield_);
-		UIManager::GetInstance()->CreateGuide(kGuidebrink_);
-		UIManager::GetInstance()->CreateGuide(kGuideKakku_);
-		UIManager::GetInstance()->CreateGuide(kGuideWarp_);
-	}
 }
+
 
 void GameScene::PlayerGoal() {
 	//プレイヤーにカメラズーム

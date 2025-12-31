@@ -219,6 +219,87 @@ public:
 	void ChangeStatePattern(std::unique_ptr<BasePlayerState> playerState);
 
 private:
+
+	void InitMainBody();
+
+	void InitUmbrella();
+
+	/// <summary>
+	/// パーティクルの設定まとめ
+	/// </summary>
+	void InitParticles();
+
+	/// <summary>
+	/// 体力のUI
+	/// </summary>
+	void SettingSpriteHp(uint32_t num);
+
+	/// <summary>
+	/// 音声処理(SE,BGM)
+	/// </summary>
+	void InitAudio();
+
+
+	/// <summary>
+	/// 弾丸の更新処理
+	/// </summary>
+	void BulletUpdate();
+	/// <summary>
+	/// 無敵時間の経過処理
+	/// </summary>
+	void InfinityTimeUpdate();
+	/// <summary>
+	/// リアクションするか更新処理
+	/// </summary>
+	void ReactionsUpdate();
+	/// <summary>
+	/// アニメーション更新処理
+	/// </summary>
+	void AnimationUpdate();
+	/// <summary>
+	/// 土煙のパーティクル
+	/// </summary>
+	void SmockParticle();
+	/// <summary>
+	/// imgui更新処理
+	/// </summary>
+	void ImGuiUpdate();
+	/// <summary>
+	/// 最後のほうにする更新処理(オブジェクト更新,WorldTransform更新)
+	/// </summary>
+	void BehindUpdate();
+
+	/// <summary>
+	/// 操作
+	/// </summary>
+	void Operation();
+	/// <summary>
+	/// 行動 :動く
+	/// </summary>
+	void ActionMove();
+	/// <summary>
+	/// 行動 :ジャンプ
+	/// </summary>
+	void ActionJump();
+	/// <summary>
+	/// 行動 :攻撃(発砲)
+	/// </summary>
+	void ActionFire();
+	/// <summary>
+	/// 行動 :シールド
+	/// </summary>
+	void ActionShield();
+	/// <summary>
+	/// 行動 :ブリンク
+	/// </summary>
+	void ActionBrink();
+
+	/// <summary>
+	/// ノックバックする更新処理
+	/// </summary>
+	void KnockBackUpdate();
+
+
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object_;
 
@@ -245,7 +326,7 @@ private:
 
 	/// 弾丸
 	std::list<std::shared_ptr<PlayerBullet>> bullets_;
-	float coolTimer_ = 0.0f;//クールタイマー
+	float fireCoolTimer_ = 0.0f;//クールタイマー
 	const float kCoolTimeMax_ = 0.5f;//クールタイム最大時間
 	const uint32_t kBulletCount_ = 3;//一度に出る弾丸数
 	

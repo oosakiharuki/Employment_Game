@@ -14,10 +14,6 @@ void CameraControl::Initialize() {
 
 void CameraControl::Update(Camera* camera) {
 
-	if (Input::GetInstance()->TriggerKey(DIK_P)) {
-		isFreeMode_ = !isFreeMode_;
-	}
-
 	//固定モードでないなら
 	if (!isFixedMode_ && !isFreeMode_) {
 		Move();
@@ -28,15 +24,32 @@ void CameraControl::Update(Camera* camera) {
 	}
 
 	//ズーム
-	Zoom();
+	if (isZoom_) {
+		Zoom();
+	}
 	//シェイク
-	Shaking();
+	if (isShakeMode_) {
+		Shaking();
+	}
 
+	//imgui更新処理
+	ImGuiUpdate();
+
+	wt_.UpdateMatrix();
+
+	camera->SetRotate(wt_.rotation_);
+	camera->SetTranslate(wt_.translation_);
+	camera->Update();
+}
+
+void CameraControl::ImGuiUpdate() {
 #ifdef  USE_IMGUI
+	//imguiでなくボタンで変更するように
+	if (Input::GetInstance()->TriggerKey(DIK_P)) {
+		isFreeMode_ = !isFreeMode_;
+	}
 
 	ImGui::Begin("camera");
-	ImGui::Text("ImGuiText");
-
 	//カメラ
 	ImGui::InputFloat3("cameraTranslate", &wt_.translation_.x);
 	ImGui::SliderFloat3("cameraTranslateSlider", &wt_.translation_.x, -30.0f, 30.0f);
@@ -46,19 +59,10 @@ void CameraControl::Update(Camera* camera) {
 	ImGui::SliderFloat("cameraRotateY", &wt_.rotation_.y, -360.0f, 360.0f);
 	ImGui::SliderFloat("cameraRotateZ", &wt_.rotation_.z, -360.0f, 360.0f);
 
-	ImGui::Checkbox("free_Mode",&isFreeMode_);
+	ImGui::Checkbox("free_Mode", &isFreeMode_);
 	ImGui::InputFloat("cameraRotate", &movePower_);
-
 	ImGui::End();
-
 #endif //  USE_IMGUI
-
-	wt_.UpdateMatrix();
-
-	camera->SetRotate(wt_.rotation_);
-	camera->SetTranslate(wt_.translation_);
-	camera->Update();
-
 }
 
 void CameraControl::SetEndPoint(const Vector3& left, const Vector3& right){
@@ -87,7 +91,6 @@ void CameraControl::Move() {
 	else {
 		wt_.translation_.y = fixedPos_.y;
 	}
-
 }
 
 void CameraControl::DebugMove() {
@@ -119,27 +122,26 @@ void CameraControl::DebugMove() {
 
 
 void CameraControl::Zoom() {
-	if (isZoom_) {
-		if (zoomTimer_ < kMaxZoomTime_) {
-			wt_.translation_ = cameraSegment_.diff + EaseOut(cameraSegment_.origin - cameraSegment_.diff, zoomTimer_, kMaxZoomTime_);
-			zoomTimer_ += kDeltaTime_;
-		}
-		else {
-			wt_.translation_ = cameraSegment_.diff;
-			zoomTimer_ = kMaxZoomTime_;
-		}
+	//ズームがMax値ではないとき
+	if (zoomTimer_ < kMaxZoomTime_) {
+		wt_.translation_ = cameraSegment_.diff + EaseOut(cameraSegment_.origin - cameraSegment_.diff, zoomTimer_, kMaxZoomTime_);
+		zoomTimer_ += kDeltaTime_;
+	}
+	else {
+		//Max値
+		wt_.translation_ = cameraSegment_.diff;
+		zoomTimer_ = kMaxZoomTime_;
 	}
 }
 
 void CameraControl::Shaking() {
-
+	//時間が0になった時
 	if (shakeTimer_ <= 0.0f) {
 		isShakeMode_ = false;
 		//カメラ位置を戻す
 		wt_.translation_ = preTranslate_;
-		return;
 	}
-	else if (isShakeMode_) {
+	else {
 		//シェイクする前に元々のカメラ位置を設定
 		if (shakeTimer_ == kShakeMaxTime_) {
 			//シェイク前のカメラ位置

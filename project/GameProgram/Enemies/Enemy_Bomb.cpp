@@ -99,7 +99,6 @@ void Enemy_Bomb::TimeRimmit() {
 	}
 
 	//リアクション
-
 	if (bombTimer_ >= kOnTheVerge) {
 		//爆発寸前だと揺れが細かくなる
 		reaction_->ScaleReaction(wt_.scale_, isTuibiStart_, bombScale_ * kScaleSpeedUp_, scaleTimer_, kScaleMax_ / kScaleSpeedUp_);
@@ -110,7 +109,11 @@ void Enemy_Bomb::TimeRimmit() {
 		reaction_->ScaleReaction(wt_.scale_, isTuibiStart_, bombScale_, scaleTimer_, kScaleMax_);
 		colorTimeMax_ = kScaleMax_;//点滅時間
 	}
+	//赤い点滅
+	RedBilinking();
+}
 
+void Enemy_Bomb::RedBilinking() {
 	//RGBの緑、青の変更(赤色にするため除外)
 	if (colorTimer_ >= colorTimeMax_ / 2) {
 		//色を足して元の色に

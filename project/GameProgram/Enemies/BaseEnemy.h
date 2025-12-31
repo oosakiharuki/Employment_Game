@@ -8,11 +8,11 @@
 /// <summary>
 /// 敵の基盤クラス
 /// </summary>
-class IEnemy : public GameActor{
+class BaseEnemy : public GameActor{
 public:
 
-	IEnemy();
-	virtual ~IEnemy();
+	BaseEnemy();
+	virtual ~BaseEnemy();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -67,6 +67,8 @@ public:
 	/// </summary>
 	/// <param name="player"></param>代入するPlayerクラス
 	void SetPlayer(Player* player) { player_ = player; }
+
+	uint32_t GetHp() { return hp_; }
 
 	/// <summary>
 	/// 完全に削除する(チェックポイントで消せる)
@@ -307,5 +309,10 @@ private:
 
 	//ステートパターン
 	std::unique_ptr<BaseEnemyState> currentEnemyState_ = std::make_unique<EnemyMoveState>();
+
+	/// <summary>
+	/// 弾丸更新処理
+	/// </summary>
+	void BulletUpdate();
 
 };

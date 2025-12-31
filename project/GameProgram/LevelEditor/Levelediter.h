@@ -76,6 +76,11 @@ public:
 
 private:
 
+	//Json文字列から解凍したデータ
+	nlohmann::json LoadJsonFile(const std::string& kFullpath);
+
+	void LoadGameObjects(nlohmann::json& object);
+
 	/// <summary>
 	/// ステージの当たり判定設定
 	/// </summary>

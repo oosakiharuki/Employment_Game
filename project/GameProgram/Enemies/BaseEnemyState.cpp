@@ -1,10 +1,16 @@
 #include "BaseEnemyState.h"
-#include "IEnemy.h"
+#include "BaseEnemy.h"
 
-void BaseEnemyState::Update(IEnemy& enemy) {}
+void BaseEnemyState::Update(BaseEnemy& enemy) {}
 void BaseEnemyState::StateLog() {}
 
-void EnemyMoveState::Update(IEnemy& enemy) {
+void BaseEnemyState::EnemyDead(BaseEnemy& enemy) {
+	if (enemy.GetHp() == 0) {
+		enemy.ChangeStatePattern(std::make_unique<EnemyDeadState>());
+	}
+}
+
+void EnemyMoveState::Update(BaseEnemy& enemy) {
 	//重力
 	enemy.GrabityUpdate();
 	//プレイヤーの発見
@@ -23,12 +29,14 @@ void EnemyMoveState::Update(IEnemy& enemy) {
 		enemy.ChangeStatePattern(std::make_unique<EnemyAttackState>());
 	}
 
+	//hp = 0
+	EnemyDead(enemy);
 }
 void EnemyMoveState::StateLog() {
 	Logger::log("EnemyState : move");
 }
 
-void EnemyAttackState::Update(IEnemy& enemy) {
+void EnemyAttackState::Update(BaseEnemy& enemy) {
 	//重力
 	enemy.GrabityUpdate();
 	//プレイヤーの発見
@@ -44,12 +52,15 @@ void EnemyAttackState::Update(IEnemy& enemy) {
 	if (enemy.IsLostFound()) {
 		enemy.ChangeStatePattern(std::make_unique<EnemyMoveState>());
 	}
+
+	//hp = 0
+	EnemyDead(enemy);
 }
 void EnemyAttackState::StateLog() {
 	Logger::log("EnemyState : attack");
 }
 
-void EnemyDeadState::Update(IEnemy& enemy) {
+void EnemyDeadState::Update(BaseEnemy& enemy) {
 	//死んだときの処理
 	enemy.UpdateDead();
 }

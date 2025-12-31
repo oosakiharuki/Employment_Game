@@ -11,9 +11,27 @@ void Levelediter::LoadLevelediter(const std::string& jsonName) {
 	//json
 	levelData_ = std::make_unique<LevelData>();
 
-	//ファイルを選択
-	const std::string kFullpath = jsonName;
+	//Json文字列から解凍したデータ
+	nlohmann::json deserialized;
+	deserialized = LoadJsonFile(jsonName);
 
+	for (nlohmann::json& object : deserialized["objects"]) {
+		assert(object.contains("type"));
+
+		if (object.contains("disabled")) {
+			bool disabled = object["disabled"].get<bool>();//jsonの値を入れる
+			if (disabled) {
+				//Trueの場合 配置しない
+				continue;
+			}
+		}
+
+		//ゲームオブジェクトを読み込む
+		LoadGameObjects(object);
+	}
+}
+
+nlohmann::json Levelediter::LoadJsonFile(const std::string& kFullpath) {
 	//ファイルストリーム
 	std::ifstream file;
 
@@ -40,36 +58,28 @@ void Levelediter::LoadLevelediter(const std::string& jsonName) {
 	//正しいレベルデータファイルなのか
 	assert(name.compare("scene") == 0);
 
-	for (nlohmann::json& object : deserialized["objects"]) {
-		assert(object.contains("type"));
+	return deserialized;
+}
 
-		if (object.contains("disabled")) {
-			bool disabled = object["disabled"].get<bool>();//jsonの値を入れる
-			if (disabled) {
-				//Trueの場合 配置しない
-				continue;
-			}
-		}
+void Levelediter::LoadGameObjects(nlohmann::json& object) {
+	//タイプの設定
+	std::string type = object["type"].get<std::string>();
 
-		//タイプの設定
-		std::string type = object["type"].get<std::string>();
-
-		//ステージ当たり判定、イベントトリガーの配置
-		if (type.compare("MESH") == 0) {
-			LoadStage(object);
-		}//プレイヤーの配置
-		else if (type.compare("PlayerSpawn") == 0) {
-			LoadPlayer(object);
-		}//敵の配置
-		else if (type.compare("EnemySpawn") == 0) {
-			LoadEnemies(object);
-		}
-		else if (type.compare("CAMERA") == 0) {
-			LoadCamera(object);
-		}//ステージオブジェクトの配置
-		else if (type.compare("StageObjectSpawn") == 0) {
-			LoadStageObject(object);
-		}
+	//ステージ当たり判定、イベントトリガーの配置
+	if (type.compare("MESH") == 0) {
+		LoadStage(object);
+	}//プレイヤーの配置
+	else if (type.compare("PlayerSpawn") == 0) {
+		LoadPlayer(object);
+	}//敵の配置
+	else if (type.compare("EnemySpawn") == 0) {
+		LoadEnemies(object);
+	}
+	else if (type.compare("CAMERA") == 0) {
+		LoadCamera(object);
+	}//ステージオブジェクトの配置
+	else if (type.compare("StageObjectSpawn") == 0) {
+		LoadStageObject(object);
 	}
 }
 
@@ -200,7 +210,7 @@ void Levelediter::LoadEventTrigger(nlohmann::json& object, const Vector3& transl
 
 		//Blenderで設定したcsvファイル名を入れる
 		eventTrigger.csvFile = "resource/csv/" + csvName + ".csv";
-
+		//イベント用固定カメラの名前
 		eventTrigger.cameraName = cameraName;
 	}
 }
