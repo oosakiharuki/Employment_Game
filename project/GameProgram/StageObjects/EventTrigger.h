@@ -1,7 +1,7 @@
 #pragma once
 #include "MyMath.h"
 #include "sstream"
-#include "IEnemy.h"
+#include "BaseEnemy.h"
 
 #include "Enemy_Bomb.h"
 #include "Enemy_Soldier.h"
@@ -95,8 +95,8 @@ public:
 	/// GameSceneにある
 	/// </summary>
 	/// <param name="E"></param>
-	void SetPopEnemies(const std::vector<std::shared_ptr<IEnemy>>& enemies) { popEnemies_ = enemies; }
-	std::vector<std::shared_ptr<IEnemy>> GetPopEnemy() const { return popEnemies_; }
+	void SetPopEnemies(const std::vector<std::shared_ptr<BaseEnemy>>& enemies) { popEnemies_ = enemies; }
+	std::vector<std::shared_ptr<BaseEnemy>> GetPopEnemy() const { return popEnemies_; }
 
 	/// <summary>
 	/// イベント終了
@@ -139,7 +139,7 @@ private:
 	uint32_t enemyDeadCount_ = 0;
 
 	//登場する敵たち
-	std::vector<std::shared_ptr<IEnemy>> popEnemies_;
+	std::vector<std::shared_ptr<BaseEnemy>> popEnemies_;
 
 	//イベントのデータ
 	EventData eventData_;

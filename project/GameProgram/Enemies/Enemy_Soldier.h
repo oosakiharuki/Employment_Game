@@ -1,10 +1,10 @@
 #pragma once
-#include "IEnemy.h"
+#include "BaseEnemy.h"
 
 /// <summary>
-/// 傭兵の敵(IEnemyの派生クラス)
+/// 傭兵の敵(BaseEnemyの派生クラス)
 /// </summary>
-class Enemy_Soldier : public IEnemy{
+class Enemy_Soldier : public BaseEnemy{
 public:
 	~Enemy_Soldier() override;
 	/// <summary>

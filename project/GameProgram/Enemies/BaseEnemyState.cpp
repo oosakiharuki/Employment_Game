@@ -1,16 +1,16 @@
 #include "BaseEnemyState.h"
-#include "IEnemy.h"
+#include "BaseEnemy.h"
 
-void BaseEnemyState::Update(IEnemy& enemy) {}
+void BaseEnemyState::Update(BaseEnemy& enemy) {}
 void BaseEnemyState::StateLog() {}
 
-void BaseEnemyState::EnemyDead(IEnemy& enemy) {
+void BaseEnemyState::EnemyDead(BaseEnemy& enemy) {
 	if (enemy.GetHp() == 0) {
 		enemy.ChangeStatePattern(std::make_unique<EnemyDeadState>());
 	}
 }
 
-void EnemyMoveState::Update(IEnemy& enemy) {
+void EnemyMoveState::Update(BaseEnemy& enemy) {
 	//重力
 	enemy.GrabityUpdate();
 	//プレイヤーの発見
@@ -36,7 +36,7 @@ void EnemyMoveState::StateLog() {
 	Logger::log("EnemyState : move");
 }
 
-void EnemyAttackState::Update(IEnemy& enemy) {
+void EnemyAttackState::Update(BaseEnemy& enemy) {
 	//重力
 	enemy.GrabityUpdate();
 	//プレイヤーの発見
@@ -60,7 +60,7 @@ void EnemyAttackState::StateLog() {
 	Logger::log("EnemyState : attack");
 }
 
-void EnemyDeadState::Update(IEnemy& enemy) {
+void EnemyDeadState::Update(BaseEnemy& enemy) {
 	//死んだときの処理
 	enemy.UpdateDead();
 }

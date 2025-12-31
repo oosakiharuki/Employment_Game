@@ -8,11 +8,11 @@
 /// <summary>
 /// 敵の基盤クラス
 /// </summary>
-class IEnemy : public GameActor{
+class BaseEnemy : public GameActor{
 public:
 
-	IEnemy();
-	virtual ~IEnemy();
+	BaseEnemy();
+	virtual ~BaseEnemy();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>

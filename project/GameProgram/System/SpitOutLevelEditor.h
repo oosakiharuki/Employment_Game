@@ -28,7 +28,7 @@ public:
 	/// 敵の配置
 	/// </summary>
 	/// <param name="enemies">敵の配列</param>
-	void SpitOutEnemies(std::vector<std::shared_ptr<IEnemy>>& enemies);
+	void SpitOutEnemies(std::vector<std::shared_ptr<BaseEnemy>>& enemies);
 
 	/// <summary>
 	/// ステージの当たり判定設定

@@ -1,29 +1,29 @@
 #pragma once
 
-class IEnemy;
+class BaseEnemy;
 
 class BaseEnemyState {
 public:
-	virtual void Update(IEnemy& enemy);
+	virtual void Update(BaseEnemy& enemy);
 	virtual void StateLog();
 protected:
-	void EnemyDead(IEnemy& enemy);
+	void EnemyDead(BaseEnemy& enemy);
 };
 
 class EnemyMoveState : public BaseEnemyState {
 public:
-	void Update(IEnemy& enemy) override;
+	void Update(BaseEnemy& enemy) override;
 	void StateLog() override;
 };
 
 class EnemyAttackState : public BaseEnemyState {
 public:
-	void Update(IEnemy& enemy) override;
+	void Update(BaseEnemy& enemy) override;
 	void StateLog() override;
 };
 
 class EnemyDeadState : public BaseEnemyState {
 public:
-	void Update(IEnemy& enemy) override;
+	void Update(BaseEnemy& enemy) override;
 	void StateLog() override;
 };

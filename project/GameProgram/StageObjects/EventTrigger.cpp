@@ -202,7 +202,7 @@ void EventTrigger::EnemyPop() {
 
 	for (auto& enemyPopData : enemyPopDatas_) {
 
-		std::unique_ptr<IEnemy> popEnemy;
+		std::unique_ptr<BaseEnemy> popEnemy;
 		//名前によって変更
 		if (enemyPopData.enemyName == "soldier") {
 			popEnemy = std::make_unique<Enemy_Soldier>();

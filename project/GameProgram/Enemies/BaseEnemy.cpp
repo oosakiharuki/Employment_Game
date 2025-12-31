@@ -1,15 +1,15 @@
-#include "IEnemy.h"
+#include "BaseEnemy.h"
 #include "ImGuiManager.h"
 #include "ParticleManager.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
 
-IEnemy::IEnemy() {}
+BaseEnemy::BaseEnemy() {}
 
-IEnemy::~IEnemy(){}
+BaseEnemy::~BaseEnemy(){}
 
-void IEnemy::Enemy_InitializeCommon(const std::string& objectName) {
+void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 	//アクターの共通初期化処理
 	Actor_InitializeCommon();
 
@@ -37,7 +37,7 @@ void IEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 	wtMark_.Initialize();
 }
 
-void IEnemy::Update() {
+void BaseEnemy::Update() {
 
 	//演出中の場合
 	if (player_->GetPerformanceMode()) {
@@ -75,7 +75,7 @@ void IEnemy::Update() {
 	UpdateBehind();
 }
 
-void IEnemy::UpdateBehind() {
+void BaseEnemy::UpdateBehind() {
 	//影
 	shadow_->SetTranslate(wt_.translation_);
 
@@ -88,7 +88,7 @@ void IEnemy::UpdateBehind() {
 	}
 }
 
-void IEnemy::MarkUpdate() {
+void BaseEnemy::MarkUpdate() {
 
 	//!,?のマーク表示時間の間
 	markTimer_ = std::clamp(markTimer_, 0.0f, kMarkMaxTime_);//0 ～ kMarkMaxTime
@@ -103,7 +103,7 @@ void IEnemy::MarkUpdate() {
 	objectNoFound_->Update(wtMark_);
 }
 
-void IEnemy::MarkDraw() {
+void BaseEnemy::MarkDraw() {
 	//見つけたとき+マークが出る時間
 	if(isBullet_ && markTimer_ < kMarkMaxTime_)
 		objectFound_->Draw();
@@ -113,19 +113,19 @@ void IEnemy::MarkDraw() {
 		objectNoFound_->Draw();
 }
 
-void IEnemy::DrawCommon() {
+void BaseEnemy::DrawCommon() {
 	if (hp_ == 0) return;
 	MarkDraw();
 }
 
-void IEnemy::DrawParticle() {
+void BaseEnemy::DrawParticle() {
 	//設定した全てのパーティクル描画処理
 	for (auto& particle : particles_) {
 		particle.second->Draw();
 	}
 }
 
-void IEnemy::BulletUpdate() {
+void BaseEnemy::BulletUpdate() {
 	//弾丸更新処理
 	for (auto& bullet : bullets_) {
 		bullet->Update();
@@ -141,7 +141,7 @@ void IEnemy::BulletUpdate() {
 }
 
 
-void IEnemy::IsDamage() {
+void BaseEnemy::IsDamage() {
 	//ダメージのパーティクルを出す
 	particles_[particleDamage_.name]->SetTranslate(wt_.translation_); //座標を読み取る
 	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode); // 発生モード(一度だけ)の変更
@@ -159,7 +159,7 @@ void IEnemy::IsDamage() {
 	hp_--;
 }
 
-void IEnemy::GrabityUpdate() {
+void BaseEnemy::GrabityUpdate() {
 	//重力
 	grabity_ -= kGrabityPower_;
 	//地面についていない
@@ -172,7 +172,7 @@ void IEnemy::GrabityUpdate() {
 	}
 }
 
-void IEnemy::PlayerTarget() {
+void BaseEnemy::PlayerTarget() {
 	//見つかった瞬間だけtrueに
 	if (isBullet_ && markTimer_ < kFoundMosionMaxTime_) {
 		isFoundReaction_ = true;
@@ -193,7 +193,7 @@ void IEnemy::PlayerTarget() {
 	}
 }
 
-void IEnemy::SearchRange() {
+void BaseEnemy::SearchRange() {
 	//敵が右向き
 	if (wt_.rotation_.y == kDirectionRight_) {
 		eyeAABB_.min = wt_.translation_ + Vector3(0, -eyeReach_.y, -eyeReach_.z);
@@ -208,7 +208,7 @@ void IEnemy::SearchRange() {
 	}
 }
 
-void IEnemy::MoveEnemy() {
+void BaseEnemy::MoveEnemy() {
 	wt_.translation_ += speed_;//移動
 	move_ += speed_;           //移動ポイント
 
@@ -223,7 +223,7 @@ void IEnemy::MoveEnemy() {
 	}
 }
 
-void IEnemy::RespawnEnemyCommon() {
+void BaseEnemy::RespawnEnemyCommon() {
 	//ゲームアクターの共通リスポーン処理
 	RespawnCommon();
 
@@ -245,7 +245,7 @@ void IEnemy::RespawnEnemyCommon() {
 	markTimer_ = 0.0f;
 }
 
-void IEnemy::DirectionDegree() {
+void BaseEnemy::DirectionDegree() {
 
 	//360度以上の場合 [360除算のあまり]
 	wt_.rotation_.y = std::fmod(wt_.rotation_.y, kMaxAngle);
@@ -263,21 +263,21 @@ void IEnemy::DirectionDegree() {
 	}
 }
 
-AABB IEnemy::GetBombAABB() { 
+AABB BaseEnemy::GetBombAABB() { 
 	AABB null{};
 	return null;
 }
 
-Vector3 IEnemy::GetDistance(){
+Vector3 BaseEnemy::GetDistance(){
 	Vector3 null{};
 	return null;
 }
 
-bool IEnemy::IsExplosion() { return false; }
+bool BaseEnemy::IsExplosion() { return false; }
 
-void IEnemy::ExplosionEnd() {}
+void BaseEnemy::ExplosionEnd() {}
 
-void IEnemy::Fire() {
+void BaseEnemy::Fire() {
 	
 	//クールタイム
 	coolTime_ += kDeltaTime_;
@@ -301,9 +301,9 @@ void IEnemy::Fire() {
 	}
 }
 
-void IEnemy::FireBullet(){}
+void BaseEnemy::FireBullet(){}
 
-void IEnemy::FoundRiaction() {
+void BaseEnemy::FoundRiaction() {
 
 	//伸びる強さ(y軸のみ)
 	Vector3 reaction = { 0,damageScale_.y * kDivideByTwo_,0 };
@@ -314,7 +314,7 @@ void IEnemy::FoundRiaction() {
 	}
 }
 
-void IEnemy::DeadReaction() {
+void BaseEnemy::DeadReaction() {
 	wt_.rotation_ -= TransformNormal(Vector3{ kDeadRotation_,0,0 }, wt_.matWorld_);
 
 	//リアクションフラグ
@@ -330,7 +330,7 @@ void IEnemy::DeadReaction() {
 	}
 }
 
-bool IEnemy::IsLostFound() {
+bool BaseEnemy::IsLostFound() {
 	//見失ってから少したってから通常処理に戻す
 	if (isLostPlayer_ && markTimer_ <= 0.0f) {
 		isLostPlayer_ = false;//リセット
@@ -344,7 +344,7 @@ bool IEnemy::IsLostFound() {
 	return false;
 }
 
-void IEnemy::EnemyFire() {
+void BaseEnemy::EnemyFire() {
 	if (isFoundTarget_) {
 		isBullet_ = true;
 	}
@@ -368,7 +368,7 @@ void IEnemy::EnemyFire() {
 
 }
 
-void IEnemy::ChangeStatePattern(std::unique_ptr<BaseEnemyState> enemyState) {
+void BaseEnemy::ChangeStatePattern(std::unique_ptr<BaseEnemyState> enemyState) {
 	currentEnemyState_.reset();
 	currentEnemyState_ = std::move(enemyState);
 }

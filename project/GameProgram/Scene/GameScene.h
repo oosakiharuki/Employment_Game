@@ -41,7 +41,7 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 	//敵たち
-	std::vector<std::shared_ptr<IEnemy>> enemies_;
+	std::vector<std::shared_ptr<BaseEnemy>> enemies_;
 	//ステージオブジェクトたち
 	std::list<std::shared_ptr<IStageObject>> stageObjects_;
 

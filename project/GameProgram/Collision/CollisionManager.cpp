@@ -19,7 +19,7 @@ std::shared_ptr<CollisionManager> CollisionManager::GetInstance() {
 
 
 void CollisionManager::PlayerAndEnemy(Player* player,
-	const std::vector<std::shared_ptr<IEnemy>>& enemies) {
+	const std::vector<std::shared_ptr<BaseEnemy>>& enemies) {
 	// - プレイヤーと敵 -
 	for (auto& enemy : enemies) {
 		//プレイヤーを見つける範囲
@@ -40,7 +40,7 @@ void CollisionManager::PlayerAndEnemy(Player* player,
 	}
 }
 
-void CollisionManager::LookPlayer(Player* player, std::shared_ptr<IEnemy> enemy) {
+void CollisionManager::LookPlayer(Player* player, std::shared_ptr<BaseEnemy> enemy) {
 	//見える範囲にプレイヤーがいたら
 	if (IsCollisionAABB(player->GetAABB(), enemy->GetEyeAABB()) && !player->GetIsDead()) {
 		enemy->SetFoundTarget(true);//見える
@@ -50,7 +50,7 @@ void CollisionManager::LookPlayer(Player* player, std::shared_ptr<IEnemy> enemy)
 	}
 }
 
-void CollisionManager::PlayerBulletAndEnemy(Player* player, std::shared_ptr<IEnemy> enemy) {
+void CollisionManager::PlayerBulletAndEnemy(Player* player, std::shared_ptr<BaseEnemy> enemy) {
 	for (auto& bullet : player->GetBullets()) {
 		if (IsCollisionAABB(bullet->GetAABB(), enemy->GetAABB()) && !enemy->GetIsDead()) {
 			enemy->IsDamage();//敵にダメージ
@@ -81,7 +81,7 @@ void CollisionManager::EnemyBulletAndPlayer(Player* player, std::shared_ptr<Enem
 	}
 }
 
-void CollisionManager::EnemyBombCollision(Player* player, std::shared_ptr<IEnemy> enemy) {
+void CollisionManager::EnemyBombCollision(Player* player, std::shared_ptr<BaseEnemy> enemy) {
 	if (IsCollisionAABB(enemy->GetBombAABB(), player->GetAABB()) &&
 		enemy->GetIsDead() && !enemy->IsExplosion()) {
 		player->IsDamage(enemy->GetDistance());//プレイヤーにダメージ	
@@ -92,7 +92,7 @@ void CollisionManager::EnemyBombCollision(Player* player, std::shared_ptr<IEnemy
 	}
 }
 
-void CollisionManager::EnemyAndPariBullet(std::shared_ptr<IEnemy> enemy, std::shared_ptr<EnemyBullet> bulletE) {
+void CollisionManager::EnemyAndPariBullet(std::shared_ptr<BaseEnemy> enemy, std::shared_ptr<EnemyBullet> bulletE) {
 	//跳ね返った弾の当たり判定
 	if (IsCollisionAABB(bulletE->GetAABB(), enemy->GetAABB()) && bulletE->GetIsPari() && !enemy->GetIsDead()) {
 		bulletE->IsHit();//当たって消える
@@ -147,7 +147,7 @@ void CollisionManager::PlayerAndStage(Player* player, const std::vector<AABB>& s
 	player->ShadowUpdate();
 }
 
-void CollisionManager::EnemyAndStage(const std::vector<std::shared_ptr<IEnemy>>& enemies,
+void CollisionManager::EnemyAndStage(const std::vector<std::shared_ptr<BaseEnemy>>& enemies,
 	const std::vector<AABB>& stagesAABB) {
 	// - 敵とステージ -
 	for (auto& enemy : enemies) {

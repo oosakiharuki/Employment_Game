@@ -1,7 +1,7 @@
 #pragma once
 #include "Player.h"
 #include "PlayerBullet.h"
-#include "IEnemy.h"
+#include "BaseEnemy.h"
 #include "IStageObject.h"
 #include "EventTrigger.h"
 #include "CameraControl.h"
@@ -34,7 +34,7 @@ public:
 	/// </summary>
 	/// <param name="player">プレイヤー</param>
 	/// <param name="enemies">敵たち</param>
-	void PlayerAndEnemy(Player* player, const std::vector<std::shared_ptr<IEnemy>>& enemies);
+	void PlayerAndEnemy(Player* player, const std::vector<std::shared_ptr<BaseEnemy>>& enemies);
 	
 	/// <summary>
 	/// プレイヤーとステージオブジェクト
@@ -55,7 +55,7 @@ public:
 	/// </summary>
 	/// <param name="enemies">敵たち</param>
 	/// <param name="stagesAABB">ステージ</param>
-	void EnemyAndStage(const std::vector<std::shared_ptr<IEnemy>>& enemies, const std::vector<AABB>& stagesAABB);
+	void EnemyAndStage(const std::vector<std::shared_ptr<BaseEnemy>>& enemies, const std::vector<AABB>& stagesAABB);
 
 	/// <summary>
 	/// プレイヤーとイベントトリガー
@@ -95,15 +95,15 @@ public:
 
 private:
 
-	void LookPlayer(Player* player, std::shared_ptr<IEnemy> enemy);
+	void LookPlayer(Player* player, std::shared_ptr<BaseEnemy> enemy);
 
-	void PlayerBulletAndEnemy(Player* player, std::shared_ptr<IEnemy> enemy);
+	void PlayerBulletAndEnemy(Player* player, std::shared_ptr<BaseEnemy> enemy);
 
 	void EnemyBulletAndPlayer(Player* player, std::shared_ptr<EnemyBullet> bulletE);
 
-	void EnemyAndPariBullet(std::shared_ptr<IEnemy> enemy, std::shared_ptr<EnemyBullet> bulletE);
+	void EnemyAndPariBullet(std::shared_ptr<BaseEnemy> enemy, std::shared_ptr<EnemyBullet> bulletE);
 
-	void EnemyBombCollision(Player* player, std::shared_ptr<IEnemy> enemy);
+	void EnemyBombCollision(Player* player, std::shared_ptr<BaseEnemy> enemy);
 
 
 
