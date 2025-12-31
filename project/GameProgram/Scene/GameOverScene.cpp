@@ -1,6 +1,18 @@
 #include "GameOverScene.h"
 
 void GameOverScene::Initialize() {
+	//スプライト初期化処理
+	InitSprite();
+	//カメラ初期化処理
+	InitCamera();
+	//オブジェクト初期化処理
+	InitObject();
+
+	//フェードスタート
+	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
+}
+
+void GameOverScene::InitSprite() {
 	//ゲームオーバーロゴ作成
 	sprite_ = std::make_unique<Sprite>();
 	sprite_->Initialize("Moji_GameOver.png");
@@ -11,7 +23,9 @@ void GameOverScene::Initialize() {
 	spriteSpace_->Initialize("Moji_botton.png");
 	spriteSpace_->SetPosition(kSpritePositionBotton_);
 	spriteSpace_->SetSize(kSpriteSizeBotton_);
+}
 
+void GameOverScene::InitCamera() {
 	cameraTranslate_ = kCameraTranslate_;
 	cameraRotate_ = kCameraRotate_;
 
@@ -21,7 +35,9 @@ void GameOverScene::Initialize() {
 	camera_->SetRotate(cameraRotate_);
 
 	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
+}
 
+void GameOverScene::InitObject() {
 	//残念そうなプレイヤーオブジェクト
 	playerGltf_ = std::make_unique<Object_glTF>();
 	playerGltf_->Initialize();
@@ -32,10 +48,8 @@ void GameOverScene::Initialize() {
 	stageGltf_->SetModelFile("gameover_stage.gltf");
 
 	wt_.Initialize();
-	
-	//フェードスタート
-	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
+
 
 void GameOverScene::Update() {
 

@@ -102,6 +102,14 @@ void SelectScene::LevelEditorObjectSetting(const std::string& leveleditor_file) 
 		sceneSaveData_.playerHp = player_->GetMaxHp();
 	}
 
+	SpitOutGameObject();
+
+	//操作方法スプライト
+	UIManager::GetInstance()->CreateGuide(kGuideMove_);
+	UIManager::GetInstance()->CreateGuide(kGuideWarp_);
+}
+
+void SelectScene::SpitOutGameObject() {
 	//ステージのjsonを読み取る
 	levelediter_.LoadLevelediter("resource/Levelediter/" + stageFileName_ + ".json");
 	spitOut_.SetLevelEditor(&levelediter_);
@@ -121,14 +129,12 @@ void SelectScene::LevelEditorObjectSetting(const std::string& leveleditor_file) 
 	player_->Initialize();//初期設定
 	player_->SetHp(sceneSaveData_.playerHp);
 	player_->SetZanki(sceneSaveData_.playerZanki);
-	
+	//プレイヤーを配置
 	spitOut_.SpitOutPlayer(player_);
+	//ステージの当たり判定を設定/配置
 	spitOut_.SpitOutStage(stageobj_, stageFileName_, stagesAABB_);
+	//ステージオブジェクトを配置
 	spitOut_.SpitOutStageObject(stageObjects_);
-
-	//操作方法スプライト
-	UIManager::GetInstance()->CreateGuide(kGuideMove_);
-	UIManager::GetInstance()->CreateGuide(kGuideWarp_);
 }
 
 void SelectScene::CollisionCommon() {

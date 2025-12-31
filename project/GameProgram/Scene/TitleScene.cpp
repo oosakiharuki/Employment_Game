@@ -6,28 +6,12 @@ using namespace UseEveryOne;
 
 void TitleScene::Initialize() {
 
-	camera_ = std::make_unique<Camera>();
-	cameraTranslate_ = kCameraTranslate_;
-	camera_->SetTranslate(cameraTranslate_);
-
-	Object3dCommon::GetInstance()->SetDefaultCamera(camera_.get());
-	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
-	ParticleCommon::GetInstance()->SetDefaultCamera(camera_.get());
+	InitCamera();
 
 	//オブジェクトを読み込む
 	ObjectLoading();
 
-	//影
-	playerShadow_ = std::make_unique<Shadow>();
-	playerShadow_->Initialize();
-	Vector3 shadowPos = wts_[0].translation_;//影位置
-	shadowPos.y = kShadowPositionY_;//影位置Y
-	playerShadow_->SetTranslate(shadowPos);
-
-	//タイトル名スプライトの初期化
-	spriteMojiTitle_ = std::make_unique<Sprite>();
-	spriteMojiTitle_->Initialize("Moji_Title.png");
-	spriteMojiTitle_->SetPosition(titlePos_);
+	InitSprite();
 
 	//パーティクル初期化
 	sceneParticles_[particleBullet_.name] = ParticleManager::GetInstance()->InitParticle(particleBullet_);
@@ -35,55 +19,78 @@ void TitleScene::Initialize() {
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
 
+void TitleScene::InitSprite() {
+	//タイトル名スプライトの初期化
+	spriteMojiTitle_ = std::make_unique<Sprite>();
+	spriteMojiTitle_->Initialize("Moji_Title.png");
+	spriteMojiTitle_->SetPosition(titlePos_);
+}
+
+void TitleScene::InitCamera() {
+	camera_ = std::make_unique<Camera>();
+	cameraTranslate_ = kCameraTranslate_;
+	camera_->SetTranslate(cameraTranslate_);
+
+	Object3dCommon::GetInstance()->SetDefaultCamera(camera_.get());
+	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
+	ParticleCommon::GetInstance()->SetDefaultCamera(camera_.get());
+}
+
 void TitleScene::ObjectLoading() {
 	//playerワールド座標系
 	for (uint32_t i = 0; i < kMaxWt_; i++) {
-		//ワールド行列作成
-		WorldTransform gwt;
-		gwt.Initialize();
-
-		//オブジェクト作成
-		std::unique_ptr<Object_glTF> gObject;
-		gObject = std::make_unique<Object_glTF>();
-		gObject->Initialize();
 
 		//オブジェクト読み込みとワールド行列の初期値
 		if (i == 0) {
 			//プレイヤー
-			gwt.rotation_.y = kRotatePlayer_;
-			gwt.translation_ = kPlayerInitPoint_;
-			gObject->SetModelFile("player_standby.gltf");
+			MakeObject("player_standby.gltf",kPlayerInitPoint_,kRotatePlayer_,kDefaultScale_);
 		}
 		else if (i == 1) {
 			//傘
-			gwt.translation_ = kUmbrellaInitPoint_;
-			gwt.rotation_.x = kUmbrellaRange_;
-			gObject->SetModelFile("umbrella_Open.gltf");
+			MakeObject("umbrella_Open.gltf",kUmbrellaInitPoint_,umbrellaRange_,kDefaultScale_);
 		}
 		else if (i == 2) {
 			//ゲームスタートの文字
-			gwt.rotation_.y = kRotateSelectMoji_;
-			gwt.translation_ = kSelectMojiPosition_;
-			gwt.scale_ = kScaleSelectMoji_;
-			gObject->SetModelFile("Select_Start.gltf");
+			MakeObject("Select_Start.gltf", kSelectMojiPosition_, kRotateSelectMoji_, kScaleSelectMoji_);
 		}
 		else if (i == 3) {
 			//ゲーム終了の文字
-			gwt.rotation_.y = kRotateSelectMoji_;
-			gwt.translation_ = kSelectMojiPosition_;
-			gwt.translation_.y = kSelectEndPositionY_;//Y座標のみ変更
-			gwt.scale_ = kScaleSelectMoji_;
-			gObject->SetModelFile("Select_End.gltf");
+			Vector3 gTranslate = kSelectMojiPosition_ + Vector3{ 0,kSelectEndPositionY_,0 };
+			MakeObject("Select_End.gltf", gTranslate, kRotateSelectMoji_, kScaleSelectMoji_);
 		}
 		else if (i == 4) {
-			gObject->SetModelFile("Title_stage.gltf");
+			MakeObject("Title_stage.gltf",{0,0,0},{0,0,0},kDefaultScale_);
 		}
-		wts_.push_back(gwt);
-		objects_.push_back(std::move(gObject));
+
 	}
 	//傘がプレイヤーを親としてついていく
 	wts_[1].parent_ = &wts_[0];
+	
+	//影
+	playerShadow_ = std::make_unique<Shadow>();
+	playerShadow_->Initialize();
+	Vector3 shadowPos = wts_[0].translation_;//影位置
+	shadowPos.y = kShadowPositionY_;//影位置Y
+	playerShadow_->SetTranslate(shadowPos);
+}
 
+void TitleScene::MakeObject(const std::string& objectName, const Vector3& translate, const Vector3& rotate, const Vector3& scale) {
+	//ワールド行列作成
+	WorldTransform gwt;
+	gwt.Initialize();
+
+	//オブジェクト作成
+	std::unique_ptr<Object_glTF> gObject;
+	gObject = std::make_unique<Object_glTF>();
+	gObject->Initialize();
+
+	gwt.rotation_ = rotate;
+	gwt.translation_ = translate;
+	gwt.scale_ = scale;
+	gObject->SetModelFile(objectName);		
+	
+	wts_.push_back(gwt);
+	objects_.push_back(std::move(gObject));
 }
 
 void TitleScene::Update() {

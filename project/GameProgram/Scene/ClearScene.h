@@ -14,6 +14,19 @@ public:
 	void Finalize() override;
 	void SceneUpdate() override;
 private:
+	/// <summary>
+	/// スプライト初期化処理
+	/// </summary>
+	void InitSprite();
+	/// <summary>
+	/// カメラ初期化処理
+	/// </summary>
+	void InitCamera();
+	/// <summary>
+	/// オブジェクト初期化処理
+	/// </summary>
+	void InitObject();
+
 	//入力処理
 	Input* input_ = Input::GetInstance().get();
 	//ゲームパット用の入力変数

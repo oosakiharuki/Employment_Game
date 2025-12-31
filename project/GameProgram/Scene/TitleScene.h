@@ -6,7 +6,7 @@
 /// <summary>
 /// タイトルシーン(BaseSceneの派生クラス)
 /// </summary>
-class TitleScene : public BaseScene{
+class TitleScene : public BaseScene {
 public:
 	void Initialize() override;
 	void Update() override;
@@ -14,6 +14,19 @@ public:
 	void Finalize() override;
 	void SceneUpdate() override;
 private:
+
+	/// <summary>
+	/// スプライト初期化処理
+	/// </summary>
+	void InitSprite();
+	/// <summary>
+	/// カメラ初期化処理
+	/// </summary>
+	void InitCamera();
+	/// <summary>
+	/// オブジェクト初期化処理
+	/// </summary>
+	void MakeObject(const std::string& objectName,const Vector3& translate, const Vector3& rotate, const Vector3& scale);
 
 	//入力処理
 	Input* input_ = Input::GetInstance().get();
@@ -61,7 +74,7 @@ private:
 	//時間
 	float titleFallingTimer_ = 0.0f;
 	const float kTitleFallingTimeMax_ = 1.0f;
-	
+
 	//タイトルロゴが登場する移動
 	float appearsePointStartY_ = -300.0f;//スタート
 	float appearsePointEndY_ = 32.0f;//ゴール
@@ -76,10 +89,10 @@ private:
 	//プレイヤー着地地点
 	const float kLandingPointY_ = -2.0f;
 	//プレイヤー前に向かす
-	const float kRotatePlayer_ = 180.0f;
+	const Vector3 kRotatePlayer_ = { 0.0f,180.0f,0.0f };
 
 	//最初、文字をふせておく
-	const float kRotateSelectMoji_ = 180.0f;
+	const Vector3 kRotateSelectMoji_ = { 0.0f,180.0f,0.0f };
 	//回転速度
 	const float kRotating_ = 30.0f;
 
@@ -94,8 +107,10 @@ private:
 	//傘
 	const Vector3 kUmbrellaInitPoint_ = { 0.0f,2.0f,0.0f };
 	//傘の向き
-	const float kUmbrellaRange_ = -90.0f;//プレイヤーが降ってくるとき
+	const float kUmbrellaRange_ = -90.0f;
 	const float kUmbrellaRangeArrowMode_ = 90.0f;//矢印の時
+	Vector3 umbrellaRange_ = { kUmbrellaRange_,0.0f,0.0f };//プレイヤーが降ってくるとき
+
 	//場所
 	const float kUmbrellaArrowModePositionX_ = -1.0f;
 
