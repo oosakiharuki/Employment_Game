@@ -202,8 +202,41 @@ namespace MyMath {
 		return v;
 	}
 
+	bool operator==(const Vector3& v1, const Vector3& v2) {
+		if (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z) {
+			return true;
+		}
+		return false;
+	}
+	
+	bool operator<=(const Vector3& v1, const Vector3& v2) {
+		if (v1.x <= v2.x && v1.y <= v2.y && v1.z <= v2.z) {
+			return true;
+		}
+		return false;
+	}
+	
+	bool operator>=(const Vector3& v1, const Vector3& v2) {
+		if (v1.x >= v2.x && v1.y >= v2.y && v1.z >= v2.z) {
+			return true;
+		}
+		return false;
+	}
 
 
+	bool operator<(const Vector3& v1, const Vector3& v2) {
+		if (v1.x < v2.x && v1.y < v2.y && v1.z < v2.z) {
+			return true;
+		}
+		return false;
+	}
+
+	bool operator>(const Vector3& v1, const Vector3& v2) {
+		if (v1.x > v2.x && v1.y > v2.y && v1.z > v2.z) {
+			return true;
+		}
+		return false;
+	}
 
 	Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2){
 		Matrix4x4 result;
@@ -417,10 +450,10 @@ namespace MyMath {
 	float Length(float start, float target) {
 		
 
-		float point1 = std::abs(start);
-		float point2 = std::abs(target);
+		//float point1 = std::abs(start);
+		//float point2 = std::abs(target);
 
-		return std::abs(point1 - point2);
+		return std::abs(start - target);
 	}
 
 

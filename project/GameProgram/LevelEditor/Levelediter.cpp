@@ -74,12 +74,15 @@ void Levelediter::LoadGameObjects(nlohmann::json& object) {
 	}//敵の配置
 	else if (type.compare("EnemySpawn") == 0) {
 		LoadEnemies(object);
-	}
+	}//カメラの配置
 	else if (type.compare("CAMERA") == 0) {
 		LoadCamera(object);
 	}//ステージオブジェクトの配置
 	else if (type.compare("StageObjectSpawn") == 0) {
 		LoadStageObject(object);
+	}//ボスの配置
+	else if (type.compare("BossSpawn") == 0) {
+		LoadBoss(object);
 	}
 }
 
@@ -213,6 +216,22 @@ void Levelediter::LoadEventTrigger(nlohmann::json& object, const Vector3& transl
 		//イベント用固定カメラの名前
 		eventTrigger.cameraName = cameraName;
 	}
+}
+
+void Levelediter::LoadBoss(nlohmann::json& object) {
+	levelData_->bosses.emplace_back(LevelData::BossData{});
+	LevelData::BossData& bossData = levelData_->bosses.back();
+
+	if (object.contains("file_name")) {
+		//ファイル名
+		bossData.fileName = object["file_name"];
+	}
+	//BlenderのY軸とZ軸と違うため y = [2],z = [1]
+	//トランスフォーム
+	SetTransform(object, bossData.transform);
+
+	//コライダー
+	SetCollider(object, bossData.colliderAABB, bossData.transform.scale);
 }
 
 void Levelediter::SetTransform(nlohmann::json& object, Transform& objectTransform) {

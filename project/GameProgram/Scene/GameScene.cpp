@@ -10,8 +10,8 @@ void GameScene::Initialize() {
 	sceneSaveData_ = NextStageSave::GetInstance()->GetNextStageSaveData();
 
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting("stage_2");
-
+	LevelEditorObjectSetting("stage_boss");
+	
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");
 	soundData_ = Audio::GetInstance()->LoadWave("resource/sound/bane.wav");
@@ -144,6 +144,10 @@ void GameScene::PlayerAliveUpdate() {
 		}
 	}
 
+	if (boss_) {
+		boss_->SetPlayer(player_.get());
+		boss_->Update();
+	}
 	//使用する当たり判定
 	CollisionCommon();
 
@@ -155,6 +159,10 @@ void GameScene::Draw() {
 	
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->Draw();
+	}
+
+	if (boss_) {
+		boss_->Draw();
 	}
 
 	//モデル描画処理
@@ -267,6 +275,9 @@ void GameScene::SpitOutGameObject() {
 	for (auto& enemy : enemies_) {
 		enemy->SetStages(stagesAABB_);
 	}
+
+	//ボスの配置
+	spitOut_.SpitOutBoss(boss_);
 }
 
 

@@ -107,6 +107,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseBossState.cpp" />
+    <ClCompile Include="Boss.cpp" />
     <ClCompile Include="GameProgram\Enemies\BaseEnemyState.cpp" />
     <ClCompile Include="Engine\3d\BaseModel.cpp" />
     <ClCompile Include="Engine\3d\BaseObject.cpp" />
@@ -204,6 +206,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\StageObjects\StageObjectFunction.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseBossState.h" />
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="GameProgram\Enemies\BaseEnemyState.h" />
     <ClInclude Include="Engine\3d\BaseModel.h" />
     <ClInclude Include="Engine\3d\BaseObject.h" />
