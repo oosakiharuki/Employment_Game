@@ -286,6 +286,10 @@ namespace MyMath {
 	Vector3 EaseOut(const Vector3& v, float t, float endt);
 
 	float Length(float start, float target);
+	Vector3 Length(const Vector3& start, const Vector3& target);
+		
+	Vector3 GoDestination(const Segment& segment);
+	Vector3 GoDestination(const Vector3& origin, const Vector3& diff);
 
 #pragma region Affine
 

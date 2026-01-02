@@ -10,15 +10,12 @@ void Boss::Initialize() {
 
 	wt_.Initialize();
 
-	move_.origin = wt_.translation_;
-	move_.diff = wt_.translation_;
-
-	kCenter_ = wt_.translation_;
-
 	bossState_ = std::make_unique<BossMoveState>();
 }
 
 void Boss::Update() {
+
+	wt_.translation_ += GoDestination(move_) / bunkatu_;
 
 	//ステートパターン
 	bossState_->Update(*this);
@@ -50,15 +47,18 @@ void Boss::Draw() {
 }
 
 void Boss::MoveRight() {
-	move_.diff = kCenter_ + kHazi_;
-	wt_.translation_.x += Length(move_.origin.x, move_.diff.x) / kBunkatu;
-	ArrivedSegmentDiff(wt_.translation_.x >= move_.diff.x);
+	//右位置
+	SetMovePoint(kCenter_ + kHazi_, 180.0f);
 }
 
 void Boss::MoveLeft() {
-	move_.diff = kCenter_ - kHazi_;
-	wt_.translation_.x -= Length(move_.origin.x, move_.diff.x) / kBunkatu;
-	ArrivedSegmentDiff(wt_.translation_.x <= move_.diff.x);
+	//左位置
+	SetMovePoint(kCenter_ - kHazi_, 180.0f);
+}
+
+void Boss::SetMovePoint(const Vector3& point, float speedBunkatu) {
+	move_.diff = point;//目的地設定
+	bunkatu_ = speedBunkatu;//スピード分割
 }
 
 void Boss::Fire() {
@@ -79,7 +79,7 @@ void Boss::Fire() {
 }
 
 void Boss::FireBullet() {
-
+	//現在位置の設定
 	Vector3 enemyPosition;
 	enemyPosition = { wt_.matWorld_.m[3][0],wt_.matWorld_.m[3][1],wt_.matWorld_.m[3][2] };
 
@@ -114,10 +114,25 @@ void Boss::ChangeStatePattern(std::unique_ptr<BaseBossState> playerState) {
 	bossState_ = std::move(playerState);
 }
 
-void Boss::ArrivedSegmentDiff(bool isArrived) {
-	if (isArrived) {
+void Boss::ArrivedSegmentDiff() {
+	Vector3 a = wt_.translation_;
+
+	//目的地についたとき
+	if (GoDestination(a, move_.diff) <= Vector3{ 0.1f,0.1f,0.1f } &&
+		GoDestination(a, move_.diff) >= Vector3{ -0.1f,-0.1f,-0.1f }) {
+
 		isMoveSucces_ = true;
-		move_.origin = wt_.translation_;
+		wt_.translation_ = move_.diff;//現在地を目的地にする
+		move_.origin = wt_.translation_;//セグメントのスタート値を設定
 	}
 }
 
+void Boss::BeforeActionMosion() {
+	wt_.rotation_.z += kRotationX_;
+
+	if (wt_.rotation_.z >= 360.0f) {
+		//モーション終了
+		isMosionFinish_ = true;
+		wt_.rotation_.z = 0.0f;
+	}
+}

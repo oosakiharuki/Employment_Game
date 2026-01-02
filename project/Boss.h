@@ -31,10 +31,14 @@ public:
 	/// <param name="translate">指定する座標</param>
 	void SetTranslate(const Vector3& translate) { wt_.translation_ = translate; }
 
-	void SetTransform(const Transform& translate) { 
-		wt_.translation_ = translate.translate;
-		wt_.rotation_ = translate.rotate;
-		wt_.scale_ = translate.scale;
+	void SetTransform(const Transform& transform) { 
+		wt_.translation_ = transform.translate;
+		wt_.rotation_ = transform.rotate;
+		wt_.scale_ = transform.scale;
+
+		//センター設定
+		move_.origin = wt_.translation_;
+		kCenter_ = wt_.translation_;
 	}
 
 	void SetPlayer(Player* player) { player_ = player; }
@@ -55,9 +59,14 @@ public:
 	/// </summary>
 	void MoveLeft();
 
+	void SetMovePoint(const Vector3& point,float speedBunkatu);
+
+
 	uint32_t MoveCount() { return moveCount_; }
 
 	void AddMoveCount() { moveCount_++; }
+
+	void ResetMoveCount() { moveCount_ = 0; }
 
 	/// <summary>
 	/// 動く完了フラグリセット
@@ -73,6 +82,11 @@ public:
 	/// 弾丸攻撃
 	/// </summary>
 	void FireBullet();
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="isArrived"></param>
+	void ArrivedSegmentDiff();
 
 	/// <summary>
 	/// 発砲終了フラグリセット
@@ -88,12 +102,14 @@ public:
 
 	bool IsMoveSucces() { return isMoveSucces_; }
 
+
+	void BeforeActionMosion();
+
+	bool IsMosionFinish() { return isMosionFinish_; }
+
+	void ResetMosionFinish() { isMosionFinish_ = false; }
+
 private:
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="isArrived"></param>
-	void ArrivedSegmentDiff(bool isArrived);
 
 	std::unique_ptr<Object_glTF> object_;
 	WorldTransform wt_;
@@ -107,13 +123,12 @@ private:
 	const Vector3 kHazi_ = { 20,0,0 };
 
 	Segment move_{};
-	const float kBunkatu = 180.0f;
-	//Vector3 nextMove_ = { 0,0,0 };
-	
+	float bunkatu_ = 180.0f;//分割
+
 	//動いたカウント
 	uint32_t moveCount_ = 0;
 
-
+	//体力
 	const uint32_t maxHp_ = 60;
 	uint32_t hp_ = maxHp_;
 
@@ -137,5 +152,10 @@ private:
 	//最大弾丸数
 	uint32_t rapidCountMax_ = 10;
 
+	//モーション終了処理
+	bool isMosionFinish_ = false;
+	const float kRotationX_ = 5.0f;
+
+	//ステートパターン
 	std::unique_ptr<BaseBossState> bossState_;
 };
