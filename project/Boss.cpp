@@ -136,3 +136,10 @@ void Boss::BeforeActionMosion() {
 		wt_.rotation_.z = 0.0f;
 	}
 }
+
+const AABB& Boss::GetAABB() {
+	AABB aabb;
+	aabb.max = wt_.translation_ + aabb_.max;
+	aabb.min = wt_.translation_ + aabb_.min;
+	return aabb;
+}

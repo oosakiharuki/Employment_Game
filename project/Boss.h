@@ -49,7 +49,12 @@ public:
 	/// <param name="aabb">AABB</param>
 	void SetAABB(const AABB& aabb) { aabb_ = aabb; }
 
+	const AABB& GetAABB();
 	
+	const Vector3& GetTranslate() { return wt_.translation_; }
+
+	std::list<std::shared_ptr<EnemyBullet>> GetBullets() { return bullets_; }
+
 	/// <summary>
 	//右に移動
 	/// </summary>
@@ -62,11 +67,11 @@ public:
 	void SetMovePoint(const Vector3& point,float speedBunkatu);
 
 
-	uint32_t MoveCount() { return moveCount_; }
+	uint32_t AttackCount() { return attackCount_; }
 
-	void AddMoveCount() { moveCount_++; }
+	void AddAttackCount() { attackCount_++; }
 
-	void ResetMoveCount() { moveCount_ = 0; }
+	void ResetAttackCount() { attackCount_ = 0; }
 
 	/// <summary>
 	/// 動く完了フラグリセット
@@ -116,7 +121,7 @@ private:
 
 	AABB aabb_;
 
-	std::list<std::unique_ptr<EnemyBullet>> bullets_;
+	std::list<std::shared_ptr<EnemyBullet>> bullets_;
 
 	Vector3 kCenter_ = { 0,0,0 };
 
@@ -125,8 +130,8 @@ private:
 	Segment move_{};
 	float bunkatu_ = 180.0f;//分割
 
-	//動いたカウント
-	uint32_t moveCount_ = 0;
+	//攻撃カウント
+	uint32_t attackCount_ = 0;
 
 	//体力
 	const uint32_t maxHp_ = 60;
@@ -154,7 +159,7 @@ private:
 
 	//モーション終了処理
 	bool isMosionFinish_ = false;
-	const float kRotationX_ = 5.0f;
+	const float kRotationX_ = 10.0f;
 
 	//ステートパターン
 	std::unique_ptr<BaseBossState> bossState_;

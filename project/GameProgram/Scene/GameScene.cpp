@@ -10,7 +10,7 @@ void GameScene::Initialize() {
 	sceneSaveData_ = NextStageSave::GetInstance()->GetNextStageSaveData();
 
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting("stage_boss");
+	LevelEditorObjectSetting();
 	
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");
@@ -305,6 +305,11 @@ void GameScene::CollisionCommon() {
 	CollisionManager::GetInstance()->PlayerAndEventTrigger(player_.get(), eventTriggers_,cameraControl_.get(), levelediter_);
 	//敵とステージ自体
 	CollisionManager::GetInstance()->EnemyAndStage(enemies_,stagesAABB_);
+
+	if (boss_) {
+		//ボスとプレイヤー
+		CollisionManager::GetInstance()->BossAndPlayer(*player_.get(),*boss_.get());
+	}
 }
 
 void GameScene::WarterWarpExit() {
@@ -355,6 +360,11 @@ void GameScene::Respawn() {
 		eventTrigger->FailureEvent();
 		cameraControl_->CameraSetting(levelediter_.GetLevelData()->cameraInit["MainCamera"], false);
 	}
+
+	//リセット
+	boss_.reset();
+	//ボスの配置
+	spitOut_.SpitOutBoss(boss_);
 }
 
 void GameScene::SceneUpdate() {

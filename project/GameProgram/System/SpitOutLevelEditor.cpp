@@ -141,10 +141,10 @@ void SpitOutLevelEditor::SpitOutEventTrigger(std::vector<std::shared_ptr<EventTr
 
 void SpitOutLevelEditor::SpitOutBoss(std::unique_ptr<Boss>& boss) {
 
-	boss = std::make_unique<Boss>();
-	boss->Initialize();
-
 	if (!levelEditor_->GetLevelData()->bosses.empty()) {
+		boss = std::make_unique<Boss>();
+		boss->Initialize();
+
 		auto& bossData = levelEditor_->GetLevelData()->bosses[0];
 		//boss->SetTranslate(bossData.transform.translate);
 		boss->SetTransform(bossData.transform);

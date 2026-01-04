@@ -150,7 +150,7 @@
             "name": "PlayerSpawn",
             "transform": {
                 "translation": [
-                    -9.0,
+                    -12.0,
                     0.0,
                     3.0
                 ],
@@ -185,7 +185,7 @@
             "name": "StageObjectSpawn",
             "transform": {
                 "translation": [
-                    0.0,
+                    -3.0,
                     1.0,
                     3.0
                 ],
@@ -206,6 +206,76 @@
                 "center": [
                     0.0,
                     -1.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "WarpGate",
+            "name": "StageObjectSpawn.001",
+            "transform": {
+                "translation": [
+                    12.0,
+                    0.0,
+                    10.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "stage_boss",
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "立方体.003",
+            "transform": {
+                "translation": [
+                    12.0,
+                    0.0,
+                    4.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    4.499999046325684,
+                    6.059999942779541,
+                    3.8999998569488525
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
                     0.0
                 ],
                 "size": [

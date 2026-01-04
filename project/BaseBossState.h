@@ -1,7 +1,5 @@
 #pragma once
-#include <cstdint>
-#include <vector>
-#include "Vector3.h"
+#include "MyMath.h"
 
 class Boss;
 /// <summary>
@@ -18,6 +16,8 @@ public:
 class BossMoveState : public BaseBossState {
 public:
 	void Update(Boss& boss) override;
+private:
+	uint32_t addCount_ = 0;
 };
 
 /// <summary>
@@ -53,5 +53,8 @@ public:
 	void Update(Boss& boss) override;
 private:
 	const uint32_t kMoveCountMax_ = 2;
+
+	const float kMoveCoolTimeMax_ = 0.5f;
+	float moveCoolTimer_ = 0.0f;
 };
 

@@ -1,12 +1,16 @@
 #include "BaseBossState.h"
 #include "Boss.h"
+#include "UseEveryOne.h"
+
+using namespace MyMath;
+using namespace UseEveryOne;
 
 void BaseBossState::Update(Boss& boss) {}
 
 void BossMoveState::Update(Boss& boss) {
 
 	//偶数か奇数か
-	if (std::fmod(boss.MoveCount(), 2) == 0) {
+	if (std::fmod(boss.AttackCount() + addCount_, 2) == 0) {
 		//右位置設定
 		boss.MoveRight();
 	}
@@ -17,11 +21,15 @@ void BossMoveState::Update(Boss& boss) {
 
 	//目的地に着いたかどうか調べる
 	boss.ArrivedSegmentDiff();
-	
+
 	//目的地に着いた
 	if (boss.IsMoveSucces()) {
-		//行動前モーションステートに変更
-		boss.ChangeStatePattern(std::make_unique<BossBeforeActionMosionState>());
+		if (addCount_ == 2) {
+			//行動前モーションステートに変更		
+			boss.ChangeStatePattern(std::make_unique<BossBeforeActionMosionState>());
+		}
+		addCount_++;
+		boss.ResetMoveSucces();
 	}
 }
 
@@ -68,19 +76,25 @@ void BossAroundMoveState::Update(Boss& boss) {
 
 
 void BossBeforeActionMosionState::Update(Boss& boss) {
-	boss.BeforeActionMosion();
-		
-	if (!boss.IsMosionFinish()) {
+
+	if (!boss.IsMosionFinish()) {	
+		//回転して行動をわかりやすく
+		boss.BeforeActionMosion();		
 		return;
 	}
+	else if (moveCoolTimer_ < kMoveCoolTimeMax_) {
+		moveCoolTimer_ += kDeltaTime_;
+		return;
+	}
+
 	//移動カウントがMax
-	if (boss.MoveCount() >= kMoveCountMax_) {
-		boss.ResetMoveCount();
+	if (boss.AttackCount() >= kMoveCountMax_) {
+		boss.ResetAttackCount();
 		boss.ResetMoveSucces();
 		boss.ChangeStatePattern(std::make_unique<BossAroundMoveState>());
 	}
 	else {
-		boss.AddMoveCount();//移動カウント加算
+		boss.AddAttackCount();//移動カウント加算
 		boss.ChangeStatePattern(std::make_unique<BossAttackState>());
 	}
 

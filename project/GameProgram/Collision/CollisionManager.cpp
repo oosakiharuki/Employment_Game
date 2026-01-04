@@ -176,6 +176,30 @@ void CollisionManager::EnemyAndStage(const std::vector<std::shared_ptr<BaseEnemy
 	}
 }
 
+void CollisionManager::BossAndPlayer(Player& player, Boss& boss) {
+	//プレイヤーがボスに当たった時
+	if (IsCollisionAABB(player.GetAABB(), boss.GetAABB())) {
+		player.IsDamage(Length(player.GetTranslate(),boss.GetTranslate()));
+	}
+
+	//
+	for (auto& playerBullet : player.GetBullets()) {
+		if (IsCollisionAABB(playerBullet->GetAABB(), boss.GetAABB())) {
+			//ボスのダメージ
+			playerBullet->IsHit();//消滅
+		}
+	}
+
+	//
+	for (auto bossBullet : boss.GetBullets()) {
+		if (IsCollisionAABB(bossBullet->GetAABB(),player.GetAABB())) {
+			player.IsDamage(Length(player.GetTranslate(), bossBullet->GetTranslate()));
+			bossBullet->IsHit();//消滅
+		}
+	}
+}
+
+
 void CollisionManager::PlayerAndEventTrigger(Player* player, const std::vector<std::shared_ptr<EventTrigger>>& eventTriggers,
 	CameraControl* cameraControl_, Levelediter& levelediter) {
 	CollisionOverlap playerCollisionOverlap;
