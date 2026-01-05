@@ -49,7 +49,7 @@ public:
 	/// <param name="aabb">AABB</param>
 	void SetAABB(const AABB& aabb) { aabb_ = aabb; }
 
-	const AABB& GetAABB();
+	AABB GetAABB();
 	
 	const Vector3& GetTranslate() { return wt_.translation_; }
 

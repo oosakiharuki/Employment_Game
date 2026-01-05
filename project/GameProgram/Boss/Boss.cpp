@@ -137,8 +137,8 @@ void Boss::BeforeActionMosion() {
 	}
 }
 
-const AABB& Boss::GetAABB() {
-	AABB aabb;
+AABB Boss::GetAABB() {
+	AABB aabb{};
 	aabb.max = wt_.translation_ + aabb_.max;
 	aabb.min = wt_.translation_ + aabb_.min;
 	return aabb;

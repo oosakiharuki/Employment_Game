@@ -65,7 +65,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\System</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)GameProgram;$(ProjectDir)externals\assimp\include;$(ProjectDir)Engine\3d\_gltf;$(ProjectDir)Engine\3d\_obj;$(ProjectDir)Engine\3d\_Particle;$(ProjectDir)Engine\3d\Primitive;$(ProjectDir)GameProgram\Enemies;$(ProjectDir)GameProgram\Player;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\Boss</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -107,8 +107,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseBossState.cpp" />
-    <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="GameProgram\Boss\BaseBossState.cpp" />
+    <ClCompile Include="GameProgram\Boss\Boss.cpp" />
     <ClCompile Include="GameProgram\Enemies\BaseEnemyState.cpp" />
     <ClCompile Include="Engine\3d\BaseModel.cpp" />
     <ClCompile Include="Engine\3d\BaseObject.cpp" />
@@ -206,8 +206,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\StageObjects\StageObjectFunction.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseBossState.h" />
-    <ClInclude Include="Boss.h" />
+    <ClInclude Include="GameProgram\Boss\BaseBossState.h" />
+    <ClInclude Include="GameProgram\Boss\Boss.h" />
     <ClInclude Include="GameProgram\Enemies\BaseEnemyState.h" />
     <ClInclude Include="Engine\3d\BaseModel.h" />
     <ClInclude Include="Engine\3d\BaseObject.h" />
