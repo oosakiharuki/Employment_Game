@@ -187,14 +187,19 @@ void CollisionManager::BossAndPlayer(Player& player, Boss& boss) {
 		if (IsCollisionAABB(playerBullet->GetAABB(), boss.GetAABB())) {
 			//ボスのダメージ
 			playerBullet->IsHit();//消滅
+			boss.IsDamage();
 		}
 	}
 
 	//
-	for (auto bossBullet : boss.GetBullets()) {
-		if (IsCollisionAABB(bossBullet->GetAABB(),player.GetAABB())) {
-			player.IsDamage(Length(player.GetTranslate(), bossBullet->GetTranslate()));
-			bossBullet->IsHit();//消滅
+	for (auto& bossBullet : boss.GetBullets()) {
+		//敵がプレイヤーの弾に当たったら
+		EnemyBulletAndPlayer(&player, bossBullet);
+
+		//跳ね返った弾の当たり判定
+		if (IsCollisionAABB(bossBullet->GetAABB(), boss.GetAABB()) && bossBullet->GetIsPari()) {
+			bossBullet->IsHit();//当たって消える
+			boss.IsDamage();
 		}
 	}
 }

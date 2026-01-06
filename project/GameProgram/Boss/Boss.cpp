@@ -15,10 +15,14 @@ void Boss::Initialize() {
 
 void Boss::Update() {
 
-	wt_.translation_ += GoDestination(move_) / bunkatu_;
+	wt_.translation_ += GoDestination(move_) / moveFrame_;
 
 	//ステートパターン
 	bossState_->Update(*this);
+
+	if (isDamageReaction_) {
+		reaction_->ScaleReaction(wt_.scale_, isDamageReaction_,damageReactionPower_,damageReactionTimer_,kDamageReactionTimeMax_);
+	}
 
 	for (auto& bullet : bullets_) {
 		bullet->Update();
@@ -46,25 +50,15 @@ void Boss::Draw() {
 	}
 }
 
-void Boss::MoveRight() {
-	//右位置
-	SetMovePoint(kCenter_ + kHazi_, 180.0f);
-}
-
-void Boss::MoveLeft() {
-	//左位置
-	SetMovePoint(kCenter_ - kHazi_, 180.0f);
-}
-
 void Boss::SetMovePoint(const Vector3& point, float speedBunkatu) {
 	move_.diff = point;//目的地設定
-	bunkatu_ = speedBunkatu;//スピード分割
+	moveFrame_ = speedBunkatu;//スピード分割
 }
 
-void Boss::Fire() {
+void Boss::Fire(float kFrame) {
 
 	//連射で時間を開ける
-	rapidFireTime_ += kDeltaTime_;
+	rapidFireTime_ += kDeltaTime_ / kFrame;
 	if (rapidFireTime_ >= kRapidFireTimeMax_) {
 		FireBullet();//敵の発泡攻撃
 		rapidCount_++;//カウント
@@ -83,6 +77,7 @@ void Boss::FireBullet() {
 	Vector3 enemyPosition;
 	enemyPosition = { wt_.matWorld_.m[3][0],wt_.matWorld_.m[3][1],wt_.matWorld_.m[3][2] };
 
+	//弾丸速度
 	Vector3 velocity;
 
 	//プレイヤーの方向に向かう(最初に打つ弾にそって進む)
@@ -99,7 +94,6 @@ void Boss::FireBullet() {
 	normal *= kSpeed;
 	velocity = normal;
 
-
 	//弾丸を生み出す
 	std::unique_ptr<EnemyBullet> bullet = std::make_unique<EnemyBullet>();
 	bullet->Initialize();
@@ -109,9 +103,9 @@ void Boss::FireBullet() {
 	bullets_.push_back(std::move(bullet));
 }
 
-void Boss::ChangeStatePattern(std::unique_ptr<BaseBossState> playerState) {
+void Boss::ChangeStatePattern(std::unique_ptr<BaseBossState> state) {
 	bossState_.reset();
-	bossState_ = std::move(playerState);
+	bossState_ = std::move(state);
 }
 
 void Boss::ArrivedSegmentDiff() {
@@ -142,4 +136,12 @@ AABB Boss::GetAABB() {
 	aabb.max = wt_.translation_ + aabb_.max;
 	aabb.min = wt_.translation_ + aabb_.min;
 	return aabb;
+}
+
+void Boss::IsDamage() {
+	if (hp_ == 0) {
+		return;
+	}
+	hp_--;
+	isDamageReaction_ = true;
 }
