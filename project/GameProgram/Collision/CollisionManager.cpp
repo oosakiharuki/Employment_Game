@@ -178,7 +178,7 @@ void CollisionManager::EnemyAndStage(const std::vector<std::shared_ptr<BaseEnemy
 
 void CollisionManager::BossAndPlayer(Player& player, Boss& boss) {
 	//プレイヤーがボスに当たった時
-	if (IsCollisionAABB(player.GetAABB(), boss.GetAABB())) {
+	if (IsCollisionAABB(player.GetAABB(), boss.GetAABB()) && !boss.IsDeadMosion()) {
 		player.IsDamage(Length(player.GetTranslate(),boss.GetTranslate()));
 	}
 

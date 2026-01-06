@@ -84,6 +84,8 @@ public:
 	/// </summary>
 	void DebugMove();
 
+	void CameraYFixed(bool result) { isCameraYFixed_ = result; }
+
 private:
 	/// <summary>
 	/// 通常(動く)
@@ -140,4 +142,6 @@ private:
 	bool isFreeMode_ = false;
 
 	float movePower_ = 0.2f;
+
+	bool isCameraYFixed_ = false;
 };

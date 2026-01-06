@@ -233,6 +233,12 @@ namespace MyMath {
 	Vector3 operator*(const Vector3& v1, const Vector3& v2);
 	Vector3 operator/(const Vector3& v1, const Vector3& v2);
 
+	Vector3 operator+(const Vector3& v, float f);
+	Vector3 operator+(float f, const Vector3& v);
+	
+	Vector3 operator-(const Vector3& v, float f);
+	Vector3 operator-(float f, const Vector3& v);
+
 	Vector3 operator*(const Vector3& v, float f);
 	Vector3 operator*(float f, const Vector3& v);
 

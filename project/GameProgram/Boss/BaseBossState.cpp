@@ -12,11 +12,11 @@ void BossMoveState::Update(Boss& boss) {
 	//偶数か奇数か
 	if (std::fmod(boss.ActionCount() + addCount_, 2) == 0) {
 		//右位置設定
-		boss.SetMovePoint(boss.GetCenter() + kHazi_, kMoveFrame_);
+		boss.SetMovePoint(boss.GetCenter() + kHazi_);
 	}
 	else {
 		//左位置設定
-		boss.SetMovePoint(boss.GetCenter() - kHazi_, kMoveFrame_);
+		boss.SetMovePoint(boss.GetCenter() - kHazi_);
 	}
 
 	//目的地に着いたかどうか調べる
@@ -95,11 +95,11 @@ void BossBeforeActionMosionState::Update(Boss& boss) {
 	}
 	else if (boss.ActionCount() >= kMoveCountMax_) {
 		boss.ResetMoveSucces();
-		boss.AddActionCount();//移動カウント加算
+		boss.AddActionCount();//行動カウント加算
 		boss.ChangeStatePattern(std::make_unique<BossAroundMoveState>());
 	}
 	else {
-		boss.AddActionCount();//移動カウント加算
+		boss.AddActionCount();//行動カウント加算
 		boss.ChangeStatePattern(std::make_unique<BossAttackState>());
 	}
 
@@ -113,17 +113,17 @@ void BossFarAttackState::Update(Boss& boss) {
 		position_ = boss.GetTranslate();
 		position_.x = -position_.x;
 		//画面奥に移動
-		boss.SetMovePoint(kFarPlace_, kBunkatu_);
+		boss.SetMovePoint(kFarPlace_);
 		isStart = false;
 	}
 
-	
 	//目的地に着いたかどうか調べる
 	boss.ArrivedSegmentDiff();
 
-	if(isAttackFinish_ && boss.IsMoveSucces()){
+	if(isAttackFinish_){
+		boss.ResetMoveSucces();
 		//移動ステートに変更
-		boss.ChangeStatePattern(std::make_unique<BossMoveState>());
+		boss.ChangeStatePattern(std::make_unique<BossFarTackleState>());
 	}
 	else if (boss.IsMoveSucces()) {
 		boss.ResetStopFire();
@@ -131,9 +131,69 @@ void BossFarAttackState::Update(Boss& boss) {
 		boss.Fire(4.0f);
 		//発砲を終了したら
 		if (boss.IsStopFire()) {
-			boss.ResetMoveSucces();
-			boss.SetMovePoint(position_, kBunkatu_);
 			isAttackFinish_ = true;
 		}
 	}
+}
+
+void BossFarTackleState::Update(Boss& boss) {
+	if (isStart_) {
+		playerPosition_ = boss.GetPlayer()->GetTranslate();
+		isStart_ = false;
+	}
+
+	boss.SetMovePoint(playerPosition_,kMoveFrame_);
+
+	if (boss.GetTranslate().z <= kNearEnd) {
+		boss.ResetMoveSucces();
+		boss.ChangeStatePattern(std::make_unique<BossFallPlayerState>());
+	}
+}
+
+void BossFallPlayerState::Update(Boss& boss) {
+	//移動ポイントの設定
+	MovePointSetting(boss);
+
+	boss.SetMovePoint(movePoint_,moveFrame_);
+
+	//目的地に着いたかどうか調べる
+	boss.ArrivedSegmentDiff();
+
+	if (boss.IsMoveSucces()) {
+		if (isFinish_) {
+			//移動ステートに変更
+			boss.ChangeStatePattern(std::make_unique<BossMoveState>());
+		}
+		//完了フラグリセット
+		boss.ResetMoveSucces();
+		isMovingStartPoint = false;
+	}
+}
+
+void BossFallPlayerState::MovePointSetting(Boss& boss) {
+	if (fallTimer_ < kFallTimeMax_) {
+		movePoint_ = boss.GetPlayer()->GetTranslate();
+		movePoint_.y = kStartPoint_.y - fallTimer_;
+		boss.SetTranslate(movePoint_);
+		boss.SetOrigin(movePoint_);
+	}
+	else if (fallTimer_ >= kGoUpTime_) {
+		movePoint_.y = kGoUpPointY_;
+		isFinish_ = true;
+	}
+	else {
+		movePoint_.y = kFallPointY_;
+		moveFrame_ = kFallFrame_;
+	}
+
+	fallTimer_ += kDeltaTime_;
+}
+
+void BossDeadMosionState::Update(Boss& boss) {
+	if (isStart_) {
+		boss.DeadPosition();
+		isStart_ = false;
+	}
+
+	boss.DeadMosion();
 }

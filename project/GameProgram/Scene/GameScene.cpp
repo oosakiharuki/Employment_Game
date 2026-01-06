@@ -278,6 +278,9 @@ void GameScene::SpitOutGameObject() {
 
 	//ボスの配置
 	spitOut_.SpitOutBoss(boss_);
+	if (boss_) {
+		cameraControl_->CameraYFixed(true);
+	}
 }
 
 
@@ -382,6 +385,14 @@ void GameScene::SceneUpdate() {
 	else if (isNextGameOverScene) {
 		nextSceneNo_ = "GameOver";//ゲームオーバーシーンに移動
 	}
+
+	if (boss_) {
+		//ボスを倒したら
+		if (boss_->IsDead()) {
+			nextSceneNo_ = "Clear";//クリアシーンに移動
+		}
+	}
+
 
 	// 前回のシーンが現在のシーンと異なっている時
 	if (NextSceneFlag()) {

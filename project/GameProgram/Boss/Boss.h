@@ -43,6 +43,8 @@ public:
 
 	void SetPlayer(Player* player) { player_ = player; }
 
+	Player* GetPlayer() { return player_; }
+
 	/// <summary>
 	/// setter_当たり判定
 	/// </summary>
@@ -77,7 +79,7 @@ public:
 	/// </summary>
 	/// <param name="point">移動させるポイント</param>
 	/// <param name="speedBunkatu">移動の分割数</param>
-	void SetMovePoint(const Vector3& point, float speedBunkatu);
+	void SetMovePoint(const Vector3& point, float speedBunkatu = 180.0f);
 
 	/// <summary>
 	/// getter_行動カウント
@@ -98,6 +100,7 @@ public:
 	/// </summary>
 	void ResetMoveSucces() { isMoveSucces_ = false; }
 
+	void SetOrigin(const Vector3& value) { move_.origin = value; }
 
 	/// <summary>
 	/// 発泡処理
@@ -157,7 +160,13 @@ public:
 	/// <returns>中心座標</returns>
 	const Vector3& GetCenter() { return kCenter_; }
 
+	bool IsDead() { return isDead_; }
 
+	bool IsDeadMosion() { return isDeadMosion_; }
+
+	void DeadMosion();
+
+	void DeadPosition();
 
 private:
 
@@ -210,6 +219,19 @@ private:
 	Vector3 damageReactionPower_ = { 0.05f,0.05f ,0.05f };
 	float damageReactionTimer_ = 0.0f;
 	const float kDamageReactionTimeMax_ = 0.3f;
+
+	//死んだときの処理
+	const float kShakePower = 0.25f;
+	Vector3 deadPosition_{};
+	Vector3 deadScale_{};
+	float deadTimer_ = 0.0f;
+	const float kDeadTimeMax_ = 6.0f;
+	
+	bool isDead_ = false;
+	bool isDeadMosion_ = false;
+
+	void ImGuiUpdate();
+
 
 	//ステートパターン
 	std::unique_ptr<BaseBossState> bossState_;

@@ -1,4 +1,5 @@
 #include "Boss.h"
+#include "ImGuiManager.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -16,6 +17,11 @@ void Boss::Initialize() {
 void Boss::Update() {
 
 	wt_.translation_ += GoDestination(move_) / moveFrame_;
+
+	if (hp_ == 0 && deadTimer_ < kDeltaTime_) {
+		bossState_.reset();
+		bossState_ = std::make_unique<BossDeadMosionState>();
+	}
 
 	//ステートパターン
 	bossState_->Update(*this);
@@ -36,6 +42,8 @@ void Boss::Update() {
 		return false;
 		});
 
+
+	ImGuiUpdate();
 
 	object_->Update(wt_);
 	wt_.UpdateMatrix();
@@ -144,4 +152,46 @@ void Boss::IsDamage() {
 	}
 	hp_--;
 	isDamageReaction_ = true;
+}
+
+void Boss::DeadMosion() {
+
+	isDeadMosion_ = true;
+
+	std::random_device seed;
+	std::mt19937 random(seed());
+
+	std::uniform_real_distribution<float> yure(-kShakePower, kShakePower);
+
+	//上下左右にシェイク(z軸は関係ない)
+	wt_.translation_ = deadPosition_ + Vector3(yure(random), yure(random), 0.0f);
+
+	wt_.translation_.x = std::clamp(wt_.translation_.x, deadPosition_.x - kShakePower, deadPosition_.x + kShakePower);
+	wt_.translation_.y = std::clamp(wt_.translation_.y, deadPosition_.y - kShakePower, deadPosition_.y + kShakePower);
+
+	deadTimer_ += kDeltaTime_;
+
+	wt_.scale_ = deadScale_ - deadTimer_ / kDeadTimeMax_;
+
+	if (deadTimer_ >= kDeadTimeMax_) {
+		isDead_ = true;
+		wt_.scale_ = { 0,0,0 };//消えるようにする
+	}
+}
+
+void Boss::DeadPosition() {
+	deadPosition_ = wt_.translation_;
+	deadScale_ = wt_.scale_;
+}
+
+void Boss::ImGuiUpdate() {
+#ifdef USE_IMGUI
+
+	ImGui::Begin("boss");
+	ImGui::Text("translate: %f, %f, %f", wt_.translation_.x, wt_.translation_.y, wt_.translation_.z);
+	ImGui::Text("Hp: %d",hp_);
+	ImGui::End();
+
+#endif // USE_IMGUI
+
 }
