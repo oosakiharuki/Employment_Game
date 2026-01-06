@@ -85,6 +85,10 @@ void CameraControl::Move() {
 	}
 	 
 	//Y座標
+	if (isCameraYFixed_) {
+		return;
+	}
+
 	if (playerPos_.y >= kFixedY_) {
 		wt_.translation_.y = playerPos_.y + kFixedY_;
 	}

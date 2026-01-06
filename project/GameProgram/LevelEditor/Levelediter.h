@@ -58,6 +58,14 @@ public:
 			std::string csvFile;
 			std::string cameraName;
 		};
+		/// <summary>
+		/// ボスの生成データ
+		/// </summary>
+		struct BossData {
+			std::string fileName;
+			Transform transform;
+			AABB colliderAABB;
+		};
 
 		//構造体データの配列たち
 		std::vector<ObjectData> objects;
@@ -66,6 +74,7 @@ public:
 		std::unordered_map<std::string, CameraInitData> cameraInit;
 		std::vector<StageObjectData> stageObjects;
 		std::vector<EventTriggerData> eventTriggerDatas;
+		std::vector<BossData> bosses;
 	};
 
 	/// <summary>
@@ -117,6 +126,12 @@ private:
 	/// <param name="object">オブジェクトのデータ配列</param>
 	/// <param name="translate">オブジェクト自体の中心</param>
 	void LoadEventTrigger(nlohmann::json& object,const Vector3& translate);
+
+	/// <summary>
+	/// ボスの配置
+	/// </summary>
+	/// <param name="object">オブジェクトのデータ配置</param>
+	void LoadBoss(nlohmann::json& object);
 
 	/// <summary>
 	/// トランスフォームの設定

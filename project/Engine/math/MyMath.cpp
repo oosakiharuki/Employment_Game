@@ -112,6 +112,30 @@ namespace MyMath {
 		return result;
 	}
 
+	Vector3 operator+(const Vector3& v, float f) {
+		Vector3 result;
+		result.x = v.x + f;
+		result.y = v.y + f;
+		result.z = v.z + f;
+		return result;
+	}
+
+	Vector3 operator+(float f, const Vector3& v) {
+		return v + f;
+	}
+
+	Vector3 operator-(const Vector3& v, float f) {
+		Vector3 result;
+		result.x = v.x - f;
+		result.y = v.y - f;
+		result.z = v.z - f;
+		return result;
+	}
+	
+	Vector3 operator-(float f, const Vector3& v) {
+		return v - f;
+	}
+
 	Vector3 operator*(const Vector3& v, float f) {
 		Vector3 result;
 		result.x = v.x * f;
@@ -202,8 +226,41 @@ namespace MyMath {
 		return v;
 	}
 
+	bool operator==(const Vector3& v1, const Vector3& v2) {
+		if (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z) {
+			return true;
+		}
+		return false;
+	}
+	
+	bool operator<=(const Vector3& v1, const Vector3& v2) {
+		if (v1.x <= v2.x && v1.y <= v2.y && v1.z <= v2.z) {
+			return true;
+		}
+		return false;
+	}
+	
+	bool operator>=(const Vector3& v1, const Vector3& v2) {
+		if (v1.x >= v2.x && v1.y >= v2.y && v1.z >= v2.z) {
+			return true;
+		}
+		return false;
+	}
 
 
+	bool operator<(const Vector3& v1, const Vector3& v2) {
+		if (v1.x < v2.x && v1.y < v2.y && v1.z < v2.z) {
+			return true;
+		}
+		return false;
+	}
+
+	bool operator>(const Vector3& v1, const Vector3& v2) {
+		if (v1.x > v2.x && v1.y > v2.y && v1.z > v2.z) {
+			return true;
+		}
+		return false;
+	}
 
 	Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2){
 		Matrix4x4 result;
@@ -415,12 +472,37 @@ namespace MyMath {
 	}
 
 	float Length(float start, float target) {
-		
+		return std::abs(start - target);
+	}
 
-		float point1 = std::abs(start);
-		float point2 = std::abs(target);
+	Vector3 Length(const Vector3& start, const Vector3& target) {
+		Vector3 result{};
+		result.x = std::abs(start.x - target.x);
+		result.y = std::abs(start.y - target.y);
+		result.z = std::abs(start.z - target.z);
 
-		return std::abs(point1 - point2);
+		return result;
+	}
+
+	Vector3 GoDestination(const Segment& segment) {
+		Vector3 result =  Length(segment.origin , segment.diff);
+		//目的地(diff)が現在地(origin)より値が小さい場合、マイナス値にする
+		if (segment.origin.x > segment.diff.x) {
+			result.x = -result.x;
+		}
+		if (segment.origin.y > segment.diff.y) {
+			result.y = -result.y;
+		}
+		if (segment.origin.z > segment.diff.z) {
+			result.z = -result.z;
+		}
+		return result;
+	}
+
+	Vector3 GoDestination(const Vector3& origin, const Vector3& diff) {
+		Segment segment = { origin,diff };
+		Vector3 result = GoDestination(segment);
+		return result;
 	}
 
 

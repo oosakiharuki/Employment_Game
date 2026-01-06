@@ -31,6 +31,7 @@ void LoadingModels::LoadObj() {
 	modelManager->LoadModel("stage_0", ".obj");
 	modelManager->LoadModel("stage_1", ".obj");
 	modelManager->LoadModel("stage_2", ".obj");
+	modelManager->LoadModel("stage_boss",".obj");
 	modelManager->LoadModel("stage_select", ".obj");
 	modelManager->LoadModel("warpGate", ".obj");
 	modelManager->LoadModel("goal", ".obj");
@@ -62,4 +63,7 @@ void LoadingModels::LoadGltf() {
 
 	modelManager->LoadModel("player_found_mark", ".gltf"); 
 	modelManager->LoadModel("player_lost_mark", ".gltf");
+
+	modelManager->LoadModel("Boss", ".gltf", true);
+
 }

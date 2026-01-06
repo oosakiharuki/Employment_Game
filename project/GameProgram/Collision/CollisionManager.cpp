@@ -176,6 +176,35 @@ void CollisionManager::EnemyAndStage(const std::vector<std::shared_ptr<BaseEnemy
 	}
 }
 
+void CollisionManager::BossAndPlayer(Player& player, Boss& boss) {
+	//プレイヤーがボスに当たった時
+	if (IsCollisionAABB(player.GetAABB(), boss.GetAABB()) && !boss.IsDeadMosion()) {
+		player.IsDamage(Length(player.GetTranslate(),boss.GetTranslate()));
+	}
+
+	//
+	for (auto& playerBullet : player.GetBullets()) {
+		if (IsCollisionAABB(playerBullet->GetAABB(), boss.GetAABB())) {
+			//ボスのダメージ
+			playerBullet->IsHit();//消滅
+			boss.IsDamage();
+		}
+	}
+
+	//
+	for (auto& bossBullet : boss.GetBullets()) {
+		//敵がプレイヤーの弾に当たったら
+		EnemyBulletAndPlayer(&player, bossBullet);
+
+		//跳ね返った弾の当たり判定
+		if (IsCollisionAABB(bossBullet->GetAABB(), boss.GetAABB()) && bossBullet->GetIsPari()) {
+			bossBullet->IsHit();//当たって消える
+			boss.IsDamage();
+		}
+	}
+}
+
+
 void CollisionManager::PlayerAndEventTrigger(Player* player, const std::vector<std::shared_ptr<EventTrigger>>& eventTriggers,
 	CameraControl* cameraControl_, Levelediter& levelediter) {
 	CollisionOverlap playerCollisionOverlap;

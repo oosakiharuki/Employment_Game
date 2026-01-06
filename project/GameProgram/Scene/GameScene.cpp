@@ -10,8 +10,8 @@ void GameScene::Initialize() {
 	sceneSaveData_ = NextStageSave::GetInstance()->GetNextStageSaveData();
 
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting("stage_2");
-
+	LevelEditorObjectSetting();
+	
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");
 	soundData_ = Audio::GetInstance()->LoadWave("resource/sound/bane.wav");
@@ -144,6 +144,10 @@ void GameScene::PlayerAliveUpdate() {
 		}
 	}
 
+	if (boss_) {
+		boss_->SetPlayer(player_.get());
+		boss_->Update();
+	}
 	//使用する当たり判定
 	CollisionCommon();
 
@@ -155,6 +159,10 @@ void GameScene::Draw() {
 	
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->Draw();
+	}
+
+	if (boss_) {
+		boss_->Draw();
 	}
 
 	//モデル描画処理
@@ -267,6 +275,12 @@ void GameScene::SpitOutGameObject() {
 	for (auto& enemy : enemies_) {
 		enemy->SetStages(stagesAABB_);
 	}
+
+	//ボスの配置
+	spitOut_.SpitOutBoss(boss_);
+	if (boss_) {
+		cameraControl_->CameraYFixed(true);
+	}
 }
 
 
@@ -294,6 +308,11 @@ void GameScene::CollisionCommon() {
 	CollisionManager::GetInstance()->PlayerAndEventTrigger(player_.get(), eventTriggers_,cameraControl_.get(), levelediter_);
 	//敵とステージ自体
 	CollisionManager::GetInstance()->EnemyAndStage(enemies_,stagesAABB_);
+
+	if (boss_) {
+		//ボスとプレイヤー
+		CollisionManager::GetInstance()->BossAndPlayer(*player_.get(),*boss_.get());
+	}
 }
 
 void GameScene::WarterWarpExit() {
@@ -344,6 +363,11 @@ void GameScene::Respawn() {
 		eventTrigger->FailureEvent();
 		cameraControl_->CameraSetting(levelediter_.GetLevelData()->cameraInit["MainCamera"], false);
 	}
+
+	//リセット
+	boss_.reset();
+	//ボスの配置
+	spitOut_.SpitOutBoss(boss_);
 }
 
 void GameScene::SceneUpdate() {
@@ -361,6 +385,14 @@ void GameScene::SceneUpdate() {
 	else if (isNextGameOverScene) {
 		nextSceneNo_ = "GameOver";//ゲームオーバーシーンに移動
 	}
+
+	if (boss_) {
+		//ボスを倒したら
+		if (boss_->IsDead()) {
+			nextSceneNo_ = "Clear";//クリアシーンに移動
+		}
+	}
+
 
 	// 前回のシーンが現在のシーンと異なっている時
 	if (NextSceneFlag()) {

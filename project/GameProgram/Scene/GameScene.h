@@ -53,6 +53,9 @@ private:
 	//イベントトリガー
 	std::vector<std::shared_ptr<EventTrigger>> eventTriggers_;
 
+	//boss
+	std::unique_ptr<Boss> boss_;
+
 	//BGM
 	SoundData BGMData_;
 	float volume_ = 0.07f;//音量調節機能

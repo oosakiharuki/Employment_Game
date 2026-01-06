@@ -139,6 +139,12 @@
     <Filter Include="ソース ファイル\GameProgram\StageObjects">
       <UniqueIdentifier>{e7200600-3803-4831-a1a7-5b8eee728d58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameProgram\Boss">
+      <UniqueIdentifier>{93f032a7-3867-4f2e-b707-691a27167f30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\Boss">
+      <UniqueIdentifier>{f4f3b1a9-26c2-43b8-9108-cb954ac43aa7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\Sprite.cpp">
@@ -404,6 +410,12 @@
     </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\StageObjectFunction.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Boss\Boss.cpp">
+      <Filter>ソース ファイル\GameProgram\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Boss\BaseBossState.cpp">
+      <Filter>ソース ファイル\GameProgram\Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -682,6 +694,12 @@
     </ClInclude>
     <ClInclude Include="GameProgram\StageObjects\StageObjectFunction.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Boss\Boss.h">
+      <Filter>ヘッダー ファイル\GameProgram\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Boss\BaseBossState.h">
+      <Filter>ヘッダー ファイル\GameProgram\Boss</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

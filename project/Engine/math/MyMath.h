@@ -233,6 +233,12 @@ namespace MyMath {
 	Vector3 operator*(const Vector3& v1, const Vector3& v2);
 	Vector3 operator/(const Vector3& v1, const Vector3& v2);
 
+	Vector3 operator+(const Vector3& v, float f);
+	Vector3 operator+(float f, const Vector3& v);
+	
+	Vector3 operator-(const Vector3& v, float f);
+	Vector3 operator-(float f, const Vector3& v);
+
 	Vector3 operator*(const Vector3& v, float f);
 	Vector3 operator*(float f, const Vector3& v);
 
@@ -249,6 +255,14 @@ namespace MyMath {
 	Vector3& operator*=(Vector3& v, float f);
 	Vector3& operator/=(Vector3& v, float f);
 
+	bool operator==(const Vector3& v1, const Vector3& v2);
+	bool operator<=(const Vector3& v1, const Vector3& v2);
+	bool operator>=(const Vector3& v1,const Vector3& v2);
+
+	bool operator<(const Vector3& v1, const Vector3& v2);
+	bool operator>(const Vector3& v1, const Vector3& v2);
+
+	
 	Vector3 operator-(const Vector3& v);
 
 
@@ -278,6 +292,10 @@ namespace MyMath {
 	Vector3 EaseOut(const Vector3& v, float t, float endt);
 
 	float Length(float start, float target);
+	Vector3 Length(const Vector3& start, const Vector3& target);
+		
+	Vector3 GoDestination(const Segment& segment);
+	Vector3 GoDestination(const Vector3& origin, const Vector3& diff);
 
 #pragma region Affine
 

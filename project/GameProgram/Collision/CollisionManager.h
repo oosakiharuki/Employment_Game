@@ -4,6 +4,7 @@
 #include "BaseEnemy.h"
 #include "IStageObject.h"
 #include "EventTrigger.h"
+#include "Boss.h"
 #include "CameraControl.h"
 
 /// <summary>
@@ -56,6 +57,10 @@ public:
 	/// <param name="enemies">敵たち</param>
 	/// <param name="stagesAABB">ステージ</param>
 	void EnemyAndStage(const std::vector<std::shared_ptr<BaseEnemy>>& enemies, const std::vector<AABB>& stagesAABB);
+
+
+	void BossAndPlayer(Player& player, Boss& boss);
+
 
 	/// <summary>
 	/// プレイヤーとイベントトリガー

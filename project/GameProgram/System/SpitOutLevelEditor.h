@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseScene.h"
+#include "Boss.h"
 /// <summary>
 /// レベルエディタの配置
 /// </summary>
@@ -49,6 +50,12 @@ public:
 	/// </summary>
 	/// <param name="eventTrigger">イベントトリガーの配列</param>
 	void SpitOutEventTrigger(std::vector<std::shared_ptr<EventTrigger>>& eventTrigger);
+
+	/// <summary>
+	/// ボスの配置
+	/// </summary>
+	/// <param name="boss">ボス</param>
+	void SpitOutBoss(std::unique_ptr<Boss>& boss);
 
 private:
 	//使用するエディタ

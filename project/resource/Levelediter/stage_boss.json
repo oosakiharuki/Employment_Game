@@ -2,37 +2,16 @@
     "name": "scene",
     "objects": [
         {
-            "type": "LIGHT",
-            "name": "Light",
-            "transform": {
-                "translation": [
-                    4.076245307922363,
-                    1.0054539442062378,
-                    5.903861999511719
-                ],
-                "rotation": [
-                    37.26104736328125,
-                    3.1637091636657715,
-                    106.93632507324219
-                ],
-                "scaling": [
-                    1.0,
-                    0.9999999403953552,
-                    1.0
-                ]
-            }
-        },
-        {
             "type": "CAMERA",
             "name": "MainCamera",
             "transform": {
                 "translation": [
                     0.0,
-                    -48.0,
-                    9.5
+                    -47.0,
+                    12.0
                 ],
                 "rotation": [
-                    90.00000762939453,
+                    84.99999237060547,
                     -0.0,
                     0.0
                 ],
@@ -41,50 +20,28 @@
                     1.0,
                     1.0
                 ]
-            }
-        },
-        {
-            "type": "MESH",
-            "name": "立方体",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    22.5,
-                    10.09999942779541,
-                    1.0
-                ]
             },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
+            "travel_route": {
+                "start": [
+                    -16.0,
                     0.0,
                     0.0
                 ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
+                "end": [
+                    16.0,
+                    0.0,
+                    0.0
                 ]
             }
         },
         {
             "type": "MESH",
-            "name": "立方体.001",
+            "name": "cube",
             "transform": {
                 "translation": [
-                    -17.0,
                     0.0,
-                    12.0
+                    0.0,
+                    -1.0
                 ],
                 "rotation": [
                     0.0,
@@ -92,43 +49,9 @@
                     0.0
                 ],
                 "scaling": [
-                    1.0,
+                    32.0,
                     10.0,
-                    11.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
                     2.0
-                ]
-            }
-        },
-        {
-            "type": "MESH",
-            "name": "立方体.002",
-            "transform": {
-                "translation": [
-                    17.0,
-                    0.0,
-                    12.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    10.0,
-                    11.0
                 ]
             },
             "collider": {
@@ -150,14 +73,14 @@
             "name": "PlayerSpawn",
             "transform": {
                 "translation": [
-                    -12.0,
+                    -10.0,
                     0.0,
                     3.0
                 ],
                 "rotation": [
                     0.0,
                     -0.0,
-                    89.99999237060547
+                    90.00000762939453
                 ],
                 "scaling": [
                     1.0,
@@ -176,89 +99,17 @@
                     2.0,
                     2.0,
                     3.0
-                ]
-            }
-        },
-        {
-            "type": "StageObjectSpawn",
-            "StageObjectName": "WarpGate",
-            "name": "StageObjectSpawn",
-            "transform": {
-                "translation": [
-                    -3.0,
-                    1.0,
-                    3.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": "stage_0",
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    -1.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
-        },
-        {
-            "type": "StageObjectSpawn",
-            "StageObjectName": "WarpGate",
-            "name": "StageObjectSpawn.001",
-            "transform": {
-                "translation": [
-                    12.0,
-                    0.0,
-                    10.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": "stage_boss",
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
                 ]
             }
         },
         {
             "type": "MESH",
-            "name": "立方体.003",
+            "name": "cube.001",
             "transform": {
                 "translation": [
-                    12.0,
+                    -30.0,
                     0.0,
-                    4.0
+                    -2.0
                 ],
                 "rotation": [
                     0.0,
@@ -266,9 +117,77 @@
                     0.0
                 ],
                 "scaling": [
-                    4.499999046325684,
-                    6.059999942779541,
-                    3.8999998569488525
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    14.0
+                ],
+                "size": [
+                    2.0,
+                    20.0,
+                    24.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "cube.002",
+            "transform": {
+                "translation": [
+                    30.0,
+                    0.0,
+                    -2.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    14.0
+                ],
+                "size": [
+                    2.0,
+                    20.0,
+                    24.0
+                ]
+            }
+        },
+        {
+            "type": "BossSpawn",
+            "name": "BossSpawn",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    13.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
                 ]
             },
             "collider": {
@@ -279,9 +198,9 @@
                     0.0
                 ],
                 "size": [
-                    2.0,
-                    2.0,
-                    2.0
+                    6.0,
+                    6.0,
+                    6.0
                 ]
             }
         }
