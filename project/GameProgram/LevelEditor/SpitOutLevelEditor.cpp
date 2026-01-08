@@ -124,7 +124,7 @@ void SpitOutLevelEditor::SpitOutStageObject(std::list<std::shared_ptr<IStageObje
 	}
 }
 
-void SpitOutLevelEditor::SettingStageObject(IStageObject& stageObject, Levelediter::LevelData::StageObjectData data) {
+void SpitOutLevelEditor::SettingStageObject(IStageObject& stageObject, LevelEditor::LevelData::StageObjectData data) {
 	stageObject.SetObjectName(data.ObjectName);//オブジェクトの名前保存
 	stageObject.Initialize();//初期化
 	stageObject.SetPosition(data.transform.translate);//座標位置

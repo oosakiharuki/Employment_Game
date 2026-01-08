@@ -2,7 +2,7 @@
 #include "WorldTransform.h"
 #include "Camera.h"
 #include "MyMath.h"
-#include <Levelediter.h>
+#include <LevelEditor.h>
 #include "UseEveryOne.h"
 /// <summary>
 /// カメラをコントロールする

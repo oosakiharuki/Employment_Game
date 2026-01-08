@@ -1,7 +1,7 @@
 #pragma once
 #include "Object3d.h"
 #include "MyMath.h"
-#include <Levelediter.h>
+#include <LevelEditor.h>
 
 /// <summary>
 /// ステージオブジェクト(ギミック)の基盤クラス

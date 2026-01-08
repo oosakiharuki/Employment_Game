@@ -241,7 +241,7 @@ void GameScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
 
 void GameScene::SpitOutGameObject() {
 	//ステージのjsonを読み取る
-	levelediter_.LoadLevelediter("resource/Levelediter/" + stageFileName_ + ".json");
+	levelediter_.LoadLevelEditor("resource/LevelEditor/" + stageFileName_ + ".json");
 	spitOut_.SetLevelEditor(&levelediter_);
 
 	//- カメラ配置 -

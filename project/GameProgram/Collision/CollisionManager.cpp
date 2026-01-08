@@ -209,7 +209,7 @@ void CollisionManager::BossAndPlayer(Player& player, Boss& boss) {
 
 
 void CollisionManager::PlayerAndEventTrigger(Player* player, const std::vector<std::shared_ptr<EventTrigger>>& eventTriggers,
-	CameraControl* cameraControl_, Levelediter& levelediter) {
+	CameraControl* cameraControl_, LevelEditor& levelediter) {
 	CollisionOverlap playerCollisionOverlap;
 	playerCollisionOverlap = SetTarget(player->GetTranslate(), player->GetAABB());
 

@@ -240,7 +240,7 @@
     <ClCompile Include="Engine\3d\_gltf\GLTFCommon.cpp">
       <Filter>ソース ファイル\Engine\3d\_gltf</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\_gltf\Model__glTF.cpp">
+    <ClCompile Include="Engine\3d\_gltf\Model_glTF.cpp">
       <Filter>ソース ファイル\Engine\3d\_gltf</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\_gltf\Object_glTF.cpp">
@@ -339,7 +339,7 @@
     <ClCompile Include="GameProgram\Scene\GameScene.cpp">
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\LevelEditor\Levelediter.cpp">
+    <ClCompile Include="GameProgram\LevelEditor\LevelEditor.cpp">
       <Filter>ソース ファイル\GameProgram\LevelEditor</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Scene\BaseScene.cpp">
@@ -387,7 +387,7 @@
     <ClCompile Include="GameProgram\System\Reaction.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\System\SpitOutLevelEditor.cpp">
+    <ClCompile Include="GameProgram\LevelEditor\SpitOutLevelEditor.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\System\UIManager.cpp">
@@ -417,7 +417,7 @@
     <ClCompile Include="GameProgram\Boss\BaseBossState.cpp">
       <Filter>ソース ファイル\GameProgram\Boss</Filter>
     </ClCompile>
-    <ClCompile Include="MoveGround.cpp">
+    <ClCompile Include="GameProgram\StageObjects\MoveGround.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -626,7 +626,7 @@
     <ClInclude Include="GameProgram\Scene\GameScene.h">
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\LevelEditor\Levelediter.h">
+    <ClInclude Include="GameProgram\LevelEditor\LevelEditor.h">
       <Filter>ヘッダー ファイル\GameProgram\LevelEditor</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\Scene\BaseScene.h">
@@ -674,7 +674,7 @@
     <ClInclude Include="GameProgram\System\UIManager.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\System\SpitOutLevelEditor.h">
+    <ClInclude Include="GameProgram\LevelEditor\SpitOutLevelEditor.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\System\Reaction.h">
@@ -704,7 +704,7 @@
     <ClInclude Include="GameProgram\Boss\BaseBossState.h">
       <Filter>ヘッダー ファイル\GameProgram\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="MoveGround.h">
+    <ClInclude Include="GameProgram\StageObjects\MoveGround.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

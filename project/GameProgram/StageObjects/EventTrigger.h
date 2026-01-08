@@ -75,7 +75,7 @@ public:
 	void FailureEvent();
 
 	/// <summary>
-	/// eventDataを導入(Levelediterで設定したやつの代入に使う)
+	/// eventDataを導入(LevelEditorで設定したやつの代入に使う)
 	/// </summary>
 	/// <param name="data"></param>
 	void SetEventData(const EventData& data) { eventData_ = data; }

@@ -14,10 +14,10 @@ struct CameraInitData {
 /// <summary>
 /// レベルエディタ(ステージのjson読み込み)
 /// </summary>
-class Levelediter {
+class LevelEditor {
 public:
 
-	void LoadLevelediter(const std::string& jsonName);
+	void LoadLevelEditor(const std::string& jsonName);
 
 	//LevelData型
 	struct LevelData {

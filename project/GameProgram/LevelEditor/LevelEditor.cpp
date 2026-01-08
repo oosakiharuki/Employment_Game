@@ -1,4 +1,4 @@
-#include "Levelediter.h"
+#include "LevelEditor.h"
 #include <json.hpp>
 #include <fstream>
 #include <cassert>
@@ -7,7 +7,7 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-void Levelediter::LoadLevelediter(const std::string& jsonName) {
+void LevelEditor::LoadLevelEditor(const std::string& jsonName) {
 	//json
 	levelData_ = std::make_unique<LevelData>();
 
@@ -31,7 +31,7 @@ void Levelediter::LoadLevelediter(const std::string& jsonName) {
 	}
 }
 
-nlohmann::json Levelediter::LoadJsonFile(const std::string& kFullpath) {
+nlohmann::json LevelEditor::LoadJsonFile(const std::string& kFullpath) {
 	//ファイルストリーム
 	std::ifstream file;
 
@@ -61,7 +61,7 @@ nlohmann::json Levelediter::LoadJsonFile(const std::string& kFullpath) {
 	return deserialized;
 }
 
-void Levelediter::LoadGameObjects(nlohmann::json& object) {
+void LevelEditor::LoadGameObjects(nlohmann::json& object) {
 	//タイプの設定
 	std::string type = object["type"].get<std::string>();
 
@@ -86,7 +86,7 @@ void Levelediter::LoadGameObjects(nlohmann::json& object) {
 	}
 }
 
-void Levelediter::LoadStage(nlohmann::json& object) {
+void LevelEditor::LoadStage(nlohmann::json& object) {
 	//要素追加
 	levelData_->objects.emplace_back(LevelData::ObjectData{});
 	//
@@ -108,7 +108,7 @@ void Levelediter::LoadStage(nlohmann::json& object) {
 	LoadEventTrigger(object,objectData.transform.translate);
 }
 
-void Levelediter::LoadCamera(nlohmann::json& object) {
+void LevelEditor::LoadCamera(nlohmann::json& object) {
 	//名前を設定
 	std::string CameraName = object["name"].get<std::string>();
 
@@ -125,7 +125,7 @@ void Levelediter::LoadCamera(nlohmann::json& object) {
 	SetTravelRoute(object, cameraInitData.leftPoint, cameraInitData.rightPoint);
 }
 
-void Levelediter::LoadPlayer(nlohmann::json& object) {
+void LevelEditor::LoadPlayer(nlohmann::json& object) {
 	//要素追加
 	levelData_->players.emplace_back(LevelData::PlayerSpawnData{});
 	//
@@ -143,7 +143,7 @@ void Levelediter::LoadPlayer(nlohmann::json& object) {
 	SetCollider(object, playerSpawnData.colliderAABB,playerSpawnData.transform.scale);
 }
 
-void Levelediter::LoadEnemies(nlohmann::json& object) {
+void LevelEditor::LoadEnemies(nlohmann::json& object) {
 	//要素追加
 	levelData_->spawnEnemies.emplace_back(LevelData::EnemySpawnData{});
 	LevelData::EnemySpawnData& enemySpawnData = levelData_->spawnEnemies.back();
@@ -168,7 +168,7 @@ void Levelediter::LoadEnemies(nlohmann::json& object) {
 	SetTravelRoute(object, enemySpawnData.leftPoint,enemySpawnData.rightPoint);
 }
 
-void Levelediter::LoadStageObject(nlohmann::json& object) {
+void LevelEditor::LoadStageObject(nlohmann::json& object) {
 	//要素追加
 	levelData_->stageObjects.emplace_back(LevelData::StageObjectData{});
 	//
@@ -194,7 +194,7 @@ void Levelediter::LoadStageObject(nlohmann::json& object) {
 	}
 }
 
-void Levelediter::LoadEventTrigger(nlohmann::json& object, const Vector3& translate) {
+void LevelEditor::LoadEventTrigger(nlohmann::json& object, const Vector3& translate) {
 	//イベントトリガー
 	nlohmann::json& trigger = object["event_trigger"];
 
@@ -223,7 +223,7 @@ void Levelediter::LoadEventTrigger(nlohmann::json& object, const Vector3& transl
 	}
 }
 
-void Levelediter::LoadBoss(nlohmann::json& object) {
+void LevelEditor::LoadBoss(nlohmann::json& object) {
 	levelData_->bosses.emplace_back(LevelData::BossData{});
 	LevelData::BossData& bossData = levelData_->bosses.back();
 
@@ -239,7 +239,7 @@ void Levelediter::LoadBoss(nlohmann::json& object) {
 	SetCollider(object, bossData.colliderAABB, bossData.transform.scale);
 }
 
-void Levelediter::SetTransform(nlohmann::json& object, Transform& objectTransform) {
+void LevelEditor::SetTransform(nlohmann::json& object, Transform& objectTransform) {
 	//トランスフォームのパラメータ読み込み
 	nlohmann::json& transform = object["transform"];
 
@@ -259,7 +259,7 @@ void Levelediter::SetTransform(nlohmann::json& object, Transform& objectTransfor
 	objectTransform.scale.z = (float)transform["scaling"][1];
 }
 
-void Levelediter::SetCollider(nlohmann::json& object, AABB& objectAABB, const Vector3& objectSize) {
+void LevelEditor::SetCollider(nlohmann::json& object, AABB& objectAABB, const Vector3& objectSize) {
 	//コライダー
 	nlohmann::json& collider = object["collider"];
 
@@ -274,7 +274,7 @@ void Levelediter::SetCollider(nlohmann::json& object, AABB& objectAABB, const Ve
 	}
 }
 
-void Levelediter::SetTravelRoute(nlohmann::json& object, Vector3& leftPoint, Vector3& rightPoint) {
+void LevelEditor::SetTravelRoute(nlohmann::json& object, Vector3& leftPoint, Vector3& rightPoint) {
 	//移動ルート
 	nlohmann::json& travelRoute = object["travel_route"];
 
