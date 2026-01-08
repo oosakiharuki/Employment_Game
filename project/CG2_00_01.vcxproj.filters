@@ -417,6 +417,9 @@
     <ClCompile Include="GameProgram\Boss\BaseBossState.cpp">
       <Filter>ソース ファイル\GameProgram\Boss</Filter>
     </ClCompile>
+    <ClCompile Include="MoveGround.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -700,6 +703,9 @@
     </ClInclude>
     <ClInclude Include="GameProgram\Boss\BaseBossState.h">
       <Filter>ヘッダー ファイル\GameProgram\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveGround.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

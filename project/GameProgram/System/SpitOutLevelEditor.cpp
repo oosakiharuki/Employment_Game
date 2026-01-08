@@ -92,30 +92,46 @@ void SpitOutLevelEditor::SpitOutStageObject(std::list<std::shared_ptr<IStageObje
 	//ステージオブジェクトの配置データがあるとき
 	if (!levelEditor_->GetLevelData()->stageObjects.empty()) {
 		for (auto& stageObjectData : levelEditor_->GetLevelData()->stageObjects) {
-			std::unique_ptr<IStageObject> stageObject;
 			//ステージオブジェクトの名前で変更する
 			if (stageObjectData.ObjectName == "WarpGate") {
 				//ワープゲート
-				stageObject = std::make_unique<WarpGate>();
+				std::unique_ptr<WarpGate>stageObject = std::make_unique<WarpGate>();
+				SettingStageObject(*stageObject.get(), stageObjectData);
 				stageObject->SetNextStage(stageObjectData.fileName);//次のステージ用の.json名
+				stageObjects.push_back(std::move(stageObject));
 			}
 			else if (stageObjectData.ObjectName == "Checkpoint") {
 				//チェックポイント
-				stageObject = std::make_unique<CheckPoint>();
+				std::unique_ptr<CheckPoint>stageObject = std::make_unique<CheckPoint>();
+				SettingStageObject(*stageObject.get(), stageObjectData);
+				stageObjects.push_back(std::move(stageObject));
 			}
 			else if (stageObjectData.ObjectName == "Goal") {
 				//ゴール
-				stageObject = std::make_unique<Goal>();
+				std::unique_ptr<Goal>stageObject = std::make_unique<Goal>();
+				SettingStageObject(*stageObject.get(), stageObjectData);
+				stageObjects.push_back(std::move(stageObject));
 			}
-			stageObject->SetObjectName(stageObjectData.ObjectName);//オブジェクトの名前保存
-			stageObject->Initialize();//初期化
-			stageObject->SetPosition(stageObjectData.transform.translate);//座標位置
-			stageObject->SetAABB(stageObjectData.colliderAABB);//AABB
-
-			stageObjects.push_back(std::move(stageObject));
+			else if (stageObjectData.ObjectName == "MoveGround") {
+				//動く足場
+				std::unique_ptr<MoveGround>stageObject = std::make_unique<MoveGround>();
+				SettingStageObject(*stageObject.get(), stageObjectData);
+				//動く足場特有の処理
+				stageObject->SetTravelRoute(stageObjectData.leftPoint, stageObjectData.rightPoint);
+				stageObjects.push_back(std::move(stageObject));
+			}
 		}
 	}
 }
+
+void SpitOutLevelEditor::SettingStageObject(IStageObject& stageObject, Levelediter::LevelData::StageObjectData data) {
+	stageObject.SetObjectName(data.ObjectName);//オブジェクトの名前保存
+	stageObject.Initialize();//初期化
+	stageObject.SetPosition(data.transform.translate);//座標位置
+	stageObject.SetScale(data.transform.scale);
+	stageObject.SetAABB(data.colliderAABB);//AABB
+}
+
 
 void SpitOutLevelEditor::SpitOutEventTrigger(std::vector<std::shared_ptr<EventTrigger>>& eventTriggers) {
 	//- イベントトリガー配置 -

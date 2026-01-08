@@ -122,6 +122,9 @@ void CollisionManager::PlayerAndStageObject(Player* player,
 				player->IsGround(true);
 				break;
 			}
+			else if (stageObject->GetObjectName() == "MoveGround") {
+				player->IsGround(true);
+			}
 		}
 	}
 }

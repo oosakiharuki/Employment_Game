@@ -31,10 +31,12 @@ void LoadingModels::LoadObj() {
 	modelManager->LoadModel("stage_0", ".obj");
 	modelManager->LoadModel("stage_1", ".obj");
 	modelManager->LoadModel("stage_2", ".obj");
+	modelManager->LoadModel("stage_3", ".obj");
 	modelManager->LoadModel("stage_boss",".obj");
 	modelManager->LoadModel("stage_select", ".obj");
 	modelManager->LoadModel("warpGate", ".obj");
 	modelManager->LoadModel("goal", ".obj");
+	modelManager->LoadModel("moveGround", ".obj");
 
 	modelManager->LoadModel("shadow", ".obj");
 	modelManager->LoadModel("player_found_mark", ".obj");

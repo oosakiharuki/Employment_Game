@@ -45,6 +45,14 @@ public:
 	/// <param name="stageObjects">ステージオブジェクトの配列</param>
 	void SpitOutStageObject(std::list<std::shared_ptr<IStageObject>>& stageObjects);
 
+	
+	/// <summary>
+	/// ステージオブジェクトの配置
+	/// </summary>
+	/// <param name="stageObjects">ステージオブジェクトの配列</param>
+	void SettingStageObject(IStageObject& stageObject,Levelediter::LevelData::StageObjectData data);
+
+
 	/// <summary>
 	/// イベントトリガーの配置
 	/// </summary>
