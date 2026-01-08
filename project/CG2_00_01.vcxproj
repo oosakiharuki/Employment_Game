@@ -204,6 +204,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\System\UIManager.cpp" />
     <ClCompile Include="Engine\base\Pipeline.cpp" />
     <ClCompile Include="GameProgram\StageObjects\StageObjectFunction.cpp" />
+    <ClCompile Include="MoveGround.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameProgram\Boss\BaseBossState.h" />
@@ -300,6 +301,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\System\UIManager.h" />
     <ClInclude Include="Engine\base\Pipeline.h" />
     <ClInclude Include="GameProgram\StageObjects\StageObjectFunction.h" />
+    <ClInclude Include="MoveGround.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

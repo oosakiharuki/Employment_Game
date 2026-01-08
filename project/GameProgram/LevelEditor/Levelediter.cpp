@@ -183,10 +183,15 @@ void Levelediter::LoadStageObject(nlohmann::json& object) {
 		stageObjectData.fileName = object["file_name"];
 	}
 	//トランスフォーム
-	SetTransform(object,stageObjectData.transform);
+	SetTransform(object, stageObjectData.transform);
 
 	//コライダー
-	SetCollider(object, stageObjectData.colliderAABB,stageObjectData.transform.scale);
+	SetCollider(object, stageObjectData.colliderAABB, stageObjectData.transform.scale);
+
+	//移動ルート(移動床以外使わない)
+	if (stageObjectData.ObjectName == "MoveGround") {
+		SetTravelRoute(object, stageObjectData.leftPoint, stageObjectData.rightPoint);
+	}
 }
 
 void Levelediter::LoadEventTrigger(nlohmann::json& object, const Vector3& translate) {

@@ -11,7 +11,9 @@ struct CameraInitData {
 	Vector3 leftPoint;
 	Vector3 rightPoint;
 };
-
+/// <summary>
+/// レベルエディタ(ステージのjson読み込み)
+/// </summary>
 class Levelediter {
 public:
 
@@ -48,6 +50,9 @@ public:
 			std::string fileName;
 			Transform transform;
 			AABB colliderAABB;
+			//移動ルート
+			Vector3 leftPoint;
+			Vector3 rightPoint;
 		};
 
 		//イベントトリガーの生成場所
