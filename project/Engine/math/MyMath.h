@@ -334,7 +334,7 @@ namespace MyMath {
 	Quaternion operator*(float f, const Quaternion& q);
 	Quaternion operator+(const Quaternion& q0, const Quaternion& q1);
 
-	float MulctyQuaternion(const Quaternion& q1, const Quaternion& q2);
+	float MultiplyQuaternion(const Quaternion& q1, const Quaternion& q2);
 	Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t);
 
 	Skeleton CreateSkeltion(const Node& rootNode);

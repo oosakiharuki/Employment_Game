@@ -14,7 +14,7 @@
 #include "TextureManager.h"
 
 #include "ImGuiManager.h"
-#include "D3DResorceLeakChecker.h"
+#include "D3DResourceLeakChecker.h"
 
 #include "PostEffectManager.h"
 

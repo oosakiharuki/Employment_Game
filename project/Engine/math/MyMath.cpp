@@ -1076,7 +1076,7 @@ namespace MyMath {
 		return result;
 	}
 
-	float MulctyQuaternion(const Quaternion& q1, const Quaternion& q2) {
+	float MultiplyQuaternion(const Quaternion& q1, const Quaternion& q2) {
 		Quaternion r;
 
 		r.x = q1.x * q2.x;
@@ -1095,7 +1095,7 @@ namespace MyMath {
 
 		Quaternion q3 = q0;
 
-		float dot = MulctyQuaternion(q0, q1);
+		float dot = MultiplyQuaternion(q0, q1);
 
 		if (dot < 0) {
 			q3 = -q0;

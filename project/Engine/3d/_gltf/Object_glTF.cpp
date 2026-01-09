@@ -76,7 +76,7 @@ void Object_glTF::AnimationUpdate() {
 	//作るときはフレームレートを60FPSにする
 	uint32_t i = 0;
 
-	animationTime_ += 1.0f / 60.0f;
+	animationTime_ += kDeltaTime_;
 
 	for (auto& animation_ : animations_) {
 		//アニメーションが最大時間を超えたら巻き戻す
@@ -85,7 +85,7 @@ void Object_glTF::AnimationUpdate() {
 		//スキニング処理
 		if (model_->IsSkinning()) {
 			if (isChange_) {
-				changeTime_ += 1.0f / 60.0f;
+				changeTime_ += kDeltaTime_;
 				if (changeTime_ >= preAnimations_[i].duration) {
 					isChange_ = false;
 					changeTime_ = 0;
