@@ -154,7 +154,7 @@ private:
 	const float kMaxUnder = 1000.0f;
 
 	//インスタンス
-	static std::shared_ptr<CollisionManager> sInstance;
+	static std::shared_ptr<CollisionManager> sInstance_;
 
 	//ゴールした時フラグ
 	bool isGoal_ = false;

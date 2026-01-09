@@ -99,7 +99,7 @@ SoundData Audio::SoundLoadWave(const char* filename)//string?
 
 	soundData.wfex = format.fmt;
 	soundData.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
-	soundData.byfferSize = data.size;
+	soundData.buyfferSize = data.size;
 
 	result_ = xAudio2_.Get()->CreateSourceVoice(&soundData.pSourceVoice, &soundData.wfex);
 	assert(SUCCEEDED(result_));
@@ -115,7 +115,7 @@ void Audio::SoundPlayWave(const SoundData& soundData, float volume, bool isLoop)
 	//波状データを読み込む
 	XAUDIO2_BUFFER buf{};
 	buf.pAudioData = soundData.pBuffer;
-	buf.AudioBytes = soundData.byfferSize;
+	buf.AudioBytes = soundData.buyfferSize;
 	buf.Flags = XAUDIO2_END_OF_STREAM;
 
 	//ループさせる処理
@@ -136,7 +136,7 @@ void Audio::SoundUnload(SoundData* soundData) {
 	delete[] soundData->pBuffer; //newしたため（波形データ読み込み）
 
 	soundData->pBuffer = 0;
-	soundData->byfferSize = 0;
+	soundData->buyfferSize = 0;
 	soundData->wfex = {};
 }
 

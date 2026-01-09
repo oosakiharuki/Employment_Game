@@ -57,7 +57,7 @@ private:
 	/// </summary>
 	void FadeOut();
 
-	static std::shared_ptr<FadeScreen> sInstance;
+	static std::shared_ptr<FadeScreen> sInstance_;
 
 	//使用するスプライト
 	std::unique_ptr<Sprite> sprite_;

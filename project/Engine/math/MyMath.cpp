@@ -233,6 +233,13 @@ namespace MyMath {
 		return false;
 	}
 	
+	bool operator!=(const Vector3& v1, const Vector3& v2) {
+		if (v1 == v2) {
+			return false;
+		}
+		return true;
+	}
+
 	bool operator<=(const Vector3& v1, const Vector3& v2) {
 		if (v1.x <= v2.x && v1.y <= v2.y && v1.z <= v2.z) {
 			return true;
@@ -260,6 +267,20 @@ namespace MyMath {
 			return true;
 		}
 		return false;
+	}
+
+	bool operator==(const Transform& a, const Transform& b) {
+		if (a.translate == b.translate && a.rotate == b.rotate && a.scale == b.scale) {
+			return true;
+		}
+		return false;
+	}
+
+	bool operator!=(const Transform& a, const Transform& b) {
+		if (a == b) {
+			return false;
+		}
+		return true;
 	}
 
 	Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2){

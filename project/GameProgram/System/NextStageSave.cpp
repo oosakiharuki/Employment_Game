@@ -1,12 +1,12 @@
 #include "NextStageSave.h"
 
-std::shared_ptr<NextStageSave> NextStageSave::sInstance = nullptr;
+std::shared_ptr<NextStageSave> NextStageSave::sInstance_ = nullptr;
 
 std::shared_ptr<NextStageSave> NextStageSave::GetInstance() {
-	if (sInstance == nullptr) {
-		sInstance = std::make_unique<NextStageSave>();
+	if (sInstance_ == nullptr) {
+		sInstance_ = std::make_unique<NextStageSave>();
 	}
-	return sInstance;
+	return sInstance_;
 }
 
 void NextStageSave::SetPlayerHp(uint32_t playerHp) {

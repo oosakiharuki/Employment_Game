@@ -35,7 +35,7 @@ struct SoundData {
 	//バッファ先頭
 	BYTE* pBuffer;
 	//サイズ
-	unsigned int byfferSize;
+	unsigned int buyfferSize;
 	//ソースボイス
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
 };

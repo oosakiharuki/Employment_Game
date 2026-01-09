@@ -20,7 +20,7 @@ private:
 
 	ModelManager* modelManager;
 
-	static std::shared_ptr<LoadingModels> sInstance;
+	static std::shared_ptr<LoadingModels> sInstance_;
 
 	/// <summary>
 	/// .objを読み取る

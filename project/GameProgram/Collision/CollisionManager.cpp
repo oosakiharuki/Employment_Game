@@ -8,13 +8,13 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-std::shared_ptr<CollisionManager> CollisionManager::sInstance = nullptr;
+std::shared_ptr<CollisionManager> CollisionManager::sInstance_ = nullptr;
 
 std::shared_ptr<CollisionManager> CollisionManager::GetInstance() {
-	if (sInstance == nullptr) {
-		sInstance = std::make_unique<CollisionManager>();
+	if (sInstance_ == nullptr) {
+		sInstance_ = std::make_unique<CollisionManager>();
 	}
-	return sInstance;
+	return sInstance_;
 }
 
 

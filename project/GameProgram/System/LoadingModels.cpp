@@ -1,16 +1,16 @@
 #include "LoadingModels.h"
 
-std::shared_ptr<LoadingModels> LoadingModels::sInstance = nullptr;
+std::shared_ptr<LoadingModels> LoadingModels::sInstance_ = nullptr;
 
 std::shared_ptr<LoadingModels> LoadingModels::GetInstance() {
-	if (sInstance == nullptr) {
-		sInstance = std::make_unique<LoadingModels>();
+	if (sInstance_ == nullptr) {
+		sInstance_ = std::make_unique<LoadingModels>();
 	}
-	return sInstance;
+	return sInstance_;
 }
 void LoadingModels::Finalize() {
-	sInstance.reset();
-	sInstance = nullptr;
+	sInstance_.reset();
+	sInstance_ = nullptr;
 }
 
 void LoadingModels::LoadObjects() {
