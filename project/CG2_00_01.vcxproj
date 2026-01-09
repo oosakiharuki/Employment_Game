@@ -136,7 +136,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\Camera.cpp" />
     <ClCompile Include="Engine\3d\_gltf\GLTFCommon.cpp" />
     <ClCompile Include="Engine\3d\_obj\Model_obj.cpp" />
-    <ClCompile Include="Engine\3d\_gltf\Model__glTF.cpp" />
+    <ClCompile Include="Engine\3d\_gltf\Model_glTF.cpp" />
     <ClCompile Include="Engine\3d\_gltf\Object_glTF.cpp" />
     <ClCompile Include="Engine\3d\_Particle\Particle.cpp" />
     <ClCompile Include="Engine\3d\_Particle\ParticleCommon.cpp" />
@@ -147,7 +147,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\base\SrvManager.cpp" />
     <ClCompile Include="Engine\base\Framework.cpp" />
-    <ClCompile Include="GameProgram\LevelEditor\Levelediter.cpp" />
+    <ClCompile Include="GameProgram\LevelEditor\LevelEditor.cpp" />
     <ClCompile Include="Engine\PostEffect\BoxFilter.cpp" />
     <ClCompile Include="Engine\PostEffect\DepthBasedOutline.cpp" />
     <ClCompile Include="Engine\PostEffect\Dissolve.cpp" />
@@ -200,11 +200,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\System\NextStageSave.cpp" />
     <ClCompile Include="GameProgram\System\UseEveryOne.cpp" />
     <ClCompile Include="GameProgram\System\Reaction.cpp" />
-    <ClCompile Include="GameProgram\System\SpitOutLevelEditor.cpp" />
+    <ClCompile Include="GameProgram\LevelEditor\SpitOutLevelEditor.cpp" />
     <ClCompile Include="GameProgram\System\UIManager.cpp" />
     <ClCompile Include="Engine\base\Pipeline.cpp" />
     <ClCompile Include="GameProgram\StageObjects\StageObjectFunction.cpp" />
-    <ClCompile Include="MoveGround.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\MoveGround.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameProgram\Boss\BaseBossState.h" />
@@ -247,7 +247,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\DirectXCommon.h" />
     <ClInclude Include="Engine\base\SrvManager.h" />
     <ClInclude Include="Engine\base\Framework.h" />
-    <ClInclude Include="GameProgram\LevelEditor\Levelediter.h" />
+    <ClInclude Include="GameProgram\LevelEditor\LevelEditor.h" />
     <ClInclude Include="Engine\PostEffect\BoxFilter.h" />
     <ClInclude Include="Engine\PostEffect\DepthBasedOutline.h" />
     <ClInclude Include="Engine\PostEffect\Dissolve.h" />
@@ -297,11 +297,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\System\NextStageSave.h" />
     <ClInclude Include="GameProgram\System\UseEveryOne.h" />
     <ClInclude Include="GameProgram\System\Reaction.h" />
-    <ClInclude Include="GameProgram\System\SpitOutLevelEditor.h" />
+    <ClInclude Include="GameProgram\LevelEditor\SpitOutLevelEditor.h" />
     <ClInclude Include="GameProgram\System\UIManager.h" />
     <ClInclude Include="Engine\base\Pipeline.h" />
     <ClInclude Include="GameProgram\StageObjects\StageObjectFunction.h" />
-    <ClInclude Include="MoveGround.h" />
+    <ClInclude Include="GameProgram\StageObjects\MoveGround.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

@@ -10,6 +10,8 @@ Umbrella::~Umbrella() {}
 void Umbrella::Initialize() {
 	
 	wt_.Initialize();
+	//Transform更新処理
+	transform_ = wt_.UpdateTransform();
 
 	object_ = std::make_unique<Object_glTF>();
 	object_->Initialize();
@@ -23,18 +25,18 @@ void Umbrella::Initialize() {
 }
 
 void Umbrella::Update() {
-	
+
 #ifdef USE_IMGUI
 
 	ImGui::Begin("um");
 
-	ImGui::InputFloat3("worldTransform.translate", &wt_.translation_.x);
-	ImGui::SliderFloat3("worldTransform.translateSlider", &wt_.translation_.x, -30.0f, 30.0f);
+	ImGui::InputFloat3("worldTransform.translate", &transform_.translate.x);
+	ImGui::SliderFloat3("worldTransform.translateSlider", &transform_.translate.x, -30.0f, 30.0f);
 
-	ImGui::InputFloat3("Rotate", &wt_.rotation_.x);
-	ImGui::SliderFloat("RotateX", &wt_.rotation_.x, -360.0f, 360.0f);
-	ImGui::SliderFloat("RotateY", &wt_.rotation_.y, -360.0f, 360.0f);
-	ImGui::SliderFloat("RotateZ", &wt_.rotation_.z, -360.0f, 360.0f);
+	ImGui::InputFloat3("Rotate", &transform_.rotate.x);
+	ImGui::SliderFloat("RotateX", &transform_.rotate.x, -360.0f, 360.0f);
+	ImGui::SliderFloat("RotateY", &transform_.rotate.y, -360.0f, 360.0f);
+	ImGui::SliderFloat("RotateZ", &transform_.rotate.z, -360.0f, 360.0f);
 
 	ImGui::End();
 
@@ -50,7 +52,7 @@ void Umbrella::Update() {
 
 	//更新
 	object_->Update(wt_);
-	wt_.UpdateMatrix();
+	wt_.UpdateMatrix(transform_);
 }
 
 void Umbrella::Draw() {
@@ -60,11 +62,11 @@ void Umbrella::Draw() {
 
 AABB Umbrella::GetAABB() const {
 	AABB aabb;
-	aabb.min = wt_.translation_ + umbrellaAABB_.min;
-	aabb.max = wt_.translation_ + umbrellaAABB_.max;
+	aabb.min = transform_.translate + umbrellaAABB_.min;
+	aabb.max = transform_.translate + umbrellaAABB_.max;
 	return aabb;
 }
 
 void Umbrella::HitReaction(bool& isShieldMode) {
-	reaction_->ScaleReaction(wt_.scale_,isShieldMode,kScalePower_, scaleTimer_,kReactionMaxTime_);
+	reaction_->ScaleReaction(transform_.scale,isShieldMode,kScalePower_, scaleTimer_,kReactionMaxTime_);
 }

@@ -16,7 +16,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update(const WorldTransform& worldTransform) override;
+	void Update(WorldTransform& worldTransform) override;
 	/// <summary>
 	/// 更新処理
 	/// </summary>

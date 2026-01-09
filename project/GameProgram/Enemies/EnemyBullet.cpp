@@ -15,6 +15,8 @@ void EnemyBullet::Initialize() {
 	object->SetModelFile("PlayerBullet.obj");
 
 	wt_.Initialize();
+	//Transform更新処理
+	transform_ = wt_.UpdateTransform();
 
 	//弾の当たり判定の大きさ
 	bulletAABB.min = -kBulletSize_ * kDivideByTwo_;
@@ -24,11 +26,11 @@ void EnemyBullet::Initialize() {
 void EnemyBullet::Update() {
 	if (!isPari) {
 		//velocity向きに等速直線運動
-		wt_.translation_ += velocity_;
+		transform_.translate += velocity_;
 	}
 	else {
 		///パリィされた時
-		wt_.translation_ -= velocity_;
+		transform_.translate -= velocity_;
 	}
 
 
@@ -40,7 +42,7 @@ void EnemyBullet::Update() {
 	}
 
 	object->Update(wt_);
-	wt_.UpdateMatrix();
+	wt_.UpdateMatrix(transform_);
 }
 
 void EnemyBullet::Draw() {
@@ -49,13 +51,13 @@ void EnemyBullet::Draw() {
 
 AABB EnemyBullet::GetAABB() const {
 	AABB aabb;
-	aabb.min = wt_.translation_ + bulletAABB.min;
-	aabb.max = wt_.translation_ + bulletAABB.max;
+	aabb.min = transform_.translate + bulletAABB.min;
+	aabb.max = transform_.translate + bulletAABB.max;
 	return aabb;
 }
 
 void EnemyBullet::IsHit() { 
-	Vector3 enemyPosition = wt_.translation_;
+	Vector3 enemyPosition = transform_.translate;
 	Vector3 playerPosition = player_->GetWorldPosition();
 	//どの位置でぶつかった記録
 	distance = enemyPosition - playerPosition;

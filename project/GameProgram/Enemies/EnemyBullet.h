@@ -29,12 +29,12 @@ public:
 	/// getter_座標位置
 	/// </summary>
 	/// <returns>現在の座標位置</returns>
-	const Vector3& GetTranslate() const { return wt_.translation_; }
+	const Vector3& GetTranslate() const { return transform_.translate; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
 	/// <param name="translate">指定する座標</param>
-	void SetTranslate(const Vector3& translate) { wt_.translation_ = translate; }
+	void SetTranslate(const Vector3& translate) { transform_.translate = translate; }
 	
 	/// <summary>
 	/// setter_弾丸速度、方向
@@ -81,6 +81,7 @@ private:
 	//
 	std::unique_ptr<Object3d> object = nullptr;
 	WorldTransform wt_;
+	Transform transform_{};
 	//弾丸速度
 	Vector3 velocity_;
 

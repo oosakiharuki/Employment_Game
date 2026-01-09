@@ -69,7 +69,7 @@ public:
 	/// <param name="eventTriggers">イベントトリガー</param>
 	/// <param name="cameraControl_">カメラコントロールクラス</param>
 	/// <param name="levelediter">レベルエディタクラス</param>
-	void PlayerAndEventTrigger(Player* player, const std::vector<std::shared_ptr<EventTrigger>>& eventTriggers, CameraControl* cameraControl_, Levelediter& levelediter);
+	void PlayerAndEventTrigger(Player* player, const std::vector<std::shared_ptr<EventTrigger>>& eventTriggers, CameraControl* cameraControl_, LevelEditor& levelediter);
 
 
 	/// <summary>

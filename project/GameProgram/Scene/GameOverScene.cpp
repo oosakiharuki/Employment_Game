@@ -47,19 +47,22 @@ void GameOverScene::InitObject() {
 	stageGltf_->Initialize();
 	stageGltf_->SetModelFile("gameover_stage.gltf");
 
-	wt_.Initialize();
+	wt_.Initialize();	
+	//Transform更新処理
+	transform_ = wt_.UpdateTransform();
 }
 
 
 void GameOverScene::Update() {
+
 
 	input_->JoystickUpdate(state_, preState_);
 
 	sprite_->Update();
 	spriteSpace_->Update();
 
-	wt_.rotation_.y += kRotate_;
-	wt_.UpdateMatrix();
+	transform_.rotate.y += kRotate_;
+	wt_.UpdateMatrix(transform_);
 
 	//ライトのスイッチ
 	stageGltf_->LightSwitch(true);

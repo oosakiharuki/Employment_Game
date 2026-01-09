@@ -29,16 +29,13 @@ public:
 	/// setter_座標
 	/// </summary>
 	/// <param name="translate">指定する座標</param>
-	void SetTranslate(const Vector3& translate) { wt_.translation_ = translate; }
+	void SetTranslate(const Vector3& translate) { transform_.translate = translate; }
 
 	void SetTransform(const Transform& transform) {
-		wt_.translation_ = transform.translate;
-		wt_.rotation_ = transform.rotate;
-		wt_.scale_ = transform.scale;
-
+		transform_ = transform;
 		//センター設定
-		move_.origin = wt_.translation_;
-		kCenter_.y = wt_.translation_.y;
+		move_.origin = transform_.translate;
+		kCenter_.y = transform_.translate.y;
 	}
 
 	void SetPlayer(Player* player) { player_ = player; }
@@ -61,7 +58,7 @@ public:
 	/// getter_座標位置
 	/// </summary>
 	/// <returns>現在の座標</returns>
-	const Vector3& GetTranslate() { return wt_.translation_; }
+	const Vector3& GetTranslate() { return transform_.translate; }
 
 	/// <summary>
 	/// getter_弾丸
@@ -172,6 +169,7 @@ private:
 
 	std::unique_ptr<Object_glTF> object_;
 	WorldTransform wt_;
+	Transform transform_{};
 
 	AABB aabb_;
 

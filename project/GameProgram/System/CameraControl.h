@@ -2,7 +2,7 @@
 #include "WorldTransform.h"
 #include "Camera.h"
 #include "MyMath.h"
-#include <Levelediter.h>
+#include <LevelEditor.h>
 #include "UseEveryOne.h"
 /// <summary>
 /// カメラをコントロールする
@@ -23,12 +23,12 @@ public:
 	/// setter_座標位置
 	/// </summary>
 	/// <param name="translate">指定する座標</param>
-	void SetTranslation(const Vector3& translate) { wt_.translation_ = translate; }
+	void SetTranslation(const Vector3& translate) { transform_.translate = translate; }
 	/// <summary>
 	/// setter_回転
 	/// </summary>
 	/// <param name="rotation"></param>
-	void SetRotation(const Vector3& rotation) { wt_.rotation_ = rotation; }
+	void SetRotation(const Vector3& rotation) { transform_.rotate = rotation; }
 	/// <summary>
 	/// setter_カメラ移動範囲
 	/// </summary>
@@ -111,6 +111,7 @@ private:
 
 	//ワールド座標系
 	WorldTransform wt_;
+	Transform transform_{};
 
 	//プレイヤー位置
 	Vector3 playerPos_;

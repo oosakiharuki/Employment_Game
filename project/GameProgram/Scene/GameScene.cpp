@@ -10,7 +10,7 @@ void GameScene::Initialize() {
 	sceneSaveData_ = NextStageSave::GetInstance()->GetNextStageSaveData();
 
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting("stage_3");
+	LevelEditorObjectSetting();
 	
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");
@@ -241,7 +241,7 @@ void GameScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
 
 void GameScene::SpitOutGameObject() {
 	//ステージのjsonを読み取る
-	levelediter_.LoadLevelediter("resource/Levelediter/" + stageFileName_ + ".json");
+	levelediter_.LoadLevelEditor("resource/LevelEditor/" + stageFileName_ + ".json");
 	spitOut_.SetLevelEditor(&levelediter_);
 
 	//- カメラ配置 -

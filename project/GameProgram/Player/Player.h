@@ -46,7 +46,7 @@ public:
 	/// getter_ワールド座標系の位置
 	/// </summary>
 	/// <returns>平行移動成分を搭載したプレイヤー座標</returns>
-	Vector3 GetWorldPosition() const;
+	Vector3 GetWorldPosition();
 
 	/// <summary>
 	/// 弾を発射する(ショットガン風)
@@ -190,14 +190,14 @@ public:
 	/// プレイヤーの向きををカメラに
 	/// </summary>
 	void DirectionTheCamera(){
-		wt_.rotation_.y = kPlayerForntAngle_.y;//カメラのほうに向く;
+		transform_.rotate.y = kPlayerForntAngle_.y;//カメラのほうに向く;
 	}
 
 	/// <summary>
 	/// プレイヤーを後ろに向かす
 	/// </summary>
 	void BackDirection() {
-		wt_.rotation_ = { 0.0f,0.0f,0.0f };//初期状態が後ろを向いているため
+		transform_.rotate = { 0.0f,0.0f,0.0f };//初期状態が後ろを向いているため
 	}
 
 	/// <summary>
@@ -219,9 +219,14 @@ public:
 	void ChangeStatePattern(std::unique_ptr<BasePlayerState> playerState);
 
 private:
-
+	/// <summary>
+	/// オブジェクトの初期化処理
+	/// </summary>
 	void InitMainBody();
 
+	/// <summary>
+	/// 傘の初期化処理
+	/// </summary>
 	void InitUmbrella();
 
 	/// <summary>
@@ -303,7 +308,6 @@ private:
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object_;
 
-
 	//input
 	Input* input_ = nullptr;
 	XINPUT_STATE state_, preState_;//パット用変数
@@ -359,6 +363,7 @@ private:
 	//傘銃
 	std::unique_ptr<Umbrella> umbrella_ = nullptr;
 	WorldTransform wtGun_;//傘のワールド座標系
+	Transform transformGun_{};
 
 	//傘のシールドフラグ
 	bool isShield_ = false;

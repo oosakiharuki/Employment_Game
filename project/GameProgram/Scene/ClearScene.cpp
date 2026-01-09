@@ -51,8 +51,10 @@ void ClearScene::InitObject() {
 	playerGltf_->Initialize();
 	playerGltf_->SetModelFile("player_clear.gltf");
 
-	wt_.Initialize();
-	wt_.rotation_.y = kPlayerFrontRange_;
+	wt_.Initialize();	
+	//Transform更新処理
+	transform_ = wt_.UpdateTransform();
+	transform_.rotate.y = kPlayerFrontRange_;
 
 	//地面
 	stageGltf_ = std::make_unique<Object_glTF>();
@@ -69,7 +71,7 @@ void ClearScene::Update() {
 	sprite_->Update();	
 	spriteSpace_->Update();
 
-	wt_.UpdateMatrix();
+	wt_.UpdateMatrix(transform_);
 	playerGltf_->Update(wt_);
 	
 	//初期値に戻す

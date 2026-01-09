@@ -40,7 +40,7 @@ void Enemy_Soldier::UpdateAttack() {
 	EnemyFire();
 
 	//コーンが上向きなので
-	particles_[particleFire_.name]->SetRotate({ 0.0f,0.0f,-wt_.rotation_.y });
+	particles_[particleFire_.name]->SetRotate({ 0.0f,0.0f,-transform_.rotate.y });
 }
 
 void Enemy_Soldier::UpdateDead() {
@@ -54,8 +54,8 @@ void Enemy_Soldier::UpdateImgui() {
 
 	ImGui::Begin("Enemy_soldier");
 
-	ImGui::Text("translate : %f,%f,%f", wt_.translation_.x, wt_.translation_.y, wt_.translation_.z);
-	ImGui::Text("translate : %f,%f,%f", wt_.rotation_.x, wt_.rotation_.y, wt_.rotation_.z);
+	ImGui::Text("translate : %f,%f,%f", transform_.translate.x, transform_.translate.y, transform_.translate.z);
+	ImGui::Text("translate : %f,%f,%f", transform_.rotate.x, transform_.rotate.y, transform_.rotate.z);
 
 	ImGui::Text("routePointLeft : %f,%f,%f", routePointLeft_.x, routePointLeft_.y, routePointLeft_.z);
 	ImGui::Text("routePointRight : %f,%f,%f", routePointRight_.x, routePointRight_.y, routePointRight_.z);
@@ -78,7 +78,7 @@ void Enemy_Soldier::Draw() {
 void Enemy_Soldier::FireBullet() {
 	
 	Vector3 enemyPosition;
-	enemyPosition = { wt_.matWorld_.m[3][0],wt_.matWorld_.m[3][1],wt_.matWorld_.m[3][2] };
+	enemyPosition = { wt_.GetMatWorld().m[3][0],wt_.GetMatWorld().m[3][1],wt_.GetMatWorld().m[3][2]};
 
 	//プレイヤーの方向に向かう(最初に打つ弾にそって進む)
 	if (rapidCount_ == 0) {

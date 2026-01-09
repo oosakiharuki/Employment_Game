@@ -35,7 +35,7 @@ private:
 	//const Vector3 kPlayerAwayPos_ = { 0, 2, -15.0f };
 
 	//レベルエディタ(オブジェクトの配置を.jsonでできる)
-	Levelediter levelediter_;
+	LevelEditor levelediter_;
 	SpitOutLevelEditor spitOut_;
 
 	//プレイヤー

@@ -303,6 +303,8 @@ private:
 	std::unique_ptr<Object3d> objectNoFound_;
 
 	WorldTransform wtMark_;
+	Transform transformMark_{};
+
 	const float kMarkPositionY_ = 2.0f;
 
 	const float kFoundMosionMaxTime_ = kMarkMaxTime_ / 5.0f;

@@ -34,7 +34,9 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 	particles_[particleDamage_.name] = ParticleManager::GetInstance()->InitParticle(particleDamage_);
 
 	//マークのワールド座標
-	wtMark_.Initialize();
+	wtMark_.Initialize();	
+	//Transform更新処理
+	transformMark_ = wtMark_.UpdateTransform();
 }
 
 void BaseEnemy::Update() {
@@ -59,7 +61,7 @@ void BaseEnemy::Update() {
 
 	//リアクション
 	if (isDamageMosion_) {
-		reaction_->ScaleReaction(wt_.scale_,isDamageMosion_, damageScale_, scaleTimer_, kDamageMaxTime_);
+		reaction_->ScaleReaction(transform_.scale,isDamageMosion_, damageScale_, scaleTimer_, kDamageMaxTime_);
 	}
 	//弾丸更新
 	BulletUpdate();
@@ -77,10 +79,10 @@ void BaseEnemy::Update() {
 
 void BaseEnemy::UpdateBehind() {
 	//影
-	shadow_->SetTranslate(wt_.translation_);
+	shadow_->SetTranslate(transform_.translate);
 
 	object_->Update(wt_);
-	wt_.UpdateMatrix();
+	wt_.UpdateMatrix(transform_);
 
 	//設定した全てのパーティクル更新処理
 	for (auto& particle : particles_) {
@@ -94,11 +96,11 @@ void BaseEnemy::MarkUpdate() {
 	markTimer_ = std::clamp(markTimer_, 0.0f, kMarkMaxTime_);//0 ～ kMarkMaxTime
 
 	// - マーク -
-	wtMark_.translation_ = wt_.translation_;  //敵の座標位置に
-	wtMark_.translation_.y += kMarkPositionY_;//敵の少し上の位置に
+	transformMark_.translate = transform_.translate;  //敵の座標位置に
+	transformMark_.translate.y += kMarkPositionY_;//敵の少し上の位置に
 	
 	//!,?マークの更新処理
-	wtMark_.UpdateMatrix();
+	wtMark_.UpdateMatrix(transformMark_);
 	objectFound_->Update(wtMark_);
 	objectNoFound_->Update(wtMark_);
 }
@@ -143,12 +145,12 @@ void BaseEnemy::BulletUpdate() {
 
 void BaseEnemy::IsDamage() {
 	//ダメージのパーティクルを出す
-	particles_[particleDamage_.name]->SetTranslate(wt_.translation_); //座標を読み取る
+	particles_[particleDamage_.name]->SetTranslate(transform_.translate); //座標を読み取る
 	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode); // 発生モード(一度だけ)の変更
 	isDamageMosion_ = true;
 
 	//連続ヒット時、元に戻す
-	wt_.scale_ = kDefaultScale_;
+	transform_.scale = kDefaultScale_;
 	scaleTimer_ = 0.0f;
 
 	//Hpが0なら
@@ -164,7 +166,7 @@ void BaseEnemy::GrabityUpdate() {
 	grabity_ -= kGrabityPower_;
 	//地面についていない
 	if (!isGround_) {
-		wt_.translation_.y += grabity_;
+		transform_.translate.y += grabity_;
 	}
 	else {
 		//重力パワーリセット
@@ -176,11 +178,11 @@ void BaseEnemy::PlayerTarget() {
 	//見つかった瞬間だけtrueに
 	if (isBullet_ && markTimer_ < kFoundMosionMaxTime_) {
 		isFoundReaction_ = true;
-		preTranslate_ = wt_.translation_;
+		preTranslate_ = transform_.translate;
 	}
 
 	Segment segment;
-	segment.origin = wt_.translation_;      //敵座標
+	segment.origin = transform_.translate;      //敵座標
 	segment.diff = player_->GetTranslate(); //プレイヤー座標
 
 	//ステージの当たり判定
@@ -195,31 +197,31 @@ void BaseEnemy::PlayerTarget() {
 
 void BaseEnemy::SearchRange() {
 	//敵が右向き
-	if (wt_.rotation_.y == kDirectionRight_) {
-		eyeAABB_.min = wt_.translation_ + Vector3(0, -eyeReach_.y, -eyeReach_.z);
-		eyeAABB_.max = wt_.translation_ + eyeReach_;
+	if (transform_.rotate.y == kDirectionRight_) {
+		eyeAABB_.min = transform_.translate + Vector3(0, -eyeReach_.y, -eyeReach_.z);
+		eyeAABB_.max = transform_.translate + eyeReach_;
 		speed_.x = kMoveX_;//右に進む
 	}
 	//左向き
-	else if (wt_.rotation_.y == kDirectionLeft_) {
-		eyeAABB_.min = wt_.translation_ + -eyeReach_;
-		eyeAABB_.max = wt_.translation_ + Vector3(0, eyeReach_.y, eyeReach_.z);
+	else if (transform_.rotate.y == kDirectionLeft_) {
+		eyeAABB_.min = transform_.translate + -eyeReach_;
+		eyeAABB_.max = transform_.translate + Vector3(0, eyeReach_.y, eyeReach_.z);
 		speed_.x = -kMoveX_;//左に進む
 	}
 }
 
 void BaseEnemy::MoveEnemy() {
-	wt_.translation_ += speed_;//移動
+	transform_.translate += speed_;//移動
 	move_ += speed_;           //移動ポイント
 
 	//移動ポイントの端だと向きを変える
 	//右端に行ったら左に旋回
 	if (move_.x > routePointRight_.x) {
-		wt_.rotation_.y = kDirectionLeft_;
+		transform_.rotate.y = kDirectionLeft_;
 	}
 	//左端に行ったら右に旋回
 	if (move_.x < routePointLeft_.x) {
-		wt_.rotation_.y = kDirectionRight_;
+		transform_.rotate.y = kDirectionRight_;
 	}
 }
 
@@ -248,18 +250,18 @@ void BaseEnemy::RespawnEnemyCommon() {
 void BaseEnemy::DirectionDegree() {
 
 	//360度以上の場合 [360除算のあまり]
-	wt_.rotation_.y = std::fmod(wt_.rotation_.y, kMaxAngle);
+	transform_.rotate.y = std::fmod(transform_.rotate.y, kMaxAngle);
 	//-の場合 [0以上になるまで360加算]
-	while (wt_.rotation_.y < 0) {
-		wt_.rotation_.y += kMaxAngle;
+	while (transform_.rotate.y < 0) {
+		transform_.rotate.y += kMaxAngle;
 	}
 
 	///0~179は右
-	if (wt_.rotation_.y >= 0.0f && wt_.rotation_.y < kMaxAngle * kDivideByTwo_) {
-		wt_.rotation_.y = kDirectionRight_;
+	if (transform_.rotate.y >= 0.0f && transform_.rotate.y < kMaxAngle * kDivideByTwo_) {
+		transform_.rotate.y = kDirectionRight_;
 	}///180~360は左
-	else if (wt_.rotation_.y <= kMaxAngle) {
-		wt_.rotation_.y = kDirectionLeft_;
+	else if (transform_.rotate.y <= kMaxAngle) {
+		transform_.rotate.y = kDirectionLeft_;
 	}
 }
 
@@ -309,20 +311,20 @@ void BaseEnemy::FoundRiaction() {
 	Vector3 reaction = { 0,damageScale_.y * kDivideByTwo_,0 };
 
 	if (isFoundReaction_) {
-		reaction_->ScaleReaction(wt_.scale_, isFoundReaction_, reaction, scaleTimer_, kFoundMosionMaxTime_);
-		reaction_->FoundReaction(wt_.translation_,isFoundReaction_, reaction, foundTimer_, kFoundMosionMaxTime_, preTranslate_);
+		reaction_->ScaleReaction(transform_.scale, isFoundReaction_, reaction, scaleTimer_, kFoundMosionMaxTime_);
+		reaction_->FoundReaction(transform_.translate,isFoundReaction_, reaction, foundTimer_, kFoundMosionMaxTime_, preTranslate_);
 	}
 }
 
 void BaseEnemy::DeadReaction() {
-	wt_.rotation_ -= TransformNormal(Vector3{ kDeadRotation_,0,0 }, wt_.matWorld_);
+	transform_.rotate -= TransformNormal(Vector3{ kDeadRotation_,0,0 }, wt_.GetMatWorld());
 
 	//リアクションフラグ
 	bool isReaction = true;
 
 	//伸びる強さ(y軸のみ)
 	Vector3 reaction = { 0,damageScale_.y * kDivideByTwo_,0 };
-	reaction_->FoundReaction(wt_.translation_, isReaction, reaction, foundTimer_, kMarkMaxTime_ * kDivideByTwo_, preTranslate_);
+	reaction_->FoundReaction(transform_.translate, isReaction, reaction, foundTimer_, kMarkMaxTime_ * kDivideByTwo_, preTranslate_);
 
 	//リアクションが終わったら
 	if (!isReaction) {

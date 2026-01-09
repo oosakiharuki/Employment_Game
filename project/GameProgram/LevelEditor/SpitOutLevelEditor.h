@@ -11,7 +11,7 @@ public:
 	/// 使用するレベルエディタをもらう
 	/// </summary>
 	/// <param name="levelEdeitor">使用するレベルエディタ</param>
-	void SetLevelEditor(Levelediter* levelEdeitor) { levelEditor_ = std::move(levelEdeitor); }
+	void SetLevelEditor(LevelEditor* levelEdeitor) { levelEditor_ = std::move(levelEdeitor); }
 	
 	/// <summary>
 	/// カメラの配置、使用するカメラ設定
@@ -50,7 +50,7 @@ public:
 	/// ステージオブジェクトの配置
 	/// </summary>
 	/// <param name="stageObjects">ステージオブジェクトの配列</param>
-	void SettingStageObject(IStageObject& stageObject,Levelediter::LevelData::StageObjectData data);
+	void SettingStageObject(IStageObject& stageObject,LevelEditor::LevelData::StageObjectData data);
 
 
 	/// <summary>
@@ -67,6 +67,6 @@ public:
 
 private:
 	//使用するエディタ
-	Levelediter* levelEditor_;
+	LevelEditor* levelEditor_;
 };
 

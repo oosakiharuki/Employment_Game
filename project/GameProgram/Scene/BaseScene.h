@@ -4,7 +4,7 @@
 #include "MyMath.h"
 #include "Framework.h"
 
-#include "Levelediter.h"
+#include "LevelEditor.h"
 #include "Player.h"
 #include "Enemy_Soldier.h"
 #include "Enemy_Turret.h"
