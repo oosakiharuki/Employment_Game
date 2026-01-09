@@ -123,6 +123,7 @@ private:
 
 	std::unique_ptr<Object_glTF> object_;
 	WorldTransform wt_;
+	Transform transform_{};
 
 	//読み取ったcsv
 	std::stringstream enemyPopCsvFile_;

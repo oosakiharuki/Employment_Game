@@ -10,7 +10,7 @@ void GameScene::Initialize() {
 	sceneSaveData_ = NextStageSave::GetInstance()->GetNextStageSaveData();
 
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting("stage_3");
+	LevelEditorObjectSetting();
 	
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");

@@ -16,17 +16,17 @@ public:
 	/// setter_回転
 	/// </summary>
 	/// <param name="rotate"></param>
-	void SetRotate(const Vector3& rotate) { worldTransform_.rotation_ = rotate; }
+	void SetRotate(const Vector3& rotate) { transform_.rotate = rotate; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
 	/// <param name="translate"></param>
-	void SetTranslate(const Vector3& translate) { worldTransform_.translation_ = translate; }
+	void SetTranslate(const Vector3& translate) { transform_.translate = translate; }
 	/// <summary>
 	/// setter_親子関係
 	/// </summary>
 	/// <param name="parent"></param>親となるオブジェクト(カメラは子)
-	void SetParent(const WorldTransform* parent) { worldTransform_.parent_ = parent; }
+	void SetParent(const WorldTransform* parent) { worldTransform_.SetParent(*parent); }
 
 	/// <summary>
 	/// setter_視野角
@@ -72,15 +72,18 @@ public:
 	/// getter_回転
 	/// </summary>
 	/// <returns></returns>
-	const Vector3& GetRotate() const { return worldTransform_.rotation_; }
+	const Vector3& GetRotate() const { return transform_.rotate; }
 	/// <summary>
 	/// getter_座標位置
 	/// </summary>
 	/// <returns></returns>
-	const Vector3& GetTranslate() const { return worldTransform_.translation_; }
+	const Vector3& GetTranslate() const { return transform_.translate; }
 
 private:
 	WorldTransform worldTransform_;
+	Transform transform_{};
+
+
 	Matrix4x4 worldMatrix_;
 	Matrix4x4 viewMatrix_;
 	Matrix4x4 projectionMatrix_;

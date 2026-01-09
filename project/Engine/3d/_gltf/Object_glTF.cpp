@@ -33,19 +33,19 @@ void Object_glTF::Initialize() {
 	InitLight();
 }
 
-void Object_glTF::Update(const WorldTransform& worldTransform) {
+void Object_glTF::Update(WorldTransform& worldTransform) {
 
-	worldMatrix_ = worldTransform.matWorld_;
+	worldMatrix_ = worldTransform.GetMatWorld();
 
 	//アニメーション更新
 	AnimationUpdate();
 
 	for (uint32_t i = 0; i < modelData_.Data.size(); i++) {
 		if (model_->IsAnimation()) {
-			wvpDatas_[i]->World = modelData_.rootNode.children[i].localMatrix * worldTransform.matWorld_;
+			wvpDatas_[i]->World = modelData_.rootNode.children[i].localMatrix * worldTransform.GetMatWorld();
 		}
 		else {
-			wvpDatas_[i]->World = modelData_.rootNode.localMatrix * worldTransform.matWorld_;
+			wvpDatas_[i]->World = modelData_.rootNode.localMatrix * worldTransform.GetMatWorld();
 		}
 	}
 

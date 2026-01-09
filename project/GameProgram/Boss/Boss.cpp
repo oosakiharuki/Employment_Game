@@ -10,13 +10,15 @@ void Boss::Initialize() {
 	object_->SetModelFile("Boss.gltf");
 
 	wt_.Initialize();
+	//Transform更新処理
+	transform_ = wt_.UpdateTransform();
 
 	bossState_ = std::make_unique<BossMoveState>();
 }
 
 void Boss::Update() {
 
-	wt_.translation_ += GoDestination(move_) / moveFrame_;
+	transform_.translate += GoDestination(move_) / moveFrame_;
 
 	if (hp_ == 0 && deadTimer_ < kDeltaTime_) {
 		bossState_.reset();
@@ -27,7 +29,7 @@ void Boss::Update() {
 	bossState_->Update(*this);
 
 	if (isDamageReaction_) {
-		reaction_->ScaleReaction(wt_.scale_, isDamageReaction_,damageReactionPower_,damageReactionTimer_,kDamageReactionTimeMax_);
+		reaction_->ScaleReaction(transform_.scale, isDamageReaction_,damageReactionPower_,damageReactionTimer_,kDamageReactionTimeMax_);
 	}
 
 	for (auto& bullet : bullets_) {
@@ -46,7 +48,7 @@ void Boss::Update() {
 	ImGuiUpdate();
 
 	object_->Update(wt_);
-	wt_.UpdateMatrix();
+	wt_.UpdateMatrix(transform_);
 }
 
 void Boss::Draw() {
@@ -83,7 +85,7 @@ void Boss::Fire(float kFrame) {
 void Boss::FireBullet() {
 	//現在位置の設定
 	Vector3 enemyPosition;
-	enemyPosition = { wt_.matWorld_.m[3][0],wt_.matWorld_.m[3][1],wt_.matWorld_.m[3][2] };
+	enemyPosition = { wt_.GetMatWorld().m[3][0],wt_.GetMatWorld().m[3][1],wt_.GetMatWorld().m[3][2]};
 
 	//弾丸速度
 	Vector3 velocity;
@@ -117,32 +119,32 @@ void Boss::ChangeStatePattern(std::unique_ptr<BaseBossState> state) {
 }
 
 void Boss::ArrivedSegmentDiff() {
-	Vector3 a = wt_.translation_;
+	Vector3 a = transform_.translate;
 
 	//目的地についたとき
 	if (GoDestination(a, move_.diff) <= Vector3{ 0.1f,0.1f,0.1f } &&
 		GoDestination(a, move_.diff) >= Vector3{ -0.1f,-0.1f,-0.1f }) {
 
 		isMoveSucces_ = true;
-		wt_.translation_ = move_.diff;//現在地を目的地にする
-		move_.origin = wt_.translation_;//セグメントのスタート値を設定
+		transform_.translate= move_.diff;//現在地を目的地にする
+		move_.origin = transform_.translate;//セグメントのスタート値を設定
 	}
 }
 
 void Boss::BeforeActionMosion() {
-	wt_.rotation_.z += kRotationX_;
+	transform_.rotate.z += kRotationX_;
 
-	if (wt_.rotation_.z >= 360.0f) {
+	if (transform_.rotate.z >= 360.0f) {
 		//モーション終了
 		isMosionFinish_ = true;
-		wt_.rotation_.z = 0.0f;
+		transform_.rotate.z = 0.0f;
 	}
 }
 
 AABB Boss::GetAABB() {
 	AABB aabb{};
-	aabb.max = wt_.translation_ + aabb_.max;
-	aabb.min = wt_.translation_ + aabb_.min;
+	aabb.max = transform_.translate + aabb_.max;
+	aabb.min = transform_.translate + aabb_.min;
 	return aabb;
 }
 
@@ -164,31 +166,31 @@ void Boss::DeadMosion() {
 	std::uniform_real_distribution<float> yure(-kShakePower, kShakePower);
 
 	//上下左右にシェイク(z軸は関係ない)
-	wt_.translation_ = deadPosition_ + Vector3(yure(random), yure(random), 0.0f);
+	transform_.translate = deadPosition_ + Vector3(yure(random), yure(random), 0.0f);
 
-	wt_.translation_.x = std::clamp(wt_.translation_.x, deadPosition_.x - kShakePower, deadPosition_.x + kShakePower);
-	wt_.translation_.y = std::clamp(wt_.translation_.y, deadPosition_.y - kShakePower, deadPosition_.y + kShakePower);
+	transform_.translate.x = std::clamp(transform_.translate.x, deadPosition_.x - kShakePower, deadPosition_.x + kShakePower);
+	transform_.translate.y = std::clamp(transform_.translate.y, deadPosition_.y - kShakePower, deadPosition_.y + kShakePower);
 
 	deadTimer_ += kDeltaTime_;
 
-	wt_.scale_ = deadScale_ - deadTimer_ / kDeadTimeMax_;
+	transform_.scale = deadScale_ - deadTimer_ / kDeadTimeMax_;
 
 	if (deadTimer_ >= kDeadTimeMax_) {
 		isDead_ = true;
-		wt_.scale_ = { 0,0,0 };//消えるようにする
+		transform_.scale = { 0,0,0 };//消えるようにする
 	}
 }
 
 void Boss::DeadPosition() {
-	deadPosition_ = wt_.translation_;
-	deadScale_ = wt_.scale_;
+	deadPosition_ = transform_.translate;
+	deadScale_ = transform_.scale;
 }
 
 void Boss::ImGuiUpdate() {
 #ifdef USE_IMGUI
 
 	ImGui::Begin("boss");
-	ImGui::Text("translate: %f, %f, %f", wt_.translation_.x, wt_.translation_.y, wt_.translation_.z);
+	ImGui::Text("translate: %f, %f, %f", transform_.translate.x, transform_.translate.y, transform_.translate.z);
 	ImGui::Text("Hp: %d",hp_);
 	ImGui::End();
 

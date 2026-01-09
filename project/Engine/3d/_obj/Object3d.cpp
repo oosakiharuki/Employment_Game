@@ -28,10 +28,10 @@ void Object3d::Initialize() {
 }
 
 
-void Object3d::Update(const WorldTransform& worldTransform) {
+void Object3d::Update(WorldTransform& worldTransform) {
 
-	wvpData_->World = worldTransform.matWorld_;
-	worldMatrix_ = worldTransform.matWorld_;
+	wvpData_->World = worldTransform.GetMatWorld();
+	worldMatrix_ = worldTransform.GetMatWorld();
 
 	directionalLightData_->direction = Normalize(directionalLightData_->direction);
 }

@@ -64,12 +64,12 @@ void TitleScene::ObjectLoading() {
 
 	}
 	//傘がプレイヤーを親としてついていく
-	wts_[1].parent_ = &wts_[0];
+	wts_[1].SetParent(wts_[0]);
 	
 	//影
 	playerShadow_ = std::make_unique<Shadow>();
 	playerShadow_->Initialize();
-	Vector3 shadowPos = wts_[0].translation_;//影位置
+	Vector3 shadowPos = transforms_[0].translate;//影位置
 	shadowPos.y = kShadowPositionY_;//影位置Y
 	playerShadow_->SetTranslate(shadowPos);
 }
@@ -84,12 +84,17 @@ void TitleScene::MakeObject(const std::string& objectName, const Vector3& transl
 	gObject = std::make_unique<Object_glTF>();
 	gObject->Initialize();
 
-	gwt.rotation_ = rotate;
-	gwt.translation_ = translate;
-	gwt.scale_ = scale;
+	Transform transform{};
+	//Transform更新処理
+	transform = gwt.UpdateTransform();
+
+	transform.rotate = rotate;
+	transform.translate = translate;
+	transform.scale = scale;
 	gObject->SetModelFile(objectName);		
 	
 	wts_.push_back(gwt);
+	transforms_.push_back(transform);
 	objects_.push_back(std::move(gObject));
 }
 
@@ -102,9 +107,9 @@ void TitleScene::Update() {
 	camera_->Update();
 
 	//プレイヤーが降ってくるところ
-	if (wts_[0].translation_.y <= kLandingPointY_) {
+	if (transforms_[0].translate.y <= kLandingPointY_) {
 		//座標を維持
-		wts_[0].translation_.y = kLandingPointY_;
+		transforms_[0].translate.y = kLandingPointY_;
 		//Maxになるまでタイマーを進ませる
 		if (titleFallingTimer_ < kTitleFallingTimeMax_) {
 			titleFallingTimer_ += kDeltaTime_;
@@ -120,7 +125,7 @@ void TitleScene::Update() {
 	}
 	else {
 		//重力でゆっくり落ちる
-		wts_[0].translation_.y -= kGravity_;
+		transforms_[0].translate.y -= kGravity_;
 	}
 
 	//タイトル更新処理
@@ -128,20 +133,20 @@ void TitleScene::Update() {
 	spriteMojiTitle_->Update();
 
 	if (isSelect_) {
-		if (wts_[1].translation_.y == wts_[2].translation_.y) {
-			wts_[2].translation_.x += kMoveSelectMoji_;
+		if (transforms_[1].translate.y == transforms_[2].translate.y) {
+			transforms_[2].translate.x += kMoveSelectMoji_;
 		}
-		else if (wts_[1].translation_.y == wts_[3].translation_.y) {
-			wts_[3].translation_.x += kMoveSelectMoji_;
+		else if (transforms_[1].translate.y == transforms_[3].translate.y) {
+			transforms_[3].translate.x += kMoveSelectMoji_;
 		}
 
 		bulletTimer_ += kDeltaTime_;
 		if (bulletTimer_ >= kBulletTimeMax_) {
-			if (wts_[1].translation_.y == wts_[2].translation_.y) {
+			if (transforms_[1].translate.y == transforms_[2].translate.y) {
 				//セレクトシーンに移動
 				isNextSelectScene = true;
 			}
-			else if (wts_[1].translation_.y == wts_[3].translation_.y) {
+			else if (transforms_[1].translate.y == transforms_[3].translate.y) {
 				//ゲーム終了
 				isNextGameEnd = true;
 			}
@@ -157,32 +162,32 @@ void TitleScene::Update() {
 
 	//-選択-
 	//選択できるようになったら傘を親子関係をなくす
-	if (wts_[1].parent_) {
-		wts_[1].parent_ = nullptr;
-		wts_[1].rotation_.z = kUmbrellaRange_;
-		wts_[1].translation_ = { kUmbrellaArrowModePositionX_,wts_[2].translation_.y,0 };
+	if (wts_[1].GetParent()) {
+		wts_[1].ResetParent();
+		transforms_[1].rotate.z = kUmbrellaRange_;
+		transforms_[1].translate = { kUmbrellaArrowModePositionX_,transforms_[2].translate.y,0 };
 		objects_[1]->ChangeAnimation("umbrella_Close.gltf");
 	}
 	
 	//文字が見えるまで回転する
-	if (wts_[2].rotation_.y <= 0.0f && wts_[3].rotation_.y <= 0.0f) {
+	if (transforms_[2].rotate.y <= 0.0f && transforms_[3].rotate.y <= 0.0f) {
 		//カメラの方向に文字が見える
-		wts_[2].rotation_.y = 0.0f;
-		wts_[3].rotation_.y = 0.0f;
+		transforms_[2].rotate.y = 0.0f;
+		transforms_[3].rotate.y = 0.0f;
 	}
 	else {
 		//回転
-		wts_[2].rotation_.y -= kRotating_;
-		wts_[3].rotation_.y -= kRotating_;
+		transforms_[2].rotate.y -= kRotating_;
+		transforms_[3].rotate.y -= kRotating_;
 	}
 
 	//キーボード操作
 
 	if (Input::GetInstance()->TriggerKey(DIK_W)) {
-		wts_[1].translation_.y = wts_[2].translation_.y;//ゲームスタート
+		transforms_[1].translate.y = transforms_[2].translate.y;//ゲームスタート
 	}
 	if (Input::GetInstance()->TriggerKey(DIK_S)) {
-		wts_[1].translation_.y = wts_[3].translation_.y;//ゲーム終了
+		transforms_[1].translate.y = transforms_[3].translate.y;//ゲーム終了
 	}
 
 	//ゲームパット操作
@@ -192,10 +197,10 @@ void TitleScene::Update() {
 		float padY = static_cast<float>(state_.Gamepad.sThumbLY) / 32768.0f;
 
 		if (padY > kStickPower_) {
-			wts_[1].translation_.y = wts_[2].translation_.y;//ゲームスタート
+			transforms_[1].translate.y = transforms_[2].translate.y;//ゲームスタート
 		}
 		else if (padY < -kStickPower_) {
-			wts_[1].translation_.y = wts_[3].translation_.y;//ゲーム終了
+			transforms_[1].translate.y = transforms_[3].translate.y;//ゲーム終了
 		}
 	}
 
@@ -204,7 +209,7 @@ void TitleScene::Update() {
 		Input::GetInstance()->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_A)) {
 		isSelect_ = true;
 		sceneParticles_[particleBullet_.name]->SetParticleBorn(ParticleBorn::MomentMode);
-		sceneParticles_[particleBullet_.name]->SetTranslate(wts_[1].translation_);
+		sceneParticles_[particleBullet_.name]->SetTranslate(transforms_[1].translate);
 		sceneParticles_[particleBullet_.name]->SetRotate({ 0.0f,0.0f,kUmbrellaRange_ });
 	}
 
@@ -236,7 +241,7 @@ void TitleScene::UpdateBehind() {
 
 	//ワールド座標系更新
 	for (uint32_t i = 0; i < kMaxWt_; i++) {
-		wts_[i].UpdateMatrix();
+		wts_[i].UpdateMatrix(transforms_[i]);
 		objects_[i]->Update(wts_[i]);
 	}
 

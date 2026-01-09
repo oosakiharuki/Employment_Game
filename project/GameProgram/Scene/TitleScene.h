@@ -44,6 +44,8 @@ private:
 
 	//タイトルで使うワールド行列たち
 	std::vector<WorldTransform> wts_;
+	std::vector<Transform> transforms_;
+
 	//タイトルで使うオブジェクトたち
 	std::vector<std::unique_ptr<Object_glTF>> objects_;
 	//必要なワールド行列

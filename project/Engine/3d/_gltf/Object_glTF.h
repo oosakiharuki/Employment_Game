@@ -21,7 +21,7 @@ public:
 	/// 更新処理
 	/// </summary>
 	/// <param name="worldTransform"></param> ワールド座標系
-	void Update(const WorldTransform& worldTransform) override;
+	void Update(WorldTransform& worldTransform) override;
 	/// <summary>
 	/// 更新処理
 	/// </summary>	

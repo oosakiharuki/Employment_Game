@@ -48,6 +48,7 @@ private:
 	//プレイヤー
 	std::unique_ptr<Object_glTF> playerGltf_;	
 	WorldTransform wt_;
+	Transform transform_{};
 
 	//演出用のステージ
 	std::unique_ptr<Object_glTF> stageGltf_;

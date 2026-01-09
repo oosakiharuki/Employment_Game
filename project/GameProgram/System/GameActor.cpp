@@ -6,6 +6,8 @@ using namespace MyMath;
 void GameActor::Actor_InitializeCommon() {
 	//行列の初期化
 	wt_.Initialize();
+	//Transform更新処理
+	transform_ = wt_.UpdateTransform();
 
 	//影の初期化
 	shadow_ = std::make_unique<Shadow>();
@@ -25,8 +27,8 @@ void GameActor::IsGround(bool result) {
 
 AABB GameActor::GetAABB() const {
 	AABB aabb;
-	aabb.min = wt_.translation_ + actorAABB_.min;
-	aabb.max = wt_.translation_ + actorAABB_.max;
+	aabb.min = transform_.translate + actorAABB_.min;
+	aabb.max = transform_.translate + actorAABB_.max;
 	return aabb;
 }
 
@@ -39,8 +41,8 @@ void GameActor::RespawnCommon() {
 	hp_ = maxHp_;    //体力を満タンに
 
 	//blenderで配置した設定に戻る
-	wt_.translation_ = initTranslate_; //座標位置
-	wt_.rotation_ = initRotate_;       //回転角度
+	transform_.translate = initTranslate_; //座標位置
+	transform_.rotate = initRotate_;       //回転角度
 }
 
 void GameActor::HP_Initialize(uint32_t max) {
@@ -48,12 +50,12 @@ void GameActor::HP_Initialize(uint32_t max) {
 	hp_ = maxHp_;//体力を設定
 }
 
-Vector3 GameActor::GetWorldPosition() const {
+Vector3 GameActor::GetWorldPosition() {
 	Vector3 worldPos;
 
-	worldPos.x = wt_.matWorld_.m[3][0];
-	worldPos.y = wt_.matWorld_.m[3][1];
-	worldPos.z = wt_.matWorld_.m[3][2];
+	worldPos.x = wt_.GetMatWorld().m[3][0];
+	worldPos.y = wt_.GetMatWorld().m[3][1];
+	worldPos.z = wt_.GetMatWorld().m[3][2];
 
 	return worldPos;
 }

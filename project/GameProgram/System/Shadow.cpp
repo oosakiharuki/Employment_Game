@@ -16,6 +16,8 @@ void Shadow::Initialize() {
 	object_->SetColor(kColor_);
 
 	wt_.Initialize();
+	//Transform更新処理
+	transform_ = wt_.UpdateTransform();
 
 	shadowAABB_ = {
 		{ kShadowWidth_,kShadowMinY_,kShadowWidth_ },
@@ -29,13 +31,13 @@ void Shadow::Update() {
 #ifdef USE_IMGUI
 
 	ImGui::Begin("player_shadow");
-	ImGui::Text("worldTransform.translate : %f, %f, %f", &wt_.translation_.x, &wt_.translation_.y, &wt_.translation_.z);
+	ImGui::Text("worldTransform.translate : %f, %f, %f", &transform_.translate.x, &transform_.translate.y, &transform_.translate.z);
 	ImGui::End();
 
 #endif // USE_IMGUI
 
 	object_->Update(wt_);
-	wt_.UpdateMatrix();
+	wt_.UpdateMatrix(transform_);
 }
 
 void Shadow::Draw() {
@@ -45,7 +47,7 @@ void Shadow::Draw() {
 
 AABB Shadow::GetAABB() {
 	AABB aabb;
-	aabb.min = wt_.translation_ + shadowAABB_.min;
-	aabb.max = wt_.translation_ + shadowAABB_.max;
+	aabb.min = transform_.translate + shadowAABB_.min;
+	aabb.max = transform_.translate + shadowAABB_.max;
 	return aabb;
 }

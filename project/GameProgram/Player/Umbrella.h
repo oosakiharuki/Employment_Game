@@ -27,34 +27,34 @@ public:
 	/// getter_座標位置
 	/// </summary>
 	/// <returns>現在の座標位置</returns>
-	Vector3 GetTranslate() const { return wt_.translation_; }
+	Vector3 GetTranslate() const { return transform_.translate; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
 	/// <param name="translate">代入する座標位置</param>
-	void SetTranslate(const Vector3& translate) { wt_.translation_ = translate; }
+	void SetTranslate(const Vector3& translate) { transform_.translate = translate; }
 
 	/// <summary>
 	/// getter_回転
 	/// </summary>
 	/// <returns>現在の回転</returns>
-	Vector3 GetRotate() const { return wt_.rotation_; }
+	Vector3 GetRotate() const { return transform_.rotate; }
 	/// <summary>
 	/// setter_回転
 	/// </summary>
 	/// <param name="rotate">代入する各回転角度</param>
-	void SetRotate(const Vector3& rotate) { wt_.rotation_ = rotate; }
+	void SetRotate(const Vector3& rotate) { transform_.rotate = rotate; }
 
 	/// <summary>
 	/// getter_スケール
 	/// </summary>
 	/// <returns>現在の大きさ</returns>
-	Vector3 GetScale() const { return wt_.scale_; }
+	Vector3 GetScale() const { return transform_.scale; }
 	/// <summary>
 	/// setter_スケール
 	/// </summary>
 	/// <param name="translate">代入する大きさ</param>
-	void SetScale(const Vector3& size) { wt_.scale_ = size; }
+	void SetScale(const Vector3& scale) { transform_.scale = scale; }
 	
 	/// <summary>
 	/// getter_当たり判定AABB
@@ -87,6 +87,7 @@ public:
 private:
 	//オブジェクト設定
 	std::unique_ptr<Object_glTF> object_;
+	Transform transform_;
 	WorldTransform wt_;
 
 	//AABB

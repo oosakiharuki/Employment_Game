@@ -9,8 +9,8 @@ IStageObject::~IStageObject() {}
 AABB IStageObject::GetAABB() {
 	AABB aabb;
 
-	aabb.min = wt_.translation_ + aabb_.min;
-	aabb.max = wt_.translation_ + aabb_.max;
+	aabb.min = transform_.translate + aabb_.min;
+	aabb.max = transform_.translate + aabb_.max;
 
 	return aabb;
 }

@@ -7,6 +7,8 @@ using namespace UseEveryOne;
 
 void EventTrigger::Initialize() {
 	wt_.Initialize();
+	//Transform更新処理
+	transform_ = wt_.UpdateTransform();
 
 	object_ = std::make_unique<Object_glTF>();
 	object_->Initialize();
@@ -23,9 +25,9 @@ void EventTrigger::Update() {
 		PopEventEneies();
 		
 		//範囲のオブジェクト
-		wt_.translation_ = eventData_.center;
-		wt_.scale_ = eventData_.size * kDivideByTwo_;
-		wt_.UpdateMatrix();
+		transform_.translate = eventData_.center;
+		transform_.scale = eventData_.size * kDivideByTwo_;
+		wt_.UpdateMatrix(transform_);
 		object_->Update(wt_);
 
 		for (auto& particle : summon_particles_) {
