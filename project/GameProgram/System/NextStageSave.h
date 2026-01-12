@@ -54,6 +54,6 @@ private:
 		3,3,2,"stage_0" //初期設定
 	};
 
-	static std::shared_ptr<NextStageSave> sInstance;
+	static std::shared_ptr<NextStageSave> sInstance_;
 };
 

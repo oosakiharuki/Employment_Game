@@ -49,7 +49,7 @@ void TextureManager::LoadTexture(const std::string& filePath) {
 }
 
 
-void TextureManager::Byte(const std::string filePath) {
+void TextureManager::Byte(const std::string& filePath) {
 	//テクスチャファイル // byte関連
 	std::wstring filePathW = ConvertString(filePath);
 	HRESULT hr;
@@ -63,7 +63,7 @@ void TextureManager::Byte(const std::string filePath) {
 	assert(SUCCEEDED(hr));
 }
 
-void TextureManager::MipMap(const std::string filePath) {
+void TextureManager::MipMap(const std::string& filePath) {
 	
 	//画像をロード
 	Byte(filePath);

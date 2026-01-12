@@ -174,7 +174,7 @@
     <ClCompile Include="Engine\base\WinApp.cpp">
       <Filter>ソース ファイル\Engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\D3DResorceLeakChecker.cpp">
+    <ClCompile Include="Engine\base\D3DResourceLeakChecker.cpp">
       <Filter>ソース ファイル\Engine\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\input\Input.cpp">
@@ -494,7 +494,7 @@
     <ClInclude Include="Engine\audio\Audio.h">
       <Filter>ヘッダー ファイル\Engine\audio</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\D3DResorceLeakChecker.h">
+    <ClInclude Include="Engine\base\D3DResourceLeakChecker.h">
       <Filter>ヘッダー ファイル\Engine\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\DirectXCommon.h">

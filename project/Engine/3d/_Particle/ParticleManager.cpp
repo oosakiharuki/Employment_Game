@@ -8,13 +8,13 @@
 using namespace MyMath;
 using namespace Primitive;
 
-std::shared_ptr<ParticleManager> ParticleManager::sInstance = nullptr;
+std::shared_ptr<ParticleManager> ParticleManager::sInstance_ = nullptr;
 
 std::shared_ptr<ParticleManager> ParticleManager::GetInstance() {
-	if (sInstance == nullptr) {
-		sInstance = std::make_unique<ParticleManager>();
+	if (sInstance_ == nullptr) {
+		sInstance_ = std::make_unique<ParticleManager>();
 	}
-	return sInstance;
+	return sInstance_;
 }
 
 void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager) {
@@ -23,8 +23,8 @@ void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager
 }
 
 void ParticleManager::Finalize() {
-	sInstance.reset();
-	sInstance = nullptr;
+	sInstance_.reset();
+	sInstance_ = nullptr;
 }
 
 

@@ -256,6 +256,7 @@ namespace MyMath {
 	Vector3& operator/=(Vector3& v, float f);
 
 	bool operator==(const Vector3& v1, const Vector3& v2);
+	bool operator!=(const Vector3& v1, const Vector3& v2);
 	bool operator<=(const Vector3& v1, const Vector3& v2);
 	bool operator>=(const Vector3& v1,const Vector3& v2);
 
@@ -265,6 +266,9 @@ namespace MyMath {
 	
 	Vector3 operator-(const Vector3& v);
 
+
+	bool operator==(const Transform& a, const Transform& b);
+	bool operator!=(const Transform& a, const Transform& b);
 
 	Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2);
 
@@ -330,7 +334,7 @@ namespace MyMath {
 	Quaternion operator*(float f, const Quaternion& q);
 	Quaternion operator+(const Quaternion& q0, const Quaternion& q1);
 
-	float MulctyQuaternion(const Quaternion& q1, const Quaternion& q2);
+	float MultiplyQuaternion(const Quaternion& q1, const Quaternion& q2);
 	Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t);
 
 	Skeleton CreateSkeltion(const Node& rootNode);

@@ -101,7 +101,7 @@ public:
 	std::unique_ptr<Particle> InitParticle(const ParticleParametars& parametars);
 
 private:
-	static std::shared_ptr<ParticleManager> sInstance;
+	static std::shared_ptr<ParticleManager> sInstance_;
 
 	ParticleCommon* particleCommon = nullptr;
 	SrvManager* srvManager = nullptr;

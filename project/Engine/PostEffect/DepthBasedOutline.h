@@ -15,11 +15,6 @@ private:
 	void RootSignature() override;
 
 	/// <summary>
-	/// InputLayoutを作成
-	/// </summary>
-	void CreateInputLayout() override;
-
-	/// <summary>
 	/// Blendを作成
 	/// </summary>
 	void CreateBlend() override;
@@ -30,19 +25,9 @@ private:
 	void CreateRasterizer() override;
 
 	/// <summary>
-	/// VertexSharderを作成
-	/// </summary>
-	void CreateVertexSharder() override;
-
-	/// <summary>
 	/// PixelSharderを作成
 	/// </summary>
 	void CreatePixelSharder() override;
-
-	/// <summary>
-	/// DepthStencilの作成
-	/// </summary>
-	void CreateDepthStencil() override;
 
 	/// <summary>
 	/// ポストエフェクトの初期化処理
@@ -56,12 +41,7 @@ private:
 
 
 	//RootSignature
-	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};
 	D3D12_DESCRIPTOR_RANGE descriptorRangeOutline_[1] = {};
-	D3D12_ROOT_PARAMETER rootParameters_[3] = {};
-	D3D12_STATIC_SAMPLER_DESC staticSamplers_[2] = {};
-
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[2] = {};
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 

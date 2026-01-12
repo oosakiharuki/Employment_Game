@@ -55,13 +55,13 @@ private:
 	/// ミップマップ作成
 	/// </summary>
 	/// <param name="filePath">ファイルパス</param>
-	void MipMap(const std::string filePath);
+	void MipMap(const std::string& filePath);
 
 	/// <summary>
 	/// 画像ロード方法設定
 	/// </summary>
 	/// <param name="filePath">ファイルパス</param>
-	void Byte(const std::string filePath);
+	void Byte(const std::string& filePath);
 
 	struct TextureData {
 		DirectX::TexMetadata metadata; //width,height

@@ -26,113 +26,42 @@ void SkinningCommon::RootSignature() {
 	descriptionRootSignature_.Flags =
 		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
-	descriptorRange_[0].BaseShaderRegister = 0;
-	descriptorRange_[0].NumDescriptors = 1;
-	descriptorRange_[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	descriptorRange_[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	descriptorRangeIBL_[0].BaseShaderRegister = 1;
-	descriptorRangeIBL_[0].NumDescriptors = 1;
-	descriptorRangeIBL_[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	descriptorRangeIBL_[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	CreateDescriptorRange(descriptorRange_, 0);
+	CreateDescriptorRange(descriptorRangeIBL_,1);
 
 	//RootParameter作成__
-	rootParameters_[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters_[0].Descriptor.ShaderRegister = 0;//Object3d.PS.hlsl の b0
+	RootParameterCommon();
 
-	rootParameters_[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters_[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	rootParameters_[1].Descriptor.ShaderRegister = 0;//Object3d.VS.hlsl の b0
-
-	descriptionRootSignature_.pParameters = rootParameters_;
-	descriptionRootSignature_.NumParameters = _countof(rootParameters_);
-
-
-
-	rootParameters_[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameters_[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters_[2].DescriptorTable.pDescriptorRanges = descriptorRange_;
-	rootParameters_[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange_);
-
-	rootParameters_[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBV
-	rootParameters_[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//plxelshader
-	rootParameters_[3].Descriptor.ShaderRegister = 1;//レジスタ番号
-
-	rootParameters_[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBV
-	rootParameters_[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//plxelshader
-	rootParameters_[4].Descriptor.ShaderRegister = 2;//レジスタ番号
-
-	rootParameters_[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBV
-	rootParameters_[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//plxelshader
-	rootParameters_[5].Descriptor.ShaderRegister = 3;//レジスタ番号
-
-	rootParameters_[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBV
-	rootParameters_[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//plxelshader
-	rootParameters_[6].Descriptor.ShaderRegister = 4;//レジスタ番号
+	CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 1);//[3] ps b1
+	CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 2);//[4] ps b2
+	CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 3);//[5] ps b3
+	CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 4);//[6] ps b4
 
 	//IBL t1
-	rootParameters_[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameters_[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters_[7].DescriptorTable.pDescriptorRanges = descriptorRangeIBL_;
+	CreateTABLE(D3D12_SHADER_VISIBILITY_PIXEL, descriptorRangeIBL_);//[7] ps t1
 	rootParameters_[7].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeIBL_);
 
 	//skinning t0
-	rootParameters_[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameters_[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	rootParameters_[8].DescriptorTable.pDescriptorRanges = descriptorRange_;
-	rootParameters_[8].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange_);
-
+	CreateTABLE(D3D12_SHADER_VISIBILITY_VERTEX, descriptorRange_);//[8] vs t0
 
 	//2でまとめる
+	DefaultSampler(0);
 
-	staticSamplers_[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	staticSamplers_[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	staticSamplers_[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	staticSamplers_[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	staticSamplers_[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-	staticSamplers_[0].MaxLOD = D3D12_FLOAT32_MAX;
-	staticSamplers_[0].ShaderRegister = 0;
-	staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	descriptionRootSignature_.pStaticSamplers = staticSamplers_;
-	descriptionRootSignature_.NumStaticSamplers = _countof(staticSamplers_);
+	IntroduceRootParameters();
+	IntroduceSamplers();
 }
 
 void SkinningCommon::CreateInputLayout() {
-	inputElementDescs[0].SemanticName = "POSITION";
-	inputElementDescs[0].SemanticIndex = 0;
-	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
-	inputElementDescs[1].SemanticName = "TEXCOORD";
-	inputElementDescs[1].SemanticIndex = 0;
-	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-	inputElementDescs[2].SemanticName = "NORMAL";
-	inputElementDescs[2].SemanticIndex = 0;
-	inputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	inputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-	inputElementDescs[3].SemanticName = "WORLDPOSITION";
-	inputElementDescs[3].SemanticIndex = 0;
-	inputElementDescs[3].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	inputElementDescs[3].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-	inputElementDescs[4].SemanticName = "WEIGHT";
-	inputElementDescs[4].SemanticIndex = 0;
-	inputElementDescs[4].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	InputElementDeceCommon();
+	CreateInputElementDesc("NORMAL", DXGI_FORMAT_R32G32B32_FLOAT);
+	CreateInputElementDesc("WORLDPOSITION", DXGI_FORMAT_R32G32B32_FLOAT);
+	CreateInputElementDesc("WEIGHT", DXGI_FORMAT_R32G32B32_FLOAT);
 	inputElementDescs[4].InputSlot = 1; //一番目のshotのVBVだと伝える
-	inputElementDescs[4].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-	inputElementDescs[5].SemanticName = "INDEX";
-	inputElementDescs[5].SemanticIndex = 0;
-	inputElementDescs[5].Format = DXGI_FORMAT_R32G32B32A32_SINT;
+	CreateInputElementDesc("INDEX", DXGI_FORMAT_R32G32B32_FLOAT);
 	inputElementDescs[5].InputSlot = 1; //一番目のshotのVBVだと伝える
-	inputElementDescs[5].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
-	inputLayoutDesc.pInputElementDescs = inputElementDescs;
-	inputLayoutDesc.NumElements = _countof(inputElementDescs);
+	IntroduceInputElementDesc();
 }
 
 void SkinningCommon::CreateBlend() {

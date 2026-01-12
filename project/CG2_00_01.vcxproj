@@ -143,7 +143,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\System\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\3d\_Particle\ParticleManager.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
-    <ClCompile Include="Engine\base\D3DResorceLeakChecker.cpp" />
+    <ClCompile Include="Engine\base\D3DResourceLeakChecker.cpp" />
     <ClCompile Include="Engine\base\DirectXCommon.cpp" />
     <ClCompile Include="Engine\base\SrvManager.cpp" />
     <ClCompile Include="Engine\base\Framework.cpp" />
@@ -243,7 +243,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\System\ParticleEmitter.h" />
     <ClInclude Include="Engine\3d\_Particle\ParticleManager.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
-    <ClInclude Include="Engine\base\D3DResorceLeakChecker.h" />
+    <ClInclude Include="Engine\base\D3DResourceLeakChecker.h" />
     <ClInclude Include="Engine\base\DirectXCommon.h" />
     <ClInclude Include="Engine\base\SrvManager.h" />
     <ClInclude Include="Engine\base\Framework.h" />

@@ -40,10 +40,7 @@ private:
 	void EffectUpdate() override;
 
 	//RootSignature
-	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};
 	D3D12_DESCRIPTOR_RANGE descriptorRangeDissolve_[1] = {};
-	D3D12_ROOT_PARAMETER rootParameters_[3] = {};
-	D3D12_STATIC_SAMPLER_DESC staticSamplers_[1] = {};
 
 	std::string textureFileName_;
 

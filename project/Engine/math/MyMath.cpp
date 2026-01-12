@@ -233,6 +233,13 @@ namespace MyMath {
 		return false;
 	}
 	
+	bool operator!=(const Vector3& v1, const Vector3& v2) {
+		if (v1 == v2) {
+			return false;
+		}
+		return true;
+	}
+
 	bool operator<=(const Vector3& v1, const Vector3& v2) {
 		if (v1.x <= v2.x && v1.y <= v2.y && v1.z <= v2.z) {
 			return true;
@@ -260,6 +267,20 @@ namespace MyMath {
 			return true;
 		}
 		return false;
+	}
+
+	bool operator==(const Transform& a, const Transform& b) {
+		if (a.translate == b.translate && a.rotate == b.rotate && a.scale == b.scale) {
+			return true;
+		}
+		return false;
+	}
+
+	bool operator!=(const Transform& a, const Transform& b) {
+		if (a == b) {
+			return false;
+		}
+		return true;
 	}
 
 	Matrix4x4 operator*(const Matrix4x4& m1, const Matrix4x4& m2){
@@ -1055,7 +1076,7 @@ namespace MyMath {
 		return result;
 	}
 
-	float MulctyQuaternion(const Quaternion& q1, const Quaternion& q2) {
+	float MultiplyQuaternion(const Quaternion& q1, const Quaternion& q2) {
 		Quaternion r;
 
 		r.x = q1.x * q2.x;
@@ -1074,7 +1095,7 @@ namespace MyMath {
 
 		Quaternion q3 = q0;
 
-		float dot = MulctyQuaternion(q0, q1);
+		float dot = MultiplyQuaternion(q0, q1);
 
 		if (dot < 0) {
 			q3 = -q0;

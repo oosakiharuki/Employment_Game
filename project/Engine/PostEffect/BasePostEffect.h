@@ -76,6 +76,11 @@ public:
 
 	D3D12_GPU_DESCRIPTOR_HANDLE GetEffect() { return srvHandleGPU_; }
 
+	/// <summary>
+	/// ポストエフェクトで共通して使われるルートシグネチャ内の処理
+	/// </summary>
+	void PostEffectRootSignatureCommon();
+
 private:
 
 	/// <summary>

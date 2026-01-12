@@ -150,4 +150,6 @@ private:
 	std::vector<Matrix4x4> localMatrices_;
 
 	Matrix4x4 WorldViewProjectionMatrix;
+
+	const float kDeltaTime_ = 1.0f / 60.0f;
 };
