@@ -78,13 +78,7 @@ private:
 	/// </summary>
 	void CreateDepthStencil() override;
 
-	//RootSignature
-
-
-
 	Camera* defaultCamera_ = nullptr;
 
 	static std::shared_ptr<Object3dCommon> sInstance_;
-	
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[4] = {};
 };

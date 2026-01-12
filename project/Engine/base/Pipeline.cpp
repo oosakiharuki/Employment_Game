@@ -129,3 +129,24 @@ void Pipeline::IntroduceSamplers() {
 	descriptionRootSignature_.NumStaticSamplers = UINT(staticSamplers_.size());
 }
 
+void Pipeline::CreateInputElementDesc(const char* name, DXGI_FORMAT format) {
+	D3D12_INPUT_ELEMENT_DESC inputElementDesc{};
+	inputElementDesc.SemanticName = name;
+	inputElementDesc.SemanticIndex = 0;
+	inputElementDesc.Format = format;
+	inputElementDesc.AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+
+	inputElementDescs.push_back(inputElementDesc);
+}
+
+void Pipeline::InputElementDeceCommon() {
+	CreateInputElementDesc("POSITION", DXGI_FORMAT_R32G32B32A32_FLOAT);//座標
+	CreateInputElementDesc("TEXCOORD", DXGI_FORMAT_R32G32_FLOAT);//テクスチャ
+}
+
+
+void Pipeline::IntroduceInputElementDesc() {
+	//インプットエレメントデスク導入
+	inputLayoutDesc.pInputElementDescs = inputElementDescs.data();
+	inputLayoutDesc.NumElements = UINT(inputElementDescs.size());
+}

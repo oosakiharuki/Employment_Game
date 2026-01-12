@@ -70,7 +70,4 @@ private:
 
 
 	static std::shared_ptr<SpriteCommon> sInstance_;
-
-	//InputLayout
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
 };

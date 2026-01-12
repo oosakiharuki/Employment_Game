@@ -77,9 +77,6 @@ private:
 	//RootSignature
 	D3D12_DESCRIPTOR_RANGE descriptorRangeIBL_[1] = {};//iamge_based_lighting
 
-	//InputLayout
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[6] = {};
-
 	Camera* defaultCamera_ = nullptr;
 
 	static std::shared_ptr<SkinningCommon> sInstance_;

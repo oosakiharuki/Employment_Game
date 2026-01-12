@@ -84,6 +84,4 @@ private:
 	Camera* defaultCamera_ = nullptr;
 
 	static std::shared_ptr<GLTFCommon> sInstance_;
-
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[4] = {};
 };

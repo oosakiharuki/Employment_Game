@@ -80,8 +80,5 @@ private:
 
 	Camera* defaultCamera_ = nullptr;
 
-
 	static std::shared_ptr<ParticleCommon> sInstance_;
-
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
 };

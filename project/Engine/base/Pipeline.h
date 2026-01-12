@@ -55,6 +55,24 @@ public:
 	/// </summary>
 	void IntroduceSamplers();
 
+	/// <summary>
+	/// エレメントデスク作成
+	/// </summary>
+	/// <param name="name">名前</param>
+	/// <param name="format">フォーマット</param>
+	void CreateInputElementDesc(const char* name,DXGI_FORMAT format);
+
+	/// <summary>
+	/// 共通のエレメントデスク
+	/// (POSITION , TEXCORD)
+	/// </summary>
+	void InputElementDeceCommon();
+
+	/// <summary>
+	/// 最後にinputLayoutDaceにElementDescsを導入する
+	/// </summary>
+	void IntroduceInputElementDesc();
+
 protected:
 	/// <summary>
 	/// グラフィックスパイプライン
@@ -113,7 +131,7 @@ protected:
 	std::vector<D3D12_ROOT_PARAMETER> rootParameters_ = {};
 	std::vector<D3D12_STATIC_SAMPLER_DESC> staticSamplers_ = {};
 
-	//std::array<D3D12_INPUT_ELEMENT_DESC, 10> inputElementDescs = {};
+	std::vector<D3D12_INPUT_ELEMENT_DESC> inputElementDescs = {};
 
 	//PSO
 	Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_ = nullptr;
