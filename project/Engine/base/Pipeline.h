@@ -13,6 +13,47 @@ public:
 	/// <param name="dxCommon">使用しているDirectXCommon</param>
 	virtual void Initialize(DirectXCommon* dxCommon) = 0;
 
+	/// <summary>
+	/// DescriptorRangeの設定
+	/// </summary>
+	/// <param name="range">使用するRange</param>
+	/// <param name="number">ベースレジスタ番号</param>
+	void CreateDescriptorRange(D3D12_DESCRIPTOR_RANGE* range, uint32_t number);
+
+	/// <summary>
+	/// コンスタンスバッファ設定
+	/// </summary>
+	/// <param name="sharder">Sherder名(VERTEX / PIXEL)</param>
+	/// <param name="number">レジスタ番号</param>
+	void CreateCBV(D3D12_SHADER_VISIBILITY sharder, uint32_t number);
+
+	/// <summary>
+	/// テーブル設定
+	/// </summary>
+	/// <param name="descriptorRange">使用するRange</param>
+	void CreateTABLE(D3D12_SHADER_VISIBILITY sharder, D3D12_DESCRIPTOR_RANGE* descriptorRange);
+	/// <summary>
+	/// 共通のパラメータ
+	/// [0] PS b0
+	/// [1] VS b0
+	/// [2] PS t0
+	/// </summary>
+	void RootParameterCommon();
+
+	/// <summary>
+	/// デフォルト(よく使われる)サンプラー設定
+	/// </summary>
+	void DefaultSampler(uint32_t arrayNumber);
+
+	/// <summary>
+	/// ルートシグネチャにルートパラメータ導入
+	/// </summary>
+	void IntroduceRootParameters();
+
+	/// <summary>
+	/// ルートシグネチャにサンプラー導入
+	/// </summary>
+	void IntroduceSamplers();
 
 protected:
 	/// <summary>
@@ -65,6 +106,14 @@ protected:
 
 	//バイナリを元に生成
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;
+
+	//RootSignature
+
+	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};
+	std::vector<D3D12_ROOT_PARAMETER> rootParameters_ = {};
+	std::vector<D3D12_STATIC_SAMPLER_DESC> staticSamplers_ = {};
+
+	//std::array<D3D12_INPUT_ELEMENT_DESC, 10> inputElementDescs = {};
 
 	//PSO
 	Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_ = nullptr;

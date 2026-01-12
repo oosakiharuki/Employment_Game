@@ -68,11 +68,6 @@ private:
 	/// </summary>
 	void CreateDepthStencil() override;
 
-	//RootSignature
-	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};
-	D3D12_ROOT_PARAMETER rootParameters_[4] = {};
-	D3D12_STATIC_SAMPLER_DESC staticSamplers_[1] = {};
-
 
 	static std::shared_ptr<SpriteCommon> sInstance_;
 

@@ -79,10 +79,7 @@ private:
 	void CreateDepthStencil() override;
 
 	//RootSignature
-	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};
 	D3D12_DESCRIPTOR_RANGE descriptorRangeIBL_[1] = {};//iamge_based_lighting
-	D3D12_ROOT_PARAMETER rootParameters_[8] = {};
-	D3D12_STATIC_SAMPLER_DESC staticSamplers_[1] = {};
 
 	Camera* defaultCamera_ = nullptr;
 

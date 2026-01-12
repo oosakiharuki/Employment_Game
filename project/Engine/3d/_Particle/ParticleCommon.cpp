@@ -24,63 +24,24 @@ void ParticleCommon::Initialize(DirectXCommon* dxCommon) {
 void ParticleCommon::RootSignature() {
 
 	//RootSignature
-	descriptionRootSignature_.Flags =
-		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+	descriptionRootSignature_.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
-	//パーテイクル
-	descriptorRangeForInstancing_[0].BaseShaderRegister = 0;
-	descriptorRangeForInstancing_[0].NumDescriptors = 1;
-	descriptorRangeForInstancing_[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	descriptorRangeForInstancing_[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-
-	descriptorRange_[0].BaseShaderRegister = 0;
-	descriptorRange_[0].NumDescriptors = 1;
-	descriptorRange_[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	descriptorRange_[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
+	CreateDescriptorRange(descriptorRangeForInstancing_, 0);//パーテイクル
+	CreateDescriptorRange(descriptorRange_, 0);
 
 	//RootParameter作成__
-	rootParameters_[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters_[0].Descriptor.ShaderRegister = 0;//Object3d.PS.hlsl の b0
+	RootParameterCommon();
 
-	//パーテイクル t0
-	rootParameters_[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters_[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	rootParameters_[1].Descriptor.ShaderRegister = 0;//Object3d.VS.hlsl の b0
-
-	descriptionRootSignature_.pStaticSamplers = staticSamplers_;
-	descriptionRootSignature_.NumStaticSamplers = _countof(staticSamplers_);
-
-
-	rootParameters_[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameters_[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters_[2].DescriptorTable.pDescriptorRanges = descriptorRange_;
-	rootParameters_[2].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange_);
-
-	rootParameters_[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CBV
-	rootParameters_[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//plxelshader
-	rootParameters_[3].Descriptor.ShaderRegister = 1;//レジスタ番号
-	
-	rootParameters_[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameters_[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	rootParameters_[4].DescriptorTable.pDescriptorRanges = descriptorRangeForInstancing_;
+	CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 1);//[3] ps b1
+	CreateTABLE(D3D12_SHADER_VISIBILITY_VERTEX,descriptorRangeForInstancing_);//[4] vs t1
 	rootParameters_[4].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing_);
 
 	//2でまとめる
+	DefaultSampler(0);
+	staticSamplers_[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;//パーティクルはココだけ違う
 
-	staticSamplers_[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	staticSamplers_[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	staticSamplers_[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-	staticSamplers_[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-	staticSamplers_[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-	staticSamplers_[0].MaxLOD = D3D12_FLOAT32_MAX;
-	staticSamplers_[0].ShaderRegister = 0;
-	staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	descriptionRootSignature_.pParameters = rootParameters_;
-	descriptionRootSignature_.NumParameters = _countof(rootParameters_);
-
+	IntroduceRootParameters();
+	IntroduceSamplers();
 }
 
 void ParticleCommon::CreateInputLayout() {
