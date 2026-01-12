@@ -114,9 +114,6 @@ protected:
 	/// </summary>
 	virtual void CreateDepthStencil() = 0;
 
-	//InputLayout
-	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc;
-	
 	//BlendState
 	D3D12_BLEND_DESC blendDesc;
 
@@ -161,6 +158,9 @@ private:
 	/// Stateにまとめる
 	/// </summary>
 	void CreateGraphicsPipelineState();
+
+	//InputLayout
+	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc;
 
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
 

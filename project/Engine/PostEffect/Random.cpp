@@ -3,50 +3,17 @@
 
 using namespace Logger;
 
-void Random::Finalize() {
-	//delete instance;
-	//instance = nullptr;
-}
+void Random::Finalize() {}
 
 void Random::RootSignature() {
 
-	//RootSignature
-	descriptionRootSignature_.Flags =
-		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+	PostEffectRootSignatureCommon();
 
+	//ランダム
+	CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 0);
 
-	descriptorRange_[0].BaseShaderRegister = 0;
-	descriptorRange_[0].NumDescriptors = 1;
-	descriptorRange_[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	descriptorRange_[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-
-	//RootParameter作成__
-	descriptionRootSignature_.pParameters = rootParameters_;
-	descriptionRootSignature_.NumParameters = _countof(rootParameters_);
-
-
-	rootParameters_[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameters_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters_[0].DescriptorTable.pDescriptorRanges = descriptorRange_;
-	rootParameters_[0].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange_);
-
-	rootParameters_[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters_[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters_[1].Descriptor.ShaderRegister = 0;
-
-	//2でまとめる
-	staticSamplers_[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	staticSamplers_[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;//clamp = そのテクスチャが伸びる
-	staticSamplers_[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-	staticSamplers_[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-	staticSamplers_[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-	staticSamplers_[0].MaxLOD = D3D12_FLOAT32_MAX;
-	staticSamplers_[0].ShaderRegister = 0;
-	staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	descriptionRootSignature_.pStaticSamplers = staticSamplers_;
-	descriptionRootSignature_.NumStaticSamplers = _countof(staticSamplers_);
-
+	IntroduceRootParameters();
+	IntroduceSamplers();
 }
 
 void Random::EffectInit() {

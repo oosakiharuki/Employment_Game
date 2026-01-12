@@ -26,18 +26,8 @@ void BasePostEffect::Initialize(DirectXCommon* dxCommon) {
 }
 
 void BasePostEffect::CreateInputLayout() {
-	inputElementDescs[0].SemanticName = "POSITION";
-	inputElementDescs[0].SemanticIndex = 0;
-	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-	inputElementDescs[1].SemanticName = "TEXCOORD";
-	inputElementDescs[1].SemanticIndex = 0;
-	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-	inputLayoutDesc.pInputElementDescs = nullptr;
-	inputLayoutDesc.NumElements = 0;
+	InputElementDeceCommon();//POSITIONとTEXCORD
+	IntroduceInputElementDesc();//InputLayoutDescに導入する
 }
 
 void BasePostEffect::CreateBlend() {
@@ -59,3 +49,23 @@ void BasePostEffect::CreateDepthStencil() {
 	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 }
+
+void BasePostEffect::PostEffectRootSignatureCommon() {
+
+	//RootSignature
+	descriptionRootSignature_.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+
+	CreateDescriptorRange(descriptorRange_, 0);
+
+	//RootParameter作成__
+	CreateTABLE(D3D12_SHADER_VISIBILITY_PIXEL, descriptorRange_);//[0] ps t0
+	rootParameters_[0].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange_);
+
+	//2でまとめる
+	DefaultSampler(0);
+	staticSamplers_[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;//clamp = そのテクスチャが伸びる
+	staticSamplers_[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+	staticSamplers_[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+
+}
+

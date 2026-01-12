@@ -29,11 +29,6 @@ private:
 	/// </summary>
 	void EffectUpdate() override;
 
-	//RootSignature
-	D3D12_DESCRIPTOR_RANGE descriptorRange_[1] = {};
-	D3D12_ROOT_PARAMETER rootParameters_[2] = {};
-	D3D12_STATIC_SAMPLER_DESC staticSamplers_[1] = {};
-
 	uint32_t srvIndex_;
 	D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU_;

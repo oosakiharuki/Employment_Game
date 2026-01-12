@@ -4,88 +4,29 @@
 using namespace Logger;
 using namespace MyMath;
 
-void DepthBasedOutline::Finalize() {
-	//delete instance;
-	//instance = nullptr;
-}
+void DepthBasedOutline::Finalize() {}
 
 void DepthBasedOutline::RootSignature() {
 
 	//RootSignature
-	descriptionRootSignature_.Flags =
-		D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+	PostEffectRootSignatureCommon();
 
+	CreateDescriptorRange(descriptorRangeOutline_,1);//t1用
 
-	descriptorRange_[0].BaseShaderRegister = 0;
-	descriptorRange_[0].NumDescriptors = 1;//t0
-	descriptorRange_[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	descriptorRange_[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	descriptorRangeOutline_[0].BaseShaderRegister = 1;
-	descriptorRangeOutline_[0].NumDescriptors = 1;//t1
-	descriptorRangeOutline_[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	descriptorRangeOutline_[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-	//RootParameter作成__
-	descriptionRootSignature_.pParameters = rootParameters_;
-	descriptionRootSignature_.NumParameters = _countof(rootParameters_);
-
-
-	rootParameters_[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameters_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters_[0].DescriptorTable.pDescriptorRanges = descriptorRange_;
-	rootParameters_[0].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange_);
-
-	rootParameters_[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameters_[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters_[1].DescriptorTable.pDescriptorRanges = descriptorRangeOutline_;
+	CreateTABLE(D3D12_SHADER_VISIBILITY_PIXEL, descriptorRangeOutline_);//[1] ps t1
 	rootParameters_[1].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeOutline_);
 
-
-	rootParameters_[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameters_[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameters_[2].Descriptor.ShaderRegister = 0;//Object3d.PS.hlsl の b0
-
-
-	//2でまとめる
-	//Sampler s0
-	staticSamplers_[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-	staticSamplers_[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;//clamp = そのテクスチャが伸びる
-	staticSamplers_[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-	staticSamplers_[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-	staticSamplers_[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-	staticSamplers_[0].MaxLOD = D3D12_FLOAT32_MAX;
-	staticSamplers_[0].ShaderRegister = 0;
-	staticSamplers_[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 0);//[2] ps b1
 
 	//SamplerPoint s1
-	staticSamplers_[1].Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
+	DefaultSampler(1);
+	staticSamplers_[1].Filter = D3D12_FILTER_MIN_MAG_MIP_POINT; 
 	staticSamplers_[1].AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;//clamp = そのテクスチャが伸びる
 	staticSamplers_[1].AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
 	staticSamplers_[1].AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
-	staticSamplers_[1].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-	staticSamplers_[1].MaxLOD = D3D12_FLOAT32_MAX;
-	staticSamplers_[1].ShaderRegister = 1;
-	staticSamplers_[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
-	descriptionRootSignature_.pStaticSamplers = staticSamplers_;
-	descriptionRootSignature_.NumStaticSamplers = _countof(staticSamplers_);
-
-}
-
-void DepthBasedOutline::CreateInputLayout() {
-	inputElementDescs[0].SemanticName = "POSITION";
-	inputElementDescs[0].SemanticIndex = 0;
-	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-	inputElementDescs[1].SemanticName = "TEXCOORD";
-	inputElementDescs[1].SemanticIndex = 0;
-	inputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-	inputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-
-	inputLayoutDesc.pInputElementDescs = nullptr;
-	inputLayoutDesc.NumElements = 0;
+	IntroduceRootParameters();
+	IntroduceSamplers();
 }
 
 void DepthBasedOutline::CreateBlend() {
@@ -97,20 +38,9 @@ void DepthBasedOutline::CreateRasterizer() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 }
 
-void DepthBasedOutline::CreateVertexSharder() {
-	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Fullscreen.VS.hlsl", L"vs_6_0");//フルスクリーン処理(共通処理)
-	assert(vertexShaderBlob != nullptr);
-}
-
 void DepthBasedOutline::CreatePixelSharder() {
 	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/DepthBasedOutline.PS.hlsl", L"ps_6_0");//ココのみ変化させる
 	assert(pixelShaderBlob != nullptr);
-}
-
-void DepthBasedOutline::CreateDepthStencil() {
-	depthStencilDesc.DepthEnable = false;
-	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 }
 
 void DepthBasedOutline::Command() {
