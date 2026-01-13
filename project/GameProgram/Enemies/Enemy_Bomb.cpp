@@ -49,17 +49,17 @@ void Enemy_Bomb::UpdateAttack() {
 }
 
 void Enemy_Bomb::UpdateDead() {
-	//プレイヤーに倒された場合
-	if (!isExplosion_) {
+
+	if (isExplosion_ && deadTimer_ >= kDeadTimeMax_) {
+		isDeleteEnemy_ = true;
+		isExplosion_ = false;//爆発フラグオフ
+	}
+	else if (deadTimer_ < kDeltaTime_) {
 		//強制爆発
 		Exprosion();
 	}
 
 	deadTimer_ += kDeltaTime_;
-
-	if (isExplosion_ &&  deadTimer_ >= kDeadTimeMax_) {
-		isDeleteEnemy_ = true;
-	}
 }
 
 void Enemy_Bomb::UpdateImgui() {
@@ -158,6 +158,11 @@ void Enemy_Bomb::RespawnEnemy() {
 	bombTimer_ = 0.0f;
 	//死亡タイマーリセット
 	deadTimer_ = 0.0f;
+	//点滅タイマーリセット
+	colorTimer_ = 0.0f;
+	//オブジェクト色変更
+	color_ = { 1,1,1,1 };//default
+	object_->SetColor(color_);
 }
 
 void Enemy_Bomb::Exprosion() {
@@ -169,4 +174,6 @@ void Enemy_Bomb::Exprosion() {
 	particles_[particleDamage_.name]->SetTranslate(transform_.translate);
 	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 
+	//爆発フラグオン
+	isExplosion_ = true;
 }

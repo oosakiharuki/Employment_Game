@@ -82,13 +82,9 @@ void CollisionManager::EnemyBulletAndPlayer(Player* player, std::shared_ptr<Enem
 }
 
 void CollisionManager::EnemyBombCollision(Player* player, std::shared_ptr<BaseEnemy> enemy) {
-	if (IsCollisionAABB(enemy->GetBombAABB(), player->GetAABB()) &&
-		enemy->GetIsDead() && !enemy->IsExplosion()) {
+	//敵(ボム)の爆発の当たり判定
+	if (IsCollisionAABB(enemy->GetBombAABB(), player->GetAABB()) && enemy->IsExplosion()) {
 		player->IsDamage(enemy->GetDistance());//プレイヤーにダメージ	
-	}
-
-	if (enemy->GetIsDead() && !enemy->IsExplosion()) {
-		enemy->ExplosionEnd();
 	}
 }
 

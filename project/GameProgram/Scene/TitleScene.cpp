@@ -183,16 +183,16 @@ void TitleScene::Update() {
 
 	//キーボード操作
 
-	if (Input::GetInstance()->TriggerKey(DIK_W)) {
+	if (Input::GetInstance()->TriggerKey(DIK_W) && !isSelect_) {
 		transforms_[1].translate.y = transforms_[2].translate.y;//ゲームスタート
 	}
-	if (Input::GetInstance()->TriggerKey(DIK_S)) {
+	if (Input::GetInstance()->TriggerKey(DIK_S) && !isSelect_) {
 		transforms_[1].translate.y = transforms_[3].translate.y;//ゲーム終了
 	}
 
 	//ゲームパット操作
 
-	if (Input::GetInstance()->GetJoystickState(0, state_)) {
+	if (Input::GetInstance()->GetJoystickState(0, state_) && !isSelect_) {
 		//スティックの傾き度
 		float padY = static_cast<float>(state_.Gamepad.sThumbLY) / 32768.0f;
 
@@ -205,8 +205,8 @@ void TitleScene::Update() {
 	}
 
 	//spaceもしくはAボタンを押したら実行
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE) ||
-		Input::GetInstance()->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_A)) {
+	if ((Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+		Input::GetInstance()->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_A)) && !isSelect_) {
 		isSelect_ = true;
 		sceneParticles_[particleBullet_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 		sceneParticles_[particleBullet_.name]->SetTranslate(transforms_[1].translate);

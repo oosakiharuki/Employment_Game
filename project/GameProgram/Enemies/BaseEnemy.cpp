@@ -277,8 +277,6 @@ Vector3 BaseEnemy::GetDistance(){
 
 bool BaseEnemy::IsExplosion() { return false; }
 
-void BaseEnemy::ExplosionEnd() {}
-
 void BaseEnemy::Fire() {
 	
 	//クールタイム

@@ -34,7 +34,6 @@ public:
 	void Draw() override;
 
 	bool IsExplosion()override { return isExplosion_; }
-	void ExplosionEnd()override { isExplosion_ = true; }
 	void RespawnEnemy() override;
 
 	/// <summary>
@@ -88,7 +87,7 @@ private:
 	const float kColorChangePower_ = 0.1f;//足し引きするパワー
 
 	float deadTimer_ = 0.0f;
-	const float kDeadTimeMax_ = 1.0f;
+	const float kDeadTimeMax_ = 0.5f;//爆発する間の時間
 
 	/// <summary>
 	/// 爆発する

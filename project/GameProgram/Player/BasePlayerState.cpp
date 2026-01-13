@@ -10,17 +10,16 @@ void PlayerLifeState::Update(Player& player) {
 		//PerformanceStateに変更
 		player.ChangeStatePattern(std::make_unique<PlayerPerformanceState>());
 	}
-
-	if (player.GetHp() == 0) {
+	else if (player.GetHp() == 0) {
 		//DeadStateに変更
 		player.ChangeStatePattern(std::make_unique<PlayerDeadState>());
 	}
-
-	//プレイヤー操作/アクション
-	player.PlayUpdate();
-	//生きている状態の更新処理
-	player.LifeUpdate();
-
+	else {
+		//プレイヤー操作/アクション
+		player.PlayUpdate();
+		//生きている状態の更新処理
+		player.LifeUpdate();
+	}
 }
 
 void PlayerDeadState::Update(Player& player) {
