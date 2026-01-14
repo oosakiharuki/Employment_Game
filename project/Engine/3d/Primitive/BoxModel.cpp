@@ -5,12 +5,12 @@ using namespace MyMath;
 using namespace Primitive;
 
 void BoxModel::Initialize(const std::string& textureFile) {
-	this->cubemap_ = Cubemap::GetInstance().get();
+	this->cubeMap_ = CubeMap::GetInstance().get();
 
 	modelData_ = CreateBox();
 	modelData_.materialData.textureFilePath = textureFile;
 
-	vertexResource_ = cubemap_->GetDirectXCommon()->CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+	vertexResource_ = cubeMap_->GetDirectXCommon()->CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
@@ -21,7 +21,7 @@ void BoxModel::Initialize(const std::string& textureFile) {
 
 	//Model用マテリアル
 	//マテリアル用のリソース
-	materialResource_ = cubemap_->GetDirectXCommon()->CreateBufferResource(sizeof(Material));
+	materialResource_ = cubeMap_->GetDirectXCommon()->CreateBufferResource(sizeof(Material));
 	//書き込むためのアドレス
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//色の設定
@@ -34,26 +34,26 @@ void BoxModel::Initialize(const std::string& textureFile) {
 	TextureManager::GetInstance()->LoadTexture(modelData_.materialData.textureFilePath);
 	modelData_.materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData_.materialData.textureFilePath);
 
-	camera_ = cubemap_->GetDefaultCamera();
-	wvpResource_ = cubemap_->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
+	camera_ = cubeMap_->GetDefaultCamera();
+	wvpResource_ = cubeMap_->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
 	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 
 	wvpData_->World = MakeIdentity4x4();
 	wvpData_->WVP = MakeIdentity4x4();
 }
 
-void BoxModel::Update(const Matrix4x4& matworld) {
+void BoxModel::Update(const Matrix4x4& matWorld) {
 
 	Matrix4x4 WorldViewProjectionMatrix;
 	if (camera_) {
 		Matrix4x4 projectionMatrix = camera_->GetViewProjectionMatrix();
-		WorldViewProjectionMatrix = matworld * projectionMatrix;
+		WorldViewProjectionMatrix = matWorld * projectionMatrix;
 	}
 	else {
-		WorldViewProjectionMatrix = matworld;
+		WorldViewProjectionMatrix = matWorld;
 	}
 
-	wvpData_->World = matworld;
+	wvpData_->World = matWorld;
 	//wvpData->World = worldMatrix;
 	wvpData_->WVP = WorldViewProjectionMatrix;
 
@@ -62,10 +62,9 @@ void BoxModel::Update(const Matrix4x4& matworld) {
 }
 
 void BoxModel::Draw() {
-	cubemap_->GetDirectXCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
-	cubemap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
-	cubemap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	cubemap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.materialData.textureFilePath));
-	//cubemap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource->GetGPUVirtualAddress());
-	cubemap_->GetDirectXCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	cubeMap_->GetDirectXCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	cubeMap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
+	cubeMap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+	cubeMap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.materialData.textureFilePath));
+	cubeMap_->GetDirectXCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }

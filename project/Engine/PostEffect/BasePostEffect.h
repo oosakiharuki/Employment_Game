@@ -64,7 +64,7 @@ public:
 	virtual void EffectInit() = 0;
 
 	/// <summary>
-	/// imguiで値を動かせるようにする
+	/// imGuiで値を動かせるようにする
 	/// </summary>
 	virtual void EffectUpdate() = 0;
 
@@ -99,9 +99,9 @@ private:
 	void CreateRasterizer() override;
 
 	/// <summary>
-	/// VertexSharderを作成
+	/// VertexShaderを作成
 	/// </summary>
-	void CreateVertexSharder() override;
+	void CreateVertexShader() override;
 
 	/// <summary>
 	/// DepthStencilの作成

@@ -1,26 +1,26 @@
-#include "Cubemap.h"
+#include "CubeMap.h"
 
 using namespace Logger;
 
-std::shared_ptr<Cubemap> Cubemap::sInstance_ = nullptr;
+std::shared_ptr<CubeMap> CubeMap::sInstance_ = nullptr;
 
-std::shared_ptr<Cubemap> Cubemap::GetInstance() {
+std::shared_ptr<CubeMap> CubeMap::GetInstance() {
 	if (sInstance_ == nullptr) {
-		sInstance_ = std::make_unique<Cubemap>();
+		sInstance_ = std::make_unique<CubeMap>();
 	}
 	return sInstance_;
 }
-void Cubemap::Finalize() {
+void CubeMap::Finalize() {
 	sInstance_.reset();
 	sInstance_ = nullptr;
 }
-void Cubemap::Initialize(DirectXCommon* dxCommon) {
+void CubeMap::Initialize(DirectXCommon* dxCommon) {
 	dxCommon_ = dxCommon;
 
 	GraphicsPipeline();
 }
 
-void Cubemap::RootSignature() {
+void CubeMap::RootSignature() {
 	//RootSignature
 	descriptionRootSignature_.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
@@ -35,40 +35,40 @@ void Cubemap::RootSignature() {
 	IntroduceSamplers();
 }
 
-void Cubemap::CreateInputLayout() {
+void CubeMap::CreateInputLayout() {
 	//InputLayout
-	InputElementDeceCommon();//POSITION ,TEXCORD
+	InputElementDescCommon();//POSITION ,TEXCORD
 	IntroduceInputElementDesc();//InputLayoutDescに導入する
 }
 
-void Cubemap::CreateBlend() {
+void CubeMap::CreateBlend() {
 	//blend
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 }
 
-void Cubemap::CreateRasterizer() {
+void CubeMap::CreateRasterizer() {
 	//RasterizerState
 	rasterizerDesc.CullMode = D3D12_CULL_MODE_NONE;//表裏表示
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 }
 
-void Cubemap::CreateVertexSharder() {
+void CubeMap::CreateVertexShader() {
 	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Skybox.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 
-void Cubemap::CreatePixelSharder() {
+void CubeMap::CreatePixelShader() {
 	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Skybox.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }
 
-void Cubemap::CreateDepthStencil() {
+void CubeMap::CreateDepthStencil() {
 	depthStencilDesc.DepthEnable = true;
 	depthStencilDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;//全ピクセルがz=1に出力される
 	depthStencilDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 }
 
-void Cubemap::Command() {
+void CubeMap::Command() {
 	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
 	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
 	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

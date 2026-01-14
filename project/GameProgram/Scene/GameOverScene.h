@@ -54,8 +54,8 @@ private:
 
 	//スプライトの設定
 	const Vector2 kSpritePositionGameOver_ = { 100.0f,100.0f };//[ゲームオーバー]文字の座標
-	const Vector2 kSpritePositionBotton_ = { 800.0f,10.0f };//[ボタンで戻る]文字の座標
-	const Vector2 kSpriteSizeBotton_ = { 256.0f, 64.0f };//[ボタンで戻る]文字のサイズ
+	const Vector2 kSpritePositionButton_ = { 800.0f,10.0f };//[ボタンで戻る]文字の座標
+	const Vector2 kSpriteSizeButton_ = { 256.0f, 64.0f };//[ボタンで戻る]文字のサイズ
 
 	//回る速度
 	const float kRotate_ = 0.5f;

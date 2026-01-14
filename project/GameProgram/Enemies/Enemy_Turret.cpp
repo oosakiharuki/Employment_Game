@@ -39,15 +39,15 @@ void Enemy_Turret::Initialize() {
 
 void Enemy_Turret::UpdateNormal() {
 	//レーザーポイント
-	LeserPoint();
+	LaserPoint();
 }
 
 void Enemy_Turret::UpdateAttack(){
 	//見つけたリアクション
-	FoundRiaction();
+	FoundReaction();
 
 	//レーザーポイント
-	LeserPoint();
+	LaserPoint();
 
 	//発砲処理
 	EnemyFire();
@@ -64,7 +64,7 @@ void Enemy_Turret::UpdateDead() {
 	DeadReaction();
 }
 
-void Enemy_Turret::UpdateImgui() {
+void Enemy_Turret::UpdateImGui() {
 
 #ifdef USE_IMGUI
 
@@ -113,11 +113,11 @@ void Enemy_Turret::FireBullet() {
 	bullet->Initialize();
 	bullet->SetPlayer(player_);
 	bullet->SetTranslate(translate);
-	bullet->SetVelocty(velocity);
+	bullet->SetVelocity(velocity);
 	bullets_.push_back(std::move(bullet));
 }
 
-void Enemy_Turret::LeserPoint() {
+void Enemy_Turret::LaserPoint() {
 	//スケール以外の行列
 	Matrix4x4 matWorld = MakeAffineMatrix(kDefaultScale_, transform_.rotate, transform_.translate);
 	//レーザーサイズXはターレットの前に出すため

@@ -54,8 +54,8 @@ void SpitOutLevelEditor::SpitOutEnemies(std::vector<std::shared_ptr<BaseEnemy>>&
 			enemy->SetInit_Position(enemyData.transform.translate, enemyData.transform.rotate);
 
 			enemy->SetAABB(enemyData.colliderAABB);//当たり判定
-			enemy->SetRouteleftPoint(enemyData.leftPoint);//移動ポイント1
-			enemy->SetRouterightPoint(enemyData.rightPoint);//移動ポイント2 (leftPoint < rightPoint)
+			enemy->SetRouteLeftPoint(enemyData.leftPoint);//移動ポイント1
+			enemy->SetRouteRightPoint(enemyData.rightPoint);//移動ポイント2 (leftPoint < rightPoint)
 			//オブジェクト向き
 			enemy->DirectionDegree();
 			//vectorに代入
@@ -64,21 +64,21 @@ void SpitOutLevelEditor::SpitOutEnemies(std::vector<std::shared_ptr<BaseEnemy>>&
 	}
 }
 
-void SpitOutLevelEditor::SpitOutStage(std::unique_ptr<Object3d>& stageobj, const std::string& stageFileName, std::vector<AABB>& stagesAABB) {
+void SpitOutLevelEditor::SpitOutStage(std::unique_ptr<Object3d>& stageObj, const std::string& stageFileName, std::vector<AABB>& stagesAABB) {
 	//- ステージ全体の当たり判定設定 -
 	// 
 	//ステージ自体の見た目
-	stageobj = std::make_unique<Object3d>();
-	stageobj->Initialize();
-	stageobj->SetModelFile(stageFileName + ".obj");
+	stageObj = std::make_unique<Object3d>();
+	stageObj->Initialize();
+	stageObj->SetModelFile(stageFileName + ".obj");
 
 	//MESH配置データがある場合
 	if (!levelEditor_->GetLevelData()->objects.empty()) {
 		for (auto& object : levelEditor_->GetLevelData()->objects) {
 			//中心座標
 			Vector3 position = object.transform.translate;
-			//aabbの大きさ
-			AABB aabb;
+			//AABBの大きさ
+			AABB aabb{};
 			aabb.min = position + object.colliderAABB.min;
 			aabb.max = position + object.colliderAABB.max;
 
@@ -165,5 +165,19 @@ void SpitOutLevelEditor::SpitOutBoss(std::unique_ptr<Boss>& boss) {
 		//boss->SetTranslate(bossData.transform.translate);
 		boss->SetTransform(bossData.transform);
 		boss->SetAABB(bossData.colliderAABB);
+	}
+}
+
+void SpitOutLevelEditor::SpitOutVisualActor(std::vector<std::shared_ptr<VisualActor>>& visualActors) {
+	if (!levelEditor_->GetLevelData()->objects.empty()) {
+		for (auto& objectData : levelEditor_->GetLevelData()->objects) {
+			//fileNameに名前があるとき
+			if (objectData.fileName != "") {
+				std::unique_ptr<VisualActor> visualActor = std::make_unique<VisualActor>();
+				visualActor->Initialize(objectData.fileName);
+				visualActor->SetTransform(objectData.transform);
+				visualActors.push_back(std::move(visualActor));
+			}
+		}
 	}
 }

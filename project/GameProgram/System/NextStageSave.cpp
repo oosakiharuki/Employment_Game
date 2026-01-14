@@ -13,8 +13,8 @@ void NextStageSave::SetPlayerHp(uint32_t playerHp) {
 	sceneSaveData_.playerHp = playerHp;
 }
 
-void NextStageSave::SetPlayerZanki(uint32_t zanki) {
-	sceneSaveData_.playerZanki = zanki;
+void NextStageSave::SetPlayerRemain(uint32_t remain) {
+	sceneSaveData_.playerRemain = remain;
 }
 
 void NextStageSave::SetPlayerMaxHp(uint32_t maxHp) {

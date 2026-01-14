@@ -24,9 +24,9 @@ public:
 	/// </summary>
 	void UpdateDead() override;
 	/// <summary>
-	/// 更新処理_Imgui
+	/// 更新処理_ImGui
 	/// </summary>
-	void UpdateImgui() override;
+	void UpdateImGui() override;
 	/// <summary>
 	/// 描画処理
 	/// </summary>

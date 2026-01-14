@@ -54,18 +54,18 @@ public:
 	/// <summary>
 	/// 重力更新処理
 	/// </summary>
-	void GrabityUpdate();
+	void GravityUpdate();
 
 	/// <summary>
 	/// 銃弾の処理
 	/// </summary>
-	/// <returns></returns>銃弾リスト
+	/// <returns>銃弾リスト</returns>
 	std::list<std::shared_ptr<EnemyBullet>> GetBullets() { return bullets_; }
 
 	/// <summary>
 	/// Playerのクラス
 	/// </summary>
-	/// <param name="player"></param>代入するPlayerクラス
+	/// <param name="player">代入するPlayerクラス</param>
 	void SetPlayer(Player* player) { player_ = player; }
 
 	uint32_t GetHp() { return hp_; }
@@ -87,15 +87,19 @@ public:
 	void RespawnEnemyCommon();
 
 	/// <summary>
-	/// 移動ルートのポイント設定(現在2つ)
+	/// 移動ルートのポイント設定:左(現在2つ)
 	/// </summary>
-	/// <param name="leftPoint"></param>
-	void SetRouteleftPoint(const Vector3& leftPoint) { routePointLeft_ = leftPoint; }
-	void SetRouterightPoint(const Vector3& rightPoint) { routePointRight_ = rightPoint; }
+	/// <param name="leftPoint">左端</param>
+	void SetRouteLeftPoint(const Vector3& leftPoint) { routePointLeft_ = leftPoint; }
+	/// <summary>
+	/// 移動ルートのポイント設定:右(現在2つ)
+	/// </summary>
+	/// <param name="leftPoint">右端</param>
+	void SetRouteRightPoint(const Vector3& rightPoint) { routePointRight_ = rightPoint; }
 	/// <summary>
 	/// 移動ルート中心の場合(Eventで使う)
 	/// </summary>
-	/// <param name="init"></param>真ん中にする場所
+	/// <param name="init">真ん中にする場所</param>
 	void SetMoveInit(const Vector3& init) { move_ = init; }
 
 	/// <summary>
@@ -106,8 +110,8 @@ public:
 	/// <summary>
 	/// setter_ステージ当たり判定
 	/// </summary>
-	/// <param name="aabb"></param>
-	void SetStages(const std::vector<AABB>& aabb) { stages_ = aabb; }
+	/// <param name="AABBs">現在のステージ当たり判定</param>
+	void SetStages(const std::vector<AABB>& AABBs) { stages_ = AABBs; }
 
 	/// <summary>
 	/// 影の座標位置
@@ -138,7 +142,7 @@ public:
 	void SetFoundTarget(bool result) { isFoundTarget_ = result; }	
 	
 	/// <summary>
-	/// プレイヤーを見つけたフラグ
+	/// プレイヤーを見つけたフラグ(getter)
 	/// </summary>
 	/// <returns></returns>
 	bool IsFoundTarget() { return isFoundTarget_; }
@@ -146,25 +150,20 @@ public:
 	/// <summary>
 	/// getter‗爆発範囲AABB
 	/// </summary>
-	/// <returns></returns>bombAABB
+	/// <returns>bombAABB</returns>
 	virtual AABB GetBombAABB();
 
 	/// <summary>
 	/// getter_距離
 	/// </summary>
-	/// <returns></returns>プレイヤーからボムの距離
+	/// <returns>プレイヤーからボムの距離</returns>
 	virtual Vector3 GetDistance();
 	
 	/// <summary>
-	/// 爆発
+	/// 爆発しているか
 	/// </summary>
-	/// <returns></returns>爆発フラグ
+	/// <returns>爆発フラグ</returns>
 	virtual bool IsExplosion();
-
-	/// <summary>
-	/// 爆発し終わったら
-	/// </summary>
-	virtual void ExplosionEnd();
 
 	/// <summary>
 	/// 発泡
@@ -223,9 +222,9 @@ public:
 protected:
 
 	/// <summary>
-	/// imguiの更新処理
+	/// imGuiの更新処理
 	/// </summary>
-	virtual void UpdateImgui() = 0;
+	virtual void UpdateImGui() = 0;
 
 	//オブジェクト
 	std::unique_ptr<Object3d> object_;
@@ -286,7 +285,7 @@ protected:
 	/// <summary>
 	/// 見つかけた時のリアクション処理
 	/// </summary>
-	void FoundRiaction();
+	void FoundReaction();
 
 	//見つかけたリアクションのパラメータ
 	bool isFoundReaction_ = false;
@@ -307,7 +306,7 @@ private:
 
 	const float kMarkPositionY_ = 2.0f;
 
-	const float kFoundMosionMaxTime_ = kMarkMaxTime_ / 5.0f;
+	const float kFoundMotionMaxTime_ = kMarkMaxTime_ / 5.0f;
 
 	//ステートパターン
 	std::unique_ptr<BaseEnemyState> currentEnemyState_ = std::make_unique<EnemyMoveState>();

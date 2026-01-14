@@ -68,8 +68,8 @@ public:
 	/// <param name="player">プレイヤー</param>
 	/// <param name="eventTriggers">イベントトリガー</param>
 	/// <param name="cameraControl_">カメラコントロールクラス</param>
-	/// <param name="levelediter">レベルエディタクラス</param>
-	void PlayerAndEventTrigger(Player* player, const std::vector<std::shared_ptr<EventTrigger>>& eventTriggers, CameraControl* cameraControl_, LevelEditor& levelediter);
+	/// <param name="levelEditor">レベルエディタクラス</param>
+	void PlayerAndEventTrigger(Player* player, const std::vector<std::shared_ptr<EventTrigger>>& eventTriggers, CameraControl* cameraControl_, LevelEditor& levelEditor);
 
 
 	/// <summary>
@@ -106,7 +106,7 @@ private:
 
 	void EnemyBulletAndPlayer(Player* player, std::shared_ptr<EnemyBullet> bulletE);
 
-	void EnemyAndPariBullet(std::shared_ptr<BaseEnemy> enemy, std::shared_ptr<EnemyBullet> bulletE);
+	void EnemyAndParryBullet(std::shared_ptr<BaseEnemy> enemy, std::shared_ptr<EnemyBullet> bulletE);
 
 	void EnemyBombCollision(Player* player, std::shared_ptr<BaseEnemy> enemy);
 
@@ -124,9 +124,9 @@ private:
 	/// <summary>
 	/// ゲームアクターとステージの当たり判定
 	/// </summary>
-	/// <param name="gameactor">ゲームアクター(player,enemy)</param>
+	/// <param name="gameActor">ゲームアクター(player,enemy)</param>
 	/// <param name="stageAABB">ステージ全体当たり判定</param>
-	void GameActorAndStageCollision(GameActor& gameactor, const std::vector<AABB>& stageAABB);
+	void GameActorAndStageCollision(GameActor& gameActor, const std::vector<AABB>& stageAABB);
 
 	/// <summary>
 	/// ステージで作成する当たり判定

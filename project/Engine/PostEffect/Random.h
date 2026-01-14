@@ -14,9 +14,9 @@ private:
 	void RootSignature() override;
 
 	/// <summary>
-	/// PixelSharderを作成(ポストエフェクトはこれ以外は共通)
+	/// PixelShaderを作成(ポストエフェクトはこれ以外は共通)
 	/// </summary>
-	void CreatePixelSharder() override;
+	void CreatePixelShader() override;
 
 	/// <summary>
 	/// ポストエフェクトの初期化処理
@@ -29,10 +29,10 @@ private:
 	void EffectUpdate() override;
 
 	struct RandomFunction {
-		float randomeTimer;
+		float randomTimer;
 	};
 
 	RandomFunction* randomFunction_;
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> RandomResoure_;
+	Microsoft::WRL::ComPtr<ID3D12Resource> RandomResource_;
 };

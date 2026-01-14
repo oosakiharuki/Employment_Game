@@ -10,10 +10,10 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="modelCommon"></param>
-	/// <param name="directorypath"></param>
-	/// <param name="fileName"></param>
-	void Initialize(ModelCommon* modelCommon,const std::string& directorypath,const std::string& fileName) override;
+	/// <param name="modelCommon">モデル共通</param>
+	/// <param name="directoryPath">リソースファイルパス</param>
+	/// <param name="fileName">オブジェクト名</param>
+	void Initialize(ModelCommon* modelCommon,const std::string& directoryPath,const std::string& fileName) override;
 	
 	/// <summary>
 	/// アニメーション
@@ -47,9 +47,21 @@ public:
 	void InitIndexResource(ModelData modelData) override;
 
 
-
-	//gltf用
+	/// <summary>
+	/// モデルを読み込む
+	/// </summary>
+	/// <param name="directoryPath">リソースファイルパス</param>
+	/// <param name="filename"></param>
+	/// <returns>完成したモデルデータ</returns>
 	static ModelDataMulti LoadModelFile(const std::string& directoryPath, const std::string& filename);
+	
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="directoryPath"></param>
+	/// <param name="filename"></param>
+	/// <param name="Number"></param>
+	/// <returns></returns>
 	static std::vector<Animation> LoadAnimationFile(const std::string& directoryPath, const std::string& filename,uint32_t Number);
 	
 

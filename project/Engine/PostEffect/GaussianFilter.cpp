@@ -14,7 +14,7 @@ void GaussianFilter::RootSignature() {
 	IntroduceSamplers();
 }
 
-void GaussianFilter::CreatePixelSharder() {
+void GaussianFilter::CreatePixelShader() {
 	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/GaussianFilter.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }
@@ -32,7 +32,7 @@ void GaussianFilter::EffectInit() {
 	srvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(srvIndex_);
 	srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_);
 
-	SrvManager::GetInstance()->CreateSRVforTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
+	SrvManager::GetInstance()->CreateSRVForTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 }
 
 void GaussianFilter::EffectUpdate() {

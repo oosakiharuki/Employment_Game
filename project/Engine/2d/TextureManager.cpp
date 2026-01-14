@@ -101,7 +101,7 @@ void TextureManager::CreateSRV(TextureData& textureData, const DirectX::TexMetad
 	textureData.srvHandleGPU = srvManager_->GetGPUDescriptorHandle(textureData.srvIndex);
 
 	//SRVの生成
-	srvManager_->CreateSRVforStructureBuffer(srvDesc, textureData.srvIndex, textureData.resource.Get(), metadata.format, UINT(metadata.mipLevels));
+	srvManager_->CreateSRVForStructureBuffer(srvDesc, textureData.srvIndex, textureData.resource.Get(), metadata.format, UINT(metadata.mipLevels));
 }
 
 

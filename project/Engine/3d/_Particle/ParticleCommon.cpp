@@ -46,7 +46,7 @@ void ParticleCommon::RootSignature() {
 
 void ParticleCommon::CreateInputLayout() {
 	//InputLayout
-	InputElementDeceCommon();
+	InputElementDescCommon();
 	CreateInputElementDesc("COLOR",DXGI_FORMAT_R32G32B32A32_FLOAT);
 
 	IntroduceInputElementDesc();
@@ -57,7 +57,7 @@ void ParticleCommon::CreateBlend(){
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 	blendDesc.RenderTarget[0].BlendEnable = TRUE;
 
-	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;// srcClor * scrAlpha
+	blendDesc.RenderTarget[0].SrcBlend = D3D12_BLEND_SRC_ALPHA;// srcColor * scrAlpha
 	blendDesc.RenderTarget[0].BlendOp = D3D12_BLEND_OP_ADD; // + 
 	blendDesc.RenderTarget[0].DestBlend = D3D12_BLEND_ONE;// DestColor * (1-SrcAlpha)
 
@@ -73,13 +73,13 @@ void ParticleCommon::CreateRasterizer(){
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 }
 
-void ParticleCommon::CreateVertexSharder() {
+void ParticleCommon::CreateVertexShader() {
 	//shaderのコンパイラ
 	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Particle.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 
-void ParticleCommon::CreatePixelSharder() {
+void ParticleCommon::CreatePixelShader() {
 	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Particle.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }

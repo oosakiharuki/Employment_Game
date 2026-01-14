@@ -74,7 +74,7 @@ public:
 	/// <summary>
 	/// シザー作成
 	/// </summary>
-	void Siccer();
+	void Scissor();
 	/// <summary>
 	/// DXC作成
 	/// </summary>
@@ -88,7 +88,7 @@ public:
 	/// <summary>
 	/// コンパイルシェーダ作成
 	/// </summary>
-	/// <param name="filePath"></param> hlslの名前
+	/// <param name="filePath"></param> HLSLの名前
 	/// <param name="profile"></param> vs_6_0 or ps_6_0
 	/// <returns></returns>
 	Microsoft::WRL::ComPtr <IDxcBlob> CompileShader(const std::wstring& filePath, const wchar_t* profile);
@@ -211,7 +211,7 @@ private:
 	/// <summary>
 	/// エラー処理でストップ
 	/// </summary>
-	void ErrerStop();
+	void ErrorStop();
 
 	Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter = nullptr;
 
@@ -276,21 +276,21 @@ private:
 	Microsoft::WRL::ComPtr <IDxcIncludeHandler> includeHandler_ = nullptr;
 
 	/// <summary>
-	/// hlslを読み取る
+	/// HLSLを読み取る
 	/// </summary>
-	/// <param name="filePath">hlslパス</param>
+	/// <param name="filePath">HLSLパス</param>
 	/// <param name="profile">プロファイル</param>
 	void LoadHLSL(const std::wstring& filePath,const wchar_t* profile);
 	/// <summary>
 	/// 警告エラー
 	/// </summary>
-	void CompileErrer();
+	void CompileError();
 	/// <summary>
 	/// コンパイルが完了した
 	/// </summary>
-	/// <param name="filePath">hlslパス</param>
+	/// <param name="filePath">HSLSパス</param>
 	/// <param name="profile">プロファイル</param>
-	void CompileSucces(const std::wstring& filePath, const wchar_t* profile);
+	void CompileSuccess(const std::wstring& filePath, const wchar_t* profile);
 
 	Microsoft::WRL::ComPtr<IDxcResult> shaderResult = nullptr;
 	Microsoft::WRL::ComPtr<IDxcBlob> shaderBlob = nullptr;

@@ -1,7 +1,7 @@
 #pragma once
 #include "BasePostEffect.h"
 /// <summary>
-/// ポストエフェクト_BoxFillter(IPostEffectの派生クラス)
+/// ポストエフェクト_BoxFilter(IPostEffectの派生クラス)
 /// </summary>
 class BoxFilter : public BasePostEffect {
 public:
@@ -15,9 +15,9 @@ private:
 	void RootSignature() override;
 
 	/// <summary>
-	/// PixelSharderを作成(ポストエフェクトはこれ以外は共通)
+	/// PixelShaderを作成(ポストエフェクトはこれ以外は共通)
 	/// </summary>
-	void CreatePixelSharder() override;
+	void CreatePixelShader() override;
 
 	/// <summary>
 	/// ポストエフェクトの初期化処理

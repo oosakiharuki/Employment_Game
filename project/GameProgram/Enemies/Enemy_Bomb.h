@@ -25,16 +25,15 @@ public:
 	/// </summary>
 	void UpdateDead() override;
 	/// <summary>
-	/// 更新処理_Imgui
+	/// 更新処理_ImGui
 	/// </summary>
-	void UpdateImgui() override;
+	void UpdateImGui() override;
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	void Draw() override;
 
 	bool IsExplosion()override { return isExplosion_; }
-	void ExplosionEnd()override { isExplosion_ = true; }
 	void RespawnEnemy() override;
 
 	/// <summary>
@@ -56,7 +55,7 @@ public:
 
 private:
 	//追尾開始
-	bool isTuibiStart_ = false;
+	bool isHomingStart_ = false;
 	//爆発
 	bool isExplosion_ = false;
 
@@ -88,21 +87,21 @@ private:
 	const float kColorChangePower_ = 0.1f;//足し引きするパワー
 
 	float deadTimer_ = 0.0f;
-	const float kDeadTimeMax_ = 1.0f;
+	const float kDeadTimeMax_ = 0.5f;//爆発する間の時間
 
 	/// <summary>
 	/// 爆発する
 	/// </summary>
-	void Exprosion();
+	void Explosion();
 
 	/// <summary>
 	/// タイムリミット
 	/// </summary>
-	void TimeRimmit();
+	void TimeLimit();
 
 	/// <summary>
 	/// 赤の点滅
 	/// </summary>
-	void RedBilinking();
+	void RedBlinking();
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseScene.h"
 #include "Boss.h"
+#include "VisualActor.h"
 /// <summary>
 /// レベルエディタの配置
 /// </summary>
@@ -10,8 +11,8 @@ public:
 	/// <summary>
 	/// 使用するレベルエディタをもらう
 	/// </summary>
-	/// <param name="levelEdeitor">使用するレベルエディタ</param>
-	void SetLevelEditor(LevelEditor* levelEdeitor) { levelEditor_ = std::move(levelEdeitor); }
+	/// <param name="levelEditor">使用するレベルエディタ</param>
+	void SetLevelEditor(LevelEditor* levelEditor) { levelEditor_ = std::move(levelEditor); }
 	
 	/// <summary>
 	/// カメラの配置、使用するカメラ設定
@@ -34,10 +35,10 @@ public:
 	/// <summary>
 	/// ステージの当たり判定設定
 	/// </summary>
-	/// <param name="stageobj">オブジェクト化</param>
+	/// <param name="stageObj">オブジェクト化</param>
 	/// <param name="stageFileName">ステージの名前(オブジェクト読み込みに使う)</param>
 	/// <param name="stagesAABB">当たり判定</param>
-	void SpitOutStage(std::unique_ptr<Object3d>& stageobj, const std::string& stageFileName, std::vector<AABB>& stagesAABB);
+	void SpitOutStage(std::unique_ptr<Object3d>& stageObj, const std::string& stageFileName, std::vector<AABB>& stagesAABB);
 
 	/// <summary>
 	/// ステージオブジェクトの配置
@@ -64,6 +65,8 @@ public:
 	/// </summary>
 	/// <param name="boss">ボス</param>
 	void SpitOutBoss(std::unique_ptr<Boss>& boss);
+
+	void SpitOutVisualActor(std::vector<std::shared_ptr<VisualActor>>& visualActors);
 
 private:
 	//使用するエディタ

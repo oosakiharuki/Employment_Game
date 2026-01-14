@@ -24,7 +24,7 @@ void EnemyBullet::Initialize() {
 }
 
 void EnemyBullet::Update() {
-	if (!isPari) {
+	if (!isParry) {
 		//velocity向きに等速直線運動
 		transform_.translate += velocity_;
 	}
@@ -65,7 +65,7 @@ void EnemyBullet::IsHit() {
 	isDead_ = true;
 }
 
-void EnemyBullet::Pari_Mode() {
+void EnemyBullet::Parry_Mode() {
 	//跳ね返るフラグ
-	isPari = true;
+	isParry = true;
 }

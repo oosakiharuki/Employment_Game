@@ -40,7 +40,7 @@ public:
 	/// setter_弾丸速度、方向
 	/// </summary>
 	/// <param name="velocity"></param>FireBulletで設定したvelocity
-	void SetVelocty(const Vector3& velocity) { velocity_ = velocity; }
+	void SetVelocity(const Vector3& velocity) { velocity_ = velocity; }
 
 	/// <summary>
 	/// 消滅フラグ
@@ -60,12 +60,12 @@ public:
 	/// <summary>
 	/// 跳ね返す(パリィ)処理
 	/// </summary>
-	void Pari_Mode();
+	void Parry_Mode();
 	/// <summary>
 	/// getter_パリィフラグ
 	/// </summary>
 	/// <returns>現在のパリィフラグ</returns>
-	bool GetIsPari() { return isPari; }
+	bool GetIsParry() { return isParry; }
 	/// <summary>
 	/// getter_direction
 	/// </summary>
@@ -95,7 +95,7 @@ private:
 	const Vector3 kBulletSize_ = { 1.0f ,1.0f ,1.0f };
 
 	//パリィされたら敵のほうにダメージになる
-	bool isPari = false;
+	bool isParry = false;
 
 	//当たり所
 	Vector3 distance;

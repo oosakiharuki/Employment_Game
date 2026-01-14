@@ -75,8 +75,8 @@ public:
 	/// 移動ポイントの設定
 	/// </summary>
 	/// <param name="point">移動させるポイント</param>
-	/// <param name="speedBunkatu">移動の分割数</param>
-	void SetMovePoint(const Vector3& point, float speedBunkatu = 180.0f);
+	/// <param name="speedDivision">移動の分割数</param>
+	void SetMovePoint(const Vector3& point, float speedDivision = 180.0f);
 
 	/// <summary>
 	/// getter_行動カウント
@@ -95,7 +95,7 @@ public:
 	/// <summary>
 	/// 動く完了フラグリセット
 	/// </summary>
-	void ResetMoveSucces() { isMoveSucces_ = false; }
+	void ResetMoveSuccess() { isMoveSuccess_ = false; }
 
 	void SetOrigin(const Vector3& value) { move_.origin = value; }
 
@@ -117,7 +117,7 @@ public:
 	/// 移動完了
 	/// </summary>
 	/// <returns></returns>
-	bool IsMoveSucces() { return isMoveSucces_; }
+	bool IsMoveSuccess() { return isMoveSuccess_; }
 
 	/// <summary>
 	/// 発砲終了フラグリセット
@@ -126,7 +126,7 @@ public:
 	/// <summary>
 	/// 発砲終了フラグ
 	/// </summary>
-	/// <returns>false まだ発砲中 / ture 発砲終了</returns>
+	/// <returns>false まだ発砲中 / true 発砲終了</returns>
 	bool IsStopFire() { return isStopFire_; }
 
 	/// <summary>
@@ -138,18 +138,18 @@ public:
 	/// <summary>
 	/// 行動前モーション処理
 	/// </summary>
-	void BeforeActionMosion();
+	void BeforeActionMotion();
 
 	/// <summary>
 	/// 行動前モーション終了フラグ
 	/// </summary>
 	/// <returns>trueで終了</returns>
-	bool IsMosionFinish() { return isMosionFinish_; }
+	bool IsMotionFinish() { return isMotionFinish_; }
 
 	/// <summary>
 	/// 行動前モーション終了フラグリセット
 	/// </summary>
-	void ResetMosionFinish() { isMosionFinish_ = false; }
+	void ResetMotionFinish() { isMotionFinish_ = false; }
 
 	/// <summary>
 	/// getter_中心座標
@@ -159,9 +159,9 @@ public:
 
 	bool IsDead() { return isDead_; }
 
-	bool IsDeadMosion() { return isDeadMosion_; }
+	bool IsDeadMotion() { return isDeadMotion_; }
 
-	void DeadMosion();
+	void DeadMotion();
 
 	void DeadPosition();
 
@@ -187,7 +187,7 @@ private:
 	const uint32_t maxHp_ = 60;
 	uint32_t hp_ = maxHp_;
 
-	bool isMoveSucces_ = false;
+	bool isMoveSuccess_ = false;
 
 	///攻撃
 
@@ -208,7 +208,7 @@ private:
 	uint32_t rapidCountMax_ = 12;
 
 	//モーション終了処理
-	bool isMosionFinish_ = false;
+	bool isMotionFinish_ = false;
 	const float kRotationX_ = 10.0f;
 
 	//リアクション
@@ -226,7 +226,7 @@ private:
 	const float kDeadTimeMax_ = 6.0f;
 	
 	bool isDead_ = false;
-	bool isDeadMosion_ = false;
+	bool isDeadMotion_ = false;
 
 	void ImGuiUpdate();
 

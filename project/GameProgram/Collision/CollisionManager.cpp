@@ -32,7 +32,7 @@ void CollisionManager::PlayerAndEnemy(Player* player,
 			//敵がプレイヤーの弾に当たったら
 			EnemyBulletAndPlayer(player, bulletE);
 			//敵が跳ね返った敵の弾に当たったら
-			EnemyAndPariBullet(enemy, bulletE);
+			EnemyAndParryBullet(enemy, bulletE);
 		}
 
 		//ボムの敵 : 爆発範囲
@@ -63,15 +63,15 @@ void CollisionManager::EnemyBulletAndPlayer(Player* player, std::shared_ptr<Enem
 	//傘の当たり判定
 	if (IsCollisionAABB(bulletE->GetAABB(), player->GetUmbrella()->GetAABB()) && player->GetIsShield()) {
 		//パリィフラグが立ってるなら
-		if (player->GetIsPari()) {
-			bulletE->Pari_Mode();//弾が跳ね返る(敵に当たるとダメージ判定になる)
-			player->PariSuccess();//パリィ成功
+		if (player->GetIsParry()) {
+			bulletE->Parry_Mode();//弾が跳ね返る(敵に当たるとダメージ判定になる)
+			player->ParrySuccess();//パリィ成功
 		}
 		else {//跳ね返さず防ぐのみ
 			bulletE->IsHit();//当たって消える
 			player->KnockBackUmbrella(kUmbrellaKnockBackPower_, kUmbrellaKnockBackTime_);//ノックバックする
 		}
-		player->IsShildMosion();//傘のリアクションフラグをtrueに
+		player->IsShieldMotion();//傘のリアクションフラグをtrueに
 	}
 
 	//プレイヤーの当たり判定
@@ -82,19 +82,15 @@ void CollisionManager::EnemyBulletAndPlayer(Player* player, std::shared_ptr<Enem
 }
 
 void CollisionManager::EnemyBombCollision(Player* player, std::shared_ptr<BaseEnemy> enemy) {
-	if (IsCollisionAABB(enemy->GetBombAABB(), player->GetAABB()) &&
-		enemy->GetIsDead() && !enemy->IsExplosion()) {
+	//敵(ボム)の爆発の当たり判定
+	if (IsCollisionAABB(enemy->GetBombAABB(), player->GetAABB()) && enemy->IsExplosion()) {
 		player->IsDamage(enemy->GetDistance());//プレイヤーにダメージ	
-	}
-
-	if (enemy->GetIsDead() && !enemy->IsExplosion()) {
-		enemy->ExplosionEnd();
 	}
 }
 
-void CollisionManager::EnemyAndPariBullet(std::shared_ptr<BaseEnemy> enemy, std::shared_ptr<EnemyBullet> bulletE) {
+void CollisionManager::EnemyAndParryBullet(std::shared_ptr<BaseEnemy> enemy, std::shared_ptr<EnemyBullet> bulletE) {
 	//跳ね返った弾の当たり判定
-	if (IsCollisionAABB(bulletE->GetAABB(), enemy->GetAABB()) && bulletE->GetIsPari() && !enemy->GetIsDead()) {
+	if (IsCollisionAABB(bulletE->GetAABB(), enemy->GetAABB()) && bulletE->GetIsParry() && !enemy->GetIsDead()) {
 		bulletE->IsHit();//当たって消える
 		enemy->IsDamage();//敵にダメージ
 	}
@@ -181,7 +177,7 @@ void CollisionManager::EnemyAndStage(const std::vector<std::shared_ptr<BaseEnemy
 
 void CollisionManager::BossAndPlayer(Player& player, Boss& boss) {
 	//プレイヤーがボスに当たった時
-	if (IsCollisionAABB(player.GetAABB(), boss.GetAABB()) && !boss.IsDeadMosion()) {
+	if (IsCollisionAABB(player.GetAABB(), boss.GetAABB()) && !boss.IsDeadMotion()) {
 		player.IsDamage(Length(player.GetTranslate(),boss.GetTranslate()));
 	}
 
@@ -200,7 +196,7 @@ void CollisionManager::BossAndPlayer(Player& player, Boss& boss) {
 		EnemyBulletAndPlayer(&player, bossBullet);
 
 		//跳ね返った弾の当たり判定
-		if (IsCollisionAABB(bossBullet->GetAABB(), boss.GetAABB()) && bossBullet->GetIsPari()) {
+		if (IsCollisionAABB(bossBullet->GetAABB(), boss.GetAABB()) && bossBullet->GetIsParry()) {
 			bossBullet->IsHit();//当たって消える
 			boss.IsDamage();
 		}
@@ -209,7 +205,7 @@ void CollisionManager::BossAndPlayer(Player& player, Boss& boss) {
 
 
 void CollisionManager::PlayerAndEventTrigger(Player* player, const std::vector<std::shared_ptr<EventTrigger>>& eventTriggers,
-	CameraControl* cameraControl_, LevelEditor& levelediter) {
+	CameraControl* cameraControl_, LevelEditor& levelEditor) {
 	CollisionOverlap playerCollisionOverlap;
 	playerCollisionOverlap = SetTarget(player->GetTranslate(), player->GetAABB());
 
@@ -222,7 +218,7 @@ void CollisionManager::PlayerAndEventTrigger(Player* player, const std::vector<s
 			//一瞬だけ通す
 			if (cameraControl_->IsFixed()) {
 				cameraControl_->FixedMode(false);//カメラを固定しない
-				cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit["MainCamera"], false);//メインカメラに戻す
+				cameraControl_->CameraSetting(levelEditor.GetLevelData()->cameraInit["MainCamera"], false);//メインカメラに戻す
 			}
 		}
 		//イベントが発動している時(順番2)
@@ -237,7 +233,7 @@ void CollisionManager::PlayerAndEventTrigger(Player* player, const std::vector<s
 		}
 		//イベントトリガーに入った直前(順番1)
 		else if (IsCollisionAABB(player->GetAABB(), data.aabb)) {
-			cameraControl_->CameraSetting(levelediter.GetLevelData()->cameraInit[data.cameraName], true);
+			cameraControl_->CameraSetting(levelEditor.GetLevelData()->cameraInit[data.cameraName], true);
 			eventTrigger->StartEvent();
 		}
 	}

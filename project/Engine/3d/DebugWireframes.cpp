@@ -45,7 +45,7 @@ void DebugWireframes::RootSignature() {
 
 void DebugWireframes::CreateInputLayout() {
 	//InputLayout
-	InputElementDeceCommon();
+	InputElementDescCommon();
 
 	CreateInputElementDesc("NORMAL", DXGI_FORMAT_R32G32B32_FLOAT);
 	CreateInputElementDesc("WORLDPOSITION", DXGI_FORMAT_R32G32B32_FLOAT);
@@ -63,12 +63,12 @@ void DebugWireframes::CreateRasterizer() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_WIREFRAME;//ワイヤーフレーム
 }
 
-void DebugWireframes::CreateVertexSharder() {
+void DebugWireframes::CreateVertexShader() {
 	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 
-void DebugWireframes::CreatePixelSharder() {
+void DebugWireframes::CreatePixelShader() {
 	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Wireframe.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }

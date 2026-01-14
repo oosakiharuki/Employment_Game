@@ -118,7 +118,7 @@ ParticleData ParticleEmitter::MakeNewParticleSpike(std::mt19937& randomEngine, c
 	return particle;
 }
 
-ParticleData ParticleEmitter::MakeNewParticleExprosion(std::mt19937& randomEngine, const Emitter& emitter) {
+ParticleData ParticleEmitter::MakeNewParticleExplosion(std::mt19937& randomEngine, const Emitter& emitter) {
 	//random
 	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);//座標位置用
 	std::uniform_real_distribution<float> distColor(0.0f, 1.0f);//色用
@@ -193,12 +193,12 @@ std::list<ParticleData> ParticleEmitter::MakeEmit(const std::string& particleNam
 		if (particleName == "player_walk" || particleName == "player_dead") {
 			particles.push_back(MakeNewParticleSmaller(randomEngine, emitter));
 		}
-		else if (particleName == "player_fire" || particleName == "player_brink" || particleName == "player_pari" || 
+		else if (particleName == "player_fire" || particleName == "player_brink" || particleName == "player_parry" || 
 			particleName == "enemy_fire" || particleName == "tullet_laser" || particleName == "title_bullet") {
 			particles.push_back(MakeNewParticleFixed(emitter));
 		}
 		else if (particleName == "player_damage" || particleName == "enemy_damage" || particleName == "enemies_summon") {
-			particles.push_back(MakeNewParticleExprosion(randomEngine, emitter));
+			particles.push_back(MakeNewParticleExplosion(randomEngine, emitter));
 		}
 		else if (particleName == "clear_fanfare") {
 			particles.push_back(MakeNewParticleFanfare(randomEngine, emitter));

@@ -23,9 +23,9 @@ public:
 	/// <summary>
 	/// コンスタンスバッファ設定
 	/// </summary>
-	/// <param name="sharder">Sherder名(VERTEX / PIXEL)</param>
+	/// <param name="shader">Shader名(VERTEX / PIXEL)</param>
 	/// <param name="number">レジスタ番号</param>
-	void CreateCBV(D3D12_SHADER_VISIBILITY sharder, uint32_t number);
+	void CreateCBV(D3D12_SHADER_VISIBILITY shader, uint32_t number);
 
 	/// <summary>
 	/// テーブル設定
@@ -66,7 +66,7 @@ public:
 	/// 共通のエレメントデスク
 	/// (POSITION , TEXCORD)
 	/// </summary>
-	void InputElementDeceCommon();
+	void InputElementDescCommon();
 
 	/// <summary>
 	/// 最後にinputLayoutDaceにElementDescsを導入する
@@ -100,14 +100,14 @@ protected:
 	virtual void CreateRasterizer() = 0;
 
 	/// <summary>
-	/// VertexSharderを作成
+	/// VertexShaderを作成
 	/// </summary>
-	virtual void CreateVertexSharder() = 0;
+	virtual void CreateVertexShader() = 0;
 	
 	/// <summary>
-	/// PixelSharderを作成
+	/// PixelShaderを作成
 	/// </summary>
-	virtual void CreatePixelSharder() = 0;
+	virtual void CreatePixelShader() = 0;
 
 	/// <summary>
 	/// DepthStencilの作成

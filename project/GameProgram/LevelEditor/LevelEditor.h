@@ -142,7 +142,7 @@ private:
 	/// トランスフォームの設定
 	/// </summary>
 	/// <param name="object">オブジェクトのデータ配列</param>
-	/// <param name="objecttransform">導入するトランスフォーム</param>
+	/// <param name="objectTransform">導入するトランスフォーム</param>
 	void SetTransform(nlohmann::json& object, Transform& objectTransform);
 
 	/// <summary>

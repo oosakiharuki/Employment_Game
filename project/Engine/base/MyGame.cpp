@@ -25,7 +25,7 @@ void MyGame::Update() {
 
 	//タイトル画面で終了を選択した時するとき
 	if (sceneManager_->SetGameEnd()) {
-		Framework::SetIsEndRequst(sceneManager_->SetGameEnd());
+		Framework::SetIsEndRequest(sceneManager_->SetGameEnd());
 	}
 
 	//フェード更新
@@ -50,7 +50,7 @@ void MyGame::Draw() {
 	DirectXCommon::GetInstance()->RenderTexturePostDraw();
 
 	//描画開始
-	DirectXCommon::GetInstance()->PreDraw();// 対 swapchain
+	DirectXCommon::GetInstance()->PreDraw();// 対 swapChain
 	
 	//フェード
 	fadeScreen_->Draw();

@@ -2,7 +2,7 @@
 #include "MyMath.h"
 #include "DirectXCommon.h"
 #include "Camera.h"
-#include "Cubemap.h"
+#include "CubeMap.h"
 #include "Primitive.h"
 /// <summary>
 /// 四角型モデル(キューブマップ用)
@@ -14,7 +14,7 @@ public:
 	/// </summary>
 	/// <param name="textureFile"></param>
 	void Initialize(const std::string& textureFile);
-	void Update(const Matrix4x4& matworld);
+	void Update(const Matrix4x4& matWorld);
 	/// <summary>
 	/// 描画処理
 	/// </summary>
@@ -27,7 +27,7 @@ public:
 
 private:
 
-	Cubemap* cubemap_ = nullptr;
+	CubeMap* cubeMap_ = nullptr;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
 	TransformationMatrix* wvpData_ = nullptr;

@@ -38,7 +38,7 @@ void DepthBasedOutline::CreateRasterizer() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 }
 
-void DepthBasedOutline::CreatePixelSharder() {
+void DepthBasedOutline::CreatePixelShader() {
 	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/DepthBasedOutline.PS.hlsl", L"ps_6_0");//ココのみ変化させる
 	assert(pixelShaderBlob != nullptr);
 }
@@ -59,13 +59,13 @@ void DepthBasedOutline::EffectInit() {
 	srvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(srvIndex_);
 	srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_);
 
-	SrvManager::GetInstance()->CreateSRVforTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
+	SrvManager::GetInstance()->CreateSRVForTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
 	srvIndex_ = SrvManager::GetInstance()->Allocate();
 	srvHandleCPUDepth_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(srvIndex_);
 	srvHandleGPUDepth_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_);
 
-	SrvManager::GetInstance()->CreateSRVforTexture2D(srvIndex_, dxCommon_->GetOutlineResource(), DXGI_FORMAT_R24_UNORM_X8_TYPELESS, 1);
+	SrvManager::GetInstance()->CreateSRVForTexture2D(srvIndex_, dxCommon_->GetOutlineResource(), DXGI_FORMAT_R24_UNORM_X8_TYPELESS, 1);
 
 	//Model用マテリアル
 	//マテリアル用のリソース

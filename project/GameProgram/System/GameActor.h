@@ -162,8 +162,8 @@ protected:
 	//地面判定
 	bool isGround_ = false;
 	//重力
-	float grabity_ = 0.0f;
-	const float kGrabityPower_ = 0.01f;//重力の質量
+	float gravity_ = 0.0f;
+	const float kGravityPower_ = 0.01f;//重力の質量
 
 	//演出中フラグ
 	bool isPerformance_ = false;
@@ -172,7 +172,7 @@ protected:
 	std::unique_ptr<Shadow> shadow_;
 
 	//ダメージのリアクション
-	bool isDamageMosion_ = false;
+	bool isDamageMotion_ = false;
 
 	//ダメージリアクション
 	float scaleTimer_ = 0.0f;

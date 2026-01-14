@@ -37,7 +37,7 @@ void Enemy_Bomb::UpdateAttack() {
 	}
 
 	//追尾モードオン
-	isTuibiStart_ = true;
+	isHomingStart_ = true;
 	//!マーク表示時間
 	markTimer_ += kDeltaTime_;
 
@@ -45,24 +45,24 @@ void Enemy_Bomb::UpdateAttack() {
 	DirectionPlayer();
 	
 	//爆弾までの制限時間カウント
-	TimeRimmit();
+	TimeLimit();
 }
 
 void Enemy_Bomb::UpdateDead() {
-	//プレイヤーに倒された場合
-	if (!isExplosion_) {
+
+	if (isExplosion_ && deadTimer_ >= kDeadTimeMax_) {
+		isDeleteEnemy_ = true;
+		isExplosion_ = false;//爆発フラグオフ
+	}
+	else if (deadTimer_ < kDeltaTime_) {
 		//強制爆発
-		Exprosion();
+		Explosion();
 	}
 
 	deadTimer_ += kDeltaTime_;
-
-	if (isExplosion_ &&  deadTimer_ >= kDeadTimeMax_) {
-		isDeleteEnemy_ = true;
-	}
 }
 
-void Enemy_Bomb::UpdateImgui() {
+void Enemy_Bomb::UpdateImGui() {
 #ifdef USE_IMGUI
 
 	ImGui::Begin("Enemy_soldier");
@@ -83,7 +83,7 @@ void Enemy_Bomb::Draw() {
 	}
 }
 
-void Enemy_Bomb::TimeRimmit() {
+void Enemy_Bomb::TimeLimit() {
 	//爆弾タイマー
 	bombTimer_ += kDeltaTime_;
 
@@ -101,19 +101,19 @@ void Enemy_Bomb::TimeRimmit() {
 	//リアクション
 	if (bombTimer_ >= kOnTheVerge) {
 		//爆発寸前だと揺れが細かくなる
-		reaction_->ScaleReaction(transform_.scale, isTuibiStart_, bombScale_ * kScaleSpeedUp_, scaleTimer_, kScaleMax_ / kScaleSpeedUp_);
+		reaction_->ScaleReaction(transform_.scale, isHomingStart_, bombScale_ * kScaleSpeedUp_, scaleTimer_, kScaleMax_ / kScaleSpeedUp_);
 		colorTimeMax_ = kScaleMax_ / kScaleSpeedUp_;//点滅時間変更
 	}
 	else {
 		//爆発しそうな演出
-		reaction_->ScaleReaction(transform_.scale, isTuibiStart_, bombScale_, scaleTimer_, kScaleMax_);
+		reaction_->ScaleReaction(transform_.scale, isHomingStart_, bombScale_, scaleTimer_, kScaleMax_);
 		colorTimeMax_ = kScaleMax_;//点滅時間
 	}
 	//赤い点滅
-	RedBilinking();
+	RedBlinking();
 }
 
-void Enemy_Bomb::RedBilinking() {
+void Enemy_Bomb::RedBlinking() {
 	//RGBの緑、青の変更(赤色にするため除外)
 	if (colorTimer_ >= colorTimeMax_ / 2) {
 		//色を足して元の色に
@@ -152,15 +152,20 @@ void Enemy_Bomb::RespawnEnemy() {
 	RespawnEnemyCommon();
 	
 	//追尾モードオフ
-	isTuibiStart_ = false;
+	isHomingStart_ = false;
 	//爆発してない
 	isExplosion_ = false;
 	bombTimer_ = 0.0f;
 	//死亡タイマーリセット
 	deadTimer_ = 0.0f;
+	//点滅タイマーリセット
+	colorTimer_ = 0.0f;
+	//オブジェクト色変更
+	color_ = { 1,1,1,1 };//default
+	object_->SetColor(color_);
 }
 
-void Enemy_Bomb::Exprosion() {
+void Enemy_Bomb::Explosion() {
 	//爆発範囲AABB
 	bombAABB_.min = transform_.translate - kExplosionRange_;
 	bombAABB_.max = transform_.translate + kExplosionRange_;
@@ -169,4 +174,6 @@ void Enemy_Bomb::Exprosion() {
 	particles_[particleDamage_.name]->SetTranslate(transform_.translate);
 	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 
+	//爆発フラグオン
+	isExplosion_ = true;
 }

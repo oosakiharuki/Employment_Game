@@ -25,9 +25,9 @@ private:
 	void CreateRasterizer() override;
 
 	/// <summary>
-	/// PixelSharderを作成
+	/// PixelShaderを作成
 	/// </summary>
-	void CreatePixelSharder() override;
+	void CreatePixelShader() override;
 
 	/// <summary>
 	/// ポストエフェクトの初期化処理

@@ -19,7 +19,7 @@ void Vignette::RootSignature() {
 	IntroduceSamplers();
 }
 
-void Vignette::CreatePixelSharder() {
+void Vignette::CreatePixelShader() {
 	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Vignette.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }
@@ -38,7 +38,7 @@ void Vignette::EffectInit() {
 	srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_);
 
 
-	SrvManager::GetInstance()->CreateSRVforTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
+	SrvManager::GetInstance()->CreateSRVForTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
 
 	vignetteResource_ = dxCommon_->CreateBufferResource(sizeof(VignetteFunction));
