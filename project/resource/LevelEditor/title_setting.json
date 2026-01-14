@@ -1,0 +1,136 @@
+{
+    "name": "scene",
+    "objects": [
+        {
+            "type": "MESH",
+            "name": "立方体",
+            "transform": {
+                "translation": [
+                    4.0,
+                    13.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    179.99998474121094
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "file_name": "Select_Start"
+        },
+        {
+            "type": "MESH",
+            "name": "立方体.001",
+            "transform": {
+                "translation": [
+                    4.0,
+                    13.0,
+                    -3.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "file_name": "Select_End"
+        },
+        {
+            "type": "MESH",
+            "name": "chilli",
+            "transform": {
+                "translation": [
+                    -5.0,
+                    13.0,
+                    15.200000762939453
+                ],
+                "rotation": [
+                    -90.00001525878906,
+                    2.6870492593131234e-13,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "umbrella_Open"
+        },
+        {
+            "type": "MESH",
+            "name": "cube",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "Title_stage"
+        },
+        {
+            "type": "MESH",
+            "name": "cube.002",
+            "transform": {
+                "translation": [
+                    -5.0,
+                    13.0,
+                    13.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -179.99998474121094
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "player_standby"
+        },
+        {
+            "type": "CAMERA",
+            "name": "MainCamera",
+            "transform": {
+                "translation": [
+                    0.0,
+                    -16.0,
+                    1.0
+                ],
+                "rotation": [
+                    90.00000762939453,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        }
+    ]
+}

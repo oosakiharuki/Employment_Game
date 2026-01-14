@@ -2,6 +2,11 @@
 #include "Sprite.h"
 #include "Framework.h"
 #include "BaseScene.h"
+#include "VisualActor.h"
+
+#include "LevelEditor.h"
+#include "SpitOutLevelEditor.h"
+#include "CameraControl.h"
 
 /// <summary>
 /// タイトルシーン(BaseSceneの派生クラス)
@@ -24,9 +29,28 @@ private:
 	/// </summary>
 	void InitCamera();
 	/// <summary>
-	/// オブジェクト初期化処理
+	/// オブジェクトたちを読み込む
 	/// </summary>
-	void MakeObject(const std::string& objectName,const Vector3& translate, const Vector3& rotate, const Vector3& scale);
+	void ObjectLoading();
+	/// <summary>
+	/// 最後にする更新処理
+	/// </summary>
+	void UpdateBehind();
+
+	void MoveTitleLogo();
+
+	/// <summary>
+	/// 選択操作
+	/// </summary>
+	void Operation();
+
+	void ArrowSelectStart(){
+		transforms_["umbrella_Open"].translate.y = transforms_["Select_Start"].translate.y;//ゲームスタート
+	}
+
+	void ArrowSelectEnd() {
+		transforms_["umbrella_Open"].translate.y = transforms_["Select_End"].translate.y;//ゲーム終了
+	}
 
 	//入力処理
 	Input* input_ = Input::GetInstance().get();
@@ -35,31 +59,12 @@ private:
 
 	//カメラ
 	std::unique_ptr<Camera> camera_ = nullptr;
-	Vector3 cameraRotate_ = { 0.0f,0.0f,0.0f };//回転
-	Vector3 cameraTranslate_ = { 0.0f,0.0f,0.0f };///座標
 
 	//パーティクルコンテナ
 	std::unordered_map<std::string, std::unique_ptr<Particle>> sceneParticles_;
 
-
-	//タイトルで使うワールド行列たち
-	std::vector<WorldTransform> wts_;
-	std::vector<Transform> transforms_;
-
-	//タイトルで使うオブジェクトたち
-	std::vector<std::unique_ptr<Object_glTF>> objects_;
-	//必要なワールド行列
-	const uint32_t kMaxWt_ = 5;
-
-	/// <summary>
-	/// オブジェクトたちを読み込む
-	/// </summary>
-	void ObjectLoading();
-
-	/// <summary>
-	/// 最後にする更新処理
-	/// </summary>
-	void UpdateBehind();
+	std::vector<std::shared_ptr<VisualActor>> visualActores;
+	std::unordered_map<std::string ,Transform> transforms_;//各々の変更用
 
 	std::unique_ptr<Shadow> playerShadow_;//プレイヤー影
 	std::unique_ptr<Sprite> spriteMojiTitle_;//タイトル名
@@ -86,20 +91,14 @@ private:
 	//通常プレイと同じ重力
 	const float kGravity_ = 0.05f;
 
-	//プレイヤー初期値
-	const Vector3 kPlayerInitPoint_ = { -4.5f,10.0f,0 };
 	//プレイヤー着地地点
 	const float kLandingPointY_ = -2.0f;
-	//プレイヤー前に向かす
-	const Vector3 kRotatePlayer_ = { 0.0f,180.0f,0.0f };
 
-	//最初、文字をふせておく
-	const Vector3 kRotateSelectMoji_ = { 0.0f,180.0f,0.0f };
-	//回転速度
+	//文字回転最大値
+	const float kRotateMaxSelectMoji_ = 180.0f;
+	//文字回転速度
 	const float kRotating_ = 30.0f;
 
-	//セレクトの文字の大きさ
-	const Vector3 kScaleSelectMoji_ = { 1.5f,1.5f ,1.5f };
 	//選択後に飛ばされる強さ
 	const float kMoveSelectMoji_ = 0.5f;
 
@@ -107,23 +106,23 @@ private:
 	const float kSelectEndPositionY_ = -2.5f;
 	
 	//傘
-	const Vector3 kUmbrellaInitPoint_ = { 0.0f,2.0f,0.0f };
-	//傘の向き
-	const float kUmbrellaRange_ = -90.0f;
-	const float kUmbrellaRangeArrowMode_ = 90.0f;//矢印の時
-	Vector3 umbrellaRange_ = { kUmbrellaRange_,0.0f,0.0f };//プレイヤーが降ってくるとき
+	float const kArrowRange_ = -90.0f;
 
 	//場所
-	const float kUmbrellaArrowModePositionX_ = -1.0f;
+	const float kUmbrellaArrowModePositionX_ = 0.0f;
 
 	//影
 	const float kShadowPositionY_ = -3.79f;//(-3.8f + 0.01f)
-
-	//タイトルシーンのカメラ座標
-	const Vector3 kCameraTranslate_ = { 0.0f,0.0f,-30.0f };
 
 	const float kStickPower_ = 0.5f;//スティックの倒し具合
 
 	bool isNextSelectScene = false;
 	bool isNextGameEnd = false;
+
+
+	std::unique_ptr<CameraControl> cameraControl_;
+
+	LevelEditor levelEditor_;
+	SpitOutLevelEditor spitOut_;
+
 };

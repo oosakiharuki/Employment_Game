@@ -167,3 +167,17 @@ void SpitOutLevelEditor::SpitOutBoss(std::unique_ptr<Boss>& boss) {
 		boss->SetAABB(bossData.colliderAABB);
 	}
 }
+
+void SpitOutLevelEditor::SpitOutVisualActor(std::vector<std::shared_ptr<VisualActor>>& visualActors) {
+	if (!levelEditor_->GetLevelData()->objects.empty()) {
+		for (auto& objectData : levelEditor_->GetLevelData()->objects) {
+			//fileNameに名前があるとき
+			if (objectData.fileName != "") {
+				std::unique_ptr<VisualActor> visualActor = std::make_unique<VisualActor>();
+				visualActor->Initialize(objectData.fileName);
+				visualActor->SetTransform(objectData.transform);
+				visualActors.push_back(std::move(visualActor));
+			}
+		}
+	}
+}

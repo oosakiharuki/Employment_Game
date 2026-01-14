@@ -387,9 +387,6 @@
     <ClCompile Include="GameProgram\System\Reaction.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\LevelEditor\SpitOutLevelEditor.cpp">
-      <Filter>ソース ファイル\GameProgram\System</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\System\UIManager.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
@@ -419,6 +416,12 @@
     </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\MoveGround.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="VisualActor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\LevelEditor\SpitOutLevelEditor.cpp">
+      <Filter>ソース ファイル\GameProgram\LevelEditor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -674,9 +677,6 @@
     <ClInclude Include="GameProgram\System\UIManager.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\LevelEditor\SpitOutLevelEditor.h">
-      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\System\Reaction.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
@@ -706,6 +706,12 @@
     </ClInclude>
     <ClInclude Include="GameProgram\StageObjects\MoveGround.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualActor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\LevelEditor\SpitOutLevelEditor.h">
+      <Filter>ヘッダー ファイル\GameProgram\LevelEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

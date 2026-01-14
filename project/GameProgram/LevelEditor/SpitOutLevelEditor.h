@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseScene.h"
 #include "Boss.h"
+#include "VisualActor.h"
 /// <summary>
 /// レベルエディタの配置
 /// </summary>
@@ -64,6 +65,8 @@ public:
 	/// </summary>
 	/// <param name="boss">ボス</param>
 	void SpitOutBoss(std::unique_ptr<Boss>& boss);
+
+	void SpitOutVisualActor(std::vector<std::shared_ptr<VisualActor>>& visualActors);
 
 private:
 	//使用するエディタ
