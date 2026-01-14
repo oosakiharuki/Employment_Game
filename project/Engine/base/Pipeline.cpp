@@ -19,8 +19,8 @@ void Pipeline::GraphicsPipeline() {
 	CreateRasterizer();
 
 	//shaderのコンパイラ
-	CreateVertexSharder();
-	CreatePixelSharder();
+	CreateVertexShader();
+	CreatePixelShader();
 
 	//DepthStencilState
 	CreateDepthStencil();
@@ -77,19 +77,19 @@ void Pipeline::CreateDescriptorRange(D3D12_DESCRIPTOR_RANGE* range, uint32_t num
 	range[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 }
 
-void Pipeline::CreateCBV(D3D12_SHADER_VISIBILITY sharder, uint32_t number) {
+void Pipeline::CreateCBV(D3D12_SHADER_VISIBILITY shader, uint32_t number) {
 	D3D12_ROOT_PARAMETER rootParameter{};
 	rootParameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameter.ShaderVisibility = sharder;
+	rootParameter.ShaderVisibility = shader;
 	rootParameter.Descriptor.ShaderRegister = number;//b0,b1など
 
 	rootParameters_.push_back(rootParameter);
 }
 
-void Pipeline::CreateTABLE(D3D12_SHADER_VISIBILITY sharder, D3D12_DESCRIPTOR_RANGE* descriptorRange) {
+void Pipeline::CreateTABLE(D3D12_SHADER_VISIBILITY shader, D3D12_DESCRIPTOR_RANGE* descriptorRange) {
 	D3D12_ROOT_PARAMETER rootParameter{};
 	rootParameter.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter.ShaderVisibility = sharder;
+	rootParameter.ShaderVisibility = shader;
 	rootParameter.DescriptorTable.pDescriptorRanges = descriptorRange;
 
 	rootParameters_.push_back(rootParameter);
@@ -139,7 +139,7 @@ void Pipeline::CreateInputElementDesc(const char* name, DXGI_FORMAT format) {
 	inputElementDescs.push_back(inputElementDesc);
 }
 
-void Pipeline::InputElementDeceCommon() {
+void Pipeline::InputElementDescCommon() {
 	CreateInputElementDesc("POSITION", DXGI_FORMAT_R32G32B32A32_FLOAT);//座標
 	CreateInputElementDesc("TEXCOORD", DXGI_FORMAT_R32G32_FLOAT);//テクスチャ
 }

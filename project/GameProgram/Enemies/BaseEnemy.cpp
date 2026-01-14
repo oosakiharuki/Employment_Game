@@ -60,16 +60,16 @@ void BaseEnemy::Update() {
 	currentEnemyState_->Update(*this);
 
 	//リアクション
-	if (isDamageMosion_) {
-		reaction_->ScaleReaction(transform_.scale,isDamageMosion_, damageScale_, scaleTimer_, kDamageMaxTime_);
+	if (isDamageMotion_) {
+		reaction_->ScaleReaction(transform_.scale,isDamageMotion_, damageScale_, scaleTimer_, kDamageMaxTime_);
 	}
 	//弾丸更新
 	BulletUpdate();
 
 #ifdef USE_IMGUI
 	
-	//Imgui 更新
-	UpdateImgui();
+	//ImGui 更新
+	UpdateImGui();
 
 #endif // USE_IMGUI
 
@@ -147,7 +147,7 @@ void BaseEnemy::IsDamage() {
 	//ダメージのパーティクルを出す
 	particles_[particleDamage_.name]->SetTranslate(transform_.translate); //座標を読み取る
 	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode); // 発生モード(一度だけ)の変更
-	isDamageMosion_ = true;
+	isDamageMotion_ = true;
 
 	//連続ヒット時、元に戻す
 	transform_.scale = kDefaultScale_;
@@ -161,22 +161,22 @@ void BaseEnemy::IsDamage() {
 	hp_--;
 }
 
-void BaseEnemy::GrabityUpdate() {
+void BaseEnemy::GravityUpdate() {
 	//重力
-	grabity_ -= kGrabityPower_;
+	gravity_ -= kGravityPower_;
 	//地面についていない
 	if (!isGround_) {
-		transform_.translate.y += grabity_;
+		transform_.translate.y += gravity_;
 	}
 	else {
 		//重力パワーリセット
-		grabity_ = 0.0f;
+		gravity_ = 0.0f;
 	}
 }
 
 void BaseEnemy::PlayerTarget() {
 	//見つかった瞬間だけtrueに
-	if (isBullet_ && markTimer_ < kFoundMosionMaxTime_) {
+	if (isBullet_ && markTimer_ < kFoundMotionMaxTime_) {
 		isFoundReaction_ = true;
 		preTranslate_ = transform_.translate;
 	}
@@ -303,14 +303,14 @@ void BaseEnemy::Fire() {
 
 void BaseEnemy::FireBullet(){}
 
-void BaseEnemy::FoundRiaction() {
+void BaseEnemy::FoundReaction() {
 
 	//伸びる強さ(y軸のみ)
 	Vector3 reaction = { 0,damageScale_.y * kDivideByTwo_,0 };
 
 	if (isFoundReaction_) {
-		reaction_->ScaleReaction(transform_.scale, isFoundReaction_, reaction, scaleTimer_, kFoundMosionMaxTime_);
-		reaction_->FoundReaction(transform_.translate,isFoundReaction_, reaction, foundTimer_, kFoundMosionMaxTime_, preTranslate_);
+		reaction_->ScaleReaction(transform_.scale, isFoundReaction_, reaction, scaleTimer_, kFoundMotionMaxTime_);
+		reaction_->FoundReaction(transform_.translate,isFoundReaction_, reaction, foundTimer_, kFoundMotionMaxTime_, preTranslate_);
 	}
 }
 

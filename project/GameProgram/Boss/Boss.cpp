@@ -22,7 +22,7 @@ void Boss::Update() {
 
 	if (hp_ == 0 && deadTimer_ < kDeltaTime_) {
 		bossState_.reset();
-		bossState_ = std::make_unique<BossDeadMosionState>();
+		bossState_ = std::make_unique<BossDeadMotionState>();
 	}
 
 	//ステートパターン
@@ -60,9 +60,9 @@ void Boss::Draw() {
 	}
 }
 
-void Boss::SetMovePoint(const Vector3& point, float speedBunkatu) {
+void Boss::SetMovePoint(const Vector3& point, float speedDivision) {
 	move_.diff = point;//目的地設定
-	moveFrame_ = speedBunkatu;//スピード分割
+	moveFrame_ = speedDivision;//スピード分割
 }
 
 void Boss::Fire(float kFrame) {
@@ -109,7 +109,7 @@ void Boss::FireBullet() {
 	bullet->Initialize();
 	bullet->SetPlayer(player_);//プレイヤーと当たりノックバックパラメータで使う
 	bullet->SetTranslate(enemyPosition);
-	bullet->SetVelocty(velocity);
+	bullet->SetVelocity(velocity);
 	bullets_.push_back(std::move(bullet));
 }
 
@@ -125,18 +125,18 @@ void Boss::ArrivedSegmentDiff() {
 	if (GoDestination(a, move_.diff) <= Vector3{ 0.1f,0.1f,0.1f } &&
 		GoDestination(a, move_.diff) >= Vector3{ -0.1f,-0.1f,-0.1f }) {
 
-		isMoveSucces_ = true;
+		isMoveSuccess_ = true;
 		transform_.translate= move_.diff;//現在地を目的地にする
 		move_.origin = transform_.translate;//セグメントのスタート値を設定
 	}
 }
 
-void Boss::BeforeActionMosion() {
+void Boss::BeforeActionMotion() {
 	transform_.rotate.z += kRotationX_;
 
 	if (transform_.rotate.z >= 360.0f) {
 		//モーション終了
-		isMosionFinish_ = true;
+		isMotionFinish_ = true;
 		transform_.rotate.z = 0.0f;
 	}
 }
@@ -156,17 +156,17 @@ void Boss::IsDamage() {
 	isDamageReaction_ = true;
 }
 
-void Boss::DeadMosion() {
+void Boss::DeadMotion() {
 
-	isDeadMosion_ = true;
+	isDeadMotion_ = true;
 
 	std::random_device seed;
 	std::mt19937 random(seed());
 
-	std::uniform_real_distribution<float> yure(-kShakePower, kShakePower);
+	std::uniform_real_distribution<float>shake(-kShakePower, kShakePower);
 
 	//上下左右にシェイク(z軸は関係ない)
-	transform_.translate = deadPosition_ + Vector3(yure(random), yure(random), 0.0f);
+	transform_.translate = deadPosition_ + Vector3(shake(random), shake(random), 0.0f);
 
 	transform_.translate.x = std::clamp(transform_.translate.x, deadPosition_.x - kShakePower, deadPosition_.x + kShakePower);
 	transform_.translate.y = std::clamp(transform_.translate.y, deadPosition_.y - kShakePower, deadPosition_.y + kShakePower);

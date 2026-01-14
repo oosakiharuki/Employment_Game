@@ -43,7 +43,7 @@ void SpriteCommon::RootSignature() {
 
 void SpriteCommon::CreateInputLayout() {
 
-	InputElementDeceCommon();
+	InputElementDescCommon();
 	CreateInputElementDesc("NORMAL", DXGI_FORMAT_R32G32B32_FLOAT);
 
 	IntroduceInputElementDesc();
@@ -68,12 +68,12 @@ void SpriteCommon::CreateRasterizer() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 }
 
-void SpriteCommon::CreateVertexSharder() {
+void SpriteCommon::CreateVertexShader() {
 	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Sprite.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 
-void SpriteCommon::CreatePixelSharder() {
+void SpriteCommon::CreatePixelShader() {
 	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Sprite.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }

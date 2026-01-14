@@ -8,7 +8,7 @@
 struct SceneSaveData {
 	uint32_t playerMaxHp;      //プレイヤーの体力
 	uint32_t playerHp;         //プレイヤーの体力
-	uint32_t playerZanki;       //残り残機
+	uint32_t playerRemain;       //残り残機
 	std::string nextStageFile; //次のステージ名
 };
 
@@ -40,8 +40,8 @@ public:
 	/// <summary>
 	/// setter_残機
 	/// </summary>
-	/// <param name="zanki"></param>
-	void SetPlayerZanki(uint32_t zanki);
+	/// <param name="remain"></param>
+	void SetPlayerRemain(uint32_t remain);
 
 	/// <summary>
 	/// setter_最大体力

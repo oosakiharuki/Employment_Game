@@ -47,15 +47,15 @@ void Player::Initialize() {
 }
 
 void Player::InitMainBody() {
-	objectMosions_["standby"] = "player_standby.gltf";
-	objectMosions_["move"] = "player_move.gltf";
-	objectMosions_["shield"] = "player_shield.gltf";
-	objectMosions_["clear"] = "player_clear.gltf";
+	objectMotions_["standby"] = "player_standby.gltf";
+	objectMotions_["move"] = "player_move.gltf";
+	objectMotions_["shield"] = "player_shield.gltf";
+	objectMotions_["clear"] = "player_clear.gltf";
 
 	//プレイヤー初期化/オブジェクト読み込み
 	object_ = std::make_unique<Object_glTF>();
 	object_->Initialize();
-	object_->SetModelFile(objectMosions_[mosionName_]);
+	object_->SetModelFile(objectMotions_[motionName_]);
 }
 
 
@@ -64,7 +64,7 @@ void Player::InitParticles() {
 	particles_[particleBrink_.name] = ParticleManager::GetInstance()->InitParticle(particleBrink_);
 	particles_[particleFire_.name] = ParticleManager::GetInstance()->InitParticle(particleFire_);
 	particles_[particleDamage_.name] = ParticleManager::GetInstance()->InitParticle(particleDamage_);
-	particles_[particlePari_.name] = ParticleManager::GetInstance()->InitParticle(particlePari_);
+	particles_[particleParry_.name] = ParticleManager::GetInstance()->InitParticle(particleParry_);
 	particles_[particleDead_.name] = ParticleManager::GetInstance()->InitParticle(particleDead_);
 
 }
@@ -92,7 +92,7 @@ void Player::InitAudio() {
 	//ダメージ
 	hitSound_ = Audio::GetInstance()->LoadWave("resource/Sound/damage.wav");
 	//パリィ
-	pariSound_ = Audio::GetInstance()->LoadWave("resource/Sound/bane.wav");
+	parrySound_ = Audio::GetInstance()->LoadWave("resource/Sound/bane.wav");
 }
 
 
@@ -124,7 +124,7 @@ void Player::Update() {
 	//現在座標に前回座標を代入
 	prePosition_ = transform_.translate;
 
-	//imgui更新処理
+	//imGui更新処理
 	ImGuiUpdate();
 
 	//最後のほうにする更新処理(オブジェクト更新,WorldTransform更新)
@@ -160,35 +160,35 @@ void Player::InfinityTimeUpdate() {
 
 void Player::ReactionsUpdate() {
 	//ダメージリアクション
-	if (isDamageMosion_) {
-		reaction_->ScaleReaction(transform_.scale, isDamageMosion_, damageScale_, scaleTimer_, kDamageMaxTime_);
+	if (isDamageMotion_) {
+		reaction_->ScaleReaction(transform_.scale, isDamageMotion_, damageScale_, scaleTimer_, kDamageMaxTime_);
 	}
 	//傘リアクション
-	if (isShildMosion_) {
-		umbrella_->HitReaction(isShildMosion_);
+	if (isShieldMotion_) {
+		umbrella_->HitReaction(isShieldMotion_);
 	}
 }
 
 void Player::AnimationUpdate() {
 	///アニメーション
 	if (isShield_) {
-		mosionName_ = "shield";
+		motionName_ = "shield";
 	}//前回の座標と現在の座標が違う = 動いた場合
 	else if (IsMovePosition()) {
-		mosionName_ = "move";
+		motionName_ = "move";
 	}
 	else {
-		mosionName_ = "standby";
+		motionName_ = "standby";
 	}
 
 	if (isPerformance_) {
-		mosionName_ = "clear";
+		motionName_ = "clear";
 	}
 
 	//animationが変わった場合切り替える
-	if (mosionName_ != preMosionName_) {
-		object_->ChangeAnimation(objectMosions_[mosionName_]);
-		preMosionName_ = mosionName_;
+	if (motionName_ != preMotionName_) {
+		object_->ChangeAnimation(objectMotions_[motionName_]);
+		preMotionName_ = motionName_;
 	}
 }
 
@@ -219,7 +219,7 @@ void Player::ImGuiUpdate() {
 	ImGui::SliderFloat("RotateZ", &transform_.rotate.z, -kMaxAngle, kMaxAngle);
 
 	ImGui::Text("体力:%d", hp_);
-	ImGui::Text("残機 %d", zanki_);
+	ImGui::Text("残機 %d", remain_);
 
 	ImGui::End();
 
@@ -255,13 +255,13 @@ void Player::LifeUpdate() {
 	//開いた状態で地面についていない
 	//傘が上向き(斜め上も)の場合かつプレイヤーが倒されていないとき
 	if (isShield_ && !isGround_ &&
-		(transformGun_.rotate.x >= kUpDis_ - kNanameValue_ && transformGun_.rotate.x <= kUpDis_ + kNanameValue_) && !isDead_) {
+		(transformGun_.rotate.x >= kUpDis_ - kDiagonalValue_ && transformGun_.rotate.x <= kUpDis_ + kDiagonalValue_) && !isDead_) {
 		//ジャンプ後だとずっと浮くためfalseに
 		if (isJump_) {
 			isJump_ = false;
 		}
 		//重力を固定することでゆっくり落ちる
-		grabity_ = kFixedGrabityPower_;
+		gravity_ = kFixedGravityPower_;
 		//ブリンクが終了した時
 		if (!isBrink_) {
 			//滑空中は上向きのみ(斜めにはならない)
@@ -373,7 +373,7 @@ void Player::ActionMove() {
 
 void Player::ActionJump() {
 	//指定したボタン、地面についていて傘がシールド状態でないとき
-	if ((input_->TriggerKey(DIK_SPACE) || input_->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_A))
+	if ((input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(state_, preState_, XINPUT_GAMEPAD_A))
 		&& isGround_ && !isShield_) {
 		isJump_ = true;
 		isGround_ = false;
@@ -383,7 +383,7 @@ void Player::ActionJump() {
 void Player::ActionFire() {
 	//発射のクールタイム
 	fireCoolTimer_ += kDeltaTime_;
-	if ((input_->TriggerKey(DIK_K) || input_->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_X)) && !isShield_) {
+	if ((input_->TriggerKey(DIK_K) || input_->TriggerButton(state_, preState_, XINPUT_GAMEPAD_X)) && !isShield_) {
 		if (fireCoolTimer_ >= kCoolTimeMax_) {
 			ShootBullet();
 			fireCoolTimer_ = 0;
@@ -392,29 +392,29 @@ void Player::ActionFire() {
 }
 
 void Player::ActionShield() {
-	if (input_->PushKey(DIK_L) || input_->PushBotton(state_, XINPUT_GAMEPAD_B)) {
+	if (input_->PushKey(DIK_L) || input_->PushButton(state_, XINPUT_GAMEPAD_B)) {
 		//押した瞬間に移動キーを押している場合 + すでにブリンクを一度している場合
-		if ((input_->TriggerKey(DIK_L) || input_->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_B))
+		if ((input_->TriggerKey(DIK_L) || input_->TriggerButton(state_, preState_, XINPUT_GAMEPAD_B))
 			&& (isPushA_ || isPushD_ || isPushW_ || isPushS_) && !isOneBrink_) {
 			//ブリンクが発動
 			isBrink_ = true;
 		}
 		isShield_ = true;
 
-		pariTime_ -= kDeltaTime_;
+		parryTime_ -= kDeltaTime_;
 		//パリィ時間がすぎるとき+ダメージを食らていたらパリィできない
-		(pariTime_ > 0.0f && infinityTimer_ >= kInfinityTimeMax_) ? isPari_ = true : isPari_ = false;
+		(parryTime_ > 0.0f && infinityTimer_ >= kInfinityTimeMax_) ? isParry_ = true : isParry_ = false;
 
 		//パリィ時間リセット
-		pariCoolTime_ = 0.0f;
+		parryCoolTime_ = 0.0f;
 	}
 	else {
 		isShield_ = false;
-		pariCoolTime_ += kDeltaTime_;
+		parryCoolTime_ += kDeltaTime_;
 	}
 	//連打してもすぐにパリィできないようにする
-	if (pariCoolTime_ >= kPariTimeMax_) {
-		pariTime_ = kPariTimeMax_;
+	if (parryCoolTime_ >= kParryTimeMax_) {
+		parryTime_ = kParryTimeMax_;
 	}
 }
 
@@ -519,7 +519,7 @@ void Player::ShootBullet() {
 
 	for (float i = -(halfCount); i <= halfCount; ++i) {
 		//弾が分散するように
-		Vector3 velocity = { 0.0f,float(i) * kDisparsionBetween_ ,kBulletSpeed_ };
+		Vector3 velocity = { 0.0f,float(i) * kDispersionBetween_ ,kBulletSpeed_ };
 		//飛ばす向きをwtGun_に合わせる
 		velocity = TransformNormal(velocity, wtGun_.GetMatWorld());
 
@@ -559,7 +559,7 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		KnockBackPlayer(hitPoint , kInfinityTimeMax_ * kDivideByThree_);
 	}
 	//リアクションフラグ
-	isDamageMosion_ = true;
+	isDamageMotion_ = true;
 }
 
 void Player::IsFall() {
@@ -598,8 +598,8 @@ void Player::KnockBackCommon(float TimerMax) {
 	knockBackTimeMax_ = TimerMax;
 }
 
-void Player::IsShildMosion() {
-	isShildMosion_ = true;
+void Player::IsShieldMotion() {
+	isShieldMotion_ = true;
 	umbrella_->ResetScaleTimer();
 	umbrella_->SetScale(kDefaultScale_);
 }
@@ -607,7 +607,7 @@ void Player::IsShildMosion() {
 void Player::DeadPlayer() {
 	//ノックバック、ダメージリアクション、ブリンクをリセット
 	isKnockback_ = false;
-	isDamageMosion_ = false;
+	isDamageMotion_ = false;
 	isBrink_ = false;
 
 	deadTimer_ += kDeltaTime_;
@@ -635,17 +635,17 @@ void Player::DeadPlayer() {
 	}
 	else {
 		//止まっているので発動しないようにする
-		grabity_ = 0.0f;
+		gravity_ = 0.0f;
 		isGround_ = true;
 	}
 }
 
 void Player::RespawnPlayer() {
-	if (zanki_ == 0) {
+	if (remain_ == 0) {
 		return;
 	}
 	//残機を減らす
-	zanki_--;
+	remain_--;
 
 	RespawnCommon();
 
@@ -654,19 +654,19 @@ void Player::RespawnPlayer() {
 }
 
 //パリィ成功
-void Player::PariSuccess() {
+void Player::ParrySuccess() {
 	//パリィ時間延長(連続弾でも跳ね返せるように)
-	pariTime_ = kPariTimeMax_;
+	parryTime_ = kParryTimeMax_;
 
 	//SE
-	Audio::GetInstance()->StopWave(pariSound_);//パリィが続くとき一度止めてから再生させるようにする
-	Audio::GetInstance()->SoundPlayWave(pariSound_, kVolume_);//SE再生:パリィ
+	Audio::GetInstance()->StopWave(parrySound_);//パリィが続くとき一度止めてから再生させるようにする
+	Audio::GetInstance()->SoundPlayWave(parrySound_, kVolume_);//SE再生:パリィ
 	//傘の座標を読み取る
 	Vector3 translate = umbrella_->GetTranslate();
 	translate += TransformNormal(kPlayerFront_, wtGun_.GetMatWorld());//出す場所をwtGun_の向きの前に
-	particles_[particlePari_.name]->SetTranslate(translate);
-	particles_[particlePari_.name]->SetRotate(umbrellaRange_);
-	particles_[particlePari_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleParry_.name]->SetTranslate(translate);
+	particles_[particleParry_.name]->SetRotate(umbrellaRange_);
+	particles_[particleParry_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 }
 
 void Player::SpriteUpdate() {
@@ -690,11 +690,11 @@ void Player::UmbrellaRange(float direction) {
 		//斜めの時
 		//左上と右下
 		if ((isPushA_ && isPushW_) || (isPushD_ && isPushS_)) {
-			transformGun_.rotate.x += kNanameValue_;
+			transformGun_.rotate.x += kDiagonalValue_;
 		}
 		//左下と右上
 		else if ((isPushA_ && isPushS_) || (isPushD_ && isPushW_)) {
-			transformGun_.rotate.x -= kNanameValue_;
+			transformGun_.rotate.x -= kDiagonalValue_;
 		}
 	}
 
@@ -706,8 +706,8 @@ void Player::UmbrellaRange(float direction) {
 
 void Player::GravityUpdate() {
 	//重力
-	grabity_ -= kGrabityPower_;
-	transform_.translate.y += grabity_;
+	gravity_ -= kGravityPower_;
+	transform_.translate.y += gravity_;
 }
 
 const bool Player::IsMovePosition() {

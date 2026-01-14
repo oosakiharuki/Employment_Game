@@ -21,7 +21,7 @@
 #include "Audio.h"
 
 #include"DebugWireframes.h"
-#include "Cubemap.h"
+#include "CubeMap.h"
 /// <summary>
 /// エンジンをまとめたもの
 /// </summary>
@@ -47,12 +47,12 @@ public:
 	/// ゲームを終了する
 	/// </summary>
 	/// <returns></returns>trueで終了
-	virtual bool IsEndRequst() { return isRequst_; }
+	virtual bool IsEndRequest() { return isRequest_; }
 	/// <summary>
 	/// ゲームを終了するか
 	/// </summary>
 	/// <param name="result"></param>
-	virtual void SetIsEndRequst(bool result) { isRequst_ = result; }
+	virtual void SetIsEndRequest(bool result) { isRequest_ = result; }
 
 	virtual ~Framework() = default;
 	/// <summary>
@@ -76,9 +76,9 @@ private:
 	Audio* audio_;
 
 	DebugWireframes* debugWireframes_ = nullptr;
-	Cubemap* cubemap_ = nullptr;
+	CubeMap* cubeMap_ = nullptr;
 
-	bool isRequst_ = false;
+	bool isRequest_ = false;
 
 	/// <summary>
 	/// オブジェクト(2d)の共通処理のまとめ

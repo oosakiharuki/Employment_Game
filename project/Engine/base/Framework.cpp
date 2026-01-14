@@ -34,7 +34,7 @@ void Framework::Initialize() {
 }
 
 void Framework::SpriteCommons() {
-	//imugi処理
+	//imGui処理
 	ImGuiManager::GetInstance()->Initialize(winApp_.get(), dxCommon_, srvManager_);
 
 	//スプライト共通処理
@@ -74,14 +74,14 @@ void Framework::ObjectCommons() {
 	debugWireframes_->Initialize(dxCommon_);
 
 	//キューブマップ処理
-	cubemap_ = Cubemap::GetInstance().get();
-	cubemap_->Initialize(dxCommon_);
+	cubeMap_ = CubeMap::GetInstance().get();
+	cubeMap_->Initialize(dxCommon_);
 }
 
 void Framework::Update() {
 	//ウィンドウを閉じるまで終わらない
 	if (winApp_->ProcessMessage()) {
-		isRequst_ = true;
+		isRequest_ = true;
 	}
 	else {
 		//ゲームの処理
@@ -113,7 +113,7 @@ void Framework::Finalize() {
 	modelCommon_.reset();
 	particleCommon_->Finalize();
 	debugWireframes_->Finalize();
-	cubemap_->Finalize();
+	cubeMap_->Finalize();
 	postEffectM_->Finalize();
 	audio_->Finalize();
 }
@@ -130,7 +130,7 @@ void Framework::Run() {
 		Update();
 
 		//終了リクエスト
-		if (IsEndRequst()) {
+		if (IsEndRequest()) {
 			break;
 		}
 		//描画処理

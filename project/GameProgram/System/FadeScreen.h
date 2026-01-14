@@ -31,6 +31,10 @@ public:
 	/// </summary>
 	void Finalize();
 
+	/// <summary>
+	/// フェード開始
+	/// </summary>
+	/// <param name="type">フェードインかフェードアウト</param>
 	void FadeStart(const FadeType& type) {
 		isFading_ = true;
 		fadeType_ = type;
@@ -41,7 +45,7 @@ public:
 	/// フェードの最中か
 	/// </summary>
 	/// <returns></returns>フェード中ならtrue
-	bool GetIsFadeing() const{ return isFading_; }
+	bool GetIsFading() const{ return isFading_; }
 	
 	void SetMaskTexture( const std::string& textureFile) { dissolveTexture_ = textureFile; }
 	void SetBackGround( const std::string& textureFile) { sprite_->SetTextureFile(textureFile); }
@@ -68,11 +72,11 @@ private:
 	FadeType fadeType_ = type_fadeOut;
 
 	//Dissolve(ポストエフェクト)で溶け具合の変数
-	float degress_ = 0.0f;
+	float degree_ = 0.0f;
 	//edgeサイズ
 	const float kEdgeSize = 0.01f;
 	//解け具合最大値
-	const float kDegressMax = 1.0f;
+	const float kDegreeMax = 1.0f;
 
 
 	//使用するポストエフェクト

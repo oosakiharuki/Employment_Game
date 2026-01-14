@@ -16,7 +16,7 @@ void Grayscale::RootSignature() {
 	IntroduceSamplers();
 }
 
-void Grayscale::CreatePixelSharder() {
+void Grayscale::CreatePixelShader() {
 	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Grayscale.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }
@@ -34,7 +34,7 @@ void Grayscale::EffectInit() {
 	srvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(srvIndex_);
 	srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_);
 
-	SrvManager::GetInstance()->CreateSRVforTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
+	SrvManager::GetInstance()->CreateSRVForTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
 	GrayscaleResource_ = dxCommon_->CreateBufferResource(sizeof(GrayFunction));
 	GrayscaleResource_->Map(0, nullptr, reinterpret_cast<void**>(&grayFunction_));

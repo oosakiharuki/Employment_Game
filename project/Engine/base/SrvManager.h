@@ -42,11 +42,11 @@ public:
 	/// <summary>
 	/// Srv_テクスチャ
 	/// </summary>
-	void CreateSRVforTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, DXGI_FORMAT Format, UINT MipLevels);
+	void CreateSRVForTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, DXGI_FORMAT Format, UINT MipLevels);
 	/// <summary>
 	/// Srv_オブジェクト
 	/// </summary>
-	void CreateSRVforStructureBuffer(D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc,uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride);
+	void CreateSRVForStructureBuffer(D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc,uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride);
 	//描画コマンド
 	void PreDraw();
 	void SetGraphicsRootDescriptorTable(UINT RootParameterIndex, uint32_t srvIndex);

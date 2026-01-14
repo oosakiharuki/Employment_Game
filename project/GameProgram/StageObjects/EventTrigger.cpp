@@ -229,8 +229,8 @@ void EventTrigger::EnemyPop() {
 		Vector3 move = { kMoveX,0,0 };
 
 		popEnemy->SetAABB(aabb);
-		popEnemy->SetRouteleftPoint(enemyPopData.position - move);
-		popEnemy->SetRouterightPoint(enemyPopData.position + move);
+		popEnemy->SetRouteLeftPoint(enemyPopData.position - move);
+		popEnemy->SetRouteRightPoint(enemyPopData.position + move);
 		popEnemy->SetMoveInit(enemyPopData.position);
 
 		popEnemy->DirectionDegree();

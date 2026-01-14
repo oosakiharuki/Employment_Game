@@ -53,7 +53,7 @@ void SkinningCommon::RootSignature() {
 
 void SkinningCommon::CreateInputLayout() {
 
-	InputElementDeceCommon();
+	InputElementDescCommon();
 	CreateInputElementDesc("NORMAL", DXGI_FORMAT_R32G32B32_FLOAT);
 	CreateInputElementDesc("WORLDPOSITION", DXGI_FORMAT_R32G32B32_FLOAT);
 	CreateInputElementDesc("WEIGHT", DXGI_FORMAT_R32G32B32_FLOAT);
@@ -74,12 +74,12 @@ void SkinningCommon::CreateRasterizer() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 }
 
-void SkinningCommon::CreateVertexSharder() {
+void SkinningCommon::CreateVertexShader() {
 	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 
-void SkinningCommon::CreatePixelSharder() {
+void SkinningCommon::CreatePixelShader() {
 	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }

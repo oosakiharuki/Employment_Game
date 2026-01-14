@@ -66,8 +66,8 @@ private:
 
 	//スプライト
 	const Vector2 kSpritePositionGameClear_ = { 100, 100 };//[ゲームクリア]文字の座標
-	const Vector2 kSpritePositionBotton_ = { 800,10 };//[ボタンで戻る]文字の座標
-	const Vector2 kSpriteSizeBotton_ = { 256,64 };//[ボタンで戻る]文字のサイズ
+	const Vector2 kSpritePositionButton_ = { 800,10 };//[ボタンで戻る]文字の座標
+	const Vector2 kSpriteSizeButton_ = { 256,64 };//[ボタンで戻る]文字のサイズ
 
 	//プレイヤーを前に向かす
 	const float kPlayerFrontRange_ = 180.0f;

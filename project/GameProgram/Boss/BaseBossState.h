@@ -18,8 +18,8 @@ public:
 	void Update(Boss& boss) override;
 private:
 	uint32_t addCount_ = 0;
-	//端
-	const Vector3 kHazi_ = { 20,0,0 };
+	//端(中心から左端+,右端-)
+	const Vector3 kEdge_ = { 20,0,0 };
 };
 
 /// <summary>
@@ -41,7 +41,7 @@ private:
 
 	struct MovePoint {
 		Vector3 position;
-		float bunkatu;
+		float division;
 	};
 
 	std::vector<MovePoint> movePoints_;
@@ -50,7 +50,7 @@ private:
 /// <summary>
 /// ボスの行動前モーションステート
 /// </summary>
-class BossBeforeActionMosionState : public BaseBossState {
+class BossBeforeActionMotionState : public BaseBossState {
 public:
 	void Update(Boss& boss) override;
 private:
@@ -121,7 +121,7 @@ private:
 	bool isFinish_ = false;
 };
 
-class BossDeadMosionState : public BaseBossState {
+class BossDeadMotionState : public BaseBossState {
 public:
 	void Update(Boss& boss) override;
 private:

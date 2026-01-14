@@ -34,7 +34,7 @@ void Enemy_Soldier::UpdateNormal() {
 
 void Enemy_Soldier::UpdateAttack() {
 	//見つけたリアクション
-	FoundRiaction();
+	FoundReaction();
 	
 	//発砲処理
 	EnemyFire();
@@ -48,7 +48,7 @@ void Enemy_Soldier::UpdateDead() {
 	DeadReaction();
 }
 
-void Enemy_Soldier::UpdateImgui() {
+void Enemy_Soldier::UpdateImGui() {
 
 #ifdef USE_IMGUI
 
@@ -102,7 +102,7 @@ void Enemy_Soldier::FireBullet() {
 	bullet->Initialize();
 	bullet->SetPlayer(player_);//プレイヤーと当たりノックバックパラメータで使う
 	bullet->SetTranslate(enemyPosition);
-	bullet->SetVelocty(velocity_);
+	bullet->SetVelocity(velocity_);
 	bullets_.push_back(std::move(bullet));
 }
 

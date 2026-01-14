@@ -22,7 +22,7 @@ void Dissolve::RootSignature() {
 	IntroduceSamplers();
 }
 
-void Dissolve::CreatePixelSharder() {
+void Dissolve::CreatePixelShader() {
 	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Dissolve.PS.hlsl", L"ps_6_0");//ココのみ変化させる
 	assert(pixelShaderBlob != nullptr);
 }
@@ -55,7 +55,7 @@ void Dissolve::EffectInit() {
 	srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_);
 
 
-	SrvManager::GetInstance()->CreateSRVforTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
+	SrvManager::GetInstance()->CreateSRVForTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
 	textureFileName_ = "resource/Sprite/noise0.png";
 	TextureManager::GetInstance()->LoadTexture(textureFileName_);
@@ -63,7 +63,7 @@ void Dissolve::EffectInit() {
 	dissolveResource_ = dxCommon_->CreateBufferResource(sizeof(Threshold));
 	dissolveResource_->Map(0, nullptr, reinterpret_cast<void**>(&threshold_));
 
-	threshold_->degress = 0.5f;
+	threshold_->degree = 0.5f;
 	threshold_->edgeSize = 0.02f;
 }
 
@@ -73,9 +73,8 @@ void Dissolve::EffectUpdate() {
 #ifdef USE_IMGUI
 
 	ImGui::Text("Dissolve");
-	ImGui::SliderFloat("溶かし度合", &threshold_->degress, 0.0f, 1.0f);
+	ImGui::SliderFloat("溶かし度合", &threshold_->degree, 0.0f, 1.0f);
 	ImGui::SliderFloat("egdeのサイズ", &threshold_->edgeSize, 0.0f, 0.1f);
-	//ImGui::SliderFloat3("egdeColor", &threshold->egdeColor.x, 0.0f, 1.0f);
 
 	ImGui::Checkbox("マスク画像変更",&isChangeMask_);
 
@@ -89,12 +88,12 @@ void Dissolve::EffectUpdate() {
 #endif
 	//溶かし具合
 	if (Input::GetInstance()->PushKey(DIK_D)) {
-		threshold_->degress += 0.01f;
+		threshold_->degree += 0.01f;
 	}
 	else if (Input::GetInstance()->PushKey(DIK_A)) {
-		threshold_->degress -= 0.01f;
+		threshold_->degree -= 0.01f;
 	}
-	threshold_->degress = std::clamp(threshold_->degress, 0.0f, 1.0f);
+	threshold_->degree = std::clamp(threshold_->degree, 0.0f, 1.0f);
 
 	//Edge調節
 	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
@@ -129,8 +128,8 @@ void Dissolve::SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu,  const std::string
 	TextureManager::GetInstance()->LoadTexture(textureFileName_);
 }
 
-void Dissolve::Degress(float value) {
-	threshold_->degress = value;
+void Dissolve::Degree(float value) {
+	threshold_->degree = value;
 }
 
 void Dissolve::EdgeSize(float value) {

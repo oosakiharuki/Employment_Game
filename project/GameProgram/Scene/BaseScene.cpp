@@ -4,7 +4,7 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-std::string BaseScene::sceneNo_ = "Title";
+std::string BaseScene::sceneNo_ = "Select";
 std::string BaseScene::nextSceneNo_ = sceneNo_;
 
 BaseScene::~BaseScene(){}
@@ -27,7 +27,7 @@ void BaseScene::ChangeSceneNo() {
 	}
 
 	//フェード中でないか && 次のシーンに変更フラグが立ったか
-	if (!FadeScreen::GetInstance()->GetIsFadeing() && NextSceneFlag()) {
+	if (!FadeScreen::GetInstance()->GetIsFading() && NextSceneFlag()) {
 		//シーンの変更
 		sceneNo_ = nextSceneNo_;
 		isFade_ = false;

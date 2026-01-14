@@ -26,7 +26,7 @@ void BasePostEffect::Initialize(DirectXCommon* dxCommon) {
 }
 
 void BasePostEffect::CreateInputLayout() {
-	InputElementDeceCommon();//POSITIONとTEXCORD
+	InputElementDescCommon();//POSITIONとTEXCORD
 	IntroduceInputElementDesc();//InputLayoutDescに導入する
 }
 
@@ -39,7 +39,7 @@ void BasePostEffect::CreateRasterizer() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 }
 
-void BasePostEffect::CreateVertexSharder() {
+void BasePostEffect::CreateVertexShader() {
 	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Fullscreen.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }

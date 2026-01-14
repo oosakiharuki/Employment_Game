@@ -12,24 +12,24 @@ void BossMoveState::Update(Boss& boss) {
 	//偶数か奇数か
 	if (std::fmod(boss.ActionCount() + addCount_, 2) == 0) {
 		//右位置設定
-		boss.SetMovePoint(boss.GetCenter() + kHazi_);
+		boss.SetMovePoint(boss.GetCenter() + kEdge_);
 	}
 	else {
 		//左位置設定
-		boss.SetMovePoint(boss.GetCenter() - kHazi_);
+		boss.SetMovePoint(boss.GetCenter() - kEdge_);
 	}
 
 	//目的地に着いたかどうか調べる
 	boss.ArrivedSegmentDiff();
 
 	//目的地に着いた
-	if (boss.IsMoveSucces()) {
+	if (boss.IsMoveSuccess()) {
 		if (addCount_ == 2) {
 			//行動前モーションステートに変更		
-			boss.ChangeStatePattern(std::make_unique<BossBeforeActionMosionState>());
+			boss.ChangeStatePattern(std::make_unique<BossBeforeActionMotionState>());
 		}
 		addCount_++;
-		boss.ResetMoveSucces();
+		boss.ResetMoveSuccess();
 	}
 }
 
@@ -39,7 +39,7 @@ void BossAttackState::Update(Boss& boss) {
 	boss.Fire();
 	//発砲を終了したら
 	if (boss.IsStopFire()) {
-		boss.ResetMoveSucces();
+		boss.ResetMoveSuccess();
 		//移動ステートに変更
 		boss.ChangeStatePattern(std::make_unique<BossMoveState>());
 	}
@@ -56,8 +56,8 @@ void BossAroundMoveState::Update(Boss& boss) {
 	}
 
 	//目的地に着いたら
-	if(boss.IsMoveSucces()) {
-		boss.ResetMoveSucces();//移動完了フラグリセット(false)
+	if(boss.IsMoveSuccess()) {
+		boss.ResetMoveSuccess();//移動完了フラグリセット(false)
 		aroundMoveCount_++;    //カウント加算
 	}
 
@@ -68,18 +68,18 @@ void BossAroundMoveState::Update(Boss& boss) {
 	}
 	else {
 		//
-		boss.SetMovePoint(movePoints_[aroundMoveCount_].position, movePoints_[aroundMoveCount_].bunkatu);
+		boss.SetMovePoint(movePoints_[aroundMoveCount_].position, movePoints_[aroundMoveCount_].division);
 		//目的地に着いたかどうか調べる
 		boss.ArrivedSegmentDiff();
 	}
 }
 
 
-void BossBeforeActionMosionState::Update(Boss& boss) {
+void BossBeforeActionMotionState::Update(Boss& boss) {
 
-	if (!boss.IsMosionFinish()) {	
+	if (!boss.IsMotionFinish()) {	
 		//回転して行動をわかりやすく
-		boss.BeforeActionMosion();		
+		boss.BeforeActionMotion();		
 		return;
 	}
 	else if (moveCoolTimer_ < kMoveCoolTimeMax_) {
@@ -89,12 +89,12 @@ void BossBeforeActionMosionState::Update(Boss& boss) {
 
 	//移動カウント
 	if (boss.ActionCount() >= kDeepAttackCountMax_) {
-		boss.ResetMoveSucces();
+		boss.ResetMoveSuccess();
 		boss.ResetActionCount();
 		boss.ChangeStatePattern(std::make_unique<BossFarAttackState>());
 	}
 	else if (boss.ActionCount() >= kMoveCountMax_) {
-		boss.ResetMoveSucces();
+		boss.ResetMoveSuccess();
 		boss.AddActionCount();//行動カウント加算
 		boss.ChangeStatePattern(std::make_unique<BossAroundMoveState>());
 	}
@@ -103,7 +103,7 @@ void BossBeforeActionMosionState::Update(Boss& boss) {
 		boss.ChangeStatePattern(std::make_unique<BossAttackState>());
 	}
 
-	boss.ResetMosionFinish();
+	boss.ResetMotionFinish();
 }
 
 void BossFarAttackState::Update(Boss& boss) {
@@ -121,11 +121,11 @@ void BossFarAttackState::Update(Boss& boss) {
 	boss.ArrivedSegmentDiff();
 
 	if(isAttackFinish_){
-		boss.ResetMoveSucces();
+		boss.ResetMoveSuccess();
 		//移動ステートに変更
 		boss.ChangeStatePattern(std::make_unique<BossFarTackleState>());
 	}
-	else if (boss.IsMoveSucces()) {
+	else if (boss.IsMoveSuccess()) {
 		boss.ResetStopFire();
 		//発泡処理
 		boss.Fire(4.0f);
@@ -145,7 +145,7 @@ void BossFarTackleState::Update(Boss& boss) {
 	boss.SetMovePoint(playerPosition_,kMoveFrame_);
 
 	if (boss.GetTranslate().z <= kNearEnd) {
-		boss.ResetMoveSucces();
+		boss.ResetMoveSuccess();
 		boss.ChangeStatePattern(std::make_unique<BossFallPlayerState>());
 	}
 }
@@ -159,13 +159,13 @@ void BossFallPlayerState::Update(Boss& boss) {
 	//目的地に着いたかどうか調べる
 	boss.ArrivedSegmentDiff();
 
-	if (boss.IsMoveSucces()) {
+	if (boss.IsMoveSuccess()) {
 		if (isFinish_) {
 			//移動ステートに変更
 			boss.ChangeStatePattern(std::make_unique<BossMoveState>());
 		}
 		//完了フラグリセット
-		boss.ResetMoveSucces();
+		boss.ResetMoveSuccess();
 		isMovingStartPoint = false;
 	}
 }
@@ -189,11 +189,11 @@ void BossFallPlayerState::MovePointSetting(Boss& boss) {
 	fallTimer_ += kDeltaTime_;
 }
 
-void BossDeadMosionState::Update(Boss& boss) {
+void BossDeadMotionState::Update(Boss& boss) {
 	if (isStart_) {
 		boss.DeadPosition();
 		isStart_ = false;
 	}
 
-	boss.DeadMosion();
+	boss.DeadMotion();
 }

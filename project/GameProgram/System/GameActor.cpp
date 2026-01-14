@@ -21,7 +21,7 @@ void GameActor::IsGround(bool result) {
 	isGround_ = result;
 	//地面なら重力を0にする(沈まないようにする)
 	if (isGround_) {
-		grabity_ = 0;
+		gravity_ = 0;
 	}
 }
 

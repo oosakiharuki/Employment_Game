@@ -1,7 +1,7 @@
 #pragma once
 
 /// <summary>
-/// 構造体_Vecotr3(x,y,z)
+/// 構造体_Vector3(x,y,z)
 /// </summary>
 struct Vector3 {
 	float x;

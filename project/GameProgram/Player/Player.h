@@ -119,17 +119,17 @@ public:
 	/// getter_パリィ
 	/// </summary>
 	/// <returns></returns>跳ね返したフラグ
-	bool GetIsPari() { return isPari_; }
+	bool GetIsParry() { return isParry_; }
 
 	/// <summary>
 	/// パリィ成功 = 連続弾も跳ね返す
 	/// </summary>
-	void PariSuccess();
+	void ParrySuccess();
 	/// <summary>
 	/// パリィ成功フラグ
 	/// </summary>
 	/// <param name="result"></param>trueで成功
-	void SetIsPari(bool result) { isPari_ = result; }
+	void SetIsParry(bool result) { isParry_ = result; }
 
 	/// <summary>
 	/// getter_体力
@@ -153,13 +153,13 @@ public:
 	/// getter_残機
 	/// </summary>
 	/// <returns></returns>
-	const uint32_t GetZanki() { return zanki_; }
+	const uint32_t GetRemain() { return remain_; }
 
 	/// <summary>
 	/// setter_残機
 	/// </summary>
-	/// <param name="zanki"></param>
-	void SetZanki(uint32_t zanki) { zanki_ = zanki; }
+	/// <param name="remain"></param>
+	void SetRemain(uint32_t remain) { remain_ = remain; }
 
 	/// <summary>
 	/// setter_影の位置
@@ -173,7 +173,7 @@ public:
 	/// <summary>
 	/// 傘が当たったリアクションフラグ
 	/// </summary>
-	void IsShildMosion();
+	void IsShieldMotion();
 
 	/// <summary>
 	/// 強制的にジャンプさせる(演出等で使う)
@@ -190,7 +190,7 @@ public:
 	/// プレイヤーの向きををカメラに
 	/// </summary>
 	void DirectionTheCamera(){
-		transform_.rotate.y = kPlayerForntAngle_.y;//カメラのほうに向く;
+		transform_.rotate.y = kPlayerFrontAngle_.y;//カメラのほうに向く;
 	}
 
 	/// <summary>
@@ -266,7 +266,7 @@ private:
 	/// </summary>
 	void SmockParticle();
 	/// <summary>
-	/// imgui更新処理
+	/// imGui更新処理
 	/// </summary>
 	void ImGuiUpdate();
 	/// <summary>
@@ -326,7 +326,7 @@ private:
 	/// 重力のみ更新処理
 	/// </summary>
 	void GravityUpdate();
-	const float kFixedGrabityPower_ = -0.05f;//滑空時重力値を固定
+	const float kFixedGravityPower_ = -0.05f;//滑空時重力値を固定
 
 	/// 弾丸
 	std::list<std::shared_ptr<PlayerBullet>> bullets_;
@@ -334,7 +334,7 @@ private:
 	const float kCoolTimeMax_ = 0.5f;//クールタイム最大時間
 	const uint32_t kBulletCount_ = 3;//一度に出る弾丸数
 	
-	const float kDisparsionBetween_ = 0.1f;//分散する間
+	const float kDispersionBetween_ = 0.1f;//分散する間
 	const float kBulletSpeed_ = 0.5f;//弾丸の前方向の速さ
 
 	//ボタン
@@ -349,11 +349,11 @@ private:
 	const float kLeftDis_ = 180.0f;//左
 	const float kRightDis_ = 360.0f;//右
 
-	const float kNanameValue_ = 45.0f;//斜めにする変数
+	const float kDiagonalValue_ = 45.0f;//斜めにする変数
 	const float kPlayerFrontRange_ = 180.0f;//プレイヤーがカメラから見て正面を向く
 
 	//ゴール時前を向くように
-	const Vector3 kPlayerForntAngle_ = { 0.0f,180.0f,0.0f };
+	const Vector3 kPlayerFrontAngle_ = { 0.0f,180.0f,0.0f };
 
 	//円柱または円錐のパーティクルを横向きにするための角度
 	const float kNinetyAngle_ = 90.0f;
@@ -368,10 +368,10 @@ private:
 	//傘のシールドフラグ
 	bool isShield_ = false;
 	//パリィ
-	bool isPari_ = false;
-	const float kPariTimeMax_ = 0.5f;//パリィする時間//ちょっと簡単に
-	float pariTime_ = kPariTimeMax_;
-	float pariCoolTime_ = 0.0f;//連打ではされないように
+	bool isParry_ = false;
+	const float kParryTimeMax_ = 0.5f;//パリィする時間//ちょっと簡単に
+	float parryTime_ = kParryTimeMax_;
+	float parryCoolTime_ = 0.0f;//連打ではされないように
 	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
 
 	/// ノックバック
@@ -391,7 +391,8 @@ private:
 	bool isUmbrellaFall_ = false;
 
 	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
-	uint32_t zanki_ = 2;
+	//残機(remain)
+	uint32_t remain_ = 2;
 
 	//ダメージを食らった後の無敵時間
 	float infinityTimer_ = 0.0f;
@@ -409,7 +410,7 @@ private:
 
 	//サウンド
 	SoundData hitSound_;//ダメージを食らった
-	SoundData pariSound_;//パリィに成功
+	SoundData parrySound_;//パリィに成功
 	const float kVolume_ = 0.07f;//ボリューム
 
 	//-パーティクル-
@@ -430,8 +431,8 @@ private:
 		"player_damage", "resource/Sprite/circle.png", Primitive::CreateRing(), 20, 0.6f,{1,1,1}
 	};
 	//パリィ成功
-	ParticleParametars particlePari_ = {
-		"player_pari", "resource/Sprite/white.png", Primitive::CreateCone(), 1, 0.5f,{2.0f,0.2f,2.0f}
+	ParticleParametars particleParry_ = {
+		"player_parry", "resource/Sprite/white.png", Primitive::CreateCone(), 1, 0.5f,{2.0f,0.2f,2.0f}
 	};
 	//倒された演出
 	ParticleParametars particleDead_ = {
@@ -448,11 +449,11 @@ private:
 	const bool IsMovePosition();
 
 	//オブジェクトたち
-	std::unordered_map<std::string, std::string> objectMosions_;
+	std::unordered_map<std::string, std::string> objectMotions_;
 
 	//オブジェクト / アニメーション
-	std::string mosionName_ = "standby";    //現在のアニメーション
-	std::string preMosionName_ = "standby"; //前回のアニメーション
+	std::string motionName_ = "standby";    //現在のアニメーション
+	std::string preMotionName_ = "standby"; //前回のアニメーション
 
 	//UI
 	const Vector2 kTextureSizeHp_ = { 64,64 };//スプライトサイズ
@@ -460,7 +461,7 @@ private:
 	const float kDistanceYHp_ = 10.0f;//スプライトのY軸幅
 
 	//傘がリアクションするflag
-	bool isShildMosion_ = false;
+	bool isShieldMotion_ = false;
 
 	std::unique_ptr<BasePlayerState> playerState_;
 };

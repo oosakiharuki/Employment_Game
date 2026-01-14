@@ -60,14 +60,14 @@ private:
 	void CreateRasterizer() override;
 
 	/// <summary>
-	/// VertexSharderを作成
+	/// VertexShaderを作成
 	/// </summary>
-	void CreateVertexSharder() override;
+	void CreateVertexShader() override;
 
 	/// <summary>
-	/// PixelSharderを作成
+	/// PixelShaderを作成
 	/// </summary>
-	void CreatePixelSharder() override;
+	void CreatePixelShader() override;
 
 	/// <summary>
 	/// DepthStencilの作成

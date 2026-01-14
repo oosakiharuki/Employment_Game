@@ -1,6 +1,6 @@
 #pragma once
 /// <summary>
-/// DirextXで解放
+/// DirectXで解放
 /// </summary>
 class D3DResourceLeakChecker {
 public:

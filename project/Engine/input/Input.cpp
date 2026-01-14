@@ -122,16 +122,16 @@ bool Input::GetJoystickStatePrevious(uint32_t num, XINPUT_STATE& state) {
 	return false;
 }
 
-bool Input::PushBotton(XINPUT_STATE& state, int botton) {
-	if (state.Gamepad.wButtons & botton) {
+bool Input::PushButton(XINPUT_STATE& state, int button) {
+	if (state.Gamepad.wButtons & button) {
 		return true;
 	}
 	return false;
 }
 
-bool Input::TriggerBotton(XINPUT_STATE& state, XINPUT_STATE& preState, int botton) {
-	if (state.Gamepad.wButtons & botton &&
-		!(preState.Gamepad.wButtons & botton)) {
+bool Input::TriggerButton(XINPUT_STATE& state, XINPUT_STATE& preState, int button) {
+	if (state.Gamepad.wButtons & button &&
+		!(preState.Gamepad.wButtons & button)) {
 		return true;
 	}	
 	return false;

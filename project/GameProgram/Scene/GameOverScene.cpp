@@ -20,9 +20,9 @@ void GameOverScene::InitSprite() {
 
 	//戻る
 	spriteSpace_ = std::make_unique<Sprite>();
-	spriteSpace_->Initialize("Moji_botton.png");
-	spriteSpace_->SetPosition(kSpritePositionBotton_);
-	spriteSpace_->SetSize(kSpriteSizeBotton_);
+	spriteSpace_->Initialize("Moji_button.png");
+	spriteSpace_->SetPosition(kSpritePositionButton_);
+	spriteSpace_->SetSize(kSpriteSizeButton_);
 }
 
 void GameOverScene::InitCamera() {
@@ -94,7 +94,7 @@ void GameOverScene::Finalize() {}
 void GameOverScene::SceneUpdate() {
 	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
 	if ((Input::GetInstance()->TriggerKey(DIK_SPACE) ||
-		Input::GetInstance()->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance()->GetIsFadeing()) {
+		Input::GetInstance()->TriggerButton(state_, preState_, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance()->GetIsFading()) {
 		nextSceneNo_ = "Select";
 		FadeScreen::GetInstance()->SetMaskTexture("fade01.png");
 		FadeScreen::GetInstance()->SetBackGround("fadeTexture.png");

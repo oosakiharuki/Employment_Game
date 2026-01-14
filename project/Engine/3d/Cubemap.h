@@ -6,13 +6,13 @@ class Camera;
 /// <summary>
 /// キューブマップ
 /// </summary>
-class Cubemap : public Pipeline {
+class CubeMap : public Pipeline {
 public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static std::shared_ptr<Cubemap> GetInstance();
+	static std::shared_ptr<CubeMap> GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -55,14 +55,14 @@ private:
 	void CreateRasterizer() override;
 
 	/// <summary>
-	/// VertexSharderを作成
+	/// VertexShaderを作成
 	/// </summary>
-	void CreateVertexSharder() override;
+	void CreateVertexShader() override;
 
 	/// <summary>
-	/// PixelSharderを作成
+	/// PixelShaderを作成
 	/// </summary>
-	void CreatePixelSharder() override;
+	void CreatePixelShader() override;
 
 	/// <summary>
 	/// DepthStencilの作成
@@ -71,7 +71,7 @@ private:
 
 	Camera* defaultCamera_ = nullptr;
 
-	static std::shared_ptr<Cubemap> sInstance_;
+	static std::shared_ptr<CubeMap> sInstance_;
 
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[2] = {};
 };

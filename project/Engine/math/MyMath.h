@@ -125,7 +125,7 @@ struct ModelData {
 
 struct ModelDataMulti {
 	std::vector<ModelData> Data;
-	std::map<std::string, JointWeightData> skinClusterDeta;
+	std::map<std::string, JointWeightData> skinClusterData;
 	Node rootNode;
 };
 
@@ -140,7 +140,7 @@ struct Material {
 
 template<typename tValue>
 struct keyframe {
-	tValue value; //キーフレームの値(Vector3/Quatanrion)
+	tValue value; //キーフレームの値(Vector3/Quaternion)
 	float time;   //時刻(秒)
 };
 

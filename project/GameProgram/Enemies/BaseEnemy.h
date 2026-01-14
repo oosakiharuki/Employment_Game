@@ -54,7 +54,7 @@ public:
 	/// <summary>
 	/// 重力更新処理
 	/// </summary>
-	void GrabityUpdate();
+	void GravityUpdate();
 
 	/// <summary>
 	/// 銃弾の処理
@@ -90,12 +90,12 @@ public:
 	/// 移動ルートのポイント設定:左(現在2つ)
 	/// </summary>
 	/// <param name="leftPoint">左端</param>
-	void SetRouteleftPoint(const Vector3& leftPoint) { routePointLeft_ = leftPoint; }
+	void SetRouteLeftPoint(const Vector3& leftPoint) { routePointLeft_ = leftPoint; }
 	/// <summary>
 	/// 移動ルートのポイント設定:右(現在2つ)
 	/// </summary>
 	/// <param name="leftPoint">右端</param>
-	void SetRouterightPoint(const Vector3& rightPoint) { routePointRight_ = rightPoint; }
+	void SetRouteRightPoint(const Vector3& rightPoint) { routePointRight_ = rightPoint; }
 	/// <summary>
 	/// 移動ルート中心の場合(Eventで使う)
 	/// </summary>
@@ -110,8 +110,8 @@ public:
 	/// <summary>
 	/// setter_ステージ当たり判定
 	/// </summary>
-	/// <param name="aabb">現在のステージ当たり判定</param>
-	void SetStages(const std::vector<AABB>& aabb) { stages_ = aabb; }
+	/// <param name="AABBs">現在のステージ当たり判定</param>
+	void SetStages(const std::vector<AABB>& AABBs) { stages_ = AABBs; }
 
 	/// <summary>
 	/// 影の座標位置
@@ -222,9 +222,9 @@ public:
 protected:
 
 	/// <summary>
-	/// imguiの更新処理
+	/// imGuiの更新処理
 	/// </summary>
-	virtual void UpdateImgui() = 0;
+	virtual void UpdateImGui() = 0;
 
 	//オブジェクト
 	std::unique_ptr<Object3d> object_;
@@ -285,7 +285,7 @@ protected:
 	/// <summary>
 	/// 見つかけた時のリアクション処理
 	/// </summary>
-	void FoundRiaction();
+	void FoundReaction();
 
 	//見つかけたリアクションのパラメータ
 	bool isFoundReaction_ = false;
@@ -306,7 +306,7 @@ private:
 
 	const float kMarkPositionY_ = 2.0f;
 
-	const float kFoundMosionMaxTime_ = kMarkMaxTime_ / 5.0f;
+	const float kFoundMotionMaxTime_ = kMarkMaxTime_ / 5.0f;
 
 	//ステートパターン
 	std::unique_ptr<BaseEnemyState> currentEnemyState_ = std::make_unique<EnemyMoveState>();

@@ -48,7 +48,7 @@ void GLTFCommon::RootSignature() {
 }
 
 void GLTFCommon::CreateInputLayout() {
-	InputElementDeceCommon();
+	InputElementDescCommon();
 
 	CreateInputElementDesc("NORMAL", DXGI_FORMAT_R32G32B32_FLOAT);
 	CreateInputElementDesc("WORLDPOSITION", DXGI_FORMAT_R32G32B32_FLOAT);
@@ -65,12 +65,12 @@ void GLTFCommon::CreateRasterizer() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 }
 
-void GLTFCommon::CreateVertexSharder() {
+void GLTFCommon::CreateVertexShader() {
 	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 
-void GLTFCommon::CreatePixelSharder() {
+void GLTFCommon::CreatePixelShader() {
 	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d_glTF.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }

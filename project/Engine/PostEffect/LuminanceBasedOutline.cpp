@@ -13,7 +13,7 @@ void LuminanceBasedOutline::RootSignature() {
 	IntroduceSamplers();
 }
 
-void LuminanceBasedOutline::CreatePixelSharder() {
+void LuminanceBasedOutline::CreatePixelShader() {
 	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/LuminanceBasedOutline.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }
@@ -31,7 +31,7 @@ void LuminanceBasedOutline::EffectInit() {
 	srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_);
 
 
-	SrvManager::GetInstance()->CreateSRVforTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
+	SrvManager::GetInstance()->CreateSRVForTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
 }
 

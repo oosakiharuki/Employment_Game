@@ -40,10 +40,10 @@ void TitleScene::InitCamera() {
 
 void TitleScene::ObjectLoading() {
 
-	spitOut_.SpitOutVisualActor(visualActores);
+	spitOut_.SpitOutVisualActor(visualActors);
 
 
-	for (auto& visualActor : visualActores) {	
+	for (auto& visualActor : visualActors) {	
 		transforms_[visualActor->GetObjectName()] = visualActor->GetTransform();
 	}
 
@@ -76,8 +76,8 @@ void TitleScene::Update() {
 			titleFallingTimer_ = kTitleFallingTimeMax_;
 		}
 		//タイトルが上からくる(最終的にStartY_がEndY_と同じ値になる)
-		appearsePointStartY_ = appearsePointEndY_ + EaseOut(appearsePointStartY_, titleFallingTimer_, kTitleFallingTimeMax_);
-		titlePos_.y = appearsePointStartY_;
+		logoPointStartY_ = logoPointEndY_ + EaseOut(logoPointStartY_, titleFallingTimer_, kTitleFallingTimeMax_);
+		titlePos_.y = logoPointStartY_;
 
 	}
 	else {
@@ -109,7 +109,7 @@ void TitleScene::Update() {
 		transforms_["umbrella_Open"].translate.x = kUmbrellaArrowModePositionX_;
 		transforms_["umbrella_Open"].translate.x = transforms_["Select_Start"].translate.y;//最初に
 		transforms_["umbrella_Open"].rotate.z = kArrowRange_;
-		visualActores[2]->ChangeObject("umbrella_Close.gltf");
+		visualActors[2]->ChangeObject("umbrella_Close.gltf");
 	}
 
 	Operation();
@@ -119,7 +119,7 @@ void TitleScene::Update() {
 
 void TitleScene::UpdateBehind() {
 
-	for (auto& visualActor : visualActores) {
+	for (auto& visualActor : visualActors) {
 		visualActor->SetTransform(transforms_[visualActor->GetObjectName()]);
 		visualActor->Update();
 	}
@@ -140,7 +140,7 @@ void TitleScene::Draw() {
 
 	GLTFCommon::GetInstance()->Command();
 
-	for (auto& visualActor : visualActores) {
+	for (auto& visualActor : visualActors) {
 		visualActor->Draw();
 	}
 
@@ -196,7 +196,7 @@ void TitleScene::Operation(){
 
 	//spaceもしくはAボタンを押したら決定
 	if ((Input::GetInstance()->TriggerKey(DIK_SPACE) ||
-		Input::GetInstance()->TriggerBotton(state_, preState_, XINPUT_GAMEPAD_A)) && !isSelect_) {
+		Input::GetInstance()->TriggerButton(state_, preState_, XINPUT_GAMEPAD_A)) && !isSelect_) {
 		isSelect_ = true;//選択した
 		//選択パーティクル
 		sceneParticles_[particleBullet_.name]->SetParticleBorn(ParticleBorn::MomentMode);

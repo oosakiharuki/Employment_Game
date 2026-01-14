@@ -51,7 +51,7 @@ void FadeScreen::Update() {
 	dissolve_->SetBackGround(sprite_->GetResource(),dissolveTexture_);
 
 	//溶かす度合
-	dissolve_->Degress(degress_);
+	dissolve_->Degree(degree_);
 	dissolve_->EdgeSize(kEdgeSize);
 }
 
@@ -65,22 +65,22 @@ void FadeScreen::Finalize() {
 }
 
 void FadeScreen::FadeIn() {
-	if (degress_ <= 0.0f) {
-		degress_ = 0.0f;
+	if (degree_ <= 0.0f) {
+		degree_ = 0.0f;
 		isFading_ = false;
 		return;
 	}
 
-	degress_ -= kDeltaTime_;
+	degree_ -= kDeltaTime_;
 }
 
 void FadeScreen::FadeOut() {
-	if (degress_ >= kDegressMax) {
-		degress_ = kDegressMax;
+	if (degree_ >= kDegreeMax) {
+		degree_ = kDegreeMax;
 		isFading_ = false;
 		return;
 	}
 
-	degress_ += kDeltaTime_;
+	degree_ += kDeltaTime_;
 }
 

@@ -63,7 +63,7 @@ private:
 	//パーティクルコンテナ
 	std::unordered_map<std::string, std::unique_ptr<Particle>> sceneParticles_;
 
-	std::vector<std::shared_ptr<VisualActor>> visualActores;
+	std::vector<std::shared_ptr<VisualActor>> visualActors;
 	std::unordered_map<std::string ,Transform> transforms_;//各々の変更用
 
 	std::unique_ptr<Shadow> playerShadow_;//プレイヤー影
@@ -83,10 +83,10 @@ private:
 	const float kTitleFallingTimeMax_ = 1.0f;
 
 	//タイトルロゴが登場する移動
-	float appearsePointStartY_ = -300.0f;//スタート
-	float appearsePointEndY_ = 32.0f;//ゴール
+	float logoPointStartY_ = -300.0f;//スタート
+	float logoPointEndY_ = 32.0f;//ゴール
 	//タイトル座標
-	Vector2 titlePos_ = { 430,appearsePointStartY_ };
+	Vector2 titlePos_ = { 430,logoPointStartY_ };
 
 	//通常プレイと同じ重力
 	const float kGravity_ = 0.05f;

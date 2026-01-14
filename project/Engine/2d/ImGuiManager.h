@@ -14,7 +14,7 @@
 #include "DirectXCommon.h"
 #include "SrvManager.h"
 /// <summary>
-/// imugiマネージャ
+/// imGuiマネージャ
 /// </summary>
 class ImGuiManager {
 public:
@@ -31,12 +31,12 @@ public:
 	static std::shared_ptr<ImGuiManager> GetInstance();
 
 	/// <summary>
-	/// imgui 更新始め
+	/// imGui 更新始め
 	/// </summary>
 	void Begin();
 
 	/// <summary>
-	/// imgui 更新終わり
+	/// imGui 更新終わり
 	/// </summary>
 	void End();
 

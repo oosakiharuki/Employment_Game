@@ -45,7 +45,7 @@ void Object3dCommon::RootSignature() {
 }
 
 void Object3dCommon::CreateInputLayout() {
-	InputElementDeceCommon();
+	InputElementDescCommon();
 	CreateInputElementDesc("NORMAL", DXGI_FORMAT_R32G32B32_FLOAT);
 	CreateInputElementDesc("WORLDPOSITION", DXGI_FORMAT_R32G32B32_FLOAT);
 
@@ -61,12 +61,12 @@ void Object3dCommon::CreateRasterizer() {
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 }
 
-void Object3dCommon::CreateVertexSharder() {
+void Object3dCommon::CreateVertexShader() {
 	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 
-void Object3dCommon::CreatePixelSharder() {
+void Object3dCommon::CreatePixelShader() {
 	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }

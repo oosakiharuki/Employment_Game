@@ -198,7 +198,7 @@ ModelDataMulti Model_glTF::LoadModelFile(const std::string& directoryPath, const
 			vertices[vertexIndex].position = { -position.x,position.y,position.z,1.0f };
 			vertices[vertexIndex].normal = { -normal.x,normal.y, normal.z, };
 
-			//Texcordがあるか
+			//Texcoordがあるか
 			if (mesh->HasTextureCoords(0)) {
 				vertices[vertexIndex].texcoord = { texcoord.x,texcoord.y };
 			}
@@ -232,7 +232,7 @@ ModelDataMulti Model_glTF::LoadModelFile(const std::string& directoryPath, const
 			//jointごとの格納領域作成
 			aiBone* bone = mesh->mBones[boneIndex]; // Bone(骨) = joint
 			std::string jointName = bone->mName.C_Str();
-			JointWeightData& jointWeightData = modelData.skinClusterDeta[jointName];
+			JointWeightData& jointWeightData = modelData.skinClusterData[jointName];
 
 			aiMatrix4x4 bindPoseMatrixAssimp = bone->mOffsetMatrix.Inverse();//BindPoseMatrixに戻す
 			aiVector3D scale, translate;
@@ -388,7 +388,7 @@ SkinCluster Model_glTF::CreateSkinCluster(const Skeleton& skeleton,const ModelDa
 	std::generate(skinCluster.inverseBindPoseMatrices.begin(), skinCluster.inverseBindPoseMatrices.end(),MakeIdentity4x4);
 	///
 
-	for (const auto& jointWeight : modelData.skinClusterDeta) {
+	for (const auto& jointWeight : modelData.skinClusterData) {
 		auto it = skeleton.jointMap.find(jointWeight.first);
 		if (it == skeleton.jointMap.end()) {
 			continue;

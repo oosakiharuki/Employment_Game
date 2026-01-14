@@ -9,12 +9,25 @@ public:
 	void Finalize() override;
 	void Command() override;
 
+	/// <summary>
+	/// 背景
+	/// </summary>
+	/// <param name="gpu">GPUハンドル</param>
+	/// <param name="textureFile">テクスチャファイルパス</param>
 	void SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu, const std::string& textureFile);
-	void Degress(float value);
+	/// <summary>
+	/// 溶かし度合
+	/// </summary>
+	/// <param name="value">度合の数値</param>
+	void Degree(float value);
+	/// <summary>
+	/// Edgeの範囲
+	/// </summary>
+	/// <param name="value">範囲の数値</param>
 	void EdgeSize(float value);
 
 	struct Threshold {
-		float degress;
+		float degree;
 		float edgeSize;
 	};
 
@@ -25,9 +38,9 @@ private:
 	void RootSignature() override;
 
 	/// <summary>
-	/// PixelSharderを作成(ポストエフェクトはこれ以外は共通)
+	/// PixelShaderを作成(ポストエフェクトはこれ以外は共通)
 	/// </summary>
-	void CreatePixelSharder() override;
+	void CreatePixelShader() override;
 
 	/// <summary>
 	/// ポストエフェクトの初期化処理

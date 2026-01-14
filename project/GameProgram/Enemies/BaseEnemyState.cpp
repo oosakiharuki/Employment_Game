@@ -12,7 +12,7 @@ void BaseEnemyState::EnemyDead(BaseEnemy& enemy) {
 
 void EnemyMoveState::Update(BaseEnemy& enemy) {
 	//重力
-	enemy.GrabityUpdate();
+	enemy.GravityUpdate();
 	//プレイヤーの発見
 	enemy.PlayerTarget();
 
@@ -38,7 +38,7 @@ void EnemyMoveState::StateLog() {
 
 void EnemyAttackState::Update(BaseEnemy& enemy) {
 	//重力
-	enemy.GrabityUpdate();
+	enemy.GravityUpdate();
 	//プレイヤーの発見
 	enemy.PlayerTarget();
 

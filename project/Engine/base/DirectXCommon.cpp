@@ -53,7 +53,7 @@ void DirectXCommon::Initialize() {
 	DSV();//深度ステンシルビュー
 	Fence();
 	ViewPort();
-	Siccer();
+	Scissor();
 	DXC();
 }
 
@@ -81,7 +81,7 @@ void DirectXCommon::Device() {
 }
 
 void DirectXCommon::Factory(){
-	//HREUSLTはWindouws系のエラーコード
+	//HREUSLTはWindows系のエラーコード
 	//関数が成功したかどうかをSUCCEEDEDマクロで判定できる
 	HRESULT hr = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory_));
 	//初期化の標本的な部分でエラーが出た場合はぷろぐらむがまちがっているか、
@@ -129,7 +129,7 @@ void DirectXCommon::CreateDevice() {
 	log("Complete create D3D12Device!!!\n");
 }
 
-void DirectXCommon::ErrerStop() {
+void DirectXCommon::ErrorStop() {
 #ifdef _DEBUG
 	Microsoft::WRL::ComPtr < ID3D12InfoQueue> infoQueue = nullptr;
 	if (SUCCEEDED(device_->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
@@ -202,7 +202,7 @@ void DirectXCommon::SwapChain() {
 	HRESULT hr = dxgiFactory_->CreateSwapChainForHwnd(commandQueue_.Get(), winApp_->GetHwnd(), &swapChainDesc_, nullptr, nullptr, reinterpret_cast <IDXGISwapChain1**>(swapChain_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 
-	//SwapchainからResourceを引っ張ってくる
+	//SwapChainからResourceを引っ張ってくる
 
 	for (uint32_t i = 0; i < kMaxResource_; ++i) {
 		hr = swapChain_->GetBuffer(i, IID_PPV_ARGS(&swapChainResources_[i]));
@@ -222,7 +222,7 @@ void DirectXCommon::ZBuffer() {
 	resourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	resourceDesc.SampleDesc.Count = 1;
 	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;//二次元
-	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;//DepthStrencil
+	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;//DepthStencil
 
 	//利用するHeap
 	D3D12_HEAP_PROPERTIES heapProperties{};	
@@ -332,7 +332,7 @@ void DirectXCommon::ViewPort() {
 	viewport_.MaxDepth = 1.0f;
 }
 
-void DirectXCommon::Siccer() {
+void DirectXCommon::Scissor() {
 	//シザー
 	scissorRect_.left = 0;
 	scissorRect_.right = WinApp::kClientWidth_;
@@ -345,14 +345,14 @@ void DirectXCommon::Siccer() {
 //ComplierShader関数
 Microsoft::WRL::ComPtr<IDxcBlob> DirectXCommon::CompileShader(const std::wstring& filePath,const wchar_t* profile)
 {
-	//1.hlslファイル
+	//1.HLSLファイル
 	LoadHLSL(filePath, profile);
 
 	//3.警告エラー
-	CompileErrer();
+	CompileError();
 
-	//4.Complie結果
-	CompileSucces(filePath, profile);
+	//4.Compile結果
+	CompileSuccess(filePath, profile);
 
 	return shaderBlob;
 }
@@ -390,7 +390,7 @@ void DirectXCommon::LoadHLSL(const std::wstring& filePath, const wchar_t* profil
 	assert(SUCCEEDED(hr));
 }
 
-void DirectXCommon::CompileErrer() {
+void DirectXCommon::CompileError() {
 	Microsoft::WRL::ComPtr<IDxcBlobUtf8> shaderError = nullptr;
 	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
 	if (shaderError != nullptr && shaderError->GetStringLength() != 0)
@@ -401,7 +401,7 @@ void DirectXCommon::CompileErrer() {
 	}
 }
 
-void DirectXCommon::CompileSucces(const std::wstring& filePath, const wchar_t* profile) {
+void DirectXCommon::CompileSuccess(const std::wstring& filePath, const wchar_t* profile) {
 	HRESULT hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
 	assert(SUCCEEDED(hr));
 
@@ -452,7 +452,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateTextureResource(cons
 	D3D12_HEAP_PROPERTIES heapProperties{};
 	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
 
-	//Resouceの生成
+	//Resourceの生成
 	Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
 	HRESULT hr = device_->CreateCommittedResource(
 		&heapProperties,
@@ -591,7 +591,7 @@ void DirectXCommon::UpdateFixFPS() {
 	//1/60秒ピッタリ
 	const std::chrono::microseconds kMinTime(uint64_t(1000000.0f / 60.0f));
 	//1/60秒少し短い
-	//vsyncまちの無駄時間軽減に使う
+	//syncまちの無駄時間軽減に使う
 	const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
 
 

@@ -20,7 +20,7 @@ void GameScene::Initialize() {
 	Audio::GetInstance()->SoundPlayWave(BGMData_, volume_, true);
 
 	//スタート演出
-	WarterWarpExit();
+	WaterWarpExit();
 
 	//演出時に重力が発動しないようにする
 	for (auto& enemy : enemies_) {
@@ -59,7 +59,7 @@ void GameScene::Update() {
 	}
 
 	//ステージの更新処理
-	stageobj_->Update();
+	stageObj_->Update();
 
 	if (isStartStage_) {
 		//プレイヤー配置座標 + 地面当たり判定によって上げられる分
@@ -168,7 +168,7 @@ void GameScene::Draw() {
 	//モデル描画処理
 	Object3dCommon::GetInstance()->Command();
 
-	stageobj_->Draw();
+	stageObj_->Draw();
 
 
 	for (auto& enemy : enemies_) {
@@ -211,7 +211,7 @@ void GameScene::Finalize() {
 }
 
 
-void GameScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
+void GameScene::LevelEditorObjectSetting(const std::string& levelEditor_file) {
 
 	//- プレイヤー配置 -
 	player_ = std::make_unique<Player>();
@@ -219,9 +219,9 @@ void GameScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
 	stageFileName_ = sceneSaveData_.nextStageFile;//ステージの全体層(.obj)
 
 	//値が入っている場合
-	if (leveleditor_file != "") {
+	if (levelEditor_file != "") {
 		//代入
-		stageFileName_ = leveleditor_file;
+		stageFileName_ = levelEditor_file;
 		sceneSaveData_.playerHp = player_->GetMaxHp();
 	}
 	//jsonファイルで設定したゲームオブジェクトの配置処理をまとめた
@@ -232,17 +232,17 @@ void GameScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
 		UIManager::GetInstance()->CreateGuide(kGuideMove_);
 		UIManager::GetInstance()->CreateGuide(kGuideJump_);
 		UIManager::GetInstance()->CreateGuide(kGuideFire_);
-		UIManager::GetInstance()->CreateGuide(kGuideshield_);
-		UIManager::GetInstance()->CreateGuide(kGuidebrink_);
-		UIManager::GetInstance()->CreateGuide(kGuideKakku_);
+		UIManager::GetInstance()->CreateGuide(kGuideShield_);
+		UIManager::GetInstance()->CreateGuide(kGuideBrink_);
+		UIManager::GetInstance()->CreateGuide(kGuideGliding_);
 		UIManager::GetInstance()->CreateGuide(kGuideWarp_);
 	}
 }
 
 void GameScene::SpitOutGameObject() {
 	//ステージのjsonを読み取る
-	levelediter_.LoadLevelEditor("resource/LevelEditor/" + stageFileName_ + ".json");
-	spitOut_.SetLevelEditor(&levelediter_);
+	levelEditor_.LoadLevelEditor("resource/LevelEditor/" + stageFileName_ + ".json");
+	spitOut_.SetLevelEditor(&levelEditor_);
 
 	//- カメラ配置 -
 	camera_ = std::make_unique<Camera>();
@@ -254,16 +254,16 @@ void GameScene::SpitOutGameObject() {
 	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
 	ParticleCommon::GetInstance()->SetDefaultCamera(camera_.get());
 	DebugWireframes::GetInstance()->SetDefaultCamera(camera_.get());
-	Cubemap::GetInstance()->SetDefaultCamera(camera_.get());
+	CubeMap::GetInstance()->SetDefaultCamera(camera_.get());
 
 	//プレイヤーの体力を上書き
 	player_->Initialize();//初期設定
 	player_->SetHp(sceneSaveData_.playerHp);
-	player_->SetZanki(sceneSaveData_.playerZanki);
+	player_->SetRemain(sceneSaveData_.playerRemain);
 	//プレイヤーを配置
 	spitOut_.SpitOutPlayer(player_);
 	//ステージの当たり判定を設定/配置
-	spitOut_.SpitOutStage(stageobj_, stageFileName_, stagesAABB_);
+	spitOut_.SpitOutStage(stageObj_, stageFileName_, stagesAABB_);
 	//ステージオブジェクトの配置
 	spitOut_.SpitOutStageObject(stageObjects_);
 	//敵の配置
@@ -305,7 +305,7 @@ void GameScene::CollisionCommon() {
 	//プレイヤーとステージオブジェクト
 	CollisionManager::GetInstance()->PlayerAndStageObject(player_.get(), stageObjects_);
 	//プレイヤーとイベントトリガー
-	CollisionManager::GetInstance()->PlayerAndEventTrigger(player_.get(), eventTriggers_,cameraControl_.get(), levelediter_);
+	CollisionManager::GetInstance()->PlayerAndEventTrigger(player_.get(), eventTriggers_,cameraControl_.get(), levelEditor_);
 	//敵とステージ自体
 	CollisionManager::GetInstance()->EnemyAndStage(enemies_,stagesAABB_);
 
@@ -315,7 +315,7 @@ void GameScene::CollisionCommon() {
 	}
 }
 
-void GameScene::WarterWarpExit() {
+void GameScene::WaterWarpExit() {
 	
 	//初期化
 	startWarp_ = std::make_unique<WarpGate>();
@@ -344,7 +344,7 @@ void GameScene::WarterWarpExit() {
 }
 
 void GameScene::Respawn() {
-	if (player_->GetZanki() == 0) {
+	if (player_->GetRemain() == 0) {
 		//残機が0で倒された場合ゲームオーバー
 		isNextGameOverScene = true;
 		FadeScreen::GetInstance()->SetMaskTexture("fade02.png");
@@ -361,7 +361,7 @@ void GameScene::Respawn() {
 	//突破できてないならやり直し
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->FailureEvent();
-		cameraControl_->CameraSetting(levelediter_.GetLevelData()->cameraInit["MainCamera"], false);
+		cameraControl_->CameraSetting(levelEditor_.GetLevelData()->cameraInit["MainCamera"], false);
 	}
 
 	//リセット

@@ -35,7 +35,7 @@ private:
 	//const Vector3 kPlayerAwayPos_ = { 0, 2, -15.0f };
 
 	//レベルエディタ(オブジェクトの配置を.jsonでできる)
-	LevelEditor levelediter_;
+	LevelEditor levelEditor_;
 	SpitOutLevelEditor spitOut_;
 
 	//プレイヤー
@@ -44,7 +44,7 @@ private:
 	std::list<std::shared_ptr<IStageObject>> stageObjects_;
 
 	//ステージ全体のオブジェクト
-	std::unique_ptr<Object3d> stageobj_;
+	std::unique_ptr<Object3d> stageObj_;
 	//ステージ全体の当たり判定AABB
 	std::vector<AABB> stagesAABB_;
 
@@ -60,8 +60,8 @@ private:
 	/// <summary>
 	/// レベルエディタで配置処理
 	/// </summary>
-	/// <param name="leveleditor_file">指定したい場合は名前を入れることも可能</param>
-	void LevelEditorObjectSetting(const std::string& leveleditor_file = "");
+	/// <param name="levelEditor_file">指定したい場合は名前を入れることも可能</param>
+	void LevelEditorObjectSetting(const std::string& levelEditor_file = "");
 	/// <summary>
 	/// ゲームオブジェクトの配置処理をまとめた
 	/// </summary>
@@ -76,11 +76,11 @@ private:
 	const Vector2 kSpriteSize_ = { 128,64 };
 
 	const Vector2 kSpriteTranslateMove_ = { 300,20 };
-	const Vector2 kSpriteTranslateEkey_ = { 600,20 };
+	const Vector2 kSpriteTranslateKeyE_ = { 600,20 };
 
 	//変更する場所(ジャンプ説明前は移動の説明)
 	Guide kGuideMove_ = { "guide_move","guide_move", kSpriteTranslateMove_, kSpriteSize_, -100.0f, 100.0f };  //移動の説明
-	Guide kGuideWarp_ = { "guide_warp","guide_warp",kSpriteTranslateEkey_, kSpriteSize_, -100.0f, 100.0f };  //ワープに入る説明
+	Guide kGuideWarp_ = { "guide_warp","guide_warp",kSpriteTranslateKeyE_, kSpriteSize_, -100.0f, 100.0f };  //ワープに入る説明
 
 	bool isNextGameScene = false;
 };

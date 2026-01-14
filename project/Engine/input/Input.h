@@ -37,8 +37,8 @@ public:
 	bool GetJoystickState(uint32_t num,XINPUT_STATE& state);
 	bool GetJoystickStatePrevious(uint32_t num, XINPUT_STATE& state);
 
-	bool PushBotton(XINPUT_STATE& state,int botton);
-	bool TriggerBotton(XINPUT_STATE& state, XINPUT_STATE& preState, int botton);
+	bool PushButton(XINPUT_STATE& state,int button);
+	bool TriggerButton(XINPUT_STATE& state, XINPUT_STATE& preState, int button);
 
 	/// <summary>
 	/// ゲームパット用の更新処理

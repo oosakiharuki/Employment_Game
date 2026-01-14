@@ -52,7 +52,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE SrvManager::GetGPUDescriptorHandle(uint32_t index) {
 	return handleGPU;
 }
 
-void SrvManager::CreateSRVforTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, DXGI_FORMAT Format, UINT MipLevels) {
+void SrvManager::CreateSRVForTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, DXGI_FORMAT Format, UINT MipLevels) {
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = Format;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -61,7 +61,7 @@ void SrvManager::CreateSRVforTexture2D(uint32_t srvIndex, ID3D12Resource* pResou
 	directXCommon_->GetDevice()->CreateShaderResourceView(pResource, &srvDesc, GetCPUDescriptorHandle(srvIndex));
 }
 
-void SrvManager::CreateSRVforStructureBuffer(D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc, uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride) {
+void SrvManager::CreateSRVForStructureBuffer(D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc, uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride) {
 	directXCommon_->GetDevice()->CreateShaderResourceView(pResource, &srvDesc, GetCPUDescriptorHandle(srvIndex));
 }
 

@@ -13,9 +13,9 @@ void SelectScene::Initialize() {
 	LevelEditorObjectSetting(sceneSaveData_.nextStageFile);
 
 	//ステージの全体層
-	stageobj_ = std::make_unique<Object3d>();
-	stageobj_->Initialize();
-	stageobj_->SetModelFile("stage_select.obj");
+	stageObj_ = std::make_unique<Object3d>();
+	stageObj_->Initialize();
+	stageObj_->SetModelFile("stage_select.obj");
 
 	//フェードスタート
 	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
@@ -45,7 +45,7 @@ void SelectScene::Update() {
 	player_->Update();
 
 	//ステージ更新
-	stageobj_->Update();
+	stageObj_->Update();
 
 	//当たり判定
 	CollisionCommon();
@@ -56,12 +56,12 @@ void SelectScene::Update() {
 
 void SelectScene::Draw() {
 
-	Cubemap::GetInstance()->Command();
+	CubeMap::GetInstance()->Command();
 
 	Object3dCommon::GetInstance()->Command();
 
 	//ステージ描画
-	stageobj_->Draw();
+	stageObj_->Draw();
 
 	//ステージオブジェクト描画
 	for (auto& stageObject : stageObjects_) {
@@ -88,7 +88,7 @@ void SelectScene::Finalize() {
 }
 
 
-void SelectScene::LevelEditorObjectSetting(const std::string& leveleditor_file) {
+void SelectScene::LevelEditorObjectSetting(const std::string& levelEditor_file) {
 
 	//- プレイヤー配置 -
 	player_ = std::make_unique<Player>();
@@ -96,9 +96,9 @@ void SelectScene::LevelEditorObjectSetting(const std::string& leveleditor_file) 
 	stageFileName_ = sceneSaveData_.nextStageFile;//ステージの全体層(.obj)
 
 	//値が入っている場合
-	if (leveleditor_file != "") {
+	if (levelEditor_file != "") {
 		//代入
-		stageFileName_ = leveleditor_file;
+		stageFileName_ = levelEditor_file;
 		sceneSaveData_.playerHp = player_->GetMaxHp();
 	}
 
@@ -111,8 +111,8 @@ void SelectScene::LevelEditorObjectSetting(const std::string& leveleditor_file) 
 
 void SelectScene::SpitOutGameObject() {
 	//ステージのjsonを読み取る
-	levelediter_.LoadLevelEditor("resource/LevelEditor/" + stageFileName_ + ".json");
-	spitOut_.SetLevelEditor(&levelediter_);
+	levelEditor_.LoadLevelEditor("resource/LevelEditor/" + stageFileName_ + ".json");
+	spitOut_.SetLevelEditor(&levelEditor_);
 
 	//- カメラ配置 -
 	camera_ = std::make_unique<Camera>();
@@ -123,16 +123,16 @@ void SelectScene::SpitOutGameObject() {
 	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
 	ParticleCommon::GetInstance()->SetDefaultCamera(camera_.get());
 	DebugWireframes::GetInstance()->SetDefaultCamera(camera_.get());
-	Cubemap::GetInstance()->SetDefaultCamera(camera_.get());
+	CubeMap::GetInstance()->SetDefaultCamera(camera_.get());
 
 	//プレイヤーの体力を上書き
 	player_->Initialize();//初期設定
 	player_->SetHp(sceneSaveData_.playerHp);
-	player_->SetZanki(sceneSaveData_.playerZanki);
+	player_->SetRemain(sceneSaveData_.playerRemain);
 	//プレイヤーを配置
 	spitOut_.SpitOutPlayer(player_);
 	//ステージの当たり判定を設定/配置
-	spitOut_.SpitOutStage(stageobj_, stageFileName_, stagesAABB_);
+	spitOut_.SpitOutStage(stageObj_, stageFileName_, stagesAABB_);
 	//ステージオブジェクトを配置
 	spitOut_.SpitOutStageObject(stageObjects_);
 }
