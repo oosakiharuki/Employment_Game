@@ -25,7 +25,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static std::shared_ptr<DirectXCommon> GetInstance();
+	static DirectXCommon& GetInstance();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -328,8 +328,10 @@ private:
 	//逆行しないタイマー
 	std::chrono::steady_clock::time_point reference_;
 
-
-	static std::shared_ptr<DirectXCommon> sInstance_;
+	//インスタンス
+	static std::unique_ptr<DirectXCommon> sInstance_;
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<DirectXCommon>;
 
 	//書き込み可能なテクスチャ レンダーテクスチャ
 	Microsoft::WRL::ComPtr<ID3D12Resource> renderTextureResource_;

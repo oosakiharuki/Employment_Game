@@ -11,7 +11,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static std::shared_ptr<SpriteCommon> GetInstance();
+	static SpriteCommon& GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -20,12 +20,7 @@ public:
 	/// 初期化処理
 	/// </summary>
 	/// <param name="dxCommon"></param>
-	void Initialize(DirectXCommon* dxCommon) override;
-	/// <summary>
-	/// getter_DirectX
-	/// </summary>
-	/// <returns></returns>
-	DirectXCommon* GetDirectXCommon() const { return dxCommon_; }
+	void Initialize() override;
 
 	/// <summary>
 	/// 描画コマンド
@@ -68,6 +63,8 @@ private:
 	/// </summary>
 	void CreateDepthStencil() override;
 
-
-	static std::shared_ptr<SpriteCommon> sInstance_;
+	//インスタンス
+	static std::unique_ptr<SpriteCommon> sInstance_;
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<SpriteCommon>;
 };

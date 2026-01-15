@@ -2,22 +2,17 @@
 
 using namespace Logger;
 
-std::shared_ptr<GLTFCommon> GLTFCommon::sInstance_ = nullptr;
+std::unique_ptr<GLTFCommon> GLTFCommon::sInstance_ = nullptr;
 
-std::shared_ptr<GLTFCommon> GLTFCommon::GetInstance() {
+GLTFCommon& GLTFCommon::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<GLTFCommon>();
 	}
-	return sInstance_;
+	return *sInstance_;
 }
-void GLTFCommon::Finalize() {
-	sInstance_.reset();
-	sInstance_ = nullptr;
-}
+void GLTFCommon::Finalize() {}
 
-void GLTFCommon::Initialize(DirectXCommon* dxCommon) {
-	dxCommon_ = dxCommon;
-
+void GLTFCommon::Initialize() {
 	GraphicsPipeline();
 }
 
@@ -66,12 +61,12 @@ void GLTFCommon::CreateRasterizer() {
 }
 
 void GLTFCommon::CreateVertexShader() {
-	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
+	vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 
 void GLTFCommon::CreatePixelShader() {
-	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d_glTF.PS.hlsl", L"ps_6_0");
+	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d_glTF.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }
 
@@ -82,7 +77,7 @@ void GLTFCommon::CreateDepthStencil() {
 }
 
 void GLTFCommon::Command() {
-	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
-	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+	DirectXCommon::GetInstance().GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

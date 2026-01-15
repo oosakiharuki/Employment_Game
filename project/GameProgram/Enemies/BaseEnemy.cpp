@@ -29,9 +29,9 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 
 	//パーティクル
 	//攻撃(発泡)
-	particles_[particleFire_.name] = ParticleManager::GetInstance()->InitParticle(particleFire_);
+	particles_[particleFire_.name] = ParticleManager::GetInstance().InitParticle(particleFire_);
 	//ダメージ
-	particles_[particleDamage_.name] = ParticleManager::GetInstance()->InitParticle(particleDamage_);
+	particles_[particleDamage_.name] = ParticleManager::GetInstance().InitParticle(particleDamage_);
 
 	//マークのワールド座標
 	wtMark_.Initialize();	

@@ -1,12 +1,12 @@
 #include "UIManager.h"
 
-std::shared_ptr<UIManager> UIManager::sInstance_ = nullptr;
+std::unique_ptr<UIManager> UIManager::sInstance_ = nullptr;
 
-std::shared_ptr<UIManager> UIManager::GetInstance() {
+UIManager& UIManager::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<UIManager>();
 	}
-	return sInstance_;
+	return *sInstance_;
 }
 
 void UIManager::Finalize() {

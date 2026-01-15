@@ -415,27 +415,27 @@ private:
 
 	//-パーティクル-
 	//歩く
-	ParticleParametars particleWalk_ = {
+	ParticleParameters particleWalk_ = {
 		"player_walk", "resource/Sprite/white.png", Primitive::CreateBox(), 5, 0.15f, {1,1,1}
 	};
 	//ブリンク
-	ParticleParametars particleBrink_ = {
+	ParticleParameters particleBrink_ = {
 		"player_brink","resource/Sprite/cone.png", Primitive::CreateCone(), 1, 1.0f, {2.0f,2.0f,2.0f}
 	}; 
 	//撃つ
-	ParticleParametars  particleFire_ = {
+	ParticleParameters  particleFire_ = {
 		"player_fire","resource/Sprite/cone.png", Primitive::CreateCone(), 1, 0.3f,{1,1,1}
 	};
 	//ダメージを食らった
-	ParticleParametars particleDamage_ = {
+	ParticleParameters particleDamage_ = {
 		"player_damage", "resource/Sprite/circle.png", Primitive::CreateRing(), 20, 0.6f,{1,1,1}
 	};
 	//パリィ成功
-	ParticleParametars particleParry_ = {
+	ParticleParameters particleParry_ = {
 		"player_parry", "resource/Sprite/white.png", Primitive::CreateCone(), 1, 0.5f,{2.0f,0.2f,2.0f}
 	};
 	//倒された演出
-	ParticleParametars particleDead_ = {
+	ParticleParameters particleDead_ = {
 		"player_dead", "resource/Sprite/white.png", Primitive::CreateSphere(), 3,0.1f,{0.5f, 0.5f, 0.5f}
 	};
 

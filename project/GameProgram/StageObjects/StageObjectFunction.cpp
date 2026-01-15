@@ -19,8 +19,8 @@ namespace StageObjectFunction {
 		//カメラがズームし終わった
 		if (cameraControl_->ZoomEnd()) {
 			//次のステージに進む時Hpなどパラメータがリセットされないようにする
-			NextStageSave::GetInstance()->SetPlayerHp(player.GetHp()); //現在のプレイヤー体力を保存
-			NextStageSave::GetInstance()->SetPlayerRemain(player.GetRemain()); //現在のプレイヤー残機を保存
+			NextStageSave::GetInstance().SetPlayerHp(player.GetHp()); //現在のプレイヤー体力を保存
+			NextStageSave::GetInstance().SetPlayerRemain(player.GetRemain()); //現在のプレイヤー残機を保存
 			//フェードインした後、次のシーンに
 			isNextScene = true;
 		}

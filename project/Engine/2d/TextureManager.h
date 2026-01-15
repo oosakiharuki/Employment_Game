@@ -16,11 +16,11 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static std::shared_ptr<TextureManager> GetInstance();
+	static TextureManager& GetInstance();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize(DirectXCommon* dxCommon, SrvManager* srvManager);
+	void Initialize();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -49,7 +49,10 @@ public:
 	/// <returns></returns>
 	const DirectX::TexMetadata& GetMetaData(const std::string& filePath);
 private:
-	static std::shared_ptr<TextureManager> sInstance_;
+	//インスタンス
+	static std::unique_ptr<TextureManager> sInstance_;
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<TextureManager>;
 
 	/// <summary>
 	/// ミップマップ作成
@@ -74,10 +77,7 @@ private:
 	void CreateSRV(TextureData& textureData, const DirectX::TexMetadata metadata);
 
 	std::unordered_map<std::string, TextureData> textureDatas_;
-
-	DirectXCommon* dxCommon_ = nullptr;
-	SrvManager* srvManager_ = nullptr;
-
+	
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> intermediateResources_;
 
 	//画像

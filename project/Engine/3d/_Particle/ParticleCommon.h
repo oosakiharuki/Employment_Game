@@ -12,7 +12,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static std::shared_ptr<ParticleCommon> GetInstance();
+	static ParticleCommon& GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -21,8 +21,7 @@ public:
 	/// 初期化処理
 	/// </summary>
 	/// <param name="dxCommon"></param>使用しているdirectXCommon
-	void Initialize(DirectXCommon* dxCommon) override;
-	DirectXCommon* GetDxCommon()const { return dxCommon_; }
+	void Initialize() override;
 
 	/// <summary>
 	/// 描画コマンド
@@ -80,5 +79,8 @@ private:
 
 	Camera* defaultCamera_ = nullptr;
 
-	static std::shared_ptr<ParticleCommon> sInstance_;
+	//インスタンス
+	static std::unique_ptr<ParticleCommon> sInstance_;
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<ParticleCommon>;
 };

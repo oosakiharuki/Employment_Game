@@ -12,7 +12,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static std::shared_ptr<DebugWireframes> GetInstance();
+	static DebugWireframes& GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -21,8 +21,7 @@ public:
 	/// 初期化処理
 	/// </summary>
 	/// <param name="dxCommon"></param>
-	void Initialize(DirectXCommon* dxCommon);
-	DirectXCommon* GetDirectXCommon() const { return dxCommon_; }
+	void Initialize();
 	/// <summary>
 	/// 描画コマンド
 	/// </summary>
@@ -70,8 +69,10 @@ private:
 	void CreateDepthStencil() override;
 
 	Camera* defaultCamera_ = nullptr;
-
-	static std::shared_ptr<DebugWireframes> sInstance_;
+	//インスタンス
+	static std::unique_ptr<DebugWireframes> sInstance_;
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<DebugWireframes>;
 
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[4] = {};
 

@@ -19,7 +19,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static std::shared_ptr<NextStageSave> GetInstance();
+	static NextStageSave& GetInstance();
 	/// <summary>
 	/// getter_前に受け取ったデータを渡す
 	/// </summary>
@@ -53,7 +53,9 @@ private:
 	SceneSaveData sceneSaveData_ = {
 		3,3,2,"stage_0" //初期設定
 	};
-
-	static std::shared_ptr<NextStageSave> sInstance_;
+	//インスタンス
+	static std::unique_ptr<NextStageSave> sInstance_;
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<NextStageSave>;
 };
 

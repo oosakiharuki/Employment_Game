@@ -27,8 +27,6 @@ private:
 	/// </summary>
 	void InitObject();
 
-	//入力処理
-	Input* input_ = Input::GetInstance().get();
 	//ゲームパット用の入力変数
 	XINPUT_STATE state_, preState_;
 
@@ -56,7 +54,7 @@ private:
 	//紙吹雪のパーティクルたち
 	const uint32_t kParticleMaxNum_ = 3;
 	
-	ParticleParametars particleFanfare_ = {
+	ParticleParameters particleFanfare_ = {
 		"clear_fanfare", "resource/Sprite/white.png", Primitive::CreatePlane(),10,1.5f,{ 1,1,1 }
 	};
 	std::vector<std::unique_ptr<Particle>> particleFanfares_;
