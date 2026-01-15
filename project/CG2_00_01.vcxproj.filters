@@ -339,9 +339,6 @@
     <ClCompile Include="GameProgram\LevelEditor\LevelEditor.cpp">
       <Filter>ソース ファイル\GameProgram\LevelEditor</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Scene\BaseScene.cpp">
-      <Filter>ソース ファイル\GameProgram\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\EventTrigger.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
@@ -417,14 +414,17 @@
     <ClCompile Include="GameProgram\MyGame.cpp">
       <Filter>ソース ファイル\GameProgram</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\AbstractSceneFactory.cpp">
-      <Filter>ソース ファイル\Engine\base</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\MoveGround.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\System\VisualActor.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\scene\AbstractSceneFactory.cpp">
+      <Filter>ソース ファイル\Engine\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\scene\BaseScene.cpp">
+      <Filter>ソース ファイル\Engine\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -632,9 +632,6 @@
     <ClInclude Include="GameProgram\LevelEditor\LevelEditor.h">
       <Filter>ヘッダー ファイル\GameProgram\LevelEditor</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Scene\BaseScene.h">
-      <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\StageObjects\EventTrigger.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
@@ -710,14 +707,17 @@
     <ClInclude Include="GameProgram\MyGame.h">
       <Filter>ヘッダー ファイル\GameProgram</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\AbstractSceneFactory.h">
-      <Filter>ヘッダー ファイル\Engine\base</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\StageObjects\MoveGround.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\System\VisualActor.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\scene\BaseScene.h">
+      <Filter>ヘッダー ファイル\Engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\scene\AbstractSceneFactory.h">
+      <Filter>ヘッダー ファイル\Engine\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

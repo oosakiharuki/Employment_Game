@@ -107,7 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\base\AbstractSceneFactory.cpp" />
+    <ClCompile Include="Engine\scene\AbstractSceneFactory.cpp" />
     <ClCompile Include="GameProgram\Boss\BaseBossState.cpp" />
     <ClCompile Include="GameProgram\Boss\Boss.cpp" />
     <ClCompile Include="GameProgram\Enemies\BaseEnemyState.cpp" />
@@ -166,7 +166,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Include="Engine\base\Logger.cpp" />
-    <ClCompile Include="GameProgram\Scene\BaseScene.cpp" />
+    <ClCompile Include="Engine\scene\BaseScene.cpp" />
     <ClCompile Include="Engine\main.cpp">
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MultiThreadedDebug</RuntimeLibrary>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EnableFastChecks</BasicRuntimeChecks>
@@ -209,7 +209,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\System\VisualActor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\base\AbstractSceneFactory.h" />
+    <ClInclude Include="Engine\scene\AbstractSceneFactory.h" />
     <ClInclude Include="GameProgram\Boss\BaseBossState.h" />
     <ClInclude Include="GameProgram\Boss\Boss.h" />
     <ClInclude Include="GameProgram\Enemies\BaseEnemyState.h" />
@@ -268,7 +268,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\Logger.h" />
     <ClInclude Include="Engine\3d\ModelCommon.h" />
     <ClInclude Include="Engine\3d\ModelManager.h" />
-    <ClInclude Include="GameProgram\Scene\BaseScene.h" />
+    <ClInclude Include="Engine\scene\BaseScene.h" />
     <ClInclude Include="Engine\math\MyMath.h" />
     <ClInclude Include="Engine\math\Matrix4x4.h" />
     <ClInclude Include="Engine\3d\_obj\Object3d.h" />
