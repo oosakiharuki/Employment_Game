@@ -1,68 +1,67 @@
 #include "SceneManager.h"
-#include "LoadingModels.h"
 
-SceneManager::SceneManager() {
-	//objectをローディング
-	LoadingModels::GetInstance()->LoadObjects();
-	LoadingModels::GetInstance()->Finalize();
-	
-	//シーンの設定
-	currentScene_ = sceneArr_->GetSceneNo();
-	prevScene_ = currentScene_;
+SceneManager::SceneManager() {}
 
-	//シーンを作る
-	BuildScene();
+SceneManager::~SceneManager() {}
+
+std::shared_ptr<SceneManager> SceneManager::sInstance_ = nullptr;
+
+std::shared_ptr<SceneManager> SceneManager::GetInstance() {
+	if (sInstance_ == nullptr) {
+		sInstance_ = std::make_unique<SceneManager>();
+	}
+	return sInstance_;
 }
 
-SceneManager::~SceneManager() {
-	Finalize();
-}
-
-void SceneManager::SceneChange() {
-
-	//前のシーンの解放
-	Finalize();
-	//次のシーンを作る
-	BuildScene();
-}
-
-void SceneManager::BuildScene() {
-	//シーンを作成
-	settingScene_ = sceneArr_->SetCurrentScene();
-	//代入
-	sceneArr_ = std::move(settingScene_);
-}
-
-void SceneManager::Initialize() {
-	//初期化処理
-	sceneArr_->Initialize();
+void SceneManager::ChangeScene(const std::string& sceneName) {
+	//すでに値が入っている時
+	if (nextScene_ != nullptr) {
+		return;
+	}
+	assert(sceneFactory_);
+	nextScene_ = sceneFactory_->CreateScene(sceneName);
 }
 
 void SceneManager::Update() {
 
-	prevScene_ = currentScene_;
-	currentScene_ = sceneArr_->GetSceneNo();
-
-	// シーンを変更(現在のシーンが前回のシーンと同じでない)
-	if (prevScene_ != currentScene_) {
-		SceneChange();
-		sceneArr_->Initialize();
-	}
-
 	//更新処理
-	sceneArr_->Update();
+	scene_->Update();
 
 	//現在シーン更新処理
-	sceneArr_->SceneUpdate();
+	scene_->SceneUpdate();
+}
+
+void SceneManager::SceneUpdate() {
+	// シーンを変更(現在のシーンが前回のシーンと同じでない)
+	if (NextSceneChangeFlag()) {
+		if (scene_) {
+			scene_->Finalize();
+			delete scene_;
+		}
+		scene_ = nextScene_;
+		nextScene_ = nullptr;
+		//初期化処理
+		scene_->Initialize();
+	}
 }
 
 void SceneManager::Draw() {
 	//描画処理
-	sceneArr_->Draw();
+	scene_->Draw();
 }
 
 void SceneManager::Finalize() {
-	sceneArr_->Finalize();
+	scene_->Finalize();
 	//シーンのリセット
-	sceneArr_.reset();
+	scene_->Finalize();
+	delete scene_;
+	delete nextScene_;
+}
+
+bool SceneManager::NextSceneChangeFlag() {
+	//次のシーンの値が入っている時
+	if (nextScene_) {
+		return true;
+	}
+	return false;
 }

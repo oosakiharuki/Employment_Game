@@ -27,24 +27,8 @@
 /// </summary>
 class BaseScene {
 protected:
-	//現在のシーン
-	static std::string sceneNo_;
-	//次のシーン
-	static std::string nextSceneNo_;
-
 	//end
 	bool isGameEnd_ = false;
-
-	/// <summary>
-	/// 次のシーンに進むフラグ(フェードなど間を開けたい時)
-	/// </summary>
-	/// <returns></returns>
-	bool NextSceneFlag();
-
-	/// <summary>
-	/// sceneNo = nextSceneNoに
-	/// </summary>
-	void ChangeSceneNo();
 
 public:
 	/// <summary>
@@ -72,22 +56,10 @@ public:
 	virtual void SceneUpdate() = 0;
 
 	/// <summary>
-	/// シーン名で
-	/// </summary>
-	/// <returns></returns>現在のシーン
-	std::string GetSceneNo();
-
-	/// <summary>
 	/// ゲーム終了処理
 	/// </summary>
 	/// <returns></returns>trueで終了
 	bool GetIsGameEnd() { return isGameEnd_; }
-
-	/// <summary>
-	/// 次のシーンに進む処理
-	/// </summary>
-	/// <returns>作ったベースシーン</returns>
-	std::unique_ptr<BaseScene> SetCurrentScene();
 
 private:
 	bool isFade_ = false;

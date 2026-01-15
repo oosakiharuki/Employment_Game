@@ -1,4 +1,5 @@
 #include "LoadingStageScene.h"
+#include "SceneManager.h"
 
 void LoadingStageScene::Initialize() {
 	sprite_ = std::make_unique<Sprite>();
@@ -18,7 +19,5 @@ void LoadingStageScene::Finalize() {}
 
 void LoadingStageScene::SceneUpdate() {
 	//すぐさまゲームシーンに
-	nextSceneNo_ = "Game";
-	//番号変更
-	ChangeSceneNo();
+	SceneManager::GetInstance()->ChangeScene("Game");
 }

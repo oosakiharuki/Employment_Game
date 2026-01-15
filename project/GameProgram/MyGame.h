@@ -2,6 +2,9 @@
 #include "Framework.h"
 #include "SceneManager.h"
 #include "FadeScreen.h"
+
+#include "SceneFactory.h"
+
 /// <summary>
 /// 自作ゲーム
 /// </summary>
@@ -25,6 +28,6 @@ public:
 	void Draw() override;
 
 private:
-	std::unique_ptr<SceneManager> sceneManager_ = nullptr;
 	FadeScreen* fadeScreen_ = nullptr;
+	SceneFactory* sceneFactory_ = nullptr;
 };

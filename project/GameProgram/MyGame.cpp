@@ -1,15 +1,25 @@
 #include "MyGame.h"
+#include "LoadingModels.h"
 
 void MyGame::Initialize() {
 	//フレームワーク処理
 	Framework::Initialize();
 
 	//ゲームシーン初期化
-	sceneManager_ = std::make_unique<SceneManager>();
-	sceneManager_->Initialize();
+
+	//objectをローディング
+	LoadingModels::GetInstance()->LoadObjects();
+	LoadingModels::GetInstance()->Finalize();
 
 	fadeScreen_ = FadeScreen::GetInstance().get();
 	fadeScreen_->Initialize();
+
+	sceneFactory_ = new SceneFactory();
+	SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
+
+	SceneManager::GetInstance()->ChangeScene("Title");
+	//シーンの更新処理(変更処理)
+	SceneManager::GetInstance()->SceneUpdate();
 }
 
 void MyGame::Update() {
@@ -21,11 +31,18 @@ void MyGame::Update() {
 #endif //  USE_IMGUI
 
 	//ゲームシーン更新
-	sceneManager_->Update();
+	
+	//フェード中は変更しない
+	if (!fadeScreen_->GetIsFading()) {
+		//シーンの更新処理(変更処理)
+		SceneManager::GetInstance()->SceneUpdate();
+	}
+
+	SceneManager::GetInstance()->Update();
 
 	//タイトル画面で終了を選択した時するとき
-	if (sceneManager_->SetGameEnd()) {
-		Framework::SetIsEndRequest(sceneManager_->SetGameEnd());
+	if (SceneManager::GetInstance()->SetGameEnd()) {
+		Framework::SetIsEndRequest(SceneManager::GetInstance()->SetGameEnd());
 	}
 
 	//フェード更新
@@ -45,7 +62,7 @@ void MyGame::Draw() {
 	DirectXCommon::GetInstance()->RenderTexturePreDraw();// 対 renderTexture
 	
 	//ゲームシーン描画
-	sceneManager_->Draw();
+	SceneManager::GetInstance()->Draw();
 
 	DirectXCommon::GetInstance()->RenderTexturePostDraw();
 
@@ -69,8 +86,10 @@ void MyGame::Draw() {
 
 
 void MyGame::Finalize() {
-	sceneManager_.reset();
+	SceneManager::GetInstance().reset();
 	fadeScreen_->Finalize();
+	SceneManager::GetInstance()->Finalize();
+	delete sceneFactory_;
 
 #ifdef  USE_IMGUI
 	ImGuiManager::GetInstance()->Finalize();

@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\base\AbstractSceneFactory.cpp" />
     <ClCompile Include="GameProgram\Boss\BaseBossState.cpp" />
     <ClCompile Include="GameProgram\Boss\Boss.cpp" />
     <ClCompile Include="GameProgram\Enemies\BaseEnemyState.cpp" />
@@ -182,7 +183,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\WinApp.cpp">
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
-    <ClCompile Include="Engine\base\MyGame.cpp" />
+    <ClCompile Include="GameProgram\MyGame.cpp" />
     <ClCompile Include="GameProgram\Scene\TitleScene.cpp" />
     <ClCompile Include="Engine\3d\WorldTransform.cpp" />
     <ClCompile Include="Engine\PostEffect\BasePostEffect.cpp" />
@@ -205,9 +206,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\Pipeline.cpp" />
     <ClCompile Include="GameProgram\StageObjects\StageObjectFunction.cpp" />
     <ClCompile Include="GameProgram\StageObjects\MoveGround.cpp" />
-    <ClCompile Include="VisualActor.cpp" />
+    <ClCompile Include="GameProgram\System\VisualActor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\base\AbstractSceneFactory.h" />
     <ClInclude Include="GameProgram\Boss\BaseBossState.h" />
     <ClInclude Include="GameProgram\Boss\Boss.h" />
     <ClInclude Include="GameProgram\Enemies\BaseEnemyState.h" />
@@ -280,7 +282,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\math\Vector3.h" />
     <ClInclude Include="Engine\math\Vector4.h" />
     <ClInclude Include="Engine\base\WinApp.h" />
-    <ClInclude Include="Engine\base\MyGame.h" />
+    <ClInclude Include="GameProgram\MyGame.h" />
     <ClInclude Include="GameProgram\Scene\TitleScene.h" />
     <ClInclude Include="Engine\3d\WorldTransform.h" />
     <ClInclude Include="Engine\PostEffect\BasePostEffect.h" />
@@ -303,7 +305,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\Pipeline.h" />
     <ClInclude Include="GameProgram\StageObjects\StageObjectFunction.h" />
     <ClInclude Include="GameProgram\StageObjects\MoveGround.h" />
-    <ClInclude Include="VisualActor.h" />
+    <ClInclude Include="GameProgram\System\VisualActor.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
