@@ -8,20 +8,24 @@
 #include "ClearScene.h"
 #include "GameOverScene.h"
 
-#include "SceneFactory.h"
+#include "AbstractSceneFactory.h"
 
 /// <summary>
 /// シーンマネージャ
 /// </summary>
 class SceneManager {
 public:
+
+	static std::shared_ptr<SceneManager> GetInstance();
+
+
 	SceneManager();
 	~SceneManager();
 
 	/// <summary>
-	/// 初期化処理
+	/// 更新処理
 	/// </summary>
-	void Initialize();
+	void SceneUpdate();
 	/// <summary>
 	/// 更新処理
 	/// </summary>
@@ -39,24 +43,31 @@ public:
 	/// ゲーム終了時の処理
 	/// </summary>
 	/// <returns></returns>trueで終了
-	bool SetGameEnd() { return sceneArr_->GetIsGameEnd(); }
+	bool SetGameEnd() { return scene_->GetIsGameEnd(); }
 
-private:
+	/// <summary>
+	/// 次のシーンに移りますよのフラグ
+	/// </summary>
+	bool NextSceneChangeFlag();
+
 	/// <summary>
 	/// シーン入れ替え
 	/// </summary>
-	void SceneChange();
+	void ChangeScene(const std::string& sceneName);
 
-	/// <summary>
-	/// シーンを作成し代入する
-	/// </summary>
-	void BuildScene();
+	void SetSceneFactory(AbstractSceneFactory* sceneFactory) { sceneFactory_ = sceneFactory; }
 
-	std::unique_ptr<BaseScene> sceneArr_;
-	SceneFactory sceneFactory_;
+private:
 
-	std::string currentScene_;//現在シーン
-	std::string prevScene_;//前シーン
+	static std::shared_ptr<SceneManager> sInstance_;
+
+	//friend struct std::default_delete<SceneManager>;
+
+	BaseScene* scene_ = nullptr;//現在シーン
+	BaseScene* nextScene_ = nullptr;//次のシーン
 
 	std::unique_ptr<BaseScene> settingScene_;
+
+	AbstractSceneFactory* sceneFactory_ = nullptr;
+
 };

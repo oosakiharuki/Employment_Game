@@ -327,9 +327,6 @@
     <ClCompile Include="GameProgram\StageObjects\IStageObject.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\MyGame.cpp">
-      <Filter>ソース ファイル\Engine\base</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\base\Framework.cpp">
       <Filter>ソース ファイル\Engine\base</Filter>
     </ClCompile>
@@ -414,14 +411,20 @@
     <ClCompile Include="GameProgram\Boss\BaseBossState.cpp">
       <Filter>ソース ファイル\GameProgram\Boss</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\StageObjects\MoveGround.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="VisualActor.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\LevelEditor\SpitOutLevelEditor.cpp">
       <Filter>ソース ファイル\GameProgram\LevelEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\MyGame.cpp">
+      <Filter>ソース ファイル\GameProgram</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\AbstractSceneFactory.cpp">
+      <Filter>ソース ファイル\Engine\base</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\MoveGround.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\System\VisualActor.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -617,9 +620,6 @@
     <ClInclude Include="GameProgram\StageObjects\WarpGate.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\MyGame.h">
-      <Filter>ヘッダー ファイル\Engine\base</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\base\Framework.h">
       <Filter>ヘッダー ファイル\Engine\base</Filter>
     </ClInclude>
@@ -704,14 +704,20 @@
     <ClInclude Include="GameProgram\Boss\BaseBossState.h">
       <Filter>ヘッダー ファイル\GameProgram\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\StageObjects\MoveGround.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="VisualActor.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\LevelEditor\SpitOutLevelEditor.h">
       <Filter>ヘッダー ファイル\GameProgram\LevelEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\MyGame.h">
+      <Filter>ヘッダー ファイル\GameProgram</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\AbstractSceneFactory.h">
+      <Filter>ヘッダー ファイル\Engine\base</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\MoveGround.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\System\VisualActor.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

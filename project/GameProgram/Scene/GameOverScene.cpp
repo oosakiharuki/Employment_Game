@@ -1,5 +1,5 @@
 #include "GameOverScene.h"
-
+#include "SceneManager.h"
 void GameOverScene::Initialize() {
 	//スプライト初期化処理
 	InitSprite();
@@ -95,10 +95,14 @@ void GameOverScene::SceneUpdate() {
 	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
 	if ((Input::GetInstance()->TriggerKey(DIK_SPACE) ||
 		Input::GetInstance()->TriggerButton(state_, preState_, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance()->GetIsFading()) {
-		nextSceneNo_ = "Select";
+		SceneManager::GetInstance()->ChangeScene("Select");
 		FadeScreen::GetInstance()->SetMaskTexture("fade01.png");
 		FadeScreen::GetInstance()->SetBackGround("fadeTexture.png");
 	}
 
-	ChangeSceneNo();
+	//次のシーンに移動するとき
+	if (SceneManager::GetInstance()->NextSceneChangeFlag()) {
+		//フェードを挟む(FadeIn)
+		FadeScreen::GetInstance()->FadeStart(type_fadeIn);
+	}
 }

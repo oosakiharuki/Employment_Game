@@ -1,4 +1,5 @@
 #include "TitleScene.h"
+#include "SceneManager.h"
 #include "UseEveryOne.h"
 
 using namespace MyMath;
@@ -159,15 +160,18 @@ void TitleScene::Finalize() {}
 
 void TitleScene::SceneUpdate() {
 	if (isNextSelectScene) {
-		nextSceneNo_ = "Select";
+		SceneManager::GetInstance()->ChangeScene("Select");
 	}
 
 	if (isNextGameEnd) {
-		nextSceneNo_ = "End";
+		isGameEnd_ = true;
 	}
 
-	ChangeSceneNo();
-
+	//次のシーンに移動するとき
+	if (SceneManager::GetInstance()->NextSceneChangeFlag()) {
+		//フェードを挟む(FadeIn)
+		FadeScreen::GetInstance()->FadeStart(type_fadeIn);
+	}
 }
 
 void TitleScene::Operation(){
@@ -223,7 +227,6 @@ void TitleScene::MoveTitleLogo() {
 			if (transforms_["umbrella_Open"].translate.y == transforms_["Select_Start"].translate.y) {
 				//セレクトシーンに移動
 				isNextSelectScene = true;
-				nextSceneNo_ = "Select";//セレクトシーンに移動
 			}
 			else if (transforms_["umbrella_Open"].translate.y == transforms_["Select_End"].translate.y) {
 				//ゲーム終了

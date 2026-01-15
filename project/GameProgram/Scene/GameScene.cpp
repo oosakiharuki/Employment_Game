@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include <sstream>
 #include "StageObjectFunction.h"
+#include "SceneManager.h"
 
 using namespace MyMath;
 using namespace StageObjectFunction;
@@ -373,31 +374,31 @@ void GameScene::Respawn() {
 void GameScene::SceneUpdate() {
 
 	if (input_->TriggerKey(DIK_F2)) {
-		nextSceneNo_ = "Clear";//クリアシーンに移動
+		SceneManager::GetInstance()->ChangeScene("Clear");//クリアシーンに移動
 	}
 
 	if (isNextClearScene) {
-		nextSceneNo_ = "Clear";//クリアシーンに移動
+		SceneManager::GetInstance()->ChangeScene("Clear");//クリアシーンに移動
 	}
 	else if (isNextLoadingStageScene) {
-		nextSceneNo_ = "NextStage";//次のステージに移動
+		SceneManager::GetInstance()->ChangeScene("NextStage");//次のステージに移動
 	}
 	else if (isNextGameOverScene) {
-		nextSceneNo_ = "GameOver";//ゲームオーバーシーンに移動
+		SceneManager::GetInstance()->ChangeScene("GameOver");//ゲームオーバーシーンに移動
 	}
 
 	if (boss_) {
 		//ボスを倒したら
 		if (boss_->IsDead()) {
-			nextSceneNo_ = "Clear";//クリアシーンに移動
+			SceneManager::GetInstance()->ChangeScene("Clear");//クリアシーンに移動
 		}
 	}
-
-
-	// 前回のシーンが現在のシーンと異なっている時
-	if (NextSceneFlag()) {
-		Audio::GetInstance()->StopWave(BGMData_);//BGM停止
+	
+	//次のシーンに移動するとき
+	if (SceneManager::GetInstance()->NextSceneChangeFlag()) {
+		//BGM停止
+		Audio::GetInstance()->StopWave(BGMData_);
+		//フェードを挟む(FadeIn)
+		FadeScreen::GetInstance()->FadeStart(type_fadeIn);
 	}
-
-	ChangeSceneNo();
 }

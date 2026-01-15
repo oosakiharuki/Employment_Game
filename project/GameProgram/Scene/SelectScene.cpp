@@ -1,5 +1,6 @@
 #include "SelectScene.h"
 #include "StageObjectFunction.h"
+#include "SceneManager.h"
 
 using namespace MyMath;
 using namespace StageObjectFunction;
@@ -149,13 +150,16 @@ void SelectScene::SceneUpdate() {
 
 	//タイトルに戻る
 	if (input_->TriggerKey(DIK_ESCAPE)) {
-		nextSceneNo_ = "Title";
+		SceneManager::GetInstance()->ChangeScene("Title");
 	}
 
 	if (isNextGameScene) {
-		nextSceneNo_ = "Game";
+		SceneManager::GetInstance()->ChangeScene("Game");
 	}
 
-	//ゲームシーンに移動
-	ChangeSceneNo();
+	//次のシーンに移動するとき
+	if (SceneManager::GetInstance()->NextSceneChangeFlag()) {
+		//フェードを挟む(FadeIn)
+		FadeScreen::GetInstance()->FadeStart(type_fadeIn);
+	}
 }

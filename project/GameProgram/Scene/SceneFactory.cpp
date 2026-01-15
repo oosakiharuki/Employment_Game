@@ -6,35 +6,34 @@
 #include "GameOverScene.h"
 #include "LoadingStageScene.h"
 
-void SceneFactory::MakeScene(const std::string& preScene) {
-	
-	// シーンの名前が同じであれば
+BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
+
+	BaseScene* newScene{};
+
 	//タイトル
-	if (preScene == "Title") {
-		sceneG_[preScene] = std::make_unique<TitleScene>();
+	if (sceneName == "Title") {
+		newScene = new TitleScene();
 	}
 	//セレクトシーン
-	else if(preScene == "Select") {
-		sceneG_[preScene] = std::make_unique<SelectScene>();
+	else if (sceneName == "Select") {
+		newScene = new SelectScene();
 	}
 	//ゲームシーン
-	else if (preScene == "Game") {
-		sceneG_[preScene] = std::make_unique<GameScene>();
+	else if (sceneName == "Game") {
+		newScene = new GameScene();
 	}
 	//ゲームオーバーシーン
-	else if (preScene == "GameOver") {
-		sceneG_[preScene] = std::make_unique<GameOverScene>();
+	else if (sceneName == "GameOver") {
+		newScene = new GameOverScene();
 	}
 	//クリアシーン
-	else if(preScene == "Clear") {
-		sceneG_[preScene] = std::make_unique<ClearScene>();
+	else if (sceneName == "Clear") {
+		newScene = new ClearScene();
 	}
 	//ローディングシーン(ステージの変更時)
-	else if(preScene == "NextStage") {
-		sceneG_[preScene] = std::make_unique<LoadingStageScene>();
+	else if (sceneName == "NextStage") {
+		newScene = new LoadingStageScene();
 	}
-}
 
-std::unique_ptr<BaseScene> SceneFactory::GetSceneGroup(std::string name) {
-	return std::move(sceneG_[name]);
+	return newScene;//std::moveかも
 }
