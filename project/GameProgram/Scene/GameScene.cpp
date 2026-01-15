@@ -374,28 +374,28 @@ void GameScene::Respawn() {
 void GameScene::SceneUpdate() {
 
 	if (input_->TriggerKey(DIK_F2)) {
-		SceneManager::GetInstance()->ChangeScene("Clear");//クリアシーンに移動
+		SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動
 	}
 
 	if (isNextClearScene) {
-		SceneManager::GetInstance()->ChangeScene("Clear");//クリアシーンに移動
+		SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動
 	}
 	else if (isNextLoadingStageScene) {
-		SceneManager::GetInstance()->ChangeScene("NextStage");//次のステージに移動
+		SceneManager::GetInstance().ChangeScene("NextStage");//次のステージに移動
 	}
 	else if (isNextGameOverScene) {
-		SceneManager::GetInstance()->ChangeScene("GameOver");//ゲームオーバーシーンに移動
+		SceneManager::GetInstance().ChangeScene("GameOver");//ゲームオーバーシーンに移動
 	}
 
 	if (boss_) {
 		//ボスを倒したら
 		if (boss_->IsDead()) {
-			SceneManager::GetInstance()->ChangeScene("Clear");//クリアシーンに移動
+			SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動
 		}
 	}
 	
 	//次のシーンに移動するとき
-	if (SceneManager::GetInstance()->NextSceneChangeFlag()) {
+	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//BGM停止
 		Audio::GetInstance()->StopWave(BGMData_);
 		//フェードを挟む(FadeIn)

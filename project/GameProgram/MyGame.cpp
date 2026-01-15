@@ -15,11 +15,11 @@ void MyGame::Initialize() {
 	fadeScreen_->Initialize();
 
 	sceneFactory_ = new SceneFactory();
-	SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
+	SceneManager::GetInstance().SetSceneFactory(sceneFactory_);
 
-	SceneManager::GetInstance()->ChangeScene("Title");
+	SceneManager::GetInstance().ChangeScene("Title");
 	//シーンの更新処理(変更処理)
-	SceneManager::GetInstance()->SceneUpdate();
+	SceneManager::GetInstance().SceneUpdate();
 }
 
 void MyGame::Update() {
@@ -35,14 +35,14 @@ void MyGame::Update() {
 	//フェード中は変更しない
 	if (!fadeScreen_->GetIsFading()) {
 		//シーンの更新処理(変更処理)
-		SceneManager::GetInstance()->SceneUpdate();
+		SceneManager::GetInstance().SceneUpdate();
 	}
 
-	SceneManager::GetInstance()->Update();
+	SceneManager::GetInstance().Update();
 
 	//タイトル画面で終了を選択した時するとき
-	if (SceneManager::GetInstance()->SetGameEnd()) {
-		Framework::SetIsEndRequest(SceneManager::GetInstance()->SetGameEnd());
+	if (SceneManager::GetInstance().SetGameEnd()) {
+		Framework::SetIsEndRequest(SceneManager::GetInstance().SetGameEnd());
 	}
 
 	//フェード更新
@@ -62,7 +62,7 @@ void MyGame::Draw() {
 	DirectXCommon::GetInstance()->RenderTexturePreDraw();// 対 renderTexture
 	
 	//ゲームシーン描画
-	SceneManager::GetInstance()->Draw();
+	SceneManager::GetInstance().Draw();
 
 	DirectXCommon::GetInstance()->RenderTexturePostDraw();
 
@@ -86,9 +86,8 @@ void MyGame::Draw() {
 
 
 void MyGame::Finalize() {
-	SceneManager::GetInstance().reset();
 	fadeScreen_->Finalize();
-	SceneManager::GetInstance()->Finalize();
+	SceneManager::GetInstance().Finalize();
 	delete sceneFactory_;
 
 #ifdef  USE_IMGUI

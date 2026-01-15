@@ -15,8 +15,11 @@
 /// </summary>
 class SceneManager {
 public:
-
-	static std::shared_ptr<SceneManager> GetInstance();
+	/// <summary>
+	/// インスタンス生成
+	/// </summary>
+	/// <returns></returns>
+	static SceneManager& GetInstance();
 
 
 	SceneManager();
@@ -58,15 +61,13 @@ public:
 	void SetSceneFactory(AbstractSceneFactory* sceneFactory) { sceneFactory_ = sceneFactory; }
 
 private:
+	//インスタンス
+	static std::unique_ptr<SceneManager> sInstance_;
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<SceneManager>;
 
-	static std::shared_ptr<SceneManager> sInstance_;
-
-	//friend struct std::default_delete<SceneManager>;
-
-	BaseScene* scene_ = nullptr;//現在シーン
-	BaseScene* nextScene_ = nullptr;//次のシーン
-
-	std::unique_ptr<BaseScene> settingScene_;
+	std::unique_ptr<BaseScene> scene_ = nullptr;//現在シーン
+	std::unique_ptr<BaseScene> nextScene_ = nullptr;//次のシーン
 
 	AbstractSceneFactory* sceneFactory_ = nullptr;
 

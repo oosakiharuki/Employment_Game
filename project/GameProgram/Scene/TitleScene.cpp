@@ -160,7 +160,7 @@ void TitleScene::Finalize() {}
 
 void TitleScene::SceneUpdate() {
 	if (isNextSelectScene) {
-		SceneManager::GetInstance()->ChangeScene("Select");
+		SceneManager::GetInstance().ChangeScene("Select");
 	}
 
 	if (isNextGameEnd) {
@@ -168,7 +168,7 @@ void TitleScene::SceneUpdate() {
 	}
 
 	//次のシーンに移動するとき
-	if (SceneManager::GetInstance()->NextSceneChangeFlag()) {
+	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//フェードを挟む(FadeIn)
 		FadeScreen::GetInstance()->FadeStart(type_fadeIn);
 	}

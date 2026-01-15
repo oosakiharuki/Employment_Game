@@ -150,15 +150,15 @@ void SelectScene::SceneUpdate() {
 
 	//タイトルに戻る
 	if (input_->TriggerKey(DIK_ESCAPE)) {
-		SceneManager::GetInstance()->ChangeScene("Title");
+		SceneManager::GetInstance().ChangeScene("Title");
 	}
 
 	if (isNextGameScene) {
-		SceneManager::GetInstance()->ChangeScene("Game");
+		SceneManager::GetInstance().ChangeScene("Game");
 	}
 
 	//次のシーンに移動するとき
-	if (SceneManager::GetInstance()->NextSceneChangeFlag()) {
+	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//フェードを挟む(FadeIn)
 		FadeScreen::GetInstance()->FadeStart(type_fadeIn);
 	}

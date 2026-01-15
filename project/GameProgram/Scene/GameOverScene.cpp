@@ -95,13 +95,13 @@ void GameOverScene::SceneUpdate() {
 	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
 	if ((Input::GetInstance()->TriggerKey(DIK_SPACE) ||
 		Input::GetInstance()->TriggerButton(state_, preState_, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance()->GetIsFading()) {
-		SceneManager::GetInstance()->ChangeScene("Select");
+		SceneManager::GetInstance().ChangeScene("Select");
 		FadeScreen::GetInstance()->SetMaskTexture("fade01.png");
 		FadeScreen::GetInstance()->SetBackGround("fadeTexture.png");
 	}
 
 	//次のシーンに移動するとき
-	if (SceneManager::GetInstance()->NextSceneChangeFlag()) {
+	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//フェードを挟む(FadeIn)
 		FadeScreen::GetInstance()->FadeStart(type_fadeIn);
 	}

@@ -19,5 +19,5 @@ void LoadingStageScene::Finalize() {}
 
 void LoadingStageScene::SceneUpdate() {
 	//すぐさまゲームシーンに
-	SceneManager::GetInstance()->ChangeScene("Game");
+	SceneManager::GetInstance().ChangeScene("Game");
 }
