@@ -8,13 +8,13 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-std::unique_ptr<CollisionManager> CollisionManager::sInstance_ = nullptr;
+std::shared_ptr<CollisionManager> CollisionManager::sInstance_ = nullptr;
 
-CollisionManager& CollisionManager::GetInstance() {
+std::shared_ptr<CollisionManager> CollisionManager::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<CollisionManager>();
 	}
-	return *sInstance_;
+	return sInstance_;
 }
 
 
@@ -106,15 +106,15 @@ void CollisionManager::PlayerAndStageObject(Player* player,
 				player->SetInit_Position(stageObject->GetPosition(), player->GetRotate());
 			}
 			//ゴール
-			else if (stageObject->GetObjectName() == "Goal" && Input::GetInstance().TriggerKey(DIK_E)) {
+			else if (stageObject->GetObjectName() == "Goal" && Input::GetInstance()->TriggerKey(DIK_E)) {
 				isGoal_ = true;
 			}
 			//stageObjectsの中でワープゲートである場合
-			else if (stageObject->GetObjectName() == "WarpGate" && Input::GetInstance().TriggerKey(DIK_E)) {
+			else if (stageObject->GetObjectName() == "WarpGate" && Input::GetInstance()->TriggerKey(DIK_E)) {
 				//プレイヤーとワープゲートの当たり判定 + Eキーを押した時
 				isWarp_ = true;
 				//次のステージに持ってくる情報
-				NextStageSave::GetInstance().SetNextStageFile(stageObject->GetNextStage());
+				NextStageSave::GetInstance()->SetNextStageFile(stageObject->GetNextStage());
 				player->IsGround(true);
 				break;
 			}

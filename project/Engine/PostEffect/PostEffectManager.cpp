@@ -1,17 +1,20 @@
 #include "PostEffectManager.h"
 
-std::unique_ptr<PostEffectManager> PostEffectManager::sInstance_ = nullptr;
+std::shared_ptr<PostEffectManager> PostEffectManager::sInstance_ = nullptr;
 
-PostEffectManager& PostEffectManager::GetInstance() {
+std::shared_ptr<PostEffectManager> PostEffectManager::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<PostEffectManager>();
 	}
-	return *sInstance_;
+	return sInstance_;
 }
 
 void PostEffectManager::Finalize() {
 	effectArr_[currentNo_]->Finalize();
 	effectArr_[currentNo_].reset();
+
+	sInstance_.reset();
+	sInstance_ = nullptr;
 }
 
 void PostEffectManager::Change(int prev, int current) {
@@ -59,15 +62,18 @@ void PostEffectManager::Change(int prev, int current) {
 	}
 	
 }
-void PostEffectManager::Initialize() {
-	//ポストエフェクト作成
+void PostEffectManager::Initialize(DirectXCommon* dxCommon) {
+	
+	
 	effectArr_[Mode_DepthBasedOutline] = std::make_unique<DepthBasedOutline>();
 
 	prevNo_ = 0;
 	currentNo_ = Mode_DepthBasedOutline;
 	
-	//
-	effectArr_[currentNo_]->Initialize();	
+
+	dxCommon_ = dxCommon;
+	effectArr_[currentNo_]->Initialize(dxCommon_);	
+
 }
 
 void PostEffectManager::Update() {
@@ -77,7 +83,7 @@ void PostEffectManager::Update() {
 
 	if (prevNo_ != currentNo_) {
 		Change(prevNo_, currentNo_);
-		effectArr_[currentNo_]->Initialize();
+		effectArr_[currentNo_]->Initialize(dxCommon_);
 	}
 #ifdef USE_IMGUI
 	ImGui::Begin("PostEffect");

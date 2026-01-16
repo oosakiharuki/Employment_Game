@@ -35,15 +35,16 @@ Particle::~Particle() {
 }
 
 void Particle::Initialize(const std::string& particleName, const std::string& textureFile , const ModelData& modelData) {
-	this->camera_ = ParticleCommon::GetInstance().GetDefaultCamera();
+	this->particleCommon_ = ParticleCommon::GetInstance().get();
+	this->camera_ = particleCommon_->GetDefaultCamera();
 
 	//particleの設定
-	ParticleManager::GetInstance().CreateParticleGroup(particleName, textureFile, modelData);
+	ParticleManager::GetInstance()->CreateParticleGroup(particleName, textureFile, modelData);
 
 	this->fileName_ = particleName;
 	this->textureFile_ = textureFile;
 
-	modelData_ = ParticleManager::GetInstance().GetModelData(fileName_);
+	modelData_ = ParticleManager::GetInstance()->GetModelData(fileName_);
 
 	//vertexResourceを作成
 	InitVertex();
@@ -55,9 +56,9 @@ void Particle::Initialize(const std::string& particleName, const std::string& te
 	InitLight();
 
 	//
-	InitParameter();
+	InitParameta();
 
-	ParticleManager::GetInstance().SetCamera(camera_);
+	ParticleManager::GetInstance()->SetCamera(camera_);
 }
 
 void Particle::Update() {
@@ -70,13 +71,13 @@ void Particle::Update() {
 		//時間が特定数を上回ったら
 		if (emitter_.frequency <= emitter_.frequencyTime) {
 			//発生処理
-			ParticleManager::GetInstance().Emit(fileName_, emitter_);
+			ParticleManager::GetInstance()->Emit(fileName_, emitter_);
 			emitter_.frequencyTime -= emitter_.frequency;//時間を元に戻す
 		}
 		break;
 	case ParticleBorn::MomentMode:
 		//発生処理
-		ParticleManager::GetInstance().Emit(fileName_, emitter_);
+		ParticleManager::GetInstance()->Emit(fileName_, emitter_);
 		particleBorn_ = ParticleBorn::Stop;//すぐに止める
 		break;
 	case ParticleBorn::Stop:
@@ -84,9 +85,9 @@ void Particle::Update() {
 	}
 
 	//出てきたパーティクルの更新処理
-	ParticleManager::GetInstance().Update(fileName_, wvpData_);
+	ParticleManager::GetInstance()->Update(fileName_, wvpData_);
 	//出ているパーティクルの数(インスタンス)をコピー
-	numInstance_ = ParticleManager::GetInstance().GetNum(fileName_);
+	numInstance_ = ParticleManager::GetInstance()->GetNum(fileName_);
 
 	// directionalLightSphereDataのnullチェック
 	if (directionalLightSphereData_) {
@@ -111,30 +112,30 @@ void Particle::Draw() {
 
 	//パーティクルが出ていないときはパス
 	if (numInstance_ > 0) {
-		DirectXCommon::GetInstance().GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance().GetSrvHandleGPU(textureFile_));
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource_->GetGPUVirtualAddress());
+		particleCommon_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+		particleCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
+		particleCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+		particleCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(textureFile_));
+		particleCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource_->GetGPUVirtualAddress());
 
 		//4のやつ particle専用
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(4, ParticleManager::GetInstance().GetSrvHandleGPU(fileName_));
-		DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), numInstance_, 0, 0);
+		particleCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(4, ParticleManager::GetInstance()->GetSrvHandleGPU(fileName_));
+		particleCommon_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), numInstance_, 0, 0);
 	}
 	numInstance_ = 0;
 
-	ParticleManager::GetInstance().ResetNum(fileName_);
+	ParticleManager::GetInstance()->ResetNum(fileName_);
 }
 
 void Particle::InitVertex() {
 
-	vertexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+	vertexResource_ = particleCommon_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
 	vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
-	wvpResource_ = ParticleManager::GetInstance().GetResource(fileName_);
+	wvpResource_ = ParticleManager::GetInstance()->GetResource(fileName_);
 	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 
 	for (uint32_t index = 0; index < kNumMaxInstance_; ++index) {
@@ -149,7 +150,7 @@ void Particle::InitVertex() {
 
 void Particle::InitMaterial() {
 	//マテリアル用のリソース
-	materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
+	materialResource_ = particleCommon_->GetDxCommon()->CreateBufferResource(sizeof(Material));
 	//書き込むためのアドレス
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//色の設定
@@ -158,11 +159,11 @@ void Particle::InitMaterial() {
 	materialData_->uvTransform = MakeIdentity4x4();
 
 	//テクスチャ読み込み
-	TextureManager::GetInstance().LoadTexture(modelData_.materialData.textureFilePath);
-	modelData_.materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(modelData_.materialData.textureFilePath);
+	TextureManager::GetInstance()->LoadTexture(modelData_.materialData.textureFilePath);
+	modelData_.materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData_.materialData.textureFilePath);
 }
 
-void Particle::InitParameter() {
+void Particle::InitParameta() {
 	//エミッター初期化
 	emitter_.transform.translate = { 0.0f,0.0f,-3.0f };
 	emitter_.transform.rotate = { 0.0f,0.0f,0.0f };
@@ -176,7 +177,7 @@ void Particle::InitParameter() {
 }
 
 void Particle::InitLight() {
-	directionalLightSphereResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(DirectionalLight));
+	directionalLightSphereResource_ = particleCommon_->GetDxCommon()->CreateBufferResource(sizeof(DirectionalLight));
 	//書き込むためのアドレス
 	directionalLightSphereResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightSphereData_));
 	//色の設定

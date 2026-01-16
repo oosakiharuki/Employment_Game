@@ -4,7 +4,7 @@
 using namespace MyMath;
 
 void BaseObject::InitCamera() {
-	cameraResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(CameraForGPU));
+	cameraResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(CameraForGPU));
 	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraData_));
 
 	cameraData_->worldPosition = { 0,0,0 };
@@ -22,7 +22,7 @@ void BaseObject::InitLight() {
 
 void BaseObject::CreateDirectionalLight() {
 	//ライト用のリソース
-	directionalLightResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(DirectionalLight));
+	directionalLightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(DirectionalLight));
 	//書き込むためのアドレス
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
 	//色の設定
@@ -33,7 +33,7 @@ void BaseObject::CreateDirectionalLight() {
 
 void BaseObject::CreatePointLight() {
 	//ライト用のリソース
-	pointLightResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(PointLight));
+	pointLightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(PointLight));
 	//書き込むためのアドレス
 	pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
 	//_
@@ -46,7 +46,7 @@ void BaseObject::CreatePointLight() {
 
 void BaseObject::CreateSpotLight() {
 	//ライト用のリソース
-	spotLightResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(SpotLight));
+	spotLightResource_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(SpotLight));
 	//書き込むためのアドレス
 	spotLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&spotLightData_));
 	//設定

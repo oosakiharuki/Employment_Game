@@ -3,13 +3,13 @@
 
 using namespace MyMath;
 
-std::unique_ptr<ParticleEmitter> ParticleEmitter::sInstance_ = nullptr;
+std::shared_ptr<ParticleEmitter> ParticleEmitter::sInstance_ = nullptr;
 
-ParticleEmitter& ParticleEmitter::GetInstance() {
+std::shared_ptr<ParticleEmitter> ParticleEmitter::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<ParticleEmitter>();
 	}
-	return *sInstance_;
+	return sInstance_;
 }
 
 ParticleData ParticleEmitter::MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter) {

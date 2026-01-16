@@ -2,17 +2,21 @@
 
 using namespace Logger;
 
-std::unique_ptr<CubeMap> CubeMap::sInstance_ = nullptr;
+std::shared_ptr<CubeMap> CubeMap::sInstance_ = nullptr;
 
-CubeMap& CubeMap::GetInstance() {
+std::shared_ptr<CubeMap> CubeMap::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<CubeMap>();
 	}
-	return *sInstance_;
+	return sInstance_;
 }
-void CubeMap::Finalize() {}
+void CubeMap::Finalize() {
+	sInstance_.reset();
+	sInstance_ = nullptr;
+}
+void CubeMap::Initialize(DirectXCommon* dxCommon) {
+	dxCommon_ = dxCommon;
 
-void CubeMap::Initialize() {
 	GraphicsPipeline();
 }
 
@@ -49,12 +53,12 @@ void CubeMap::CreateRasterizer() {
 }
 
 void CubeMap::CreateVertexShader() {
-	vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Skybox.VS.hlsl", L"vs_6_0");
+	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Skybox.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 
 void CubeMap::CreatePixelShader() {
-	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Skybox.PS.hlsl", L"ps_6_0");
+	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Skybox.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }
 
@@ -65,7 +69,7 @@ void CubeMap::CreateDepthStencil() {
 }
 
 void CubeMap::Command() {
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

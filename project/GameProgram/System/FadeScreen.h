@@ -12,7 +12,7 @@ enum FadeType {
 /// </summary>
 class FadeScreen {
 public:
-	static FadeScreen& GetInstance();
+	static std::shared_ptr<FadeScreen> GetInstance();
 
 	/// <summary>
 	/// 初期化処理
@@ -60,10 +60,8 @@ private:
 	/// フェードアウト(ゲーム画面)
 	/// </summary>
 	void FadeOut();
-	//インスタンス
-	static std::unique_ptr<FadeScreen> sInstance_;
-	//default_deleteを設定(解放処理を行える)
-	friend struct std::default_delete<FadeScreen>;
+
+	static std::shared_ptr<FadeScreen> sInstance_;
 
 	//使用するスプライト
 	std::unique_ptr<Sprite> sprite_;

@@ -30,7 +30,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static UIManager& GetInstance();
+	static std::shared_ptr<UIManager> GetInstance();
 
 	void CreateSprite(const SpriteData& spriteData);
 
@@ -68,8 +68,7 @@ public:
 	std::string GetSpriteTexture(const std::string name);
 
 private:
-	//インスタン
-	static std::unique_ptr<UIManager> sInstance_;
+	static std::shared_ptr<UIManager> sInstance_;
 
 	std::vector<Guide> guides_;
 	

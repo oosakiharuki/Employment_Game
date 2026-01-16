@@ -32,7 +32,7 @@ void Enemy_Turret::Initialize() {
 	particleLaser_.basicSize = particleLaserSize_;
 
 	//レーザー(見える範囲)の初期化処理
-	particles_[particleLaser_.name] = ParticleManager::GetInstance().InitParticle(particleLaser_);
+	particles_[particleLaser_.name] = ParticleManager::GetInstance()->InitParticle(particleLaser_);
 	//ちょっと大きく
 	particles_[particleFire_.name]->SetScale(kParticleFireSize_);
 }

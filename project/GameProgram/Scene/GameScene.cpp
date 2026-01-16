@@ -8,17 +8,17 @@ using namespace StageObjectFunction;
 
 void GameScene::Initialize() {
 	//ゲームデータ引継ぎ(Hp,ステージ面)
-	sceneSaveData_ = NextStageSave::GetInstance().GetNextStageSaveData();
+	sceneSaveData_ = NextStageSave::GetInstance()->GetNextStageSaveData();
 
 	//ゲームオブジェクト配置
 	LevelEditorObjectSetting();
 	
 	//BGM、SEの設定
-	BGMData_ = Audio::GetInstance().LoadWave("resource/sound/title.wav");
-	soundData_ = Audio::GetInstance().LoadWave("resource/sound/bane.wav");
+	BGMData_ = Audio::GetInstance()->LoadWave("resource/sound/title.wav");
+	soundData_ = Audio::GetInstance()->LoadWave("resource/sound/bane.wav");
 
 	//BGM再生(リピート)
-	Audio::GetInstance().SoundPlayWave(BGMData_, volume_, true);
+	Audio::GetInstance()->SoundPlayWave(BGMData_, volume_, true);
 
 	//スタート演出
 	WaterWarpExit();
@@ -29,9 +29,9 @@ void GameScene::Initialize() {
 	}
 
 	//フェードスタート
-	FadeScreen::GetInstance().FadeStart(type_fadeOut);
+	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 	//ワープやゴールのフラグをオフ
-	CollisionManager::GetInstance().ResetFlag();
+	CollisionManager::GetInstance()->ResetFlag();
 }
 
 void GameScene::Update() {
@@ -51,11 +51,11 @@ void GameScene::Update() {
 
 
 	//プレイヤーがゴールした
-	if (CollisionManager::GetInstance().IsGoal()) {
+	if (CollisionManager::GetInstance()->IsGoal()) {
 		PlayerGoal();
 	}
 	//次のシーンに移動する
-	if (CollisionManager::GetInstance().IsWarp()) {
+	if (CollisionManager::GetInstance()->IsWarp()) {
 		WarpNextScene(*player_.get(),cameraControl_.get(), isNextLoadingStageScene);
 	}
 
@@ -100,9 +100,9 @@ void GameScene::Update() {
 	}
 
 	//プレイヤーが移動したら変更
-	UIManager::GetInstance().SetPlayerTranslate(player_->GetTranslate());
+	UIManager::GetInstance()->SetPlayerTranslate(player_->GetTranslate());
 	//スプライト更新処理
-	UIManager::GetInstance().Update();
+	UIManager::GetInstance()->Update();
 
 #ifdef  USE_IMGUI
 
@@ -119,7 +119,7 @@ void GameScene::Update() {
 
 #endif //  USE_IMGUI
 
-	Audio::GetInstance().ControlVolume(BGMData_, volume_);
+	Audio::GetInstance()->ControlVolume(BGMData_, volume_);
 }
 
 void GameScene::PlayerAliveUpdate() {
@@ -156,7 +156,7 @@ void GameScene::PlayerAliveUpdate() {
 
 void GameScene::Draw() {
 	//モデル描画処理
-	GLTFCommon::GetInstance().Command();
+	GLTFCommon::GetInstance()->Command();
 	
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->Draw();
@@ -167,7 +167,7 @@ void GameScene::Draw() {
 	}
 
 	//モデル描画処理
-	Object3dCommon::GetInstance().Command();
+	Object3dCommon::GetInstance()->Command();
 
 	stageObj_->Draw();
 
@@ -186,7 +186,7 @@ void GameScene::Draw() {
 	player_->Draw();
 
 	//パーティクル描画処理
-	ParticleCommon::GetInstance().Command();
+	ParticleCommon::GetInstance()->Command();
 
 	//敵のパーティクル描画
 	for (auto& enemy : enemies_) {
@@ -200,15 +200,15 @@ void GameScene::Draw() {
 	}
 
 	//スプライト描画処理(UI用)
-	SpriteCommon::GetInstance().Command();
+	SpriteCommon::GetInstance()->Command();
 
-	UIManager::GetInstance().Draw();
+	UIManager::GetInstance()->Draw();
 	//説明ガイド
-	UIManager::GetInstance().GuideDraw();
+	UIManager::GetInstance()->GuideDraw();
 }
 
 void GameScene::Finalize() {
-	UIManager::GetInstance().Finalize();
+	UIManager::GetInstance()->Finalize();
 }
 
 
@@ -230,13 +230,13 @@ void GameScene::LevelEditorObjectSetting(const std::string& levelEditor_file) {
 
 	//チュートリアル用の操作方法スプライト
 	if (stageFileName_ == "stage_0") {
-		UIManager::GetInstance().CreateGuide(kGuideMove_);
-		UIManager::GetInstance().CreateGuide(kGuideJump_);
-		UIManager::GetInstance().CreateGuide(kGuideFire_);
-		UIManager::GetInstance().CreateGuide(kGuideShield_);
-		UIManager::GetInstance().CreateGuide(kGuideBrink_);
-		UIManager::GetInstance().CreateGuide(kGuideGliding_);
-		UIManager::GetInstance().CreateGuide(kGuideWarp_);
+		UIManager::GetInstance()->CreateGuide(kGuideMove_);
+		UIManager::GetInstance()->CreateGuide(kGuideJump_);
+		UIManager::GetInstance()->CreateGuide(kGuideFire_);
+		UIManager::GetInstance()->CreateGuide(kGuideShield_);
+		UIManager::GetInstance()->CreateGuide(kGuideBrink_);
+		UIManager::GetInstance()->CreateGuide(kGuideGliding_);
+		UIManager::GetInstance()->CreateGuide(kGuideWarp_);
 	}
 }
 
@@ -251,11 +251,11 @@ void GameScene::SpitOutGameObject() {
 	spitOut_.SpitOutCamera(cameraControl_);
 
 	//各デフォルトカメラの設定
-	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
-	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
-	ParticleCommon::GetInstance().SetDefaultCamera(camera_.get());
-	DebugWireframes::GetInstance().SetDefaultCamera(camera_.get());
-	CubeMap::GetInstance().SetDefaultCamera(camera_.get());
+	Object3dCommon::GetInstance()->SetDefaultCamera(camera_.get());
+	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
+	ParticleCommon::GetInstance()->SetDefaultCamera(camera_.get());
+	DebugWireframes::GetInstance()->SetDefaultCamera(camera_.get());
+	CubeMap::GetInstance()->SetDefaultCamera(camera_.get());
 
 	//プレイヤーの体力を上書き
 	player_->Initialize();//初期設定
@@ -300,19 +300,19 @@ void GameScene::PlayerGoal() {
 void GameScene::CollisionCommon() {
 	//ゲーム内で使用する当たり判定
 	//プレイヤーと敵
-	CollisionManager::GetInstance().PlayerAndEnemy(player_.get(), enemies_);
+	CollisionManager::GetInstance()->PlayerAndEnemy(player_.get(), enemies_);
 	//プレイヤーとステージ自体
-	CollisionManager::GetInstance().PlayerAndStage(player_.get(), stagesAABB_);
+	CollisionManager::GetInstance()->PlayerAndStage(player_.get(), stagesAABB_);
 	//プレイヤーとステージオブジェクト
-	CollisionManager::GetInstance().PlayerAndStageObject(player_.get(), stageObjects_);
+	CollisionManager::GetInstance()->PlayerAndStageObject(player_.get(), stageObjects_);
 	//プレイヤーとイベントトリガー
-	CollisionManager::GetInstance().PlayerAndEventTrigger(player_.get(), eventTriggers_,cameraControl_.get(), levelEditor_);
+	CollisionManager::GetInstance()->PlayerAndEventTrigger(player_.get(), eventTriggers_,cameraControl_.get(), levelEditor_);
 	//敵とステージ自体
-	CollisionManager::GetInstance().EnemyAndStage(enemies_,stagesAABB_);
+	CollisionManager::GetInstance()->EnemyAndStage(enemies_,stagesAABB_);
 
 	if (boss_) {
 		//ボスとプレイヤー
-		CollisionManager::GetInstance().BossAndPlayer(*player_.get(),*boss_.get());
+		CollisionManager::GetInstance()->BossAndPlayer(*player_.get(),*boss_.get());
 	}
 }
 
@@ -335,7 +335,7 @@ void GameScene::WaterWarpExit() {
 	startWarpAABB.min = warpPosition + Vector3{ 0,startPointY_,0 };
 
 	//プレイヤー初期位置の真下に
-	warpPosition = CollisionManager::GetInstance().UnderCollision(stagesAABB_, startWarpAABB, playerPoint_);
+	warpPosition = CollisionManager::GetInstance()->UnderCollision(stagesAABB_, startWarpAABB, playerPoint_);
 	warpPosition.y += kWarpGateUpThanShadow_;//重ならないように影より上にする
 
 	startWarp_->SetPosition(warpPosition);//playerの真下に
@@ -348,8 +348,8 @@ void GameScene::Respawn() {
 	if (player_->GetRemain() == 0) {
 		//残機が0で倒された場合ゲームオーバー
 		isNextGameOverScene = true;
-		FadeScreen::GetInstance().SetMaskTexture("fade02.png");
-		FadeScreen::GetInstance().SetBackGround("black.png");
+		FadeScreen::GetInstance()->SetMaskTexture("fade02.png");
+		FadeScreen::GetInstance()->SetBackGround("black.png");
 		return;
 	}
 
@@ -373,7 +373,7 @@ void GameScene::Respawn() {
 
 void GameScene::SceneUpdate() {
 
-	if (Input::GetInstance().TriggerKey(DIK_F2)) {
+	if (input_->TriggerKey(DIK_F2)) {
 		SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動
 	}
 
@@ -397,8 +397,8 @@ void GameScene::SceneUpdate() {
 	//次のシーンに移動するとき
 	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//BGM停止
-		Audio::GetInstance().StopWave(BGMData_);
+		Audio::GetInstance()->StopWave(BGMData_);
 		//フェードを挟む(FadeIn)
-		FadeScreen::GetInstance().FadeStart(type_fadeIn);
+		FadeScreen::GetInstance()->FadeStart(type_fadeIn);
 	}
 }

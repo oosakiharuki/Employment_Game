@@ -41,7 +41,7 @@ void Shadow::Update() {
 }
 
 void Shadow::Draw() {
-	Object3dCommon::GetInstance().Command();
+	Object3dCommon::GetInstance()->Command();
 	object_->Draw();
 }
 

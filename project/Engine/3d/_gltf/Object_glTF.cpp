@@ -10,7 +10,6 @@
 #include "Logger.h"
 
 #include "ImGuiManager.h"
-#include <Object3dCommon.h>
 
 using namespace MyMath;
 
@@ -24,7 +23,8 @@ Object_glTF::~Object_glTF(){
 }
 
 void Object_glTF::Initialize() {
-	camera_ = Object3dCommon::GetInstance().GetDefaultCamera();
+	object3dCommon_ = GLTFCommon::GetInstance().get();
+	camera_ = object3dCommon_->GetDefaultCamera();
 
 	//カメラ初期化
 	InitCamera();
@@ -178,11 +178,11 @@ void Object_glTF::Draw() {
 
 	//モデル
 	for (uint32_t i = 0; i < modelData_.Data.size();i++) {
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResources_[i]->GetGPUVirtualAddress());
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource_->GetGPUVirtualAddress());
+		object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResources_[i]->GetGPUVirtualAddress());
+		object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+		object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
+		object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
+		object3dCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource_->GetGPUVirtualAddress());
 		if (model_) {
 			model_->Draw();
 		}
@@ -191,13 +191,13 @@ void Object_glTF::Draw() {
 	model_->ResetMeshCount();
 
 #ifdef _DEBUG
-	DebugWireframes::GetInstance().Command();
+	DebugWireframes::GetInstance()->Command();
 
 	for (auto it : debugSpheres_) {
 		//it->Draw();
 	}
 
-	GLTFCommon::GetInstance().Command();
+	GLTFCommon::GetInstance()->Command();
 #endif // _DEBUG
 }
 
@@ -210,7 +210,7 @@ void Object_glTF::CreateWVP() {
 	for (auto& i : modelData_.Data) {
 		Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource;
 		TransformationMatrix* wvpData;
-		wvpResource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
+		wvpResource = object3dCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
 		wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
 
 
@@ -225,7 +225,7 @@ void Object_glTF::CreateWVP() {
 
 void Object_glTF::SetModelFile(const std::string& filePath) {
 
-	model_ = ModelManager::GetInstance().FindModel_gltf(filePath);
+	model_ = ModelManager::GetInstance()->FindModel_gltf(filePath);
 	modelData_ = model_->GetModelData();
 
 	//wvpを作成
@@ -259,7 +259,7 @@ void Object_glTF::SetModelFile(const std::string& filePath) {
 	}
 
 	//初期環境マップ
-	TextureManager::GetInstance().LoadTexture("resource/rostock_laage_airport_4k.dds");
+	TextureManager::GetInstance()->LoadTexture("resource/rostock_laage_airport_4k.dds");
 	model_->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 }
 
@@ -354,7 +354,7 @@ void Object_glTF::SetWireframe() {
 void Object_glTF::ChangeAnimation(const std::string& filePath) {
 
 	//モデルが同じならすぐにリターン
-	if (model_ == ModelManager::GetInstance().FindModel_gltf(filePath)) {
+	if (model_ == ModelManager::GetInstance()->FindModel_gltf(filePath)) {
 		return;
 	}
 
@@ -362,7 +362,7 @@ void Object_glTF::ChangeAnimation(const std::string& filePath) {
 	preAnimations_ = animations_;
 
 	//変更先のアニメーションデータ
-	model_ = ModelManager::GetInstance().FindModel_gltf(filePath);
+	model_ = ModelManager::GetInstance()->FindModel_gltf(filePath);
 	modelData_ = model_->GetModelData();
 	animations_ = model_->GetAnimationData();
 	skeletons_ = model_->GetSkeleton();
@@ -396,7 +396,7 @@ void Object_glTF::ChangeAnimation(const std::string& filePath) {
 	}
 
 	//初期環境マップ
-	TextureManager::GetInstance().LoadTexture("resource/rostock_laage_airport_4k.dds");
+	TextureManager::GetInstance()->LoadTexture("resource/rostock_laage_airport_4k.dds");
 	model_->SetEnvironment("resource/rostock_laage_airport_4k.dds");
 }
 

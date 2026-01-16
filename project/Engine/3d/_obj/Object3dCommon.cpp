@@ -2,17 +2,22 @@
 
 using namespace Logger;
 
-std::unique_ptr<Object3dCommon> Object3dCommon::sInstance_ = nullptr;
+std::shared_ptr<Object3dCommon> Object3dCommon::sInstance_ = nullptr;
 
-Object3dCommon& Object3dCommon::GetInstance() {
+std::shared_ptr<Object3dCommon> Object3dCommon::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<Object3dCommon>();
 	}
-	return *sInstance_;
+	return sInstance_;
 }
-void Object3dCommon::Finalize() {}
+void Object3dCommon::Finalize() {
+	sInstance_.reset();
+	sInstance_ = nullptr;
+}
 
-void Object3dCommon::Initialize() {
+void Object3dCommon::Initialize(DirectXCommon* dxCommon) {
+	dxCommon_ = dxCommon;
+
 	GraphicsPipeline();
 }
 
@@ -57,12 +62,12 @@ void Object3dCommon::CreateRasterizer() {
 }
 
 void Object3dCommon::CreateVertexShader() {
-	vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
+	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 
 void Object3dCommon::CreatePixelShader() {
-	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d.PS.hlsl", L"ps_6_0");
+	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }
 
@@ -73,7 +78,7 @@ void Object3dCommon::CreateDepthStencil() {
 }
 
 void Object3dCommon::Command() {
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

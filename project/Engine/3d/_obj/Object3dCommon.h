@@ -12,7 +12,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static Object3dCommon& GetInstance();
+	static std::shared_ptr<Object3dCommon> GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -21,7 +21,12 @@ public:
 	/// 初期化処理
 	/// </summary>
 	/// <param name="dxCommon"></param>
-	void Initialize() override;
+	void Initialize(DirectXCommon* dxCommon) override;
+	/// <summary>
+	/// getter_DirectXCommon
+	/// </summary>
+	/// <returns></returns>
+	DirectXCommon* GetDirectXCommon()const { return dxCommon_; }
 	/// <summary>
 	/// 描画コマンド
 	/// </summary>
@@ -74,8 +79,6 @@ private:
 	void CreateDepthStencil() override;
 
 	Camera* defaultCamera_ = nullptr;
-	//インスタンス
-	static std::unique_ptr<Object3dCommon> sInstance_;
-	//default_deleteを設定(解放処理を行える)
-	friend struct std::default_delete<Object3dCommon>;
+
+	static std::shared_ptr<Object3dCommon> sInstance_;
 };

@@ -11,7 +11,7 @@ void LoadingStageScene::Update() {
 }
 
 void LoadingStageScene::Draw() {
-	SpriteCommon::GetInstance().Command();
+	SpriteCommon::GetInstance()->Command();
 	sprite_->Draw();
 }
 

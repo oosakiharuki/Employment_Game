@@ -14,11 +14,16 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static ModelManager& GetInstance();
+	static std::shared_ptr<ModelManager> GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
 	void Finalize();
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="dxCommon"></param>
+	void Initialize(DirectXCommon* dxCommon);
 	/// <summary>
 	/// モデル読み込み
 	/// </summary>
@@ -32,10 +37,9 @@ public:
 	Model_obj* FindModel_obj(const std::string& filePath);
 
 private:
-	//インスタンス
-	static std::unique_ptr<ModelManager> sInstance_;
-	//default_deleteを設定(解放処理を行える)
-	friend struct std::default_delete<ModelManager>;
+	static std::shared_ptr<ModelManager> sInstance_;
+
+	std::unique_ptr<ModelCommon> modelCommon_ = nullptr;
 
 	//モデル別のコンテナ
 	//.obj用のコンテナ

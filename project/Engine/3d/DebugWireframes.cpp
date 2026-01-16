@@ -2,17 +2,21 @@
 
 using namespace Logger;
 
-std::unique_ptr<DebugWireframes> DebugWireframes::sInstance_ = nullptr;
+std::shared_ptr<DebugWireframes> DebugWireframes::sInstance_ = nullptr;
 
-DebugWireframes& DebugWireframes::GetInstance() {
+std::shared_ptr<DebugWireframes> DebugWireframes::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<DebugWireframes>();
 	}
-	return *sInstance_;
+	return sInstance_;
 }
-void DebugWireframes::Finalize() {}
+void DebugWireframes::Finalize() {
+	sInstance_.reset();
+	sInstance_ = nullptr;
+}
+void DebugWireframes::Initialize(DirectXCommon* dxCommon) {
+	dxCommon_ = dxCommon;
 
-void DebugWireframes::Initialize() {
 	GraphicsPipeline();
 }
 
@@ -60,12 +64,12 @@ void DebugWireframes::CreateRasterizer() {
 }
 
 void DebugWireframes::CreateVertexShader() {
-	vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
+	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 
 void DebugWireframes::CreatePixelShader() {
-	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Wireframe.PS.hlsl", L"ps_6_0");
+	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Wireframe.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }
 
@@ -77,7 +81,7 @@ void DebugWireframes::CreateDepthStencil() {
 
 
 void DebugWireframes::Command() {
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

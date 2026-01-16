@@ -20,7 +20,8 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize();
+	/// <param name="dxCommon"></param>
+	void Initialize(DirectXCommon* dxCommon);
 	/// <summary>
 	/// 更新処理
 	/// </summary>
@@ -37,7 +38,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static PostEffectManager& GetInstance();
+	static std::shared_ptr<PostEffectManager> GetInstance();
 
 private:
 	/// <summary>
@@ -55,8 +56,7 @@ private:
 	int currentNo_;//現在シーン
 	int prevNo_;//前シーン
 
-	//インスタンス
-	static std::unique_ptr<PostEffectManager> sInstance_;
-	//default_deleteを設定(解放処理を行える)
-	friend struct std::default_delete<PostEffectManager>;
+	static std::shared_ptr<PostEffectManager> sInstance_;
+
+	DirectXCommon* dxCommon_;
 };

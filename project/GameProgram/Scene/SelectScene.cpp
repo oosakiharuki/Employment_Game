@@ -19,15 +19,15 @@ void SelectScene::Initialize() {
 	stageObj_->SetModelFile("stage_select.obj");
 
 	//フェードスタート
-	FadeScreen::GetInstance().FadeStart(type_fadeOut);
+	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 	//ワープ、ゴールフラグのリセット
-	CollisionManager::GetInstance().ResetFlag();
+	CollisionManager::GetInstance()->ResetFlag();
 }
 
 void SelectScene::Update() {
 	
 	//ゲームパットの更新
-	Input::GetInstance().JoystickUpdate(state_, preState_);
+	input_->JoystickUpdate(state_, preState_);
 
 	//ステージオブジェクト更新
 	for (auto& stageObject : stageObjects_) {
@@ -35,7 +35,7 @@ void SelectScene::Update() {
 	}
 
 	//ワープしてゲームシーンに移動
-	if (CollisionManager::GetInstance().IsWarp()) {
+	if (CollisionManager::GetInstance()->IsWarp()) {
 		WarpNextScene(*player_.get(),cameraControl_.get(), isNextGameScene);
 	}
 	
@@ -52,14 +52,14 @@ void SelectScene::Update() {
 	CollisionCommon();
 
 	//ガイド更新処理
-	UIManager::GetInstance().Update();
+	UIManager::GetInstance()->Update();
 }
 
 void SelectScene::Draw() {
 
-	CubeMap::GetInstance().Command();
+	CubeMap::GetInstance()->Command();
 
-	Object3dCommon::GetInstance().Command();
+	Object3dCommon::GetInstance()->Command();
 
 	//ステージ描画
 	stageObj_->Draw();
@@ -69,23 +69,23 @@ void SelectScene::Draw() {
 		stageObject->Draw();
 	}
 
-	GLTFCommon::GetInstance().Command();
+	GLTFCommon::GetInstance()->Command();
 	//プレイヤー描画
 	player_->Draw();
 
 	//パーティクル描画処理
-	ParticleCommon::GetInstance().Command();
+	ParticleCommon::GetInstance()->Command();
 	//プレイヤーパーティクル描画
 	player_->DrawParticle();
 
-	SpriteCommon::GetInstance().Command();
+	SpriteCommon::GetInstance()->Command();
 	//説明ガイド
-	UIManager::GetInstance().Draw();
-	UIManager::GetInstance().GuideDraw();
+	UIManager::GetInstance()->Draw();
+	UIManager::GetInstance()->GuideDraw();
 }
 
 void SelectScene::Finalize() {
-	UIManager::GetInstance().Finalize();
+	UIManager::GetInstance()->Finalize();
 }
 
 
@@ -106,8 +106,8 @@ void SelectScene::LevelEditorObjectSetting(const std::string& levelEditor_file) 
 	SpitOutGameObject();
 
 	//操作方法スプライト
-	UIManager::GetInstance().CreateGuide(kGuideMove_);
-	UIManager::GetInstance().CreateGuide(kGuideWarp_);
+	UIManager::GetInstance()->CreateGuide(kGuideMove_);
+	UIManager::GetInstance()->CreateGuide(kGuideWarp_);
 }
 
 void SelectScene::SpitOutGameObject() {
@@ -120,11 +120,11 @@ void SelectScene::SpitOutGameObject() {
 	spitOut_.SpitOutCamera(cameraControl_);
 
 	//各デフォルトカメラの設定
-	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
-	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
-	ParticleCommon::GetInstance().SetDefaultCamera(camera_.get());
-	DebugWireframes::GetInstance().SetDefaultCamera(camera_.get());
-	CubeMap::GetInstance().SetDefaultCamera(camera_.get());
+	Object3dCommon::GetInstance()->SetDefaultCamera(camera_.get());
+	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
+	ParticleCommon::GetInstance()->SetDefaultCamera(camera_.get());
+	DebugWireframes::GetInstance()->SetDefaultCamera(camera_.get());
+	CubeMap::GetInstance()->SetDefaultCamera(camera_.get());
 
 	//プレイヤーの体力を上書き
 	player_->Initialize();//初期設定
@@ -141,15 +141,15 @@ void SelectScene::SpitOutGameObject() {
 void SelectScene::CollisionCommon() {
 	//ゲーム内で使用する当たり判定
 	//プレイヤーとステージ自体
-	CollisionManager::GetInstance().PlayerAndStage(player_.get(), stagesAABB_);
+	CollisionManager::GetInstance()->PlayerAndStage(player_.get(), stagesAABB_);
 	//プレイヤーとステージオブジェクト
-	CollisionManager::GetInstance().PlayerAndStageObject(player_.get(), stageObjects_);
+	CollisionManager::GetInstance()->PlayerAndStageObject(player_.get(), stageObjects_);
 }
 
 void SelectScene::SceneUpdate() {
 
 	//タイトルに戻る
-	if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
+	if (input_->TriggerKey(DIK_ESCAPE)) {
 		SceneManager::GetInstance().ChangeScene("Title");
 	}
 
@@ -160,6 +160,6 @@ void SelectScene::SceneUpdate() {
 	//次のシーンに移動するとき
 	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//フェードを挟む(FadeIn)
-		FadeScreen::GetInstance().FadeStart(type_fadeIn);
+		FadeScreen::GetInstance()->FadeStart(type_fadeIn);
 	}
 }

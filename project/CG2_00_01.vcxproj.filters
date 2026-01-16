@@ -153,6 +153,9 @@
     <ClCompile Include="Engine\2d\SpriteCommon.cpp">
       <Filter>ソース ファイル\Engine\2d</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\ModelCommon.cpp">
+      <Filter>ソース ファイル\Engine\3d</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\3d\ModelManager.cpp">
       <Filter>ソース ファイル\Engine\3d</Filter>
     </ClCompile>
@@ -444,6 +447,9 @@
       <Filter>ヘッダー ファイル\Engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\DebugWireframes.h">
+      <Filter>ヘッダー ファイル\Engine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\ModelCommon.h">
       <Filter>ヘッダー ファイル\Engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\ModelManager.h">

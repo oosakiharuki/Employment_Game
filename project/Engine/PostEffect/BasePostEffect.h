@@ -43,7 +43,7 @@ protected:
 
 public:
 	
-	void Initialize() override;
+	void Initialize(DirectXCommon* dxCommon) override;
 
 	/// <summary>
 	/// 削除処理

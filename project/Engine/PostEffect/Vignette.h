@@ -7,6 +7,7 @@ class Vignette : public BasePostEffect {
 public:
 	void Finalize() override;
 	void Command() override;
+	DirectXCommon* GetDirectXCommon()const { return dxCommon_; }
 private:
 	/// <summary>
 	/// ルートシグネチャ

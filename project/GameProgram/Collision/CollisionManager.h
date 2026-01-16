@@ -28,7 +28,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static CollisionManager& GetInstance();
+	static std::shared_ptr<CollisionManager> GetInstance();
 
 	/// <summary>
 	/// プレイヤーと敵の当たり判定
@@ -58,11 +58,7 @@ public:
 	/// <param name="stagesAABB">ステージ</param>
 	void EnemyAndStage(const std::vector<std::shared_ptr<BaseEnemy>>& enemies, const std::vector<AABB>& stagesAABB);
 
-	/// <summary>
-	/// ボスとプレイヤー
-	/// </summary>
-	/// <param name="player">プレイヤー</param>
-	/// <param name="boss">ボス</param>
+
 	void BossAndPlayer(Player& player, Boss& boss);
 
 
@@ -103,42 +99,26 @@ public:
 	void ResetFlag();
 
 private:
-	/// <summary>
-	/// プレイヤーと敵の視野
-	/// </summary>
-	/// <param name="player">プレイヤー当たり判定</param>
-	/// <param name="enemy">敵たちの当たり判定</param>
+
 	void LookPlayer(Player* player, std::shared_ptr<BaseEnemy> enemy);
-	/// <summary>
-	/// プレイヤーの弾丸と敵の当たり判定
-	/// </summary>
-	/// <param name="player">プレイヤー弾丸当たり判定</param>
-	/// <param name="enemy">敵たちの当たり判定</param>
+
 	void PlayerBulletAndEnemy(Player* player, std::shared_ptr<BaseEnemy> enemy);
-	/// <summary>
-	/// 敵の弾丸とプレイヤー
-	/// </summary>
-	/// <param name="player">プレイヤーの当たり判定</param>
-	/// <param name="bulletE">敵の弾丸当たり判定</param>
+
 	void EnemyBulletAndPlayer(Player* player, std::shared_ptr<EnemyBullet> bulletE);
-	/// <summary>
-	/// 敵とパリィで跳ね返った敵弾丸
-	/// </summary>
-	/// <param name="enemy">敵</param>
-	/// <param name="bulletE"></param>
+
 	void EnemyAndParryBullet(std::shared_ptr<BaseEnemy> enemy, std::shared_ptr<EnemyBullet> bulletE);
-	/// <summary>
-	/// ボム(敵)の爆発とプレイヤー
-	/// </summary>
-	/// <param name="player">プレイヤー当たり判定</param>
-	/// <param name="enemy">ボムの爆発当たり判定</param>
+
 	void EnemyBombCollision(Player* player, std::shared_ptr<BaseEnemy> enemy);
+
+
 
 	/// <summary>
 	/// 対象の重なった分戻す
 	/// </summary>
-	/// <param name="collisionBack">現在の対象の位置、重なった部分、壁/床のフラグが入ってある構造体</param>
-	/// <returns>現在の位置から重なる部分を引いた位置に、重なった部分が横なら壁で下なら床のフラグがtrueになる</returns>
+	/// <param name="collisionBack"></param>
+	/// 現在の対象の位置、重なった部分、壁/床のフラグが入ってある構造体
+	/// <returns></returns>
+	/// 現在の位置から重なる部分を引いた位置に、重なった部分が横なら壁で下なら床のフラグがtrueになる
 	void BackPosition(CollisionOverlap& collisionBack);
 
 	/// <summary>
@@ -158,9 +138,9 @@ private:
 	/// <summary>
 	/// CollisionOverlapのターゲット(player,enemy)の設定
 	/// </summary>
-	/// <param name="position">ターゲットの現在の座標</param>
-	/// <param name="aabb">ターゲット自体の現在の当たり判定</param>
-	/// <returns>設定された構造体CollisionOverlap</returns>
+	/// <param name="position">ターゲットの座標</param>
+	/// <param name="aabb">ターゲット自体の当たり判定</param>
+	/// <returns></returns>
 	CollisionOverlap SetTarget(const Vector3& position,const AABB& aabb);
 
 
@@ -174,9 +154,7 @@ private:
 	const float kMaxUnder = 1000.0f;
 
 	//インスタンス
-	static std::unique_ptr<CollisionManager> sInstance_;
-	//default_deleteを設定(解放処理を行える)
-	friend struct std::default_delete<CollisionManager>;
+	static std::shared_ptr<CollisionManager> sInstance_;
 
 	//ゴールした時フラグ
 	bool isGoal_ = false;

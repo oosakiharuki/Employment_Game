@@ -1,4 +1,5 @@
 #pragma once
+#include "ModelCommon.h"
 #include "MyMath.h"
 #include <memory>
 
@@ -11,9 +12,10 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="directoryPath"></param>
+	/// <param name="modelCommon"></param>
+	/// <param name="directorypath"></param>
 	/// <param name="fileName"></param>
-	virtual void Initialize(const std::string& directoryPath, const std::string& fileName) = 0;
+	virtual void Initialize(ModelCommon* modelCommon, const std::string& directorypath, const std::string& fileName) = 0;
 
 	/// <summary>
 	/// 描画処理
@@ -51,6 +53,9 @@ public:
 	void LightOn(bool Light);
 
 protected:
+	
+	std::unique_ptr<ModelCommon> modelCommon_ = nullptr;
+
 
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexResource_;
 	std::vector<D3D12_VERTEX_BUFFER_VIEW> vertexBufferView_;

@@ -2,20 +2,22 @@
 
 using  namespace Logger;
 
-std::unique_ptr<ParticleCommon> ParticleCommon::sInstance_ = nullptr;
+std::shared_ptr<ParticleCommon> ParticleCommon::sInstance_ = nullptr;
 
-ParticleCommon& ParticleCommon::GetInstance() {
+std::shared_ptr<ParticleCommon> ParticleCommon::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<ParticleCommon>();
 	}
-	return *sInstance_;
+	return sInstance_;
 }
 void ParticleCommon::Finalize() {
 	sInstance_.reset();
 	sInstance_ = nullptr;
 }
 
-void ParticleCommon::Initialize() {
+void ParticleCommon::Initialize(DirectXCommon* dxCommon) {
+	dxCommon_ = dxCommon;
+
 	GraphicsPipeline();
 }
 
@@ -73,12 +75,12 @@ void ParticleCommon::CreateRasterizer(){
 
 void ParticleCommon::CreateVertexShader() {
 	//shaderのコンパイラ
-	vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Particle.VS.hlsl", L"vs_6_0");
+	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Particle.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 
 void ParticleCommon::CreatePixelShader() {
-	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Particle.PS.hlsl", L"ps_6_0");
+	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Particle.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }
 
@@ -90,7 +92,7 @@ void ParticleCommon::CreateDepthStencil() {
 }
 
 void ParticleCommon::Command() {
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

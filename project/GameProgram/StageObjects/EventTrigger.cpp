@@ -190,7 +190,7 @@ void EventTrigger::LoadPopEnemy(std::istringstream& line_stream, std::string& wo
 	enemyPopDatas_.push_back(enemyPopData);
 
 	//召喚パーティクル
-	particles_[particleSummon_.name] = ParticleManager::GetInstance().InitParticle(particleSummon_);
+	particles_[particleSummon_.name] = ParticleManager::GetInstance()->InitParticle(particleSummon_);
 	particles_[particleSummon_.name]->SetTranslate(enemyPopData.position);
 	summon_particles_.push_back(std::move(particles_[particleSummon_.name]));
 }

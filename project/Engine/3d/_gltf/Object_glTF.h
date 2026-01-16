@@ -117,6 +117,8 @@ private:
 	/// <param name="skeleton"></param>スケルトンデータ
 	void SkinClusterUpdate(SkinCluster& skinCluster ,const Skeleton& skeleton);
 
+	GLTFCommon* object3dCommon_ = nullptr;
+
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> wvpResources_;
 	std::vector<TransformationMatrix*> wvpDatas_;
 

@@ -27,13 +27,13 @@ using namespace StringUtility;
 const uint32_t DirectXCommon::kMaxSRVCount_ = 512;
 
 
-std::unique_ptr<DirectXCommon> DirectXCommon::sInstance_ = nullptr;
+std::shared_ptr<DirectXCommon> DirectXCommon::sInstance_ = nullptr;
 
-DirectXCommon& DirectXCommon::GetInstance() {
+std::shared_ptr<DirectXCommon> DirectXCommon::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<DirectXCommon>();
 	}
-	return *sInstance_;
+	return sInstance_;
 }
 
 void DirectXCommon::Initialize() {
@@ -538,7 +538,7 @@ void DirectXCommon::PreDraw() {
 	//DepthStencilのバリア変更
 	SetBarrier(depthStencilResource_.Get(), D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
-	PostEffectManager::GetInstance().Command();
+	PostEffectManager::GetInstance()->Command();
 }
 
 void DirectXCommon::FadePreDraw() {
@@ -664,7 +664,7 @@ void DirectXCommon::DrawCommon(D3D12_CPU_DESCRIPTOR_HANDLE handle, float color[]
 	commandList_->ClearRenderTargetView(handle, color, 0, nullptr);
 
 	//描画用のDescriptorHeap
-	SrvManager::GetInstance().PreDraw();
+	SrvManager::GetInstance()->PreDraw();
 
 	//ビューポート
 	commandList_->RSSetViewports(1, &viewport_);

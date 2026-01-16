@@ -12,16 +12,17 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static SkinningCommon& GetInstance();
+	static std::shared_ptr<SkinningCommon> GetInstance();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
 	/// <param name="dxCommon"></param>
-	void Initialize() override;
+	void Initialize(DirectXCommon* dxCommon) override;
 	/// <summary>
 	/// 解放処理
 	/// </summary>
 	void Finalize();
+	DirectXCommon* GetDirectXCommon()const { return dxCommon_; }
 	/// <summary>
 	/// 描画コマンド
 	/// </summary>
@@ -78,8 +79,5 @@ private:
 
 	Camera* defaultCamera_ = nullptr;
 
-	//インスタンス
-	static std::unique_ptr<SkinningCommon> sInstance_;
-	//default_deleteを設定(解放処理を行える)
-	friend struct std::default_delete<SkinningCommon>;
+	static std::shared_ptr<SkinningCommon> sInstance_;
 };

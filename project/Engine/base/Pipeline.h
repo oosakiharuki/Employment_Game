@@ -11,7 +11,7 @@ public:
 	/// 初期化処理
 	/// </summary>
 	/// <param name="dxCommon">使用しているDirectXCommon</param>
-	virtual void Initialize() = 0;
+	virtual void Initialize(DirectXCommon* dxCommon) = 0;
 
 	/// <summary>
 	/// DescriptorRangeの設定
@@ -116,6 +116,8 @@ protected:
 
 	//BlendState
 	D3D12_BLEND_DESC blendDesc;
+
+	DirectXCommon* dxCommon_ = nullptr;
 
 	//バイナリを元に生成
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_ = nullptr;

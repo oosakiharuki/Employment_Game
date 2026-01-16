@@ -2,17 +2,22 @@
 
 using namespace Logger;
 
-std::unique_ptr<SkinningCommon> SkinningCommon::sInstance_ = nullptr;
+std::shared_ptr<SkinningCommon> SkinningCommon::sInstance_ = nullptr;
 
-SkinningCommon& SkinningCommon::GetInstance() {
+std::shared_ptr<SkinningCommon> SkinningCommon::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<SkinningCommon>();
 	}
-	return *sInstance_;
+	return sInstance_;
 }
-void SkinningCommon::Finalize() {}
+void SkinningCommon::Finalize() {
+	sInstance_.reset();
+	sInstance_ = nullptr;
+}
 
-void SkinningCommon::Initialize() {
+void SkinningCommon::Initialize(DirectXCommon* dxCommon) {
+	dxCommon_ = dxCommon;
+
 	GraphicsPipeline();
 }
 
@@ -70,12 +75,12 @@ void SkinningCommon::CreateRasterizer() {
 }
 
 void SkinningCommon::CreateVertexShader() {
-	vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
+	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 
 void SkinningCommon::CreatePixelShader() {
-	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d.PS.hlsl", L"ps_6_0");
+	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Object3d.PS.hlsl", L"ps_6_0");
 	assert(pixelShaderBlob != nullptr);
 }
 
@@ -86,7 +91,7 @@ void SkinningCommon::CreateDepthStencil() {
 }
 
 void SkinningCommon::Command() {
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+	dxCommon_->GetCommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

@@ -22,13 +22,13 @@ public:
 	/// 初期化処理
 	/// </summary>
 	/// <param name="winApp"></param>
-	void Initialize(WinApp* winApp);
+	void Initialize(WinApp* winApp, DirectXCommon* dxCommon, SrvManager* srvManager);
 	
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static ImGuiManager& GetInstance();
+	static std::shared_ptr<ImGuiManager> GetInstance();
 
 	/// <summary>
 	/// imGui 更新始め
@@ -56,10 +56,11 @@ private:
 	/// 日本語表記
 	/// </summary>
 	void JapaneseNotation();
-	//インスタンス
-	static std::unique_ptr<ImGuiManager> sInstance_;
-	//default_deleteを設定(解放処理を行える)
-	friend struct std::default_delete<ImGuiManager>;
+
+	static std::shared_ptr<ImGuiManager> sInstance_;
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> srvHeap_;
+
+	DirectXCommon* dxCommon_ = nullptr;	
+	SrvManager* srvManager_ = nullptr;
 };

@@ -6,16 +6,19 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"Xinput.lib")
 
-std::unique_ptr<Input> Input::sInstance_ = nullptr;
+std::shared_ptr<Input> Input::sInstance_ = nullptr;
 
-Input& Input::GetInstance() {
+std::shared_ptr<Input> Input::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<Input>();
 	}
-	return *sInstance_;
+	return sInstance_;
 }
 
-void Input::Finalize() {}
+void Input::Finalize() {
+	sInstance_.reset();
+	sInstance_ = nullptr;
+}
 
 void Input::Initialize(WinApp* winApp) {
 

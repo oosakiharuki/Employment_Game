@@ -39,6 +39,9 @@ void Player::Initialize() {
 		SettingSpriteHp(i);
 	}
 
+	//入力処理
+	input_ = Input::GetInstance().get();
+
 	//ステートパターン
 	playerState_ = std::make_unique<PlayerLifeState>();
 }
@@ -57,12 +60,12 @@ void Player::InitMainBody() {
 
 
 void Player::InitParticles() {
-	particles_[particleWalk_.name] = ParticleManager::GetInstance().InitParticle(particleWalk_);
-	particles_[particleBrink_.name] = ParticleManager::GetInstance().InitParticle(particleBrink_);
-	particles_[particleFire_.name] = ParticleManager::GetInstance().InitParticle(particleFire_);
-	particles_[particleDamage_.name] = ParticleManager::GetInstance().InitParticle(particleDamage_);
-	particles_[particleParry_.name] = ParticleManager::GetInstance().InitParticle(particleParry_);
-	particles_[particleDead_.name] = ParticleManager::GetInstance().InitParticle(particleDead_);
+	particles_[particleWalk_.name] = ParticleManager::GetInstance()->InitParticle(particleWalk_);
+	particles_[particleBrink_.name] = ParticleManager::GetInstance()->InitParticle(particleBrink_);
+	particles_[particleFire_.name] = ParticleManager::GetInstance()->InitParticle(particleFire_);
+	particles_[particleDamage_.name] = ParticleManager::GetInstance()->InitParticle(particleDamage_);
+	particles_[particleParry_.name] = ParticleManager::GetInstance()->InitParticle(particleParry_);
+	particles_[particleDead_.name] = ParticleManager::GetInstance()->InitParticle(particleDead_);
 
 }
 
@@ -82,14 +85,14 @@ void Player::SettingSpriteHp(uint32_t num) {
 	iterator.texturePath = "Hp";
 	iterator.position = { kInitializePointHp_.x + kTextureSizeHp_.x * num , kInitializePointHp_.y - num * kDistanceYHp_ };
 	iterator.size = kTextureSizeHp_;
-	UIManager::GetInstance().CreateSprite(iterator);
+	UIManager::GetInstance()->CreateSprite(iterator);
 }
 
 void Player::InitAudio() {
 	//ダメージ
-	hitSound_ = Audio::GetInstance().LoadWave("resource/Sound/damage.wav");
+	hitSound_ = Audio::GetInstance()->LoadWave("resource/Sound/damage.wav");
 	//パリィ
-	parrySound_ = Audio::GetInstance().LoadWave("resource/Sound/bane.wav");
+	parrySound_ = Audio::GetInstance()->LoadWave("resource/Sound/bane.wav");
 }
 
 
@@ -308,10 +311,10 @@ void Player::PlayUpdate() {
 }
 
 void Player::Operation() {
-	Input::GetInstance().JoystickUpdate(state_, preState_);
+	input_->JoystickUpdate(state_, preState_);
 
 	//ゲームパット操作の場合
-	if (Input::GetInstance().GetJoystickState(0, state_)) {
+	if (input_->GetJoystickState(0, state_)) {
 		//Lスティック
 		float padX = static_cast<float>(state_.Gamepad.sThumbLX) / 32768.0f;
 		float padY = static_cast<float>(state_.Gamepad.sThumbLY) / 32768.0f;
@@ -327,13 +330,13 @@ void Player::Operation() {
 	else {
 		//キーボード操作
 		//左
-		(Input::GetInstance().PushKey(DIK_A)) ? isPushA_ = true : isPushA_ = false;
+		(input_->PushKey(DIK_A)) ? isPushA_ = true : isPushA_ = false;
 		//右
-		(Input::GetInstance().PushKey(DIK_D)) ? isPushD_ = true : isPushD_ = false;
+		(input_->PushKey(DIK_D)) ? isPushD_ = true : isPushD_ = false;
 		//上
-		(Input::GetInstance().PushKey(DIK_W)) ? isPushW_ = true : isPushW_ = false;
+		(input_->PushKey(DIK_W)) ? isPushW_ = true : isPushW_ = false;
 		//下
-		(Input::GetInstance().PushKey(DIK_S)) ? isPushS_ = true : isPushS_ = false;
+		(input_->PushKey(DIK_S)) ? isPushS_ = true : isPushS_ = false;
 	}
 }
 
@@ -370,7 +373,7 @@ void Player::ActionMove() {
 
 void Player::ActionJump() {
 	//指定したボタン、地面についていて傘がシールド状態でないとき
-	if ((Input::GetInstance().TriggerKey(DIK_SPACE) || Input::GetInstance().TriggerButton(state_, preState_, XINPUT_GAMEPAD_A))
+	if ((input_->TriggerKey(DIK_SPACE) || input_->TriggerButton(state_, preState_, XINPUT_GAMEPAD_A))
 		&& isGround_ && !isShield_) {
 		isJump_ = true;
 		isGround_ = false;
@@ -380,7 +383,7 @@ void Player::ActionJump() {
 void Player::ActionFire() {
 	//発射のクールタイム
 	fireCoolTimer_ += kDeltaTime_;
-	if ((Input::GetInstance().TriggerKey(DIK_K) || Input::GetInstance().TriggerButton(state_, preState_, XINPUT_GAMEPAD_X)) && !isShield_) {
+	if ((input_->TriggerKey(DIK_K) || input_->TriggerButton(state_, preState_, XINPUT_GAMEPAD_X)) && !isShield_) {
 		if (fireCoolTimer_ >= kCoolTimeMax_) {
 			ShootBullet();
 			fireCoolTimer_ = 0;
@@ -389,9 +392,9 @@ void Player::ActionFire() {
 }
 
 void Player::ActionShield() {
-	if (Input::GetInstance().PushKey(DIK_L) || Input::GetInstance().PushButton(state_, XINPUT_GAMEPAD_B)) {
+	if (input_->PushKey(DIK_L) || input_->PushButton(state_, XINPUT_GAMEPAD_B)) {
 		//押した瞬間に移動キーを押している場合 + すでにブリンクを一度している場合
-		if ((Input::GetInstance().TriggerKey(DIK_L) || Input::GetInstance().TriggerButton(state_, preState_, XINPUT_GAMEPAD_B))
+		if ((input_->TriggerKey(DIK_L) || input_->TriggerButton(state_, preState_, XINPUT_GAMEPAD_B))
 			&& (isPushA_ || isPushD_ || isPushW_ || isPushS_) && !isOneBrink_) {
 			//ブリンクが発動
 			isBrink_ = true;
@@ -464,7 +467,7 @@ void Player::KnockBackUpdate() {
 #pragma endregion
 
 void Player::Draw() {
-	GLTFCommon::GetInstance().Command();
+	GLTFCommon::GetInstance()->Command();
 	//プレイヤー本体
 	object_->Draw();
 
@@ -475,7 +478,7 @@ void Player::Draw() {
 		shadow_->Draw();
 	}
 	
-	Object3dCommon::GetInstance().Command();
+	Object3dCommon::GetInstance()->Command();
 
 	//弾丸
 	for (auto& bullet : bullets_) {
@@ -550,7 +553,7 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		particles_[particleDamage_.name]->SetTranslate(transform_.translate + Normalize(hitPoint));
 		particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 		//ダメージのSE再生
-		Audio::GetInstance().SoundPlayWave(hitSound_, kVolume_);
+		Audio::GetInstance()->SoundPlayWave(hitSound_, kVolume_);
 		infinityTimer_ = 0.0f;//無敵時間発動
 		//ノックバック(時間の三分の一ぶんまで)
 		KnockBackPlayer(hitPoint , kInfinityTimeMax_ * kDivideByThree_);
@@ -566,7 +569,7 @@ void Player::IsFall() {
 	//一発K.O
 	hp_ = 0;
 	//ダメージSE再生
-	Audio::GetInstance().SoundPlayWave(hitSound_, kVolume_);
+	Audio::GetInstance()->SoundPlayWave(hitSound_, kVolume_);
 }
 
 void Player::KnockBackPlayer(const Vector3& Power, float TimerMax) {
@@ -656,8 +659,8 @@ void Player::ParrySuccess() {
 	parryTime_ = kParryTimeMax_;
 
 	//SE
-	Audio::GetInstance().StopWave(parrySound_);//パリィが続くとき一度止めてから再生させるようにする
-	Audio::GetInstance().SoundPlayWave(parrySound_, kVolume_);//SE再生:パリィ
+	Audio::GetInstance()->StopWave(parrySound_);//パリィが続くとき一度止めてから再生させるようにする
+	Audio::GetInstance()->SoundPlayWave(parrySound_, kVolume_);//SE再生:パリィ
 	//傘の座標を読み取る
 	Vector3 translate = umbrella_->GetTranslate();
 	translate += TransformNormal(kPlayerFront_, wtGun_.GetMatWorld());//出す場所をwtGun_の向きの前に
@@ -670,10 +673,10 @@ void Player::SpriteUpdate() {
 	for (uint32_t i = 0; i < kPlayerMaxHp_; i++) {
 		//Hpに応じてテクスチャを変化させる
 		if (i >= hp_) {
-			UIManager::GetInstance().SetSpriteTexture("playerHp" + std::to_string(i), "NoHp");
+			UIManager::GetInstance()->SetSpriteTexture("playerHp" + std::to_string(i), "NoHp");
 		}//テクスチャ体力ない状態なら変更
-		else if (UIManager::GetInstance().GetSpriteTexture("playerHp" + std::to_string(i)) == "NoHp.png") {
-			UIManager::GetInstance().SetSpriteTexture("playerHp" + std::to_string(i), "Hp");
+		else if (UIManager::GetInstance()->GetSpriteTexture("playerHp" + std::to_string(i)) == "NoHp.png") {
+			UIManager::GetInstance()->SetSpriteTexture("playerHp" + std::to_string(i), "Hp");
 		}
 	}
 }

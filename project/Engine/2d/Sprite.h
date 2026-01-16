@@ -140,6 +140,8 @@ public:
 	const D3D12_GPU_DESCRIPTOR_HANDLE GetResource() const ;
 
 private:
+	SpriteCommon* spriteCommon_ = nullptr;
+
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;

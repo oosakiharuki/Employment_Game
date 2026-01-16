@@ -15,11 +15,17 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static ParticleManager& GetInstance();
+	static std::shared_ptr<ParticleManager> GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
 	void Finalize();
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="dxCommon"></param>
+	/// <param name="srvManager"></param>
+	void Initialize(DirectXCommon* dxCommon, SrvManager* srvManager);
 
 	/// <summary>
 	/// パーティクルグループ作成
@@ -91,14 +97,14 @@ public:
 	/// <summary>
 	/// パーティクル初期化処理テンプレート
 	/// </summary>
-	/// <param name="parameters">パーティクルのパラメータをまとめたもの</param>
-	std::unique_ptr<Particle> InitParticle(const ParticleParameters& parameters);
+	/// <param name="parametars">パーティクルのパラメータをまとめたもの</param>
+	std::unique_ptr<Particle> InitParticle(const ParticleParametars& parametars);
 
 private:
-	//インスタンス
-	static std::unique_ptr<ParticleManager> sInstance_;
-	//default_deleteを設定(解放処理を行える)
-	friend struct std::default_delete<ParticleManager>;
+	static std::shared_ptr<ParticleManager> sInstance_;
+
+	ParticleCommon* particleCommon = nullptr;
+	SrvManager* srvManager = nullptr;
 
 	struct ParticleGroup {
 		std::string textureFile;

@@ -14,12 +14,12 @@ void ClearScene::Initialize() {
 	//パーティクル生成
 	for (uint32_t i = 0; i < kParticleMaxNum_; i++) {
 		//ファンファーレのパーティクル作成
-		sceneParticles_[particleFanfare_.name] = ParticleManager::GetInstance().InitParticle(particleFanfare_);
+		sceneParticles_[particleFanfare_.name] = ParticleManager::GetInstance()->InitParticle(particleFanfare_);
 		//vectorに導入
 		particleFanfares_.push_back(std::move(sceneParticles_[particleFanfare_.name]));
 	}
 	//フェードスタート
-	FadeScreen::GetInstance().FadeStart(type_fadeOut);
+	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
 }
 
 void ClearScene::InitSprite() {
@@ -42,8 +42,8 @@ void ClearScene::InitCamera() {
 	camera_->SetTranslate(cameraTranslate_);
 	camera_->SetRotate(cameraRotate_);
 
-	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
-	ParticleCommon::GetInstance().SetDefaultCamera(camera_.get());
+	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
+	ParticleCommon::GetInstance()->SetDefaultCamera(camera_.get());
 
 }
 
@@ -65,7 +65,7 @@ void ClearScene::InitObject() {
 
 void ClearScene::Update() {
 
-	Input::GetInstance().JoystickUpdate(state_, preState_);
+	input_->JoystickUpdate(state_, preState_);
 
 	camera_->Update();
 	//クリアロゴ更新
@@ -96,36 +96,36 @@ void ClearScene::Update() {
 
 void ClearScene::Draw() {
 
-	GLTFCommon::GetInstance().Command();
+	GLTFCommon::GetInstance()->Command();
 	playerGltf_->Draw();
 	stageGltf_->Draw();
 
-	ParticleCommon::GetInstance().Command();
+	ParticleCommon::GetInstance()->Command();
 	for (auto& particle : particleFanfares_) {
 		particle->Draw();
 	}
 
-	SpriteCommon::GetInstance().Command();
+	SpriteCommon::GetInstance()->Command();
 	//クリアロゴｗ描画
 	sprite_->Draw();
 	spriteSpace_->Draw();
 }
 
 void ClearScene::Finalize() {
-	ParticleManager::GetInstance().ResetParticle("clear_fanfare");
+	ParticleManager::GetInstance()->ResetParticle("clear_fanfare");
 }
 
 void ClearScene::SceneUpdate() {
 
 	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
-	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||
-		Input::GetInstance().TriggerButton(state_, preState_, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance().GetIsFading()) {
+	if ((Input::GetInstance()->TriggerKey(DIK_SPACE) ||
+		Input::GetInstance()->TriggerButton(state_, preState_, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance()->GetIsFading()) {
 		SceneManager::GetInstance().ChangeScene("Select");
 	}
 
 	//次のシーンに移動するとき
 	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//フェードを挟む(FadeIn)
-		FadeScreen::GetInstance().FadeStart(type_fadeIn);
+		FadeScreen::GetInstance()->FadeStart(type_fadeIn);
 	}
 }

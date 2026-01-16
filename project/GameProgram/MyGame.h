@@ -28,5 +28,6 @@ public:
 	void Draw() override;
 
 private:
+	FadeScreen* fadeScreen_ = nullptr;
 	SceneFactory* sceneFactory_ = nullptr;
 };

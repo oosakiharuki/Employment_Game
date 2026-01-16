@@ -25,6 +25,8 @@ private:
 	/// オブジェクト初期化処理
 	/// </summary>
 	void InitObject();
+	//入力処理
+	Input* input_ = Input::GetInstance().get();
 	//ゲームパット用の入力変数
 	XINPUT_STATE state_, preState_;
 
