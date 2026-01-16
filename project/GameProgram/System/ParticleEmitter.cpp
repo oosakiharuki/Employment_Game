@@ -12,6 +12,10 @@ ParticleEmitter& ParticleEmitter::GetInstance() {
 	return *sInstance_;
 }
 
+void ParticleEmitter::Finalize() {
+	sInstance_.reset();
+}
+
 ParticleData ParticleEmitter::MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter) {
 	//random
 	std::uniform_real_distribution<float> distribution(-1.0f, 1.0f);//座標位置用

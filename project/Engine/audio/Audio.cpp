@@ -14,7 +14,6 @@ void Audio::Finalize() {
 	SoundUnload(&soundData_);
 
 	sInstance_.reset();
-	sInstance_ = nullptr;
 }
 
 void Audio::Initialize() {

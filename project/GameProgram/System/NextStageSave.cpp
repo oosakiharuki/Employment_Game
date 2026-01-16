@@ -9,6 +9,10 @@ NextStageSave& NextStageSave::GetInstance() {
 	return *sInstance_;
 }
 
+void NextStageSave::Finalize() {
+	sInstance_.reset();
+}
+
 void NextStageSave::SetPlayerHp(uint32_t playerHp) {
 	sceneSaveData_.playerHp = playerHp;
 }

@@ -12,6 +12,7 @@ PostEffectManager& PostEffectManager::GetInstance() {
 void PostEffectManager::Finalize() {
 	effectArr_[currentNo_]->Finalize();
 	effectArr_[currentNo_].reset();
+	sInstance_.reset();
 }
 
 void PostEffectManager::Change(int prev, int current) {

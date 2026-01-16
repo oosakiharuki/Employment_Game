@@ -10,7 +10,9 @@ CubeMap& CubeMap::GetInstance() {
 	}
 	return *sInstance_;
 }
-void CubeMap::Finalize() {}
+void CubeMap::Finalize() {
+	sInstance_.reset();
+}
 
 void CubeMap::Initialize() {
 	GraphicsPipeline();

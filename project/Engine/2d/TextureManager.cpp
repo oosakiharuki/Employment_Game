@@ -15,7 +15,9 @@ void TextureManager::Initialize() {
 	textureDatas_.reserve(SrvManager::sMaxSRVCount_);
 }
 
-void TextureManager::Finalize() {}
+void TextureManager::Finalize() {
+	sInstance_.reset();
+}
 
 void TextureManager::LoadTexture(const std::string& filePath) {
 

@@ -20,6 +20,12 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	static NextStageSave& GetInstance();
+
+	/// <summary>
+	/// 解放処理
+	/// </summary>
+	void Finalize();
+
 	/// <summary>
 	/// getter_前に受け取ったデータを渡す
 	/// </summary>

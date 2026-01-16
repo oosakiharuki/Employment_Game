@@ -15,7 +15,9 @@ Input& Input::GetInstance() {
 	return *sInstance_;
 }
 
-void Input::Finalize() {}
+void Input::Finalize() {
+	sInstance_.reset();
+}
 
 void Input::Initialize(WinApp* winApp) {
 

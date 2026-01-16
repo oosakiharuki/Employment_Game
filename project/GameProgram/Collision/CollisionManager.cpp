@@ -17,6 +17,9 @@ CollisionManager& CollisionManager::GetInstance() {
 	return *sInstance_;
 }
 
+void CollisionManager::Finalize() {
+	sInstance_.reset();
+}
 
 void CollisionManager::PlayerAndEnemy(Player* player,
 	const std::vector<std::shared_ptr<BaseEnemy>>& enemies) {

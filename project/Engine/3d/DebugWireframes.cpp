@@ -10,7 +10,9 @@ DebugWireframes& DebugWireframes::GetInstance() {
 	}
 	return *sInstance_;
 }
-void DebugWireframes::Finalize() {}
+void DebugWireframes::Finalize() {
+	sInstance_.reset();
+}
 
 void DebugWireframes::Initialize() {
 	GraphicsPipeline();

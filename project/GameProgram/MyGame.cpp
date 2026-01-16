@@ -87,6 +87,10 @@ void MyGame::Draw() {
 void MyGame::Finalize() {
 	FadeScreen::GetInstance().Finalize();
 	SceneManager::GetInstance().Finalize();
+	NextStageSave::GetInstance().Finalize();
+	CollisionManager::GetInstance().Finalize();
+	UIManager::GetInstance().Finalize();
+	ParticleEmitter::GetInstance().Finalize();
 	delete sceneFactory_;
 
 #ifdef  USE_IMGUI

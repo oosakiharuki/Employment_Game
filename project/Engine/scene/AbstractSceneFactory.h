@@ -13,6 +13,6 @@ public:
 	/// </summary>
 	/// <param name="sceneName">ベースシーン派生のシーンクラス名</param>
 	/// <returns></returns>
-	virtual std::unique_ptr<BaseScene> CreateScene(const std::string& sceneName) = 0;
+	virtual BaseScene* CreateScene(const std::string& sceneName) = 0;
 };
 

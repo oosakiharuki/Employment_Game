@@ -12,7 +12,6 @@ SrvManager& SrvManager::GetInstance() {
 }
 void SrvManager::Finalize() {
 	sInstance_.reset();
-	sInstance_ = nullptr;
 }
 
 

@@ -30,7 +30,9 @@ void Framework::Initialize() {
 
 void Framework::SpriteCommons() {
 	//imGui処理
+#ifdef USE_IMGUI
 	ImGuiManager::GetInstance().Initialize(winApp_.get());
+#endif // USE_IMGUI
 
 	//スプライト共通処理
 	SpriteCommon::GetInstance().Initialize();

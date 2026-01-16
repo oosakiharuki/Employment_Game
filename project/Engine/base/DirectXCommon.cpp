@@ -677,5 +677,4 @@ void DirectXCommon::DrawCommon(D3D12_CPU_DESCRIPTOR_HANDLE handle, float color[]
 void DirectXCommon::Finalize() {
 	CloseHandle(fenceEvent_);
 	sInstance_.reset();
-	sInstance_ = nullptr;
 }

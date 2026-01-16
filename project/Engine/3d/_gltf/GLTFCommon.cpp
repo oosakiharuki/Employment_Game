@@ -10,7 +10,9 @@ GLTFCommon& GLTFCommon::GetInstance() {
 	}
 	return *sInstance_;
 }
-void GLTFCommon::Finalize() {}
+void GLTFCommon::Finalize() {
+	sInstance_.reset();
+}
 
 void GLTFCommon::Initialize() {
 	GraphicsPipeline();

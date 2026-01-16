@@ -14,6 +14,11 @@ public:
 	static ParticleEmitter& GetInstance();
 
 	/// <summary>
+	/// 解放処理
+	/// </summary>
+	void Finalize();
+
+	/// <summary>
 	/// パーティクル生成
 	/// </summary>
 	/// <param name="particleName">パーティクルの名前</param>

@@ -78,7 +78,6 @@ void ImGuiManager::Finalize() {
 	ImGui::DestroyContext();
 
 	sInstance_.reset();
-	sInstance_ = nullptr;
 
 #endif //  USE_IMGUI
 }

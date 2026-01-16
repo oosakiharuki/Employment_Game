@@ -31,6 +31,11 @@ public:
 	static CollisionManager& GetInstance();
 
 	/// <summary>
+	/// 解放処理
+	/// </summary>
+	void Finalize();
+
+	/// <summary>
 	/// プレイヤーと敵の当たり判定
 	/// </summary>
 	/// <param name="player">プレイヤー</param>

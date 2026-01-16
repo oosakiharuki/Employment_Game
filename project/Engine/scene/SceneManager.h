@@ -66,8 +66,8 @@ private:
 	//default_deleteを設定(解放処理を行える)
 	friend struct std::default_delete<SceneManager>;
 
-	std::unique_ptr<BaseScene> scene_ = nullptr;//現在シーン
-	std::unique_ptr<BaseScene> nextScene_ = nullptr;//次のシーン
+	BaseScene* scene_ = nullptr;//現在シーン
+	BaseScene* nextScene_ = nullptr;//次のシーン
 
 	AbstractSceneFactory* sceneFactory_ = nullptr;
 

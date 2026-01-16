@@ -12,7 +12,6 @@ UIManager& UIManager::GetInstance() {
 void UIManager::Finalize() {
 	guides_.clear();
 	sprites_.clear();
-	
 	sInstance_.reset();
 }
 

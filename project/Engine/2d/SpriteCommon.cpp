@@ -10,7 +10,9 @@ SpriteCommon& SpriteCommon::GetInstance() {
 	}
 	return *sInstance_;
 }
-void SpriteCommon::Finalize() {}
+void SpriteCommon::Finalize() {
+	sInstance_.reset();
+}
 
 void SpriteCommon::Initialize() {
 	GraphicsPipeline();

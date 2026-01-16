@@ -10,7 +10,9 @@ Object3dCommon& Object3dCommon::GetInstance() {
 	}
 	return *sInstance_;
 }
-void Object3dCommon::Finalize() {}
+void Object3dCommon::Finalize() {
+	sInstance_.reset();
+}
 
 void Object3dCommon::Initialize() {
 	GraphicsPipeline();

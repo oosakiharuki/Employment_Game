@@ -10,7 +10,9 @@ SkinningCommon& SkinningCommon::GetInstance() {
 	}
 	return *sInstance_;
 }
-void SkinningCommon::Finalize() {}
+void SkinningCommon::Finalize() {
+	sInstance_.reset();
+}
 
 void SkinningCommon::Initialize() {
 	GraphicsPipeline();

@@ -19,7 +19,6 @@ ParticleManager& ParticleManager::GetInstance() {
 
 void ParticleManager::Finalize() {
 	sInstance_.reset();
-	sInstance_ = nullptr;
 }
 
 

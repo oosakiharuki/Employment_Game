@@ -6,33 +6,33 @@
 #include "GameOverScene.h"
 #include "LoadingStageScene.h"
 
-std::unique_ptr<BaseScene> SceneFactory::CreateScene(const std::string& sceneName) {
+BaseScene* SceneFactory::CreateScene(const std::string& sceneName) {
 
-	std::unique_ptr<BaseScene> newScene{};
+	BaseScene* newScene{};
 
 	//タイトル
 	if (sceneName == "Title") {
-		newScene = std::make_unique<TitleScene>();
+		newScene = new TitleScene();
 	}
 	//セレクトシーン
 	else if (sceneName == "Select") {
-		newScene = std::make_unique<SelectScene>();
+		newScene = new SelectScene();
 	}
 	//ゲームシーン
 	else if (sceneName == "Game") {
-		newScene = std::make_unique<GameScene>();
+		newScene = new GameScene();
 	}
 	//ゲームオーバーシーン
 	else if (sceneName == "GameOver") {
-		newScene = std::make_unique<GameOverScene>();
+		newScene = new GameOverScene();
 	}
 	//クリアシーン
 	else if (sceneName == "Clear") {
-		newScene = std::make_unique<ClearScene>();
+		newScene = new ClearScene();
 	}
 	//ローディングシーン(ステージの変更時)
 	else if (sceneName == "NextStage") {
-		newScene = std::make_unique<LoadingStageScene>();
+		newScene = new LoadingStageScene();
 	}
 
 	return newScene;//std::moveかも

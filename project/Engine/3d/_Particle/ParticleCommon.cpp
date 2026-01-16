@@ -12,7 +12,6 @@ ParticleCommon& ParticleCommon::GetInstance() {
 }
 void ParticleCommon::Finalize() {
 	sInstance_.reset();
-	sInstance_ = nullptr;
 }
 
 void ParticleCommon::Initialize() {

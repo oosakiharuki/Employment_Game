@@ -8,7 +8,9 @@ LoadingModels& LoadingModels::GetInstance() {
 	}
 	return *sInstance_;
 }
-void LoadingModels::Finalize() {}
+void LoadingModels::Finalize() {
+	sInstance_.reset();
+}
 
 void LoadingModels::LoadObjects() {
 	LoadObj();

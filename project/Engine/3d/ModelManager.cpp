@@ -10,7 +10,9 @@ ModelManager& ModelManager::GetInstance() {
 	return *sInstance_;
 }
 
-void ModelManager::Finalize() {}
+void ModelManager::Finalize() {
+	sInstance_.reset();
+}
 
 void ModelManager::LoadModel(const std::string& filePath, const std::string& objType, bool isAnimation, bool isSkinning) {
 	
