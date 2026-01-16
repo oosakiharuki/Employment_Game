@@ -58,7 +58,7 @@ public:
 	/// </summary>
 	void ChangeScene(const std::string& sceneName);
 
-	void SetSceneFactory(AbstractSceneFactory* sceneFactory) { sceneFactory_ = sceneFactory; }
+	void SetSceneFactory(std::unique_ptr<AbstractSceneFactory> sceneFactory) { sceneFactory_ = std::move(sceneFactory); }
 
 private:
 	//インスタンス
@@ -66,9 +66,8 @@ private:
 	//default_deleteを設定(解放処理を行える)
 	friend struct std::default_delete<SceneManager>;
 
-	BaseScene* scene_ = nullptr;//現在シーン
-	BaseScene* nextScene_ = nullptr;//次のシーン
+	std::unique_ptr<BaseScene> scene_ = nullptr;//現在シーン
+	std::unique_ptr<BaseScene> nextScene_ = nullptr;//次のシーン
 
-	AbstractSceneFactory* sceneFactory_ = nullptr;
-
+	std::unique_ptr<AbstractSceneFactory> sceneFactory_ = nullptr;
 };

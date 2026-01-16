@@ -28,5 +28,4 @@ public:
 	void Draw() override;
 
 private:
-	SceneFactory* sceneFactory_ = nullptr;
 };

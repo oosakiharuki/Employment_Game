@@ -38,11 +38,9 @@ void SceneManager::SceneUpdate() {
 	if (NextSceneChangeFlag()) {
 		if (scene_) {
 			scene_->Finalize();
-			delete scene_;
-			scene_ = nullptr;
+			scene_.reset();
 		}
-		scene_ = nextScene_;
-		nextScene_ = nullptr;
+		scene_ = std::move(nextScene_);
 		//初期化処理
 		scene_->Initialize();
 	}
@@ -55,8 +53,9 @@ void SceneManager::Draw() {
 
 void SceneManager::Finalize() {
 	//シーンのリセット
-	scene_->Finalize();	
-	delete scene_;//シ－ンの開放
+	scene_->Finalize();
+	//シ－ンの開放
+	scene_.reset();
 	sInstance_.reset();
 }
 

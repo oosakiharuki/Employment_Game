@@ -13,8 +13,8 @@ void MyGame::Initialize() {
 
 	FadeScreen::GetInstance().Initialize();
 
-	sceneFactory_ = new SceneFactory();
-	SceneManager::GetInstance().SetSceneFactory(sceneFactory_);
+	std::unique_ptr<SceneFactory> sceneFactory_ = std::make_unique<SceneFactory>();
+	SceneManager::GetInstance().SetSceneFactory(std::move(sceneFactory_));
 
 	SceneManager::GetInstance().ChangeScene("Title");
 	//シーンの更新処理(変更処理)
@@ -91,7 +91,6 @@ void MyGame::Finalize() {
 	CollisionManager::GetInstance().Finalize();
 	UIManager::GetInstance().Finalize();
 	ParticleEmitter::GetInstance().Finalize();
-	delete sceneFactory_;
 
 #ifdef  USE_IMGUI
 	ImGuiManager::GetInstance().Finalize();
