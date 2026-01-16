@@ -9,7 +9,7 @@ void GameOverScene::Initialize() {
 	InitObject();
 
 	//フェードスタート
-	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
+	FadeScreen::GetInstance().FadeStart(type_fadeOut);
 }
 
 void GameOverScene::InitSprite() {
@@ -34,7 +34,7 @@ void GameOverScene::InitCamera() {
 	camera_->SetTranslate(cameraTranslate_);
 	camera_->SetRotate(cameraRotate_);
 
-	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
+	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
 }
 
 void GameOverScene::InitObject() {
@@ -56,7 +56,7 @@ void GameOverScene::InitObject() {
 void GameOverScene::Update() {
 
 
-	input_->JoystickUpdate(state_, preState_);
+	Input::GetInstance().JoystickUpdate(state_, preState_);
 
 	sprite_->Update();
 	spriteSpace_->Update();
@@ -77,13 +77,13 @@ void GameOverScene::Update() {
 
 void GameOverScene::Draw() {
 
-	GLTFCommon::GetInstance()->Command();
+	GLTFCommon::GetInstance().Command();
 
 	//オブジェクト描画
 	playerGltf_->Draw();
 	stageGltf_->Draw();
 
-	SpriteCommon::GetInstance()->Command();
+	SpriteCommon::GetInstance().Command();
 
 	sprite_->Draw();
 	spriteSpace_->Draw();
@@ -93,16 +93,16 @@ void GameOverScene::Finalize() {}
 
 void GameOverScene::SceneUpdate() {
 	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
-	if ((Input::GetInstance()->TriggerKey(DIK_SPACE) ||
-		Input::GetInstance()->TriggerButton(state_, preState_, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance()->GetIsFading()) {
+	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||
+		Input::GetInstance().TriggerButton(state_, preState_, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance().GetIsFading()) {
 		SceneManager::GetInstance().ChangeScene("Select");
-		FadeScreen::GetInstance()->SetMaskTexture("fade01.png");
-		FadeScreen::GetInstance()->SetBackGround("fadeTexture.png");
+		FadeScreen::GetInstance().SetMaskTexture("fade01.png");
+		FadeScreen::GetInstance().SetBackGround("fadeTexture.png");
 	}
 
 	//次のシーンに移動するとき
 	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//フェードを挟む(FadeIn)
-		FadeScreen::GetInstance()->FadeStart(type_fadeIn);
+		FadeScreen::GetInstance().FadeStart(type_fadeIn);
 	}
 }

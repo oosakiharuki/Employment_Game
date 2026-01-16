@@ -5,10 +5,9 @@
 
 using namespace MyMath;
 
-void Model_obj::Initialize(ModelCommon* modelCommon, const std::string& directorypath, const std::string& fileName) {
-	this->modelCommon_ = modelCommon;
+void Model_obj::Initialize(const std::string& directoryPath, const std::string& fileName) {
 	// (resource) / (Object / モデルファイル) / (オブジェクト名.obj)
-	modelData_ = LoadObjFile(directorypath, fileName, ".obj");
+	modelData_ = LoadObjFile(directoryPath, fileName, ".obj");
 
 	InitialData_ = modelData_;
 
@@ -29,7 +28,7 @@ void Model_obj::InitVertexResource(ModelData modelData) {
 
 	std::vector<VertexData> vertexDatas = modelData.vertices;
 
-	vertexR = modelCommon_->GetDxCommon()->CreateBufferResource(sizeof(VertexData) * vertexDatas.size());
+	vertexR = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * vertexDatas.size());
 
 	vertexB.BufferLocation = vertexR->GetGPUVirtualAddress();
 	vertexB.SizeInBytes = UINT(sizeof(VertexData) * vertexDatas.size());
@@ -47,13 +46,13 @@ void Model_obj::InitMaterialResource(ModelData modelData) {
 	MaterialData materialData = modelData.materialData;
 
 	//テクスチャ読み込み
-	TextureManager::GetInstance()->LoadTexture(materialData.textureFilePath);
-	materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(materialData.textureFilePath);
+	TextureManager::GetInstance().LoadTexture(materialData.textureFilePath);
+	materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(materialData.textureFilePath);
 
 	//Model用マテリアル
 	//マテリアル用のリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
-	materialResource = modelCommon_->GetDxCommon()->CreateBufferResource(sizeof(Material));
+	materialResource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
 	//書き込むためのアドレス
 	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//色の設定
@@ -75,10 +74,10 @@ void Model_obj::Draw() {
 
 	int i = 0;
 	for (auto& multi : modelData_.Data) {
-		modelCommon_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_[i]);
-		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResources_[i]->GetGPUVirtualAddress());
-		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(multi.materialData.textureFilePath));
-		modelCommon_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(multi.vertices.size()), 1, 0, 0);
+		DirectXCommon::GetInstance().GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_[i]);
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResources_[i]->GetGPUVirtualAddress());
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance().GetSrvHandleGPU(multi.materialData.textureFilePath));
+		DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(UINT(multi.vertices.size()), 1, 0, 0);
 		i++;
 	}
 }
@@ -89,15 +88,15 @@ void Model_obj::Draw(const std::string& textureFilePath) {
 		//テクスチャを変更
 		multi.materialData.textureFilePath = textureFilePath;
 
-		modelCommon_->GetDxCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_[i]);
-		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResources_[i]->GetGPUVirtualAddress());
-		modelCommon_->GetDxCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(multi.materialData.textureFilePath));
-		modelCommon_->GetDxCommon()->GetCommandList()->DrawInstanced(UINT(multi.vertices.size()), 1, 0, 0);
+		DirectXCommon::GetInstance().GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_[i]);
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResources_[i]->GetGPUVirtualAddress());
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance().GetSrvHandleGPU(multi.materialData.textureFilePath));
+		DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(UINT(multi.vertices.size()), 1, 0, 0);
 		i++;
 	}
 }
 
-MaterialData Model_obj::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename, const std::string& usemtl) {
+MaterialData Model_obj::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename, const std::string& useMtl) {
 	MaterialData materialData;
 	std::string line;
 	std::ifstream file(directoryPath + "/Object/" + filename);
@@ -114,7 +113,7 @@ MaterialData Model_obj::LoadMaterialTemplateFile(const std::string& directoryPat
 			s >> mtlName;
 
 			//使用したいマテリアルならtrue
-			if (usemtl == mtlName) {
+			if (useMtl == mtlName) {
 				isSame = true;
 			}
 		}
@@ -163,7 +162,7 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 		std::istringstream s(line);
 		s >> identifier; //先頭の義別子 (v ,vt, vn, f) を読み取る
 
-		//modeldataの建築
+		//modelDataの建築
 		if (identifier == "v") {
 			Vector4 position;
 			s >> position.x >> position.y >> position.z;//左から順に消費 = 飛ばしたり、もう一度使うことはできない	

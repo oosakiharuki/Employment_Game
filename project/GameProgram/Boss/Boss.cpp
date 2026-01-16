@@ -54,7 +54,7 @@ void Boss::Update() {
 void Boss::Draw() {
 	object_->Draw();
 
-	Object3dCommon::GetInstance()->Command();
+	Object3dCommon::GetInstance().Command();
 	for (auto& bullet : bullets_) {
 		bullet->Draw();
 	}

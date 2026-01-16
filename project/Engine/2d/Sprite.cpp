@@ -6,11 +6,10 @@
 using namespace MyMath;
 
 void Sprite::Initialize(const std::string& textureFilePath) {
-	this->spriteCommon_ = SpriteCommon::GetInstance().get();
 	//テクスチャ名
 	filePath_ = "resource/Sprite/" + textureFilePath;
 
-	TextureManager::GetInstance()->LoadTexture(filePath_);
+	TextureManager::GetInstance().LoadTexture(filePath_);
 	
 	//vertexResourceの初期化
 	InitVertexResource();
@@ -30,7 +29,7 @@ void Sprite::Initialize(const std::string& textureFilePath) {
 
 void Sprite::InitVertexResource() {
 	//Sprite
-	vertexResource_ = spriteCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(VertexData) * 4);
+	vertexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * 4);
 
 	//リソースの先頭アドレス
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
@@ -61,7 +60,7 @@ void Sprite::InitVertexData() {
 	}
 
 	AdjustTextureSize();
-	const DirectX::TexMetadata& kMetadata = TextureManager::GetInstance()->GetMetaData(filePath_);
+	const DirectX::TexMetadata& kMetadata = TextureManager::GetInstance().GetMetaData(filePath_);
 	float tex_left = textureLeftTop_.x / kMetadata.width;
 	float tex_right = textureLeftTop_.x + textureSize_.x / kMetadata.width;
 	float tex_top = textureLeftTop_.y / kMetadata.height;
@@ -87,7 +86,7 @@ void Sprite::InitVertexData() {
 void Sprite::InitIndexData() {
 
 	//Index
-	indexResource_ = spriteCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(uint32_t) * 6);
+	indexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(uint32_t) * 6);
 
 	//リソースの先頭アドレス
 	indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
@@ -108,7 +107,7 @@ void Sprite::InitIndexData() {
 
 void Sprite::InitMaterial() {
 	//spriteのリソース
-	materialResource_ = spriteCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(Material));
+	materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
 
 	//書き込むためのアドレス
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
@@ -120,7 +119,7 @@ void Sprite::InitMaterial() {
 
 void Sprite::InitTransformationMatrix() {
 	//座標変換行列	
-	transformationMatrixResource_ = spriteCommon_->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
+	transformationMatrixResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
 
 	transformationMatrixResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixData_));
 
@@ -129,7 +128,7 @@ void Sprite::InitTransformationMatrix() {
 }
 
 void Sprite::AdjustTextureSize() {
-	const DirectX::TexMetadata& kMetadata = TextureManager::GetInstance()->GetMetaData(filePath_);
+	const DirectX::TexMetadata& kMetadata = TextureManager::GetInstance().GetMetaData(filePath_);
 
 	textureSize_.x = static_cast<float>(kMetadata.width);
 	textureSize_.y = static_cast<float>(kMetadata.height);
@@ -154,17 +153,17 @@ void Sprite::Update() {
 }
 
 void Sprite::Draw() {
-	spriteCommon_->GetDirectXCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
-	spriteCommon_->GetDirectXCommon()->GetCommandList()->IASetIndexBuffer(&indexBufferView_);
-	spriteCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
-	spriteCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
-	spriteCommon_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(filePath_));
-	spriteCommon_->GetDirectXCommon()->GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
+	DirectXCommon::GetInstance().GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	DirectXCommon::GetInstance().GetCommandList()->IASetIndexBuffer(&indexBufferView_);
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResource_->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance().GetSrvHandleGPU(filePath_));
+	DirectXCommon::GetInstance().GetCommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 
 void Sprite::SetTextureFile(const std::string& textureFile) {
 	filePath_ = "resource/Sprite/" + textureFile;
-	TextureManager::GetInstance()->LoadTexture(filePath_);
+	TextureManager::GetInstance().LoadTexture(filePath_);
 }
 
 std::string Sprite::GetTextureFile() const {
@@ -177,5 +176,5 @@ std::string Sprite::GetTextureFile() const {
 
 
 const D3D12_GPU_DESCRIPTOR_HANDLE Sprite::GetResource() const {
-	return TextureManager::GetInstance()->GetSrvHandleGPU(filePath_);
+	return TextureManager::GetInstance().GetSrvHandleGPU(filePath_);
 }

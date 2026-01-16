@@ -1,21 +1,16 @@
 #include "LoadingModels.h"
 
-std::shared_ptr<LoadingModels> LoadingModels::sInstance_ = nullptr;
+std::unique_ptr<LoadingModels> LoadingModels::sInstance_ = nullptr;
 
-std::shared_ptr<LoadingModels> LoadingModels::GetInstance() {
+LoadingModels& LoadingModels::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<LoadingModels>();
 	}
-	return sInstance_;
+	return *sInstance_;
 }
-void LoadingModels::Finalize() {
-	sInstance_.reset();
-	sInstance_ = nullptr;
-}
+void LoadingModels::Finalize() {}
 
 void LoadingModels::LoadObjects() {
-	modelManager = ModelManager::GetInstance().get();
-
 	LoadObj();
 	LoadGltf();
 }
@@ -23,49 +18,49 @@ void LoadingModels::LoadObjects() {
 
 void LoadingModels::LoadObj() {
 	//objの設定
-	modelManager->LoadModel("cannon", ".obj");
-	modelManager->LoadModel("enemy", ".obj");
-	modelManager->LoadModel("PlayerBullet", ".obj");
-	modelManager->LoadModel("checkpoint", ".obj");
-	modelManager->LoadModel("enemy_bomb", ".obj");
-	modelManager->LoadModel("stage_0", ".obj");
-	modelManager->LoadModel("stage_1", ".obj");
-	modelManager->LoadModel("stage_2", ".obj");
-	modelManager->LoadModel("stage_3", ".obj");
-	modelManager->LoadModel("stage_boss",".obj");
-	modelManager->LoadModel("stage_select", ".obj");
-	modelManager->LoadModel("warpGate", ".obj");
-	modelManager->LoadModel("goal", ".obj");
-	modelManager->LoadModel("moveGround", ".obj");
+	ModelManager::GetInstance().LoadModel("cannon", ".obj");
+	ModelManager::GetInstance().LoadModel("enemy", ".obj");
+	ModelManager::GetInstance().LoadModel("PlayerBullet", ".obj");
+	ModelManager::GetInstance().LoadModel("checkpoint", ".obj");
+	ModelManager::GetInstance().LoadModel("enemy_bomb", ".obj");
+	ModelManager::GetInstance().LoadModel("stage_0", ".obj");
+	ModelManager::GetInstance().LoadModel("stage_1", ".obj");
+	ModelManager::GetInstance().LoadModel("stage_2", ".obj");
+	ModelManager::GetInstance().LoadModel("stage_3", ".obj");
+	ModelManager::GetInstance().LoadModel("stage_boss",".obj");
+	ModelManager::GetInstance().LoadModel("stage_select", ".obj");
+	ModelManager::GetInstance().LoadModel("warpGate", ".obj");
+	ModelManager::GetInstance().LoadModel("goal", ".obj");
+	ModelManager::GetInstance().LoadModel("moveGround", ".obj");
 
-	modelManager->LoadModel("shadow", ".obj");
-	modelManager->LoadModel("player_found_mark", ".obj");
-	modelManager->LoadModel("player_lost_mark", ".obj");
+	ModelManager::GetInstance().LoadModel("shadow", ".obj");
+	ModelManager::GetInstance().LoadModel("player_found_mark", ".obj");
+	ModelManager::GetInstance().LoadModel("player_lost_mark", ".obj");
 
 }
 
 void LoadingModels::LoadGltf() {
 	//gltfの設定
-	modelManager->LoadModel("player_standby", ".gltf",true);
-	modelManager->LoadModel("player_move", ".gltf", true);
-	modelManager->LoadModel("player_shield", ".gltf");
-	modelManager->LoadModel("player_GameOver", ".gltf");
-	modelManager->LoadModel("player_clear", ".gltf", true);
+	ModelManager::GetInstance().LoadModel("player_standby", ".gltf",true);
+	ModelManager::GetInstance().LoadModel("player_move", ".gltf", true);
+	ModelManager::GetInstance().LoadModel("player_shield", ".gltf");
+	ModelManager::GetInstance().LoadModel("player_GameOver", ".gltf");
+	ModelManager::GetInstance().LoadModel("player_clear", ".gltf", true);
 
 
-	modelManager->LoadModel("umbrella_Close", ".gltf");
-	modelManager->LoadModel("umbrella_Open", ".gltf");
+	ModelManager::GetInstance().LoadModel("umbrella_Close", ".gltf");
+	ModelManager::GetInstance().LoadModel("umbrella_Open", ".gltf");
 
-	modelManager->LoadModel("Select_Start", ".gltf");
-	modelManager->LoadModel("Select_End", ".gltf");
+	ModelManager::GetInstance().LoadModel("Select_Start", ".gltf");
+	ModelManager::GetInstance().LoadModel("Select_End", ".gltf");
 
-	modelManager->LoadModel("Title_stage", ".gltf");
-	modelManager->LoadModel("gameover_stage", ".gltf");
-	modelManager->LoadModel("EventGate", ".gltf");
+	ModelManager::GetInstance().LoadModel("Title_stage", ".gltf");
+	ModelManager::GetInstance().LoadModel("gameover_stage", ".gltf");
+	ModelManager::GetInstance().LoadModel("EventGate", ".gltf");
 
-	modelManager->LoadModel("player_found_mark", ".gltf"); 
-	modelManager->LoadModel("player_lost_mark", ".gltf");
+	ModelManager::GetInstance().LoadModel("player_found_mark", ".gltf"); 
+	ModelManager::GetInstance().LoadModel("player_lost_mark", ".gltf");
 
-	modelManager->LoadModel("Boss", ".gltf", true);
+	ModelManager::GetInstance().LoadModel("Boss", ".gltf", true);
 
 }

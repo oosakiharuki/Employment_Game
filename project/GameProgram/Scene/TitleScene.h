@@ -53,7 +53,6 @@ private:
 	}
 
 	//入力処理
-	Input* input_ = Input::GetInstance().get();
 	//ゲームパット用の入力変数
 	XINPUT_STATE state_, preState_;
 
@@ -69,7 +68,7 @@ private:
 	std::unique_ptr<Shadow> playerShadow_;//プレイヤー影
 	std::unique_ptr<Sprite> spriteMojiTitle_;//タイトル名
 
-	ParticleParametars particleBullet_ = {
+	ParticleParameters particleBullet_ = {
 		"title_bullet", "resource/Sprite/cone.png", Primitive::CreateCone(), 1, 0.5f, {1,1,1}
 	};
 

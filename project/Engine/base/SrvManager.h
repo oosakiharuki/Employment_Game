@@ -6,7 +6,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static std::shared_ptr<SrvManager> GetInstance();
+	static SrvManager& GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -15,7 +15,7 @@ public:
 	/// 初期化処理
 	/// </summary>
 	/// <param name="dxCommon"></param>
-	void Initialize(DirectXCommon* dxCommon);
+	void Initialize();
 	/// <summary>
 	/// カウント
 	/// </summary>
@@ -60,13 +60,14 @@ public:
 	static const uint32_t sMaxSRVCount_;
 
 private:
-	DirectXCommon* directXCommon_ = nullptr;
 
 	//
 	uint32_t descriptorSize_;
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
 	uint32_t useIndex_ = 0;
 
-
-	static std::shared_ptr<SrvManager> sInstance_;
+	//インスタンス
+	static std::unique_ptr<SrvManager> sInstance_;
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<SrvManager>;
 };

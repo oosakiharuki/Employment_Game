@@ -8,7 +8,7 @@ BasePostEffect::~BasePostEffect() {}
 void BasePostEffect::ChangeNumber() {
 
 #ifdef _DEBUG
-	if (Input::GetInstance()->TriggerKey(DIK_F1)) {
+	if (Input::GetInstance().TriggerKey(DIK_F1)) {
 		sEffectNo_++;
 	}
 	//最大→0に
@@ -18,9 +18,7 @@ void BasePostEffect::ChangeNumber() {
 #endif // _DEBUG
 }
 
-void BasePostEffect::Initialize(DirectXCommon* dxCommon) {
-	dxCommon_ = dxCommon;
-
+void BasePostEffect::Initialize() {
 	GraphicsPipeline();
 	EffectInit();
 }
@@ -40,7 +38,7 @@ void BasePostEffect::CreateRasterizer() {
 }
 
 void BasePostEffect::CreateVertexShader() {
-	vertexShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Fullscreen.VS.hlsl", L"vs_6_0");
+	vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Fullscreen.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 }
 

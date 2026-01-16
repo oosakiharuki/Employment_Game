@@ -10,10 +10,9 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="modelCommon">モデル共通</param>
 	/// <param name="directoryPath">リソースファイルパス</param>
 	/// <param name="fileName">オブジェクト名</param>
-	void Initialize(ModelCommon* modelCommon,const std::string& directoryPath,const std::string& fileName) override;
+	void Initialize(const std::string& directoryPath,const std::string& fileName) override;
 	
 	/// <summary>
 	/// アニメーション
@@ -121,7 +120,6 @@ public:
 	void ResetMeshCount() { multiMeshCount_ = 0; }
 
 private:
-	ModelCommon* modelCommon_ = nullptr;
 
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource_; //index
 

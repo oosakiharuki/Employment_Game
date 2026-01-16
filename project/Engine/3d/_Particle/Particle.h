@@ -54,7 +54,7 @@ enum class ParticleBorn {
 /// <summary>
 /// パーティクルのパラメータ構造体
 /// </summary>
-struct ParticleParametars {
+struct ParticleParameters {
 	std::string name;        //パーティクルの名前
 	std::string textureFile; //テクスチャファイル名
 	ModelData primitive; //パーティクルの形(プリミティブ)
@@ -137,13 +137,11 @@ public:
 	/// <summary>
 	/// パーティクルの発生数
 	/// </summary>
-	/// <param name="countnum"></param>
-	void SetParticleCount(uint32_t countnum) { emitter_.count = countnum; }
+	/// <param name="count"></param>
+	void SetParticleCount(uint32_t count) { emitter_.count = count; }
 
 private:
-	ParticleCommon* particleCommon_ = nullptr;
 
-	
 	std::string fileName_;
 	std::string textureFile_;
 
@@ -201,7 +199,7 @@ private:
 	void InitMaterial();
 
 
-	void InitParameta();
+	void InitParameter();
 
 	void InitLight();
 };

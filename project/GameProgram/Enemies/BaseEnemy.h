@@ -263,12 +263,12 @@ protected:
 
 	//パーティクル
 	//ダメージを食らったとき
-	ParticleParametars particleDamage_ = {
+	ParticleParameters particleDamage_ = {
 		"enemy_damage", "resource/Sprite/circle.png", Primitive::CreateRing(), 20, 0.6f, {1 ,1 ,1}
 
 	};
 	//攻撃するとき
-	ParticleParametars particleFire_ = {
+	ParticleParameters particleFire_ = {
 		"enemy_fire", "resource/Sprite/cone.png", Primitive::CreateCone(), 1, 0.1f, {1 ,1 ,1}
 	};
 

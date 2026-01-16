@@ -12,7 +12,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static std::shared_ptr<GLTFCommon> GetInstance();
+	static GLTFCommon& GetInstance();
 	/// <summary>
 	/// 解放処理
 	/// </summary>
@@ -20,16 +20,11 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize(DirectXCommon* dxCommon) override;
+	void Initialize() override;
 	/// <summary>
 	/// 描画コマンド
 	/// </summary>
 	void Command();	
-	/// <summary>
-	/// getter_DirectX
-	/// </summary>
-	/// <returns></returns>
-	DirectXCommon* GetDirectXCommon()const { return dxCommon_; }
 
 	/// <summary>
 	/// setter_デフォルトカメラ
@@ -82,6 +77,8 @@ private:
 	D3D12_DESCRIPTOR_RANGE descriptorRangeIBL_[1] = {};//iamge_based_lighting
 
 	Camera* defaultCamera_ = nullptr;
-
-	static std::shared_ptr<GLTFCommon> sInstance_;
+	//インスタンス
+	static std::unique_ptr<GLTFCommon> sInstance_;
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<GLTFCommon>;
 };

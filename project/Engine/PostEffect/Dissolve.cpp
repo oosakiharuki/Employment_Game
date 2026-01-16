@@ -23,44 +23,44 @@ void Dissolve::RootSignature() {
 }
 
 void Dissolve::CreatePixelShader() {
-	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/Dissolve.PS.hlsl", L"ps_6_0");//ココのみ変化させる
+	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Dissolve.PS.hlsl", L"ps_6_0");//ココのみ変化させる
 	assert(pixelShaderBlob != nullptr);
 }
 
 void Dissolve::Command() {
-	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
 	//通常の描画
 	
 	if (isFade_) {
 		//特定のテクスチャ
-		dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(0, TextureGPU_);
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(0, TextureGPU_);
 	}
 	else {
-		dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
 	}
 	
 	//Dissolveの描画
-	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(1, TextureManager::GetInstance()->GetSrvHandleGPU(textureFileName_));
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(1, TextureManager::GetInstance().GetSrvHandleGPU(textureFileName_));
 	//溶ける度合
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(2, dissolveResource_->GetGPUVirtualAddress());
-	dxCommon_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(2, dissolveResource_->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(3, 1, 0, 0);
 }
 
 
 void Dissolve::EffectInit() {
 
-	srvIndex_ = SrvManager::GetInstance()->Allocate();
-	srvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(srvIndex_);
-	srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_);
+	srvIndex_ = SrvManager::GetInstance().Allocate();
+	srvHandleCPU_ = SrvManager::GetInstance().GetCPUDescriptorHandle(srvIndex_);
+	srvHandleGPU_ = SrvManager::GetInstance().GetGPUDescriptorHandle(srvIndex_);
 
 
-	SrvManager::GetInstance()->CreateSRVForTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
+	SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
 	textureFileName_ = "resource/Sprite/noise0.png";
-	TextureManager::GetInstance()->LoadTexture(textureFileName_);
+	TextureManager::GetInstance().LoadTexture(textureFileName_);
 
-	dissolveResource_ = dxCommon_->CreateBufferResource(sizeof(Threshold));
+	dissolveResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Threshold));
 	dissolveResource_->Map(0, nullptr, reinterpret_cast<void**>(&threshold_));
 
 	threshold_->degree = 0.5f;
@@ -87,35 +87,35 @@ void Dissolve::EffectUpdate() {
 	}
 #endif
 	//溶かし具合
-	if (Input::GetInstance()->PushKey(DIK_D)) {
+	if (Input::GetInstance().PushKey(DIK_D)) {
 		threshold_->degree += 0.01f;
 	}
-	else if (Input::GetInstance()->PushKey(DIK_A)) {
+	else if (Input::GetInstance().PushKey(DIK_A)) {
 		threshold_->degree -= 0.01f;
 	}
 	threshold_->degree = std::clamp(threshold_->degree, 0.0f, 1.0f);
 
 	//Edge調節
-	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+	if (Input::GetInstance().PushKey(DIK_RIGHT)) {
 		threshold_->edgeSize += 0.001f;
 	}
-	else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+	else if (Input::GetInstance().PushKey(DIK_LEFT)) {
 		threshold_->edgeSize -= 0.001f;
 	}
 	threshold_->edgeSize = std::clamp(threshold_->edgeSize, 0.0f, 0.1f);
 
 	//マスク変更
-	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
+	if (Input::GetInstance().TriggerKey(DIK_RETURN)) {
 		isChangeMask_ = !isChangeMask_;
 	}
 
 	if (isChangeMask_) {
 		textureFileName_ = "resource/Sprite/noise1.png";
-		TextureManager::GetInstance()->LoadTexture(textureFileName_);
+		TextureManager::GetInstance().LoadTexture(textureFileName_);
 	}
 	else {
 		textureFileName_ = "resource/Sprite/noise0.png";
-		TextureManager::GetInstance()->LoadTexture(textureFileName_);
+		TextureManager::GetInstance().LoadTexture(textureFileName_);
 	}
 }
 
@@ -125,7 +125,7 @@ void Dissolve::SetBackGround(D3D12_GPU_DESCRIPTOR_HANDLE gpu,  const std::string
 	isFade_ = true;
 
 	textureFileName_ = "resource/Sprite/" + textureFile;
-	TextureManager::GetInstance()->LoadTexture(textureFileName_);
+	TextureManager::GetInstance().LoadTexture(textureFileName_);
 }
 
 void Dissolve::Degree(float value) {

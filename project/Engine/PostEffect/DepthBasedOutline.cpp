@@ -39,37 +39,37 @@ void DepthBasedOutline::CreateRasterizer() {
 }
 
 void DepthBasedOutline::CreatePixelShader() {
-	pixelShaderBlob = dxCommon_->CompileShader(L"resource/shaders/DepthBasedOutline.PS.hlsl", L"ps_6_0");//ココのみ変化させる
+	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/DepthBasedOutline.PS.hlsl", L"ps_6_0");//ココのみ変化させる
 	assert(pixelShaderBlob != nullptr);
 }
 
 void DepthBasedOutline::Command() {
-	dxCommon_->GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	dxCommon_->GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
 	//通常の描画
-	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
 	//outlineの描画
-	dxCommon_->GetCommandList()->SetGraphicsRootDescriptorTable(1, srvHandleGPUDepth_);
-	dxCommon_->GetCommandList()->SetGraphicsRootConstantBufferView(2, materialResource_->GetGPUVirtualAddress());
-	dxCommon_->GetCommandList()->DrawInstanced(3, 1, 0, 0);
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(1, srvHandleGPUDepth_);
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(2, materialResource_->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(3, 1, 0, 0);
 }
 
 void DepthBasedOutline::EffectInit() {
-	srvIndex_ = SrvManager::GetInstance()->Allocate();
-	srvHandleCPU_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(srvIndex_);
-	srvHandleGPU_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_);
+	srvIndex_ = SrvManager::GetInstance().Allocate();
+	srvHandleCPU_ = SrvManager::GetInstance().GetCPUDescriptorHandle(srvIndex_);
+	srvHandleGPU_ = SrvManager::GetInstance().GetGPUDescriptorHandle(srvIndex_);
 
-	SrvManager::GetInstance()->CreateSRVForTexture2D(srvIndex_, dxCommon_->GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
+	SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
-	srvIndex_ = SrvManager::GetInstance()->Allocate();
-	srvHandleCPUDepth_ = SrvManager::GetInstance()->GetCPUDescriptorHandle(srvIndex_);
-	srvHandleGPUDepth_ = SrvManager::GetInstance()->GetGPUDescriptorHandle(srvIndex_);
+	srvIndex_ = SrvManager::GetInstance().Allocate();
+	srvHandleCPUDepth_ = SrvManager::GetInstance().GetCPUDescriptorHandle(srvIndex_);
+	srvHandleGPUDepth_ = SrvManager::GetInstance().GetGPUDescriptorHandle(srvIndex_);
 
-	SrvManager::GetInstance()->CreateSRVForTexture2D(srvIndex_, dxCommon_->GetOutlineResource(), DXGI_FORMAT_R24_UNORM_X8_TYPELESS, 1);
+	SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetOutlineResource(), DXGI_FORMAT_R24_UNORM_X8_TYPELESS, 1);
 
 	//Model用マテリアル
 	//マテリアル用のリソース
-	materialResource_ = dxCommon_->CreateBufferResource(sizeof(DepthOutlineFunction));
+	materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(DepthOutlineFunction));
 	//書き込むためのアドレス
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&depthOutlineFunction_));
 	//色の設定

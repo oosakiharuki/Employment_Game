@@ -48,7 +48,7 @@ private:
 	Vector3 particleLaserSize_ = { 0.1f,0.1f,0.1f };
 
 	//見える範囲のパーティクルパラメータ
-	ParticleParametars particleLaser_ = {
+	ParticleParameters particleLaser_ = {
 		"tullet_laser","resource/Sprite/3YvXH.png",Primitive::CreateBeam(), 1, 0.001f, particleLaserSize_
 	};
 
