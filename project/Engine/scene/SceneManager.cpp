@@ -2,15 +2,17 @@
 
 SceneManager::SceneManager() {}
 
-SceneManager::~SceneManager() {}
+SceneManager::~SceneManager() {
+	sInstance_.reset();
+}
 
-std::shared_ptr<SceneManager> SceneManager::sInstance_ = nullptr;
+std::unique_ptr<SceneManager> SceneManager::sInstance_ = nullptr;
 
-std::shared_ptr<SceneManager> SceneManager::GetInstance() {
+SceneManager& SceneManager::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<SceneManager>();
 	}
-	return sInstance_;
+	return *sInstance_;
 }
 
 void SceneManager::ChangeScene(const std::string& sceneName) {
@@ -36,10 +38,9 @@ void SceneManager::SceneUpdate() {
 	if (NextSceneChangeFlag()) {
 		if (scene_) {
 			scene_->Finalize();
-			delete scene_;
+			scene_.reset();
 		}
-		scene_ = nextScene_;
-		nextScene_ = nullptr;
+		scene_ = std::move(nextScene_);
 		//初期化処理
 		scene_->Initialize();
 	}
@@ -51,11 +52,11 @@ void SceneManager::Draw() {
 }
 
 void SceneManager::Finalize() {
-	scene_->Finalize();
 	//シーンのリセット
 	scene_->Finalize();
-	delete scene_;
-	delete nextScene_;
+	//シ－ンの開放
+	scene_.reset();
+	sInstance_.reset();
 }
 
 bool SceneManager::NextSceneChangeFlag() {

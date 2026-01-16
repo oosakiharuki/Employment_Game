@@ -9,7 +9,8 @@ void VisualActor::Initialize(const std::string objectName) {
 	baseObject_ = std::make_unique<Object_glTF>();
 	baseObject_->Initialize();
 	baseObject_->SetModelFile(objectName  + ".gltf");
-	objectName_ = objectName;
+	objectName_ = objectName;//オブジェクト名を設定しておく
+	baseObject_->LightSwitch(false);//ライトのスイッチ初期化
 }
 
 void VisualActor::Update() {
@@ -19,5 +20,9 @@ void VisualActor::Update() {
 
 void VisualActor::Draw() {
 	baseObject_->Draw();
+}
+
+void VisualActor::LightOn() {
+	baseObject_->LightSwitch(true);
 }
 

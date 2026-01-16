@@ -1,23 +1,17 @@
 #include "ModelManager.h"
 
-std::shared_ptr<ModelManager> ModelManager::sInstance_ = nullptr;
+std::unique_ptr<ModelManager> ModelManager::sInstance_ = nullptr;
 
 
-std::shared_ptr<ModelManager> ModelManager::GetInstance() {
+ModelManager& ModelManager::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<ModelManager>();
 	}
-	return sInstance_;
+	return *sInstance_;
 }
 
 void ModelManager::Finalize() {
 	sInstance_.reset();
-	sInstance_ = nullptr;
-}
-
-void ModelManager::Initialize(DirectXCommon* dxCommon) {
-	modelCommon_ = std::make_unique<ModelCommon>();
-	modelCommon_->Initialize(dxCommon);
 }
 
 void ModelManager::LoadModel(const std::string& filePath, const std::string& objType, bool isAnimation, bool isSkinning) {
@@ -34,12 +28,12 @@ void ModelManager::LoadModel(const std::string& filePath, const std::string& obj
 
 	if (objType == ".obj") {
 		std::unique_ptr<Model_obj> model = std::make_unique<Model_obj>();
-		model->Initialize(modelCommon_.get(), "resource", filePath);//model,file名,OBJ本体
+		model->Initialize("resource", filePath);//model,file名,OBJ本体
 		objs_.insert(std::make_pair(fileName, std::move(model)));
 	}
 	else if (objType == ".gltf") {
 		std::unique_ptr<Model_glTF> model = std::make_unique<Model_glTF>();
-		model->Initialize(modelCommon_.get(), "resource", filePath + "/" + fileName);//model,file名,OBJ本体
+		model->Initialize("resource", filePath + "/" + fileName);//model,file名,OBJ本体
 		model->InitAnimation("resource", filePath + "/" + fileName, isAnimation, isSkinning);//アニメーションが必要な場合
 		glTFs_.insert(std::make_pair(fileName, std::move(model)));
 	}

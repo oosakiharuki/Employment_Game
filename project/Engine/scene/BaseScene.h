@@ -61,6 +61,4 @@ public:
 	/// <returns></returns>trueで終了
 	bool GetIsGameEnd() { return isGameEnd_; }
 
-private:
-	bool isFade_ = false;
 };

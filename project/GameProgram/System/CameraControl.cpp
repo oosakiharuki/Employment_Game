@@ -34,7 +34,7 @@ void CameraControl::Update(Camera* camera) {
 		Shaking();
 	}
 
-	//imgui更新処理
+	//imGui更新処理
 	ImGuiUpdate();
 
 	wt_.UpdateMatrix(transform_);
@@ -47,7 +47,7 @@ void CameraControl::Update(Camera* camera) {
 void CameraControl::ImGuiUpdate() {
 #ifdef  USE_IMGUI
 	//imguiでなくボタンで変更するように
-	if (Input::GetInstance()->TriggerKey(DIK_P)) {
+	if (Input::GetInstance().TriggerKey(DIK_P)) {
 		isFreeMode_ = !isFreeMode_;
 	}
 
@@ -101,27 +101,27 @@ void CameraControl::Move() {
 
 void CameraControl::DebugMove() {
 	//上に移動
-	if (Input::GetInstance()->PushKey(DIK_UP)) {
+	if (Input::GetInstance().PushKey(DIK_UP)) {
 		transform_.translate.y += movePower_;
 	}
 	//下に移動
-	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
+	if (Input::GetInstance().PushKey(DIK_DOWN)) {
 		transform_.translate.y -= movePower_;
 	}
 	//左に移動
-	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+	if (Input::GetInstance().PushKey(DIK_LEFT)) {
 		transform_.translate.x -= movePower_;
 	}
 	//右に移動
-	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+	if (Input::GetInstance().PushKey(DIK_RIGHT)) {
 		transform_.translate.x += movePower_;
 	}
 	//後ろに移動
-	if (Input::GetInstance()->PushKey(DIK_Y)) {
+	if (Input::GetInstance().PushKey(DIK_Y)) {
 		transform_.translate.z -= movePower_;
 	}
 	//前に移動
-	if (Input::GetInstance()->PushKey(DIK_U)) {
+	if (Input::GetInstance().PushKey(DIK_U)) {
 		transform_.translate.z += movePower_;
 	}
 }

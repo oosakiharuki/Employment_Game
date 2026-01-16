@@ -11,7 +11,12 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static std::shared_ptr<ParticleEmitter> GetInstance();
+	static ParticleEmitter& GetInstance();
+
+	/// <summary>
+	/// 解放処理
+	/// </summary>
+	void Finalize();
 
 	/// <summary>
 	/// パーティクル生成
@@ -23,7 +28,8 @@ public:
 	std::list<ParticleData> MakeEmit(const std::string& particleName, const Emitter& emitter, std::mt19937& randomEngine);
 
 private:
-	static std::shared_ptr<ParticleEmitter> sInstance_;
+	//インスタンス
+	static std::unique_ptr<ParticleEmitter> sInstance_;
 
 	///パーティクル生成方法一覧
 	ParticleData MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter);//通常

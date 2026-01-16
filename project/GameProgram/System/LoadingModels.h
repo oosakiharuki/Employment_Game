@@ -6,7 +6,11 @@
 /// </summary>
 class LoadingModels {
 public:
-	static std::shared_ptr<LoadingModels> GetInstance();
+	/// <summary>
+	/// インスタンス生成
+	/// </summary>
+	/// <returns></returns>
+	static LoadingModels& GetInstance();
 	
 	/// <summary>
 	/// ロード
@@ -17,10 +21,10 @@ public:
 	/// </summary>
 	void Finalize();
 private:
-
-	ModelManager* modelManager;
-
-	static std::shared_ptr<LoadingModels> sInstance_;
+	//インスタンス
+	static std::unique_ptr<LoadingModels> sInstance_;
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<LoadingModels>;
 
 	/// <summary>
 	/// .objを読み取る

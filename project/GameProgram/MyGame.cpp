@@ -8,18 +8,17 @@ void MyGame::Initialize() {
 	//ゲームシーン初期化
 
 	//objectをローディング
-	LoadingModels::GetInstance()->LoadObjects();
-	LoadingModels::GetInstance()->Finalize();
+	LoadingModels::GetInstance().LoadObjects();
+	LoadingModels::GetInstance().Finalize();
 
-	fadeScreen_ = FadeScreen::GetInstance().get();
-	fadeScreen_->Initialize();
+	FadeScreen::GetInstance().Initialize();
 
-	sceneFactory_ = new SceneFactory();
-	SceneManager::GetInstance()->SetSceneFactory(sceneFactory_);
+	std::unique_ptr<SceneFactory> sceneFactory_ = std::make_unique<SceneFactory>();
+	SceneManager::GetInstance().SetSceneFactory(std::move(sceneFactory_));
 
-	SceneManager::GetInstance()->ChangeScene("Title");
+	SceneManager::GetInstance().ChangeScene("GameOver");
 	//シーンの更新処理(変更処理)
-	SceneManager::GetInstance()->SceneUpdate();
+	SceneManager::GetInstance().SceneUpdate();
 }
 
 void MyGame::Update() {
@@ -27,72 +26,74 @@ void MyGame::Update() {
 	Framework::Update();
 
 #ifdef  USE_IMGUI
-	ImGuiManager::GetInstance()->Begin();
+	ImGuiManager::GetInstance().Begin();
 #endif //  USE_IMGUI
 
 	//ゲームシーン更新
 	
 	//フェード中は変更しない
-	if (!fadeScreen_->GetIsFading()) {
+	if (!FadeScreen::GetInstance().GetIsFading()) {
 		//シーンの更新処理(変更処理)
-		SceneManager::GetInstance()->SceneUpdate();
+		SceneManager::GetInstance().SceneUpdate();
 	}
 
-	SceneManager::GetInstance()->Update();
+	SceneManager::GetInstance().Update();
 
 	//タイトル画面で終了を選択した時するとき
-	if (SceneManager::GetInstance()->SetGameEnd()) {
-		Framework::SetIsEndRequest(SceneManager::GetInstance()->SetGameEnd());
+	if (SceneManager::GetInstance().SetGameEnd()) {
+		Framework::SetIsEndRequest(SceneManager::GetInstance().SetGameEnd());
 	}
 
 	//フェード更新
-	fadeScreen_->Update();
+	FadeScreen::GetInstance().Update();
 	
 	//ポストエフェクト更新/変更
-	PostEffectManager::GetInstance()->Update();
+	PostEffectManager::GetInstance().Update();
 
 #ifdef  USE_IMGUI
-	ImGuiManager::GetInstance()->End();
+	ImGuiManager::GetInstance().End();
 #endif //  USE_IMGUI
 
 }
 
 void MyGame::Draw() {
 	//描画開始
-	DirectXCommon::GetInstance()->RenderTexturePreDraw();// 対 renderTexture
+	DirectXCommon::GetInstance().RenderTexturePreDraw();// 対 renderTexture
 	
 	//ゲームシーン描画
-	SceneManager::GetInstance()->Draw();
+	SceneManager::GetInstance().Draw();
 
-	DirectXCommon::GetInstance()->RenderTexturePostDraw();
+	DirectXCommon::GetInstance().RenderTexturePostDraw();
 
 	//描画開始
-	DirectXCommon::GetInstance()->PreDraw();// 対 swapChain
+	DirectXCommon::GetInstance().PreDraw();// 対 swapChain
 	
 	//フェード
-	fadeScreen_->Draw();
+	FadeScreen::GetInstance().Draw();
 
-	DirectXCommon::GetInstance()->FadePreDraw();
+	DirectXCommon::GetInstance().FadePreDraw();
 
 #ifdef  USE_IMGUI
 	//ImGui描画処理
-	ImGuiManager::GetInstance()->Draw();
+	ImGuiManager::GetInstance().Draw();
 #endif //  USE_IMGUI
 
 	//描画終了
-	DirectXCommon::GetInstance()->PostDraw();
+	DirectXCommon::GetInstance().PostDraw();
 
 }
 
 
 void MyGame::Finalize() {
-	SceneManager::GetInstance().reset();
-	fadeScreen_->Finalize();
-	SceneManager::GetInstance()->Finalize();
-	delete sceneFactory_;
+	FadeScreen::GetInstance().Finalize();
+	SceneManager::GetInstance().Finalize();
+	NextStageSave::GetInstance().Finalize();
+	CollisionManager::GetInstance().Finalize();
+	UIManager::GetInstance().Finalize();
+	ParticleEmitter::GetInstance().Finalize();
 
 #ifdef  USE_IMGUI
-	ImGuiManager::GetInstance()->Finalize();
+	ImGuiManager::GetInstance().Finalize();
 #endif //  USE_IMGUI
 
 	Framework::Finalize();

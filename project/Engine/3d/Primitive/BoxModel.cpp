@@ -5,12 +5,11 @@ using namespace MyMath;
 using namespace Primitive;
 
 void BoxModel::Initialize(const std::string& textureFile) {
-	this->cubeMap_ = CubeMap::GetInstance().get();
 
 	modelData_ = CreateBox();
 	modelData_.materialData.textureFilePath = textureFile;
 
-	vertexResource_ = cubeMap_->GetDirectXCommon()->CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+	vertexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 
 	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
@@ -21,7 +20,7 @@ void BoxModel::Initialize(const std::string& textureFile) {
 
 	//Model用マテリアル
 	//マテリアル用のリソース
-	materialResource_ = cubeMap_->GetDirectXCommon()->CreateBufferResource(sizeof(Material));
+	materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
 	//書き込むためのアドレス
 	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 	//色の設定
@@ -31,11 +30,11 @@ void BoxModel::Initialize(const std::string& textureFile) {
 	materialData_->shininess = 70;
 
 	//テクスチャ読み込み
-	TextureManager::GetInstance()->LoadTexture(modelData_.materialData.textureFilePath);
-	modelData_.materialData.textureIndex = TextureManager::GetInstance()->GetSrvIndex(modelData_.materialData.textureFilePath);
+	TextureManager::GetInstance().LoadTexture(modelData_.materialData.textureFilePath);
+	modelData_.materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(modelData_.materialData.textureFilePath);
 
 	camera_ = cubeMap_->GetDefaultCamera();
-	wvpResource_ = cubeMap_->GetDirectXCommon()->CreateBufferResource(sizeof(TransformationMatrix));
+	wvpResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
 	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 
 	wvpData_->World = MakeIdentity4x4();
@@ -62,9 +61,9 @@ void BoxModel::Update(const Matrix4x4& matWorld) {
 }
 
 void BoxModel::Draw() {
-	cubeMap_->GetDirectXCommon()->GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
-	cubeMap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
-	cubeMap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	cubeMap_->GetDirectXCommon()->GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance()->GetSrvHandleGPU(modelData_.materialData.textureFilePath));
-	cubeMap_->GetDirectXCommon()->GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	DirectXCommon::GetInstance().GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance().GetSrvHandleGPU(modelData_.materialData.textureFilePath));
+	DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }

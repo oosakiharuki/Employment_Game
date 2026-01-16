@@ -2,6 +2,9 @@
 #include "Framework.h"
 #include "BaseScene.h"
 
+#include "LevelEditor.h"
+#include "SpitOutLevelEditor.h"
+#include "CameraControl.h"
 /// <summary>
 /// ゲームオーバーシーン(BaseSceneの派生クラス)
 /// </summary>
@@ -25,38 +28,29 @@ private:
 	/// オブジェクト初期化処理
 	/// </summary>
 	void InitObject();
-	//入力処理
-	Input* input_ = Input::GetInstance().get();
 	//ゲームパット用の入力変数
 	XINPUT_STATE state_, preState_;
 
 	//カメラ
 	std::unique_ptr<Camera> camera_ = nullptr;
-	Vector3 cameraRotate_ = { 0.0f,0.0f,0.0f };//回転
-	Vector3 cameraTranslate_ = { 0.0f,0.0f,0.0f };///座標
+	//カメラのコントロール
+	std::unique_ptr<CameraControl> cameraControl_;
 
+	//レベルエディタ(オブジェクトの配置を.jsonでできる)
+	LevelEditor levelEditor_;
+	SpitOutLevelEditor spitOut_;
+	//オブジェクト描画
+	std::vector<std::shared_ptr<VisualActor>> visualActors;
+	std::unordered_map<std::string, Transform> transforms_;//各々の変更用
+	//回る速度
+	const float kRotate_ = 0.5f;
 
 	//スプライト
 	std::unique_ptr<Sprite> sprite_;//ゲームオーバーの文字
 	std::unique_ptr<Sprite> spriteSpace_;//Spaceでもどるの文字
 
-	//プレイヤー
-	std::unique_ptr<Object_glTF> playerGltf_;
-	WorldTransform wt_;
-	Transform transform_{};
-	
-	//演出用ステージ
-	std::unique_ptr<Object_glTF> stageGltf_;
-
-	//ゲームオーバーのカメラ位置
-	const Vector3 kCameraTranslate_ = { 0.0f,5.0f,-15.0f };//座標
-	const Vector3 kCameraRotate_ = { 15.0f,0.0f,0.0f };//回転
-
 	//スプライトの設定
 	const Vector2 kSpritePositionGameOver_ = { 100.0f,100.0f };//[ゲームオーバー]文字の座標
 	const Vector2 kSpritePositionButton_ = { 800.0f,10.0f };//[ボタンで戻る]文字の座標
 	const Vector2 kSpriteSizeButton_ = { 256.0f, 64.0f };//[ボタンで戻る]文字のサイズ
-
-	//回る速度
-	const float kRotate_ = 0.5f;
 };

@@ -1,22 +1,19 @@
 #include "ImGuiManager.h"
 
-std::shared_ptr<ImGuiManager> ImGuiManager::sInstance_ = nullptr;
+std::unique_ptr<ImGuiManager> ImGuiManager::sInstance_ = nullptr;
 
-std::shared_ptr<ImGuiManager> ImGuiManager::GetInstance() {
+ImGuiManager& ImGuiManager::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<ImGuiManager>();
 	}
-	return sInstance_;
+	return *sInstance_;
 }
 
-void ImGuiManager::Initialize([[maybe_unused]]WinApp* winApp, DirectXCommon* dxCommon, [[maybe_unused]]SrvManager* srvManager) {
+void ImGuiManager::Initialize([[maybe_unused]]WinApp* winApp) {
 #ifdef  USE_IMGUI
 
-	dxCommon_ = DirectXCommon::GetInstance().get();
-	srvManager_ = SrvManager::GetInstance().get();
-
-	uint32_t srvIndex = srvManager_->Allocate();
-	srvHeap_ = srvManager_->GetDescriptorHeap();
+	uint32_t srvIndex = SrvManager::GetInstance().Allocate();
+	srvHeap_ = SrvManager::GetInstance().GetDescriptorHeap();
 
 	//ImGui初期化
 	IMGUI_CHECKVERSION();
@@ -24,12 +21,12 @@ void ImGuiManager::Initialize([[maybe_unused]]WinApp* winApp, DirectXCommon* dxC
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(winApp->GetHwnd());
 	ImGui_ImplDX12_Init(
-		dxCommon_->GetDevice(),
-		static_cast<int>(dxCommon_->GetSwapChainResourceNum()),
+		DirectXCommon::GetInstance().GetDevice(),
+		static_cast<int>(DirectXCommon::GetInstance().GetSwapChainResourceNum()),
 		DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
 		srvHeap_.Get(),
-		srvManager_->GetCPUDescriptorHandle(srvIndex),
-		srvManager_->GetGPUDescriptorHandle(srvIndex));
+		SrvManager::GetInstance().GetCPUDescriptorHandle(srvIndex),
+		SrvManager::GetInstance().GetGPUDescriptorHandle(srvIndex));
 
 	//日本語表記
 	JapaneseNotation();
@@ -63,7 +60,7 @@ void ImGuiManager::End() {
 
 void ImGuiManager::Draw(){
 #ifdef  USE_IMGUI
-	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance().GetCommandList();
 
 	ID3D12DescriptorHeap* ppHeaps[] = { srvHeap_.Get() };
 	commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
@@ -81,7 +78,6 @@ void ImGuiManager::Finalize() {
 	ImGui::DestroyContext();
 
 	sInstance_.reset();
-	sInstance_ = nullptr;
 
 #endif //  USE_IMGUI
 }

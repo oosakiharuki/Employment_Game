@@ -9,9 +9,9 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="directorypath"></param>
+	/// <param name="directoryPath"></param>
 	/// <param name="fileName"></param>
-	void Initialize(ModelCommon* modelCommon, const std::string& directorypath, const std::string& fileName) override;
+	void Initialize(const std::string& directoryPath, const std::string& fileName) override;
 
 	/// <summary>
 	/// 描画処理
@@ -50,9 +50,9 @@ private:
 	/// </summary>
 	/// <param name="directoryPath"></param>
 	/// <param name="filename"></param>
-	/// <param name="usemtl"></param>
+	/// <param name="useMtl"></param>
 	/// <returns></returns>
-	static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename, const std::string& usemtl);
+	static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename, const std::string& useMtl);
 	/// <summary>
 	/// .objファイルを読み取る
 	/// </summary>
@@ -61,8 +61,6 @@ private:
 	/// <param name="objName"></param>
 	/// <returns></returns>
 	static ModelDataMulti LoadObjFile(const std::string& directoryPath, const std::string& filename, const std::string& objName);
-	
-	ModelCommon* modelCommon_ = nullptr;
 
 	ModelDataMulti InitialData_;
 };

@@ -8,29 +8,23 @@
 using namespace MyMath;
 using namespace Primitive;
 
-std::shared_ptr<ParticleManager> ParticleManager::sInstance_ = nullptr;
+std::unique_ptr<ParticleManager> ParticleManager::sInstance_ = nullptr;
 
-std::shared_ptr<ParticleManager> ParticleManager::GetInstance() {
+ParticleManager& ParticleManager::GetInstance() {
 	if (sInstance_ == nullptr) {
 		sInstance_ = std::make_unique<ParticleManager>();
 	}
-	return sInstance_;
-}
-
-void ParticleManager::Initialize(DirectXCommon* dxCommon, SrvManager* srvManager) {
-	particleCommon = ParticleCommon::GetInstance().get(); 
-	this->srvManager = srvManager;
+	return *sInstance_;
 }
 
 void ParticleManager::Finalize() {
 	sInstance_.reset();
-	sInstance_ = nullptr;
 }
 
 
 void ParticleManager::CreateParticleGroup(const std::string& name, const std::string& textureFilePath, const ModelData& modelData) {
 
-	assert(srvManager->Max());
+	assert(SrvManager::GetInstance().Max());
 	
 	if (particleGroups.contains(name)) {
 		return;
@@ -44,7 +38,7 @@ void ParticleManager::CreateParticleGroup(const std::string& name, const std::st
 
 	//テクスチャ読み込み
 	particleG.modelData.materialData.textureFilePath = textureFilePath;
-	particleG.resource = particleCommon->GetDxCommon()->CreateBufferResource(sizeof(ParticleForGPU) * particleG.kNumInstance);
+	particleG.resource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(ParticleForGPU) * particleG.kNumInstance);
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
@@ -55,54 +49,54 @@ void ParticleManager::CreateParticleGroup(const std::string& name, const std::st
 	srvDesc.Buffer.NumElements = particleG.kNumInstance;
 	srvDesc.Buffer.StructureByteStride = sizeof(ParticleForGPU);
 
-	particleG.srvIndex = srvManager->Allocate();
-	particleG.srvHandleCPU = srvManager->GetCPUDescriptorHandle(particleG.srvIndex);
-	particleG.srvHandleGPU = srvManager->GetGPUDescriptorHandle(particleG.srvIndex);
+	particleG.srvIndex = SrvManager::GetInstance().Allocate();
+	particleG.srvHandleCPU = SrvManager::GetInstance().GetCPUDescriptorHandle(particleG.srvIndex);
+	particleG.srvHandleGPU = SrvManager::GetInstance().GetGPUDescriptorHandle(particleG.srvIndex);
 	
 
 	//SRVの生成
-	particleCommon->GetDxCommon()->GetDevice()->CreateShaderResourceView(particleG.resource.Get(), &srvDesc, particleG.srvHandleCPU);
+	DirectXCommon::GetInstance().GetDevice()->CreateShaderResourceView(particleG.resource.Get(), &srvDesc, particleG.srvHandleCPU);
 	
 	particleG.numInstance = 0;
 }
 
 D3D12_GPU_DESCRIPTOR_HANDLE  ParticleManager::GetSrvHandleGPU( const std::string& filePath) {
-	assert(srvManager->Max());
+	assert(SrvManager::GetInstance().Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 	return particleG.srvHandleGPU;
 }
 
 ModelData ParticleManager::GetModelData( const std::string& filePath) {
-	assert(srvManager->Max());
+	assert(SrvManager::GetInstance().Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 	return particleG.modelData;
 }
 
 std::string ParticleManager::GetTextureFile( const std::string& filePath) {
-	assert(srvManager->Max());
+	assert(SrvManager::GetInstance().Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 	return particleG.textureFile;
 }
 
 Microsoft::WRL::ComPtr<ID3D12Resource> ParticleManager::GetResource( const std::string& filePath) {
-	assert(srvManager->Max());
+	assert(SrvManager::GetInstance().Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 	return particleG.resource;
 }
 
 std::list<ParticleData> ParticleManager::GetParticle( const std::string& filePath) {
-	assert(srvManager->Max());
+	assert(SrvManager::GetInstance().Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 	return particleG.particles;
 }
 
 void ParticleManager::Update( const std::string& filePath, ParticleForGPU* wvpData) {
-	assert(srvManager->Max());
+	assert(SrvManager::GetInstance().Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 
@@ -212,47 +206,47 @@ void ParticleManager::Timer(ParticleData& particleData) {
 
 void ParticleManager::Emit( const std::string& filePath, const Emitter& emitter) {
 
-	assert(srvManager->Max());
+	assert(SrvManager::GetInstance().Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 	//
 	std::random_device seedGenerator;
 	std::mt19937 randomEngine(seedGenerator());
 
-	particleG.particles.splice(particleG.particles.end(), ParticleEmitter::GetInstance()->MakeEmit(filePath ,emitter, randomEngine));
+	particleG.particles.splice(particleG.particles.end(), ParticleEmitter::GetInstance().MakeEmit(filePath ,emitter, randomEngine));
 }
 
 uint32_t& ParticleManager::GetNum(const std::string& filePath) {
-	assert(srvManager->Max());
+	assert(SrvManager::GetInstance().Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 	return particleG.numInstance;
 }
 
 void ParticleManager::ResetNum(const std::string& filePath) {
-	assert(srvManager->Max());
+	assert(SrvManager::GetInstance().Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 	particleG.Updated = false;
 }
 
 void ParticleManager::ResetParticle(const std::string& filePath) {
-	assert(srvManager->Max());
+	assert(SrvManager::GetInstance().Max());
 
 	ParticleGroup& particleG = particleGroups[filePath];
 	particleG.particles.clear();
 }
 
-std::unique_ptr<Particle> ParticleManager::InitParticle(const ParticleParametars& parametars) {
+std::unique_ptr<Particle> ParticleManager::InitParticle(const ParticleParameters& parameters) {
 	//使用するパーティクルを選ぶ
-	std::unique_ptr<Particle>& particle = particles_[parametars.name];
+	std::unique_ptr<Particle>& particle = particles_[parameters.name];
 	//パーティクルを設定
 	particle = std::make_unique<Particle>();
 	//初期化(名前,テクスチャファイル,モデルの形)
-	particle->Initialize(parametars.name, parametars.textureFile, parametars.primitive);
-	particle->SetParticleCount(parametars.count); //生成数を設定
-	particle->SetFrequency(parametars.frequency); //頻度 / 生存時間を設定
-	particle->SetScale(parametars.basicSize);     //基本サイズを設定
+	particle->Initialize(parameters.name, parameters.textureFile, parameters.primitive);
+	particle->SetParticleCount(parameters.count); //生成数を設定
+	particle->SetFrequency(parameters.frequency); //頻度 / 生存時間を設定
+	particle->SetScale(parameters.basicSize);     //基本サイズを設定
 
 	return std::move(particle);
 }

@@ -6,17 +6,14 @@ void Framework::Initialize() {
 	winApp_->Initialize();
 
 	//入力処理
-	input_ = Input::GetInstance().get();
-	input_->Initialize(winApp_.get());
+	Input::GetInstance().Initialize(winApp_.get());
 
 	//DirectX処理
-	dxCommon_ = DirectXCommon::GetInstance().get();
-	dxCommon_->SetWinApp(winApp_.get());
-	dxCommon_->Initialize();
+	DirectXCommon::GetInstance().SetWinApp(winApp_.get());
+	DirectXCommon::GetInstance().Initialize();
 
 	//Srv処理
-	srvManager_ = SrvManager::GetInstance().get();
-	srvManager_->Initialize(dxCommon_);
+	SrvManager::GetInstance().Initialize();
 
 	//スプライト(2d)の共通処理のまとめ
 	SpriteCommons();
@@ -25,57 +22,47 @@ void Framework::Initialize() {
 	ObjectCommons();
 
 	//ポストエフェクト共有処理
-	postEffectM_ = PostEffectManager::GetInstance().get();
-	postEffectM_->Initialize(dxCommon_);
+	PostEffectManager::GetInstance().Initialize();
 
 	//音声共有処理
-	audio_ = Audio::GetInstance().get();
-	audio_->Initialize();
+	Audio::GetInstance().Initialize();
 }
 
 void Framework::SpriteCommons() {
 	//imGui処理
-	ImGuiManager::GetInstance()->Initialize(winApp_.get(), dxCommon_, srvManager_);
+#ifdef USE_IMGUI
+	ImGuiManager::GetInstance().Initialize(winApp_.get());
+#endif // USE_IMGUI
 
 	//スプライト共通処理
-	spriteCommon_ = SpriteCommon::GetInstance().get();
-	spriteCommon_->Initialize(dxCommon_);
+	SpriteCommon::GetInstance().Initialize();
 	//テクスチャマネージャ初期化
-	TextureManager::GetInstance()->Initialize(dxCommon_, srvManager_);
+	TextureManager::GetInstance().Initialize();
 }
 
 void Framework::ObjectCommons() {
 	//オブジェクト(.obj)共有処理
-	object3dCommon_ = Object3dCommon::GetInstance().get();
-	object3dCommon_->Initialize(dxCommon_);
+	Object3dCommon::GetInstance().Initialize();
 
 	//オブジェクト(.gltf)共有処理
-	glTFCommon_ = GLTFCommon::GetInstance().get();
-	glTFCommon_->Initialize(dxCommon_);
+	GLTFCommon::GetInstance().Initialize();
 
 	//スキニング共有処理
-	skinningCommon_ = SkinningCommon::GetInstance().get();
-	skinningCommon_->Initialize(dxCommon_);
+	SkinningCommon::GetInstance().Initialize();
 
-	//モデル共有処理
-	modelCommon_ = std::make_unique<ModelCommon>();
-	modelCommon_->Initialize(dxCommon_);
 	//モデルマネージャ初期化
-	ModelManager::GetInstance()->Initialize(dxCommon_);
+	ModelManager::GetInstance();
 
 	//パーティクル共有処理
-	particleCommon_ = ParticleCommon::GetInstance().get();
-	particleCommon_->Initialize(dxCommon_);
+	ParticleCommon::GetInstance().Initialize();
 	//パーティクルマネージャ初期化
-	ParticleManager::GetInstance()->Initialize(dxCommon_, srvManager_);
+	ParticleManager::GetInstance();
 
 	//ワイヤーフレーム処理
-	debugWireframes_ = DebugWireframes::GetInstance().get();
-	debugWireframes_->Initialize(dxCommon_);
+	DebugWireframes::GetInstance().Initialize();
 
 	//キューブマップ処理
-	cubeMap_ = CubeMap::GetInstance().get();
-	cubeMap_->Initialize(dxCommon_);
+	CubeMap::GetInstance().Initialize();
 }
 
 void Framework::Update() {
@@ -85,7 +72,7 @@ void Framework::Update() {
 	}
 	else {
 		//ゲームの処理
-		input_->Update();
+		Input::GetInstance().Update();
 	}
 }
 
@@ -94,28 +81,26 @@ void Framework::Finalize() {
 	D3DResourceLeakChecker leakCheck;
 
 	//delete input_;
-	input_->Finalize();
+	Input::GetInstance().Finalize();
 
 	winApp_->Finalize();
 	winApp_.reset();
-	winApp_ = nullptr;
 
-	TextureManager::GetInstance()->Finalize();
-	ModelManager::GetInstance()->Finalize();
-	ParticleManager::GetInstance()->Finalize();
+	TextureManager::GetInstance().Finalize();
+	ModelManager::GetInstance().Finalize();
+	ParticleManager::GetInstance().Finalize();
 
-	dxCommon_->Finalize();
-	srvManager_->Finalize();
-	spriteCommon_->Finalize();
-	object3dCommon_->Finalize();
-	glTFCommon_->Finalize();
-	skinningCommon_->Finalize();
-	modelCommon_.reset();
-	particleCommon_->Finalize();
-	debugWireframes_->Finalize();
-	cubeMap_->Finalize();
-	postEffectM_->Finalize();
-	audio_->Finalize();
+	DirectXCommon::GetInstance().Finalize();
+	SrvManager::GetInstance().Finalize();
+	SpriteCommon::GetInstance().Finalize();
+	Object3dCommon::GetInstance().Finalize();
+	GLTFCommon::GetInstance().Finalize();
+	SkinningCommon::GetInstance().Finalize();
+	ParticleCommon::GetInstance().Finalize();
+	DebugWireframes::GetInstance().Finalize();
+	CubeMap::GetInstance().Finalize();
+	PostEffectManager::GetInstance().Finalize();
+	Audio::GetInstance().Finalize();
 }
 
 

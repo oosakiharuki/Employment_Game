@@ -18,9 +18,9 @@ void TitleScene::Initialize() {
 	InitSprite();
 
 	//パーティクル初期化
-	sceneParticles_[particleBullet_.name] = ParticleManager::GetInstance()->InitParticle(particleBullet_);
+	sceneParticles_[particleBullet_.name] = ParticleManager::GetInstance().InitParticle(particleBullet_);
 
-	FadeScreen::GetInstance()->FadeStart(type_fadeOut);
+	FadeScreen::GetInstance().FadeStart(type_fadeOut);
 }
 
 void TitleScene::InitSprite() {
@@ -34,9 +34,9 @@ void TitleScene::InitCamera() {
 	camera_ = std::make_unique<Camera>();
 	spitOut_.SpitOutCamera(cameraControl_);
 
-	Object3dCommon::GetInstance()->SetDefaultCamera(camera_.get());
-	GLTFCommon::GetInstance()->SetDefaultCamera(camera_.get());
-	ParticleCommon::GetInstance()->SetDefaultCamera(camera_.get());
+	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
+	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
+	ParticleCommon::GetInstance().SetDefaultCamera(camera_.get());
 }
 
 void TitleScene::ObjectLoading() {
@@ -59,7 +59,7 @@ void TitleScene::ObjectLoading() {
 void TitleScene::Update() {
 
 	//ゲームパット用操作処理設定
-	input_->JoystickUpdate(state_, preState_);
+	Input::GetInstance().JoystickUpdate(state_, preState_);
 
 	//カメラコントロールの更新
 	cameraControl_->Update(&*camera_);
@@ -84,6 +84,7 @@ void TitleScene::Update() {
 	else {
 		//重力でゆっくり落ちる
 		transforms_["player_standby"].translate.y -= kGravity_;
+		transforms_["umbrella_Open"].translate.y -= kGravity_;
 	}
 
 	MoveTitleLogo();
@@ -103,14 +104,14 @@ void TitleScene::Update() {
 		transforms_["Select_End"].rotate.y = 0.0f;
 	}
 	else {
-		//文字を回転
+		//伏せていた文字を回転
 		transforms_["Select_Start"].rotate.y -= kRotating_;
 		transforms_["Select_End"].rotate.y -= kRotating_;
-		//傘が矢印に
-		transforms_["umbrella_Open"].translate.x = kUmbrellaArrowModePositionX_;
-		transforms_["umbrella_Open"].translate.x = transforms_["Select_Start"].translate.y;//最初に
-		transforms_["umbrella_Open"].rotate.z = kArrowRange_;
+		//傘が矢印のように使う(配置、オブジェクト変更)
 		visualActors[2]->ChangeObject("umbrella_Close.gltf");
+		transforms_["umbrella_Open"].translate.x = kUmbrellaArrowModePositionX_;//プレイヤーより少し右
+		transforms_["umbrella_Open"].rotate.z = kArrowRange_;//上向きから右向きに
+		transforms_["umbrella_Open"].translate.y = transforms_["Select_Start"].translate.y;//「ゲームスタート」に合わせる
 	}
 
 	Operation();
@@ -135,21 +136,21 @@ void TitleScene::UpdateBehind() {
 
 void TitleScene::Draw() {
 
-	Object3dCommon::GetInstance()->Command();
+	Object3dCommon::GetInstance().Command();
 
 	playerShadow_->Draw();
 
-	GLTFCommon::GetInstance()->Command();
+	GLTFCommon::GetInstance().Command();
 
 	for (auto& visualActor : visualActors) {
 		visualActor->Draw();
 	}
 
-	SpriteCommon::GetInstance()->Command();
+	SpriteCommon::GetInstance().Command();
 
 	spriteMojiTitle_->Draw();
 
-	ParticleCommon::GetInstance()->Command();
+	ParticleCommon::GetInstance().Command();
 
 	for (auto& particle : sceneParticles_) {
 		particle.second->Draw();
@@ -160,7 +161,7 @@ void TitleScene::Finalize() {}
 
 void TitleScene::SceneUpdate() {
 	if (isNextSelectScene) {
-		SceneManager::GetInstance()->ChangeScene("Select");
+		SceneManager::GetInstance().ChangeScene("Select");
 	}
 
 	if (isNextGameEnd) {
@@ -168,25 +169,25 @@ void TitleScene::SceneUpdate() {
 	}
 
 	//次のシーンに移動するとき
-	if (SceneManager::GetInstance()->NextSceneChangeFlag()) {
+	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//フェードを挟む(FadeIn)
-		FadeScreen::GetInstance()->FadeStart(type_fadeIn);
+		FadeScreen::GetInstance().FadeStart(type_fadeIn);
 	}
 }
 
 void TitleScene::Operation(){
 	//キーボード操作
 
-	if (Input::GetInstance()->TriggerKey(DIK_W) && !isSelect_) {
+	if (Input::GetInstance().TriggerKey(DIK_W) && !isSelect_) {
 		ArrowSelectStart();//ゲームスタート
 	}
-	else if (Input::GetInstance()->TriggerKey(DIK_S) && !isSelect_) {
+	else if (Input::GetInstance().TriggerKey(DIK_S) && !isSelect_) {
 		ArrowSelectEnd();//ゲーム終了
 	}
 
 
 	//ゲームパット操作
-	if (Input::GetInstance()->GetJoystickState(0, state_) && !isSelect_) {
+	if (Input::GetInstance().GetJoystickState(0, state_) && !isSelect_) {
 		//スティックの傾き度
 		float padY = static_cast<float>(state_.Gamepad.sThumbLY) / 32768.0f;
 		//上に傾いた
@@ -199,8 +200,8 @@ void TitleScene::Operation(){
 	}
 
 	//spaceもしくはAボタンを押したら決定
-	if ((Input::GetInstance()->TriggerKey(DIK_SPACE) ||
-		Input::GetInstance()->TriggerButton(state_, preState_, XINPUT_GAMEPAD_A)) && !isSelect_) {
+	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||
+		Input::GetInstance().TriggerButton(state_, preState_, XINPUT_GAMEPAD_A)) && !isSelect_) {
 		isSelect_ = true;//選択した
 		//選択パーティクル
 		sceneParticles_[particleBullet_.name]->SetParticleBorn(ParticleBorn::MomentMode);
@@ -215,13 +216,16 @@ void TitleScene::MoveTitleLogo() {
 	spriteMojiTitle_->Update();
 
 	if (isSelect_) {
+		//「ゲームスタート」を選択
 		if (transforms_["umbrella_Open"].translate.y == transforms_["Select_Start"].translate.y) {
-			transforms_["Select_Start"].translate.x += kMoveSelectMoji_;
+			transforms_["Select_Start"].translate.x += kMoveSelectMoji_;//文字が吹っ飛ぶ
 		}
+		//「ゲーム終了」を選択
 		else if (transforms_["umbrella_Open"].translate.y == transforms_["Select_End"].translate.y) {
-			transforms_["Select_End"].translate.x += kMoveSelectMoji_;
+			transforms_["Select_End"].translate.x += kMoveSelectMoji_;//文字が吹っ飛ぶ
 		}
 
+		//飛ばされる時間
 		bulletTimer_ += kDeltaTime_;
 		if (bulletTimer_ >= kBulletTimeMax_) {
 			if (transforms_["umbrella_Open"].translate.y == transforms_["Select_Start"].translate.y) {

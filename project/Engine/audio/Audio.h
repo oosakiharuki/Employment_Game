@@ -48,7 +48,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static std::shared_ptr<Audio> GetInstance();
+	static Audio& GetInstance();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -83,8 +83,10 @@ public:
 	/// <param name="volume">音量</param>
 	void ControlVolume(const SoundData& soundData, float volume);
 private:
-
-	static std::shared_ptr<Audio> sInstance_;
+	//インスタンス
+	static std::unique_ptr<Audio> sInstance_;
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<Audio>;
 
 	/// <summary>
 	/// サウンドを読み取る

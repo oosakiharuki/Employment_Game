@@ -16,8 +16,6 @@ public:
 	void SceneUpdate() override;
 private:
 
-	//入力処理
-	Input* input_ = Input::GetInstance().get();
 	//ゲームパット用の入力変数
 	XINPUT_STATE state_, preState_;
 
@@ -30,9 +28,6 @@ private:
 	Vector3 cameraPointRight_;//右端
 	//カメラのコントロール
 	std::unique_ptr<CameraControl> cameraControl_;
-
-	//ズームするときのプレイヤーと少し離れた位置
-	//const Vector3 kPlayerAwayPos_ = { 0, 2, -15.0f };
 
 	//レベルエディタ(オブジェクトの配置を.jsonでできる)
 	LevelEditor levelEditor_;

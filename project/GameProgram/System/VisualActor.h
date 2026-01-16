@@ -11,20 +11,43 @@ public:
 
 	VisualActor();
 	~VisualActor();
-
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="objectName"></param>
 	void Initialize(const std::string objectName);
-
+	/// <summary>
+	/// 
+	/// </summary>
 	void Update();
-
+	/// <summary>
+	/// 
+	/// </summary>
 	void Draw();
-
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="transform"></param>
 	void SetTransform(const Transform& transform) { transform_ = transform; }
-
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
 	const Transform& GetTransform() { return transform_; }
-
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
 	const std::string& GetObjectName() { return objectName_; }
-
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="changeObjectName"></param>
 	void ChangeObject(const std::string& changeObjectName) { baseObject_->ChangeAnimation(changeObjectName); }
+	/// <summary>
+	/// 
+	/// </summary>
+	void LightOn();
 
 private:
 	WorldTransform wt_;
