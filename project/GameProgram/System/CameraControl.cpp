@@ -34,7 +34,7 @@ void CameraControl::Update(Camera* camera) {
 		Shaking();
 	}
 
-	//imgui更新処理
+	//imGui更新処理
 	ImGuiUpdate();
 
 	wt_.UpdateMatrix(transform_);

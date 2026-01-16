@@ -1,6 +1,10 @@
 #include "GameOverScene.h"
 #include "SceneManager.h"
 void GameOverScene::Initialize() {
+
+	levelEditor_.LoadLevelEditor("resource/LevelEditor/gameOver_setting.json");
+	spitOut_.SetLevelEditor(&levelEditor_);
+
 	//スプライト初期化処理
 	InitSprite();
 	//カメラ初期化処理
@@ -26,53 +30,38 @@ void GameOverScene::InitSprite() {
 }
 
 void GameOverScene::InitCamera() {
-	cameraTranslate_ = kCameraTranslate_;
-	cameraRotate_ = kCameraRotate_;
-
 	//カメラ設定
 	camera_ = std::make_unique<Camera>();
-	camera_->SetTranslate(cameraTranslate_);
-	camera_->SetRotate(cameraRotate_);
+	spitOut_.SpitOutCamera(cameraControl_);
 
+	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
 	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
 }
 
 void GameOverScene::InitObject() {
-	//残念そうなプレイヤーオブジェクト
-	playerGltf_ = std::make_unique<Object_glTF>();
-	playerGltf_->Initialize();
-	playerGltf_->SetModelFile("player_GameOver.gltf");
-	//地面
-	stageGltf_ = std::make_unique<Object_glTF>();
-	stageGltf_->Initialize();
-	stageGltf_->SetModelFile("gameover_stage.gltf");
+	spitOut_.SpitOutVisualActor(visualActors);
 
-	wt_.Initialize();	
-	//Transform更新処理
-	transform_ = wt_.UpdateTransform();
+	for (auto& visualActor : visualActors) {
+		transforms_[visualActor->GetObjectName()] = visualActor->GetTransform();
+		visualActor->LightOn();//ライト処理オン
+	}
 }
 
 
 void GameOverScene::Update() {
-
-
 	Input::GetInstance().JoystickUpdate(state_, preState_);
+	
+	cameraControl_->Update(camera_.get());
 
 	sprite_->Update();
 	spriteSpace_->Update();
 
-	transform_.rotate.y += kRotate_;
-	wt_.UpdateMatrix(transform_);
-
-	//ライトのスイッチ
-	stageGltf_->LightSwitch(true);
-	playerGltf_->LightSwitch(true);
-
-	//オブジェクト更新
-	playerGltf_->Update(wt_);
-	stageGltf_->Update(wt_);
-
-	camera_->Update();
+	//オブジェクト更新処理
+	for (auto& visualActor : visualActors) {
+		transforms_[visualActor->GetObjectName()].rotate.y += kRotate_;
+		visualActor->SetTransform(transforms_[visualActor->GetObjectName()]);//座標更新
+		visualActor->Update();
+	}
 }
 
 void GameOverScene::Draw() {
@@ -80,8 +69,9 @@ void GameOverScene::Draw() {
 	GLTFCommon::GetInstance().Command();
 
 	//オブジェクト描画
-	playerGltf_->Draw();
-	stageGltf_->Draw();
+	for (auto& visualActor : visualActors) {
+		visualActor->Draw();
+	}
 
 	SpriteCommon::GetInstance().Command();
 

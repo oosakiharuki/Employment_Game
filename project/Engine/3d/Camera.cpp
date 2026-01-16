@@ -15,11 +15,11 @@ Camera::Camera() {
 	projectionMatrix_ = MakePerspectiveFovMatrix(forY_, aspect_, nearClip_, farClip_);//
 	viewProjectionMatrix_ = Multiply(viewMatrix_, projectionMatrix_);//ビュープロジェクション行列
 }
-void Camera::Update() {
+void Camera::Update() {	
+	worldTransform_.UpdateMatrix(transform_);
 	worldMatrix_ = worldTransform_.GetMatWorld();
 	viewMatrix_ = Inverse(worldMatrix_);
 	projectionMatrix_ = MakePerspectiveFovMatrix(forY_, aspect_, nearClip_, farClip_);
 	viewProjectionMatrix_ = Multiply(viewMatrix_, projectionMatrix_);
-	
-	worldTransform_.UpdateMatrix(transform_);
+
 }

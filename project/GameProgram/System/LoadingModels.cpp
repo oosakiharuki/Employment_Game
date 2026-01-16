@@ -57,7 +57,7 @@ void LoadingModels::LoadGltf() {
 	ModelManager::GetInstance().LoadModel("Select_End", ".gltf");
 
 	ModelManager::GetInstance().LoadModel("Title_stage", ".gltf");
-	ModelManager::GetInstance().LoadModel("gameover_stage", ".gltf");
+	ModelManager::GetInstance().LoadModel("ResultStage", ".gltf");
 	ModelManager::GetInstance().LoadModel("EventGate", ".gltf");
 
 	ModelManager::GetInstance().LoadModel("player_found_mark", ".gltf"); 

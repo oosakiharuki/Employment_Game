@@ -84,6 +84,7 @@ void TitleScene::Update() {
 	else {
 		//重力でゆっくり落ちる
 		transforms_["player_standby"].translate.y -= kGravity_;
+		transforms_["umbrella_Open"].translate.y -= kGravity_;
 	}
 
 	MoveTitleLogo();
@@ -103,14 +104,14 @@ void TitleScene::Update() {
 		transforms_["Select_End"].rotate.y = 0.0f;
 	}
 	else {
-		//文字を回転
+		//伏せていた文字を回転
 		transforms_["Select_Start"].rotate.y -= kRotating_;
 		transforms_["Select_End"].rotate.y -= kRotating_;
-		//傘が矢印に
-		transforms_["umbrella_Open"].translate.x = kUmbrellaArrowModePositionX_;
-		transforms_["umbrella_Open"].translate.x = transforms_["Select_Start"].translate.y;//最初に
-		transforms_["umbrella_Open"].rotate.z = kArrowRange_;
+		//傘が矢印のように使う(配置、オブジェクト変更)
 		visualActors[2]->ChangeObject("umbrella_Close.gltf");
+		transforms_["umbrella_Open"].translate.x = kUmbrellaArrowModePositionX_;//プレイヤーより少し右
+		transforms_["umbrella_Open"].rotate.z = kArrowRange_;//上向きから右向きに
+		transforms_["umbrella_Open"].translate.y = transforms_["Select_Start"].translate.y;//「ゲームスタート」に合わせる
 	}
 
 	Operation();
@@ -215,13 +216,16 @@ void TitleScene::MoveTitleLogo() {
 	spriteMojiTitle_->Update();
 
 	if (isSelect_) {
+		//「ゲームスタート」を選択
 		if (transforms_["umbrella_Open"].translate.y == transforms_["Select_Start"].translate.y) {
-			transforms_["Select_Start"].translate.x += kMoveSelectMoji_;
+			transforms_["Select_Start"].translate.x += kMoveSelectMoji_;//文字が吹っ飛ぶ
 		}
+		//「ゲーム終了」を選択
 		else if (transforms_["umbrella_Open"].translate.y == transforms_["Select_End"].translate.y) {
-			transforms_["Select_End"].translate.x += kMoveSelectMoji_;
+			transforms_["Select_End"].translate.x += kMoveSelectMoji_;//文字が吹っ飛ぶ
 		}
 
+		//飛ばされる時間
 		bulletTimer_ += kDeltaTime_;
 		if (bulletTimer_ >= kBulletTimeMax_) {
 			if (transforms_["umbrella_Open"].translate.y == transforms_["Select_Start"].translate.y) {
