@@ -49,7 +49,7 @@ void GameOverScene::InitObject() {
 
 
 void GameOverScene::Update() {
-	Input::GetInstance().JoystickUpdate(state_, preState_);
+	Input::GetInstance().JoystickUpdate();
 	
 	cameraControl_->Update(camera_.get());
 
@@ -82,9 +82,11 @@ void GameOverScene::Draw() {
 void GameOverScene::Finalize() {}
 
 void GameOverScene::SceneUpdate() {
+	Input::GetInstance().GetJoystickState();
+
 	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
 	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||
-		Input::GetInstance().TriggerButton(state_, preState_, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance().GetIsFading()) {
+		Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance().GetIsFading()) {
 		SceneManager::GetInstance().ChangeScene("Select");
 		FadeScreen::GetInstance().SetMaskTexture("fade01.png");
 		FadeScreen::GetInstance().SetBackGround("fadeTexture.png");

@@ -59,7 +59,7 @@ void TitleScene::ObjectLoading() {
 void TitleScene::Update() {
 
 	//ゲームパット用操作処理設定
-	Input::GetInstance().JoystickUpdate(state_, preState_);
+	Input::GetInstance().JoystickUpdate();
 
 	//カメラコントロールの更新
 	cameraControl_->Update(&*camera_);
@@ -187,9 +187,9 @@ void TitleScene::Operation(){
 
 
 	//ゲームパット操作
-	if (Input::GetInstance().GetJoystickState(0, state_) && !isSelect_) {
-		//スティックの傾き度
-		float padY = static_cast<float>(state_.Gamepad.sThumbLY) / 32768.0f;
+	if (Input::GetInstance().GetJoystickState() && !isSelect_) {
+		//スティックの傾き度(LスティックYのみ)
+		float padY = Input::GetInstance().LeftStickY();
 		//上に傾いた
 		if (padY > kStickPower_) {
 			ArrowSelectStart();//ゲームスタート
@@ -201,7 +201,7 @@ void TitleScene::Operation(){
 
 	//spaceもしくはAボタンを押したら決定
 	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||
-		Input::GetInstance().TriggerButton(state_, preState_, XINPUT_GAMEPAD_A)) && !isSelect_) {
+		Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && !isSelect_) {
 		isSelect_ = true;//選択した
 		//選択パーティクル
 		sceneParticles_[particleBullet_.name]->SetParticleBorn(ParticleBorn::MomentMode);

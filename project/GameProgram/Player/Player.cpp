@@ -281,6 +281,34 @@ void Player::PlayUpdate() {
 	//操作
 	Operation();
 
+	//Input::GetInstance().JoystickUpdate();
+
+	//ゲームパット操作の場合
+	if (Input::GetInstance().GetJoystickState()) {
+		//Lスティック
+		float padX = Input::GetInstance().LeftStickX();
+		float padY = Input::GetInstance().LeftStickY();
+		//左
+		(padX > kStickPower_) ? isPushD_ = true : isPushD_ = false;
+		//右
+		(padX < -kStickPower_) ? isPushA_ = true : isPushA_ = false;
+		//上
+		(padY > kStickPower_) ? isPushW_ = true : isPushW_ = false;
+		//下
+		(padY < -kStickPower_) ? isPushS_ = true : isPushS_ = false;
+	}
+	else {
+		//キーボード操作
+		//左
+		(Input::GetInstance().PushKey(DIK_A)) ? isPushA_ = true : isPushA_ = false;
+		//右
+		(Input::GetInstance().PushKey(DIK_D)) ? isPushD_ = true : isPushD_ = false;
+		//上
+		(Input::GetInstance().PushKey(DIK_W)) ? isPushW_ = true : isPushW_ = false;
+		//下
+		(Input::GetInstance().PushKey(DIK_S)) ? isPushS_ = true : isPushS_ = false;
+	}
+
 	//移動
 	ActionMove();
 
@@ -308,33 +336,7 @@ void Player::PlayUpdate() {
 }
 
 void Player::Operation() {
-	Input::GetInstance().JoystickUpdate(state_, preState_);
 
-	//ゲームパット操作の場合
-	if (Input::GetInstance().GetJoystickState(0, state_)) {
-		//Lスティック
-		float padX = static_cast<float>(state_.Gamepad.sThumbLX) / 32768.0f;
-		float padY = static_cast<float>(state_.Gamepad.sThumbLY) / 32768.0f;
-		//左
-		(padX > kStickPower_) ? isPushD_ = true : isPushD_ = false;
-		//右
-		(padX < -kStickPower_) ? isPushA_ = true : isPushA_ = false;
-		//上
-		(padY > kStickPower_) ? isPushW_ = true : isPushW_ = false;
-		//下
-		(padY < -kStickPower_) ? isPushS_ = true : isPushS_ = false;
-	}
-	else {
-		//キーボード操作
-		//左
-		(Input::GetInstance().PushKey(DIK_A)) ? isPushA_ = true : isPushA_ = false;
-		//右
-		(Input::GetInstance().PushKey(DIK_D)) ? isPushD_ = true : isPushD_ = false;
-		//上
-		(Input::GetInstance().PushKey(DIK_W)) ? isPushW_ = true : isPushW_ = false;
-		//下
-		(Input::GetInstance().PushKey(DIK_S)) ? isPushS_ = true : isPushS_ = false;
-	}
 }
 
 void Player::ActionMove() {
@@ -370,7 +372,7 @@ void Player::ActionMove() {
 
 void Player::ActionJump() {
 	//指定したボタン、地面についていて傘がシールド状態でないとき
-	if ((Input::GetInstance().TriggerKey(DIK_SPACE) || Input::GetInstance().TriggerButton(state_, preState_, XINPUT_GAMEPAD_A))
+	if ((Input::GetInstance().TriggerKey(DIK_SPACE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A))
 		&& isGround_ && !isShield_) {
 		isJump_ = true;
 		isGround_ = false;
@@ -380,7 +382,7 @@ void Player::ActionJump() {
 void Player::ActionFire() {
 	//発射のクールタイム
 	fireCoolTimer_ += kDeltaTime_;
-	if ((Input::GetInstance().TriggerKey(DIK_K) || Input::GetInstance().TriggerButton(state_, preState_, XINPUT_GAMEPAD_X)) && !isShield_) {
+	if ((Input::GetInstance().TriggerKey(DIK_K) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_X)) && !isShield_) {
 		if (fireCoolTimer_ >= kCoolTimeMax_) {
 			ShootBullet();
 			fireCoolTimer_ = 0;
@@ -389,9 +391,9 @@ void Player::ActionFire() {
 }
 
 void Player::ActionShield() {
-	if (Input::GetInstance().PushKey(DIK_L) || Input::GetInstance().PushButton(state_, XINPUT_GAMEPAD_B)) {
+	if (Input::GetInstance().PushKey(DIK_L) || Input::GetInstance().PushButton(XINPUT_GAMEPAD_B)) {
 		//押した瞬間に移動キーを押している場合 + すでにブリンクを一度している場合
-		if ((Input::GetInstance().TriggerKey(DIK_L) || Input::GetInstance().TriggerButton(state_, preState_, XINPUT_GAMEPAD_B))
+		if ((Input::GetInstance().TriggerKey(DIK_L) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_B))
 			&& (isPushA_ || isPushD_ || isPushW_ || isPushS_) && !isOneBrink_) {
 			//ブリンクが発動
 			isBrink_ = true;

@@ -15,9 +15,6 @@ public:
 	void SceneUpdate() override;
 private:
 
-	//ゲームパット用の入力変数
-	XINPUT_STATE state_, preState_;
-
 	//カメラ
 	std::unique_ptr<Camera> camera_ = nullptr;
 	Vector3 cameraRotate_ = { 0.0f,0.0f,0.0f };//回転

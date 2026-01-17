@@ -372,10 +372,14 @@ void GameScene::Respawn() {
 }
 
 void GameScene::SceneUpdate() {
-
+#ifdef USE_IMGUI
 	if (Input::GetInstance().TriggerKey(DIK_F2)) {
 		SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動
 	}
+	if (Input::GetInstance().TriggerKey(DIK_F3)) {
+		SceneManager::GetInstance().ChangeScene("GameOver");//ゲームオーバーシーンに移動
+	}
+#endif // USE_IMGUI
 
 	if (isNextClearScene) {
 		SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動

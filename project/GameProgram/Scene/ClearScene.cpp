@@ -71,7 +71,7 @@ void ClearScene::InitParticle() {
 
 void ClearScene::Update() {
 
-	Input::GetInstance().JoystickUpdate(state_, preState_);
+	Input::GetInstance().JoystickUpdate();
 
 	cameraControl_->Update(camera_.get());
 	//クリアロゴ更新
@@ -112,10 +112,11 @@ void ClearScene::Finalize() {
 }
 
 void ClearScene::SceneUpdate() {
+	Input::GetInstance().GetJoystickState();
 
 	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
 	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||
-		Input::GetInstance().TriggerButton(state_, preState_, XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance().GetIsFading()) {
+		Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance().GetIsFading()) {
 		SceneManager::GetInstance().ChangeScene("Select");
 	}
 

@@ -28,8 +28,6 @@ private:
 	/// オブジェクト初期化処理
 	/// </summary>
 	void InitObject();
-	//ゲームパット用の入力変数
-	XINPUT_STATE state_, preState_;
 
 	//カメラ
 	std::unique_ptr<Camera> camera_ = nullptr;

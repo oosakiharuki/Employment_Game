@@ -52,41 +52,38 @@ public:
 	/// <summary>
 	/// ゲームパットボタン操作(長押し)
 	/// </summary>
-	/// <param name="state"></param>
 	/// <param name="button">ボタンを選択</param>
 	/// <returns></returns>
-	bool PushButton(XINPUT_STATE& state,int button);
+	bool PushButton(int button);
 	/// <summary>
 	/// ゲームパットボタン(単押し)
 	/// </summary>
-	/// <param name="state"></param>
-	/// <param name="preState"></param>
 	/// <param name="button">ボタンを選択</param>
 	/// <returns></returns>
-	bool TriggerButton(XINPUT_STATE& state, XINPUT_STATE& preState, int button);
+	bool TriggerButton(int button);
+
+	float LeftStickX();
+	float LeftStickY();
+
+	float RightStickX();
+	float RightStickY();
 
 	/// <summary>
 	/// ゲームパット用の更新処理
 	/// </summary>
-	/// <param name="state"></param>
-	/// <param name="preState"></param>
-	void JoystickUpdate(XINPUT_STATE& state, XINPUT_STATE& preState);	
+	void JoystickUpdate();	
 	/// <summary>
 	/// ゲームパット
 	/// </summary>
-	/// <param name="num">番号</param>
-	/// <param name="state">ステート</param>
 	/// <returns></returns>
-	bool GetJoystickState(uint32_t num, XINPUT_STATE& state);
+	bool GetJoystickState();
 private:
 
 	/// <summary>
 	/// ゲームパット
 	/// </summary>
-	/// <param name="num"></param>
-	/// <param name="state">これInputクラスだけで完結できるかも</param>
 	/// <returns></returns>
-	bool GetJoystickStatePrevious(uint32_t num, XINPUT_STATE& state);
+	bool GetJoystickStatePrevious();
 
 	ComPtr<IDirectInputDevice8> keyboard_;
 	ComPtr<IDirectInput8> directInput_;
@@ -98,5 +95,8 @@ private:
 	//default_deleteを設定(解放処理を行える)
 	friend struct std::default_delete<Input>;
 
-	XINPUT_STATE prevState_ = {};
+	//ゲームパット用の入力変数
+	XINPUT_STATE state_, preState_;
+	//傾け度合
+	const float kInclination = 32768.0f;
 };

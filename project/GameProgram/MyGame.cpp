@@ -16,7 +16,7 @@ void MyGame::Initialize() {
 	std::unique_ptr<SceneFactory> sceneFactory_ = std::make_unique<SceneFactory>();
 	SceneManager::GetInstance().SetSceneFactory(std::move(sceneFactory_));
 
-	SceneManager::GetInstance().ChangeScene("GameOver");
+	SceneManager::GetInstance().ChangeScene("Title");
 	//シーンの更新処理(変更処理)
 	SceneManager::GetInstance().SceneUpdate();
 }
