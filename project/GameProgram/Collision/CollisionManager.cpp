@@ -109,11 +109,13 @@ void CollisionManager::PlayerAndStageObject(Player* player,
 				player->SetInit_Position(stageObject->GetPosition(), player->GetRotate());
 			}
 			//ゴール
-			else if (stageObject->GetObjectName() == "Goal" && Input::GetInstance().TriggerKey(DIK_E)) {
+			else if (stageObject->GetObjectName() == "Goal" && 
+				(Input::GetInstance().TriggerKey(DIK_E) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_Y))) {
 				isGoal_ = true;
 			}
 			//stageObjectsの中でワープゲートである場合
-			else if (stageObject->GetObjectName() == "WarpGate" && Input::GetInstance().TriggerKey(DIK_E)) {
+			else if (stageObject->GetObjectName() == "WarpGate" && 
+				(Input::GetInstance().TriggerKey(DIK_E) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_Y))) {
 				//プレイヤーとワープゲートの当たり判定 + Eキーを押した時
 				isWarp_ = true;
 				//次のステージに持ってくる情報

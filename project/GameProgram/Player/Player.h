@@ -309,8 +309,6 @@ private:
 	std::unique_ptr<Object_glTF> object_;
 
 	//input
-	Input* input_ = nullptr;
-	XINPUT_STATE state_, preState_;//パット用変数
 	const float kStickPower_ = 0.5f;//スティックの倒し具合
 
 	//プレイヤーの速さ

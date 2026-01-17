@@ -27,7 +27,7 @@ void SelectScene::Initialize() {
 void SelectScene::Update() {
 	
 	//ゲームパットの更新
-	Input::GetInstance().JoystickUpdate(state_, preState_);
+	Input::GetInstance().JoystickUpdate();
 
 	//ステージオブジェクト更新
 	for (auto& stageObject : stageObjects_) {

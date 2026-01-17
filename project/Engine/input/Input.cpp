@@ -69,15 +69,15 @@ bool Input::TriggerKey(BYTE keyNumber) {
 	return false;
 }
 
-bool Input::GetJoystickState(uint32_t num, XINPUT_STATE& state) {
+bool Input::GetJoystickState() {
 	DWORD dwResult;
 
-	prevState_ = state;
+	preState_ = state_;
 
-	ZeroMemory(&state, sizeof(XINPUT_STATE));
+	ZeroMemory(&state_, sizeof(XINPUT_STATE));
 	
 	// Simply get the state of the controller from XInput.
-	dwResult = XInputGetState(num, &state);
+	dwResult = XInputGetState(0, &state_);
 
 	//コントローラが作動してるか
 	if (dwResult == ERROR_SUCCESS)
@@ -94,13 +94,13 @@ bool Input::GetJoystickState(uint32_t num, XINPUT_STATE& state) {
 	return false;
 }
 
-bool Input::GetJoystickStatePrevious(uint32_t num, XINPUT_STATE& state) {
+bool Input::GetJoystickStatePrevious() {
 	DWORD dwResult;
 
-	ZeroMemory(&state, sizeof(XINPUT_STATE));
+	ZeroMemory(&state_, sizeof(XINPUT_STATE));
 
 	// Simply get the state of the controller from XInput.
-	dwResult = XInputGetState(num, &state);
+	dwResult = XInputGetState(0, &state_);
 
 	//コントローラが作動してるか
 	if (dwResult == ERROR_SUCCESS)
@@ -108,7 +108,7 @@ bool Input::GetJoystickStatePrevious(uint32_t num, XINPUT_STATE& state) {
 		// Controller is connected	
 
 		//現在の状態から前回の状態に
-		state = prevState_;
+		state_ = preState_;
 
 		return true;
 	}
@@ -121,22 +121,36 @@ bool Input::GetJoystickStatePrevious(uint32_t num, XINPUT_STATE& state) {
 	return false;
 }
 
-bool Input::PushButton(XINPUT_STATE& state, int button) {
-	if (state.Gamepad.wButtons & button) {
+bool Input::PushButton(int button) {
+	if (state_.Gamepad.wButtons & button) {
 		return true;
 	}
 	return false;
 }
 
-bool Input::TriggerButton(XINPUT_STATE& state, XINPUT_STATE& preState, int button) {
-	if (state.Gamepad.wButtons & button &&
-		!(preState.Gamepad.wButtons & button)) {
+bool Input::TriggerButton(int button) {
+	if (state_.Gamepad.wButtons & button &&
+		!(preState_.Gamepad.wButtons & button)) {
 		return true;
 	}	
 	return false;
 }
 
-void Input::JoystickUpdate(XINPUT_STATE& state, XINPUT_STATE& preState) {
-	GetJoystickState(0, state);
-	GetJoystickStatePrevious(0,preState);
+float Input::LeftStickX() {
+	return static_cast<float>(state_.Gamepad.sThumbLX) /  kInclination;
+}
+float Input::LeftStickY() {
+	return static_cast<float>(state_.Gamepad.sThumbLY) /  kInclination;
+}
+
+float Input::RightStickX() {
+	return static_cast<float>(state_.Gamepad.sThumbRX) /  kInclination;
+}
+float Input::RightStickY() {
+	return static_cast<float>(state_.Gamepad.sThumbRY) /  kInclination;
+}
+
+void Input::JoystickUpdate() {
+	GetJoystickState();
+	GetJoystickStatePrevious();
 }
