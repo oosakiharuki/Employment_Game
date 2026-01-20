@@ -342,9 +342,6 @@
     <ClCompile Include="GameProgram\Scene\SceneFactory.cpp">
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Scene\LoadingStageScene.cpp">
-      <Filter>ソース ファイル\GameProgram\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\scene\SceneManager.cpp">
       <Filter>ソース ファイル\Engine\scene</Filter>
     </ClCompile>
@@ -630,9 +627,6 @@
       <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\Scene\SceneFactory.h">
-      <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\Scene\LoadingStageScene.h">
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Engine\scene\SceneManager.h">

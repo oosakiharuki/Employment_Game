@@ -80,6 +80,16 @@ public:
 	void CameraSetting(const CameraInitData& data, bool fixed_Mode_);
 
 	/// <summary>
+	/// 対応するカメラを変更
+	/// </summary>
+	/// <param name="data">変更したいカメラデータ</param>
+	/// <param name="fixed_Mode_">固定する場合</param>
+	void CameraInterpolation(const CameraInitData& data, bool fixed_Mode_);
+
+	void CameraStartPointPlayer(const CameraInitData& data, const Vector3& playerPosition);
+
+
+	/// <summary>
 	/// 十字キーで移動する
 	/// </summary>
 	void DebugMove();
@@ -101,13 +111,15 @@ private:
 	void Shaking();
 
 	/// <summary>
-	/// imguiの更新処理
+	/// imGuiの更新処理
 	/// </summary>
 	void ImGuiUpdate();
 
 	//右端、左端
-	Vector3 leftEndPoint_;
-	Vector3 rightEndPoint_;
+
+	//範囲上限
+	Vector3 minEndPoint_;//最小
+	Vector3 maxEndPoint_;//最大
 
 	//ワールド座標系
 	WorldTransform wt_;
@@ -115,13 +127,17 @@ private:
 
 	//プレイヤー位置
 	Vector3 playerPos_;
+	//前にもらったプレイヤー位置
+	Vector3 prevPlayerPos_;
+	//
+	const float kInterpolationPointX_ = 8.0f;
+
 
 	//固定する高さ
 	const float kFixedY_ = 6.0f;
 
 	//固定する値
 	bool isFixedMode_ = false;
-	Vector3 fixedPos_;
 
 	//シェイク
 	const float kShakeMaxTime_ = 0.25f;
@@ -132,17 +148,23 @@ private:
 
 	//カメラズーム
 	Segment cameraSegment_ = {};
+	const float kMoveFrame_ = 1.0f / 40.0f;//移動フレーム
 
 	float zoomTimer_ = 0.0f;
 	//ズーム時間最大値
-	const float kMaxZoomTime_ = 1.0f;
+	const float kMaxZoomTime_ = 1.5f;
 	//ズーム中
 	bool isZoom_ = false;
 
-	//imgui
+	//imGui
 	bool isFreeMode_ = false;
 
 	float movePower_ = 0.2f;
 
+	//Y座標は固定するフラグ
 	bool isCameraYFixed_ = false;
+	//カメラの変更
+	bool isChangeCamera_ = false;
+
+	Vector3 segmentExtreme = { 0.1f,0.1f,0.1f };//極限まで数字を近く
 };

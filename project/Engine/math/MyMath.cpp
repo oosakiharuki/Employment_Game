@@ -506,7 +506,7 @@ namespace MyMath {
 	}
 
 	Vector3 GoDestination(const Segment& segment) {
-		Vector3 result =  Length(segment.origin , segment.diff);
+		Vector3 result =  Length(segment.origin , segment.diff);		
 		//目的地(diff)が現在地(origin)より値が小さい場合、マイナス値にする
 		if (segment.origin.x > segment.diff.x) {
 			result.x = -result.x;
@@ -1154,38 +1154,6 @@ namespace MyMath {
 		result.texcoord.y = v1.texcoord.y + v2.texcoord.y;
 		return result;
 	}
-
-	//bool IsCollisionAABB_Segment(const AABB& aabb, const Segment& segment) {
-
-	//	Vector2 t1 = {
-	//		(aabb.min.x - segment.origin.x) / segment.diff.x,
-	//		(aabb.min.y - segment.origin.y) / segment.diff.y
-	//	};
-
-	//	Vector2 t2 = {
-	//		(aabb.max.x - segment.origin.x) / segment.diff.x,
-	//		(aabb.max.y - segment.origin.y) / segment.diff.y
-	//	};
-
-	//	Vector2 tNear = {
-	//		min(t1.x, t2.x),
-	//		min(t1.y, t2.y)
-	//	};
-
-	//	Vector2 tFar = {
-	//		max(t1.x, t2.x),
-	//		max(t1.y, t2.y)
-	//	};
-
-
-	//	float tmin = max(tNear.x, tNear.y);
-	//	float tmax = min(tFar.x, tFar.y);
-
-	//	if (tmin <= tmax) {
-	//		return true;
-	//	}
-	//	return false;
-	//}
 
 	bool IsCollisionAABB_Segment(const AABB& aabb, const Segment& segment) {
 

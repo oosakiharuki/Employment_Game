@@ -17,7 +17,7 @@ void CameraControl::Initialize() {
 void CameraControl::Update(Camera* camera) {
 
 	//固定モードでないなら
-	if (!isFixedMode_ && !isFreeMode_) {
+	if (!isFixedMode_ && !isFreeMode_ && !isZoom_) {
 		Move();
 	}
 
@@ -34,6 +34,10 @@ void CameraControl::Update(Camera* camera) {
 		Shaking();
 	}
 
+	//カメラセグメントの更新
+	transform_.translate += GoDestination(cameraSegment_) * kMoveFrame_;
+	cameraSegment_.origin = transform_.translate;//originを常に更新
+
 	//imGui更新処理
 	ImGuiUpdate();
 
@@ -46,7 +50,7 @@ void CameraControl::Update(Camera* camera) {
 
 void CameraControl::ImGuiUpdate() {
 #ifdef  USE_IMGUI
-	//imguiでなくボタンで変更するように
+	//imGuiでなくボタンで変更するように
 	if (Input::GetInstance().TriggerKey(DIK_P)) {
 		isFreeMode_ = !isFreeMode_;
 	}
@@ -68,35 +72,35 @@ void CameraControl::ImGuiUpdate() {
 }
 
 void CameraControl::SetEndPoint(const Vector3& left, const Vector3& right){
-	leftEndPoint_ = left;//左端
-	rightEndPoint_ = right;//右端
+	minEndPoint_ = left;//左端
+	maxEndPoint_ = right;//右端
 }
 
 void CameraControl::Move() {
-	
-	//X座標
-	//プレイヤーが左端を超えたら
-	if (playerPos_.x <= leftEndPoint_.x) {
-		transform_.translate.x = leftEndPoint_.x;
-	}//プレイヤーが右端を超えたら
-	else if (playerPos_.x >= rightEndPoint_.x) {
-		transform_.translate.x = rightEndPoint_.x;
-	}//両端の間
-	else {
-		transform_.translate.x = playerPos_.x;//プレイヤーX座標
+
+	if (playerPos_.x > prevPlayerPos_.x) {
+		cameraSegment_.diff.x = playerPos_.x + kInterpolationPointX_;
 	}
-	 
-	//Y座標
-	if (isCameraYFixed_) {
-		return;
+	else if (playerPos_.x < prevPlayerPos_.x) {
+		cameraSegment_.diff.x = playerPos_.x - kInterpolationPointX_;
+	}
+	else {
+		cameraSegment_.diff.x = playerPos_.x;
 	}
 
-	if (playerPos_.y >= kFixedY_) {
-		transform_.translate.y = playerPos_.y + kFixedY_;
+	prevPlayerPos_ = playerPos_;//前回の座標を測る
+
+	//X座標範囲
+	cameraSegment_.diff.x = std::clamp(cameraSegment_.diff.x, minEndPoint_.x, maxEndPoint_.x);
+
+	//Y座標範囲
+	if (playerPos_.y >= kFixedY_ && !isCameraYFixed_) {
+		cameraSegment_.diff.y = playerPos_.y + kFixedY_;
 	}
 	else {
-		transform_.translate.y = fixedPos_.y;
+		cameraSegment_.diff.y = playerPos_.y;
 	}
+	cameraSegment_.diff.y = std::clamp(cameraSegment_.diff.y, minEndPoint_.y, maxEndPoint_.y);
 }
 
 void CameraControl::DebugMove() {
@@ -130,12 +134,9 @@ void CameraControl::DebugMove() {
 void CameraControl::Zoom() {
 	//ズームがMax値ではないとき
 	if (zoomTimer_ < kMaxZoomTime_) {
-		transform_.translate = cameraSegment_.diff + EaseOut(cameraSegment_.origin - cameraSegment_.diff, zoomTimer_, kMaxZoomTime_);
 		zoomTimer_ += kDeltaTime_;
 	}
 	else {
-		//Max値
-		transform_.translate = cameraSegment_.diff;
 		zoomTimer_ = kMaxZoomTime_;
 	}
 }
@@ -185,12 +186,31 @@ void CameraControl::CameraSetting(const CameraInitData& data, bool fixed_Mode_) 
 	//座標と回転
 	transform_.rotate = data.transform.rotate;
 	transform_.translate = data.transform.translate;
+	cameraSegment_.origin = data.transform.translate;
+	cameraSegment_.diff = data.transform.translate;
 
 	//カメラの最小/最大地点
-	leftEndPoint_ = transform_.translate + data.leftPoint;
-	rightEndPoint_ = transform_.translate + data.rightPoint;
+	SetEndPoint(data.transform.translate + data.leftPoint, data.transform.translate + data.rightPoint);
 
 	isFixedMode_ = fixed_Mode_;
+}
 
-	fixedPos_ = transform_.translate;
+void CameraControl::CameraInterpolation(const CameraInitData& data, bool fixed_Mode_) {
+	//座標と回転
+	cameraSegment_.origin = transform_.translate;
+	cameraSegment_.diff = data.transform.translate;
+
+	//カメラの最小/最大地点
+	SetEndPoint(data.transform.translate + data.leftPoint, data.transform.translate + data.rightPoint);
+
+	isFixedMode_ = fixed_Mode_;
+}
+
+void CameraControl::CameraStartPointPlayer(const CameraInitData& data, const Vector3& playerPosition) {
+	transform_.translate = playerPosition;
+
+	cameraSegment_.origin = playerPosition;
+	cameraSegment_.diff = data.transform.translate;
+	//カメラの最小/最大地点
+	SetEndPoint(data.transform.translate + data.leftPoint, data.transform.translate + data.rightPoint);
 }

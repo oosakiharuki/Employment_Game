@@ -209,6 +209,7 @@ private:
 
 	//モーション終了処理
 	bool isMotionFinish_ = false;
+	const float kRotateOneLap_ = 360.0f;
 	const float kRotationX_ = 10.0f;
 
 	//リアクション
@@ -230,6 +231,8 @@ private:
 
 	void ImGuiUpdate();
 
+	//
+	Vector3 segmentExtreme = { 0.1f,0.1f,0.1f };
 
 	//ステートパターン
 	std::unique_ptr<BaseBossState> bossState_;

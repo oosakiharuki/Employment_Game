@@ -10,6 +10,12 @@ void SpitOutLevelEditor::SpitOutCamera(std::unique_ptr<CameraControl>& cameraCon
 	cameraControl->CameraSetting(levelEditor_->GetLevelData()->cameraInit["MainCamera"], false);
 }
 
+void SpitOutLevelEditor::CameraStartPointPlayer(std::unique_ptr<CameraControl>& cameraControl) {
+	//メインのカメラ
+	cameraControl->CameraStartPointPlayer(levelEditor_->GetLevelData()->cameraInit["MainCamera"], 
+		levelEditor_->GetLevelData()->players[0].transform.translate);
+}
+
 void SpitOutLevelEditor::SpitOutPlayer(std::unique_ptr<Player>& player) {
 	//プレイヤーの体力を上書き
 	player->Initialize();//初期設定

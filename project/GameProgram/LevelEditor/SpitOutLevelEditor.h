@@ -21,6 +21,11 @@ public:
 	void SpitOutCamera(std::unique_ptr<CameraControl>& cameraControl);
 
 	/// <summary>
+	/// プレイヤーから使用するカメラに
+	/// </summary>
+	void CameraStartPointPlayer(std::unique_ptr<CameraControl>& cameraControl);
+
+	/// <summary>
 	/// プレイヤーの配置
 	/// </summary>
 	/// <param name="player">プレイヤー</param>
