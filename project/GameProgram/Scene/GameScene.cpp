@@ -249,6 +249,8 @@ void GameScene::SpitOutGameObject() {
 	camera_ = std::make_unique<Camera>();
 	//カメラコントロール設定
 	spitOut_.SpitOutCamera(cameraControl_);
+	//プレイヤーから使用するカメラに移動
+	spitOut_.CameraStartPointPlayer(cameraControl_);
 
 	//各デフォルトカメラの設定
 	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
@@ -362,7 +364,7 @@ void GameScene::Respawn() {
 	//突破できてないならやり直し
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->FailureEvent();
-		cameraControl_->CameraSetting(levelEditor_.GetLevelData()->cameraInit["MainCamera"], false);
+		cameraControl_->CameraInterpolation(levelEditor_.GetLevelData()->cameraInit["MainCamera"], false);
 	}
 
 	//リセット
@@ -381,11 +383,15 @@ void GameScene::SceneUpdate() {
 	}
 #endif // USE_IMGUI
 
+	if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
+		SceneManager::GetInstance().ChangeScene("Select");//ゲームオーバーシーンに移動
+	}
+
 	if (isNextClearScene) {
 		SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動
 	}
 	else if (isNextLoadingStageScene) {
-		SceneManager::GetInstance().ChangeScene("NextStage");//次のステージに移動
+		SceneManager::GetInstance().ChangeScene("Game");//次のステージに移動(ゲームシーンであることは変わらない)
 	}
 	else if (isNextGameOverScene) {
 		SceneManager::GetInstance().ChangeScene("GameOver");//ゲームオーバーシーンに移動

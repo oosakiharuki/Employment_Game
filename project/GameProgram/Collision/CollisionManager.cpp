@@ -223,7 +223,7 @@ void CollisionManager::PlayerAndEventTrigger(Player* player, const std::vector<s
 			//一瞬だけ通す
 			if (cameraControl_->IsFixed()) {
 				cameraControl_->FixedMode(false);//カメラを固定しない
-				cameraControl_->CameraSetting(levelEditor.GetLevelData()->cameraInit["MainCamera"], false);//メインカメラに戻す
+				cameraControl_->CameraInterpolation(levelEditor.GetLevelData()->cameraInit["MainCamera"], false);//メインカメラに戻す
 			}
 		}
 		//イベントが発動している時(順番2)
@@ -238,7 +238,7 @@ void CollisionManager::PlayerAndEventTrigger(Player* player, const std::vector<s
 		}
 		//イベントトリガーに入った直前(順番1)
 		else if (IsCollisionAABB(player->GetAABB(), data.aabb)) {
-			cameraControl_->CameraSetting(levelEditor.GetLevelData()->cameraInit[data.cameraName], true);
+			cameraControl_->CameraInterpolation(levelEditor.GetLevelData()->cameraInit[data.cameraName], true);
 			eventTrigger->StartEvent();
 		}
 	}

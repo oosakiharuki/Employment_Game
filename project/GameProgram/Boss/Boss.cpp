@@ -122,8 +122,8 @@ void Boss::ArrivedSegmentDiff() {
 	Vector3 a = transform_.translate;
 
 	//目的地についたとき
-	if (GoDestination(a, move_.diff) <= Vector3{ 0.1f,0.1f,0.1f } &&
-		GoDestination(a, move_.diff) >= Vector3{ -0.1f,-0.1f,-0.1f }) {
+	if (GoDestination(a, move_.diff) <= segmentExtreme &&
+		GoDestination(a, move_.diff) >= -segmentExtreme) {
 
 		isMoveSuccess_ = true;
 		transform_.translate= move_.diff;//現在地を目的地にする
@@ -134,7 +134,7 @@ void Boss::ArrivedSegmentDiff() {
 void Boss::BeforeActionMotion() {
 	transform_.rotate.z += kRotationX_;
 
-	if (transform_.rotate.z >= 360.0f) {
+	if (transform_.rotate.z >= kRotateOneLap_) {
 		//モーション終了
 		isMotionFinish_ = true;
 		transform_.rotate.z = 0.0f;

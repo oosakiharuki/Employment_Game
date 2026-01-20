@@ -4,7 +4,6 @@
 #include "SelectScene.h"
 #include "ClearScene.h"
 #include "GameOverScene.h"
-#include "LoadingStageScene.h"
 
 std::unique_ptr<BaseScene> SceneFactory::CreateScene(const std::string& sceneName) {
 
@@ -29,10 +28,6 @@ std::unique_ptr<BaseScene> SceneFactory::CreateScene(const std::string& sceneNam
 	//クリアシーン
 	else if (sceneName == "Clear") {
 		newScene = std::make_unique<ClearScene>();
-	}
-	//ローディングシーン(ステージの変更時)
-	else if (sceneName == "NextStage") {
-		newScene = std::make_unique<LoadingStageScene>();
 	}
 
 	return std::move(newScene);//std::moveかも
