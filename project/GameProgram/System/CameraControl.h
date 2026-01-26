@@ -122,6 +122,10 @@ private:
 	/// <param name="diff"></param>
 	void SetSegment(const Vector3& origin, const Vector3& diff);
 
+
+
+	void ChangeInterpolation();
+
 	//右端、左端
 
 	//範囲上限
@@ -137,7 +141,7 @@ private:
 	//前にもらったプレイヤー位置
 	Vector3 prevPlayerPos_;
 	//
-	float kInterpolationPointX_ = 8.0f;
+	const float kInterpolationPointX_ = 8.0f;
 
 
 	//固定する高さ
@@ -156,7 +160,12 @@ private:
 	//カメラズーム
 	Segment cameraSegment_ = {};
 	float interpolation = 0.0f;
-	const float kMoveFrame_ = 1.0f / 30.0f;//補間フレーム
+
+	float moveFrame_;//使用する補間フレーム
+	const float kLittleFront_ = kInterpolationPointX_ + 1.0f;//プレイヤーの少し前方向
+	const float kMoveFrameStrong_ = 1.0f / 60.0f;//補間フレーム強(補間が長い)
+	const float kMoveFrameMedium_ = 1.0f / 20.0f;//補間フレーム中
+	const float kMoveFrameWeek_ = 1.0f / 10.0f;//補間フレーム弱(補間が短い)
 
 	float zoomTimer_ = 0.0f;
 	//ズーム時間最大値

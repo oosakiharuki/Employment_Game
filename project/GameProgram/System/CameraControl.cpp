@@ -34,10 +34,13 @@ void CameraControl::Update(Camera* camera) {
 		Shaking();
 	}
 
-	//カメラセグメントの更新
-	//目標位置(diff)と現在位置(origin)の距離を比較し離れている距離分足していく
-	transform_.translate += GoDestination(cameraSegment_) * kMoveFrame_;
-	cameraSegment_.origin = transform_.translate;//originを常に更新し徐々に距離が狭くなる
+	//デバッグ以外では止めない
+	if (!isFreeMode_) {
+		//カメラセグメントの更新
+		//目標位置(diff)と現在位置(origin)の距離を比較し離れている距離分足していく
+		transform_.translate += GoDestination(cameraSegment_) * moveFrame_;
+		cameraSegment_.origin = transform_.translate;//originを常に更新し徐々に距離が狭くなる
+	}
 
 	//imGui更新処理
 	ImGuiUpdate();
@@ -49,7 +52,7 @@ void CameraControl::Update(Camera* camera) {
 	camera->Update();
 }
 
-void CameraControl::ImGuiUpdate() {
+void CameraControl::ImGuiUpdate() {	
 #ifdef  USE_IMGUI
 	//imGuiでなくボタンで変更するように
 	if (Input::GetInstance().TriggerKey(DIK_P)) {
@@ -103,6 +106,22 @@ void CameraControl::Move() {
 	
 	//Y座標範囲
 	cameraSegment_.diff.y = std::clamp(cameraSegment_.diff.y, minEndPoint_.y, maxEndPoint_.y);
+
+	//補間の変更
+	ChangeInterpolation();
+}
+
+void CameraControl::ChangeInterpolation() {
+	//補間変更
+	if (Length(cameraSegment_.origin.x, cameraSegment_.diff.x) >= kLittleFront_ * kTwice_) {
+		moveFrame_ = kMoveFrameWeek_;//補間フレーム「弱」に変更
+	}
+	else if (Length(cameraSegment_.origin.x, cameraSegment_.diff.x) >= kLittleFront_) {
+		moveFrame_ = kMoveFrameMedium_;//補間フレーム「中」に変更
+	}
+	else {
+		moveFrame_ = kMoveFrameStrong_;//補間フレーム「強」に変更
+	}
 }
 
 void CameraControl::DebugMove() {
