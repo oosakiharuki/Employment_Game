@@ -31,18 +31,18 @@ void Model_glTF::Initialize(const std::string& directoryPath, const std::string&
 	EnvironmentFile_ ="resource/rostock_laage_airport_4k.dds";
 }
 
-void Model_glTF::InitAnimation(const std::string& directorypath, const std::string& fileName, bool isAnimation, bool isSkinning) {
+void Model_glTF::InitAnimation(const std::string& directoryPath, const std::string& fileName, bool isAnimation, bool isSkinning) {
 	isAnimation_ = isAnimation;
 	isSkinning_ = isSkinning;
 
 	if (isAnimation_) {
-		animation_ = LoadAnimationFile(directorypath, fileName, uint32_t(modelData_.Data.size()));
+		animation_ = LoadAnimationFile(directoryPath, fileName, uint32_t(modelData_.Data.size()));
 	}
 
 	if (isSkinning_) {
 		for (auto& child : modelData_.rootNode.children) {
 			Skeleton skeleton;
-			skeleton = CreateSkeltion(child);
+			skeleton = CreateSkelton(child);
 			skeletons_.push_back(skeleton);
 		}
 

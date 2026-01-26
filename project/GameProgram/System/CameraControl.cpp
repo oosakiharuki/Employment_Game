@@ -35,8 +35,9 @@ void CameraControl::Update(Camera* camera) {
 	}
 
 	//カメラセグメントの更新
+	//目標位置(diff)と現在位置(origin)の距離を比較し離れている距離分足していく
 	transform_.translate += GoDestination(cameraSegment_) * kMoveFrame_;
-	cameraSegment_.origin = transform_.translate;//originを常に更新
+	cameraSegment_.origin = transform_.translate;//originを常に更新し徐々に距離が狭くなる
 
 	//imGui更新処理
 	ImGuiUpdate();
@@ -93,13 +94,14 @@ void CameraControl::Move() {
 	//X座標範囲
 	cameraSegment_.diff.x = std::clamp(cameraSegment_.diff.x, minEndPoint_.x, maxEndPoint_.x);
 
-	//Y座標範囲
 	if (playerPos_.y >= kFixedY_ && !isCameraYFixed_) {
 		cameraSegment_.diff.y = playerPos_.y + kFixedY_;
 	}
 	else {
 		cameraSegment_.diff.y = playerPos_.y;
 	}
+	
+	//Y座標範囲
 	cameraSegment_.diff.y = std::clamp(cameraSegment_.diff.y, minEndPoint_.y, maxEndPoint_.y);
 }
 
@@ -186,31 +188,29 @@ void CameraControl::CameraSetting(const CameraInitData& data, bool fixed_Mode_) 
 	//座標と回転
 	transform_.rotate = data.transform.rotate;
 	transform_.translate = data.transform.translate;
-	cameraSegment_.origin = data.transform.translate;
-	cameraSegment_.diff = data.transform.translate;
-
+	SetSegment(data.transform.translate, data.transform.translate);
 	//カメラの最小/最大地点
 	SetEndPoint(data.transform.translate + data.leftPoint, data.transform.translate + data.rightPoint);
-
 	isFixedMode_ = fixed_Mode_;
 }
 
 void CameraControl::CameraInterpolation(const CameraInitData& data, bool fixed_Mode_) {
-	//座標と回転
-	cameraSegment_.origin = transform_.translate;
-	cameraSegment_.diff = data.transform.translate;
-
+	//座標
+	SetSegment(transform_.translate, data.transform.translate);
 	//カメラの最小/最大地点
 	SetEndPoint(data.transform.translate + data.leftPoint, data.transform.translate + data.rightPoint);
-
 	isFixedMode_ = fixed_Mode_;
 }
 
 void CameraControl::CameraStartPointPlayer(const CameraInitData& data, const Vector3& playerPosition) {
+	//座標
 	transform_.translate = playerPosition;
-
-	cameraSegment_.origin = playerPosition;
-	cameraSegment_.diff = data.transform.translate;
+	SetSegment(playerPosition, data.transform.translate);
 	//カメラの最小/最大地点
 	SetEndPoint(data.transform.translate + data.leftPoint, data.transform.translate + data.rightPoint);
+}
+
+void CameraControl::SetSegment(const Vector3& origin, const Vector3& diff) {
+	cameraSegment_.origin = origin;
+	cameraSegment_.diff = diff;
 }

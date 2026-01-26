@@ -313,109 +313,41 @@ namespace MyMath {
 	}
 
 	Matrix4x4 MakeScaleMatrix(const Vector3& scale) {
-		Matrix4x4 result{};
+		Matrix4x4 result = MakeIdentity4x4();
 		result.m[0][0] = scale.x;
-		result.m[0][1] = 0.0f;
-		result.m[0][2] = 0.0f;
-		result.m[0][3] = 0.0f;
-		result.m[1][0] = 0.0f;
 		result.m[1][1] = scale.y;
-		result.m[1][2] = 0.0f;
-		result.m[1][3] = 0.0f;
-		result.m[2][0] = 0.0f;
-		result.m[2][1] = 0.0f;
 		result.m[2][2] = scale.z;
-		result.m[2][3] = 0.0f;
-		result.m[3][0] = 0.0f;
-		result.m[3][1] = 0.0f;
-		result.m[3][2] = 0.0f;
-		result.m[3][3] = 1.0f;
-
 		return result;
 	}
 	Matrix4x4 MakeRotateXMatrix(float radian) {
-		Matrix4x4 result{};
-		result.m[0][0] = 1.0f;
-		result.m[0][1] = 0.0f;
-		result.m[0][2] = 0.0f;
-		result.m[0][3] = 0.0f;
-		result.m[1][0] = 0.0f;
+		Matrix4x4 result = MakeIdentity4x4();
 		result.m[1][1] = cosf(radian);
 		result.m[1][2] = sinf(radian);
-		result.m[1][3] = 0.0f;
-		result.m[2][0] = 0.0f;
 		result.m[2][1] = -(sinf(radian));
 		result.m[2][2] = cosf(radian);
-		result.m[2][3] = 0.0f;
-		result.m[3][0] = 0.0f;
-		result.m[3][1] = 0.0f;
-		result.m[3][2] = 0.0f;
-		result.m[3][3] = 1.0f;
-
 		return result;
 	}	
 	Matrix4x4 MakeRotateYMatrix(float radian) {
-		Matrix4x4 result{};
+		Matrix4x4 result = MakeIdentity4x4();
 		result.m[0][0] = cosf(radian);
-		result.m[0][1] = 0.0f;
 		result.m[0][2] = -(sinf(radian));
-		result.m[0][3] = 0.0f;
-		result.m[1][0] = 0.0f;
-		result.m[1][1] = 1.0f;
-		result.m[1][2] = 0.0f;
-		result.m[1][3] = 0.0f;
 		result.m[2][0] = sinf(radian);
-		result.m[2][1] = 0.0f;
 		result.m[2][2] = cosf(radian);
-		result.m[2][3] = 0.0f;
-		result.m[3][0] = 0.0f;
-		result.m[3][1] = 0.0f;
-		result.m[3][2] = 0.0f;
-		result.m[3][3] = 1.0f;
-
 		return result;
 	}	
 	Matrix4x4 MakeRotateZMatrix(float radian) {
-		Matrix4x4 result{};
+		Matrix4x4 result = MakeIdentity4x4();
 		result.m[0][0] = cosf(radian);
 		result.m[0][1] = sinf(radian);
-		result.m[0][2] = 0.0f;
-		result.m[0][3] = 0.0f;
 		result.m[1][0] = -(sinf(radian));
 		result.m[1][1] = cosf(radian);
-		result.m[1][2] = 0.0f;
-		result.m[1][3] = 0.0f;
-		result.m[2][0] = 0.0f;
-		result.m[2][1] = 0.0f;
-		result.m[2][2] = 1.0f;
-		result.m[2][3] = 0.0f;
-		result.m[3][0] = 0.0f;
-		result.m[3][1] = 0.0f;
-		result.m[3][2] = 0.0f;
-		result.m[3][3] = 1.0f;
-
 		return result;
 	}
 	Matrix4x4 MakeTranslateMatrix(const Vector3& translate) {
-		Matrix4x4 result{};
-
-		result.m[0][0] = 1.0f;
-		result.m[0][1] = 0.0f;
-		result.m[0][2] = 0.0f;
-		result.m[0][3] = 0.0f;
-		result.m[1][0] = 0.0f;
-		result.m[1][1] = 1.0f;
-		result.m[1][2] = 0.0f;
-		result.m[1][3] = 0.0f;
-		result.m[2][0] = 0.0f;
-		result.m[2][1] = 0.0f;
-		result.m[2][2] = 1.0f;
-		result.m[2][3] = 0.0f;
+		Matrix4x4 result = MakeIdentity4x4();
 		result.m[3][0] = translate.x;
 		result.m[3][1] = translate.y;
 		result.m[3][2] = translate.z;
-		result.m[3][3] = 1.0f;
-
 		return result;
 	}
 
@@ -429,7 +361,6 @@ namespace MyMath {
 	}
 
 
-	// AABBの衝突判定
 	bool IsCollisionAABB(const AABB& aabb1, const AABB& aabb2) {
 		//AABBのMaxとMinが同じ状態(点)ならfalse
 		if ((aabb1.max.x == aabb1.min.x && aabb1.max.y == aabb1.min.y && aabb1.max.z == aabb1.min.z) ||
@@ -445,7 +376,6 @@ namespace MyMath {
 		return false;
 	}
 
-	// AABBの衝突判定(外側)2ga uti
 	bool IsCollisionAABB_outSide(const AABB& aabb1, const AABB& aabb2) {
 		if ((aabb1.min.x >= aabb2.min.x && aabb1.max.x <= aabb2.max.x) && //x軸
 			(aabb1.min.y >= aabb2.min.y && aabb1.max.y <= aabb2.max.y) && //y軸
@@ -536,49 +466,49 @@ namespace MyMath {
 	}
 
 
-	float EaseIn(float f, float t) {
-		return f * t;
+	float EaseIn(float startPoint, float endPoint, float t) {
+		float easeT = t * t;
+		return  startPoint * (1 - easeT) + easeT * endPoint;
 	}
 
-	Vector2 EaseIn(const Vector2& v, float t) {
+	Vector2 EaseIn(const Vector2& startPoint, const Vector2& endPoint, float t) {
 		Vector2 result{};
 
-		result.x = EaseIn(v.x, t);
-		result.y = EaseIn(v.y, t);
+		result.x = EaseIn(startPoint.x, endPoint.x, t);
+		result.y = EaseIn(startPoint.y, endPoint.y, t);
 
 		return result;
 	}
 
-	Vector3 EaseIn(const Vector3& v, float t) {	
+	Vector3 EaseIn(const Vector3& startPoint, const Vector3& endPoint, float t) {
 		Vector3 result{};	
 
-		result.x = EaseIn(v.x, t);
-		result.y = EaseIn(v.y, t);
-		result.z = EaseIn(v.z, t);
+		result.x = EaseIn(startPoint.x, endPoint.x, t);
+		result.y = EaseIn(startPoint.y, endPoint.y, t);
+		result.x = EaseIn(startPoint.z, endPoint.z, t);
 
 		return result;
 	}
 
-	float EaseOut(float f, float t, float endt) {
-		//0のとき
-		if (t == endt) {
-			return 0.0f;
-		}
-		return (endt - t) * f;
+	float EaseOut(float startPoint,float endPoint, float t) {
+
+		float easeT = powf(1.0f - t, 2.0f);
+
+		return (1.0f - easeT) * startPoint + easeT * endPoint;
 	}
 
-	Vector2 EaseOut(const Vector2& v, float t, float endt) {
-		Vector2 result;
-		result.x = EaseOut(v.x, t, endt);
-		result.y = EaseOut(v.y, t, endt);
+	Vector2 EaseOut(const Vector2& startPoint, const Vector2& endPoint, float t) {
+		Vector2 result{};
+		result.x = EaseOut(startPoint.x,endPoint.x, t);
+		result.y = EaseOut(startPoint.y,endPoint.y, t);
 		return result;
 	}
 
-	Vector3 EaseOut(const Vector3& v,float t, float endt) {
-		Vector3 result;
-		result.x = EaseOut(v.x, t, endt);
-		result.y = EaseOut(v.y, t, endt);
-		result.z = EaseOut(v.z, t, endt);
+	Vector3 EaseOut(const Vector3& startPoint, const Vector3& endPoint, float t) {
+		Vector3 result{};
+		result.x = EaseOut(startPoint.x, endPoint.x, t);
+		result.y = EaseOut(startPoint.y, endPoint.y, t);
+		result.z = EaseOut(startPoint.z, endPoint.z, t);
 		return result;
 	}
 
@@ -996,31 +926,26 @@ namespace MyMath {
 			}
 		}
 
-		return Slerp(animation1, animation2, time);
+		return SLerp(animation1, animation2, time);
 	}
 
 
 	Vector3 Lerp(const Vector3& p0, const Vector3& p1, float t) {
-
-		Vector3 a = { t * p0.x ,t * p0.y ,t * p0.z };
-		Vector3 b = { (1.0f - t) * p1.x,(1.0f - t) * p1.y,(1.0f - t) * p1.z };
-		Vector3	c = { a.x + b.x,a.y + b.y,a.z + b.z };
-
-		return c;
+		Vector3 pointA = p0 * t;
+		Vector3 pointB = p1 * (1.0f - t);
+		return pointA + pointB;
 	}
 
 	Quaternion Lerp(const Quaternion& p0, const Quaternion& p1, float t) {
-
-		Vector3 a = { t * p0.x ,t * p0.y ,t * p0.z };
-		Vector3 b = { (1.0f - t) * p1.x,(1.0f - t) * p1.y,(1.0f - t) * p1.z };
-		Vector3	c = { a.x + b.x,a.y + b.y,a.z + b.z };
-
+		Vector3 pointA = Vector3(p0.x, p0.y, p0.z) * t;
+		Vector3 pointB = Vector3(p1.x, p1.y, p1.z) * (1.0f - t);
+		Vector3 c = pointA + pointB;
+		//クオータニオンに変更
 		Quaternion result = { c.x,c.y,c.z,p0.w };
-
 		return result;
 	}
 
-	Skeleton CreateSkeltion(const Node& rootNode) {
+	Skeleton CreateSkelton(const Node& rootNode) {
 		Skeleton skeleton;
 		skeleton.root = CreateJoint(rootNode, {},skeleton.joints);
 
@@ -1091,7 +1016,7 @@ namespace MyMath {
 		return result;
 	}
 
-	Quaternion Slerp(const Quaternion& q0, const Quaternion& q1, float t) {
+	Quaternion SLerp(const Quaternion& q0, const Quaternion& q1, float t) {
 
 		Quaternion q3 = q0;
 
@@ -1157,7 +1082,7 @@ namespace MyMath {
 
 	bool IsCollisionAABB_Segment(const AABB& aabb, const Segment& segment) {
 
-
+		//二次元の四角の点を作る
 		Vector2 topLeft = { aabb.min.x, aabb.max.y };
 		Vector2 topRight = { aabb.max.x, aabb.max.y };
 		Vector2 bottomLeft = { aabb.min.x, aabb.min.y };

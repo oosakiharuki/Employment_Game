@@ -420,6 +420,9 @@
     <ClCompile Include="Engine\scene\BaseScene.cpp">
       <Filter>ソース ファイル\Engine\scene</Filter>
     </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\BackGroundObject.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -706,6 +709,9 @@
     </ClInclude>
     <ClInclude Include="Engine\scene\AbstractSceneFactory.h">
       <Filter>ヘッダー ファイル\Engine\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\BackGroundObject.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

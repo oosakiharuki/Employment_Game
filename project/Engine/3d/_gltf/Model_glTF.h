@@ -19,7 +19,7 @@ public:
 	/// </summary>
 	/// <param name="isAnimation">アニメーションを入れるか</param>
 	/// <param name="isSkinning">スキニングであるか</param>
-	void InitAnimation(const std::string& directorypath, const std::string& fileName, bool isAnimation, bool isSkinning);
+	void InitAnimation(const std::string& directoryPath, const std::string& fileName, bool isAnimation, bool isSkinning);
 
 	/// <summary>
 	/// 描画処理

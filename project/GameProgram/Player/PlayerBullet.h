@@ -38,8 +38,7 @@ public:
 	/// setter_弾丸速度
 	/// </summary>
 	/// <param name="velocity">代入する弾丸速度</param>
-	void SetVelocty(const Vector3& velocity) { velocity_ = velocity; }
-
+	void SetVelocity(const Vector3& velocity) { velocity_ = velocity; }
 	/// <summary>
 	/// 弾がなくなるフラグ
 	/// </summary>
@@ -64,6 +63,7 @@ private:
 	Transform transform_{};
 	//速さ
 	Vector3 velocity_;
+	Vector3 kBulletEndPoint_;
 
 	//消えるまでの処理
 	float deathTimer_ = 0.0f;

@@ -60,9 +60,6 @@ void LoadingModels::LoadGltf() {
 	ModelManager::GetInstance().LoadModel("ResultStage", ".gltf");
 	ModelManager::GetInstance().LoadModel("EventGate", ".gltf");
 
-	ModelManager::GetInstance().LoadModel("player_found_mark", ".gltf"); 
-	ModelManager::GetInstance().LoadModel("player_lost_mark", ".gltf");
-
 	ModelManager::GetInstance().LoadModel("Boss", ".gltf", true);
-
+	ModelManager::GetInstance().LoadModel("skybox", ".gltf");
 }

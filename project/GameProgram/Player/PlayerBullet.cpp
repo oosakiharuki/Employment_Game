@@ -27,7 +27,8 @@ void PlayerBullet::Update() {
 	
 	//弾丸速度
 	//徐々に減速する
-	transform_.translate += EaseOut(velocity_,deathTimer_,kEndTime_);
+	Vector3 velocity = EaseOut({0,0,0}, velocity_, deathTimer_ / kEndTime_);
+	transform_.translate += velocity;
 
 	//時間がたったら消える
 	if (deathTimer_ >= kEndTime_) {

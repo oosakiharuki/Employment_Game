@@ -32,6 +32,9 @@ void GameScene::Initialize() {
 	FadeScreen::GetInstance().FadeStart(type_fadeOut);
 	//ワープやゴールのフラグをオフ
 	CollisionManager::GetInstance().ResetFlag();
+
+	backGround = std::make_unique<BackGroundObject>();
+	backGround->Initialize();
 }
 
 void GameScene::Update() {
@@ -98,6 +101,8 @@ void GameScene::Update() {
 	if (player_->GetTranslate().y < kFallEndY_) {
 		player_->IsFall();
 	}
+	
+	backGround->Update();
 
 	//プレイヤーが移動したら変更
 	UIManager::GetInstance().SetPlayerTranslate(player_->GetTranslate());
@@ -157,7 +162,8 @@ void GameScene::PlayerAliveUpdate() {
 void GameScene::Draw() {
 	//モデル描画処理
 	GLTFCommon::GetInstance().Command();
-	
+	backGround->Draw();
+
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->Draw();
 	}

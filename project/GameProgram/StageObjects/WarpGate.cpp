@@ -1,6 +1,7 @@
 #include "WarpGate.h"
+#include "UseEveryOne.h"
 using namespace MyMath;
-
+using namespace UseEveryOne;
 WarpGate::~WarpGate() {}
 
 
@@ -28,8 +29,20 @@ void WarpGate::Draw() {
 }
 
 void WarpGate::Vanish() {
-	if (transform_.scale.x > 0 && transform_.scale.y > 0 && transform_.scale.z > 0) {
-		smallingTimer_ += 0.1f;
-		transform_.scale -= EaseIn(0.1f, kLittleLarge_ + smallingTimer_);
+	//小さくて見えないためすぐに返す
+	if (smallingTimer_ < 1.0f) {
+
+		if (largeFlag_) {
+			largeTimer_ += kDeltaTime_;
+			transform_.scale = EaseOut(kLargeMax_, kDefaultScale_, largeTimer_);
+		}
+		else {
+			smallingTimer_ += kDeltaTime_;
+			transform_.scale = EaseIn(kLargeMax_, { 0,0,0 }, smallingTimer_);
+		}
+		//補間がMaxに達した時
+		if (largeTimer_ >= 1.0f) {
+			largeFlag_ = false;//拡大を終了
+		}
 	}
 }

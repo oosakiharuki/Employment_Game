@@ -22,6 +22,10 @@ void SelectScene::Initialize() {
 	FadeScreen::GetInstance().FadeStart(type_fadeOut);
 	//ワープ、ゴールフラグのリセット
 	CollisionManager::GetInstance().ResetFlag();
+
+	//背景の初期化処理
+	backGround = std::make_unique<BackGroundObject>();
+	backGround->Initialize();
 }
 
 void SelectScene::Update() {
@@ -53,6 +57,9 @@ void SelectScene::Update() {
 
 	//ガイド更新処理
 	UIManager::GetInstance().Update();
+
+	//背景更新
+	backGround->Update();
 }
 
 void SelectScene::Draw() {
@@ -70,6 +77,8 @@ void SelectScene::Draw() {
 	}
 
 	GLTFCommon::GetInstance().Command();
+	//背景描画
+	backGround->Draw();
 	//プレイヤー描画
 	player_->Draw();
 

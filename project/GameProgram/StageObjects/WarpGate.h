@@ -34,7 +34,10 @@ private:
 
 	//小さくする
 	float smallingTimer_ = 0.0f;
-	//少しだけ大きくして緩急をつける
-	const float kLittleLarge_ = -1.5f;
+
+	float largeTimer_ = 0.0f;
+	const Vector3 kLargeMax_ = { 1.5f, 1.5f, 1.5f };
+
+	bool largeFlag_ = true;
 };
 

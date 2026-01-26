@@ -424,7 +424,7 @@ void Player::ActionBrink() {
 		brinkTimer_ += kDeltaTime_;
 
 		isOneBrink_ = true;
-		transform_.translate += EaseOut(TransformNormal(kPlayerFront_, wtGun_.GetMatWorld()), brinkTimer_, kBrinkTimeMax_);
+		transform_.translate += EaseOut({0,0,0}, TransformNormal({0,0,kBrinkPower_}, wtGun_.GetMatWorld()), brinkTimer_ / kBrinkTimeMax_);
 
 		//飛んだ瞬間後ろにパーティクルをだす
 		if (brinkTimer_ <= kDeltaTime_) {
@@ -453,8 +453,8 @@ void Player::KnockBackUpdate() {
 		}
 		else {
 			knockBackTimer_ += kDeltaTime_;
-
-			transform_.translate -= EaseOut(backPower_, knockBackTimer_, knockBackTimeMax_);
+			//backPower分マイナス
+			transform_.translate = EaseOut(transform_.translate, transform_.translate - backPower_, knockBackTimer_);
 			if (knockBackTimer_ >= knockBackTimeMax_) {
 				isKnockback_ = false;
 				knockBackTimer_ = 0.0f;
@@ -518,7 +518,7 @@ void Player::ShootBullet() {
 
 	for (float i = -(halfCount); i <= halfCount; ++i) {
 		//弾が分散するように
-		Vector3 velocity = { 0.0f,float(i) * kDispersionBetween_ ,kBulletSpeed_ };
+		Vector3 velocity = { 0.0f,i * kDispersionBetween_ ,kBulletSpeed_ };
 		//飛ばす向きをwtGun_に合わせる
 		velocity = TransformNormal(velocity, wtGun_.GetMatWorld());
 
@@ -526,7 +526,7 @@ void Player::ShootBullet() {
 		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
 		bullet->Initialize();
 		bullet->SetTranslate(translate);//発泡初期位置
-		bullet->SetVelocty(velocity);//速さ
+		bullet->SetVelocity(velocity);//速さ
 		bullets_.push_back(std::move(bullet));
 	}
 
@@ -573,7 +573,7 @@ void Player::IsFall() {
 
 void Player::KnockBackPlayer(const Vector3& Power, float TimerMax) {
 	//威力を代入
-	backPower_ = Normalize(Power);
+	backPower_ = Normalize(Power) * kDivideByTwo_;
 	KnockBackCommon(TimerMax);	
 	//リアクション
 	//連続ヒット時、大きさを元に戻す
