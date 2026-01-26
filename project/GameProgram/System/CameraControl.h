@@ -115,6 +115,13 @@ private:
 	/// </summary>
 	void ImGuiUpdate();
 
+	/// <summary>
+	/// セグメント
+	/// </summary>
+	/// <param name="origin"></param>
+	/// <param name="diff"></param>
+	void SetSegment(const Vector3& origin, const Vector3& diff);
+
 	//右端、左端
 
 	//範囲上限
@@ -130,7 +137,7 @@ private:
 	//前にもらったプレイヤー位置
 	Vector3 prevPlayerPos_;
 	//
-	const float kInterpolationPointX_ = 8.0f;
+	float kInterpolationPointX_ = 8.0f;
 
 
 	//固定する高さ
@@ -148,7 +155,8 @@ private:
 
 	//カメラズーム
 	Segment cameraSegment_ = {};
-	const float kMoveFrame_ = 1.0f / 40.0f;//移動フレーム
+	float interpolation = 0.0f;
+	const float kMoveFrame_ = 1.0f / 30.0f;//補間フレーム
 
 	float zoomTimer_ = 0.0f;
 	//ズーム時間最大値

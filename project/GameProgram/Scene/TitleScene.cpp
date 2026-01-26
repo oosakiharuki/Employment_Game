@@ -77,8 +77,7 @@ void TitleScene::Update() {
 			titleFallingTimer_ = kTitleFallingTimeMax_;
 		}
 		//タイトルが上からくる(最終的にStartY_がEndY_と同じ値になる)
-		logoPointStartY_ = logoPointEndY_ + EaseOut(logoPointStartY_, titleFallingTimer_, kTitleFallingTimeMax_);
-		titlePos_.y = logoPointStartY_;
+		titlePos_.y = EaseOut(logoPointEndY_, logoPointStartY_,  titleFallingTimer_);
 
 	}
 	else {

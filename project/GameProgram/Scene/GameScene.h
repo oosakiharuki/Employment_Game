@@ -2,6 +2,7 @@
 #include "BaseScene.h"
 #include "SpitOutLevelEditor.h"
 #include "UIManager.h"
+#include "BackGroundObject.h"
 
 /// <summary>
 /// ゲームシーン(BaseSceneの派生クラス)
@@ -136,4 +137,7 @@ private:
 	bool isNextLoadingStageScene = false;
 	bool isNextClearScene = false;
 	bool isNextGameOverScene = false;
+
+	//背景
+	std::unique_ptr<BackGroundObject> backGround = nullptr;
 };

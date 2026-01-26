@@ -371,13 +371,14 @@ private:
 	float parryTime_ = kParryTimeMax_;
 	float parryCoolTime_ = 0.0f;//連打ではされないように
 	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
+	const float kBrinkPower_ = 1.25f;
 
 	/// ノックバック
 	bool isKnockback_ = false;
 	Vector3 backPower_ = { 0,0,0 };
 	float knockBackTimer_ = 0.0f;
 	float knockBackTimeMax_ = 0.0f;//最大ノックバック時間
-	const Vector3 kBulletKnockbackPower_ = { 0.0f,0.0f,0.25f };//撃った場合のノックバックパワー
+	const Vector3 kBulletKnockbackPower_ = { 0.0f,0.0f,0.1f };//撃った場合のノックバックパワー
 
 	///ブリンク
 	bool isBrink_ = false;//ブリンク中
@@ -418,7 +419,7 @@ private:
 	};
 	//ブリンク
 	ParticleParameters particleBrink_ = {
-		"player_brink","resource/Sprite/cone.png", Primitive::CreateCone(), 1, 1.0f, {2.0f,2.0f,2.0f}
+		"player_brink","resource/Sprite/cone.png", Primitive::CreateCone(), 1, 0.3f, {2.0f,2.0f,2.0f}
 	}; 
 	//撃つ
 	ParticleParameters  particleFire_ = {

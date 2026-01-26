@@ -4,6 +4,8 @@
 
 #include "UIManager.h"
 
+#include "BackGroundObject.h"
+
 /// <summary>
 /// セレクト(ステージ選択)シーン(BaseSceneの派生クラス)
 /// </summary>
@@ -75,4 +77,7 @@ private:
 	Guide kGuideWarp_ = { "guide_warp","guide_warp",kSpriteTranslateKeyE_, kSpriteSize_, -100.0f, 100.0f };  //ワープに入る説明
 
 	bool isNextGameScene = false;
+
+	//背景
+	std::unique_ptr<BackGroundObject> backGround = nullptr;
 };
