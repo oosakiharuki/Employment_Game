@@ -423,6 +423,12 @@
     <ClCompile Include="GameProgram\StageObjects\BackGroundObject.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
+    <ClCompile Include="GameProgram\System\BasePauseState.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\System\PauseScreen.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -712,6 +718,12 @@
     </ClInclude>
     <ClInclude Include="GameProgram\StageObjects\BackGroundObject.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\System\PauseScreen.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\System\BasePauseState.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

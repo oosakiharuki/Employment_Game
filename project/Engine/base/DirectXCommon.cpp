@@ -541,11 +541,6 @@ void DirectXCommon::PreDraw() {
 	PostEffectManager::GetInstance().Command();
 }
 
-void DirectXCommon::FadePreDraw() {
-	//DepthStencilのバリア変更の終了
-	SetBarrier(depthStencilResource_.Get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE);
-}
-
 //更新後
 void DirectXCommon::PostDraw() {
 	//　これから書き込みバックバッファのインデックスを取得

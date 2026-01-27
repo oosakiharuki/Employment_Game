@@ -1,5 +1,6 @@
 #include "MyGame.h"
 #include "LoadingModels.h"
+#include "UIManager.h"
 
 void MyGame::Initialize() {
 	//フレームワーク処理
@@ -62,16 +63,19 @@ void MyGame::Draw() {
 	
 	//ゲームシーン描画
 	SceneManager::GetInstance().Draw();
-
+	
 	DirectXCommon::GetInstance().RenderTexturePostDraw();
 
 	//描画開始
 	DirectXCommon::GetInstance().PreDraw();// 対 swapChain
-	
+
+	SpriteCommon::GetInstance().Command();
+	//説明ガイド
+	UIManager::GetInstance().Draw();
+	UIManager::GetInstance().GuideDraw();
+
 	//フェード
 	FadeScreen::GetInstance().Draw();
-
-	DirectXCommon::GetInstance().FadePreDraw();
 
 #ifdef  USE_IMGUI
 	//ImGui描画処理

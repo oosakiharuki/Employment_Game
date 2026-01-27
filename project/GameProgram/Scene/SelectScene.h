@@ -5,6 +5,7 @@
 #include "UIManager.h"
 
 #include "BackGroundObject.h"
+#include "PauseScreen.h"
 
 /// <summary>
 /// セレクト(ステージ選択)シーン(BaseSceneの派生クラス)
@@ -75,6 +76,10 @@ private:
 	//変更する場所(ジャンプ説明前は移動の説明)
 	Guide kGuideMove_ = { "guide_move","guide_move", kSpriteTranslateMove_, kSpriteSize_, -100.0f, 100.0f };  //移動の説明
 	Guide kGuideWarp_ = { "guide_warp","guide_warp",kSpriteTranslateKeyE_, kSpriteSize_, -100.0f, 100.0f };  //ワープに入る説明
+
+	//ポーズ画面
+	std::unique_ptr<PauseScreen> pauseScreen_ = nullptr;
+	bool isPause_ = false;
 
 	bool isNextGameScene = false;
 

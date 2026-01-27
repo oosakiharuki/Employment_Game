@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameProgram\System\BasePauseState.cpp" />
     <ClCompile Include="GameProgram\StageObjects\BackGroundObject.cpp" />
     <ClCompile Include="Engine\scene\AbstractSceneFactory.cpp" />
     <ClCompile Include="GameProgram\Boss\BaseBossState.cpp" />
@@ -206,8 +207,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\StageObjects\StageObjectFunction.cpp" />
     <ClCompile Include="GameProgram\StageObjects\MoveGround.cpp" />
     <ClCompile Include="GameProgram\System\VisualActor.cpp" />
+    <ClCompile Include="GameProgram\System\PauseScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameProgram\System\BasePauseState.h" />
     <ClInclude Include="GameProgram\StageObjects\BackGroundObject.h" />
     <ClInclude Include="Engine\scene\AbstractSceneFactory.h" />
     <ClInclude Include="GameProgram\Boss\BaseBossState.h" />
@@ -304,6 +307,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\StageObjects\StageObjectFunction.h" />
     <ClInclude Include="GameProgram\StageObjects\MoveGround.h" />
     <ClInclude Include="GameProgram\System\VisualActor.h" />
+    <ClInclude Include="GameProgram\System\PauseScreen.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

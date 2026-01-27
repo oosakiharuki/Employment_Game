@@ -183,10 +183,6 @@ public:
 	/// </summary>
 	void RenderTexturePostDraw();
 	/// <summary>
-	/// fade用
-	/// </summary>
-	void FadePreDraw();
-	/// <summary>
 	/// 解除処理
 	/// </summary>
 	void Finalize();

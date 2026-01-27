@@ -35,9 +35,21 @@ void GameScene::Initialize() {
 
 	backGround = std::make_unique<BackGroundObject>();
 	backGround->Initialize();
+
+	//ポーズ画面
+	pauseScreen_ = std::make_unique<PauseScreen>();
+	pauseScreen_->Initialize("pauseReturnSelect.png","Select");
 }
 
 void GameScene::Update() {
+
+	if (pauseScreen_->IsPauseFinish()) {
+		pauseScreen_->Update();
+		return;
+	}
+	if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
+		pauseScreen_->PauseFlag(true);
+	}
 
 	//演出用のワープゲート出口
 	startWarp_->Update();
@@ -208,9 +220,9 @@ void GameScene::Draw() {
 	//スプライト描画処理(UI用)
 	SpriteCommon::GetInstance().Command();
 
-	UIManager::GetInstance().Draw();
-	//説明ガイド
-	UIManager::GetInstance().GuideDraw();
+	if (pauseScreen_->IsPauseFinish()) {
+		pauseScreen_->Draw();
+	}
 }
 
 void GameScene::Finalize() {
@@ -389,9 +401,10 @@ void GameScene::SceneUpdate() {
 	}
 #endif // USE_IMGUI
 
-	if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
-		SceneManager::GetInstance().ChangeScene("Select");//ゲームオーバーシーンに移動
-	}
+	//if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
+	//	isPause_ = true;
+	//	//SceneManager::GetInstance().ChangeScene("Select");//ゲームオーバーシーンに移動
+	//}
 
 	if (isNextClearScene) {
 		SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動
