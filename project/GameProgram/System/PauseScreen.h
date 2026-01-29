@@ -10,12 +10,14 @@
 class PauseScreen {
 public:
 
+	static PauseScreen& GetInstance();
+
 	void PauseFlag(bool a) { isPause_ = a; }
 
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize(const std::string& textureName, const std::string& changeScene);
+	void Initialize();
 	/// <summary>
 	/// 更新処理
 	/// </summary>
@@ -25,12 +27,27 @@ public:
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// ポーズ中であるか
+	/// </summary>
+	/// <returns></returns>
+	bool IsPause() { return isPause_; }
 
-	bool IsPauseFinish() { return isPause_; }
-
+	/// <summary>
+	/// ポーズのUIの初期化
+	/// </summary>
 	void ResetPauseSprite();
 
+	/// <summary>
+	/// シーン移動の変更時、使うテクスチャの指定
+	/// </summary>
+	/// <param name="textureName">テクスチャ名</param>
+	/// <param name="changeScene">移動するシーン名</param>
+	void BeforeChangeScene(const std::string& textureName, const std::string& changeScene);
 
+	/// <summary>
+	/// 動く選択UI
+	/// </summary>
 	void MoveSprite();
 
 	/// <summary>
@@ -39,17 +56,28 @@ public:
 	void UpdateGuide();
 
 	/// <summary>
-	/// 操作ガイド描画処理
+	/// 操作ガイド用の描画処理
 	/// </summary>
 	void DrawGuide();
 
+	/// <summary>
+	/// 選択UI用の描画処理
+	/// </summary>
 	void DrawSelectMode();
 
+	/// <summary>
+	/// getter_次のシーン
+	/// </summary>
+	/// <returns>あらかじめ指定したシーン名</returns>
 	const std::string& GetNextSceneName() { return nextSceneName_; }
 
+	/// <summary>
+	/// setter_ポーズステート(状態遷移)
+	/// </summary>
+	/// <param name="nextState">変更先のステート</param>
 	void SetPauseState(std::unique_ptr<BasePauseState> nextState) { 
-		pauseState_.reset();
-		pauseState_ = std::move(nextState); 
+		pauseState_.reset();//一度リセット
+		pauseState_ = std::move(nextState); //変更する
 	}
 	/// <summary>
 	/// 項目から選択
@@ -57,6 +85,9 @@ public:
 	void SelectMode();
 
 private:
+
+	static std::unique_ptr<PauseScreen> sInstance_;
+
 	/// <summary>
 	/// 選んだ後の処理
 	/// </summary>

@@ -20,6 +20,9 @@ void MyGame::Initialize() {
 	SceneManager::GetInstance().ChangeScene("Title");
 	//シーンの更新処理(変更処理)
 	SceneManager::GetInstance().SceneUpdate();
+
+	PauseScreen::GetInstance().Initialize();
+
 }
 
 void MyGame::Update() {
@@ -31,7 +34,7 @@ void MyGame::Update() {
 #endif //  USE_IMGUI
 
 	//ゲームシーン更新
-	
+
 	//フェード中は変更しない
 	if (!FadeScreen::GetInstance().GetIsFading()) {
 		//シーンの更新処理(変更処理)
@@ -73,6 +76,10 @@ void MyGame::Draw() {
 	//説明ガイド
 	UIManager::GetInstance().Draw();
 	UIManager::GetInstance().GuideDraw();
+
+	if (PauseScreen::GetInstance().IsPause()) {
+		PauseScreen::GetInstance().Draw();
+	}
 
 	//フェード
 	FadeScreen::GetInstance().Draw();

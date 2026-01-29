@@ -37,18 +37,16 @@ void GameScene::Initialize() {
 	backGround->Initialize();
 
 	//ポーズ画面
-	pauseScreen_ = std::make_unique<PauseScreen>();
-	pauseScreen_->Initialize("pauseReturnSelect.png","Select");
+	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnSelect.png","Select");
 }
 
 void GameScene::Update() {
-
-	if (pauseScreen_->IsPauseFinish()) {
-		pauseScreen_->Update();
+	if (PauseScreen::GetInstance().IsPause()) {
+		PauseScreen::GetInstance().Update(); 
 		return;
 	}
 	if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
-		pauseScreen_->PauseFlag(true);
+		PauseScreen::GetInstance().PauseFlag(true);
 	}
 
 	//演出用のワープゲート出口
@@ -220,9 +218,6 @@ void GameScene::Draw() {
 	//スプライト描画処理(UI用)
 	SpriteCommon::GetInstance().Command();
 
-	if (pauseScreen_->IsPauseFinish()) {
-		pauseScreen_->Draw();
-	}
 }
 
 void GameScene::Finalize() {

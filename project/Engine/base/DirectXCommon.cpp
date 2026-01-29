@@ -539,6 +539,10 @@ void DirectXCommon::PreDraw() {
 	SetBarrier(depthStencilResource_.Get(), D3D12_RESOURCE_STATE_DEPTH_WRITE, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 
 	PostEffectManager::GetInstance().Command();
+	
+	//DepthStencilのバリア変更の終了
+	SetBarrier(depthStencilResource_.Get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_DEPTH_WRITE);
+
 }
 
 //更新後

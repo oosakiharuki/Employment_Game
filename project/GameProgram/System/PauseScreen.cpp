@@ -5,7 +5,16 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-void PauseScreen::Initialize(const std::string& fileName, const std::string& changeScene) {
+std::unique_ptr<PauseScreen> PauseScreen::sInstance_ = nullptr;
+
+PauseScreen& PauseScreen::GetInstance() {
+	if (sInstance_ == nullptr) {
+		sInstance_ = std::make_unique<PauseScreen>();
+	}
+	return *sInstance_;
+}
+
+void PauseScreen::Initialize() {
 	backScreen_ = std::make_unique<Sprite>();
 	backScreen_->Initialize("pauseScreen.png");
 
@@ -22,13 +31,10 @@ void PauseScreen::Initialize(const std::string& fileName, const std::string& cha
 	spriteSelectReturn_->Initialize("pauseReturnGame.png");
 
 	spriteSelectSceneChange_ = std::make_unique<Sprite>();
-	spriteSelectSceneChange_->Initialize(fileName);
-	
+
 	ResetPauseSprite();
 
 	pauseState_ = std::make_unique<PauseMove>();
-
-	nextSceneName_ = changeScene;
 }
 
 void PauseScreen::ResetPauseSprite() {
@@ -40,6 +46,21 @@ void PauseScreen::ResetPauseSprite() {
 	spriteSelectSceneChange_->SetPosition(kSelectSceneChangeStartPosition_);
 
 	interpolation_ = 0.0f;
+
+}
+
+void PauseScreen::BeforeChangeScene(const std::string& textureName, const std::string& changeScene) {
+	if (spriteSelectSceneChange_ != nullptr) {
+		spriteSelectSceneChange_.reset();
+	}
+	
+	spriteSelectSceneChange_ = std::make_unique<Sprite>();
+	spriteSelectSceneChange_->Initialize(textureName);
+
+	ResetPauseSprite();
+
+	nextSceneName_ = changeScene;
+
 }
 
 

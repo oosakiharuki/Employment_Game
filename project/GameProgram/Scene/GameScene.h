@@ -133,10 +133,6 @@ private:
 	/// </summary>
 	void SpitOutGameObject();
 
-	//ポーズ画面
-	std::unique_ptr<PauseScreen> pauseScreen_ = nullptr;
-	bool isPause_ = false;
-
 	//シーンが変更するフラグ
 	bool isNextLoadingStageScene = false;
 	bool isNextClearScene = false;

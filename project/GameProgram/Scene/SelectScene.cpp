@@ -28,17 +28,16 @@ void SelectScene::Initialize() {
 	backGround->Initialize();
 
 	//ポーズ画面
-	pauseScreen_ = std::make_unique<PauseScreen>();
-	pauseScreen_->Initialize("pauseReturnTitle.png", "Title");
+	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnTitle.png", "Title");
 }
 
 void SelectScene::Update() {
-	if (pauseScreen_->IsPauseFinish()) {
-		pauseScreen_->Update();
+	if (PauseScreen::GetInstance().IsPause()) {
+		PauseScreen::GetInstance().Update();
 		return;
 	}
 	if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
-		pauseScreen_->PauseFlag(true);
+		PauseScreen::GetInstance().PauseFlag(true);
 	}
 
 	//ゲームパットの更新
@@ -99,11 +98,6 @@ void SelectScene::Draw() {
 	player_->DrawParticle();
 
 	SpriteCommon::GetInstance().Command();
-
-
-	if (pauseScreen_->IsPauseFinish()) {
-		pauseScreen_->Draw();
-	}
 }
 
 void SelectScene::Finalize() {
