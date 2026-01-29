@@ -3,6 +3,7 @@
 #include "SpitOutLevelEditor.h"
 #include "UIManager.h"
 #include "BackGroundObject.h"
+#include "PauseScreen.h"
 
 /// <summary>
 /// ゲームシーン(BaseSceneの派生クラス)
@@ -131,7 +132,6 @@ private:
 	/// ゲームオブジェクトの配置処理をまとめた
 	/// </summary>
 	void SpitOutGameObject();
-
 
 	//シーンが変更するフラグ
 	bool isNextLoadingStageScene = false;

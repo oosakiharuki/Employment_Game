@@ -5,6 +5,7 @@
 #include "UIManager.h"
 
 #include "BackGroundObject.h"
+#include "PauseScreen.h"
 
 /// <summary>
 /// セレクト(ステージ選択)シーン(BaseSceneの派生クラス)

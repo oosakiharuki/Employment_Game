@@ -82,7 +82,7 @@ private:
 
 
 	//使用するポストエフェクト
-	std::shared_ptr<Dissolve> dissolve_;
+	std::unique_ptr<Dissolve> dissolve_;
 	std::string dissolveTexture_;
 
 };

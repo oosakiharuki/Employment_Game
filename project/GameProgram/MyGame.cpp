@@ -1,5 +1,6 @@
 #include "MyGame.h"
 #include "LoadingModels.h"
+#include "UIManager.h"
 
 void MyGame::Initialize() {
 	//フレームワーク処理
@@ -19,6 +20,9 @@ void MyGame::Initialize() {
 	SceneManager::GetInstance().ChangeScene("Title");
 	//シーンの更新処理(変更処理)
 	SceneManager::GetInstance().SceneUpdate();
+
+	PauseScreen::GetInstance().Initialize();
+
 }
 
 void MyGame::Update() {
@@ -30,7 +34,7 @@ void MyGame::Update() {
 #endif //  USE_IMGUI
 
 	//ゲームシーン更新
-	
+
 	//フェード中は変更しない
 	if (!FadeScreen::GetInstance().GetIsFading()) {
 		//シーンの更新処理(変更処理)
@@ -62,16 +66,23 @@ void MyGame::Draw() {
 	
 	//ゲームシーン描画
 	SceneManager::GetInstance().Draw();
-
+	
 	DirectXCommon::GetInstance().RenderTexturePostDraw();
 
 	//描画開始
 	DirectXCommon::GetInstance().PreDraw();// 対 swapChain
-	
+
+	SpriteCommon::GetInstance().Command();
+	//説明ガイド
+	UIManager::GetInstance().Draw();
+	UIManager::GetInstance().GuideDraw();
+
+	if (PauseScreen::GetInstance().IsPause()) {
+		PauseScreen::GetInstance().Draw();
+	}
+
 	//フェード
 	FadeScreen::GetInstance().Draw();
-
-	DirectXCommon::GetInstance().FadePreDraw();
 
 #ifdef  USE_IMGUI
 	//ImGui描画処理

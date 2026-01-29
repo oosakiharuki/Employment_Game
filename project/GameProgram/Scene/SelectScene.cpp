@@ -26,10 +26,20 @@ void SelectScene::Initialize() {
 	//背景の初期化処理
 	backGround = std::make_unique<BackGroundObject>();
 	backGround->Initialize();
+
+	//ポーズ画面
+	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnTitle.png", "Title");
 }
 
 void SelectScene::Update() {
-	
+	if (PauseScreen::GetInstance().IsPause()) {
+		PauseScreen::GetInstance().Update();
+		return;
+	}
+	if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
+		PauseScreen::GetInstance().PauseFlag(true);
+	}
+
 	//ゲームパットの更新
 	Input::GetInstance().JoystickUpdate();
 
@@ -88,9 +98,6 @@ void SelectScene::Draw() {
 	player_->DrawParticle();
 
 	SpriteCommon::GetInstance().Command();
-	//説明ガイド
-	UIManager::GetInstance().Draw();
-	UIManager::GetInstance().GuideDraw();
 }
 
 void SelectScene::Finalize() {
@@ -158,9 +165,9 @@ void SelectScene::CollisionCommon() {
 void SelectScene::SceneUpdate() {
 
 	//タイトルに戻る
-	if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
-		SceneManager::GetInstance().ChangeScene("Title");
-	}
+	//if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
+	//	SceneManager::GetInstance().ChangeScene("Title");
+	//}
 
 	if (isNextGameScene) {
 		SceneManager::GetInstance().ChangeScene("Game");
