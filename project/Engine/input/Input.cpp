@@ -6,6 +6,9 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"Xinput.lib")
 
+#include "ImGuiManager.h"
+#include <algorithm>
+
 std::unique_ptr<Input> Input::sInstance_ = nullptr;
 
 Input& Input::GetInstance() {
@@ -39,6 +42,21 @@ void Input::Initialize(WinApp* winApp) {
 	result = keyboard_->SetCooperativeLevel(winApp_->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(result));
 
+
+	result = directInput_->CreateDevice(GUID_SysMouse, &mouseInput_, NULL);
+	assert(SUCCEEDED(result));
+
+	result = mouseInput_->SetDataFormat(&c_dfDIMouse2);
+	assert(SUCCEEDED(result));
+
+
+	//ウィンドウズのクライアント領域の真ん中座標をとる処理
+	p.x = centerX;
+	p.y = centerY;
+
+	ClientToScreen(winApp_->GetHwnd(), &p);
+	SetCursorPos(p.x, p.y);
+
 }
 
 void Input::Update() {
@@ -49,6 +67,26 @@ void Input::Update() {
 	result = keyboard_->Acquire();
 
 	result = keyboard_->GetDeviceState(sizeof(key_), key_);
+
+	result = mouseInput_->Acquire();
+
+	result = mouseInput_->GetDeviceState(sizeof(mouseState_), &mouseState_);
+
+	mouseX_ += float(mouseState_.lX);
+	mouseY_ += float(mouseState_.lY);
+
+
+	if (mouseState_.rgbButtons[0] & 0x80) {
+		//SetCursorPos(centerX, centerY);
+	}
+
+	mouseX_ = std::clamp(mouseX_, float(p.x - centerX) , float(p.x + centerX));
+	mouseY_ = std::clamp(mouseY_, float(p.y - centerY), float(p.y + centerY));
+
+	ImGui::Begin("input");
+	ImGui::Text("%f,%f",mouseX_, mouseY_);
+	ImGui::End();
+
 }
 
 bool Input::PushKey(BYTE keyNumber) {

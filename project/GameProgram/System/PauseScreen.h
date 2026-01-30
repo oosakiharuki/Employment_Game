@@ -26,6 +26,10 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw();
+	/// <summary>
+	/// 解放処理
+	/// </summary>
+	void Finalize();
 
 	/// <summary>
 	/// ポーズ中であるか
@@ -87,7 +91,8 @@ public:
 private:
 
 	static std::unique_ptr<PauseScreen> sInstance_;
-
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<PauseScreen>;
 	/// <summary>
 	/// 選んだ後の処理
 	/// </summary>

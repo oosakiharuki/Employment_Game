@@ -27,11 +27,11 @@ void MyGame::Initialize() {
 
 void MyGame::Update() {
 
-	Framework::Update();
-
 #ifdef  USE_IMGUI
 	ImGuiManager::GetInstance().Begin();
 #endif //  USE_IMGUI
+
+	Framework::Update();
 
 	//ゲームシーン更新
 
@@ -102,6 +102,7 @@ void MyGame::Finalize() {
 	CollisionManager::GetInstance().Finalize();
 	UIManager::GetInstance().Finalize();
 	ParticleEmitter::GetInstance().Finalize();
+	PauseScreen::GetInstance().Finalize();
 
 #ifdef  USE_IMGUI
 	ImGuiManager::GetInstance().Finalize();

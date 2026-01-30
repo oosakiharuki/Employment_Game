@@ -70,7 +70,8 @@ public:
 private:
 	//インスタン
 	static std::unique_ptr<UIManager> sInstance_;
-
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<UIManager>;
 	std::vector<Guide> guides_;
 	
 	std::unordered_map<std::string, std::unique_ptr<Sprite>> sprites_;

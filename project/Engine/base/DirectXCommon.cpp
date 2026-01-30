@@ -78,6 +78,8 @@ void DirectXCommon::Device() {
 	Adapter();
 	//ドライブ生成
 	CreateDevice();
+	//エラー警告を出す
+	ErrorStop();
 }
 
 void DirectXCommon::Factory(){

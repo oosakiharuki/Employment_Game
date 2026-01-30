@@ -99,4 +99,19 @@ private:
 	XINPUT_STATE state_, preState_;
 	//傾け度合
 	const float kInclination = 32768.0f;
+
+	ComPtr<IDirectInputDevice8> mouseInput_;
+
+	DIMOUSESTATE2 mouseState_;
+	DIMOUSESTATE2 mousePreState_;
+
+	POINT p{};
+
+	int centerX = WinApp::kClientWidth_ / 2;
+	int centerY = WinApp::kClientHeight_ / 2;
+
+	float mouseX_ = WinApp::kClientWidth_ / 2;
+	float mouseY_ = WinApp::kClientHeight_ / 2;
+
+	bool mouseSensitivity_;
 };

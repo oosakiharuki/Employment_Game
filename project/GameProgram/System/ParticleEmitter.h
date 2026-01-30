@@ -30,7 +30,8 @@ public:
 private:
 	//インスタンス
 	static std::unique_ptr<ParticleEmitter> sInstance_;
-
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<ParticleEmitter>;
 	///パーティクル生成方法一覧
 	ParticleData MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter);//通常
 	ParticleData MakeNewParticleFixed(const Emitter& emitter);//固定
