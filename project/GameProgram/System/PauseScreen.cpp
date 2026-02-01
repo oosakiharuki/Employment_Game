@@ -155,6 +155,10 @@ void PauseScreen::Draw() {
 	pauseState_->Draw(*this);
 }
 
+void PauseScreen::Finalize() {
+	sInstance_.reset();
+}
+
 void PauseScreen::DrawGuide() {
 	spriteGuide_->Draw();
 }

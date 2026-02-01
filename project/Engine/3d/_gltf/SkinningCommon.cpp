@@ -40,6 +40,7 @@ void SkinningCommon::RootSignature() {
 
 	//skinning t0
 	CreateTABLE(D3D12_SHADER_VISIBILITY_VERTEX, descriptorRange_);//[8] vs t0
+	rootParameters_[8].DescriptorTable.NumDescriptorRanges = _countof(descriptorRange_);
 
 	//2でまとめる
 	DefaultSampler(0);

@@ -30,16 +30,16 @@ void WinApp::Initialize() {
 	AdjustWindowRect(&wrc, WS_OVERLAPPEDWINDOW, false);
 
 	hwnd_ = CreateWindow(
-		wc_.lpszClassName,
-		L"LE3B_05_オオサキ_ハルキ_パラソルジャー",//バーの名前
-		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		wrc.right - wrc.left,
-		wrc.bottom - wrc.top,
+		wc_.lpszClassName,                         //利用するクラス名
+		L"LE3B_05_オオサキ_ハルキ_パラソルジャー", //バーの名前
+		WS_OVERLAPPEDWINDOW,                       //ウィンドウスタイル
+		CW_USEDEFAULT,                             //表示するX座標
+		CW_USEDEFAULT,                             //表示するY座標
+		wrc.right - wrc.left,                      //ウィンドウ横幅
+		wrc.bottom - wrc.top,                      //ウィンドウ縦幅
 		nullptr,
 		nullptr,
-		wc_.hInstance,
+		wc_.hInstance,                             //インスタンスハンドル
 		nullptr);
 
 	ShowWindow(hwnd_, SW_SHOW);
