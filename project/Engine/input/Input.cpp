@@ -83,10 +83,13 @@ void Input::Update() {
 	mouseX_ = std::clamp(mouseX_, float(p.x - centerX) , float(p.x + centerX));
 	mouseY_ = std::clamp(mouseY_, float(p.y - centerY), float(p.y + centerY));
 
+#ifdef USE_IMGUI
+	
 	ImGui::Begin("input");
 	ImGui::Text("%f,%f",mouseX_, mouseY_);
 	ImGui::End();
 
+#endif // USE_IMGUI
 }
 
 bool Input::PushKey(BYTE keyNumber) {
