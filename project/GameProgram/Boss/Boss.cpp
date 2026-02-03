@@ -65,7 +65,9 @@ void Boss::SetMovePoint(const Vector3& point, float speedDivision) {
 	moveFrame_ = speedDivision;//スピード分割
 }
 
-void Boss::Fire(float kFrame) {
+void Boss::Fire(float kFrame, float bulletSpeed, uint32_t bulletMax) {
+	//速さを代入
+	bulletSpeed_ = bulletSpeed;
 
 	//連射で時間を開ける
 	rapidFireTime_ += kDeltaTime_ / kFrame;
@@ -76,7 +78,7 @@ void Boss::Fire(float kFrame) {
 	}
 
 	//最大弾丸数を超えた場合
-	if (rapidCount_ == rapidCountMax_) {
+	if (rapidCount_ == bulletMax) {
 		rapidCount_ = 0;//カウントリセット
 		isStopFire_ = true;//発砲終了
 	}
@@ -90,9 +92,6 @@ void Boss::FireBullet() {
 	//弾丸速度
 	Vector3 velocity;
 
-	//プレイヤーの方向に向かう(最初に打つ弾にそって進む)
-
-	const float kSpeed = 0.4f;
 	//プレイヤーの座標
 	Vector3 playerPosition = player_->GetWorldPosition();
 	//敵とプレイヤーの距離
@@ -101,7 +100,7 @@ void Boss::FireBullet() {
 	Vector3 normal = Normalize(distance);
 
 	//スピードを合わせる
-	normal *= kSpeed;
+	normal *= bulletSpeed_;
 	velocity = normal;
 
 	//弾丸を生み出す

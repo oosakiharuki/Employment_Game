@@ -19,7 +19,7 @@ public:
 private:
 	uint32_t addCount_ = 0;
 	//端(中心から左端+,右端-)
-	const Vector3 kEdge_ = { 20,0,0 };
+	const Vector3 kEdge_ = { 15,0,0 };
 };
 
 /// <summary>
@@ -28,6 +28,13 @@ private:
 class BossAttackState : public BaseBossState {
 public:
 	void Update(Boss& boss) override;
+private:
+	//秒数
+	const float kTimerFrame_ = 2.0f;
+	//弾丸の速さ
+	const float kBulletSpeed_ = 0.2f;
+	//最大弾丸数
+	const uint32_t kRapidCountMax_ = 5;
 };
 
 /// <summary>
@@ -75,6 +82,12 @@ private:
 	bool isStart = true;
 
 	bool isAttackFinish_ = false;
+	//秒数
+	const float kTimerFrame_ = 4.0f;
+	//弾丸の速さ
+	const float kBulletSpeed_ = 0.4f;
+	//最大弾丸数
+	const uint32_t kRapidCountMax_ = 10;
 };
 
 class BossFarTackleState : public BaseBossState {

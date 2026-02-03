@@ -103,7 +103,7 @@ public:
 	/// 発泡処理
 	/// </summary>
 	/// <param name="kFrame">連射時間の分割</param>
-	void Fire(float kFrame = 1.0f);
+	void Fire(float kFrame, float bulletSpeed, uint32_t bulletMax);
 	/// <summary>
 	/// 弾丸攻撃
 	/// </summary>
@@ -174,6 +174,7 @@ private:
 	AABB aabb_;
 
 	std::list<std::shared_ptr<EnemyBullet>> bullets_;
+	float bulletSpeed_ = 0.2f;//弾の速さ
 
 	Vector3 kCenter_ = { 0,0,0 };
 
@@ -204,8 +205,6 @@ private:
 	const float kRapidFireTimeMax_ = 0.1f;
 	//発射カウント
 	uint32_t rapidCount_ = 0;
-	//最大弾丸数
-	uint32_t rapidCountMax_ = 12;
 
 	//モーション終了処理
 	bool isMotionFinish_ = false;

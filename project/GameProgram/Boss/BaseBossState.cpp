@@ -36,7 +36,7 @@ void BossMoveState::Update(Boss& boss) {
 void BossAttackState::Update(Boss& boss) {
 	boss.ResetStopFire();
 	//発泡処理
-	boss.Fire();
+	boss.Fire(kTimerFrame_,kBulletSpeed_,kRapidCountMax_);
 	//発砲を終了したら
 	if (boss.IsStopFire()) {
 		boss.ResetMoveSuccess();
@@ -128,7 +128,7 @@ void BossFarAttackState::Update(Boss& boss) {
 	else if (boss.IsMoveSuccess()) {
 		boss.ResetStopFire();
 		//発泡処理
-		boss.Fire(4.0f);
+		boss.Fire(kTimerFrame_, kBulletSpeed_, kRapidCountMax_);
 		//発砲を終了したら
 		if (boss.IsStopFire()) {
 			isAttackFinish_ = true;
