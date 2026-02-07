@@ -76,6 +76,12 @@ public:
 	bool GetIsShield() { return isShield_; }
 
 	/// <summary>
+	/// setter_シールドフラグ
+	/// </summary>
+	/// <param name="result"></param>
+	void SetIsShield(bool result) { isShield_ = result; }
+
+	/// <summary>
 	/// ダメージを食らった
 	/// </summary>
 	/// <param name="hitPoint"></param>当たった場所
@@ -125,11 +131,6 @@ public:
 	/// パリィ成功 = 連続弾も跳ね返す
 	/// </summary>
 	void ParrySuccess();
-	/// <summary>
-	/// パリィ成功フラグ
-	/// </summary>
-	/// <param name="result"></param>trueで成功
-	void SetIsParry(bool result) { isParry_ = result; }
 
 	/// <summary>
 	/// getter_体力
@@ -176,11 +177,6 @@ public:
 	void IsShieldMotion();
 
 	/// <summary>
-	/// 強制的にジャンプさせる(演出等で使う)
-	/// </summary>
-	void IsJumping() { isJump_ = true; }
-
-	/// <summary>
 	/// 傘の8方向の回転
 	/// </summary>
 	/// <param name="direction"></param>回転角度
@@ -217,6 +213,52 @@ public:
 	/// </summary>
 	/// <param name="enemyState">次のステートパターン</param>
 	void ChangeStatePattern(std::unique_ptr<BasePlayerState> playerState);
+	
+	/// <summary>
+	/// ステートパターン変更
+	/// </summary>
+	/// <param name="enemyState">次のステートパターン</param>
+	void ChangeStatePattern(std::unique_ptr<BasePlayerActionState> playerState);
+
+	void ActionUpdate();
+
+	/// <summary>
+	/// 行動 :動く
+	/// </summary>
+	void ActionMove();
+	/// <summary>
+	/// 行動 :ジャンプ
+	/// </summary>
+	void ActionJump();
+	/// <summary>
+	/// 行動 :攻撃(発砲)
+	/// </summary>
+	void ActionFire();
+	/// <summary>
+	/// 行動 :シールド
+	/// </summary>
+	void ActionShield();
+
+	/// <summary>
+	/// 行動 :ブリンク
+	/// </summary>
+	void ActionBrink(float& brinkTimer,float brinkTimeMax);
+
+	bool BrinkFlag();
+
+	/// <summary>
+	/// 滑空処理
+	/// </summary>
+	void Gliding();
+
+	void GravityDown();
+
+	bool JumpPowerMax() {
+		if (jumpPower_ == kJumpPowerMax_) {
+			return true;
+		}
+		return false;
+	}
 
 private:
 	/// <summary>
@@ -275,31 +317,6 @@ private:
 	void BehindUpdate();
 
 	/// <summary>
-	/// 操作
-	/// </summary>
-	void Operation();
-	/// <summary>
-	/// 行動 :動く
-	/// </summary>
-	void ActionMove();
-	/// <summary>
-	/// 行動 :ジャンプ
-	/// </summary>
-	void ActionJump();
-	/// <summary>
-	/// 行動 :攻撃(発砲)
-	/// </summary>
-	void ActionFire();
-	/// <summary>
-	/// 行動 :シールド
-	/// </summary>
-	void ActionShield();
-	/// <summary>
-	/// 行動 :ブリンク
-	/// </summary>
-	void ActionBrink();
-
-	/// <summary>
 	/// ノックバックする更新処理
 	/// </summary>
 	void KnockBackUpdate();
@@ -315,8 +332,8 @@ private:
 	const float kStandardSpeed_ = 0.14f;//通常の速さ
 	float speed_ = kStandardSpeed_;
 	//ジャンプフラグ
-	bool isJump_ = false;
-	const float kJumpUp_ = 0.25f;//上がる高さ
+	float jumpPower_ = 0.0f;//上がる高さ
+	const float kJumpPowerMax_ = 0.3f;//上がる高さ
 
 	//重力
 	
@@ -329,7 +346,7 @@ private:
 	/// 弾丸
 	std::list<std::shared_ptr<PlayerBullet>> bullets_;
 	float fireCoolTimer_ = 0.0f;//クールタイマー
-	const float kCoolTimeMax_ = 0.5f;//クールタイム最大時間
+	const float kFireCoolTimeMax_ = 0.5f;//クールタイム最大時間
 	const uint32_t kBulletCount_ = 3;//一度に出る弾丸数
 	
 	const float kDispersionBetween_ = 0.1f;//分散する間
@@ -369,7 +386,6 @@ private:
 	bool isParry_ = false;
 	const float kParryTimeMax_ = 0.5f;//パリィする時間//ちょっと簡単に
 	float parryTime_ = kParryTimeMax_;
-	float parryCoolTime_ = 0.0f;//連打ではされないように
 	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
 	const float kBrinkPower_ = 1.25f;
 
@@ -381,13 +397,7 @@ private:
 	const Vector3 kBulletKnockbackPower_ = { 0.0f,0.0f,0.1f };//撃った場合のノックバックパワー
 
 	///ブリンク
-	bool isBrink_ = false;//ブリンク中
 	bool isOneBrink_ = false;//一回のみ
-	float brinkTimer_ = 0.0f;
-	const float kBrinkTimeMax_ = 0.5f;
-
-	//落下する時ふわふわできるように
-	bool isUmbrellaFall_ = false;
 
 	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
 	//残機(remain)
@@ -463,4 +473,5 @@ private:
 	bool isShieldMotion_ = false;
 
 	std::unique_ptr<BasePlayerState> playerState_;
+	std::unique_ptr<BasePlayerActionState> playerActionState_;
 };

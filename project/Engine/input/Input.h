@@ -62,28 +62,28 @@ public:
 	/// <returns></returns>
 	bool TriggerButton(int button);
 
+	bool LeftTriggerLongPress();
+	bool RightTriggerLongPress();
+
+	bool LeftTrigger();
+	bool RightTrigger();
+
 	float LeftStickX();
 	float LeftStickY();
 
 	float RightStickX();
 	float RightStickY();
-
-	/// <summary>
-	/// ゲームパット用の更新処理
-	/// </summary>
-	void JoystickUpdate();	
-	/// <summary>
+		/// <summary>
 	/// ゲームパット
 	/// </summary>
 	/// <returns></returns>
 	bool GetJoystickState();
-private:
-
 	/// <summary>
-	/// ゲームパット
+	/// ゲームパット(アクティブかのみ)
 	/// </summary>
 	/// <returns></returns>
-	bool GetJoystickStatePrevious();
+	bool GetActiveGamePad();
+private:
 
 	ComPtr<IDirectInputDevice8> keyboard_;
 	ComPtr<IDirectInput8> directInput_;
@@ -113,5 +113,6 @@ private:
 	float mouseX_ = WinApp::kClientWidth_ / 2;
 	float mouseY_ = WinApp::kClientHeight_ / 2;
 
+	bool isActiveGamePad_ = false;
 	bool mouseSensitivity_;
 };

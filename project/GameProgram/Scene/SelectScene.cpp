@@ -40,9 +40,6 @@ void SelectScene::Update() {
 		PauseScreen::GetInstance().PauseFlag(true);
 	}
 
-	//ゲームパットの更新
-	Input::GetInstance().JoystickUpdate();
-
 	//ステージオブジェクト更新
 	for (auto& stageObject : stageObjects_) {
 		stageObject->Update();

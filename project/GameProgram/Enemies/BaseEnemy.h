@@ -309,7 +309,7 @@ private:
 	const float kFoundMotionMaxTime_ = kMarkMaxTime_ / 5.0f;
 
 	//ステートパターン
-	std::unique_ptr<BaseEnemyState> currentEnemyState_ = std::make_unique<EnemyMoveState>();
+	std::unique_ptr<BaseEnemyState> enemyState_ = std::make_unique<EnemyMoveState>();
 
 	/// <summary>
 	/// 弾丸更新処理

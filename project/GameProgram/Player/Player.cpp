@@ -41,6 +41,8 @@ void Player::Initialize() {
 
 	//ステートパターン
 	playerState_ = std::make_unique<PlayerLifeState>();
+	//行動ステートパターン
+	playerActionState_ = std::make_unique<PlayerJumpState>();
 }
 
 void Player::InitMainBody() {
@@ -92,6 +94,10 @@ void Player::InitAudio() {
 	parrySound_ = Audio::GetInstance().LoadWave("resource/Sound/bane.wav");
 }
 
+void Player::ActionUpdate() {
+	//ステートの更新処理
+	playerActionState_->Update(*this);
+}
 
 
 void Player::Update() {
@@ -244,47 +250,41 @@ void Player::BehindUpdate() {
 void Player::LifeUpdate() {
 	//地面にいるとき
 	if (isGround_) {
-		isJump_ = false;//ジャンプ可能
+		jumpPower_ = 0.0f;//ジャンプ可能
 		isOneBrink_ = false;//ブリンク可能
-	}
-
-	// - 滑空 - 
-	//開いた状態で地面についていない
-	//傘が上向き(斜め上も)の場合かつプレイヤーが倒されていないとき
-	if (isShield_ && !isGround_ &&
-		(transformGun_.rotate.x >= kUpDis_ - kDiagonalValue_ && transformGun_.rotate.x <= kUpDis_ + kDiagonalValue_) && !isDead_) {
-		//ジャンプ後だとずっと浮くためfalseに
-		if (isJump_) {
-			isJump_ = false;
-		}
-		//重力を固定することでゆっくり落ちる
-		gravity_ = kFixedGravityPower_;
-		//ブリンクが終了した時
-		if (!isBrink_) {
-			//滑空中は上向きのみ(斜めにはならない)
-			transformGun_.rotate.x = kUpDis_;
-		}
-	}
-
-	//ジャンプ
-	if (isJump_) {
-		transform_.translate.y += kJumpUp_;
+	}else {
+		transform_.translate.y += jumpPower_;
 	}
 
 	//重力
 	GravityUpdate();
 }
 
+void Player::Gliding() {
+	// - 滑空 - 
+	//開いた状態で地面についていない
+	//傘が上向き(斜め上も)の場合かつプレイヤーが倒されていないとき
+	if (isShield_ && !isGround_ &&
+		(transformGun_.rotate.x >= kUpDis_ - kDiagonalValue_ && transformGun_.rotate.x <= kUpDis_ + kDiagonalValue_)) {
+		GravityDown();
+		//滑空中は上向きのみ(斜めにはならない)
+		transformGun_.rotate.x = kUpDis_;
+	}
+}
+
+void Player::GravityDown() {
+	//ジャンプパワーリセット(ジャンプできない)
+	jumpPower_ = 0.0f;
+	//重力を固定することでゆっくり落ちる
+	gravity_ = kFixedGravityPower_;
+}
+
 #pragma region プレイヤーの操作
 
 void Player::PlayUpdate() {
-	//操作
-	Operation();
-
-	//Input::GetInstance().JoystickUpdate();
 
 	//ゲームパット操作の場合
-	if (Input::GetInstance().GetJoystickState()) {
+	if (Input::GetInstance().GetActiveGamePad()) {
 		//Lスティック
 		float padX = Input::GetInstance().LeftStickX();
 		float padY = Input::GetInstance().LeftStickY();
@@ -308,35 +308,26 @@ void Player::PlayUpdate() {
 		//下
 		(Input::GetInstance().PushKey(DIK_S)) ? isPushS_ = true : isPushS_ = false;
 	}
-
-	//移動
-	ActionMove();
-
-	//攻撃
-	ActionFire();
-
-	//ジャンプ
-	ActionJump();
-
-	//傘シールド
-	ActionShield();
+	
+	//発砲のクールタイム
+	fireCoolTimer_ -= kDeltaTime_;
+	fireCoolTimer_ = std::clamp(fireCoolTimer_,0.0f, kFireCoolTimeMax_);
 
 	//傘の方向を読み取る
 	umbrellaRange_ = transformGun_.rotate;
 	//円柱または円錐が縦のため、90度回転して横にする
 	umbrellaRange_.x += kNinetyAngle_;
 
-	ActionBrink();
+	if(!isShield_){
+		parryTime_ += kDeltaTime_;
+		parryTime_ = std::clamp(parryTime_,0.0f,kParryTimeMax_);
+	}
 
 	//ノックバック発動
 	KnockBackUpdate();
 
 	//影の更新
 	shadow_->SetTranslate(transform_.translate);
-}
-
-void Player::Operation() {
-
 }
 
 void Player::ActionMove() {
@@ -371,77 +362,53 @@ void Player::ActionMove() {
 }
 
 void Player::ActionJump() {
-	//指定したボタン、地面についていて傘がシールド状態でないとき
-	if ((Input::GetInstance().TriggerKey(DIK_SPACE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A))
-		&& isGround_ && !isShield_) {
-		isJump_ = true;
-		isGround_ = false;
-	}
+	jumpPower_ = 0.3f;
+	isGround_ = false;
 }
 
 void Player::ActionFire() {
-	//発射のクールタイム
-	fireCoolTimer_ += kDeltaTime_;
-	if ((Input::GetInstance().TriggerKey(DIK_K) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_X)) && !isShield_) {
-		if (fireCoolTimer_ >= kCoolTimeMax_) {
-			ShootBullet();
-			fireCoolTimer_ = 0;
-		}
+	//クールタイムは終了した時
+	if (fireCoolTimer_ == 0.0f) {
+		ShootBullet();
+		fireCoolTimer_ = kFireCoolTimeMax_;
 	}
 }
 
 void Player::ActionShield() {
-	if (Input::GetInstance().PushKey(DIK_L) || Input::GetInstance().PushButton(XINPUT_GAMEPAD_B)) {
-		//押した瞬間に移動キーを押している場合 + すでにブリンクを一度している場合
-		if ((Input::GetInstance().TriggerKey(DIK_L) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_B))
-			&& (isPushA_ || isPushD_ || isPushW_ || isPushS_) && !isOneBrink_) {
-			//ブリンクが発動
-			isBrink_ = true;
-		}
-		isShield_ = true;
+	isShield_ = true;
+	parryTime_ -= kDeltaTime_;
 
-		parryTime_ -= kDeltaTime_;
-		//パリィ時間がすぎるとき+ダメージを食らていたらパリィできない
-		(parryTime_ > 0.0f && infinityTimer_ >= kInfinityTimeMax_) ? isParry_ = true : isParry_ = false;
-
-		//パリィ時間リセット
-		parryCoolTime_ = 0.0f;
+	if (parryTime_ <= 0.0f) {
+		isParry_ = false;
 	}
 	else {
-		isShield_ = false;
-		parryCoolTime_ += kDeltaTime_;
-	}
-	//連打してもすぐにパリィできないようにする
-	if (parryCoolTime_ >= kParryTimeMax_) {
-		parryTime_ = kParryTimeMax_;
+		isParry_ = true;
 	}
 }
 
-void Player::ActionBrink() {
-	if (isBrink_) {
-		//ブリンクの時は傘は開いたまま
-		isShield_ = true;
-		brinkTimer_ += kDeltaTime_;
+void Player::ActionBrink(float& brinkTimer, float brinkTimeMax) {
+	brinkTimer += kDeltaTime_;
+	isOneBrink_ = true;//ブリンク一回
+	transform_.translate += EaseOut({ 0,0,0 }, TransformNormal({ 0,0,kBrinkPower_ }, wtGun_.GetMatWorld()), brinkTimer / brinkTimeMax);
 
-		isOneBrink_ = true;
-		transform_.translate += EaseOut({0,0,0}, TransformNormal({0,0,kBrinkPower_}, wtGun_.GetMatWorld()), brinkTimer_ / kBrinkTimeMax_);
-
-		//飛んだ瞬間後ろにパーティクルをだす
-		if (brinkTimer_ <= kDeltaTime_) {
-			Vector3 gTranslate = transform_.translate + TransformNormal(-kPlayerFront_, wtGun_.GetMatWorld());
-			particles_[particleBrink_.name]->SetTranslate(gTranslate);
-			particles_[particleBrink_.name]->SetRotate(umbrellaRange_);
-			particles_[particleBrink_.name]->SetParticleBorn(ParticleBorn::MomentMode);
-		}
+	//飛んだ瞬間後ろにパーティクルをだす
+	if (brinkTimer <= kDeltaTime_) {
+		Vector3 gTranslate = transform_.translate + TransformNormal(-kPlayerFront_, wtGun_.GetMatWorld());
+		particles_[particleBrink_.name]->SetTranslate(gTranslate);
+		particles_[particleBrink_.name]->SetRotate(umbrellaRange_);
+		particles_[particleBrink_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 	}
 	//地面についている場合、下向きのブリンクは発動しない
 	if (isGround_ && (transformGun_.rotate.x > 0.0f && transformGun_.rotate.x < kLeftDis_)) {
-		brinkTimer_ = kBrinkTimeMax_;
+		brinkTimer = brinkTimeMax;
 	}
-	if (brinkTimer_ >= kBrinkTimeMax_) {
-		isBrink_ = false;
-		brinkTimer_ = 0.0f;
+}
+
+bool Player::BrinkFlag() {
+	if ((isPushA_ || isPushD_ || isPushW_ || isPushS_) && !isOneBrink_) {
+		return true;
 	}
+	return false;
 }
 
 void Player::KnockBackUpdate() {
@@ -607,7 +574,6 @@ void Player::DeadPlayer() {
 	//ノックバック、ダメージリアクション、ブリンクをリセット
 	isKnockback_ = false;
 	isDamageMotion_ = false;
-	isBrink_ = false;
 
 	deadTimer_ += kDeltaTime_;
 	isDead_ = true;
@@ -682,19 +648,17 @@ void Player::SpriteUpdate() {
 
 void Player::UmbrellaRange(float direction) {
 	//ブリンク中は角度を変更しない
-	if (!isBrink_) {
-		//上下左右
-		transformGun_.rotate.x = direction;
+	//上下左右
+	transformGun_.rotate.x = direction;
 
-		//斜めの時
-		//左上と右下
-		if ((isPushA_ && isPushW_) || (isPushD_ && isPushS_)) {
-			transformGun_.rotate.x += kDiagonalValue_;
-		}
-		//左下と右上
-		else if ((isPushA_ && isPushS_) || (isPushD_ && isPushW_)) {
-			transformGun_.rotate.x -= kDiagonalValue_;
-		}
+	//斜めの時
+	//左上と右下
+	if ((isPushA_ && isPushW_) || (isPushD_ && isPushS_)) {
+		transformGun_.rotate.x += kDiagonalValue_;
+	}
+	//左下と右上
+	else if ((isPushA_ && isPushS_) || (isPushD_ && isPushW_)) {
+		transformGun_.rotate.x -= kDiagonalValue_;
 	}
 
 	//360度を超えたらマイナスする
@@ -719,4 +683,9 @@ const bool Player::IsMovePosition() {
 void Player::ChangeStatePattern(std::unique_ptr<BasePlayerState> playerState) {
 	playerState_.reset();
 	playerState_ = std::move(playerState);
+}
+
+void Player::ChangeStatePattern(std::unique_ptr<BasePlayerActionState> playerState) {
+	playerActionState_.reset();
+	playerActionState_ = std::move(playerState);
 }

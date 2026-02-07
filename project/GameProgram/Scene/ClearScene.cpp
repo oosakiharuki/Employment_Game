@@ -70,9 +70,6 @@ void ClearScene::InitParticle() {
 }
 
 void ClearScene::Update() {
-
-	Input::GetInstance().JoystickUpdate();
-
 	cameraControl_->Update(camera_.get());
 	//クリアロゴ更新
 	sprite_->Update();	
@@ -112,7 +109,6 @@ void ClearScene::Finalize() {
 }
 
 void ClearScene::SceneUpdate() {
-	Input::GetInstance().GetJoystickState();
 
 	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
 	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||

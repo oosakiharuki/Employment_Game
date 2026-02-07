@@ -81,7 +81,7 @@ void GameScene::Update() {
 			player_->SetTranslate({ playerPoint_.x,startPointY_,playerPoint_.z });
 			isStartStage_ = false;
 			player_->IsPerformanceFlag(false);//演出モードを終了し操作できるように
-			player_->IsJumping();//強制的にジャンプさせて飛び出たようにする
+			//player_->IsJumping();//強制的にジャンプさせて飛び出たようにする
 			//演出フラグ解除
 			for (auto& enemy : enemies_) {
 				enemy->IsPerformanceFlag(false);

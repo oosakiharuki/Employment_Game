@@ -90,6 +90,11 @@ void Input::Update() {
 	ImGui::End();
 
 #endif // USE_IMGUI
+
+	//現在の状態から前回の状態に
+	preState_ = state_;
+	//ゲームパットボタン更新処理	
+	GetJoystickState();
 }
 
 bool Input::PushKey(BYTE keyNumber) {
@@ -113,10 +118,8 @@ bool Input::TriggerKey(BYTE keyNumber) {
 bool Input::GetJoystickState() {
 	DWORD dwResult;
 
-	preState_ = state_;
-
 	ZeroMemory(&state_, sizeof(XINPUT_STATE));
-	
+
 	// Simply get the state of the controller from XInput.
 	dwResult = XInputGetState(0, &state_);
 
@@ -124,42 +127,23 @@ bool Input::GetJoystickState() {
 	if (dwResult == ERROR_SUCCESS)
 	{
 		// Controller is connected
+		isActiveGamePad_ = true;
+
 		return true;
 	}
 	else
 	{
 		// Controller is not connected
+		isActiveGamePad_ = false;
+
 		return false;
 	}
 
 	return false;
 }
 
-bool Input::GetJoystickStatePrevious() {
-	DWORD dwResult;
-
-	ZeroMemory(&state_, sizeof(XINPUT_STATE));
-
-	// Simply get the state of the controller from XInput.
-	dwResult = XInputGetState(0, &state_);
-
-	//コントローラが作動してるか
-	if (dwResult == ERROR_SUCCESS)
-	{
-		// Controller is connected	
-
-		//現在の状態から前回の状態に
-		state_ = preState_;
-
-		return true;
-	}
-	else
-	{
-		// Controller is not connected		
-		return false;
-	}
-
-	return false;
+bool Input::GetActiveGamePad() {
+	return isActiveGamePad_;
 }
 
 bool Input::PushButton(int button) {
@@ -177,6 +161,34 @@ bool Input::TriggerButton(int button) {
 	return false;
 }
 
+bool Input::LeftTriggerLongPress() {
+	if (state_.Gamepad.bLeftTrigger) {
+		return true;
+	}
+	return false;
+}
+
+bool Input::RightTriggerLongPress() {
+	if (state_.Gamepad.bRightTrigger) {
+		return true;
+	}
+	return false;
+}
+
+bool Input::LeftTrigger() {
+	if (state_.Gamepad.bLeftTrigger && !preState_.Gamepad.bLeftTrigger) {
+		return true;
+	}
+	return false;
+}
+
+bool Input::RightTrigger() {
+	if (state_.Gamepad.bRightTrigger && !preState_.Gamepad.bRightTrigger) {
+		return true;
+	}
+	return false;
+}
+
 float Input::LeftStickX() {
 	return static_cast<float>(state_.Gamepad.sThumbLX) /  kInclination;
 }
@@ -189,9 +201,4 @@ float Input::RightStickX() {
 }
 float Input::RightStickY() {
 	return static_cast<float>(state_.Gamepad.sThumbRY) /  kInclination;
-}
-
-void Input::JoystickUpdate() {
-	GetJoystickState();
-	GetJoystickStatePrevious();
 }

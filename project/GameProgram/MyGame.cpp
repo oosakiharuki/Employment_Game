@@ -17,11 +17,11 @@ void MyGame::Initialize() {
 	std::unique_ptr<SceneFactory> sceneFactory_ = std::make_unique<SceneFactory>();
 	SceneManager::GetInstance().SetSceneFactory(std::move(sceneFactory_));
 
-	SceneManager::GetInstance().ChangeScene("Title");
+	PauseScreen::GetInstance().Initialize();
+
+	SceneManager::GetInstance().ChangeScene("Select");
 	//シーンの更新処理(変更処理)
 	SceneManager::GetInstance().SceneUpdate();
-
-	PauseScreen::GetInstance().Initialize();
 
 }
 

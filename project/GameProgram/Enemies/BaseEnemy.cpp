@@ -57,7 +57,7 @@ void BaseEnemy::Update() {
 	SearchRange();
 
 	//ステートパターンの更新処理
-	currentEnemyState_->Update(*this);
+	enemyState_->Update(*this);
 
 	//リアクション
 	if (isDamageMotion_) {
@@ -369,6 +369,6 @@ void BaseEnemy::EnemyFire() {
 }
 
 void BaseEnemy::ChangeStatePattern(std::unique_ptr<BaseEnemyState> enemyState) {
-	currentEnemyState_.reset();
-	currentEnemyState_ = std::move(enemyState);
+	enemyState_.reset();
+	enemyState_ = std::move(enemyState);
 }
