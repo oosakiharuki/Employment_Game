@@ -44,68 +44,67 @@ void PlayerPerformanceState::Update(Player& player) {
 	}
 }
 
+void PlayerNormalState::Update(PlayerCommand& playerCommand) {
+	playerCommand.CommandMove();//移動
+}
 
-void PlayerNormalState::Update(Player& player) {
-	player.ActionMove();
-
-	if ((Input::GetInstance().TriggerKey(DIK_K) || 
-		Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_X) ||
-		Input::GetInstance().RightTrigger()) && !player.GetIsShield()) {
-		player.ChangeStatePattern(std::make_unique<PlayerFireState>());
-		return;
+void PlayerNormalState::CommandInput(Player& player) {
+	if (Input::GetInstance().TriggerKey(DIK_SPACE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) {
+		nextState_ = std::make_unique<PlayerJumpState>();
 	}
-
-	if ((Input::GetInstance().TriggerKey(DIK_L) || 
-		Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_B) || 
-		Input::GetInstance().LeftTrigger()) && !player.GetIsShield()) {
-		player.ChangeStatePattern(std::make_unique<PlayerShieldState>());
-		return;
+	if (Input::GetInstance().TriggerKey(DIK_K) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_X) || Input::GetInstance().RightTrigger()) {
+		nextState_ = std::make_unique<PlayerFireState>();
 	}
-
-	//指定したボタン、地面についていて傘がシールド状態でないとき
-	if ((Input::GetInstance().TriggerKey(DIK_SPACE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && player.GetIsGround()) {
-		player.ChangeStatePattern(std::make_unique<PlayerJumpState>());
-		return;
+	if (Input::GetInstance().TriggerKey(DIK_L) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_B) || Input::GetInstance().LeftTrigger()) {
+		//ブリンクの条件を満たしているか
+		if (player.BrinkFlag()) {
+			nextState_ = std::make_unique<PlayerBrinkState>(); 
+		}
+		else {
+			nextState_ = std::make_unique<PlayerShieldState>();
+		}
 	}
 }
 
-void PlayerJumpState::Update(Player& player) {
-	player.ActionJump();
-	player.ActionMove();
-	player.ChangeStatePattern(std::make_unique<PlayerNormalState>());
+void PlayerJumpState::Update(PlayerCommand& playerCommand) {
+	playerCommand.CommandMove();//移動
+	playerCommand.CommandJump();//ジャンプ
 }
 
-void PlayerFireState::Update(Player& player) {
-	player.ActionFire();
-	player.ActionMove();
-	player.ChangeStatePattern(std::make_unique<PlayerNormalState>());
+void PlayerJumpState::CommandInput(Player& player) {
+	//すぐにステートを変更
+	nextState_ = std::make_unique<PlayerNormalState>();
 }
 
-void PlayerShieldState::Update(Player& player) {
-	//ブリンクの条件+瞬間のみ()
-	if (player.BrinkFlag() && !player.GetIsShield()) {
-		player.ChangeStatePattern(std::make_unique<PlayerBrinkState>());
-		return;
-	}
+void PlayerFireState::Update(PlayerCommand& playerCommand) {
+	playerCommand.CommandMove();//移動
+	playerCommand.CommandFire();//発砲攻撃
+}
+void PlayerFireState::CommandInput(Player& player) {
+	//すぐにステートを変更
+	nextState_ = std::make_unique<PlayerNormalState>();
+}
 
-	player.ActionShield();
-	player.ActionMove();
-	player.Gliding();//滑空
+void PlayerShieldState::Update(PlayerCommand& playerCommand) {
+	playerCommand.CommandMove();//移動
+	playerCommand.CommandShield();//傘で守る
+}
 
-	//押していなければ
+void PlayerShieldState::CommandInput(Player& player) {
+	//ボタンが離れたとき、ステートを変更
 	if (!Input::GetInstance().PushKey(DIK_L) && !Input::GetInstance().PushButton(XINPUT_GAMEPAD_B) && !Input::GetInstance().LeftTriggerLongPress()) {
-		player.SetIsShield(false);
-		player.ChangeStatePattern(std::make_unique<PlayerNormalState>());
+		player.SetIsShield(false);//シールドフラグオフ
+		nextState_ = std::make_unique<PlayerNormalState>();
 	}
 }
 
-void PlayerBrinkState::Update(Player& player) {
-	player.ActionShield();
-	player.ActionBrink(brinkTimer_, kBrinkTimeMax_);
-	player.GravityDown();//滑空と同じ重力(弱める)
+void PlayerBrinkState::Update(PlayerCommand& playerCommand) {
+	playerCommand.CommandBrink();//ブリンク(ここでは移動処理は行わない)
+}
 
-	//押していなければ
-	if (brinkTimer_ >= kBrinkTimeMax_) {
-		player.ChangeStatePattern(std::make_unique<PlayerShieldState>());
+void PlayerBrinkState::CommandInput(Player& player) {
+	//ブリンクが最大まで行ったとき、ステートを変更
+	if (player.BrinkTimeMax()) {
+		nextState_ = std::make_unique<PlayerShieldState>();
 	}
 }

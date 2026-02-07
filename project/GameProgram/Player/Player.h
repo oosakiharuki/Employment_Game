@@ -14,7 +14,7 @@
 /// <summary>
 /// プレイヤー
 /// </summary>
-class Player : public GameActor{
+class Player : public GameActor , public PlayerCommand {
 public:
 	Player();
 	~Player();
@@ -218,49 +218,40 @@ public:
 	/// ステートパターン変更
 	/// </summary>
 	/// <param name="enemyState">次のステートパターン</param>
-	void ChangeStatePattern(std::unique_ptr<BasePlayerActionState> playerState);
+	void ChangeStatePattern(std::unique_ptr<ActionState> state);
 
 	void ActionUpdate();
 
-	/// <summary>
-	/// 行動 :動く
-	/// </summary>
-	void ActionMove();
-	/// <summary>
-	/// 行動 :ジャンプ
-	/// </summary>
-	void ActionJump();
-	/// <summary>
-	/// 行動 :攻撃(発砲)
-	/// </summary>
-	void ActionFire();
-	/// <summary>
-	/// 行動 :シールド
-	/// </summary>
-	void ActionShield();
-
-	/// <summary>
-	/// 行動 :ブリンク
-	/// </summary>
-	void ActionBrink(float& brinkTimer,float brinkTimeMax);
-
 	bool BrinkFlag();
+
+	bool BrinkTimeMax() {
+		if (brinkTimer_ >= kBrinkTimeMax_) {
+			brinkTimer_ = 0.0f; //タイマーリセット
+			return true;
+		}
+		return false;
+	}
+
 
 	/// <summary>
 	/// 滑空処理
 	/// </summary>
 	void Gliding();
 
+	/// <summary>
+	/// 
+	/// </summary>
 	void GravityDown();
 
-	bool JumpPowerMax() {
-		if (jumpPower_ == kJumpPowerMax_) {
-			return true;
-		}
-		return false;
-	}
-
 private:
+
+	//コマンド処理
+	void CommandMove() override;
+	void CommandJump() override;
+	void CommandFire() override;
+	void CommandShield() override;
+	void CommandBrink() override;
+
 	/// <summary>
 	/// オブジェクトの初期化処理
 	/// </summary>
@@ -325,18 +316,6 @@ private:
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object_;
 
-	//input
-	const float kStickPower_ = 0.5f;//スティックの倒し具合
-
-	//プレイヤーの速さ
-	const float kStandardSpeed_ = 0.14f;//通常の速さ
-	float speed_ = kStandardSpeed_;
-	//ジャンプフラグ
-	float jumpPower_ = 0.0f;//上がる高さ
-	const float kJumpPowerMax_ = 0.3f;//上がる高さ
-
-	//重力
-	
 	/// <summary>
 	/// 重力のみ更新処理
 	/// </summary>
@@ -352,12 +331,7 @@ private:
 	const float kDispersionBetween_ = 0.1f;//分散する間
 	const float kBulletSpeed_ = 0.5f;//弾丸の前方向の速さ
 
-	//ボタン
-	bool isPushA_ = false;
-	bool isPushD_ = false;
-	bool isPushW_ = false;
-	bool isPushS_ = false;
-	
+
 	//向き
 	const float kUpDis_ = 270.0f;//上
 	const float kDownDis_ = 90.0f;//下
@@ -380,14 +354,6 @@ private:
 	WorldTransform wtGun_;//傘のワールド座標系
 	Transform transformGun_{};
 
-	//傘のシールドフラグ
-	bool isShield_ = false;
-	//パリィ
-	bool isParry_ = false;
-	const float kParryTimeMax_ = 0.5f;//パリィする時間//ちょっと簡単に
-	float parryTime_ = kParryTimeMax_;
-	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
-	const float kBrinkPower_ = 1.25f;
 
 	/// ノックバック
 	bool isKnockback_ = false;
@@ -395,9 +361,6 @@ private:
 	float knockBackTimer_ = 0.0f;
 	float knockBackTimeMax_ = 0.0f;//最大ノックバック時間
 	const Vector3 kBulletKnockbackPower_ = { 0.0f,0.0f,0.1f };//撃った場合のノックバックパワー
-
-	///ブリンク
-	bool isOneBrink_ = false;//一回のみ
 
 	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
 	//残機(remain)
@@ -473,5 +436,5 @@ private:
 	bool isShieldMotion_ = false;
 
 	std::unique_ptr<BasePlayerState> playerState_;
-	std::unique_ptr<BasePlayerActionState> playerActionState_;
+	std::unique_ptr<ActionState> actionState_;
 };

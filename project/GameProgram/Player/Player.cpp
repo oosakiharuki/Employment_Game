@@ -41,8 +41,7 @@ void Player::Initialize() {
 
 	//ステートパターン
 	playerState_ = std::make_unique<PlayerLifeState>();
-	//行動ステートパターン
-	playerActionState_ = std::make_unique<PlayerJumpState>();
+	actionState_ = std::make_unique<PlayerNormalState>();
 }
 
 void Player::InitMainBody() {
@@ -95,8 +94,13 @@ void Player::InitAudio() {
 }
 
 void Player::ActionUpdate() {
-	//ステートの更新処理
-	playerActionState_->Update(*this);
+	actionState_->Update(*this);
+	actionState_->CommandInput(*this);
+
+	if (actionState_->GetIsInput()) {
+		ChangeStatePattern(actionState_->GetNextState());
+	}
+
 }
 
 
@@ -283,6 +287,28 @@ void Player::GravityDown() {
 
 void Player::PlayUpdate() {
 
+	//発砲のクールタイム
+	fireCoolTimer_ -= kDeltaTime_;
+	fireCoolTimer_ = std::clamp(fireCoolTimer_,0.0f, kFireCoolTimeMax_);
+
+	//傘の方向を読み取る
+	umbrellaRange_ = transformGun_.rotate;
+	//円柱または円錐が縦のため、90度回転して横にする
+	umbrellaRange_.x += kNinetyAngle_;
+
+	if(!isShield_){
+		parryTime_ += kDeltaTime_;
+		parryTime_ = std::clamp(parryTime_,0.0f,kParryTimeMax_);
+	}
+
+	//ノックバック発動
+	KnockBackUpdate();
+
+	//影の更新
+	shadow_->SetTranslate(transform_.translate);
+}
+
+void Player::CommandMove() {
 	//ゲームパット操作の場合
 	if (Input::GetInstance().GetActiveGamePad()) {
 		//Lスティック
@@ -308,31 +334,8 @@ void Player::PlayUpdate() {
 		//下
 		(Input::GetInstance().PushKey(DIK_S)) ? isPushS_ = true : isPushS_ = false;
 	}
-	
-	//発砲のクールタイム
-	fireCoolTimer_ -= kDeltaTime_;
-	fireCoolTimer_ = std::clamp(fireCoolTimer_,0.0f, kFireCoolTimeMax_);
-
-	//傘の方向を読み取る
-	umbrellaRange_ = transformGun_.rotate;
-	//円柱または円錐が縦のため、90度回転して横にする
-	umbrellaRange_.x += kNinetyAngle_;
-
-	if(!isShield_){
-		parryTime_ += kDeltaTime_;
-		parryTime_ = std::clamp(parryTime_,0.0f,kParryTimeMax_);
-	}
-
-	//ノックバック発動
-	KnockBackUpdate();
-
-	//影の更新
-	shadow_->SetTranslate(transform_.translate);
-}
-
-void Player::ActionMove() {
 	//シールド中足が遅くなる
-//(滑空中は影響しない)
+	//(滑空中は影響しない)
 	if (isShield_ && isGround_) {
 		//スピードを半減させる
 		const float gSlowSpeed = 0.5f;//半減する数値
@@ -361,12 +364,14 @@ void Player::ActionMove() {
 	}
 }
 
-void Player::ActionJump() {
-	jumpPower_ = 0.3f;
+void Player::CommandJump() {
+	if (isGround_) {
+		jumpPower_ = 0.3f;
+	}
 	isGround_ = false;
 }
 
-void Player::ActionFire() {
+void Player::CommandFire() {
 	//クールタイムは終了した時
 	if (fireCoolTimer_ == 0.0f) {
 		ShootBullet();
@@ -374,7 +379,7 @@ void Player::ActionFire() {
 	}
 }
 
-void Player::ActionShield() {
+void Player::CommandShield() {
 	isShield_ = true;
 	parryTime_ -= kDeltaTime_;
 
@@ -384,15 +389,19 @@ void Player::ActionShield() {
 	else {
 		isParry_ = true;
 	}
+	Gliding();
 }
 
-void Player::ActionBrink(float& brinkTimer, float brinkTimeMax) {
-	brinkTimer += kDeltaTime_;
-	isOneBrink_ = true;//ブリンク一回
-	transform_.translate += EaseOut({ 0,0,0 }, TransformNormal({ 0,0,kBrinkPower_ }, wtGun_.GetMatWorld()), brinkTimer / brinkTimeMax);
+void Player::CommandBrink() {
+	//傘は開く
+	isShield_ = true;
+
+	brinkTimer_ += kDeltaTime_;
+	isOneBrink_ = true;//ブリンク一回目
+	transform_.translate += EaseOut({ 0,0,0 }, TransformNormal({ 0,0,kBrinkPower_ }, wtGun_.GetMatWorld()), brinkTimer_ / kBrinkTimeMax_);
 
 	//飛んだ瞬間後ろにパーティクルをだす
-	if (brinkTimer <= kDeltaTime_) {
+	if (brinkTimer_ <= kDeltaTime_) {
 		Vector3 gTranslate = transform_.translate + TransformNormal(-kPlayerFront_, wtGun_.GetMatWorld());
 		particles_[particleBrink_.name]->SetTranslate(gTranslate);
 		particles_[particleBrink_.name]->SetRotate(umbrellaRange_);
@@ -400,8 +409,10 @@ void Player::ActionBrink(float& brinkTimer, float brinkTimeMax) {
 	}
 	//地面についている場合、下向きのブリンクは発動しない
 	if (isGround_ && (transformGun_.rotate.x > 0.0f && transformGun_.rotate.x < kLeftDis_)) {
-		brinkTimer = brinkTimeMax;
+		brinkTimer_ = kBrinkTimeMax_;
 	}
+
+	GravityDown();
 }
 
 bool Player::BrinkFlag() {
@@ -685,7 +696,7 @@ void Player::ChangeStatePattern(std::unique_ptr<BasePlayerState> playerState) {
 	playerState_ = std::move(playerState);
 }
 
-void Player::ChangeStatePattern(std::unique_ptr<BasePlayerActionState> playerState) {
-	playerActionState_.reset();
-	playerActionState_ = std::move(playerState);
+void Player::ChangeStatePattern(std::unique_ptr<ActionState> state) {
+	actionState_.reset();
+	actionState_ = std::move(state);
 }
