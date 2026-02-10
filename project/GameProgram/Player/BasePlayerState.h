@@ -4,50 +4,6 @@
 
 class Player;
 
-/// <summary>
-/// プレイヤーのステートパターン(基盤)
-/// </summary>
-class BasePlayerState {
-public:
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	virtual void Update(Player& player) = 0;
-};
-
-/// <summary>
-/// プレイヤー通常状態ステート
-/// </summary>
-class PlayerLifeState : public BasePlayerState {
-public:
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void Update(Player& player) override;
-};
-
-/// <summary>
-/// プレイヤー死亡ステート
-/// </summary>
-class PlayerDeadState : public BasePlayerState {
-public:
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void Update(Player& player) override;
-};
-
-/// <summary>
-/// プレイヤー演出ステート
-/// </summary>
-class PlayerPerformanceState : public BasePlayerState {
-public:
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void Update(Player& player) override;
-};
-
 class PlayerCommand {
 public:
 	virtual void CommandMove() = 0;
@@ -55,6 +11,10 @@ public:
 	virtual void CommandFire() = 0;
 	virtual void CommandShield() = 0;
 	virtual void CommandBrink() = 0;
+
+	virtual void Active() = 0;
+	virtual void Dead() = 0;
+	virtual void Performance() = 0;
 
 protected:
 	//input
@@ -93,7 +53,7 @@ protected:
 	
 };
 
-class ActionState {
+class BasePlayerState {
 public:
 	virtual void Update(PlayerCommand& command) = 0;
 	virtual void CommandInput(Player& player) = 0;
@@ -112,17 +72,58 @@ public:
 	/// getter_次のステートパターン
 	/// </summary>
 	/// <returns></returns>
-	std::unique_ptr<ActionState> GetNextState() { return std::move(nextState_); }
+	std::unique_ptr<BasePlayerState> GetNextState() { return std::move(nextState_); }
 
 protected:
 	//次に変更するステートの入れ物
-	std::unique_ptr<ActionState> nextState_;
+	std::unique_ptr<BasePlayerState> nextState_;
 };
+
+class PlayerActiveState : public BasePlayerState {
+public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void Update(PlayerCommand& playerCommand) override;
+	/// <summary>
+	/// キーでステート変更
+	/// </summary>
+	/// <param name="player">使っているプレイヤー</param>
+	void CommandInput(Player& player) override;
+};
+
+class PlayerDeadState : public BasePlayerState {
+public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void Update(PlayerCommand& playerCommand) override;
+	/// <summary>
+	/// キーでステート変更
+	/// </summary>
+	/// <param name="player">使っているプレイヤー</param>
+	void CommandInput(Player& player) override;
+};
+
+
+class PlayerPerformanceState : public BasePlayerState {
+public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void Update(PlayerCommand& playerCommand) override;
+	/// <summary>
+	/// キーでステート変更
+	/// </summary>
+	/// <param name="player">使っているプレイヤー</param>
+	void CommandInput(Player& player) override;
+};
+
 
 /// <summary>
 /// プレイヤー発砲攻撃状態ステート
 /// </summary>
-class PlayerNormalState : public ActionState {
+class PlayerNormalState : public BasePlayerState {
 public:
 	/// <summary>
 	/// 更新処理
@@ -138,7 +139,7 @@ public:
 /// <summary>
 /// プレイヤー発砲攻撃状態ステート
 /// </summary>
-class PlayerJumpState : public ActionState {
+class PlayerJumpState : public BasePlayerState {
 public:
 	/// <summary>
 	/// 更新処理
@@ -155,7 +156,7 @@ public:
 /// <summary>
 /// プレイヤー発砲攻撃状態ステート
 /// </summary>
-class PlayerFireState : public ActionState {
+class PlayerFireState : public BasePlayerState {
 public:
 	/// <summary>
 	/// 更新処理
@@ -171,7 +172,7 @@ public:
 /// <summary>
 /// プレイヤー防御状態ステート
 /// </summary>
-class PlayerShieldState : public ActionState {
+class PlayerShieldState : public BasePlayerState {
 public:
 	/// <summary>
 	/// 更新処理
@@ -187,7 +188,7 @@ public:
 /// <summary>
 /// プレイヤーブリンク状態ステート
 /// </summary>
-class PlayerBrinkState : public ActionState {
+class PlayerBrinkState : public BasePlayerState {
 public:
 	/// <summary>
 	/// 更新処理

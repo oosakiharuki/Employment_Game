@@ -40,7 +40,7 @@ void Player::Initialize() {
 	}
 
 	//ステートパターン
-	playerState_ = std::make_unique<PlayerLifeState>();
+	playerState_ = std::make_unique<PlayerActiveState>();
 	actionState_ = std::make_unique<PlayerNormalState>();
 }
 
@@ -98,15 +98,21 @@ void Player::ActionUpdate() {
 	actionState_->CommandInput(*this);
 
 	if (actionState_->GetIsInput()) {
-		ChangeStatePattern(actionState_->GetNextState());
+		ChangeStatePatternAction(actionState_->GetNextState());
 	}
 
 }
 
 
 void Player::Update() {
+	
 	//ステートの更新処理
 	playerState_->Update(*this);
+	playerState_->CommandInput(*this);
+
+	if (playerState_->GetIsInput()) {
+		ChangeStatePattern(playerState_->GetNextState());
+	}
 
 	//弾丸更新処理
 	BulletUpdate();
@@ -252,6 +258,26 @@ void Player::BehindUpdate() {
 
 
 void Player::LifeUpdate() {
+	//発砲のクールタイム
+	fireCoolTimer_ -= kDeltaTime_;
+	fireCoolTimer_ = std::clamp(fireCoolTimer_, 0.0f, kFireCoolTimeMax_);
+
+	//傘の方向を読み取る
+	umbrellaRange_ = transformGun_.rotate;
+	//円柱または円錐が縦のため、90度回転して横にする
+	umbrellaRange_.x += kNinetyAngle_;
+
+	if (!isShield_) {
+		parryTime_ += kDeltaTime_;
+		parryTime_ = std::clamp(parryTime_, 0.0f, kParryTimeMax_);
+	}
+
+	//ノックバック発動
+	KnockBackUpdate();
+
+	//影の更新
+	shadow_->SetTranslate(transform_.translate);
+
 	//地面にいるとき
 	if (isGround_) {
 		jumpPower_ = 0.0f;//ジャンプ可能
@@ -283,30 +309,54 @@ void Player::GravityDown() {
 	gravity_ = kFixedGravityPower_;
 }
 
-#pragma region プレイヤーの操作
 
-void Player::PlayUpdate() {
+void Player::Active() {
+	//プレイヤー操作
+	//アクションステートの更新処理
+	ActionUpdate();
 
-	//発砲のクールタイム
-	fireCoolTimer_ -= kDeltaTime_;
-	fireCoolTimer_ = std::clamp(fireCoolTimer_,0.0f, kFireCoolTimeMax_);
-
-	//傘の方向を読み取る
-	umbrellaRange_ = transformGun_.rotate;
-	//円柱または円錐が縦のため、90度回転して横にする
-	umbrellaRange_.x += kNinetyAngle_;
-
-	if(!isShield_){
-		parryTime_ += kDeltaTime_;
-		parryTime_ = std::clamp(parryTime_,0.0f,kParryTimeMax_);
-	}
-
-	//ノックバック発動
-	KnockBackUpdate();
-
-	//影の更新
-	shadow_->SetTranslate(transform_.translate);
+	//生きている状態の更新処理
+	LifeUpdate();
 }
+
+void Player::Dead() {
+	//ノックバック、ダメージリアクション、ブリンクをリセット
+	isKnockback_ = false;
+	isDamageMotion_ = false;
+
+	deadTimer_ += kDeltaTime_;
+	isDead_ = true;
+
+	//少しディレイを挟む(カメラのシェイクが終わったら)
+	if (deadTimer_ >= kHitStopTime_) {
+		//倒されたパーティクル配置+発動
+		particles_[particleDead_.name]->SetTranslate(transform_.translate);
+		particles_[particleDead_.name]->SetParticleBorn(ParticleBorn::TimerMode);
+
+		DirectionTheCamera();//カメラのほうに向く
+		transform_.rotate.z += kPlayerDeadRotating_;//回転する
+		//少し浮く
+		transform_.translate.y += kDeadLittleUp_;
+		//重力
+		GravityUpdate();
+
+		isGround_ = false;
+		if (deadTimer_ >= kDeadTimeMax_) {
+			RespawnPlayer();
+			//パーティクル発動停止
+			particles_[particleDead_.name]->SetParticleBorn(ParticleBorn::Stop);
+		}
+	}
+	else {
+		//止まっているので発動しないようにする
+		gravity_ = 0.0f;
+		isGround_ = true;
+	}
+}
+
+void Player::Performance() {}
+
+#pragma region プレイヤーの操作
 
 void Player::CommandMove() {
 	//ゲームパット操作の場合
@@ -417,6 +467,14 @@ void Player::CommandBrink() {
 
 bool Player::BrinkFlag() {
 	if ((isPushA_ || isPushD_ || isPushW_ || isPushS_) && !isOneBrink_) {
+		return true;
+	}
+	return false;
+}
+
+bool Player::BrinkTimeMax() {
+	if (brinkTimer_ >= kBrinkTimeMax_) {
+		brinkTimer_ = 0.0f; //タイマーリセット
 		return true;
 	}
 	return false;
@@ -581,52 +639,19 @@ void Player::IsShieldMotion() {
 	umbrella_->SetScale(kDefaultScale_);
 }
 
-void Player::DeadPlayer() {
-	//ノックバック、ダメージリアクション、ブリンクをリセット
-	isKnockback_ = false;
-	isDamageMotion_ = false;
-
-	deadTimer_ += kDeltaTime_;
-	isDead_ = true;
-	
-	//少しディレイを挟む(カメラのシェイクが終わったら)
-	if (deadTimer_ >= kHitStopTime_) {		
-		//倒されたパーティクル配置+発動
-		particles_[particleDead_.name]->SetTranslate(transform_.translate);
-		particles_[particleDead_.name]->SetParticleBorn(ParticleBorn::TimerMode);
-
-		DirectionTheCamera();//カメラのほうに向く
-		transform_.rotate.z += kPlayerDeadRotating_;//回転する
-		//少し浮く
-		transform_.translate.y += kDeadLittleUp_;
-		//重力
-		GravityUpdate();
-
-		isGround_ = false;
-		if (deadTimer_ >= kDeadTimeMax_) {
-			isRespawn_ = true;
-			//パーティクル発動停止
-			particles_[particleDead_.name]->SetParticleBorn(ParticleBorn::Stop);
-		}
-	}
-	else {
-		//止まっているので発動しないようにする
-		gravity_ = 0.0f;
-		isGround_ = true;
-	}
-}
-
 void Player::RespawnPlayer() {
+
 	if (remain_ == 0) {
 		return;
 	}
 	//残機を減らす
 	remain_--;
-
-	RespawnCommon();
+	//0なら初期位置に戻すなどがいらない
+	if (remain_ != 0) {
+		RespawnCommon();	
+	}
 
 	deadTimer_ = 0.0f;
-	isRespawn_ = false;
 }
 
 //パリィ成功
@@ -696,7 +721,7 @@ void Player::ChangeStatePattern(std::unique_ptr<BasePlayerState> playerState) {
 	playerState_ = std::move(playerState);
 }
 
-void Player::ChangeStatePattern(std::unique_ptr<ActionState> state) {
+void Player::ChangeStatePatternAction(std::unique_ptr<BasePlayerState> playerState) {
 	actionState_.reset();
-	actionState_ = std::move(state);
+	actionState_ = std::move(playerState);
 }

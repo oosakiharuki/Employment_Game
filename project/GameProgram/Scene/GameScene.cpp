@@ -94,9 +94,7 @@ void GameScene::Update() {
 	}
 	
 	//死んでしまった、復活(リスポーン)する時
-	if (player_->GetIsDead() && player_->GetIsRespawn()) {
-		Respawn();
-	}
+	Respawn();
 
 	//プレイヤーが死んでしまったら通らない(停止)
 	if (!player_->GetIsDead()) {
@@ -360,11 +358,8 @@ void GameScene::WaterWarpExit() {
 }
 
 void GameScene::Respawn() {
-	if (player_->GetRemain() == 0) {
-		//残機が0で倒された場合ゲームオーバー
-		isNextGameOverScene = true;
-		FadeScreen::GetInstance().SetMaskTexture("fade02.png");
-		FadeScreen::GetInstance().SetBackGround("black.png");
+	//死んでしまったとき || 残機が0の時
+	if (!player_->GetIsDead() || player_->GetRemain() == 0) {
 		return;
 	}
 
@@ -372,8 +367,7 @@ void GameScene::Respawn() {
 	for (auto& enemy : enemies_) {
 		enemy->RespawnEnemy();
 	}
-	//プレイヤー復活
-	player_->RespawnPlayer();
+
 	//突破できてないならやり直し
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->FailureEvent();
@@ -407,7 +401,11 @@ void GameScene::SceneUpdate() {
 	else if (isNextLoadingStageScene) {
 		SceneManager::GetInstance().ChangeScene("Game");//次のステージに移動(ゲームシーンであることは変わらない)
 	}
-	else if (isNextGameOverScene) {
+	else if (player_->GetRemain() == 0) {
+		//残機が0で倒された場合ゲームオーバー
+		FadeScreen::GetInstance().SetMaskTexture("fade02.png");
+		FadeScreen::GetInstance().SetBackGround("black.png");
+
 		SceneManager::GetInstance().ChangeScene("GameOver");//ゲームオーバーシーンに移動
 	}
 

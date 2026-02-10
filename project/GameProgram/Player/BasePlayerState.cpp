@@ -5,16 +5,11 @@
 
 using namespace UseEveryOne;
 
-void PlayerLifeState::Update(Player& player) {
+void PlayerActiveState::Update(PlayerCommand& playerCommand) {
+	playerCommand.Active();
+}
 
-	//アクションステートの更新処理
-	player.ActionUpdate();
-
-	//プレイヤー操作/アクション
-	player.PlayUpdate();
-	//生きている状態の更新処理
-	player.LifeUpdate();
-
+void PlayerActiveState::CommandInput(Player& player) {
 	//演出中なら
 	if (player.GetPerformanceMode()) {
 		//PerformanceStateに変更
@@ -26,21 +21,25 @@ void PlayerLifeState::Update(Player& player) {
 	}
 }
 
-void PlayerDeadState::Update(Player& player) {
 
-	if (!player.GetIsDead() && player.GetHp() > 0) {
-		//復活した(死んでいない)場合LifeStateに変更
-		player.ChangeStatePattern(std::make_unique<PlayerLifeState>());
-	}
-	else {
-		//倒された時
-		player.DeadPlayer();
+void PlayerDeadState::Update(PlayerCommand& playerCommand) {
+	playerCommand.Dead();
+}
+
+void PlayerDeadState::CommandInput(Player& player) {
+	if (!player.GetIsDead()) {
+		//復活した(死んでいない)場合LifeStateに変更		
+		player.ChangeStatePattern(std::make_unique<PlayerActiveState>());
 	}
 }
 
-void PlayerPerformanceState::Update(Player& player) {
+void PlayerPerformanceState::Update(PlayerCommand& playerCommand) {
+	playerCommand.Performance();
+}
+
+void PlayerPerformanceState::CommandInput(Player& player) {
 	if (!player.GetPerformanceMode()) {
-		player.ChangeStatePattern(std::make_unique<PlayerLifeState>());
+		player.ChangeStatePattern(std::make_unique<PlayerActiveState>());
 	}
 }
 

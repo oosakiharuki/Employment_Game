@@ -49,11 +49,6 @@ public:
 	Vector3 GetWorldPosition();
 
 	/// <summary>
-	/// 弾を発射する(ショットガン風)
-	/// </summary>
-	void ShootBullet();
-
-	/// <summary>
 	/// getter_弾丸リスト
 	/// </summary>
 	/// <returns></returns>弾丸リスト
@@ -111,12 +106,6 @@ public:
 	void KnockBackCommon(float TimeMax);
 
 	/// <summary>
-	/// getter_復活
-	/// </summary>
-	/// <returns></returns>復活フラグ
-	bool GetIsRespawn() { return isRespawn_; }
-	
-	/// <summary>
 	/// 全ての敵が初期地に戻った時
 	/// </summary>	
 	void RespawnPlayer();
@@ -168,19 +157,10 @@ public:
 	/// <param name="position"></param>影の位置の登録
 	void SetShadowPosition(const Vector3& position) { shadow_->SetTranslate(position); }
 
-	//スプライトの変化
-	void SpriteUpdate();
-
 	/// <summary>
 	/// 傘が当たったリアクションフラグ
 	/// </summary>
 	void IsShieldMotion();
-
-	/// <summary>
-	/// 傘の8方向の回転
-	/// </summary>
-	/// <param name="direction"></param>回転角度
-	void UmbrellaRange(float direction);
 
 	/// <summary>
 	/// プレイヤーの向きををカメラに
@@ -197,40 +177,66 @@ public:
 	}
 
 	/// <summary>
-	/// 操作できるときの処理()
-	/// </summary>
-	void PlayUpdate();
-
-	void LifeUpdate();
-
-	/// <summary>
-	/// 死んだときの処理
-	/// </summary>
-	void DeadPlayer();
-
-	/// <summary>
-	/// ステートパターン変更
+	/// ステートパターン変更(状態)
 	/// </summary>
 	/// <param name="enemyState">次のステートパターン</param>
 	void ChangeStatePattern(std::unique_ptr<BasePlayerState> playerState);
-	
+
 	/// <summary>
-	/// ステートパターン変更
+	/// ステートパターン変更(アクション)
 	/// </summary>
 	/// <param name="enemyState">次のステートパターン</param>
-	void ChangeStatePattern(std::unique_ptr<ActionState> state);
+	void ChangeStatePatternAction(std::unique_ptr<BasePlayerState> state);
+
+
+	/// <summary>
+	///	ブリンク発動条件
+	/// </summary>
+	/// <returns></returns>
+	bool BrinkFlag();
+
+	/// <summary>
+	/// ブリンクタイマー
+	/// </summary>
+	/// <returns></returns>
+	bool BrinkTimeMax();
+
+private:
+
+	//コマンド処理
+	void CommandMove() override;
+	void CommandJump() override;
+	void CommandFire() override;
+	void CommandShield() override;
+	void CommandBrink() override;
+
+	void Active() override;
+	void Dead() override;
+	void Performance() override;
+
+
+	/// <summary>
+	/// 生存時の処理()
+	/// </summary>
+	void LifeUpdate();
+
 
 	void ActionUpdate();
 
-	bool BrinkFlag();
 
-	bool BrinkTimeMax() {
-		if (brinkTimer_ >= kBrinkTimeMax_) {
-			brinkTimer_ = 0.0f; //タイマーリセット
-			return true;
-		}
-		return false;
-	}
+	//スプライトの変化
+	void SpriteUpdate();
+
+	/// <summary>
+	/// 傘の8方向の回転
+	/// </summary>
+	/// <param name="direction"></param>回転角度
+	void UmbrellaRange(float direction);
+
+	/// <summary>
+	/// 弾を発射する(ショットガン風)
+	/// </summary>
+	void ShootBullet();
 
 
 	/// <summary>
@@ -243,14 +249,6 @@ public:
 	/// </summary>
 	void GravityDown();
 
-private:
-
-	//コマンド処理
-	void CommandMove() override;
-	void CommandJump() override;
-	void CommandFire() override;
-	void CommandShield() override;
-	void CommandBrink() override;
 
 	/// <summary>
 	/// オブジェクトの初期化処理
@@ -364,7 +362,7 @@ private:
 
 	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
 	//残機(remain)
-	uint32_t remain_ = 2;
+	uint32_t remain_;
 
 	//ダメージを食らった後の無敵時間
 	float infinityTimer_ = 0.0f;
@@ -376,9 +374,6 @@ private:
 	const float kDeadTimeMax_ = 3.0f;//死んだ演出用時間
 	const float kPlayerDeadRotating_ = 10.0f;//10度ずつ回る
 	const float kDeadLittleUp_ = 0.4f;
-
-	//復活
-	bool isRespawn_ = false;
 
 	//サウンド
 	SoundData hitSound_;//ダメージを食らった
@@ -435,6 +430,9 @@ private:
 	//傘がリアクションするflag
 	bool isShieldMotion_ = false;
 
+	//ステートパターン
+	//プレイヤーの状態用
 	std::unique_ptr<BasePlayerState> playerState_;
-	std::unique_ptr<ActionState> actionState_;
+	//プレイヤーの操作アクション用
+	std::unique_ptr<BasePlayerState> actionState_;
 };
