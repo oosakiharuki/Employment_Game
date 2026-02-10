@@ -57,6 +57,13 @@ class MYADDON_OT_export_scene(bpy.types.Operator,bpy_extras.io_utils.ExportHelpe
             json_object["type"] = object["type"]
         else:
             json_object["type"] = object.type
+        
+        if "EnemyName" in object:
+            json_object["EnemyName"] = object["EnemyName"]
+        
+        if "StageObjectName" in object:
+            json_object["StageObjectName"] = object["StageObjectName"]
+
         #オブジェクト名
         json_object["name"] = object.name
 
@@ -97,6 +104,14 @@ class MYADDON_OT_export_scene(bpy.types.Operator,bpy_extras.io_utils.ExportHelpe
             travel_route["start"] = object["start"].to_list()
             travel_route["end"] = object["end"].to_list()
             json_object["travel_route"] = travel_route
+
+        if "event_trigger" in object:
+            event_trigger = dict()
+            event_trigger["center"] = object["trigger_center"].to_list()
+            event_trigger["size"] = object["trigger_size"].to_list()
+            event_trigger["camera"] = object["set_camera"]
+            event_trigger["csv"] = object["set_csv"]
+            json_object["event_trigger"] = event_trigger
 
 
         #1個分のjsonオブジェクトを親オブジェクトに
@@ -155,11 +170,28 @@ class MYADDON_OT_export_scene(bpy.types.Operator,bpy_extras.io_utils.ExportHelpe
         if "travel_route" in object:
             self.write_and_print(file, indent + "C %s" % object["travel_route"])
             temp_str = indent + "CC %f %f %f"
-            temp_str %= (object["start"][0],object["start"][1],object["start"][2])
+            temp_str %= (object["point"][0],object["point"][1],object["point"][2])
             self.write_and_print(file, temp_str)
+
+            if "travel_point" in object:
+
+                temp_str = indent + "CC %f %f %f"
+                temp_str %= (object["new_point"][0],object["new_point"][1],object["new_point"][2])
+                self.write_and_print(file, temp_str)
+
+        if "event_trigger" in object:
+            self.write_and_print(file,indent + "C %s" % object["event_trigger"])
             temp_str = indent + "CC %f %f %f"
-            temp_str %= (object["end"][0],object["end"][1],object["end"][2])
+            temp_str %= (object["trigger_center"][0],object["trigger_center"][1],object["trigger_center"][2])
             self.write_and_print(file, temp_str)
+            temp_str = indent + "CS %f %f %f"
+            temp_str %= (object["trigger_size"][0],object["trigger_size"][1],object["trigger_size"][2])
+            self.write_and_print(file, temp_str)
+            self.write_and_print(file,indent + "N %s" % object["set_camera"])
+            self.write_and_print(file,indent + "N %s" % object["set_csv"])
+
+
+
 
         self.write_and_print(file,indent + 'END')
         self.write_and_print(file,'')

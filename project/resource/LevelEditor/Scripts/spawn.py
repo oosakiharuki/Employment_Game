@@ -41,6 +41,13 @@ class MYADDON_OT_spawn_import_symbol(bpy.types.Operator):
         # オブジェクトの種類を設定
         object["type"] = SpawnNames.names[type][SpawnNames.INSTANCE]
 
+        #EnemySpawnなら
+        if "EnemySpawn" in object["type"]:
+            object["EnemyName"] = type
+        
+        if "StageObjectSpawn" in object["type"]:
+            object["StageObjectName"] = type
+
         # メモリ上にはおいておくがシーンでは除外する
         bpy.context.collection.objects.unlink(object)
 
@@ -48,14 +55,21 @@ class MYADDON_OT_spawn_import_symbol(bpy.types.Operator):
     
     def execute(self, context):
         # Enemyオブジェクト読み込み
-        self.load_obj("Enemy")
+        self.load_obj("Soldier")
+        self.load_obj("Turret")
+        self.load_obj("Bomb")
         # Playerオブジェクト読み込み
         self.load_obj("Player")
         # Checkpointオブジェクト読み込み
         self.load_obj("Checkpoint")
         # Checkpointオブジェクト読み込み
         self.load_obj("WarpGate")
-        
+        # Goalオブジェクト読み込み
+        self.load_obj("Goal")
+        # MoveGroundオブジェクト読み込み
+        self.load_obj("MoveGround")
+        #Bossオブジェクト読み込み
+        self.load_obj("Boss")
         return {'FINISHED'}
 
     
@@ -105,11 +119,18 @@ class SpawnNames():
 
     names = {}
 
-    names["Enemy"] = ("PrototypeEnemySpawn","EnemySpawn","enemy/enemy.obj")
     names["Player"] = ("PrototypePlayerSpawn","PlayerSpawn","player/player.obj")
-    names["Checkpoint"] = ("PrototypeCheckpoint","Checkpoint","checkpoint/checkpoint.obj")
-    names["WarpGate"] = ("PrototypeWorpGate","WarpGate","warpGate/warpGate.obj")
 
+    names["Soldier"] = ("PrototypeEnemySpawnA","EnemySpawn","enemies/soldier/enemy.obj")
+    names["Turret"] = ("PrototypeEnemySpawnB","EnemySpawn","enemies/turret/cannon.obj")
+    names["Bomb"] = ("PrototypeEnemySpawnC","EnemySpawn","enemies/bomb/enemy_bomb.obj")
+
+    names["Checkpoint"] = ("PrototypeCheckpoint","StageObjectSpawn","stageObjects/checkpoint/checkpoint.obj")
+    names["WarpGate"] = ("PrototypeWorpGate","StageObjectSpawn","stageObjects/warpGate/warpGate.obj")
+    names["Goal"] = ("PrototypeGoal","StageObjectSpawn","stageObjects/goal/goal.obj")
+    names["MoveGround"] = ("PrototypeMoveGround","StageObjectSpawn","stageObjects/moveGround/moveGround.obj")
+
+    names["Boss"] = ("PrototypeBoss","BossSpawn","Boss/Boss.obj")
 
 class MYADDON_OT_create_player_spawn(bpy.types.Operator):
     bl_idname = "myaddon.myaddon_ot_create_player_spawn"
@@ -124,16 +145,40 @@ class MYADDON_OT_create_player_spawn(bpy.types.Operator):
         return {'FINISHED'}
     
 
-class MYADDON_OT_create_enemy_spawn(bpy.types.Operator):
-    bl_idname = "myaddon.myaddon_ot_create_enemy_spawn"
-    bl_label = "敵出現ポイントシンボルの作成"
-    bl_description = "敵出現ポイントのシンボルを作成します"
+class MYADDON_OT_create_enemy_Soldier_spawn(bpy.types.Operator):
+    bl_idname = "myaddon.myaddon_ot_create_enemy_soldier_spawn"
+    bl_label = "敵出現ポイントシンボル-soldier"
+    bl_description = "敵[soldier]出現ポイントシンボルを作成します"
     bl_options = {'REGISTER','UNDO'} 
 
     def execute(self, context):
         
-        bpy.ops.myaddon.myaddon_ot_make_spawn_point('EXEC_DEFAULT',type="Enemy")
+        bpy.ops.myaddon.myaddon_ot_make_spawn_point('EXEC_DEFAULT',type="Soldier")
 
+        return {'FINISHED'}
+    
+class MYADDON_OT_create_enemy_Turret_spawn(bpy.types.Operator):
+    bl_idname = "myaddon.myaddon_ot_create_enemy_turret_spawn"
+    bl_label = "敵出現ポイントシンボル-turret"
+    bl_description = "敵[turret]出現ポイントのシンボルを作成します"
+    bl_options = {'REGISTER','UNDO'} 
+
+    def execute(self, context):
+        
+        bpy.ops.myaddon.myaddon_ot_make_spawn_point('EXEC_DEFAULT',type="Turret")
+        
+        return {'FINISHED'}
+
+class MYADDON_OT_create_enemy_Bomb_spawn(bpy.types.Operator):
+    bl_idname = "myaddon.myaddon_ot_create_enemy_bomb_spawn"
+    bl_label = "敵出現ポイントシンボル-bomb"
+    bl_description = "敵[bomb]出現ポイントのシンボルを作成します"
+    bl_options = {'REGISTER','UNDO'} 
+
+    def execute(self, context):
+        
+        bpy.ops.myaddon.myaddon_ot_make_spawn_point('EXEC_DEFAULT',type="Bomb")
+        
         return {'FINISHED'}
     
 class MYADDON_OT_create_check_point(bpy.types.Operator):
@@ -159,3 +204,41 @@ class MYADDON_OT_create_warp_gate(bpy.types.Operator):
         bpy.ops.myaddon.myaddon_ot_make_spawn_point('EXEC_DEFAULT',type="WarpGate")
 
         return {'FINISHED'}
+        
+        
+class MYADDON_OT_create_goal(bpy.types.Operator):
+    bl_idname = "myaddon.myaddon_ot_create_goal"
+    bl_label = "ゴールポイントシンボルの作成"
+    bl_description = "ゴールのシンボルを作成します"
+    bl_options = {'REGISTER','UNDO'} 
+
+    def execute(self, context):
+        
+        bpy.ops.myaddon.myaddon_ot_make_spawn_point('EXEC_DEFAULT',type="Goal")
+
+        return {'FINISHED'}
+
+class MYADDON_OT_create_boss_spawn(bpy.types.Operator):
+    bl_idname = "myaddon.myaddon_ot_create_boss_spawn"
+    bl_label = "ボス出現ポイントシンボル"
+    bl_description = "ボス出現ポイントのシンボルを作成します"
+    bl_options = {'REGISTER','UNDO'} 
+
+    def execute(self, context):
+        
+        bpy.ops.myaddon.myaddon_ot_make_spawn_point('EXEC_DEFAULT',type="Boss")
+        
+        return {'FINISHED'}
+    
+class MYADDON_OT_create_move_ground(bpy.types.Operator):
+    bl_idname = "myaddon.myaddon_ot_create_move_ground"
+    bl_label = "動く足場ポイントシンボル"
+    bl_description = "動く足場のポイントシンボルを作成します"
+    bl_options = {'REGISTER','UNDO'}
+
+    def execute(self,context):
+
+        bpy.ops.myaddon.myaddon_ot_make_spawn_point('EXEC_DEFAULT',type="MoveGround")
+
+        return {'FINISHED'}
+

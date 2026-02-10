@@ -64,7 +64,7 @@ private:
 	const uint32_t kParticleMaxNum_ = 3;
 	
 	ParticleParameters particleFanfare_ = {
-		"clear_fanfare", "resource/Sprite/white.png", Primitive::CreatePlane(),10,1.5f,{ 1,1,1 }
+		"clear_fanfare", "resource/Sprite/white.dds", Primitive::CreatePlane(),10,1.5f,{ 1,1,1 }
 	};
 	std::vector<std::unique_ptr<Particle>> particleFanfares_;
 
