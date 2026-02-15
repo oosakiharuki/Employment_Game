@@ -2,12 +2,6 @@
 #include "MyMath.h"
 #include "BaseEnemy.h"
 
-class EnemyCommand
-{
-public:
-
-};
-
 class EnemyMoveCommand {
 public:
 
@@ -47,7 +41,7 @@ protected:
 	const float kMoveX_ = 0.03f;
 };
 
-class FireEnemy {
+class EnemyFireCommand {
 public:
 
 	/// <summary>

@@ -33,38 +33,61 @@ void Enemy_Turret::Initialize() {
 
 	//レーザー(見える範囲)の初期化処理
 	particles_[particleLaser_.name] = ParticleManager::GetInstance().InitParticle(particleLaser_);
+	//攻撃(発泡)
+	particles_[particleFire_.name] = ParticleManager::GetInstance().InitParticle(particleFire_);
 	//ちょっと大きく
-	//particles_[particleFire_.name]->SetScale(kParticleFireSize_);
+	particles_[particleFire_.name]->SetScale(kParticleFireSize_);
 }
 
-void Enemy_Turret::UpdateNormal() {
+void Enemy_Turret::SearchCommand() {
 	//レーザーポイント
 	LaserPoint();
 }
 
-void Enemy_Turret::UpdateAttack(){
-	//見つけたリアクション
-	FoundReaction();
+void Enemy_Turret::AttackCommand(){
+	if (isFoundTarget_) {
+		//見つけたリアクション
+		FoundReaction();
+
+		//発砲処理
+		Fire();
+		if (coolTime_ == 0.0f) {
+			isFoundTarget_ = false;
+		}
+	}
 
 	//レーザーポイント
 	LaserPoint();
+	//マークの更新
+	MarkUpdate();
 
-	//発砲処理
-	Fire();
+}
 
+void Enemy_Turret::Active() {
+
+	//敵のステートパターンの更新処理
+	StatePatternUpdate();
+
+	PlayerTarget();
+
+	//重力
+	//GravityUpdate(transform_.translate.y);
+	//弾丸の更新
 	BulletUpdate();
 
 	//コーンが上向きなので
-	//particles_[particleFire_.name]->SetRotate({ 0,0,-transform_.rotate.y });
+	particles_[particleFire_.name]->SetRotate({ 0,0,-transform_.rotate.y });
 }
 
-void Enemy_Turret::UpdateDead() {
+void Enemy_Turret::Dead() {
 	//レーザーのパーティクル停止
 	particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::Stop);
 
 	//死んだリアクション
 	DeadReaction();
 }
+
+void Enemy_Turret::Performance() {}
 
 void Enemy_Turret::UpdateImGui() {
 
@@ -104,7 +127,7 @@ void Enemy_Turret::FireBullet() {
 
 	//パーティクルの場所変更
 	particlePosition_ = transform_.translate;
-	//particles_[particleFire_.name]->SetTranslate(particlePosition_);
+	particles_[particleFire_.name]->SetTranslate(particlePosition_);
 	
 	//飛ばす方向
 	Vector3 velocity = { 0.0f,0.0f,kBulletSpeed_ };
@@ -117,6 +140,8 @@ void Enemy_Turret::FireBullet() {
 	bullet->SetTranslate(translate);
 	bullet->SetVelocity(velocity);
 	bullets_.push_back(std::move(bullet));
+
+	particles_[particleFire_.name]->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
 }
 
 void Enemy_Turret::LaserPoint() {

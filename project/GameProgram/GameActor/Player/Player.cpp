@@ -17,7 +17,8 @@ Player::Player(){}
 Player::~Player() {}
 
 void Player::Initialize() {
-	Actor_InitializeCommon();
+	//アクターの共通初期化処理
+	GameActor::Initialize();
 
 	//アニメーションを保管
 	InitMainBody(); 
@@ -40,7 +41,6 @@ void Player::Initialize() {
 	}
 
 	//ステートパターン
-	playerState_ = std::make_unique<PlayerActiveState>();
 	actionState_ = std::make_unique<PlayerNormalState>();
 }
 
@@ -100,19 +100,11 @@ void Player::ActionUpdate() {
 	if (actionState_->GetIsInput()) {
 		ChangeStatePatternAction(actionState_->GetNextState());
 	}
-
 }
 
 
 void Player::Update() {
-	
-	//ステートの更新処理
-	playerState_->Update(*this);
-	playerState_->CommandInput(*this);
-
-	if (playerState_->GetIsInput()) {
-		ChangeStatePattern(playerState_->GetNextState());
-	}
+	GameActor::Update();
 
 	//弾丸更新処理
 	BulletUpdate();
@@ -708,11 +700,6 @@ const bool Player::IsMovePosition() {
 		return true;
 	}
 	return false;
-}
-
-void Player::ChangeStatePattern(std::unique_ptr<BasePlayerState> playerState) {
-	playerState_.reset();
-	playerState_ = std::move(playerState);
 }
 
 void Player::ChangeStatePatternAction(std::unique_ptr<BasePlayerState> playerState) {

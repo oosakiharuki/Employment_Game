@@ -3,7 +3,7 @@
 using namespace UseEveryOne;
 using namespace MyMath;
 
-void GameActor::Actor_InitializeCommon() {
+void GameActor::Initialize() {
 	//行列の初期化
 	wt_.Initialize();
 	//Transform更新処理
@@ -15,6 +15,18 @@ void GameActor::Actor_InitializeCommon() {
 
 	//リアクションクラス
 	reaction_ = std::make_unique<Reaction>();
+
+	actorState_ = std::make_unique<ActiveState>();
+}
+
+void GameActor::Update() {
+	//状態ステート(生存(active)、死亡(dead)、演出(performance))
+	actorState_->Update(*this);
+	actorState_->ChangeState(*this);
+
+	if (actorState_->GetIsInput()) {
+		ChangeStatePattern(actorState_->GetNextState());
+	}
 }
 
 AABB GameActor::GetAABB() const {
@@ -50,4 +62,9 @@ Vector3 GameActor::GetWorldPosition() {
 	worldPos.z = wt_.GetMatWorld().m[3][2];
 
 	return worldPos;
+}
+
+void GameActor::ChangeStatePattern(std::unique_ptr<BaseActorState> actorState) {
+	actorState_.reset();
+	actorState_ = std::move(actorState);
 }

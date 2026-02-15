@@ -5,7 +5,7 @@
 /// <summary>
 /// ターレットの敵(BaseEnemyの派生クラス)
 /// </summary>
-class Enemy_Turret : public BaseEnemy, public FireEnemy, public GravityActor {
+class Enemy_Turret : public BaseEnemy, public EnemyFireCommand, public GravityActor {
 public:
 
 	~Enemy_Turret() override;
@@ -13,18 +13,6 @@ public:
 	/// 初期化処理
 	/// </summary>
 	void Initialize() override;
-	/// <summary>
-	/// 更新処理_通常
-	/// </summary>
-	void UpdateNormal() override;
-	/// <summary>
-	/// 更新処理_攻撃中
-	/// </summary>
-	void UpdateAttack() override;
-	/// <summary>
-	/// 更新処理_死亡中
-	/// </summary>
-	void UpdateDead() override;
 	/// <summary>
 	/// 更新処理_ImGui
 	/// </summary>
@@ -37,6 +25,14 @@ public:
 	void RespawnEnemy() override;
 
 private:
+
+	void Active() override;
+
+	void SearchCommand() override;
+	void AttackCommand() override;
+
+	void Dead() override;
+	void Performance() override;
 
 	/// <summary>
 	/// 弾丸発射処理

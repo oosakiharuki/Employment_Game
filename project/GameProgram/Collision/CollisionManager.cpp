@@ -49,7 +49,7 @@ void CollisionManager::LookPlayer(Player* player, std::shared_ptr<BaseEnemy> ene
 		enemy->SetFoundTarget(true);//見える
 	}
 	else {
-		enemy->SetFoundTarget(false);//見えない
+		//enemy->SetFoundTarget(false);//見えない
 	}
 }
 

@@ -3,6 +3,7 @@
 
 #include "ImGuiManager.h"
 #include "Object3dCommon.h"
+#include "ParticleManager.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -25,6 +26,9 @@ void Enemy_Soldier::Initialize() {
 
 	//最大弾丸数
 	rapidCountMax_ = kRapidCountMax_;
+
+	//攻撃(発泡)
+	particles_[particleFire_.name] = ParticleManager::GetInstance().InitParticle(particleFire_);
 }
 
 void Enemy_Soldier::Move() {
@@ -43,26 +47,48 @@ void Enemy_Soldier::Move() {
 	}
 }
 
-void Enemy_Soldier::UpdateNormal() {
-	//
+
+void Enemy_Soldier::Active() {
+	//敵のステートパターンの更新処理
+	StatePatternUpdate();
+
+	//重力
+	//GravityUpdate(transform_.translate.y);
+	PlayerTarget();
+	//弾丸の更新
+	BulletUpdate();
+}
+
+void Enemy_Soldier::SearchCommand() {
+	//移動する
 	Move();
 }
 
-void Enemy_Soldier::UpdateAttack() {
-	//見つけたリアクション
-	BaseEnemy::FoundReaction();
-	
-	//発砲処理
-	Fire();
+void Enemy_Soldier::AttackCommand() {
+	if (isFoundTarget_) {
+		//見つけたリアクション
+		FoundReaction();
+
+		//発砲処理
+		Fire();
+		if (coolTime_ == 0.0f) {
+			isFoundTarget_ = false;
+		}
+	}
+
+	//マークの更新
+	MarkUpdate();
 
 	//コーンが上向きなので
-	//BaseEnemy::particles_[particleFire_.name]->SetRotate({ 0.0f,0.0f,-transform_.rotate.y });
+	particles_[particleFire_.name]->SetRotate({ 0.0f,0.0f,-transform_.rotate.y });
 }
 
-void Enemy_Soldier::UpdateDead() {
+void Enemy_Soldier::Dead() {
 	//死んだリアクション
-	BaseEnemy::DeadReaction();
+	DeadReaction();
 }
+
+void Enemy_Soldier::Performance() {}
 
 void Enemy_Soldier::UpdateImGui() {
 
@@ -111,7 +137,7 @@ void Enemy_Soldier::FireBullet() {
 		normal *= kSpeed;
 		velocity_ = normal;
 	}
-	//particles_[particleFire_.name]->SetTranslate(enemyPosition);
+	particles_[particleFire_.name]->SetTranslate(enemyPosition);
 
 	//弾丸を生み出す
 	std::unique_ptr<EnemyBullet> bullet = std::make_unique<EnemyBullet>();
@@ -120,6 +146,8 @@ void Enemy_Soldier::FireBullet() {
 	bullet->SetTranslate(enemyPosition);
 	bullet->SetVelocity(velocity_);
 	bullets_.push_back(std::move(bullet));
+
+	particles_[particleFire_.name]->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
 }
 
 void Enemy_Soldier::RespawnEnemy() {

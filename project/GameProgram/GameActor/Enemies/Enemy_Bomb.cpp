@@ -37,7 +37,31 @@ void Enemy_Bomb::Move() {
 	}
 }
 
-void Enemy_Bomb::UpdateNormal() {
+
+void Enemy_Bomb::Active() {
+	//敵のステートパターンの更新処理
+	StatePatternUpdate();
+
+	//重力
+	GravityUpdate(transform_.translate.y);
+}
+
+void Enemy_Bomb::Dead() {
+	if (isExplosion_ && deadTimer_ >= kDeadTimeMax_) {
+		isDeleteEnemy_ = true;
+		isExplosion_ = false;//爆発フラグオフ
+	}
+	else if (deadTimer_ < kDeltaTime_) {
+		//強制爆発
+		Explosion();
+	}
+
+	deadTimer_ += kDeltaTime_;
+}
+
+void Enemy_Bomb::Performance() {}
+
+void Enemy_Bomb::SearchCommand() {
 	//動く
 	Move();
 
@@ -45,7 +69,7 @@ void Enemy_Bomb::UpdateNormal() {
 	DirectionPlayer();
 }
 
-void Enemy_Bomb::UpdateAttack() {
+void Enemy_Bomb::AttackCommand() {
 	//制限時間がMaxを越した時
 	if (bombTimer_ >= kBombTimeMax_) {
 		//Hpが0になって爆発
@@ -62,20 +86,9 @@ void Enemy_Bomb::UpdateAttack() {
 	
 	//爆弾までの制限時間カウント
 	TimeLimit();
-}
 
-void Enemy_Bomb::UpdateDead() {
-
-	if (isExplosion_ && deadTimer_ >= kDeadTimeMax_) {
-		isDeleteEnemy_ = true;
-		isExplosion_ = false;//爆発フラグオフ
-	}
-	else if (deadTimer_ < kDeltaTime_) {
-		//強制爆発
-		Explosion();
-	}
-
-	deadTimer_ += kDeltaTime_;
+	//マークの更新
+	MarkUpdate();
 }
 
 void Enemy_Bomb::UpdateImGui() {

@@ -14,18 +14,6 @@ public:
 	/// </summary>
 	void Initialize() override;
 	/// <summary>
-	/// 更新処理_通常
-	/// </summary>
-	void UpdateNormal() override;
-	/// <summary>
-	/// 更新処理_攻撃中
-	/// </summary>
-	void UpdateAttack() override;
-	/// <summary>
-	/// 更新処理_死亡中
-	/// </summary>
-	void UpdateDead() override;
-	/// <summary>
 	/// 更新処理_ImGui
 	/// </summary>
 	void UpdateImGui() override;
@@ -63,6 +51,16 @@ public:
 	void DirectionPlayer();
 
 private:
+
+	void Active() override;
+	
+	void SearchCommand() override;
+	void AttackCommand() override;
+	
+	void Dead() override;
+	void Performance() override;
+
+
 	/// <summary>
 	/// 移動
 	/// </summary>

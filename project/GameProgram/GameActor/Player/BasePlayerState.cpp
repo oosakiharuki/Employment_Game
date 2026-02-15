@@ -5,44 +5,6 @@
 
 using namespace UseEveryOne;
 
-void PlayerActiveState::Update(PlayerCommand& playerCommand) {
-	playerCommand.Active();
-}
-
-void PlayerActiveState::CommandInput(Player& player) {
-	//演出中なら
-	if (player.GetPerformanceMode()) {
-		//PerformanceStateに変更
-		player.ChangeStatePattern(std::make_unique<PlayerPerformanceState>());
-	}
-	else if (player.GetHp() == 0) {
-		//DeadStateに変更
-		player.ChangeStatePattern(std::make_unique<PlayerDeadState>());
-	}
-}
-
-
-void PlayerDeadState::Update(PlayerCommand& playerCommand) {
-	playerCommand.Dead();
-}
-
-void PlayerDeadState::CommandInput(Player& player) {
-	if (!player.GetIsDead()) {
-		//復活した(死んでいない)場合LifeStateに変更		
-		player.ChangeStatePattern(std::make_unique<PlayerActiveState>());
-	}
-}
-
-void PlayerPerformanceState::Update(PlayerCommand& playerCommand) {
-	playerCommand.Performance();
-}
-
-void PlayerPerformanceState::CommandInput(Player& player) {
-	if (!player.GetPerformanceMode()) {
-		player.ChangeStatePattern(std::make_unique<PlayerActiveState>());
-	}
-}
-
 void PlayerNormalState::Update(PlayerCommand& playerCommand) {
 	playerCommand.CommandMove();//移動
 }

@@ -4,7 +4,7 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-void FireEnemy::BulletUpdate() {
+void EnemyFireCommand::BulletUpdate() {
 	//弾丸更新処理
 	for (auto& bullet : bullets_) {
 		bullet->Update();
@@ -19,7 +19,7 @@ void FireEnemy::BulletUpdate() {
 		});
 }
 
-void FireEnemy::Fire() {
+void EnemyFireCommand::Fire() {
 
 	//クールタイム
 	coolTime_ += kDeltaTime_;
@@ -29,7 +29,6 @@ void FireEnemy::Fire() {
 		rapidFireTime_ += kDeltaTime_;
 		if (rapidFireTime_ >= kRapidFireTimeMax_) {
 			FireBullet();//敵の発泡攻撃
-			//particles_[particleFire_.name]->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
 			rapidCount_++;//カウント
 			rapidFireTime_ = 0;//もう一度
 		}

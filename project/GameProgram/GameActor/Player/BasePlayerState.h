@@ -12,10 +12,6 @@ public:
 	virtual void CommandShield() = 0;
 	virtual void CommandBrink() = 0;
 
-	virtual void Active() = 0;
-	virtual void Dead() = 0;
-	virtual void Performance() = 0;
-
 protected:
 	//input
 	const float kStickPower_ = 0.5f;//スティックの倒し具合
@@ -78,47 +74,6 @@ protected:
 	//次に変更するステートの入れ物
 	std::unique_ptr<BasePlayerState> nextState_;
 };
-
-class PlayerActiveState : public BasePlayerState {
-public:
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void Update(PlayerCommand& playerCommand) override;
-	/// <summary>
-	/// キーでステート変更
-	/// </summary>
-	/// <param name="player">使っているプレイヤー</param>
-	void CommandInput(Player& player) override;
-};
-
-class PlayerDeadState : public BasePlayerState {
-public:
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void Update(PlayerCommand& playerCommand) override;
-	/// <summary>
-	/// キーでステート変更
-	/// </summary>
-	/// <param name="player">使っているプレイヤー</param>
-	void CommandInput(Player& player) override;
-};
-
-
-class PlayerPerformanceState : public BasePlayerState {
-public:
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void Update(PlayerCommand& playerCommand) override;
-	/// <summary>
-	/// キーでステート変更
-	/// </summary>
-	/// <param name="player">使っているプレイヤー</param>
-	void CommandInput(Player& player) override;
-};
-
 
 /// <summary>
 /// プレイヤー発砲攻撃状態ステート

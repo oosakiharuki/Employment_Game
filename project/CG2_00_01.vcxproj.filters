@@ -429,13 +429,13 @@
     <ClCompile Include="GameProgram\System\PauseScreen.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="GravityActor.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Enemies\EnemyCommand.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\GravityActor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\ActorState.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -734,13 +734,13 @@
     <ClInclude Include="GameProgram\System\BasePauseState.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="GravityActor.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Enemies\EnemyCommand.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\GravityActor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\ActorState.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

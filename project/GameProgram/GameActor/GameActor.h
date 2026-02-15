@@ -11,19 +11,28 @@
 #include "UseEveryOne.h"
 
 #include "Reaction.h"
+#include "ActorState.h"
 
 /// <summary>
 /// プレイヤー、敵のような動く、攻撃すると
 /// ゲームで使う基盤クラス
 /// </summary>
-class GameActor
+class GameActor : public ActorCommand
 {
 public:
 
 	/// <summary>
-	/// アクター内でもできる初期化処理
+	/// 初期化処理
 	/// </summary>
-	void Actor_InitializeCommon();
+	virtual void Initialize();
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	virtual void Update();
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	virtual void Draw() = 0;
 
 	/// <summary>
 	/// getter_座標位置
@@ -122,10 +131,28 @@ public:
 	void RespawnCommon();
 
 	/// <summary>
+	/// getter_体力
+	/// </summary>
+	/// <returns></returns>現在の体力
+	uint32_t GetHp() { return hp_; }
+
+	/// <summary>
+	/// setter_体力
+	/// </summary>
+	/// <param name="preHp"></param>代入する体力数
+	void SetHp(uint32_t preHp) { hp_ = preHp; }
+
+	/// <summary>
 	/// 体力の設定
 	/// </summary>
 	/// <param name="max">最大体力</param>
 	void HP_Initialize(uint32_t max);
+
+	/// <summary>
+	/// ステートパターン変更(状態)
+	/// </summary>
+	/// <param name="actorState">次のステートパターン</param>
+	void ChangeStatePattern(std::unique_ptr<BaseActorState> actorState);
 
 protected:
 
@@ -174,6 +201,5 @@ protected:
 	std::unique_ptr<Reaction> reaction_;
 
 private:
-
+	std::unique_ptr<BaseActorState> actorState_;
 };
-

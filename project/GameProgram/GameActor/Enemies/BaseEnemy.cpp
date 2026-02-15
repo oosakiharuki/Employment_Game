@@ -11,7 +11,7 @@ BaseEnemy::~BaseEnemy(){}
 
 void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 	//アクターの共通初期化処理
-	Actor_InitializeCommon();
+	GameActor::Initialize();
 
 	object_ = std::make_unique<Object3d>();
 	object_->Initialize();
@@ -28,8 +28,6 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 	objectNoFound_->SetModelFile("player_lost_mark.obj");
 
 	//パーティクル
-	//攻撃(発泡)
-	//particles_[particleFire_.name] = ParticleManager::GetInstance().InitParticle(particleFire_);
 	//ダメージ
 	particles_[particleDamage_.name] = ParticleManager::GetInstance().InitParticle(particleDamage_);
 
@@ -37,9 +35,12 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 	wtMark_.Initialize();	
 	//Transform更新処理
 	transformMark_ = wtMark_.UpdateTransform();
+
+	//enemyState_ = std::make_unique<EnemySearchState>();
 }
 
 void BaseEnemy::Update() {
+	GameActor::Update();
 
 	//演出中の場合
 	if (player_->GetPerformanceMode()) {
@@ -55,9 +56,6 @@ void BaseEnemy::Update() {
 
 	//捜索範囲更新
 	SearchRange();
-
-	//ステートパターンの更新処理
-	enemyState_->Update(*this);
 
 	//リアクション
 	if (isDamageMotion_) {
@@ -91,6 +89,12 @@ void BaseEnemy::UpdateBehind() {
 void BaseEnemy::MarkUpdate() {
 
 	//!,?のマーク表示時間の間
+	if (isFoundTarget_) {
+		markTimer_ += kDeltaTime_;
+	}
+	else {
+		markTimer_ -= kDeltaTime_;
+	}
 	markTimer_ = std::clamp(markTimer_, 0.0f, kMarkMaxTime_);//0 ～ kMarkMaxTime
 
 	// - マーク -
@@ -105,11 +109,11 @@ void BaseEnemy::MarkUpdate() {
 
 void BaseEnemy::MarkDraw() {
 	//見つけたとき+マークが出る時間
-	if(markTimer_ < kMarkMaxTime_)
+	if(isFoundTarget_ && markTimer_ < kMarkMaxTime_)
 		objectFound_->Draw();
 
 	//見失った+マークが出る時間
-	if (markTimer_ > 0.0f)
+	if (!isFoundTarget_ && markTimer_ > 0.0f)
 		objectNoFound_->Draw();
 }
 
@@ -186,7 +190,6 @@ void BaseEnemy::RespawnEnemyCommon() {
 	GameActor::RespawnCommon();
 
 	isDeleteEnemy_ = false;
-	ChangeStatePattern(std::make_unique<EnemyMoveState>());
 
 	//向きリセット
 	DirectionDegree();
@@ -249,16 +252,23 @@ void BaseEnemy::DeadReaction() {
 
 bool BaseEnemy::IsLostFound() {
 	//見失ってから少したってから通常処理に戻す
-	if (isLostPlayer_ && markTimer_ <= 0.0f) {
-		isLostPlayer_ = false;//リセット
+	if (markTimer_ <= 0.0f) {
 		return true;
 	}
 	//途中でまた見つかったら
-	else if (isLostPlayer_ && isFoundTarget_) {
-		isLostPlayer_ = false;//リセット
+	else if (!isFoundTarget_ && markTimer_ >= 1.0f) {
 		markTimer_ = 0.0f;    //タイマーリセット(!マークとリアクションをさせる)
 	}
 	return false;
+}
+
+void BaseEnemy::StatePatternUpdate() {
+	enemyState_->Update(*this);
+	enemyState_->ChangeState(*this);
+
+	if (enemyState_->GetIsInput()) {
+		ChangeStatePattern(enemyState_->GetNextState());
+	}
 }
 
 

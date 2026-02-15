@@ -23,15 +23,15 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize();
+	void Initialize() override;
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
+	void Update() override;
 	/// <summary>
 	/// 描画処理
 	/// </summary>
-	void Draw();
+	void Draw() override;
 	/// <summary>
 	/// パーティクル処理
 	/// </summary>
@@ -123,18 +123,6 @@ public:
 	void ParrySuccess();
 
 	/// <summary>
-	/// getter_体力
-	/// </summary>
-	/// <returns></returns>現在の体力
-	uint32_t GetHp() { return hp_; }
-
-	/// <summary>
-	/// setter_体力
-	/// </summary>
-	/// <param name="preHp"></param>代入する体力数
-	void SetHp(uint32_t preHp) { hp_ = preHp; }
-
-	/// <summary>
 	/// setter_体力
 	/// </summary>
 	/// <param name="preHp"></param>代入する体力数
@@ -176,12 +164,6 @@ public:
 	void BackDirection() {
 		transform_.rotate = { 0.0f,0.0f,0.0f };//初期状態が後ろを向いているため
 	}
-
-	/// <summary>
-	/// ステートパターン変更(状態)
-	/// </summary>
-	/// <param name="enemyState">次のステートパターン</param>
-	void ChangeStatePattern(std::unique_ptr<BasePlayerState> playerState);
 
 	/// <summary>
 	/// ステートパターン変更(アクション)
@@ -428,8 +410,6 @@ private:
 	bool isShieldMotion_ = false;
 
 	//ステートパターン
-	//プレイヤーの状態用
-	std::unique_ptr<BasePlayerState> playerState_;
 	//プレイヤーの操作アクション用
 	std::unique_ptr<BasePlayerState> actionState_;
 };

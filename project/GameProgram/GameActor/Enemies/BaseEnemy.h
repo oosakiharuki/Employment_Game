@@ -8,15 +8,15 @@
 /// <summary>
 /// 敵の基盤クラス
 /// </summary>
-class BaseEnemy : public GameActor{
+class BaseEnemy : public GameActor, public EnemyCommand{
 public:
 
 	BaseEnemy();
 	virtual ~BaseEnemy();
-	/// <summary>
-	/// 初期化処理
-	/// </summary>
-	virtual void Initialize() = 0;
+	///// <summary>
+	///// 初期化処理
+	///// </summary>
+	//virtual void Initialize() = 0;
 	/// <summary>
 	/// 共有する初期化処理
 	/// </summary>
@@ -25,17 +25,17 @@ public:
 	/// <summary>
 	/// 共有する更新処理
 	/// </summary>
-	void Update();
+	void Update() override;
 
 	/// <summary>
 	/// 最後にオブジェクト更新処理
 	/// </summary>
 	void UpdateBehind();
 
-	/// <summary>
-	/// 描画処理
-	/// </summary>
-	virtual void Draw() = 0;
+	///// <summary>
+	///// 描画処理
+	///// </summary>
+	//virtual void Draw() = 0;
 	/// <summary>
 	/// 共有する更新処理
 	/// </summary>
@@ -122,21 +122,6 @@ public:
 	bool IsLostFound();
 
 	/// <summary>
-	/// 生きている時の更新処理
-	/// </summary>
-	virtual void UpdateNormal() = 0;
-
-	/// <summary>
-	/// 攻撃中の更新処理
-	/// </summary>
-	virtual void UpdateAttack() = 0;
-
-	/// <summary>
-	/// 死んだ時の更新処理
-	/// </summary>
-	virtual void UpdateDead() = 0;
-	
-	/// <summary>
 	/// playerを見つけたとき 
 	/// </summary>
 	void PlayerTarget();
@@ -188,7 +173,6 @@ protected:
 
 	const float kMarkMaxTime_ = 1.0f;
 	float markTimer_ = 0.0f;
-	bool isLostPlayer_ = false;
 
 	/// <summary>
 	/// 見つかけた時のリアクション処理
@@ -203,7 +187,15 @@ protected:
 
 	void DeadReaction();
 
+	/// <summary>
+	/// ステート変更(捜索(search)、攻撃(attack))
+	/// </summary>
+	void StatePatternUpdate();
+
 private:
+	//ステートパターン
+	std::unique_ptr<BaseEnemyState> enemyState_ = std::make_unique<EnemySearchState>();//ここでも初期化できる
+
 	std::vector<AABB> stages_;
 
 	std::unique_ptr<Object3d> objectFound_;
@@ -215,8 +207,5 @@ private:
 	const float kMarkPositionY_ = 2.0f;
 
 	const float kFoundMotionMaxTime_ = kMarkMaxTime_ / 5.0f;
-
-	//ステートパターン
-	std::unique_ptr<BaseEnemyState> enemyState_ = std::make_unique<EnemyMoveState>();
 
 };
