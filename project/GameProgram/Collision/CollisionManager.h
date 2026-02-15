@@ -150,8 +150,9 @@ private:
 	/// ゲームアクターとステージの当たり判定
 	/// </summary>
 	/// <param name="gameActor">ゲームアクター(player,enemy)</param>
+	/// <param name="gravityActor">重力があるゲームアクター</param>
 	/// <param name="stageAABB">ステージ全体当たり判定</param>
-	void GameActorAndStageCollision(GameActor& gameActor, const std::vector<AABB>& stageAABB);
+	void GameActorAndStageCollision(GameActor& gameActor, GravityActor& gravityActor, const std::vector<AABB>& stageAABB);
 
 	/// <summary>
 	/// ステージで作成する当たり判定

@@ -29,7 +29,7 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 
 	//パーティクル
 	//攻撃(発泡)
-	particles_[particleFire_.name] = ParticleManager::GetInstance().InitParticle(particleFire_);
+	//particles_[particleFire_.name] = ParticleManager::GetInstance().InitParticle(particleFire_);
 	//ダメージ
 	particles_[particleDamage_.name] = ParticleManager::GetInstance().InitParticle(particleDamage_);
 
@@ -63,8 +63,6 @@ void BaseEnemy::Update() {
 	if (isDamageMotion_) {
 		reaction_->ScaleReaction(transform_.scale,isDamageMotion_, damageScale_, scaleTimer_, kDamageMaxTime_);
 	}
-	//弾丸更新
-	BulletUpdate();
 
 #ifdef USE_IMGUI
 	
@@ -107,11 +105,11 @@ void BaseEnemy::MarkUpdate() {
 
 void BaseEnemy::MarkDraw() {
 	//見つけたとき+マークが出る時間
-	if(isBullet_ && markTimer_ < kMarkMaxTime_)
+	if(markTimer_ < kMarkMaxTime_)
 		objectFound_->Draw();
 
 	//見失った+マークが出る時間
-	if (isLostPlayer_ && markTimer_ > 0.0f)
+	if (markTimer_ > 0.0f)
 		objectNoFound_->Draw();
 }
 
@@ -127,20 +125,7 @@ void BaseEnemy::DrawParticle() {
 	}
 }
 
-void BaseEnemy::BulletUpdate() {
-	//弾丸更新処理
-	for (auto& bullet : bullets_) {
-		bullet->Update();
-	}
-	//消滅処理
-	bullets_.remove_if([](auto& bullet) {
-		if (bullet->IsDead()) {
-			bullet.reset();
-			return true;
-		}
-		return false;
-	});
-}
+
 
 
 void BaseEnemy::IsDamage() {
@@ -161,22 +146,9 @@ void BaseEnemy::IsDamage() {
 	hp_--;
 }
 
-void BaseEnemy::GravityUpdate() {
-	//重力
-	gravity_ -= kGravityPower_;
-	//地面についていない
-	if (!isGround_) {
-		transform_.translate.y += gravity_;
-	}
-	else {
-		//重力パワーリセット
-		gravity_ = 0.0f;
-	}
-}
-
 void BaseEnemy::PlayerTarget() {
 	//見つかった瞬間だけtrueに
-	if (isBullet_ && markTimer_ < kFoundMotionMaxTime_) {
+	if (markTimer_ < kFoundMotionMaxTime_) {
 		isFoundReaction_ = true;
 		preTranslate_ = transform_.translate;
 	}
@@ -200,49 +172,32 @@ void BaseEnemy::SearchRange() {
 	if (transform_.rotate.y == kDirectionRight_) {
 		eyeAABB_.min = transform_.translate + Vector3(0, -eyeReach_.y, -eyeReach_.z);
 		eyeAABB_.max = transform_.translate + eyeReach_;
-		speed_.x = kMoveX_;//右に進む
 	}
 	//左向き
 	else if (transform_.rotate.y == kDirectionLeft_) {
 		eyeAABB_.min = transform_.translate + -eyeReach_;
 		eyeAABB_.max = transform_.translate + Vector3(0, eyeReach_.y, eyeReach_.z);
-		speed_.x = -kMoveX_;//左に進む
 	}
 }
 
-void BaseEnemy::MoveEnemy() {
-	transform_.translate += speed_;//移動
-	move_ += speed_;           //移動ポイント
-
-	//移動ポイントの端だと向きを変える
-	//右端に行ったら左に旋回
-	if (move_.x > routePointRight_.x) {
-		transform_.rotate.y = kDirectionLeft_;
-	}
-	//左端に行ったら右に旋回
-	if (move_.x < routePointLeft_.x) {
-		transform_.rotate.y = kDirectionRight_;
-	}
-}
 
 void BaseEnemy::RespawnEnemyCommon() {
 	//ゲームアクターの共通リスポーン処理
-	RespawnCommon();
+	GameActor::RespawnCommon();
 
 	isDeleteEnemy_ = false;
-	isBullet_ = false;//攻撃はしない
 	ChangeStatePattern(std::make_unique<EnemyMoveState>());
 
 	//向きリセット
 	DirectionDegree();
-	//移動ルート位置戻す
-	move_ = { 0,0,0 };
+	////移動ルート位置戻す
+	//move_ = { 0,0,0 };
 
-	//弾はすべて消す
-	bullets_.remove_if([](auto& bullet) {
-		bullet.reset();
-		return true;
-	});
+	////弾はすべて消す
+	//bullets_.remove_if([](auto& bullet) {
+	//	bullet.reset();
+	//	return true;
+	//});
 
 	markTimer_ = 0.0f;
 }
@@ -264,44 +219,6 @@ void BaseEnemy::DirectionDegree() {
 		transform_.rotate.y = kDirectionLeft_;
 	}
 }
-
-AABB BaseEnemy::GetBombAABB() { 
-	AABB null{};
-	return null;
-}
-
-Vector3 BaseEnemy::GetDistance(){
-	Vector3 null{};
-	return null;
-}
-
-bool BaseEnemy::IsExplosion() { return false; }
-
-void BaseEnemy::Fire() {
-	
-	//クールタイム
-	coolTime_ += kDeltaTime_;
-	if (coolTime_ >= kCoolTimeMax_) {
-
-		//連射で時間を開ける
-		rapidFireTime_ += kDeltaTime_;
-		if (rapidFireTime_ >= kRapidFireTimeMax_) {
-			FireBullet();//敵の発泡攻撃
-			particles_[particleFire_.name]->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
-			rapidCount_++;//カウント
-			rapidFireTime_ = 0;//もう一度
-		}
-
-		//最大弾丸数を超えた場合
-		if (rapidCount_ == rapidCountMax_) {
-			rapidCount_ = 0;//カウントリセット
-			coolTime_ = 0;//クールタイム発動
-			isBullet_ = false;//撃たないフラグ
-		}
-	}
-}
-
-void BaseEnemy::FireBullet(){}
 
 void BaseEnemy::FoundReaction() {
 
@@ -344,29 +261,6 @@ bool BaseEnemy::IsLostFound() {
 	return false;
 }
 
-void BaseEnemy::EnemyFire() {
-	if (isFoundTarget_) {
-		isBullet_ = true;
-	}
-
-	if (isBullet_) {
-		//発泡処理
-		Fire();
-		//!マーク表示時間
-		markTimer_ += kDeltaTime_;
-	}
-	else if (!isBullet_) {
-		//連射タイマー、クールタイマーリセット
-		rapidCount_ = 0;
-		rapidFireTime_ = 0;
-		coolTime_ = 0;
-		//見失うフラグ
-		isLostPlayer_ = true;
-		//?マーク表示時間
-		markTimer_ -= kDeltaTime_;
-	}
-
-}
 
 void BaseEnemy::ChangeStatePattern(std::unique_ptr<BaseEnemyState> enemyState) {
 	enemyState_.reset();

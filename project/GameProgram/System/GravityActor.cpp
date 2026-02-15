@@ -1,0 +1,22 @@
+#include "GravityActor.h"
+
+void GravityActor::IsGround(bool result) {
+	isGround_ = result;
+	//地面なら重力を0にする(沈まないようにする)
+	if (isGround_) {
+		gravity_ = 0;
+	}
+}
+
+void GravityActor::GravityUpdate(float& translateY) {
+	//重力
+	gravity_ -= kGravityPower_;
+	//地面についていない
+	if (!isGround_) {
+		translateY += gravity_;
+	}
+	else {
+		//重力パワーリセット
+		gravity_ = 0.0f;
+	}
+}

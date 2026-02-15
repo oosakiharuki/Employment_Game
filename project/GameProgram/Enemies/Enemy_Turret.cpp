@@ -34,7 +34,7 @@ void Enemy_Turret::Initialize() {
 	//レーザー(見える範囲)の初期化処理
 	particles_[particleLaser_.name] = ParticleManager::GetInstance().InitParticle(particleLaser_);
 	//ちょっと大きく
-	particles_[particleFire_.name]->SetScale(kParticleFireSize_);
+	//particles_[particleFire_.name]->SetScale(kParticleFireSize_);
 }
 
 void Enemy_Turret::UpdateNormal() {
@@ -50,10 +50,12 @@ void Enemy_Turret::UpdateAttack(){
 	LaserPoint();
 
 	//発砲処理
-	EnemyFire();
+	Fire();
+
+	BulletUpdate();
 
 	//コーンが上向きなので
-	particles_[particleFire_.name]->SetRotate({ 0,0,-transform_.rotate.y });
+	//particles_[particleFire_.name]->SetRotate({ 0,0,-transform_.rotate.y });
 }
 
 void Enemy_Turret::UpdateDead() {
@@ -102,7 +104,7 @@ void Enemy_Turret::FireBullet() {
 
 	//パーティクルの場所変更
 	particlePosition_ = transform_.translate;
-	particles_[particleFire_.name]->SetTranslate(particlePosition_);
+	//particles_[particleFire_.name]->SetTranslate(particlePosition_);
 	
 	//飛ばす方向
 	Vector3 velocity = { 0.0f,0.0f,kBulletSpeed_ };
@@ -129,5 +131,4 @@ void Enemy_Turret::RespawnEnemy() {
 	RespawnEnemyCommon();
 	rapidCount_ = 0;
 	coolTime_ = 0;
-	isBullet_ = false;
 }

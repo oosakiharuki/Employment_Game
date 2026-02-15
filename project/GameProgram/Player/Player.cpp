@@ -287,7 +287,7 @@ void Player::LifeUpdate() {
 	}
 
 	//重力
-	GravityUpdate();
+	GravityUpdate(transform_.translate.y);
 }
 
 void Player::Gliding() {
@@ -338,7 +338,7 @@ void Player::Dead() {
 		//少し浮く
 		transform_.translate.y += kDeadLittleUp_;
 		//重力
-		GravityUpdate();
+		GravityUpdate(transform_.translate.y);
 
 		isGround_ = false;
 		if (deadTimer_ >= kDeadTimeMax_) {
@@ -701,12 +701,6 @@ void Player::UmbrellaRange(float direction) {
 	if (transformGun_.rotate.x > kMaxAngle) {
 		transformGun_.rotate.x -= kMaxAngle;
 	}
-}
-
-void Player::GravityUpdate() {
-	//重力
-	gravity_ -= kGravityPower_;
-	transform_.translate.y += gravity_;
 }
 
 const bool Player::IsMovePosition() {

@@ -1,11 +1,12 @@
 #pragma once
 #include "BaseEnemy.h"
 #include "MyMath.h"
+#include "EnemyCommand.h"
 
 /// <summary>
 /// ボムの敵(BaseEnemyの派生クラス)
 /// </summary>
-class Enemy_Bomb : public BaseEnemy {
+class Enemy_Bomb : public BaseEnemy, public EnemyMoveCommand, public EnemyExplosionCommand, public GravityActor {
 public:
 	~Enemy_Bomb() override;
 	/// <summary>
@@ -33,8 +34,16 @@ public:
 	/// </summary>
 	void Draw() override;
 
-	bool IsExplosion()override { return isExplosion_; }
+	/// <summary>
+	/// リスポーン
+	/// </summary>
 	void RespawnEnemy() override;
+	
+	/// <summary>
+	/// 爆発フラグ
+	/// </summary>
+	/// <returns></returns>
+	bool IsExplosion()override { return isExplosion_; }
 
 	/// <summary>
 	/// getter‗爆発範囲AABB
@@ -54,54 +63,33 @@ public:
 	void DirectionPlayer();
 
 private:
-	//追尾開始
-	bool isHomingStart_ = false;
-	//爆発
-	bool isExplosion_ = false;
+	/// <summary>
+	/// 移動
+	/// </summary>
+	void Move() override;
 
-	//爆発するまでのタイマー
-	const float kBombTimeMax_ = 5.0f;//max
-	float bombTimer_ = 0.0f;
-	
 	//Hp
 	const uint32_t kHp_ = 1;
 	//見える範囲初期化
 	const Vector3 kEyeReach_ = { 15, 2, 1 };
 
-	//爆発範囲AABB
-	AABB bombAABB_;
-	const Vector3 kExplosionRange_ = { 5,5,5 };//大きさ
 	//プレイヤーとの距離感
 	Vector3 distance_;
 	const float kSpeed_ = -0.15f;
 
-	//リアクション(拡大縮小)
-	Vector3 bombScale_ = { 0.05f, 0.05f, 0.05f };
-	const float kScaleMax_ = 0.2f;//スケール最大値
-	const float kOnTheVerge = 3.5f;//爆発寸前のタイマー
-	const float kScaleSpeedUp_ = 2.0f;
-	//リアクション(色)
-	Vector4 color_ = { 1,1,1,1 };
-	float colorTimer_ = 0.0f;//時間
-	float colorTimeMax_ = 0.2f;//色変化の最大時間
-	const float kColorChangePower_ = 0.1f;//足し引きするパワー
-
-	float deadTimer_ = 0.0f;
-	const float kDeadTimeMax_ = 0.5f;//爆発する間の時間
-
 	/// <summary>
 	/// 爆発する
 	/// </summary>
-	void Explosion();
+	void Explosion() override;
 
 	/// <summary>
 	/// タイムリミット
 	/// </summary>
-	void TimeLimit();
+	void TimeLimit() override;
 
 	/// <summary>
 	/// 赤の点滅
 	/// </summary>
-	void RedBlinking();
+	void RedBlinking() override;
 };
 

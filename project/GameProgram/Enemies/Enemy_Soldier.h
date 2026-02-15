@@ -1,10 +1,11 @@
 #pragma once
 #include "BaseEnemy.h"
+#include "EnemyCommand.h"
 
 /// <summary>
 /// 傭兵の敵(BaseEnemyの派生クラス)
 /// </summary>
-class Enemy_Soldier : public BaseEnemy{
+class Enemy_Soldier : public BaseEnemy, public FireEnemy,public EnemyMoveCommand, public GravityActor {
 public:
 	~Enemy_Soldier() override;
 	/// <summary>
@@ -33,16 +34,21 @@ public:
 	void Draw() override;
 
 	/// <summary>
-	/// 弾丸発射処理
-	/// </summary>
-	void FireBullet() override;
-
-	/// <summary>
 	/// リスポーン
 	/// </summary>
 	void RespawnEnemy() override;
 
 private:
+	/// <summary>
+	/// 移動
+	/// </summary>
+	void Move() override;
+
+	/// <summary>
+	/// 弾丸発射処理
+	/// </summary>
+	void FireBullet() override;
+
 	//速度
 	Vector3 velocity_;
 

@@ -76,18 +76,6 @@ public:
 	void SetAABB(const AABB& aabb) { actorAABB_ = aabb; }
 
 	/// <summary>
-	/// 地面判定フラグ変更
-	/// </summary>
-	/// <param name="result">trueは地面 / falseは空中</param>
-	void IsGround(bool result);
-
-	/// <summary>
-	/// getter_地面判定
-	/// </summary>
-	/// <returns>現在の地面判定</returns>
-	bool GetIsGround() { return isGround_; }
-
-	/// <summary>
 	/// getter_倒れた時
 	/// </summary>
 	/// <returns>倒れたフラグ</returns>
@@ -158,12 +146,6 @@ protected:
 
 	//最大角度(360度)
 	const float kMaxAngle = 360.0f;
-
-	//地面判定
-	bool isGround_ = false;
-	//重力
-	float gravity_ = 0.0f;
-	const float kGravityPower_ = 0.01f;//重力の質量
 
 	//演出中フラグ
 	bool isPerformance_ = false;

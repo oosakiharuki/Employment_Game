@@ -6,6 +6,7 @@
 #include "Input.h"
 
 #include "GameActor.h"
+#include "GravityActor.h"
 
 #include "UIManager.h"
 
@@ -14,7 +15,7 @@
 /// <summary>
 /// プレイヤー
 /// </summary>
-class Player : public GameActor , public PlayerCommand {
+class Player : public GameActor, public GravityActor, public PlayerCommand {
 public:
 	Player();
 	~Player();
@@ -314,10 +315,6 @@ private:
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object_;
 
-	/// <summary>
-	/// 重力のみ更新処理
-	/// </summary>
-	void GravityUpdate();
 	const float kFixedGravityPower_ = -0.05f;//滑空時重力値を固定
 
 	/// 弾丸

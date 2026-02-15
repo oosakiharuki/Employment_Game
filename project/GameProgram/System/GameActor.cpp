@@ -17,14 +17,6 @@ void GameActor::Actor_InitializeCommon() {
 	reaction_ = std::make_unique<Reaction>();
 }
 
-void GameActor::IsGround(bool result) {
-	isGround_ = result;
-	//地面なら重力を0にする(沈まないようにする)
-	if (isGround_) {
-		gravity_ = 0;
-	}
-}
-
 AABB GameActor::GetAABB() const {
 	AABB aabb;
 	aabb.min = transform_.translate + actorAABB_.min;

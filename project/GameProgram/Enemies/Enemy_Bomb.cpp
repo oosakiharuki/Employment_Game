@@ -21,9 +21,25 @@ void Enemy_Bomb::Initialize() {
 	object_->SetColor(color_);
 }
 
+void Enemy_Bomb::Move() {
+	move_ += speed_;//移動ポイント
+
+	//方向転換
+	//敵が右向き
+	if (transform_.rotate.y == kDirectionRight_) {
+		transform_.rotate.y = kDirectionLeft_;
+		speed_.x = kMoveX_;//右に進む
+	}
+	//左向き
+	else if (transform_.rotate.y == kDirectionLeft_) {
+		transform_.rotate.y = kDirectionRight_;
+		speed_.x = -kMoveX_;//左に進む
+	}
+}
+
 void Enemy_Bomb::UpdateNormal() {
 	//動く
-	MoveEnemy();
+	Move();
 
 	//ボムとプレイヤーの距離
 	DirectionPlayer();

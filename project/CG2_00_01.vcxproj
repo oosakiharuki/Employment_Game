@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameProgram\Enemies\EnemyCommand.cpp" />
     <ClCompile Include="GameProgram\System\BasePauseState.cpp" />
     <ClCompile Include="GameProgram\StageObjects\BackGroundObject.cpp" />
     <ClCompile Include="Engine\scene\AbstractSceneFactory.cpp" />
@@ -121,6 +122,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\_gltf\SkinningCommon.cpp" />
     <ClCompile Include="GameProgram\System\CameraControl.cpp" />
     <ClCompile Include="GameProgram\System\FadeScreen.cpp" />
+    <ClCompile Include="GameProgram\System\GravityActor.cpp" />
     <ClCompile Include="GameProgram\System\LoadingModels.cpp" />
     <ClCompile Include="GameProgram\Scene\ClearScene.cpp" />
     <ClCompile Include="GameProgram\Scene\GameOverScene.cpp" />
@@ -208,8 +210,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\StageObjects\MoveGround.cpp" />
     <ClCompile Include="GameProgram\System\VisualActor.cpp" />
     <ClCompile Include="GameProgram\System\PauseScreen.cpp" />
+    <ClCompile Include="GravityActor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameProgram\Enemies\EnemyCommand.h" />
     <ClInclude Include="GameProgram\System\BasePauseState.h" />
     <ClInclude Include="GameProgram\StageObjects\BackGroundObject.h" />
     <ClInclude Include="Engine\scene\AbstractSceneFactory.h" />
@@ -224,6 +228,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\_gltf\SkinningCommon.h" />
     <ClInclude Include="GameProgram\System\CameraControl.h" />
     <ClInclude Include="GameProgram\System\FadeScreen.h" />
+    <ClInclude Include="GameProgram\System\GravityActor.h" />
     <ClInclude Include="GameProgram\System\LoadingModels.h" />
     <ClInclude Include="GameProgram\Scene\ClearScene.h" />
     <ClInclude Include="GameProgram\Scene\GameOverScene.h" />
@@ -308,6 +313,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\StageObjects\MoveGround.h" />
     <ClInclude Include="GameProgram\System\VisualActor.h" />
     <ClInclude Include="GameProgram\System\PauseScreen.h" />
+    <ClInclude Include="GravityActor.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

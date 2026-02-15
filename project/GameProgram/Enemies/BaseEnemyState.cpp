@@ -12,7 +12,7 @@ void BaseEnemyState::EnemyDead(BaseEnemy& enemy) {
 
 void EnemyMoveState::Update(BaseEnemy& enemy) {
 	//重力
-	enemy.GravityUpdate();
+	//enemy.GravityUpdate();
 	//プレイヤーの発見
 	enemy.PlayerTarget();
 
@@ -25,7 +25,7 @@ void EnemyMoveState::Update(BaseEnemy& enemy) {
 
 	//見つかったら
 	if (enemy.IsFoundTarget()) {
-		enemy.BulletFlag();
+		//enemy.BulletFlag();
 		enemy.ChangeStatePattern(std::make_unique<EnemyAttackState>());
 	}
 
@@ -38,7 +38,7 @@ void EnemyMoveState::StateLog() {
 
 void EnemyAttackState::Update(BaseEnemy& enemy) {
 	//重力
-	enemy.GravityUpdate();
+	//enemy.GravityUpdate();
 	//プレイヤーの発見
 	enemy.PlayerTarget();
 

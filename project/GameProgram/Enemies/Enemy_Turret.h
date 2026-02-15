@@ -1,10 +1,11 @@
 #pragma once
 #include "BaseEnemy.h"
+#include "EnemyCommand.h"
 
 /// <summary>
 /// ターレットの敵(BaseEnemyの派生クラス)
 /// </summary>
-class Enemy_Turret : public BaseEnemy {
+class Enemy_Turret : public BaseEnemy, public FireEnemy, public GravityActor {
 public:
 
 	~Enemy_Turret() override;
@@ -33,14 +34,14 @@ public:
 	/// </summary>
 	void Draw() override;
 
+	void RespawnEnemy() override;
+
+private:
+
 	/// <summary>
 	/// 弾丸発射処理
 	/// </summary>
 	void FireBullet()override;
-
-	void RespawnEnemy() override;
-
-private:
 
 	//レーザーポイントパーティクル
 	void LaserPoint();

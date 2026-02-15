@@ -60,8 +60,8 @@ void SpitOutLevelEditor::SpitOutEnemies(std::vector<std::shared_ptr<BaseEnemy>>&
 			enemy->SetInit_Position(enemyData.transform.translate, enemyData.transform.rotate);
 
 			enemy->SetAABB(enemyData.colliderAABB);//当たり判定
-			enemy->SetRouteLeftPoint(enemyData.leftPoint);//移動ポイント1
-			enemy->SetRouteRightPoint(enemyData.rightPoint);//移動ポイント2 (leftPoint < rightPoint)
+			//enemy->SetRouteLeftPoint(enemyData.leftPoint);//移動ポイント1
+			//enemy->SetRouteRightPoint(enemyData.rightPoint);//移動ポイント2 (leftPoint < rightPoint)
 			//オブジェクト向き
 			enemy->DirectionDegree();
 			//vectorに代入

@@ -15,10 +15,10 @@ Enemy_Soldier::~Enemy_Soldier() {
 
 void Enemy_Soldier::Initialize() {
 	//敵の共通初期化処理
-	Enemy_InitializeCommon("enemy.obj");
+	BaseEnemy::Enemy_InitializeCommon("enemy.obj");
 
 	//体力の初期化
-	HP_Initialize(kHp_);
+	GameActor::HP_Initialize(kHp_);
 
 	//見える範囲初期化
 	eyeReach_ = kEyeReach_;
@@ -27,25 +27,41 @@ void Enemy_Soldier::Initialize() {
 	rapidCountMax_ = kRapidCountMax_;
 }
 
+void Enemy_Soldier::Move() {
+	move_ += speed_;//移動ポイント
+	
+	//方向転換
+	//敵が右向き
+	if (transform_.rotate.y == kDirectionRight_) {
+		transform_.rotate.y = kDirectionLeft_;
+		speed_.x = kMoveX_;//右に進む
+	}
+	//左向き
+	else if (transform_.rotate.y == kDirectionLeft_) {
+		transform_.rotate.y = kDirectionRight_;
+		speed_.x = -kMoveX_;//左に進む
+	}
+}
+
 void Enemy_Soldier::UpdateNormal() {
 	//
-	MoveEnemy();
+	Move();
 }
 
 void Enemy_Soldier::UpdateAttack() {
 	//見つけたリアクション
-	FoundReaction();
+	BaseEnemy::FoundReaction();
 	
 	//発砲処理
-	EnemyFire();
+	Fire();
 
 	//コーンが上向きなので
-	particles_[particleFire_.name]->SetRotate({ 0.0f,0.0f,-transform_.rotate.y });
+	//BaseEnemy::particles_[particleFire_.name]->SetRotate({ 0.0f,0.0f,-transform_.rotate.y });
 }
 
 void Enemy_Soldier::UpdateDead() {
 	//死んだリアクション
-	DeadReaction();
+	BaseEnemy::DeadReaction();
 }
 
 void Enemy_Soldier::UpdateImGui() {
@@ -95,7 +111,7 @@ void Enemy_Soldier::FireBullet() {
 		normal *= kSpeed;
 		velocity_ = normal;
 	}
-	particles_[particleFire_.name]->SetTranslate(enemyPosition);
+	//particles_[particleFire_.name]->SetTranslate(enemyPosition);
 
 	//弾丸を生み出す
 	std::unique_ptr<EnemyBullet> bullet = std::make_unique<EnemyBullet>();
@@ -112,5 +128,4 @@ void Enemy_Soldier::RespawnEnemy() {
 	//発泡処理のリセット
 	rapidCount_ = 0;
 	coolTime_ = 0;
-	isBullet_ = false;
 }
