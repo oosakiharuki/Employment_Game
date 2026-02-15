@@ -6,7 +6,7 @@ using namespace Primitive;
 
 void SphereModel::Initialize() {
 	modelData_ = CreateSphere();
-	modelData_.materialData.textureFilePath = "resource/Sprite/white.png";
+	modelData_.materialData.textureFilePath = "resource/Sprite/white.dds";
 	//テクスチャ読み込み
 	TextureManager::GetInstance().LoadTexture(modelData_.materialData.textureFilePath);
 	modelData_.materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(modelData_.materialData.textureFilePath);

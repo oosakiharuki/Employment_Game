@@ -57,7 +57,7 @@ public:
 private:
 
 	SceneSaveData sceneSaveData_ = {
-		3,3,2,"stage_0" //初期設定
+		3,3,3,"stage_0" //初期設定
 	};
 	//インスタンス
 	static std::unique_ptr<NextStageSave> sInstance_;

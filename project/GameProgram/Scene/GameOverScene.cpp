@@ -49,8 +49,6 @@ void GameOverScene::InitObject() {
 
 
 void GameOverScene::Update() {
-	Input::GetInstance().JoystickUpdate();
-	
 	cameraControl_->Update(camera_.get());
 
 	sprite_->Update();
@@ -82,7 +80,6 @@ void GameOverScene::Draw() {
 void GameOverScene::Finalize() {}
 
 void GameOverScene::SceneUpdate() {
-	Input::GetInstance().GetJoystickState();
 
 	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
 	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||

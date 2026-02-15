@@ -14,7 +14,7 @@
 /// <summary>
 /// プレイヤー
 /// </summary>
-class Player : public GameActor{
+class Player : public GameActor , public PlayerCommand {
 public:
 	Player();
 	~Player();
@@ -49,11 +49,6 @@ public:
 	Vector3 GetWorldPosition();
 
 	/// <summary>
-	/// 弾を発射する(ショットガン風)
-	/// </summary>
-	void ShootBullet();
-
-	/// <summary>
 	/// getter_弾丸リスト
 	/// </summary>
 	/// <returns></returns>弾丸リスト
@@ -74,6 +69,12 @@ public:
 	/// </summary>
 	/// <returns></returns>trueなら守っている
 	bool GetIsShield() { return isShield_; }
+
+	/// <summary>
+	/// setter_シールドフラグ
+	/// </summary>
+	/// <param name="result"></param>
+	void SetIsShield(bool result) { isShield_ = result; }
 
 	/// <summary>
 	/// ダメージを食らった
@@ -105,12 +106,6 @@ public:
 	void KnockBackCommon(float TimeMax);
 
 	/// <summary>
-	/// getter_復活
-	/// </summary>
-	/// <returns></returns>復活フラグ
-	bool GetIsRespawn() { return isRespawn_; }
-	
-	/// <summary>
 	/// 全ての敵が初期地に戻った時
 	/// </summary>	
 	void RespawnPlayer();
@@ -125,11 +120,6 @@ public:
 	/// パリィ成功 = 連続弾も跳ね返す
 	/// </summary>
 	void ParrySuccess();
-	/// <summary>
-	/// パリィ成功フラグ
-	/// </summary>
-	/// <param name="result"></param>trueで成功
-	void SetIsParry(bool result) { isParry_ = result; }
 
 	/// <summary>
 	/// getter_体力
@@ -167,24 +157,10 @@ public:
 	/// <param name="position"></param>影の位置の登録
 	void SetShadowPosition(const Vector3& position) { shadow_->SetTranslate(position); }
 
-	//スプライトの変化
-	void SpriteUpdate();
-
 	/// <summary>
 	/// 傘が当たったリアクションフラグ
 	/// </summary>
 	void IsShieldMotion();
-
-	/// <summary>
-	/// 強制的にジャンプさせる(演出等で使う)
-	/// </summary>
-	void IsJumping() { isJump_ = true; }
-
-	/// <summary>
-	/// 傘の8方向の回転
-	/// </summary>
-	/// <param name="direction"></param>回転角度
-	void UmbrellaRange(float direction);
 
 	/// <summary>
 	/// プレイヤーの向きををカメラに
@@ -201,24 +177,79 @@ public:
 	}
 
 	/// <summary>
-	/// 操作できるときの処理()
-	/// </summary>
-	void PlayUpdate();
-
-	void LifeUpdate();
-
-	/// <summary>
-	/// 死んだときの処理
-	/// </summary>
-	void DeadPlayer();
-
-	/// <summary>
-	/// ステートパターン変更
+	/// ステートパターン変更(状態)
 	/// </summary>
 	/// <param name="enemyState">次のステートパターン</param>
 	void ChangeStatePattern(std::unique_ptr<BasePlayerState> playerState);
 
+	/// <summary>
+	/// ステートパターン変更(アクション)
+	/// </summary>
+	/// <param name="enemyState">次のステートパターン</param>
+	void ChangeStatePatternAction(std::unique_ptr<BasePlayerState> state);
+
+
+	/// <summary>
+	///	ブリンク発動条件
+	/// </summary>
+	/// <returns></returns>
+	bool BrinkFlag();
+
+	/// <summary>
+	/// ブリンクタイマー
+	/// </summary>
+	/// <returns></returns>
+	bool BrinkTimeMax();
+
 private:
+
+	//コマンド処理
+	void CommandMove() override;
+	void CommandJump() override;
+	void CommandFire() override;
+	void CommandShield() override;
+	void CommandBrink() override;
+
+	void Active() override;
+	void Dead() override;
+	void Performance() override;
+
+
+	/// <summary>
+	/// 生存時の処理()
+	/// </summary>
+	void LifeUpdate();
+
+
+	void ActionUpdate();
+
+
+	//スプライトの変化
+	void SpriteUpdate();
+
+	/// <summary>
+	/// 傘の8方向の回転
+	/// </summary>
+	/// <param name="direction"></param>回転角度
+	void UmbrellaRange(float direction);
+
+	/// <summary>
+	/// 弾を発射する(ショットガン風)
+	/// </summary>
+	void ShootBullet();
+
+
+	/// <summary>
+	/// 滑空処理
+	/// </summary>
+	void Gliding();
+
+	/// <summary>
+	/// 
+	/// </summary>
+	void GravityDown();
+
+
 	/// <summary>
 	/// オブジェクトの初期化処理
 	/// </summary>
@@ -275,31 +306,6 @@ private:
 	void BehindUpdate();
 
 	/// <summary>
-	/// 操作
-	/// </summary>
-	void Operation();
-	/// <summary>
-	/// 行動 :動く
-	/// </summary>
-	void ActionMove();
-	/// <summary>
-	/// 行動 :ジャンプ
-	/// </summary>
-	void ActionJump();
-	/// <summary>
-	/// 行動 :攻撃(発砲)
-	/// </summary>
-	void ActionFire();
-	/// <summary>
-	/// 行動 :シールド
-	/// </summary>
-	void ActionShield();
-	/// <summary>
-	/// 行動 :ブリンク
-	/// </summary>
-	void ActionBrink();
-
-	/// <summary>
 	/// ノックバックする更新処理
 	/// </summary>
 	void KnockBackUpdate();
@@ -308,18 +314,6 @@ private:
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object_;
 
-	//input
-	const float kStickPower_ = 0.5f;//スティックの倒し具合
-
-	//プレイヤーの速さ
-	const float kStandardSpeed_ = 0.14f;//通常の速さ
-	float speed_ = kStandardSpeed_;
-	//ジャンプフラグ
-	bool isJump_ = false;
-	const float kJumpUp_ = 0.25f;//上がる高さ
-
-	//重力
-	
 	/// <summary>
 	/// 重力のみ更新処理
 	/// </summary>
@@ -329,18 +323,13 @@ private:
 	/// 弾丸
 	std::list<std::shared_ptr<PlayerBullet>> bullets_;
 	float fireCoolTimer_ = 0.0f;//クールタイマー
-	const float kCoolTimeMax_ = 0.5f;//クールタイム最大時間
+	const float kFireCoolTimeMax_ = 0.5f;//クールタイム最大時間
 	const uint32_t kBulletCount_ = 3;//一度に出る弾丸数
 	
 	const float kDispersionBetween_ = 0.1f;//分散する間
 	const float kBulletSpeed_ = 0.5f;//弾丸の前方向の速さ
 
-	//ボタン
-	bool isPushA_ = false;
-	bool isPushD_ = false;
-	bool isPushW_ = false;
-	bool isPushS_ = false;
-	
+
 	//向き
 	const float kUpDis_ = 270.0f;//上
 	const float kDownDis_ = 90.0f;//下
@@ -363,15 +352,6 @@ private:
 	WorldTransform wtGun_;//傘のワールド座標系
 	Transform transformGun_{};
 
-	//傘のシールドフラグ
-	bool isShield_ = false;
-	//パリィ
-	bool isParry_ = false;
-	const float kParryTimeMax_ = 0.5f;//パリィする時間//ちょっと簡単に
-	float parryTime_ = kParryTimeMax_;
-	float parryCoolTime_ = 0.0f;//連打ではされないように
-	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
-	const float kBrinkPower_ = 1.25f;
 
 	/// ノックバック
 	bool isKnockback_ = false;
@@ -380,18 +360,9 @@ private:
 	float knockBackTimeMax_ = 0.0f;//最大ノックバック時間
 	const Vector3 kBulletKnockbackPower_ = { 0.0f,0.0f,0.1f };//撃った場合のノックバックパワー
 
-	///ブリンク
-	bool isBrink_ = false;//ブリンク中
-	bool isOneBrink_ = false;//一回のみ
-	float brinkTimer_ = 0.0f;
-	const float kBrinkTimeMax_ = 0.5f;
-
-	//落下する時ふわふわできるように
-	bool isUmbrellaFall_ = false;
-
 	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
 	//残機(remain)
-	uint32_t remain_ = 2;
+	uint32_t remain_;
 
 	//ダメージを食らった後の無敵時間
 	float infinityTimer_ = 0.0f;
@@ -404,9 +375,6 @@ private:
 	const float kPlayerDeadRotating_ = 10.0f;//10度ずつ回る
 	const float kDeadLittleUp_ = 0.4f;
 
-	//復活
-	bool isRespawn_ = false;
-
 	//サウンド
 	SoundData hitSound_;//ダメージを食らった
 	SoundData parrySound_;//パリィに成功
@@ -415,27 +383,27 @@ private:
 	//-パーティクル-
 	//歩く
 	ParticleParameters particleWalk_ = {
-		"player_walk", "resource/Sprite/white.png", Primitive::CreateBox(), 5, 0.15f, {1,1,1}
+		"player_walk", "resource/Sprite/white.dds", Primitive::CreateBox(), 5, 0.15f, {1,1,1}
 	};
 	//ブリンク
 	ParticleParameters particleBrink_ = {
-		"player_brink","resource/Sprite/cone.png", Primitive::CreateCone(), 1, 0.3f, {2.0f,2.0f,2.0f}
+		"player_brink","resource/Sprite/cone.dds", Primitive::CreateCone(), 1, 0.3f, {2.0f,2.0f,2.0f}
 	}; 
 	//撃つ
 	ParticleParameters  particleFire_ = {
-		"player_fire","resource/Sprite/cone.png", Primitive::CreateCone(), 1, 0.3f,{1,1,1}
+		"player_fire","resource/Sprite/cone.dds", Primitive::CreateCone(), 1, 0.3f,{1,1,1}
 	};
 	//ダメージを食らった
 	ParticleParameters particleDamage_ = {
-		"player_damage", "resource/Sprite/circle.png", Primitive::CreateRing(), 20, 0.6f,{1,1,1}
+		"player_damage", "resource/Sprite/circle.dds", Primitive::CreateRing(), 20, 0.6f,{1,1,1}
 	};
 	//パリィ成功
 	ParticleParameters particleParry_ = {
-		"player_parry", "resource/Sprite/white.png", Primitive::CreateCone(), 1, 0.5f,{2.0f,0.2f,2.0f}
+		"player_parry", "resource/Sprite/white.dds", Primitive::CreateCone(), 1, 0.5f,{2.0f,0.2f,2.0f}
 	};
 	//倒された演出
 	ParticleParameters particleDead_ = {
-		"player_dead", "resource/Sprite/white.png", Primitive::CreateSphere(), 3,0.1f,{0.5f, 0.5f, 0.5f}
+		"player_dead", "resource/Sprite/white.dds", Primitive::CreateSphere(), 3,0.1f,{0.5f, 0.5f, 0.5f}
 	};
 
 	//前回座標の保存場所
@@ -462,5 +430,9 @@ private:
 	//傘がリアクションするflag
 	bool isShieldMotion_ = false;
 
+	//ステートパターン
+	//プレイヤーの状態用
 	std::unique_ptr<BasePlayerState> playerState_;
+	//プレイヤーの操作アクション用
+	std::unique_ptr<BasePlayerState> actionState_;
 };

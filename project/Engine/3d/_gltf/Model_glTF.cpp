@@ -162,14 +162,29 @@ ModelDataMulti Model_glTF::LoadModelFile(const std::string& directoryPath, const
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-			materialData.textureFilePath = directoryPath + "/Sprite/" + textureFilePath.C_Str();
+
+			size_t pos1;
+			std::string texture = textureFilePath.C_Str();//stringに変更
+
+			std::string extension;
+
+			//最後の'.'を読み込む  ○○'.'png
+			pos1 = texture.rfind('.');
+
+			//拡張子がない
+			if (pos1 != std::wstring::npos) {
+				extension = texture.substr(0, pos1);//.pngを抜いた文字列
+			}
+
+
+			materialData.textureFilePath = directoryPath + "/Sprite/" + extension + ".dds";
 			materialData.materialColor = { 1.0f,1.0f,1.0f,1.0f };
 		}
 		else {
 			aiColor4D color;
 			material->Get(AI_MATKEY_BASE_COLOR, color);
 			//Blender初期のベースカラー
-			materialData.textureFilePath = directoryPath + "/Sprite/white.png";
+			materialData.textureFilePath = directoryPath + "/Sprite/white.dds";
 			materialData.materialColor = { (float)color.r,(float)color.g,(float)color.b,(float)color.a };
 		}
 		//マテリアルデータを導入

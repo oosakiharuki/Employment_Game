@@ -13,3 +13,4 @@ class MYADDON_OT_add_travel_route(bpy.types.Operator):
         context.object["end"] = mathutils.Vector((2,0,0))
 
         return {"FINISHED"}
+    

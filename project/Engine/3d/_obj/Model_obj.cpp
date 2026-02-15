@@ -121,7 +121,18 @@ MaterialData Model_obj::LoadMaterialTemplateFile(const std::string& directoryPat
 			std::string textureFilename;
 			s >> textureFilename;
 
-			materialData.textureFilePath = directoryPath + "/Sprite/" + textureFilename;
+			size_t pos1;
+			std::string extension;
+
+			//最後の'.'を読み込む  ○○'.'png
+			pos1 = textureFilename.find('.');
+
+			//npos = 拡張子がない
+			if (pos1 != std::wstring::npos) {
+				extension = textureFilename.substr(0, pos1);
+			}
+
+			materialData.textureFilePath = directoryPath + "/Sprite/" + extension + ".dds";
 			isSame = false;
 		}
 	}

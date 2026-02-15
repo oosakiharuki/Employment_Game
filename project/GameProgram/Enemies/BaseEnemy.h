@@ -264,12 +264,12 @@ protected:
 	//パーティクル
 	//ダメージを食らったとき
 	ParticleParameters particleDamage_ = {
-		"enemy_damage", "resource/Sprite/circle.png", Primitive::CreateRing(), 20, 0.6f, {1 ,1 ,1}
+		"enemy_damage", "resource/Sprite/circle.dds", Primitive::CreateRing(), 20, 0.6f, {1 ,1 ,1}
 
 	};
 	//攻撃するとき
 	ParticleParameters particleFire_ = {
-		"enemy_fire", "resource/Sprite/cone.png", Primitive::CreateCone(), 1, 0.1f, {1 ,1 ,1}
+		"enemy_fire", "resource/Sprite/cone.dds", Primitive::CreateCone(), 1, 0.1f, {1 ,1 ,1}
 	};
 
 	//移動するとき
@@ -309,7 +309,7 @@ private:
 	const float kFoundMotionMaxTime_ = kMarkMaxTime_ / 5.0f;
 
 	//ステートパターン
-	std::unique_ptr<BaseEnemyState> currentEnemyState_ = std::make_unique<EnemyMoveState>();
+	std::unique_ptr<BaseEnemyState> enemyState_ = std::make_unique<EnemyMoveState>();
 
 	/// <summary>
 	/// 弾丸更新処理

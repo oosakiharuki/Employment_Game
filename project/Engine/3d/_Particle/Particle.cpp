@@ -41,7 +41,19 @@ void Particle::Initialize(const std::string& particleName, const std::string& te
 	ParticleManager::GetInstance().CreateParticleGroup(particleName, textureFile, modelData);
 
 	this->fileName_ = particleName;
-	this->textureFile_ = textureFile;
+
+	size_t pos1;
+	std::string extension;
+
+	//最後の'.'を読み込む  ○○'.'png
+	pos1 = textureFile.rfind('.');
+
+	//拡張子をなくす
+	if (pos1 != std::wstring::npos) {
+		extension = textureFile.substr(0, pos1);//.pngを抜いた文字列
+	}
+
+	this->textureFile_ = extension + ".dds";
 
 	modelData_ = ParticleManager::GetInstance().GetModelData(fileName_);
 

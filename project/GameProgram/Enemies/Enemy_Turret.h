@@ -49,7 +49,7 @@ private:
 
 	//見える範囲のパーティクルパラメータ
 	ParticleParameters particleLaser_ = {
-		"tullet_laser","resource/Sprite/3YvXH.png",Primitive::CreateBeam(), 1, 0.001f, particleLaserSize_
+		"tullet_laser","resource/Sprite/3YvXH.dds",Primitive::CreateBeam(), 1, 0.001f, particleLaserSize_
 	};
 
 	const Vector3 kParticleFireSize_ = { 1.5f, 1.5f, 1.5f };
