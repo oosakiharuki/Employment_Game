@@ -22,6 +22,8 @@ void Umbrella::Initialize() {
 	umbrellaAABB_.max = kAABBSize_ * kDivideByTwo_;
 
 	reaction_ = std::make_unique<Reaction>();
+
+	collisionType_ = CollisionTypes::umbrella;
 }
 
 void Umbrella::Update() {
@@ -53,6 +55,13 @@ void Umbrella::Update() {
 	//更新
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
+
+	//当たり判定設定
+	collisionAABB_.min = transform_.translate + umbrellaAABB_.min;
+	collisionAABB_.max = transform_.translate + umbrellaAABB_.max;
+	center_ = transform_.translate;
+
+	CollisionManager::GetInstance().AddCollisions(this);
 }
 
 void Umbrella::Draw() {
@@ -60,13 +69,8 @@ void Umbrella::Draw() {
 	object_->Draw();
 }
 
-AABB Umbrella::GetAABB() const {
-	AABB aabb;
-	aabb.min = transform_.translate + umbrellaAABB_.min;
-	aabb.max = transform_.translate + umbrellaAABB_.max;
-	return aabb;
-}
-
 void Umbrella::HitReaction(bool& isShieldMode) {
 	reaction_->ScaleReaction(transform_.scale,isShieldMode,kScalePower_, scaleTimer_,kReactionMaxTime_);
 }
+
+void Umbrella::OnCollision(CollisionSource* collision) {}

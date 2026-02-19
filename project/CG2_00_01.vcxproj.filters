@@ -408,9 +408,6 @@
     <ClCompile Include="GameProgram\MyGame.cpp">
       <Filter>ソース ファイル\GameProgram</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\StageObjects\MoveGround.cpp">
-      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\GameActor\VisualActor.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
@@ -436,6 +433,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\ActorState.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionSource.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -713,9 +713,6 @@
     <ClInclude Include="GameProgram\MyGame.h">
       <Filter>ヘッダー ファイル\GameProgram</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\StageObjects\MoveGround.h">
-      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\GameActor\VisualActor.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
@@ -741,6 +738,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\ActorState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionSource.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

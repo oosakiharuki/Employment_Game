@@ -25,20 +25,20 @@ public:
 		struct ObjectData {
 			std::string fileName;
 			Transform transform;
-			AABB colliderAABB;
+			Vector3 colliderSize;
 		};
 		//プレイヤーのスポーン場所
 		struct PlayerSpawnData {
 			std::string fileName;
 			Transform transform;
-			AABB colliderAABB;
+			Vector3 colliderSize;
 		};
 		//敵の生成場所
 		struct EnemySpawnData {
 			std::string EnemyName;
 			std::string fileName;
 			Transform transform;
-			AABB colliderAABB;
+			Vector3 colliderSize;
 			//移動ルート
 			Vector3 leftPoint;
 			Vector3 rightPoint;
@@ -49,7 +49,7 @@ public:
 			std::string ObjectName;
 			std::string fileName;
 			Transform transform;
-			AABB colliderAABB;
+			Vector3 colliderSize;
 			//移動ルート
 			Vector3 leftPoint;
 			Vector3 rightPoint;
@@ -59,7 +59,7 @@ public:
 		struct EventTriggerData {
 			Vector3 center;
 			Vector3 size;
-			AABB collisionAABB;
+			Vector3 colliderSize;
 			std::string csvFile;
 			std::string cameraName;
 		};
@@ -69,7 +69,7 @@ public:
 		struct BossData {
 			std::string fileName;
 			Transform transform;
-			AABB colliderAABB;
+			Vector3 colliderSize;
 		};
 
 		//構造体データの配列たち
@@ -149,9 +149,9 @@ private:
 	/// コライダーの設定
 	/// </summary>
 	/// <param name="object">オブジェクトのデータ配列</param>
-	/// <param name="objectAABB">導入するコライダーAABB</param>
+	/// <param name="objectVector3">導入するコライダーVector3</param>
 	/// <param name="objectSize">オブジェクトの大きさ</param>
-	void SetCollider(nlohmann::json& object,AABB& objectAABB,const Vector3& objectSize);
+	void SetCollider(nlohmann::json& object,Vector3& objectVector3,const Vector3& objectSize);
 
 	/// <summary>
 	/// 移動ルートの設定

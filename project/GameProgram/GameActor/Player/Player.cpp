@@ -42,6 +42,9 @@ void Player::Initialize() {
 
 	//ステートパターン
 	actionState_ = std::make_unique<PlayerNormalState>();
+
+	//コリジョンタイプ
+	collisionType_ = CollisionTypes::player;
 }
 
 void Player::InitMainBody() {
@@ -137,6 +140,17 @@ void Player::Update() {
 
 	//スプライト更新
 	SpriteUpdate();
+
+	//当たり判定設定
+	collisionAABB_.min = transform_.translate - colliderSize_;
+	collisionAABB_.max = transform_.translate + colliderSize_;
+
+	center_ = transform_.translate;//真ん中の座標
+
+	CollisionManager::GetInstance().AddCollisions(this);
+	collisionOverlap = CollisionManager::GetInstance().SetTarget(GetTranslate(), GetAABB());
+	isGround_ = false;
+
 }
 
 void Player::BulletUpdate() {
@@ -566,6 +580,20 @@ void Player::ShootBullet() {
 	///撃った方向と反対方向にノックバック
 	KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
 }
+
+
+void Player::OnCollision(CollisionSource* collision) {
+	if (collision->GetType() == CollisionTypes::enemyBullet || 
+		collision->GetType() == CollisionTypes::bombExplotion || 
+		collision->GetType() == CollisionTypes::boss) {
+		IsDamage(GetDistance(collision->GetCenter()));
+	}
+
+	if (collision->GetType() == CollisionTypes::stage) {
+		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap,*this, *this,collision->GetAABB());
+	}
+}
+
 
 void Player::IsDamage(const Vector3& hitPoint) {
 	//無敵時間をすぎたとき

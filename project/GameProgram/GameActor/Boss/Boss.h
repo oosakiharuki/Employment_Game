@@ -6,10 +6,13 @@
 
 #include "BaseBossState.h"
 #include "Player.h"
+
+#include "CollisionManager.h"
+
 /// <summary>
 /// ボス(クラッコっぽい動き)
 /// </summary>
-class Boss
+class Boss : public CollisionSource
 {
 public:
 	/// <summary>
@@ -46,13 +49,7 @@ public:
 	/// setter_当たり判定
 	/// </summary>
 	/// <param name="aabb">AABB</param>
-	void SetAABB(const AABB& aabb) { aabb_ = aabb; }
-
-	/// <summary>
-	/// getter_当たり判定
-	/// </summary>
-	/// <returns>AABB</returns>
-	AABB GetAABB();
+	void SetColliderSize(const Vector3& size) { colliderSize_ = size; }
 
 	/// <summary>
 	/// getter_座標位置
@@ -167,11 +164,13 @@ public:
 
 private:
 
+	void OnCollision(CollisionSource* collision) override;
+
 	std::unique_ptr<Object_glTF> object_;
 	WorldTransform wt_;
 	Transform transform_{};
 
-	AABB aabb_;
+	Vector3 colliderSize_;
 
 	std::list<std::shared_ptr<EnemyBullet>> bullets_;
 	float bulletSpeed_ = 0.2f;//弾の速さ

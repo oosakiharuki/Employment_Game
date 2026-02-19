@@ -29,13 +29,6 @@ void GameActor::Update() {
 	}
 }
 
-AABB GameActor::GetAABB() const {
-	AABB aabb;
-	aabb.min = transform_.translate + actorAABB_.min;
-	aabb.max = transform_.translate + actorAABB_.max;
-	return aabb;
-}
-
 void GameActor::ShadowUpdate() {
 	shadow_->Update();
 }

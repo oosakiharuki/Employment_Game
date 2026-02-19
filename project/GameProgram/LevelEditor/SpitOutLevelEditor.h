@@ -43,7 +43,7 @@ public:
 	/// <param name="stageObj">オブジェクト化</param>
 	/// <param name="stageFileName">ステージの名前(オブジェクト読み込みに使う)</param>
 	/// <param name="stagesAABB">当たり判定</param>
-	void SpitOutStage(std::unique_ptr<Object3d>& stageObj, const std::string& stageFileName, std::vector<AABB>& stagesAABB);
+	void SpitOutStage(std::unique_ptr<Object3d>& stageObj, const std::string& stageFileName);
 
 	/// <summary>
 	/// ステージオブジェクトの配置

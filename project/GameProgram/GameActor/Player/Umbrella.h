@@ -3,11 +3,12 @@
 #include "MyMath.h"
 
 #include "Reaction.h"
+#include "CollisionManager.h"
 
 /// <summary>
 /// 傘(発泡、守が使える)
 /// </summary>
-class Umbrella{
+class Umbrella : public CollisionSource {
 public:
 	~Umbrella();
 	/// <summary>
@@ -57,11 +58,6 @@ public:
 	void SetScale(const Vector3& scale) { transform_.scale = scale; }
 	
 	/// <summary>
-	/// getter_当たり判定AABB
-	/// </summary>
-	/// <returns>座標が中心のAABB</returns>
-	AABB GetAABB() const;
-	/// <summary>
 	/// setter_当たり判定AABB
 	/// </summary>
 	/// <param name="aabb">AABB</param>
@@ -85,6 +81,8 @@ public:
 	void ResetScaleTimer() { scaleTimer_ = 0.0f; }
 
 private:
+	void OnCollision(CollisionSource* collision) override;
+
 	//オブジェクト設定
 	std::unique_ptr<Object_glTF> object_;
 	Transform transform_;

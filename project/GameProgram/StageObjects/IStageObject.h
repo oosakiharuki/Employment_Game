@@ -2,11 +2,12 @@
 #include "Object3d.h"
 #include "MyMath.h"
 #include <LevelEditor.h>
+#include "CollisionManager.h"
 
 /// <summary>
 /// ステージオブジェクト(ギミック)の基盤クラス
 /// </summary>
-class IStageObject {
+class IStageObject : public CollisionSource {
 public:
 
 	IStageObject();
@@ -60,16 +61,10 @@ public:
 	void SetScale(const Vector3& scale) { transform_.scale = scale; }
 
 	/// <summary>
-	/// getter_当たり判定AABB
+	/// setter_当たり判定の大きさ
 	/// </summary>
-	/// <returns>座標位置が真ん中のAABB</returns>
-	AABB GetAABB();
-
-	/// <summary>
-	/// setter_当たり判定AABB
-	/// </summary>
-	/// <param name="aabb">代入するAABB</param>
-	void SetAABB(const AABB& aabb) { aabb_ = aabb; }
+	/// <param name="size">大きさ</param>
+	void SetColliderSize(const Vector3& size) { colliderSize_ = size; }
 
 	/// <summary>
 	/// オブジェクトのクラスを知るための名前
@@ -98,7 +93,7 @@ protected:
 	WorldTransform wt_;
 	Transform transform_{};
 
-	AABB aabb_;
+	Vector3 colliderSize_;
 
 	std::string objectName_;
 };

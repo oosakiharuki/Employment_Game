@@ -13,11 +13,13 @@
 #include "Reaction.h"
 #include "ActorState.h"
 
+#include "CollisionManager.h"
+
 /// <summary>
 /// プレイヤー、敵のような動く、攻撃すると
 /// ゲームで使う基盤クラス
 /// </summary>
-class GameActor : public ActorCommand
+class GameActor : public ActorCommand, public CollisionSource
 {
 public:
 
@@ -74,15 +76,10 @@ public:
 	void SetScale(const Vector3& scale) { transform_.scale = scale; }
 
 	/// <summary>
-	/// getter_当たり判定AABB
+	/// setter_当たり判定の大きさ
 	/// </summary>
-	/// <returns>座標が中心のAABB</returns>
-	AABB GetAABB() const;
-	/// <summary>
-	/// setter_当たり判定AABB
-	/// </summary>
-	/// <param name="aabb">AABB</param>
-	void SetAABB(const AABB& aabb) { actorAABB_ = aabb; }
+	/// <param name="size">大きさ</param>
+	void SetColliderSize(const Vector3& size) { colliderSize_ = size; }
 
 	/// <summary>
 	/// getter_倒れた時
@@ -101,13 +98,6 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool GetPerformanceMode() { return isPerformance_; }
-
-
-	/// <summary>
-	/// getter_影の当たり判定
-	/// </summary>
-	/// <returns>影のAABB</returns>
-	AABB GetShadowAABB() { return shadow_->GetAABB(); }
 
 	/// <summary>
 	/// 影のみの更新処理
@@ -159,7 +149,7 @@ protected:
 	WorldTransform wt_;
 	Transform transform_{};
 	//当たり判定
-	AABB actorAABB_;
+	Vector3 colliderSize_;
 
 	//体力
 	uint32_t maxHp_;//最大値

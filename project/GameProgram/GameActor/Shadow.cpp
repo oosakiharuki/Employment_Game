@@ -23,6 +23,8 @@ void Shadow::Initialize() {
 		{ kShadowWidth_,kShadowMinY_,kShadowWidth_ },
 		{ -kShadowWidth_,0.0f,-kShadowWidth_ }
 	};
+
+	collisionType_ = CollisionTypes::shadow;
 }
 
 
@@ -38,6 +40,12 @@ void Shadow::Update() {
 
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
+
+	collisionAABB_.min = transform_.translate + shadowAABB_.min;
+	collisionAABB_.max = transform_.translate + shadowAABB_.max;
+	center_ = transform_.translate;
+
+	CollisionManager::GetInstance().AddCollisions(this);
 }
 
 void Shadow::Draw() {
@@ -45,9 +53,4 @@ void Shadow::Draw() {
 	object_->Draw();
 }
 
-AABB Shadow::GetAABB() {
-	AABB aabb;
-	aabb.min = transform_.translate + shadowAABB_.min;
-	aabb.max = transform_.translate + shadowAABB_.max;
-	return aabb;
-}
+void Shadow::OnCollision(CollisionSource* collision) {}

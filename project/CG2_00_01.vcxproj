@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CollisionSource.cpp" />
     <ClCompile Include="GameProgram\GameActor\ActorState.cpp" />
     <ClCompile Include="GameProgram\GameActor\Enemies\EnemyCommand.cpp" />
     <ClCompile Include="GameProgram\System\BasePauseState.cpp" />
@@ -208,11 +209,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\System\UIManager.cpp" />
     <ClCompile Include="Engine\base\Pipeline.cpp" />
     <ClCompile Include="GameProgram\StageObjects\StageObjectFunction.cpp" />
-    <ClCompile Include="GameProgram\StageObjects\MoveGround.cpp" />
     <ClCompile Include="GameProgram\GameActor\VisualActor.cpp" />
     <ClCompile Include="GameProgram\System\PauseScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionSource.h" />
     <ClInclude Include="GameProgram\GameActor\ActorState.h" />
     <ClInclude Include="GameProgram\GameActor\Enemies\EnemyCommand.h" />
     <ClInclude Include="GameProgram\System\BasePauseState.h" />
@@ -311,7 +312,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\System\UIManager.h" />
     <ClInclude Include="Engine\base\Pipeline.h" />
     <ClInclude Include="GameProgram\StageObjects\StageObjectFunction.h" />
-    <ClInclude Include="GameProgram\StageObjects\MoveGround.h" />
     <ClInclude Include="GameProgram\GameActor\VisualActor.h" />
     <ClInclude Include="GameProgram\System\PauseScreen.h" />
   </ItemGroup>

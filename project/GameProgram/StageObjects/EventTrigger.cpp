@@ -13,6 +13,8 @@ void EventTrigger::Initialize() {
 	object_ = std::make_unique<Object_glTF>();
 	object_->Initialize();
 	object_->SetModelFile("EventGate.gltf");
+
+	collisionType_ = CollisionTypes::event;
 }
 
 void EventTrigger::Update() {
@@ -22,7 +24,7 @@ void EventTrigger::Update() {
 			LoadEventCSV(eventData_.csvFile);
 		}
 		//敵召喚
-		PopEventEneies();
+		PopEventEnemies();
 		
 		//範囲のオブジェクト
 		transform_.translate = eventData_.center;
@@ -40,6 +42,13 @@ void EventTrigger::Update() {
 			summon_particles_.clear();
 		}
 	}
+
+	//当たり判定設定
+	collisionAABB_.min = transform_.translate - eventData_.aabb.min;
+	collisionAABB_.max = transform_.translate + eventData_.aabb.max;
+
+	center_ = transform_.translate;
+	CollisionManager::GetInstance().AddCollisions(this);
 }
 
 void EventTrigger::Draw() {
@@ -71,7 +80,7 @@ void EventTrigger::LoadEventCSV(const std::string& fileName) {
 	isLoadCsv_ = false;
 }
 
-void EventTrigger::PopEventEneies() {
+void EventTrigger::PopEventEnemies() {
 	//敵召喚		
 	EnemyPop();
 
@@ -259,5 +268,12 @@ void EventTrigger::FailureEvent() {
 	
 	//最初の行にする
 	enemyPopCsvFile_.seekg(0, std::ios_base::beg);
+
+}
+
+void EventTrigger::OnCollision(CollisionSource* collision) {
+	if (collision->GetType() == CollisionTypes::player) {
+
+	}
 
 }

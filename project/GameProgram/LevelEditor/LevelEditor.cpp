@@ -102,7 +102,7 @@ void LevelEditor::LoadStage(nlohmann::json& object) {
 	SetTransform(object,objectData.transform);
 
 	//コライダー
-	SetCollider(object, objectData.colliderAABB, objectData.transform.scale);
+	SetCollider(object, objectData.colliderSize, objectData.transform.scale);
 
 	//イベントトリガー
 	LoadEventTrigger(object,objectData.transform.translate);
@@ -140,7 +140,7 @@ void LevelEditor::LoadPlayer(nlohmann::json& object) {
 	SetTransform(object, playerSpawnData.transform);
 
 	//コライダー
-	SetCollider(object, playerSpawnData.colliderAABB,playerSpawnData.transform.scale);
+	SetCollider(object, playerSpawnData.colliderSize,playerSpawnData.transform.scale);
 }
 
 void LevelEditor::LoadEnemies(nlohmann::json& object) {
@@ -162,7 +162,7 @@ void LevelEditor::LoadEnemies(nlohmann::json& object) {
 	SetTransform(object,enemySpawnData.transform);
 
 	//コライダー
-	SetCollider(object,enemySpawnData.colliderAABB,enemySpawnData.transform.scale);
+	SetCollider(object,enemySpawnData.colliderSize,enemySpawnData.transform.scale);
 
 	//移動ルート
 	SetTravelRoute(object, enemySpawnData.leftPoint,enemySpawnData.rightPoint);
@@ -186,7 +186,7 @@ void LevelEditor::LoadStageObject(nlohmann::json& object) {
 	SetTransform(object, stageObjectData.transform);
 
 	//コライダー
-	SetCollider(object, stageObjectData.colliderAABB, stageObjectData.transform.scale);
+	SetCollider(object, stageObjectData.colliderSize, stageObjectData.transform.scale);
 
 	//移動ルート(移動床以外使わない)
 	if (stageObjectData.ObjectName == "MoveGround") {
@@ -213,8 +213,7 @@ void LevelEditor::LoadEventTrigger(nlohmann::json& object, const Vector3& transl
 		//オブジェクトサイズ(モデルでつかう)
 		eventTrigger.size = size;
 		//オブジェクトの真ん中 + eventTrigger自体の真ん中 ± サイズの半分
-		eventTrigger.collisionAABB.min = translate + center - size * kDivideByTwo_;
-		eventTrigger.collisionAABB.max = translate + center + size * kDivideByTwo_;
+		eventTrigger.colliderSize = size * kDivideByTwo_;
 
 		//Blenderで設定したcsvファイル名を入れる
 		eventTrigger.csvFile = "resource/csv/" + csvName + ".csv";
@@ -236,7 +235,7 @@ void LevelEditor::LoadBoss(nlohmann::json& object) {
 	SetTransform(object, bossData.transform);
 
 	//コライダー
-	SetCollider(object, bossData.colliderAABB, bossData.transform.scale);
+	SetCollider(object, bossData.colliderSize, bossData.transform.scale);
 }
 
 void LevelEditor::SetTransform(nlohmann::json& object, Transform& objectTransform) {
@@ -259,7 +258,7 @@ void LevelEditor::SetTransform(nlohmann::json& object, Transform& objectTransfor
 	objectTransform.scale.z = (float)transform["scaling"][1];
 }
 
-void LevelEditor::SetCollider(nlohmann::json& object, AABB& objectAABB, const Vector3& objectSize) {
+void LevelEditor::SetCollider(nlohmann::json& object, Vector3& objectVector3, const Vector3& objectSize) {
 	//コライダー
 	nlohmann::json& collider = object["collider"];
 
@@ -268,9 +267,8 @@ void LevelEditor::SetCollider(nlohmann::json& object, AABB& objectAABB, const Ve
 		Vector3 center = { (float)collider["center"][0],(float)collider["center"][2], (float)collider["center"][1] };
 		Vector3 size = { (float)collider["size"][0],(float)collider["size"][2], (float)collider["size"][1] };
 
-		//AABBに追加
-		objectAABB.min = center - (size * objectSize * kDivideByTwo_);
-		objectAABB.max = center + (size * objectSize * kDivideByTwo_);
+		//Vector3に追加
+		objectVector3 = (size * objectSize * kDivideByTwo_);
 	}
 }
 

@@ -12,7 +12,6 @@
 #include "CheckPoint.h"
 #include "WarpGate.h"
 #include "Goal.h"
-#include "MoveGround.h"
 
 #include "BoxModel.h"
 #include "FadeScreen.h"

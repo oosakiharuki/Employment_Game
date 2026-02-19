@@ -2,11 +2,12 @@
 #include "Object3d.h"
 #include "Object_glTF.h"
 #include "MyMath.h"
+#include "CollisionManager.h"
 
 /// <summary>
 /// 影
 /// </summary>
-class Shadow {
+class Shadow : public CollisionSource {
 public:
 	~Shadow();
 	/// <summary>
@@ -33,13 +34,9 @@ public:
 	/// <param name="scale"></param>代入する大きさ
 	void SetScale(const Vector3& scale) { transform_.scale = scale; }
 
-	/// <summary>
-	/// getter_当たり判定AABB
-	/// </summary>
-	/// <returns></returns>座標位置が真ん中のAABB
-	AABB GetAABB();
-
 private:
+	void OnCollision(CollisionSource* collision) override;
+
 	std::unique_ptr<Object3d> object_;
 	WorldTransform wt_;
 	Transform transform_{};

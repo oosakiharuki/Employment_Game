@@ -20,8 +20,6 @@ void SelectScene::Initialize() {
 
 	//フェードスタート
 	FadeScreen::GetInstance().FadeStart(type_fadeOut);
-	//ワープ、ゴールフラグのリセット
-	CollisionManager::GetInstance().ResetFlag();
 
 	//背景の初期化処理
 	backGround = std::make_unique<BackGroundObject>();
@@ -29,6 +27,8 @@ void SelectScene::Initialize() {
 
 	//ポーズ画面
 	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnTitle.png", "Title");
+
+	CollisionManager::GetInstance().ResetFrag();
 }
 
 void SelectScene::Update() {
@@ -60,7 +60,7 @@ void SelectScene::Update() {
 	stageObj_->Update();
 
 	//当たり判定
-	CollisionCommon();
+	CollisionManager::GetInstance().CollisionUpdate();
 
 	//ガイド更新処理
 	UIManager::GetInstance().Update();
@@ -146,17 +146,9 @@ void SelectScene::SpitOutGameObject() {
 	//プレイヤーを配置
 	spitOut_.SpitOutPlayer(player_);
 	//ステージの当たり判定を設定/配置
-	spitOut_.SpitOutStage(stageObj_, stageFileName_, stagesAABB_);
+	spitOut_.SpitOutStage(stageObj_, stageFileName_);
 	//ステージオブジェクトを配置
 	spitOut_.SpitOutStageObject(stageObjects_);
-}
-
-void SelectScene::CollisionCommon() {
-	//ゲーム内で使用する当たり判定
-	//プレイヤーとステージ自体
-	CollisionManager::GetInstance().PlayerAndStage(player_.get(), stagesAABB_);
-	//プレイヤーとステージオブジェクト
-	CollisionManager::GetInstance().PlayerAndStageObject(player_.get(), stageObjects_);
 }
 
 void SelectScene::SceneUpdate() {

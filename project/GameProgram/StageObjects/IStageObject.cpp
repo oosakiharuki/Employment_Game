@@ -6,15 +6,6 @@ IStageObject::IStageObject(){}
 
 IStageObject::~IStageObject() {}
 
-AABB IStageObject::GetAABB() {
-	AABB aabb;
-
-	aabb.min = transform_.translate + aabb_.min;
-	aabb.max = transform_.translate + aabb_.max;
-
-	return aabb;
-}
-
 void IStageObject::SetObjectName(const std::string& name) {
 	objectName_ = name;
 }

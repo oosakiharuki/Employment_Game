@@ -14,6 +14,8 @@ void Boss::Initialize() {
 	transform_ = wt_.UpdateTransform();
 
 	bossState_ = std::make_unique<BossMoveState>();
+
+	collisionType_ = CollisionTypes::boss;
 }
 
 void Boss::Update() {
@@ -49,6 +51,12 @@ void Boss::Update() {
 
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
+
+	collisionAABB_.max = transform_.translate + colliderSize_;
+	collisionAABB_.min = transform_.translate + colliderSize_;
+	center_ = transform_.translate;
+	//当たり判定設定
+	CollisionManager::GetInstance().AddCollisions(this);
 }
 
 void Boss::Draw() {
@@ -140,13 +148,6 @@ void Boss::BeforeActionMotion() {
 	}
 }
 
-AABB Boss::GetAABB() {
-	AABB aabb{};
-	aabb.max = transform_.translate + aabb_.max;
-	aabb.min = transform_.translate + aabb_.min;
-	return aabb;
-}
-
 void Boss::IsDamage() {
 	if (hp_ == 0) {
 		return;
@@ -195,4 +196,11 @@ void Boss::ImGuiUpdate() {
 
 #endif // USE_IMGUI
 
+}
+
+void Boss::OnCollision(CollisionSource* collision) {
+	if (collision->GetType() == CollisionTypes::playerBullet ||
+		collision->GetType() == CollisionTypes::parryBullet) {
+		IsDamage();
+	}
 }

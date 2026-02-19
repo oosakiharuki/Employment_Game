@@ -37,10 +37,12 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 	transformMark_ = wtMark_.UpdateTransform();
 
 	//enemyState_ = std::make_unique<EnemySearchState>();
+
+	collisionType_ = CollisionTypes::enemy;
 }
 
 void BaseEnemy::Update() {
-	GameActor::Update();
+	GameActor::Update();//ステートパターンが入っている
 
 	//演出中の場合
 	if (player_->GetPerformanceMode()) {
@@ -71,6 +73,7 @@ void BaseEnemy::Update() {
 
 	//オブジェクト更新
 	UpdateBehind();
+
 }
 
 void BaseEnemy::UpdateBehind() {
@@ -84,6 +87,13 @@ void BaseEnemy::UpdateBehind() {
 	for (auto& particle : particles_) {
 		particle.second->Update();
 	}
+
+	//当たり判定設定
+	collisionAABB_.min = transform_.translate - colliderSize_;
+	collisionAABB_.max = transform_.translate + colliderSize_;
+	center_ = transform_.translate;
+
+	CollisionManager::GetInstance().AddCollisions(this);
 }
 
 void BaseEnemy::MarkUpdate() {
@@ -161,14 +171,14 @@ void BaseEnemy::PlayerTarget() {
 	segment.origin = transform_.translate;      //敵座標
 	segment.diff = player_->GetTranslate(); //プレイヤー座標
 
-	//ステージの当たり判定
-	for (auto& stage : stages_) {
-		//playerと敵との間に壁があるならば
-		if (IsCollisionAABB_Segment(stage, segment)) {
-			isFoundTarget_ = false;//見つかってないフラグ
-			break;
-		}
-	}
+	////ステージの当たり判定
+	//for (auto& stage : stages_) {
+	//	//playerと敵との間に壁があるならば
+	//	if (IsCollisionAABB_Segment(stage, segment)) {
+	//		isFoundTarget_ = false;//見つかってないフラグ
+	//		break;
+	//	}
+	//}
 }
 
 void BaseEnemy::SearchRange() {
@@ -182,6 +192,8 @@ void BaseEnemy::SearchRange() {
 		eyeAABB_.min = transform_.translate + -eyeReach_;
 		eyeAABB_.max = transform_.translate + Vector3(0, eyeReach_.y, eyeReach_.z);
 	}
+
+	CollisionManager::GetInstance().CreateCollision(eyeAABB_, transform_.translate, CollisionTypes::enemyEye);
 }
 
 
@@ -271,8 +283,14 @@ void BaseEnemy::StatePatternUpdate() {
 	}
 }
 
-
 void BaseEnemy::ChangeStatePattern(std::unique_ptr<BaseEnemyState> enemyState) {
 	enemyState_.reset();
 	enemyState_ = std::move(enemyState);
+}
+
+void BaseEnemy::OnCollision(CollisionSource* collision) {
+	if (collision->GetType() == CollisionTypes::playerBullet || 
+		collision->GetType() == CollisionTypes::parryBullet) {
+		IsDamage();
+	}
 }

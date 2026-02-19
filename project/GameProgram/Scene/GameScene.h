@@ -41,8 +41,6 @@ private:
 
 	//ステージ全体のオブジェクト
 	std::unique_ptr<Object3d> stageObj_;
-	//ステージ全体の当たり判定AABB
-	std::vector<AABB> stagesAABB_;
 
 	//イベントトリガー
 	std::vector<std::shared_ptr<EventTrigger>> eventTriggers_;
@@ -64,11 +62,6 @@ private:
 	SceneSaveData sceneSaveData_ = {
 		3,3,3,"stage_0" //初期設定
 	};
-
-	/// <summary>
-	/// 全シーンに共有できる当たり判定
-	/// </summary>
-	void CollisionCommon();
 
 	/// <summary>
 	/// プレイヤーがゴールする時の処理

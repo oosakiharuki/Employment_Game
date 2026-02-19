@@ -198,6 +198,8 @@ private:
 	void Performance() override;
 
 
+	void OnCollision(CollisionSource* collision) override;
+
 	/// <summary>
 	/// 生存時の処理()
 	/// </summary>
@@ -412,4 +414,7 @@ private:
 	//ステートパターン
 	//プレイヤーの操作アクション用
 	std::unique_ptr<BasePlayerState> actionState_;
+
+	CollisionOverlap collisionOverlap;
+
 };

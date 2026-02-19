@@ -21,6 +21,8 @@ void EnemyBullet::Initialize() {
 	//弾の当たり判定の大きさ
 	bulletAABB.min = -kBulletSize_ * kDivideByTwo_;
 	bulletAABB.max = kBulletSize_ * kDivideByTwo_;
+
+	collisionType_ = CollisionTypes::enemyBullet;
 }
 
 void EnemyBullet::Update() {
@@ -43,24 +45,20 @@ void EnemyBullet::Update() {
 
 	object->Update(wt_);
 	wt_.UpdateMatrix(transform_);
+
+	//当たり判定設定
+	collisionAABB_.min = transform_.translate + -kBulletSize_ * kDivideByTwo_;
+	collisionAABB_.max = transform_.translate + kBulletSize_ * kDivideByTwo_;
+
+	center_ = transform_.translate;//真ん中の座標
+	CollisionManager::GetInstance().AddCollisions(this);
 }
 
 void EnemyBullet::Draw() {
 	object->Draw();
 }
 
-AABB EnemyBullet::GetAABB() const {
-	AABB aabb;
-	aabb.min = transform_.translate + bulletAABB.min;
-	aabb.max = transform_.translate + bulletAABB.max;
-	return aabb;
-}
-
-void EnemyBullet::IsHit() { 
-	Vector3 enemyPosition = transform_.translate;
-	Vector3 playerPosition = player_->GetWorldPosition();
-	//どの位置でぶつかった記録
-	distance = enemyPosition - playerPosition;
+void EnemyBullet::OnCollision(CollisionSource* collision) {
 	//消えるフラグ
 	isDead_ = true;
 }

@@ -1,7 +1,11 @@
 #include "WarpGate.h"
 #include "UseEveryOne.h"
+#include "CollisionManager.h"
+#include <Input.h>
+
 using namespace MyMath;
 using namespace UseEveryOne;
+
 WarpGate::~WarpGate() {}
 
 
@@ -12,11 +16,20 @@ void WarpGate::Initialize() {
 	object_->SetModelFile("warpGate.obj");
 	//Transform更新処理
 	transform_ = wt_.UpdateTransform();
+
+	collisionType_ = CollisionTypes::stageObject;
 }
 
 void WarpGate::Update() {
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
+
+	//当たり判定設定
+	collisionAABB_.min = transform_.translate - colliderSize_;
+	collisionAABB_.max = transform_.translate + colliderSize_;
+	center_ = transform_.translate;
+
+	CollisionManager::GetInstance().AddCollisions(this);
 }
 
 void WarpGate::Draw() {
@@ -44,5 +57,12 @@ void WarpGate::Vanish() {
 		if (largeTimer_ >= 1.0f) {
 			largeFlag_ = false;//拡大を終了
 		}
+	}
+}
+
+void WarpGate::OnCollision(CollisionSource* collision) {
+	if ((collision->GetType() == CollisionTypes::player && Input::GetInstance().TriggerKey(DIK_E)) || a) {
+		CollisionManager::GetInstance().SuccessWarp();
+		a = true;
 	}
 }

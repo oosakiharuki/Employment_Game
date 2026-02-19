@@ -18,7 +18,9 @@ void PlayerBullet::Initialize() {
 
 	//AABBの大きさ設定
 	bulletAABB_.min = -kBulletSize_ * kDivideByTwo_;
-	bulletAABB_.max = kBulletSize_ * kDivideByTwo_;;
+	bulletAABB_.max = kBulletSize_ * kDivideByTwo_;
+
+	collisionType_ = CollisionTypes::parryBullet;
 }
 
 void PlayerBullet::Update() {
@@ -37,15 +39,18 @@ void PlayerBullet::Update() {
 
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
+
+	//当たり判定設定
+	collisionAABB_.min = transform_.translate + bulletAABB_.min;
+	collisionAABB_.max = transform_.translate + bulletAABB_.max;
+	center_ = transform_.translate;
+	CollisionManager::GetInstance().AddCollisions(this);
 }
 
 void PlayerBullet::Draw() {
 	object_->Draw();
 }
 
-AABB PlayerBullet::GetAABB() const {
-	AABB aabb;
-	aabb.min = transform_.translate + bulletAABB_.min;
-	aabb.max = transform_.translate + bulletAABB_.max;
-	return aabb;
+void PlayerBullet::OnCollision(CollisionSource* collision) {
+	isDead_ = true;
 }

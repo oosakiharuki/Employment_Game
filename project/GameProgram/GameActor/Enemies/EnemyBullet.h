@@ -1,13 +1,14 @@
 #pragma once
 #include "Object3d.h"
 #include "MyMath.h"
+#include "CollisionManager.h"
 
 class Player;
 
 /// <summary>
 /// 敵の弾丸
 /// </summary>
-class EnemyBullet {
+class EnemyBullet : public CollisionSource {
 public:
 
 	~EnemyBullet();
@@ -50,12 +51,7 @@ public:
 	/// <summary>
 	/// 当たったフラグ
 	/// </summary>
-	void IsHit();
-	/// <summary>
-	/// getter_当たり判定AABB
-	/// </summary>
-	/// <returns></returns>
-	AABB GetAABB() const;
+	void OnCollision(CollisionSource* collision) override;
 
 	/// <summary>
 	/// 跳ね返す(パリィ)処理

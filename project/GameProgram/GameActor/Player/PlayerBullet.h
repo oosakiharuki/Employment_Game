@@ -1,11 +1,12 @@
 #pragma once
 #include "Object3d.h"
 #include "MyMath.h"
+#include "CollisionManager.h"
 
 /// <summary>
 /// プレイヤーの弾丸
 /// </summary>
-class PlayerBullet {
+class PlayerBullet : public CollisionSource {
 public:
 
 	~PlayerBullet();
@@ -50,13 +51,9 @@ public:
 	/// </summary>
 	void IsHit() { isDead_ = true; }
 
-	/// <summary>
-	/// getter_当たり判定AABB
-	/// </summary>
-	/// <returns>座標位置の真ん中のAABB</returns>
-	AABB GetAABB() const;
-
 private:
+	void OnCollision(CollisionSource* collision) override;
+
 	//オブジェクト
 	std::unique_ptr<Object3d> object_ = nullptr;
 	WorldTransform wt_;

@@ -205,4 +205,7 @@ void Enemy_Bomb::Explosion() {
 
 	//爆発フラグオン
 	isExplosion_ = true;
+
+	//当たり判定設定
+	CollisionManager::GetInstance().CreateCollision(bombAABB_, transform_.translate, CollisionTypes::bombExplotion);
 }

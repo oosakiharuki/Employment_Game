@@ -29,6 +29,10 @@ public:
 	/// </summary>
 	void Vanish();
 private:
+	
+	void OnCollision(CollisionSource* collision) override;
+	bool a = false;
+
 	//次のステージの名前
 	std::string fileName_;
 
