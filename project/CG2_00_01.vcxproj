@@ -107,8 +107,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CollisionSource.cpp" />
-    <ClCompile Include="EnemyEye.cpp" />
+    <ClCompile Include="GameProgram\Collision\CollisionSource.cpp" />
+    <ClCompile Include="GameProgram\GameActor\Enemies\EnemyEye.cpp" />
     <ClCompile Include="GameProgram\GameActor\ActorState.cpp" />
     <ClCompile Include="GameProgram\GameActor\Enemies\EnemyCommand.cpp" />
     <ClCompile Include="GameProgram\System\BasePauseState.cpp" />
@@ -214,8 +214,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\System\PauseScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CollisionSource.h" />
-    <ClInclude Include="EnemyEye.h" />
+    <ClInclude Include="GameProgram\Collision\CollisionSource.h" />
+    <ClInclude Include="GameProgram\GameActor\Enemies\EnemyEye.h" />
     <ClInclude Include="GameProgram\GameActor\ActorState.h" />
     <ClInclude Include="GameProgram\GameActor\Enemies\EnemyCommand.h" />
     <ClInclude Include="GameProgram\System\BasePauseState.h" />

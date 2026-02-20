@@ -435,10 +435,10 @@
     <ClCompile Include="GameProgram\GameActor\ActorState.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionSource.cpp">
+    <ClCompile Include="GameProgram\Collision\CollisionSource.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyEye.cpp">
+    <ClCompile Include="GameProgram\GameActor\Enemies\EnemyEye.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -743,10 +743,10 @@
     <ClInclude Include="GameProgram\GameActor\ActorState.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionSource.h">
+    <ClInclude Include="GameProgram\Collision\CollisionSource.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyEye.h">
+    <ClInclude Include="GameProgram\GameActor\Enemies\EnemyEye.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
