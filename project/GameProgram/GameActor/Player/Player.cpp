@@ -45,6 +45,9 @@ void Player::Initialize() {
 
 	//コリジョンタイプ
 	collisionType_ = CollisionTypes::player;
+
+	eventMin = -kMoveMax_;
+	eventMax = kMoveMax_;
 }
 
 void Player::InitMainBody() {
@@ -323,6 +326,13 @@ void Player::Active() {
 
 	//生きている状態の更新処理
 	LifeUpdate();
+
+	//動ける範囲制限
+	transform_.translate.x = std::clamp(transform_.translate.x, eventMin.x, eventMax.x);
+	transform_.translate.y = std::clamp(transform_.translate.y, eventMin.y, eventMax.y);
+	transform_.translate.z = std::clamp(transform_.translate.z, eventMin.z, eventMax.z);
+	isEvent_ = false;
+
 }
 
 void Player::Dead() {
@@ -589,9 +599,29 @@ void Player::OnCollision(CollisionSource* collision) {
 		IsDamage(GetDistance(collision->GetCenter()));
 	}
 
-	if (collision->GetType() == CollisionTypes::stage) {
+	//演出中、死亡の時は当たらない
+	if (collision->GetType() == CollisionTypes::stage
+		&& hp_ != 0 && !isPerformance_) {
 		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap,*this, *this,collision->GetAABB());
 	}
+
+	if (collision->GetType() == CollisionTypes::stageObject) {
+		SetInit_Position(collision->GetCenter(), GetRotate());
+	}
+
+	if (collision->GetType() == CollisionTypes::event) {
+		//イベント範囲から出れないように
+		eventMin = collision->GetAABB().min + transform_.scale;
+		eventMax = collision->GetAABB().max - transform_.scale;
+		isEvent_ = true;
+	}
+
+	if (!isEvent_) {
+		//イベント範囲解放
+		eventMin = -kMoveMax_;
+		eventMax = kMoveMax_;
+	}
+
 }
 
 

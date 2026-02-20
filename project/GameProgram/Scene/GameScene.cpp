@@ -149,14 +149,21 @@ void GameScene::PlayerAliveUpdate() {
 
 	//イベントトリガーの更新
 	for (auto& eventTrigger : eventTriggers_) {
-
+		eventTrigger->Update();
 		if (eventTrigger->GetEventData().isEvent) {
 			eventTrigger->SetPopEnemies(enemies_);
-			eventTrigger->Update();
+			eventTrigger->EventUpdate();
 
 			enemies_ = std::move(eventTrigger->GetPopEnemy());
 		}
 	}
+
+	eventTriggers_.remove_if([](auto& event) {
+		if (event->EventEnd()) {
+			return true;
+		}
+		return false;
+	});
 
 	if (boss_) {
 		boss_->SetPlayer(player_.get());

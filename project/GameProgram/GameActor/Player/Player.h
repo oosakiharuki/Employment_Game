@@ -411,10 +411,14 @@ private:
 	//傘がリアクションするflag
 	bool isShieldMotion_ = false;
 
+	bool isEvent_ = false;
+
+	Vector3 kMoveMax_ = { 1000.0f,1000.0f,1000.0f };//最大移動
+	Vector3 eventMin{};
+	Vector3 eventMax{};
+
 	//ステートパターン
 	//プレイヤーの操作アクション用
 	std::unique_ptr<BasePlayerState> actionState_;
-
-	CollisionOverlap collisionOverlap;
 
 };

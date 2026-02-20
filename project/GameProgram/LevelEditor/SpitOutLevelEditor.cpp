@@ -131,7 +131,7 @@ void SpitOutLevelEditor::SettingStageObject(IStageObject& stageObject, LevelEdit
 }
 
 
-void SpitOutLevelEditor::SpitOutEventTrigger(std::vector<std::shared_ptr<EventTrigger>>& eventTriggers) {
+void SpitOutLevelEditor::SpitOutEventTrigger(std::list<std::shared_ptr<EventTrigger>>& eventTriggers) {
 	//- イベントトリガー配置 -
 	//イベントトリガー配置データがあるとき
 	if (!levelEditor_->GetLevelData()->eventTriggerDatas.empty()) {

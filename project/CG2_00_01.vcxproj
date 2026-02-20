@@ -108,6 +108,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CollisionSource.cpp" />
+    <ClCompile Include="EnemyEye.cpp" />
     <ClCompile Include="GameProgram\GameActor\ActorState.cpp" />
     <ClCompile Include="GameProgram\GameActor\Enemies\EnemyCommand.cpp" />
     <ClCompile Include="GameProgram\System\BasePauseState.cpp" />
@@ -214,6 +215,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionSource.h" />
+    <ClInclude Include="EnemyEye.h" />
     <ClInclude Include="GameProgram\GameActor\ActorState.h" />
     <ClInclude Include="GameProgram\GameActor\Enemies\EnemyCommand.h" />
     <ClInclude Include="GameProgram\System\BasePauseState.h" />

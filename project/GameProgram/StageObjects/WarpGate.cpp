@@ -2,6 +2,7 @@
 #include "UseEveryOne.h"
 #include "CollisionManager.h"
 #include <Input.h>
+#include <NextStageSave.h>
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -21,6 +22,12 @@ void WarpGate::Initialize() {
 }
 
 void WarpGate::Update() {
+
+	if (scaleFlag_ && transform_.scale != kDefaultScale_ && !largeFlag_) {
+		scaleFlag_ = false;
+		scaleTimer_ = 0.0f;
+	}
+
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
 
@@ -61,8 +68,16 @@ void WarpGate::Vanish() {
 }
 
 void WarpGate::OnCollision(CollisionSource* collision) {
-	if ((collision->GetType() == CollisionTypes::player && Input::GetInstance().TriggerKey(DIK_E)) || a) {
-		CollisionManager::GetInstance().SuccessWarp();
-		a = true;
+	if (collision->GetType() == CollisionTypes::player) {
+		scaleTimer_ += kDeltaTime_ * 2.0f;
+		scaleTimer_ = std::clamp(scaleTimer_, 0.0f, 1.0f);
+
+		transform_.scale = EaseOut(kDefaultScale_ * 1.5f,kDefaultScale_, scaleTimer_);
+		scaleFlag_ = true;
+		if (Input::GetInstance().TriggerKey(DIK_E) || a) {
+			CollisionManager::GetInstance().SuccessWarp();
+			NextStageSave::GetInstance().SetNextStageFile(fileName_);
+			a = true;
+		}
 	}
 }

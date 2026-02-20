@@ -34,6 +34,8 @@ private:
 	void Dead() override;
 	void Performance() override;
 
+	void OnCollision(CollisionSource* collision) override;
+
 	/// <summary>
 	/// 弾丸発射処理
 	/// </summary>
@@ -58,7 +60,7 @@ private:
 	Vector3 particlePosition_;
 
 	//見える範囲初期化
-	const Vector3 kEyeReach_ = { 20, 0, 0 };
+	const Vector3 kEyeReach_ = { 20, 0.5f, 0.5f };
 
 	//最大弾丸数
 	const uint32_t kRapidCountMax_ = 6;

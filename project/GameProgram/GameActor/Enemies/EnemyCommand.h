@@ -76,6 +76,8 @@ protected:
 		"enemy_fire", "resource/Sprite/cone.dds", Primitive::CreateCone(), 1, 0.1f, {1 ,1 ,1}
 	};
 
+	bool isFire_ = true;
+
 	/// <summary>
 	/// 弾丸更新処理
 	/// </summary>

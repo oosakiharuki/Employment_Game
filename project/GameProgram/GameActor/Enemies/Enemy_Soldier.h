@@ -35,6 +35,9 @@ private:
 
 	void Dead() override;
 	void Performance() override;
+
+	void OnCollision(CollisionSource* collision) override;
+
 	/// <summary>
 	/// 移動
 	/// </summary>

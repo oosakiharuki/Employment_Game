@@ -37,13 +37,13 @@ void Enemy_Soldier::Move() {
 	//方向転換
 	//敵が右向き
 	if (transform_.rotate.y == kDirectionRight_) {
-		transform_.rotate.y = kDirectionLeft_;
 		speed_.x = kMoveX_;//右に進む
+		eyeReach_.x = kEyeReach_.x;
 	}
 	//左向き
 	else if (transform_.rotate.y == kDirectionLeft_) {
-		transform_.rotate.y = kDirectionRight_;
 		speed_.x = -kMoveX_;//左に進む
+		eyeReach_.x = -kEyeReach_.x;
 	}
 }
 
@@ -53,27 +53,35 @@ void Enemy_Soldier::Active() {
 	StatePatternUpdate();
 
 	//重力
-	//GravityUpdate(transform_.translate.y);
+	GravityUpdate(transform_.translate.y);
 	PlayerTarget();
 	//弾丸の更新
 	BulletUpdate();
+
+	isGround_ = false;
 }
 
 void Enemy_Soldier::SearchCommand() {
 	//移動する
 	Move();
+	isFire_ = true;
 }
 
 void Enemy_Soldier::AttackCommand() {
-	if (isFoundTarget_) {
+	
+	if (isFire_) {
 		//見つけたリアクション
 		FoundReaction();
 
 		//発砲処理
 		Fire();
-		if (coolTime_ == 0.0f) {
-			isFoundTarget_ = false;
-		}
+	}
+
+	if (!isFire_ && !enemyEye_->IsFound()) {
+		attackSwitch_ = false;
+	}
+	else {
+		isFire_ = true;
 	}
 
 	//マークの更新
@@ -156,4 +164,16 @@ void Enemy_Soldier::RespawnEnemy() {
 	//発泡処理のリセット
 	rapidCount_ = 0;
 	coolTime_ = 0;
+}
+
+
+void Enemy_Soldier::OnCollision(CollisionSource* collision) {
+	if (collision->GetType() == CollisionTypes::playerBullet ||
+		collision->GetType() == CollisionTypes::parryBullet) {
+		IsDamage();
+	}
+
+	if (collision->GetType() == CollisionTypes::stage) {
+		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
+	}
 }

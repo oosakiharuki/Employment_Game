@@ -42,18 +42,23 @@ void Enemy_Turret::Initialize() {
 void Enemy_Turret::SearchCommand() {
 	//レーザーポイント
 	LaserPoint();
+	isFire_ = true;
 }
 
 void Enemy_Turret::AttackCommand(){
-	if (isFoundTarget_) {
+	if (isFire_) {
 		//見つけたリアクション
 		FoundReaction();
 
 		//発砲処理
 		Fire();
-		if (coolTime_ == 0.0f) {
-			isFoundTarget_ = false;
-		}
+	}
+	
+	if (!isFire_ && !enemyEye_->IsFound()) {
+		attackSwitch_ = false;
+	}
+	else {
+		isFire_ = true;
 	}
 
 	//レーザーポイント
@@ -68,15 +73,25 @@ void Enemy_Turret::Active() {
 	//敵のステートパターンの更新処理
 	StatePatternUpdate();
 
+	if (transform_.rotate.y == kDirectionRight_) {
+		eyeReach_.x = kEyeReach_.x;
+	}
+	//左向き
+	else if (transform_.rotate.y == kDirectionLeft_) {
+		eyeReach_.x = -kEyeReach_.x;
+	}
+
 	PlayerTarget();
 
 	//重力
-	//GravityUpdate(transform_.translate.y);
+	GravityUpdate(transform_.translate.y);
 	//弾丸の更新
 	BulletUpdate();
 
 	//コーンが上向きなので
 	particles_[particleFire_.name]->SetRotate({ 0,0,-transform_.rotate.y });
+
+	isGround_ = false;
 }
 
 void Enemy_Turret::Dead() {
@@ -98,8 +113,8 @@ void Enemy_Turret::UpdateImGui() {
 	ImGui::Text("translate : %f,%f,%f", transform_.translate.x, transform_.translate.y, transform_.translate.z);
 	ImGui::Text("translate : %f,%f,%f", transform_.rotate.x, transform_.rotate.y, transform_.rotate.z);
 
-	ImGui::Text("Eye_Min : %f,%f,%f", eyeAABB_.min.x, eyeAABB_.min.y, eyeAABB_.min.z);
-	ImGui::Text("Eye_Max : %f,%f,%f", eyeAABB_.max.x, eyeAABB_.max.y, eyeAABB_.max.z);
+	//ImGui::Text("Eye_Min : %f,%f,%f", eyeCenter_ - eyeReach_, eyeAABB_.min.y, eyeAABB_.min.z);
+	//ImGui::Text("Eye_Max : %f,%f,%f", eyeAABB_.max.x, eyeAABB_.max.y, eyeAABB_.max.z);
 
 	ImGui::End();
 
@@ -156,4 +171,16 @@ void Enemy_Turret::RespawnEnemy() {
 	RespawnEnemyCommon();
 	rapidCount_ = 0;
 	coolTime_ = 0;
+}
+
+
+void Enemy_Turret::OnCollision(CollisionSource* collision) {
+	if (collision->GetType() == CollisionTypes::playerBullet ||
+		collision->GetType() == CollisionTypes::parryBullet) {
+		IsDamage();
+	}
+
+	if (collision->GetType() == CollisionTypes::stage) {
+		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
+	}
 }

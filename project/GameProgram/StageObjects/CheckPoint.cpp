@@ -35,5 +35,7 @@ void CheckPoint::Draw() {
 }
 
 void CheckPoint::OnCollision(CollisionSource* collision) {
-
+	if (collision->GetType() == CollisionTypes::player) {
+		transform_.rotate.y += 10.0f;
+	}
 }

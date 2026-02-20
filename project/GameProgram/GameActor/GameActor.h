@@ -190,6 +190,9 @@ protected:
 	//リアクションクラス
 	std::unique_ptr<Reaction> reaction_;
 
+	//地面・壁で使う当たり判定
+	CollisionOverlap collisionOverlap;
+
 private:
 	std::unique_ptr<BaseActorState> actorState_;
 };

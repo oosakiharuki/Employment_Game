@@ -10,7 +10,7 @@ void EnemySearchState::Update(EnemyCommand& enemy) {
 void EnemySearchState::ChangeState(BaseEnemy& enemy) {
 	//見つかったら
 	if (enemy.IsFoundTarget()) {
-		//enemy.BulletFlag();
+		enemy.AttackFlag();
 		enemy.ChangeStatePattern(std::make_unique<EnemyAttackState>());
 	}
 }

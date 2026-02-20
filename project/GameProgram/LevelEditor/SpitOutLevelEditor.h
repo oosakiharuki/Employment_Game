@@ -63,7 +63,7 @@ public:
 	/// イベントトリガーの配置
 	/// </summary>
 	/// <param name="eventTrigger">イベントトリガーの配列</param>
-	void SpitOutEventTrigger(std::vector<std::shared_ptr<EventTrigger>>& eventTrigger);
+	void SpitOutEventTrigger(std::list<std::shared_ptr<EventTrigger>>& eventTrigger);
 
 	/// <summary>
 	/// ボスの配置

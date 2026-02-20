@@ -4,6 +4,7 @@
 #include "GameActor.h"
 
 #include "BaseEnemyState.h"
+#include "EnemyEye.h"
 
 /// <summary>
 /// 敵の基盤クラス
@@ -91,24 +92,11 @@ public:
 	/// </summary>
 	void SearchRange();
 
-
-	/// <summary>
-	/// getter_見える範囲
-	/// </summary>
-	/// <returns></returns>
-	AABB GetEyeAABB() { return eyeAABB_; }
-
-	/// <summary>
-	/// setter_プレイヤーを見つけたフラグ
-	/// </summary>
-	/// <param name="result">true:見つけた / false:見つかってない</param>
-	void SetFoundTarget(bool result) { isFoundTarget_ = result; }	
-	
 	/// <summary>
 	/// プレイヤーを見つけたフラグ(getter)
 	/// </summary>
 	/// <returns></returns>
-	bool IsFoundTarget() { return isFoundTarget_; }
+	bool IsFoundTarget() { return enemyEye_->IsFound(); }
 
 	/// <summary>
 	/// 見失うフラグ
@@ -129,6 +117,8 @@ public:
 	/// </summary>
 	void MarkDraw();
 
+	void AttackFlag() { attackSwitch_ = true; }
+
 	/// <summary>
 	/// ステートパターン変更
 	/// </summary>
@@ -148,9 +138,7 @@ protected:
 	//プレイヤークラス
 	Player* player_ = nullptr;
 
-	AABB eyeAABB_;//見える範囲
 	Vector3 eyeReach_{};
-	bool isFoundTarget_ = false;
 
 	//ゲームに移さないフラグ
 	bool isDeleteEnemy_ = false;
@@ -185,6 +173,10 @@ protected:
 	/// ステート変更(捜索(search)、攻撃(attack))
 	/// </summary>
 	void StatePatternUpdate();
+
+	std::unique_ptr<EnemyEye> enemyEye_ = nullptr;
+
+	bool attackSwitch_ = false;
 
 private:
 

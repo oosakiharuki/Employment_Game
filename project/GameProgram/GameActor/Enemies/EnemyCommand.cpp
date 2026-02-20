@@ -37,6 +37,7 @@ void EnemyFireCommand::Fire() {
 		if (rapidCount_ == rapidCountMax_) {
 			rapidCount_ = 0;//カウントリセット
 			coolTime_ = 0;//クールタイム発動
+			isFire_ = false;
 		}
 	}
 }

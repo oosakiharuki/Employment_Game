@@ -43,6 +43,12 @@ public:
 	/// </summary>
 	void Draw();
 
+
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void EventUpdate();
+
 	/// <summary>
 	/// 描画処理_パーティクル
 	/// </summary>

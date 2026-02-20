@@ -99,6 +99,9 @@ void CollisionManager::EachCollision(CollisionSource& collisionA, CollisionSourc
 	DetermineType(collisionA, CollisionTypes::enemy, collisionB, CollisionTypes::playerBullet);
 	DetermineType(collisionA, CollisionTypes::enemy, collisionB, CollisionTypes::parryBullet);
 	DetermineType(collisionA, CollisionTypes::enemy, collisionB, CollisionTypes::stage);
+	
+	DetermineType(collisionA, CollisionTypes::enemyEye, collisionB, CollisionTypes::player);
+	DetermineType(collisionA, CollisionTypes::enemyEye, collisionB , CollisionTypes::stage);
 
 	//ステージオブジェクト
 	DetermineType(collisionA, CollisionTypes::stageObject, collisionB, CollisionTypes::player);

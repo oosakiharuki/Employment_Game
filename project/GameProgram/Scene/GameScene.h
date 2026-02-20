@@ -43,7 +43,7 @@ private:
 	std::unique_ptr<Object3d> stageObj_;
 
 	//イベントトリガー
-	std::vector<std::shared_ptr<EventTrigger>> eventTriggers_;
+	std::list<std::shared_ptr<EventTrigger>> eventTriggers_;
 
 	//boss
 	std::unique_ptr<Boss> boss_;

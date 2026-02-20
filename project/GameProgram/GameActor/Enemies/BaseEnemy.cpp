@@ -39,6 +39,8 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 	//enemyState_ = std::make_unique<EnemySearchState>();
 
 	collisionType_ = CollisionTypes::enemy;
+
+	enemyEye_ = std::make_unique<EnemyEye>();
 }
 
 void BaseEnemy::Update() {
@@ -94,12 +96,14 @@ void BaseEnemy::UpdateBehind() {
 	center_ = transform_.translate;
 
 	CollisionManager::GetInstance().AddCollisions(this);
+	collisionOverlap = CollisionManager::GetInstance().SetTarget(GetTranslate(), GetAABB());
+
 }
 
 void BaseEnemy::MarkUpdate() {
 
 	//!,?のマーク表示時間の間
-	if (isFoundTarget_) {
+	if (attackSwitch_) {
 		markTimer_ += kDeltaTime_;
 	}
 	else {
@@ -119,11 +123,11 @@ void BaseEnemy::MarkUpdate() {
 
 void BaseEnemy::MarkDraw() {
 	//見つけたとき+マークが出る時間
-	if(isFoundTarget_ && markTimer_ < kMarkMaxTime_)
+	if(attackSwitch_ && markTimer_ < kMarkMaxTime_)
 		objectFound_->Draw();
 
 	//見失った+マークが出る時間
-	if (!isFoundTarget_ && markTimer_ > 0.0f)
+	if (!attackSwitch_ && !enemyEye_->IsFound() && markTimer_ > 0.0f)
 		objectNoFound_->Draw();
 }
 
@@ -166,34 +170,12 @@ void BaseEnemy::PlayerTarget() {
 		isFoundReaction_ = true;
 		preTranslate_ = transform_.translate;
 	}
-
-	Segment segment;
-	segment.origin = transform_.translate;      //敵座標
-	segment.diff = player_->GetTranslate(); //プレイヤー座標
-
-	////ステージの当たり判定
-	//for (auto& stage : stages_) {
-	//	//playerと敵との間に壁があるならば
-	//	if (IsCollisionAABB_Segment(stage, segment)) {
-	//		isFoundTarget_ = false;//見つかってないフラグ
-	//		break;
-	//	}
-	//}
 }
 
 void BaseEnemy::SearchRange() {
-	//敵が右向き
-	if (transform_.rotate.y == kDirectionRight_) {
-		eyeAABB_.min = transform_.translate + Vector3(0, -eyeReach_.y, -eyeReach_.z);
-		eyeAABB_.max = transform_.translate + eyeReach_;
+	if (hp_ != 0) {
+		enemyEye_->Update(transform_.translate, eyeReach_);
 	}
-	//左向き
-	else if (transform_.rotate.y == kDirectionLeft_) {
-		eyeAABB_.min = transform_.translate + -eyeReach_;
-		eyeAABB_.max = transform_.translate + Vector3(0, eyeReach_.y, eyeReach_.z);
-	}
-
-	CollisionManager::GetInstance().CreateCollision(eyeAABB_, transform_.translate, CollisionTypes::enemyEye);
 }
 
 
@@ -264,18 +246,14 @@ void BaseEnemy::DeadReaction() {
 
 bool BaseEnemy::IsLostFound() {
 	//見失ってから少したってから通常処理に戻す
-	if (markTimer_ <= 0.0f) {
+	if (!attackSwitch_ && markTimer_ <= 0.0f) {
 		return true;
-	}
-	//途中でまた見つかったら
-	else if (!isFoundTarget_ && markTimer_ >= 1.0f) {
-		markTimer_ = 0.0f;    //タイマーリセット(!マークとリアクションをさせる)
 	}
 	return false;
 }
 
 void BaseEnemy::StatePatternUpdate() {
-	enemyState_->Update(*this);
+	enemyState_->Update(*this);	
 	enemyState_->ChangeState(*this);
 
 	if (enemyState_->GetIsInput()) {

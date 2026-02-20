@@ -44,6 +44,8 @@ void Enemy_Bomb::Active() {
 
 	//重力
 	GravityUpdate(transform_.translate.y);
+
+	isGround_ = false;
 }
 
 void Enemy_Bomb::Dead() {
@@ -208,4 +210,15 @@ void Enemy_Bomb::Explosion() {
 
 	//当たり判定設定
 	CollisionManager::GetInstance().CreateCollision(bombAABB_, transform_.translate, CollisionTypes::bombExplotion);
+}
+
+void Enemy_Bomb::OnCollision(CollisionSource* collision) {
+	if (collision->GetType() == CollisionTypes::playerBullet ||
+		collision->GetType() == CollisionTypes::parryBullet) {
+		IsDamage();
+	}
+
+	if (collision->GetType() == CollisionTypes::stage) {
+		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
+	}
 }
