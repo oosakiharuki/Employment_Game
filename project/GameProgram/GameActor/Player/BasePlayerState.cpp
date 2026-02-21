@@ -54,7 +54,7 @@ void PlayerShieldState::Update(PlayerCommand& playerCommand) {
 void PlayerShieldState::CommandInput(Player& player) {
 	//ボタンが離れたとき、ステートを変更
 	if (!Input::GetInstance().PushKey(DIK_L) && !Input::GetInstance().PushButton(XINPUT_GAMEPAD_B) && !Input::GetInstance().LeftTriggerLongPress()) {
-		player.SetIsShield(false);//シールドフラグオフ
+		player.OffShield();//シールドフラグオフ
 		nextState_ = std::make_unique<PlayerNormalState>();
 	}
 }

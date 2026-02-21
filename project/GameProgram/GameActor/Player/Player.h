@@ -66,16 +66,9 @@ public:
 	void SetUmbrellaRotate();
 
 	/// <summary>
-	/// getter_シールドフラグ
+	/// シールド解除
 	/// </summary>
-	/// <returns></returns>trueなら守っている
-	bool GetIsShield() { return isShield_; }
-
-	/// <summary>
-	/// setter_シールドフラグ
-	/// </summary>
-	/// <param name="result"></param>
-	void SetIsShield(bool result) { isShield_ = result; }
+	void OffShield();
 
 	/// <summary>
 	/// ダメージを食らった
@@ -112,12 +105,6 @@ public:
 	void RespawnPlayer();
 
 	/// <summary>
-	/// getter_パリィ
-	/// </summary>
-	/// <returns></returns>跳ね返したフラグ
-	bool GetIsParry() { return isParry_; }
-
-	/// <summary>
 	/// パリィ成功 = 連続弾も跳ね返す
 	/// </summary>
 	void ParrySuccess();
@@ -145,11 +132,6 @@ public:
 	/// </summary>
 	/// <param name="position"></param>影の位置の登録
 	void SetShadowPosition(const Vector3& position) { shadow_->SetTranslate(position); }
-
-	/// <summary>
-	/// 傘が当たったリアクションフラグ
-	/// </summary>
-	void IsShieldMotion();
 
 	/// <summary>
 	/// プレイヤーの向きををカメラに
@@ -407,9 +389,6 @@ private:
 	const Vector2 kTextureSizeHp_ = { 64,64 };//スプライトサイズ
 	const Vector2 kInitializePointHp_ = { 20.0f,45.0f };//スプライトの初期位置
 	const float kDistanceYHp_ = 10.0f;//スプライトのY軸幅
-
-	//傘がリアクションするflag
-	bool isShieldMotion_ = false;
 
 	bool isEvent_ = false;
 

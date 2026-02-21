@@ -91,21 +91,22 @@ void CollisionManager::EachCollision(CollisionSource& collisionA, CollisionSourc
 	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::bombExplotion); 
 	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::stage);
 	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::event);
-
+	//弾丸(player)
+	DetermineType(collisionA,CollisionTypes::playerBullet,collisionB,CollisionTypes::stage);
 	//傘
 	DetermineType(collisionA, CollisionTypes::umbrella, collisionB, CollisionTypes::enemyBullet);
-
+	DetermineType(collisionA, CollisionTypes::umbrellaParry, collisionB, CollisionTypes::enemyBullet);
 	//敵
 	DetermineType(collisionA, CollisionTypes::enemy, collisionB, CollisionTypes::playerBullet);
 	DetermineType(collisionA, CollisionTypes::enemy, collisionB, CollisionTypes::parryBullet);
 	DetermineType(collisionA, CollisionTypes::enemy, collisionB, CollisionTypes::stage);
-	
+	//敵のサーチ範囲
 	DetermineType(collisionA, CollisionTypes::enemyEye, collisionB, CollisionTypes::player);
 	DetermineType(collisionA, CollisionTypes::enemyEye, collisionB , CollisionTypes::stage);
-
+	//弾丸(enemy)
+	DetermineType(collisionA, CollisionTypes::enemyBullet, collisionB, CollisionTypes::stage);
 	//ステージオブジェクト
 	DetermineType(collisionA, CollisionTypes::stageObject, collisionB, CollisionTypes::player);
-
 	//ボス
 	DetermineType(collisionA, CollisionTypes::boss, collisionB, CollisionTypes::playerBullet);
 }

@@ -62,9 +62,7 @@ void BaseEnemy::Update() {
 	SearchRange();
 
 	//リアクション
-	if (isDamageMotion_) {
-		reaction_->ScaleReaction(transform_.scale,isDamageMotion_, damageScale_, scaleTimer_, kDamageMaxTime_);
-	}
+	reaction_->ScaleReaction(transform_.scale,isDamageMotion_, damageScale_, scaleTimer_, kDamageMaxTime_);
 
 #ifdef USE_IMGUI
 	
@@ -222,10 +220,8 @@ void BaseEnemy::FoundReaction() {
 	//伸びる強さ(y軸のみ)
 	Vector3 reaction = { 0,damageScale_.y * kDivideByTwo_,0 };
 
-	if (isFoundReaction_) {
-		reaction_->ScaleReaction(transform_.scale, isFoundReaction_, reaction, scaleTimer_, kFoundMotionMaxTime_);
-		reaction_->FoundReaction(transform_.translate,isFoundReaction_, reaction, foundTimer_, kFoundMotionMaxTime_, preTranslate_);
-	}
+	reaction_->ScaleReaction(transform_.scale, isFoundReaction_, reaction, scaleTimer_, kFoundMotionMaxTime_);
+	reaction_->FoundReaction(transform_.translate,isFoundReaction_, reaction, foundTimer_, kFoundMotionMaxTime_, preTranslate_);
 }
 
 void BaseEnemy::DeadReaction() {

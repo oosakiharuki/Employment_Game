@@ -30,9 +30,7 @@ void Boss::Update() {
 	//ステートパターン
 	bossState_->Update(*this);
 
-	if (isDamageReaction_) {
-		reaction_->ScaleReaction(transform_.scale, isDamageReaction_,damageReactionPower_,damageReactionTimer_,kDamageReactionTimeMax_);
-	}
+	reaction_->ScaleReaction(transform_.scale, isDamageReaction_,damageReactionPower_,damageReactionTimer_,kDamageReactionTimeMax_);
 
 	for (auto& bullet : bullets_) {
 		bullet->Update();

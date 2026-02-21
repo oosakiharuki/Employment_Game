@@ -59,8 +59,18 @@ void EnemyBullet::Draw() {
 }
 
 void EnemyBullet::OnCollision(CollisionSource* collision) {
-	//消えるフラグ
-	isDead_ = true;
+	if (collision->GetType() == CollisionTypes::player ||
+		collision->GetType() == CollisionTypes::stage ||
+		collision->GetType() == CollisionTypes::umbrella ||
+		(collision->GetType() == CollisionTypes::enemy) && isParry) {
+		//消滅フラグ
+		isDead_ = true;
+	}
+
+	if (collision->GetType() == CollisionTypes::umbrellaParry) {
+		collisionType_ = CollisionTypes::parryBullet;
+		isParry = true;
+	}
 }
 
 void EnemyBullet::Parry_Mode() {

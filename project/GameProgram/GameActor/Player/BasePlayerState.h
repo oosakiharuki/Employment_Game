@@ -30,14 +30,7 @@ protected:
 	bool isPushW_ = false;
 	bool isPushS_ = false;
 
-
-	//傘のシールドフラグ
-	bool isShield_ = false;
-	
-	//パリィ
-	bool isParry_ = false;
-	const float kParryTimeMax_ = 0.5f;//パリィする時間//ちょっと簡単に
-	float parryTime_ = kParryTimeMax_;
+	//傘の位置設定時に使う
 	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
 	const float kBrinkPower_ = 1.25f;
 

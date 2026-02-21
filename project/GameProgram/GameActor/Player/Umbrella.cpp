@@ -2,6 +2,8 @@
 #include "ImGuiManager.h"
 #include "UseEveryOne.h"
 
+#include "Player.h"
+
 using namespace MyMath;
 using namespace UseEveryOne;
 
@@ -43,25 +45,20 @@ void Umbrella::Update() {
 	ImGui::End();
 
 #endif // USE_IMGUI
+	//傘に弾丸が触れた時
+	reaction_->ScaleReaction(transform_.scale, isHit_, kScalePower_, scaleTimer_, kReactionMaxTime_);
 
 	//防御状態の場合
-	if (isShieldMode_) {
-		object_->ChangeAnimation("umbrella_Open.gltf");//開いた傘
-	}
-	else {
+	if (!isShield_) {
 		object_->ChangeAnimation("umbrella_Close.gltf");//閉じた傘
 	}
+
+	//パリィ更新処理
+	ParryUpdate();
 
 	//更新
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
-
-	//当たり判定設定
-	collisionAABB_.min = transform_.translate + umbrellaAABB_.min;
-	collisionAABB_.max = transform_.translate + umbrellaAABB_.max;
-	center_ = transform_.translate;
-
-	CollisionManager::GetInstance().AddCollisions(this);
 }
 
 void Umbrella::Draw() {
@@ -69,8 +66,49 @@ void Umbrella::Draw() {
 	object_->Draw();
 }
 
-void Umbrella::HitReaction(bool& isShieldMode) {
-	reaction_->ScaleReaction(transform_.scale,isShieldMode,kScalePower_, scaleTimer_,kReactionMaxTime_);
+void Umbrella::OnCollision(CollisionSource* collision) {
+	if (collision->GetType() == CollisionTypes::enemyBullet && isShield_) {
+		isHit_ = true;
+		scaleTimer_ = 0.0f;
+		transform_.scale = kDefaultScale_;
+
+		if (collisionType_ == CollisionTypes::umbrellaParry) {
+			parryTime_ = kParryTimeMax_;//連続で跳ね返せるように
+			player_->ParrySuccess();//パリィ成功処理
+			return;
+		}
+		//通常防御の場合、プレイヤーがノックバック
+		player_->KnockBackUmbrella(kUmbrellaKnockBackPower_,kUmbrellaKnockBackTime_);
+	}
 }
 
-void Umbrella::OnCollision(CollisionSource* collision) {}
+void Umbrella::ShieldMode() {
+	//既に開いている場合はスキップ
+	if (!isShield_) {		
+		isParry_ = true;
+	}
+	isShield_ = true;
+
+	//当たり判定設定
+	collisionAABB_.min = transform_.translate + umbrellaAABB_.min;
+	collisionAABB_.max = transform_.translate + umbrellaAABB_.max;
+	center_ = transform_.translate;
+
+	CollisionManager::GetInstance().AddCollisions(this);
+	object_->ChangeAnimation("umbrella_Open.gltf");//開いた傘
+}
+
+void Umbrella::ParryUpdate() {
+	if (!isParry_) {
+		parryTime_ = kParryTimeMax_;
+		collisionType_ = CollisionTypes::umbrella;
+		return;
+	}
+
+	collisionType_ = CollisionTypes::umbrellaParry;
+	parryTime_ -= kDeltaTime_;
+
+	if(parryTime_ <= 0.0f) {
+		isParry_ = false;
+	}
+}

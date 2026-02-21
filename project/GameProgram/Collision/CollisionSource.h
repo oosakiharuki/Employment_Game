@@ -5,6 +5,7 @@ enum CollisionTypes {
 	player,
 	playerBullet,
 	umbrella,
+	umbrellaParry,
 	enemy,
 	enemyEye,
 	enemyBullet,

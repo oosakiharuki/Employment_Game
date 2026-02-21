@@ -81,6 +81,8 @@ void Player::InitUmbrella() {
 	wtGun_.Initialize();
 	//Transform更新処理
 	transformGun_ = wt_.UpdateTransform();
+	//プレイヤー情報
+	umbrella_->SetPlayer(this);
 }
 
 void Player::SettingSpriteHp(uint32_t num) {
@@ -182,18 +184,12 @@ void Player::InfinityTimeUpdate() {
 
 void Player::ReactionsUpdate() {
 	//ダメージリアクション
-	if (isDamageMotion_) {
-		reaction_->ScaleReaction(transform_.scale, isDamageMotion_, damageScale_, scaleTimer_, kDamageMaxTime_);
-	}
-	//傘リアクション
-	if (isShieldMotion_) {
-		umbrella_->HitReaction(isShieldMotion_);
-	}
+	reaction_->ScaleReaction(transform_.scale, isDamageMotion_, damageScale_, scaleTimer_, kDamageMaxTime_);
 }
 
 void Player::AnimationUpdate() {
 	///アニメーション
-	if (isShield_) {
+	if (umbrella_->GetShieldMode()) {
 		motionName_ = "shield";
 	}//前回の座標と現在の座標が違う = 動いた場合
 	else if (IsMovePosition()) {
@@ -259,8 +255,6 @@ void Player::BehindUpdate() {
 		TransformNormal(kPlayerFront_, wtGun_.GetMatWorld()));
 	//傘の方向
 	umbrella_->SetRotate(transformGun_.rotate);
-	//防御状態か
-	umbrella_->ShieldMode(isShield_);
 	//更新
 	umbrella_->Update();
 }
@@ -275,11 +269,6 @@ void Player::LifeUpdate() {
 	umbrellaRange_ = transformGun_.rotate;
 	//円柱または円錐が縦のため、90度回転して横にする
 	umbrellaRange_.x += kNinetyAngle_;
-
-	if (!isShield_) {
-		parryTime_ += kDeltaTime_;
-		parryTime_ = std::clamp(parryTime_, 0.0f, kParryTimeMax_);
-	}
 
 	//ノックバック発動
 	KnockBackUpdate();
@@ -303,7 +292,7 @@ void Player::Gliding() {
 	// - 滑空 - 
 	//開いた状態で地面についていない
 	//傘が上向き(斜め上も)の場合かつプレイヤーが倒されていないとき
-	if (isShield_ && !isGround_ &&
+	if (umbrella_->GetShieldMode() && !isGround_ &&
 		(transformGun_.rotate.x >= kUpDis_ - kDiagonalValue_ && transformGun_.rotate.x <= kUpDis_ + kDiagonalValue_)) {
 		GravityDown();
 		//滑空中は上向きのみ(斜めにはならない)
@@ -402,7 +391,7 @@ void Player::CommandMove() {
 	}
 	//シールド中足が遅くなる
 	//(滑空中は影響しない)
-	if (isShield_ && isGround_) {
+	if (umbrella_->GetShieldMode() && isGround_) {
 		//スピードを半減させる
 		const float gSlowSpeed = 0.5f;//半減する数値
 		speed_ = kStandardSpeed_ * gSlowSpeed;
@@ -446,21 +435,13 @@ void Player::CommandFire() {
 }
 
 void Player::CommandShield() {
-	isShield_ = true;
-	parryTime_ -= kDeltaTime_;
-
-	if (parryTime_ <= 0.0f) {
-		isParry_ = false;
-	}
-	else {
-		isParry_ = true;
-	}
+	umbrella_->ShieldMode();
 	Gliding();
 }
 
 void Player::CommandBrink() {
 	//傘は開く
-	isShield_ = true;
+	umbrella_->ShieldMode();
 
 	brinkTimer_ += kDeltaTime_;
 	isOneBrink_ = true;//ブリンク一回目
@@ -591,6 +572,10 @@ void Player::ShootBullet() {
 	KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
 }
 
+void Player::OffShield() {
+	umbrella_->OffShield();
+}
+
 
 void Player::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::enemyBullet || 
@@ -683,12 +668,6 @@ void Player::KnockBackCommon(float TimerMax) {
 	knockBackTimeMax_ = TimerMax;
 }
 
-void Player::IsShieldMotion() {
-	isShieldMotion_ = true;
-	umbrella_->ResetScaleTimer();
-	umbrella_->SetScale(kDefaultScale_);
-}
-
 void Player::RespawnPlayer() {
 
 	if (remain_ == 0) {
@@ -706,9 +685,6 @@ void Player::RespawnPlayer() {
 
 //パリィ成功
 void Player::ParrySuccess() {
-	//パリィ時間延長(連続弾でも跳ね返せるように)
-	parryTime_ = kParryTimeMax_;
-
 	//SE
 	Audio::GetInstance().StopWave(parrySound_);//パリィが続くとき一度止めてから再生させるようにする
 	Audio::GetInstance().SoundPlayWave(parrySound_, kVolume_);//SE再生:パリィ

@@ -5,6 +5,8 @@
 #include "Reaction.h"
 #include "CollisionManager.h"
 
+class Player;
+
 /// <summary>
 /// 傘(発泡、守が使える)
 /// </summary>
@@ -67,21 +69,26 @@ public:
 	/// シールドモード
 	/// </summary>
 	/// <param name="isShield">trueはシールドモードに変更</param>
-	void ShieldMode(bool isShield) { isShieldMode_ = isShield; }
+	void ShieldMode();
 
-	/// <summary>
-	/// 傘で防いだ時
-	/// </summary>
-	/// <param name="isShieldMode">リアクションフラグ</param>
-	void HitReaction(bool& isShieldMode);
+	void OffShield() { isShield_ = false; }
+
+	bool GetShieldMode() { return isShield_; }
 
 	/// <summary>
 	/// 連続ヒットの場合タイマーをリセット
 	/// </summary>
 	void ResetScaleTimer() { scaleTimer_ = 0.0f; }
 
+	void SetPlayer(Player* player) { player_ = player; }
+
 private:
 	void OnCollision(CollisionSource* collision) override;
+
+	/// <summary>
+	/// パリィの更新処理
+	/// </summary>
+	void ParryUpdate();
 
 	//オブジェクト設定
 	std::unique_ptr<Object_glTF> object_;
@@ -92,9 +99,6 @@ private:
 	AABB umbrellaAABB_;
 	//AABBのサイズ
 	const Vector3 kAABBSize_ = { 1,2,1 };
-	//シールドモード
-	bool isShieldMode_ = false;
-
 
 	std::unique_ptr<Reaction> reaction_;
 
@@ -102,5 +106,22 @@ private:
 	const Vector3 kScalePower_ = { 0.1f, 0.1f, 0.1f };//大きくする力
 
 	float scaleTimer_ = 0.0f;
+
+	//傘に当たったフラグ
+	bool isHit_ = false;
+
+	//傘のシールドフラグ
+	bool isShield_ = false;
+
+	//パリィ
+	bool isParry_ = false;
+	const float kParryTimeMax_ = 0.5f;//パリィする時間//ちょっと簡単に
+	float parryTime_ = kParryTimeMax_;
+
+	//傘のノックバックの値
+	const Vector3 kUmbrellaKnockBackPower_ = { 0.0f,0.0f,0.3f };
+	const float kUmbrellaKnockBackTime_ = 0.0f;
+
+	Player* player_ = nullptr;
 };
 

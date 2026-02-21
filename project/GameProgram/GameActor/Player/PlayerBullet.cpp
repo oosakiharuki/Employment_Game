@@ -20,7 +20,7 @@ void PlayerBullet::Initialize() {
 	bulletAABB_.min = -kBulletSize_ * kDivideByTwo_;
 	bulletAABB_.max = kBulletSize_ * kDivideByTwo_;
 
-	collisionType_ = CollisionTypes::parryBullet;
+	collisionType_ = CollisionTypes::playerBullet;
 }
 
 void PlayerBullet::Update() {
@@ -52,5 +52,9 @@ void PlayerBullet::Draw() {
 }
 
 void PlayerBullet::OnCollision(CollisionSource* collision) {
-	isDead_ = true;
+	if (collision->GetType() == CollisionTypes::stage ||
+		collision->GetType() == CollisionTypes::enemy ||
+		collision->GetType() == CollisionTypes::boss) {
+		isDead_ = true;
+	}
 }
