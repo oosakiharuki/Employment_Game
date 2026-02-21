@@ -5,6 +5,9 @@
 #include <WarpGate.h>
 #include <NextStageSave.h>
 
+#include "GameActor.h"
+#include "GravityActor.h"
+
 using namespace MyMath;
 using namespace UseEveryOne;
 
@@ -21,228 +24,100 @@ void CollisionManager::Finalize() {
 	sInstance_.reset();
 }
 
-void CollisionManager::PlayerAndEnemy(Player* player,
-	const std::vector<std::shared_ptr<BaseEnemy>>& enemies) {
-	// - プレイヤーと敵 -
-	for (auto& enemy : enemies) {
-		//プレイヤーを見つける範囲
-		LookPlayer(player, enemy);
+void CollisionManager::AddCollisions(CollisionSource* addCollision) {
+	collisions_.push_back(addCollision);
 
-		//プレイヤーが敵の弾に当たったら
-		PlayerBulletAndEnemy(player, enemy);
-
-		for (auto& bulletE : enemy->GetBullets()) {
-			//敵がプレイヤーの弾に当たったら
-			EnemyBulletAndPlayer(player, bulletE);
-			//敵が跳ね返った敵の弾に当たったら
-			EnemyAndParryBullet(enemy, bulletE);
-		}
-
-		//ボムの敵 : 爆発範囲
-		EnemyBombCollision(player, enemy);
-	}
+	CollisionOverlap collisionOverlap;
+	collisionOverlap = CollisionManager::GetInstance().SetTarget(addCollision->GetCenter(), addCollision->GetAABB());
 }
 
-void CollisionManager::LookPlayer(Player* player, std::shared_ptr<BaseEnemy> enemy) {
-	//見える範囲にプレイヤーがいたら
-	if (IsCollisionAABB(player->GetAABB(), enemy->GetEyeAABB()) && !player->GetIsDead()) {
-		enemy->SetFoundTarget(true);//見える
-	}
-	else {
-		enemy->SetFoundTarget(false);//見えない
-	}
+void CollisionManager::CreateCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type) {
+	std::unique_ptr<CollisionSource> collision;
+	collision = std::make_unique<CollisionSource>();
+
+	collision->SetAABB(collisionAABB);
+	collision->SetCenter(center);
+	collision->SetType(type);
+
+	collisions_.push_back(&*collision);
 }
 
-void CollisionManager::PlayerBulletAndEnemy(Player* player, std::shared_ptr<BaseEnemy> enemy) {
-	for (auto& bullet : player->GetBullets()) {
-		if (IsCollisionAABB(bullet->GetAABB(), enemy->GetAABB()) && !enemy->GetIsDead()) {
-			enemy->IsDamage();//敵にダメージ
-			bullet->IsHit();//弾の消滅
-		}
+void CollisionManager::CreateStageCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type) {
+
+	if (isAlreadyInStage_) {
+		stageCollisions_.clear();
+		isAlreadyInStage_ = false;
 	}
+
+	std::unique_ptr<CollisionSource> collision;
+	collision = std::make_unique<CollisionSource>();
+
+	collision->SetAABB(collisionAABB);
+	collision->SetCenter(center);
+	collision->SetType(type);
+
+	stageCollisions_.push_back(std::move(collision));
 }
 
-void CollisionManager::EnemyBulletAndPlayer(Player* player, std::shared_ptr<EnemyBullet> bulletE) {
-	//傘の当たり判定
-	if (IsCollisionAABB(bulletE->GetAABB(), player->GetUmbrella()->GetAABB()) && player->GetIsShield()) {
-		//パリィフラグが立ってるなら
-		if (player->GetIsParry()) {
-			bulletE->Parry_Mode();//弾が跳ね返る(敵に当たるとダメージ判定になる)
-			player->ParrySuccess();//パリィ成功
-		}
-		else {//跳ね返さず防ぐのみ
-			bulletE->IsHit();//当たって消える
-			player->KnockBackUmbrella(kUmbrellaKnockBackPower_, kUmbrellaKnockBackTime_);//ノックバックする
-		}
-		player->IsShieldMotion();//傘のリアクションフラグをtrueに
+void CollisionManager::CollisionUpdate() {
+
+	isAlreadyInStage_ = true;
+
+	for (auto& stageCollision : stageCollisions_) {
+		collisions_.push_back(&*stageCollision);
 	}
 
-	//プレイヤーの当たり判定
-	if (IsCollisionAABB(bulletE->GetAABB(), player->GetAABB()) && !player->GetIsDead()) {
-		bulletE->IsHit();//当たって消える
-		player->IsDamage(bulletE->GetDistance());//プレイヤーにダメージ
-	}
-}
-
-void CollisionManager::EnemyBombCollision(Player* player, std::shared_ptr<BaseEnemy> enemy) {
-	//敵(ボム)の爆発の当たり判定
-	if (IsCollisionAABB(enemy->GetBombAABB(), player->GetAABB()) && enemy->IsExplosion()) {
-		player->IsDamage(enemy->GetDistance());//プレイヤーにダメージ	
-	}
-}
-
-void CollisionManager::EnemyAndParryBullet(std::shared_ptr<BaseEnemy> enemy, std::shared_ptr<EnemyBullet> bulletE) {
-	//跳ね返った弾の当たり判定
-	if (IsCollisionAABB(bulletE->GetAABB(), enemy->GetAABB()) && bulletE->GetIsParry() && !enemy->GetIsDead()) {
-		bulletE->IsHit();//当たって消える
-		enemy->IsDamage();//敵にダメージ
-	}
-}
-
-void CollisionManager::PlayerAndStageObject(Player* player,
-	const std::list<std::shared_ptr<IStageObject>>& stageObjects) {
-	// - ステージオブジェクト -
-	for (auto& stageObject : stageObjects) {
-		if (IsCollisionAABB(player->GetAABB(), stageObject->GetAABB())) {
-			//チェックポイント
-			if (stageObject->GetObjectName() == "Checkpoint") {
-				player->SetInit_Position(stageObject->GetPosition(), player->GetRotate());
+	for (uint32_t i = 0; i < collisions_.size();i++) {
+		for (uint32_t j = 0; j < collisions_.size(); j++) {
+			//iとjが同じ値ではしない(自分自身なので)
+			if (i == j) {
+				continue;
 			}
-			//ゴール
-			else if (stageObject->GetObjectName() == "Goal" && 
-				(Input::GetInstance().TriggerKey(DIK_E) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_Y))) {
-				isGoal_ = true;
-			}
-			//stageObjectsの中でワープゲートである場合
-			else if (stageObject->GetObjectName() == "WarpGate" && 
-				(Input::GetInstance().TriggerKey(DIK_E) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_Y))) {
-				//プレイヤーとワープゲートの当たり判定 + Eキーを押した時
-				isWarp_ = true;
-				//次のステージに持ってくる情報
-				NextStageSave::GetInstance().SetNextStageFile(stageObject->GetNextStage());
-				player->IsGround(true);
-				break;
-			}
-			else if (stageObject->GetObjectName() == "MoveGround") {
-				player->IsGround(true);
+			//当たり判定
+			if (IsCollisionAABB(collisions_[i]->GetAABB(), collisions_[j]->GetAABB()) && collisions_[i]->GetType() != collisions_[j]->GetType()) {
+				EachCollision(*collisions_[i], *collisions_[j]);
 			}
 		}
 	}
+	//リセット
+	collisions_.clear();
 }
 
-void CollisionManager::PlayerAndStage(Player* player, const std::vector<AABB>& stagesAABB) {
-	// - プレイヤーとステージ -
-	GameActorAndStageCollision(*player, stagesAABB);
-	// - 弾とステージ -
-	for (auto& stage : stagesAABB) {
-		//プレイヤーの弾丸
-		for (auto& bullet : player->GetBullets()) {
-			if (IsCollisionAABB(bullet->GetAABB(), stage)) {
-				bullet->IsHit();//弾の消滅
-			}
-		}
-	}
-
-	// - 影とステージの当たり判定 -
-	Vector3 shadowPos = {};
-	shadowPos = UnderCollision(stagesAABB, player->GetShadowAABB(), player->GetTranslate());
-
-	player->SetShadowPosition(shadowPos);
-	player->ShadowUpdate();
+void CollisionManager::EachCollision(CollisionSource& collisionA, CollisionSource& collisionB) {
+	//プレイヤー
+	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::enemyBullet);
+	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::enemyEye);
+	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::boss);
+	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::bombExplotion); 
+	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::stage);
+	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::event);
+	//弾丸(player)
+	DetermineType(collisionA,CollisionTypes::playerBullet,collisionB,CollisionTypes::stage);
+	//傘
+	DetermineType(collisionA, CollisionTypes::umbrella, collisionB, CollisionTypes::enemyBullet);
+	DetermineType(collisionA, CollisionTypes::umbrellaParry, collisionB, CollisionTypes::enemyBullet);
+	//敵
+	DetermineType(collisionA, CollisionTypes::enemy, collisionB, CollisionTypes::playerBullet);
+	DetermineType(collisionA, CollisionTypes::enemy, collisionB, CollisionTypes::parryBullet);
+	DetermineType(collisionA, CollisionTypes::enemy, collisionB, CollisionTypes::stage);
+	//敵のサーチ範囲
+	DetermineType(collisionA, CollisionTypes::enemyEye, collisionB, CollisionTypes::player);
+	DetermineType(collisionA, CollisionTypes::enemyEye, collisionB , CollisionTypes::stage);
+	//弾丸(enemy)
+	DetermineType(collisionA, CollisionTypes::enemyBullet, collisionB, CollisionTypes::stage);
+	//ステージオブジェクト
+	DetermineType(collisionA, CollisionTypes::stageObject, collisionB, CollisionTypes::player);
+	//ボス
+	DetermineType(collisionA, CollisionTypes::boss, collisionB, CollisionTypes::playerBullet);
 }
 
-void CollisionManager::EnemyAndStage(const std::vector<std::shared_ptr<BaseEnemy>>& enemies,
-	const std::vector<AABB>& stagesAABB) {
-	// - 敵とステージ -
-	for (auto& enemy : enemies) {
-		GameActorAndStageCollision(*enemy.get(), stagesAABB);
-	}
-
-	// - 弾とステージ -
-	for (auto& stage : stagesAABB) {
-		//敵の弾丸
-		for (auto& enemy : enemies) {
-			for (auto& bulletE : enemy->GetBullets()) {
-				if (IsCollisionAABB(bulletE->GetAABB(), stage)) {
-					bulletE->IsHit();//弾の消滅
-				}
-			}
-		}
-	}
-
-	// - 影とステージの当たり判定 -
-	Vector3 shadowPos = {};
-	for (auto& enemy : enemies) {
-		shadowPos = UnderCollision(stagesAABB, enemy->GetShadowAABB(), enemy->GetTranslate());
-
-		enemy->SetShadowPosition(shadowPos);
-		enemy->ShadowUpdate();
+void CollisionManager::DetermineType(CollisionSource& collisionA, const CollisionTypes& typeA, CollisionSource& collisionB, const CollisionTypes& typeB) {
+	if (collisionA.GetType() == typeA && collisionB.GetType() == typeB) {
+		collisionA.OnCollision(&collisionB);
+		collisionB.OnCollision(&collisionA);
 	}
 }
 
-void CollisionManager::BossAndPlayer(Player& player, Boss& boss) {
-	//プレイヤーがボスに当たった時
-	if (IsCollisionAABB(player.GetAABB(), boss.GetAABB()) && !boss.IsDeadMotion()) {
-		player.IsDamage(Length(player.GetTranslate(),boss.GetTranslate()));
-	}
-
-	//
-	for (auto& playerBullet : player.GetBullets()) {
-		if (IsCollisionAABB(playerBullet->GetAABB(), boss.GetAABB())) {
-			//ボスのダメージ
-			playerBullet->IsHit();//消滅
-			boss.IsDamage();
-		}
-	}
-
-	//
-	for (auto& bossBullet : boss.GetBullets()) {
-		//敵がプレイヤーの弾に当たったら
-		EnemyBulletAndPlayer(&player, bossBullet);
-
-		//跳ね返った弾の当たり判定
-		if (IsCollisionAABB(bossBullet->GetAABB(), boss.GetAABB()) && bossBullet->GetIsParry()) {
-			bossBullet->IsHit();//当たって消える
-			boss.IsDamage();
-		}
-	}
-}
-
-
-void CollisionManager::PlayerAndEventTrigger(Player* player, const std::vector<std::shared_ptr<EventTrigger>>& eventTriggers,
-	CameraControl* cameraControl_, LevelEditor& levelEditor) {
-	CollisionOverlap playerCollisionOverlap;
-	playerCollisionOverlap = SetTarget(player->GetTranslate(), player->GetAABB());
-
-	// - イベントトリガー -
-	for (auto& eventTrigger : eventTriggers) {
-		EventData data = eventTrigger->GetEventData();
-
-		//イベントが終了した時(順番3)
-		if (eventTrigger->EventEnd()) {
-			//一瞬だけ通す
-			if (cameraControl_->IsFixed()) {
-				cameraControl_->FixedMode(false);//カメラを固定しない
-				cameraControl_->CameraInterpolation(levelEditor.GetLevelData()->cameraInit["MainCamera"], false);//メインカメラに戻す
-			}
-		}
-		//イベントが発動している時(順番2)
-		else if (data.isEvent) {
-			Vector3 move_range = player->GetTranslate();
-			Vector3 size = player->GetScale();
-			//動ける範囲制限
-			move_range.x = std::clamp(move_range.x, data.aabb.min.x + size.x, data.aabb.max.x - size.x);
-			move_range.y = std::clamp(move_range.y, data.aabb.min.y + size.y, data.aabb.max.y - size.y);
-			move_range.z = std::clamp(move_range.z, data.aabb.min.z + size.z, data.aabb.max.z - size.z);
-			player->SetTranslate(move_range);
-		}
-		//イベントトリガーに入った直前(順番1)
-		else if (IsCollisionAABB(player->GetAABB(), data.aabb)) {
-			cameraControl_->CameraInterpolation(levelEditor.GetLevelData()->cameraInit[data.cameraName], true);
-			eventTrigger->StartEvent();
-		}
-	}
-}
 
 Vector3 CollisionManager::UnderCollision(const std::vector<AABB>& stageAABB, const AABB& shadowAABB, const Vector3& position) const {
 
@@ -273,39 +148,25 @@ Vector3 CollisionManager::UnderCollision(const std::vector<AABB>& stageAABB, con
 	return result;
 }
 
-void CollisionManager::GameActorAndStageCollision(GameActor& gameActor, const std::vector<AABB>& stagesAABB) {
-	CollisionOverlap collisionOverlap;
-	collisionOverlap = SetTarget(gameActor.GetTranslate(), gameActor.GetAABB());
+void CollisionManager::GameActorAndStageCollision(CollisionOverlap& collisionOverlap, GameActor& gameActor, GravityActor& gravityActor, const AABB& otherCollisionAABB) {
+
+	//両方ともtrueの時
+	if (collisionOverlap.isWall && collisionOverlap.isGround) {
+		return;
+	}
+
 	//演出や死んだときは発動しない
 	if (!gameActor.GetIsDead() && !gameActor.GetPerformanceMode()) {
-		StageCollisions(collisionOverlap, stagesAABB);
+		collisionOverlap.stageAABB = otherCollisionAABB;
+		//重なった部分
+		collisionOverlap.overlap = OverAABB(collisionOverlap.targetAABB, otherCollisionAABB);
+		//場所を戻す・壁と床の判定
+		BackPosition(collisionOverlap);
 	}
 	//地面にいる判定(床の判定がtrueの場合)
-	gameActor.IsGround(collisionOverlap.isGround);
+	gravityActor.IsGround(collisionOverlap.isGround);
 	//戻った場所を代入
 	gameActor.SetTranslate(collisionOverlap.position);
-}
-
-void CollisionManager::StageCollisions(CollisionOverlap& collisionOverlap , const std::vector<AABB>& stagesAABB) {
-
-	//プレイヤーとステージ
-	for (auto& stage : stagesAABB) {
-		//当たり判定AABBが作動した時
-		if (IsCollisionAABB(collisionOverlap.targetAABB, stage)) {
-
-			//ステージ判定代入
-			collisionOverlap.stageAABB = stage;
-			//重なった部分
-			collisionOverlap.overlap = OverAABB(collisionOverlap.targetAABB, stage);
-			//場所を戻す・壁と床の判定
-			BackPosition(collisionOverlap);
-
-			//両方ともtrueの時
-			if (collisionOverlap.isWall && collisionOverlap.isGround) {
-				break;
-			}
-		}
-	}
 }
 
 void CollisionManager::BackPosition(CollisionOverlap& collisionOverlap) {
@@ -349,11 +210,4 @@ CollisionOverlap CollisionManager::SetTarget(const Vector3& position, const AABB
 	result.isWall = false;     //壁判定フラグ
 
 	return result;
-}
-
-void CollisionManager::ResetFlag() {
-	//ゴールした時フラグ
-	isGoal_ = false;
-	//ワープで次のステージに進むフラグ
-	isWarp_ = false;
 }

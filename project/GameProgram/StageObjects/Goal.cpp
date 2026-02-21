@@ -1,4 +1,5 @@
 #include "Goal.h"
+#include "CollisionManager.h"
 
 using namespace MyMath;
 
@@ -13,13 +14,26 @@ void Goal::Initialize(){
 	object_->Initialize();
 	object_->SetModelFile("goal.obj");
 
+	collisionType_ = CollisionTypes::stageObject;
 }
 	
 void Goal::Update(){
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
+
+	//当たり判定設定
+	collisionAABB_.min = transform_.translate - colliderSize_;
+	collisionAABB_.max = transform_.translate + colliderSize_;
+	center_ = transform_.translate;
+
+	CollisionManager::GetInstance().AddCollisions(this);
 }
 	
 void Goal::Draw(){
 	object_->Draw();
 }
+
+void Goal::OnCollision(CollisionSource* collision) {
+
+}
+

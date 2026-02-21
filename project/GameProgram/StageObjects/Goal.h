@@ -12,4 +12,5 @@ public:
 	void Update() override;
 	void Draw() override;
 private:
+	void OnCollision(CollisionSource* collision) override;
 };

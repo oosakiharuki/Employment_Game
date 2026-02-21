@@ -18,7 +18,7 @@ void SpitOutLevelEditor::CameraStartPointPlayer(std::unique_ptr<CameraControl>& 
 
 void SpitOutLevelEditor::SpitOutPlayer(std::unique_ptr<Player>& player) {
 	//プレイヤーの体力を上書き
-	player->Initialize();//初期設定
+	//player->Initialize();//初期設定
 
 	//プレイヤー配置データがあるときプレイヤーを配置
 	if (!levelEditor_->GetLevelData()->players.empty()) {
@@ -27,7 +27,7 @@ void SpitOutLevelEditor::SpitOutPlayer(std::unique_ptr<Player>& player) {
 		player->SetTranslate(playerData.transform.translate);//座標
 		player->SetRotate(playerData.transform.rotate);//向き
 		player->SetUmbrellaRotate();//傘の向き
-		player->SetAABB(playerData.colliderAABB);//当たり判定
+		player->SetColliderSize(playerData.colliderSize);//当たり判定
 		//初期状態(位置、回転)設定
 		player->SetInit_Position(playerData.transform.translate, playerData.transform.rotate);
 	}
@@ -59,9 +59,9 @@ void SpitOutLevelEditor::SpitOutEnemies(std::vector<std::shared_ptr<BaseEnemy>>&
 			//初期状態(位置、回転)設定
 			enemy->SetInit_Position(enemyData.transform.translate, enemyData.transform.rotate);
 
-			enemy->SetAABB(enemyData.colliderAABB);//当たり判定
-			enemy->SetRouteLeftPoint(enemyData.leftPoint);//移動ポイント1
-			enemy->SetRouteRightPoint(enemyData.rightPoint);//移動ポイント2 (leftPoint < rightPoint)
+			enemy->SetColliderSize(enemyData.colliderSize);//当たり判定
+			//enemy->SetRouteLeftPoint(enemyData.leftPoint);//移動ポイント1
+			//enemy->SetRouteRightPoint(enemyData.rightPoint);//移動ポイント2 (leftPoint < rightPoint)
 			//オブジェクト向き
 			enemy->DirectionDegree();
 			//vectorに代入
@@ -70,7 +70,7 @@ void SpitOutLevelEditor::SpitOutEnemies(std::vector<std::shared_ptr<BaseEnemy>>&
 	}
 }
 
-void SpitOutLevelEditor::SpitOutStage(std::unique_ptr<Object3d>& stageObj, const std::string& stageFileName, std::vector<AABB>& stagesAABB) {
+void SpitOutLevelEditor::SpitOutStage(std::unique_ptr<Object3d>& stageObj, const std::string& stageFileName) {
 	//- ステージ全体の当たり判定設定 -
 	// 
 	//ステージ自体の見た目
@@ -85,10 +85,10 @@ void SpitOutLevelEditor::SpitOutStage(std::unique_ptr<Object3d>& stageObj, const
 			Vector3 position = object.transform.translate;
 			//AABBの大きさ
 			AABB aabb{};
-			aabb.min = position + object.colliderAABB.min;
-			aabb.max = position + object.colliderAABB.max;
+			aabb.min = position - object.colliderSize;
+			aabb.max = position + object.colliderSize;
 
-			stagesAABB.push_back(aabb);
+			CollisionManager::GetInstance().CreateStageCollision(aabb,position,CollisionTypes::stage);
 		}
 	}
 }
@@ -118,14 +118,6 @@ void SpitOutLevelEditor::SpitOutStageObject(std::list<std::shared_ptr<IStageObje
 				SettingStageObject(*stageObject.get(), stageObjectData);
 				stageObjects.push_back(std::move(stageObject));
 			}
-			else if (stageObjectData.ObjectName == "MoveGround") {
-				//動く足場
-				std::unique_ptr<MoveGround>stageObject = std::make_unique<MoveGround>();
-				SettingStageObject(*stageObject.get(), stageObjectData);
-				//動く足場特有の処理
-				stageObject->SetTravelRoute(stageObjectData.leftPoint, stageObjectData.rightPoint);
-				stageObjects.push_back(std::move(stageObject));
-			}
 		}
 	}
 }
@@ -135,18 +127,21 @@ void SpitOutLevelEditor::SettingStageObject(IStageObject& stageObject, LevelEdit
 	stageObject.Initialize();//初期化
 	stageObject.SetPosition(data.transform.translate);//座標位置
 	stageObject.SetScale(data.transform.scale);
-	stageObject.SetAABB(data.colliderAABB);//AABB
+	stageObject.SetColliderSize(data.colliderSize);//当たり判定の大きさ
 }
 
 
-void SpitOutLevelEditor::SpitOutEventTrigger(std::vector<std::shared_ptr<EventTrigger>>& eventTriggers) {
+void SpitOutLevelEditor::SpitOutEventTrigger(std::list<std::shared_ptr<EventTrigger>>& eventTriggers) {
 	//- イベントトリガー配置 -
 	//イベントトリガー配置データがあるとき
 	if (!levelEditor_->GetLevelData()->eventTriggerDatas.empty()) {
 		for (auto& eventTriggerData : levelEditor_->GetLevelData()->eventTriggerDatas) {
 			EventData iterator;
-			iterator.aabb = eventTriggerData.collisionAABB;//当たり判定
 			iterator.center = eventTriggerData.center;//真ん中座標
+			
+			iterator.aabb.min = iterator.center - eventTriggerData.colliderSize;//当たり判定
+			iterator.aabb.max = iterator.center + eventTriggerData.colliderSize;//当たり判定
+			
 			iterator.size = eventTriggerData.size;//大きさ(フィールドを囲うオブジェクト用に使う)
 			iterator.csvFile = eventTriggerData.csvFile;//csvを読み取る
 			iterator.cameraName = eventTriggerData.cameraName;//カメラの変更
@@ -170,7 +165,7 @@ void SpitOutLevelEditor::SpitOutBoss(std::unique_ptr<Boss>& boss) {
 		auto& bossData = levelEditor_->GetLevelData()->bosses[0];
 		//boss->SetTranslate(bossData.transform.translate);
 		boss->SetTransform(bossData.transform);
-		boss->SetAABB(bossData.colliderAABB);
+		boss->SetColliderSize(bossData.colliderSize);
 	}
 }
 

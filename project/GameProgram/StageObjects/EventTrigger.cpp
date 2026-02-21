@@ -13,33 +13,43 @@ void EventTrigger::Initialize() {
 	object_ = std::make_unique<Object_glTF>();
 	object_->Initialize();
 	object_->SetModelFile("EventGate.gltf");
+
+	collisionType_ = CollisionTypes::event;
 }
 
 void EventTrigger::Update() {
-	if (eventData_.isEvent) {
-		if (isLoadCsv_) {
-			//Csvを読み込む
-			LoadEventCSV(eventData_.csvFile);
-		}
-		//敵召喚
-		PopEventEneies();
-		
-		//範囲のオブジェクト
-		transform_.translate = eventData_.center;
-		transform_.scale = eventData_.size * kDivideByTwo_;
-		wt_.UpdateMatrix(transform_);
-		object_->Update(wt_);
+	//当たり判定設定
+	collisionAABB_ = eventData_.aabb;
 
-		for (auto& particle : summon_particles_) {
-			//敵が出るまで
-			(summonTimer_ > 0) ? particle->SetParticleBorn(ParticleBorn::TimerMode) : particle->SetParticleBorn(ParticleBorn::Stop);
-			particle->Update();
-		}
-		//敵が出終わった後ちょっとしてからリセットする
-		if (summonTimer_ <= -particleSummon_.frequency * kTwice_) {
-			summon_particles_.clear();
-		}
+	center_ = transform_.translate;
+	CollisionManager::GetInstance().AddCollisions(this);
+}
+
+void EventTrigger::EventUpdate() {
+	if (isLoadCsv_) {
+		//Csvを読み込む
+		LoadEventCSV(eventData_.csvFile);
 	}
+	//敵召喚
+	PopEventEnemies();
+
+	//範囲のオブジェクト
+	transform_.translate = eventData_.center;
+	transform_.scale = eventData_.size * kDivideByTwo_;
+	wt_.UpdateMatrix(transform_);
+	object_->Update(wt_);
+
+	for (auto& particle : summon_particles_) {
+		//敵が出るまで
+		(summonTimer_ > 0) ? particle->SetParticleBorn(ParticleBorn::TimerMode) : particle->SetParticleBorn(ParticleBorn::Stop);
+		particle->Update();
+	}
+	//敵が出終わった後ちょっとしてからリセットする
+	if (summonTimer_ <= -particleSummon_.frequency * kTwice_) {
+		summon_particles_.clear();
+	}
+
+	EventData data = GetEventData();
 }
 
 void EventTrigger::Draw() {
@@ -71,7 +81,7 @@ void EventTrigger::LoadEventCSV(const std::string& fileName) {
 	isLoadCsv_ = false;
 }
 
-void EventTrigger::PopEventEneies() {
+void EventTrigger::PopEventEnemies() {
 	//敵召喚		
 	EnemyPop();
 
@@ -220,18 +230,14 @@ void EventTrigger::EnemyPop() {
 		popEnemy->SetTranslate(enemyPopData.position);
 		popEnemy->SetRotate(enemyPopData.rotate);
 
-		//敵の当たり判定更新
-		AABB aabb;
-		aabb.min = -kAABBSize_ * kDivideByTwo_;
-		aabb.max = kAABBSize_ * kDivideByTwo_;
-
 		//少しだけ動けるように
 		Vector3 move = { kMoveX,0,0 };
 
-		popEnemy->SetAABB(aabb);
-		popEnemy->SetRouteLeftPoint(enemyPopData.position - move);
-		popEnemy->SetRouteRightPoint(enemyPopData.position + move);
-		popEnemy->SetMoveInit(enemyPopData.position);
+		//敵の当たり判定更新
+		popEnemy->SetColliderSize(kAABBSize_ * kDivideByTwo_);
+		//popEnemy->SetRouteLeftPoint(enemyPopData.position - move);
+		//popEnemy->SetRouteRightPoint(enemyPopData.position + move);
+		//popEnemy->SetMoveInit(enemyPopData.position);
 
 		popEnemy->DirectionDegree();
 
@@ -261,3 +267,47 @@ void EventTrigger::FailureEvent() {
 	enemyPopCsvFile_.seekg(0, std::ios_base::beg);
 
 }
+
+void EventTrigger::OnCollision(CollisionSource* collision) {
+	if (collision->GetType() == CollisionTypes::player) {
+		//cameraControl_->CameraInterpolation(levelEditor.GetLevelData()->cameraInit[data.cameraName], true);
+		StartEvent();
+	}
+
+}
+
+//
+//void CollisionManager::PlayerAndEventTrigger(Player* player, const std::vector<std::shared_ptr<EventTrigger>>& eventTriggers,
+//	CameraControl* cameraControl_, LevelEditor& levelEditor) {
+//	CollisionOverlap playerCollisionOverlap;
+//	playerCollisionOverlap = SetTarget(player->GetTranslate(), player->GetAABB());
+//
+//	// - イベントトリガー -
+//	for (auto& eventTrigger : eventTriggers) {
+//		EventData data = eventTrigger->GetEventData();
+//
+//		//イベントが終了した時(順番3)
+//		if (eventTrigger->EventEnd()) {
+//			//一瞬だけ通す
+//			if (cameraControl_->IsFixed()) {
+//				cameraControl_->FixedMode(false);//カメラを固定しない
+//				cameraControl_->CameraInterpolation(levelEditor.GetLevelData()->cameraInit["MainCamera"], false);//メインカメラに戻す
+//			}
+//		}
+//		//イベントが発動している時(順番2)
+//		else if (data.isEvent) {
+//			Vector3 move_range = player->GetTranslate();
+//			Vector3 size = player->GetScale();
+//			//動ける範囲制限
+//			move_range.x = std::clamp(move_range.x, data.aabb.min.x + size.x, data.aabb.max.x - size.x);
+//			move_range.y = std::clamp(move_range.y, data.aabb.min.y + size.y, data.aabb.max.y - size.y);
+//			move_range.z = std::clamp(move_range.z, data.aabb.min.z + size.z, data.aabb.max.z - size.z);
+//			player->SetTranslate(move_range);
+//		}
+//		//イベントトリガーに入った直前(順番1)
+//		else if (IsCollisionAABB(player->GetAABB(), data.aabb)) {
+//			cameraControl_->CameraInterpolation(levelEditor.GetLevelData()->cameraInit[data.cameraName], true);
+//			eventTrigger->StartEvent();
+//		}
+//	}
+//}

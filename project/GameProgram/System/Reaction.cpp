@@ -4,36 +4,29 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-void Reaction::ScaleReaction(Vector3& value, bool& mosionOn, const Vector3& power, float& timer, float maxTime) {
+void Reaction::ScaleReaction(Vector3& value, bool& motionOn, const Vector3& power, float& timer, float maxTime) {
+	if (!motionOn) return;
 	//時間が半分になったら
 	ReturnHalfTime(value, power, timer, maxTime);
 
 	//経過時間がたったら終了
 	if (timer >= maxTime) {
-		//時間を初期値(0)にする
-		timer = 0.0f;
-		//元の大きさに{1,1,1}
-		value = kDefaultScale_;
-		//モーションを終了する
-		mosionOn = false;
+		Finish(value, kDefaultScale_, timer, motionOn);
 	}
 
 	//時間がが進む
 	timer += kDeltaTime_;
 }
 
-void Reaction::FoundReaction(Vector3& value, bool& mosion, const Vector3& power, float& timer, float maxTime, const Vector3& prePosition) {
+void Reaction::FoundReaction(Vector3& value, bool& motion, const Vector3& power, float& timer, float maxTime, const Vector3& prePosition) {
+	if (!motion) return;
+
 	//時間が半分になったら
 	ReturnHalfTime(value, power, timer, maxTime);
 
 	//経過時間がたったら終了
 	if (timer >= maxTime) {
-		//時間を初期値(0)にする
-		timer = 0.0f;
-		//元の位置に
-		value = prePosition;
-		//モーションを終了する
-		mosion = false;
+		Finish(value, prePosition, timer, motion);
 	}
 
 	timer += kDeltaTime_;
@@ -49,4 +42,13 @@ void Reaction::ReturnHalfTime(Vector3& value, const Vector3& power, float& timer
 		//値を足す
 		value += power;
 	}
+}
+
+void Reaction::Finish(Vector3& value, const Vector3& prePosition, float& timer, bool& flag) {
+	//時間を初期値(0)にする
+	timer = 0.0f;
+	//元の値に
+	value = prePosition;
+	//モーションを終了する
+	flag = false;
 }

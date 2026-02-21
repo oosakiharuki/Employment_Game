@@ -273,25 +273,25 @@
     <ClCompile Include="Engine\3d\DebugWireframes.cpp">
       <Filter>ソース ファイル\Engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Enemies\Enemy_Soldier.cpp">
+    <ClCompile Include="GameProgram\GameActor\Enemies\Enemy_Soldier.cpp">
       <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Enemies\Enemy_Turret.cpp">
+    <ClCompile Include="GameProgram\GameActor\Enemies\Enemy_Turret.cpp">
       <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Enemies\EnemyBullet.cpp">
+    <ClCompile Include="GameProgram\GameActor\Enemies\EnemyBullet.cpp">
       <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Enemies\BaseEnemy.cpp">
+    <ClCompile Include="GameProgram\GameActor\Enemies\BaseEnemy.cpp">
       <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Player\Player.cpp">
+    <ClCompile Include="GameProgram\GameActor\Player\Player.cpp">
       <Filter>ソース ファイル\GameProgram\Player</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Player\PlayerBullet.cpp">
+    <ClCompile Include="GameProgram\GameActor\Player\PlayerBullet.cpp">
       <Filter>ソース ファイル\GameProgram\Player</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Player\Umbrella.cpp">
+    <ClCompile Include="GameProgram\GameActor\Player\Umbrella.cpp">
       <Filter>ソース ファイル\GameProgram\Player</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\Primitive\Primitive.cpp">
@@ -303,7 +303,7 @@
     <ClCompile Include="GameProgram\StageObjects\WarpGate.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Enemies\Enemy_Bomb.cpp">
+    <ClCompile Include="GameProgram\GameActor\Enemies\Enemy_Bomb.cpp">
       <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Scene\ClearScene.cpp">
@@ -357,13 +357,13 @@
     <ClCompile Include="GameProgram\System\LoadingModels.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\System\Shadow.cpp">
+    <ClCompile Include="GameProgram\GameActor\Shadow.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\System\NextStageSave.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\System\GameActor.cpp">
+    <ClCompile Include="GameProgram\GameActor\GameActor.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\System\ParticleEmitter.cpp">
@@ -387,19 +387,19 @@
     <ClCompile Include="Engine\3d\BaseObject.cpp">
       <Filter>ソース ファイル\Engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Enemies\BaseEnemyState.cpp">
+    <ClCompile Include="GameProgram\GameActor\Enemies\BaseEnemyState.cpp">
       <Filter>ソース ファイル\GameProgram\Enemies</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Player\BasePlayerState.cpp">
+    <ClCompile Include="GameProgram\GameActor\Player\BasePlayerState.cpp">
       <Filter>ソース ファイル\GameProgram\Player</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\StageObjectFunction.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Boss\Boss.cpp">
+    <ClCompile Include="GameProgram\GameActor\Boss\Boss.cpp">
       <Filter>ソース ファイル\GameProgram\Boss</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Boss\BaseBossState.cpp">
+    <ClCompile Include="GameProgram\GameActor\Boss\BaseBossState.cpp">
       <Filter>ソース ファイル\GameProgram\Boss</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\LevelEditor\SpitOutLevelEditor.cpp">
@@ -408,10 +408,7 @@
     <ClCompile Include="GameProgram\MyGame.cpp">
       <Filter>ソース ファイル\GameProgram</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\StageObjects\MoveGround.cpp">
-      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\System\VisualActor.cpp">
+    <ClCompile Include="GameProgram\GameActor\VisualActor.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
     <ClCompile Include="Engine\scene\AbstractSceneFactory.cpp">
@@ -428,6 +425,21 @@
     </ClCompile>
     <ClCompile Include="GameProgram\System\PauseScreen.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Enemies\EnemyCommand.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\GravityActor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\ActorState.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Collision\CollisionSource.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Enemies\EnemyEye.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -575,28 +587,28 @@
     <ClInclude Include="Engine\PostEffect\Vignette.h">
       <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Enemies\Enemy_Soldier.h">
+    <ClInclude Include="GameProgram\GameActor\Enemies\Enemy_Soldier.h">
       <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Enemies\Enemy_Bomb.h">
+    <ClInclude Include="GameProgram\GameActor\Enemies\Enemy_Bomb.h">
       <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Enemies\Enemy_Turret.h">
+    <ClInclude Include="GameProgram\GameActor\Enemies\Enemy_Turret.h">
       <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Enemies\EnemyBullet.h">
+    <ClInclude Include="GameProgram\GameActor\Enemies\EnemyBullet.h">
       <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Enemies\BaseEnemy.h">
+    <ClInclude Include="GameProgram\GameActor\Enemies\BaseEnemy.h">
       <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Player\Player.h">
+    <ClInclude Include="GameProgram\GameActor\Player\Player.h">
       <Filter>ヘッダー ファイル\GameProgram\Player</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Player\PlayerBullet.h">
+    <ClInclude Include="GameProgram\GameActor\Player\PlayerBullet.h">
       <Filter>ヘッダー ファイル\GameProgram\Player</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Player\Umbrella.h">
+    <ClInclude Include="GameProgram\GameActor\Player\Umbrella.h">
       <Filter>ヘッダー ファイル\GameProgram\Player</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\Scene\ClearScene.h">
@@ -644,7 +656,7 @@
     <ClInclude Include="GameProgram\Collision\CollisionManager.h">
       <Filter>ヘッダー ファイル\GameProgram\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\System\Shadow.h">
+    <ClInclude Include="GameProgram\GameActor\Shadow.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\System\LoadingModels.h">
@@ -659,7 +671,7 @@
     <ClInclude Include="GameProgram\System\NextStageSave.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\System\GameActor.h">
+    <ClInclude Include="GameProgram\GameActor\GameActor.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\System\ParticleEmitter.h">
@@ -683,19 +695,19 @@
     <ClInclude Include="Engine\3d\BaseObject.h">
       <Filter>ヘッダー ファイル\Engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Enemies\BaseEnemyState.h">
+    <ClInclude Include="GameProgram\GameActor\Enemies\BaseEnemyState.h">
       <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Player\BasePlayerState.h">
+    <ClInclude Include="GameProgram\GameActor\Player\BasePlayerState.h">
       <Filter>ヘッダー ファイル\GameProgram\Player</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\StageObjects\StageObjectFunction.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Boss\Boss.h">
+    <ClInclude Include="GameProgram\GameActor\Boss\Boss.h">
       <Filter>ヘッダー ファイル\GameProgram\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Boss\BaseBossState.h">
+    <ClInclude Include="GameProgram\GameActor\Boss\BaseBossState.h">
       <Filter>ヘッダー ファイル\GameProgram\Boss</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\LevelEditor\SpitOutLevelEditor.h">
@@ -704,10 +716,7 @@
     <ClInclude Include="GameProgram\MyGame.h">
       <Filter>ヘッダー ファイル\GameProgram</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\StageObjects\MoveGround.h">
-      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\System\VisualActor.h">
+    <ClInclude Include="GameProgram\GameActor\VisualActor.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
     <ClInclude Include="Engine\scene\BaseScene.h">
@@ -724,6 +733,21 @@
     </ClInclude>
     <ClInclude Include="GameProgram\System\BasePauseState.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Enemies\EnemyCommand.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\GravityActor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\ActorState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Collision\CollisionSource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Enemies\EnemyEye.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

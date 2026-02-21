@@ -61,11 +61,6 @@ private:
 	/// ゲームオブジェクトの配置処理をまとめた
 	/// </summary>
 	void SpitOutGameObject();
-	
-	/// <summary>
-	/// 全シーンに共有できる当たり判定
-	/// </summary>
-	void CollisionCommon();
 
 	//説明ガイドの初期座標と大きさ
 	const Vector2 kSpriteSize_ = { 128,64 };

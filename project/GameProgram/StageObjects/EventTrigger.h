@@ -7,6 +7,8 @@
 #include "Enemy_Soldier.h"
 #include "Enemy_Turret.h"
 
+#include "CollisionManager.h"
+
 /// <summary>
 /// イベントの構造体
 /// </summary>
@@ -25,7 +27,7 @@ struct EnemyPopData {
 	std::string enemyName;
 };
 
-class EventTrigger {
+class EventTrigger : public CollisionSource {
 public:
 
 	/// <summary>
@@ -40,6 +42,12 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw();
+
+
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void EventUpdate();
 
 	/// <summary>
 	/// 描画処理_パーティクル
@@ -56,7 +64,7 @@ public:
 	/// 敵をcsvで召喚設備
 	/// </summary>
 	/// <param name="eventTrigger"></param>
-	void PopEventEneies();
+	void PopEventEnemies();
 
 	/// <summary>
 	/// 敵の召喚処理
@@ -105,6 +113,8 @@ public:
 	bool EventEnd() { return isEventEnd_; }
 
 private:
+
+	void OnCollision(CollisionSource* collision) override;
 
 	/// <summary>
 	/// 召喚した敵を数えて

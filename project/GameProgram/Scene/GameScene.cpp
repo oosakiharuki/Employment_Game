@@ -30,14 +30,14 @@ void GameScene::Initialize() {
 
 	//フェードスタート
 	FadeScreen::GetInstance().FadeStart(type_fadeOut);
-	//ワープやゴールのフラグをオフ
-	CollisionManager::GetInstance().ResetFlag();
 
 	backGround = std::make_unique<BackGroundObject>();
 	backGround->Initialize();
 
 	//ポーズ画面
 	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnSelect.png","Select");
+
+	CollisionManager::GetInstance().ResetFrag();
 }
 
 void GameScene::Update() {
@@ -62,7 +62,7 @@ void GameScene::Update() {
 	//プレイヤー更新処理
 	player_->Update();
 
-
+	
 	//プレイヤーがゴールした
 	if (CollisionManager::GetInstance().IsGoal()) {
 		PlayerGoal();
@@ -149,21 +149,28 @@ void GameScene::PlayerAliveUpdate() {
 
 	//イベントトリガーの更新
 	for (auto& eventTrigger : eventTriggers_) {
-
+		eventTrigger->Update();
 		if (eventTrigger->GetEventData().isEvent) {
 			eventTrigger->SetPopEnemies(enemies_);
-			eventTrigger->Update();
+			eventTrigger->EventUpdate();
 
 			enemies_ = std::move(eventTrigger->GetPopEnemy());
 		}
 	}
+
+	eventTriggers_.remove_if([](auto& event) {
+		if (event->EventEnd()) {
+			return true;
+		}
+		return false;
+	});
 
 	if (boss_) {
 		boss_->SetPlayer(player_.get());
 		boss_->Update();
 	}
 	//使用する当たり判定
-	CollisionCommon();
+	CollisionManager::GetInstance().CollisionUpdate();	
 
 }
 
@@ -277,7 +284,7 @@ void GameScene::SpitOutGameObject() {
 	//プレイヤーを配置
 	spitOut_.SpitOutPlayer(player_);
 	//ステージの当たり判定を設定/配置
-	spitOut_.SpitOutStage(stageObj_, stageFileName_, stagesAABB_);
+	spitOut_.SpitOutStage(stageObj_, stageFileName_);
 	//ステージオブジェクトの配置
 	spitOut_.SpitOutStageObject(stageObjects_);
 	//敵の配置
@@ -287,7 +294,7 @@ void GameScene::SpitOutGameObject() {
 
 	//敵がステージ全体当たり判定をもらう(プレイヤーを見つける処理に使う)
 	for (auto& enemy : enemies_) {
-		enemy->SetStages(stagesAABB_);
+		//enemy->SetStages(stagesAABB_);
 	}
 
 	//ボスの配置
@@ -310,25 +317,6 @@ void GameScene::PlayerGoal() {
 	}
 }
 
-void GameScene::CollisionCommon() {
-	//ゲーム内で使用する当たり判定
-	//プレイヤーと敵
-	CollisionManager::GetInstance().PlayerAndEnemy(player_.get(), enemies_);
-	//プレイヤーとステージ自体
-	CollisionManager::GetInstance().PlayerAndStage(player_.get(), stagesAABB_);
-	//プレイヤーとステージオブジェクト
-	CollisionManager::GetInstance().PlayerAndStageObject(player_.get(), stageObjects_);
-	//プレイヤーとイベントトリガー
-	CollisionManager::GetInstance().PlayerAndEventTrigger(player_.get(), eventTriggers_,cameraControl_.get(), levelEditor_);
-	//敵とステージ自体
-	CollisionManager::GetInstance().EnemyAndStage(enemies_,stagesAABB_);
-
-	if (boss_) {
-		//ボスとプレイヤー
-		CollisionManager::GetInstance().BossAndPlayer(*player_.get(),*boss_.get());
-	}
-}
-
 void GameScene::WaterWarpExit() {
 	
 	//初期化
@@ -348,7 +336,7 @@ void GameScene::WaterWarpExit() {
 	startWarpAABB.min = warpPosition + Vector3{ 0,startPointY_,0 };
 
 	//プレイヤー初期位置の真下に
-	warpPosition = CollisionManager::GetInstance().UnderCollision(stagesAABB_, startWarpAABB, playerPoint_);
+	//warpPosition = CollisionManager::GetInstance().UnderCollision(stagesAABB_, startWarpAABB, playerPoint_);
 	warpPosition.y += kWarpGateUpThanShadow_;//重ならないように影より上にする
 
 	startWarp_->SetPosition(warpPosition);//playerの真下に
