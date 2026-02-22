@@ -100,6 +100,8 @@ void Enemy_Turret::Dead() {
 
 	//死んだリアクション
 	DeadReaction();
+	//弾丸の更新
+	BulletUpdate();
 }
 
 void Enemy_Turret::Performance() {}

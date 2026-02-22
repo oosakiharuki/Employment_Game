@@ -128,12 +128,6 @@ public:
 	void SetRemain(uint32_t remain) { remain_ = remain; }
 
 	/// <summary>
-	/// setter_影の位置
-	/// </summary>
-	/// <param name="position"></param>影の位置の登録
-	void SetShadowPosition(const Vector3& position) { shadow_->SetTranslate(position); }
-
-	/// <summary>
 	/// プレイヤーの向きををカメラに
 	/// </summary>
 	void DirectionTheCamera(){

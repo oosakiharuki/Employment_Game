@@ -78,7 +78,7 @@ void BaseEnemy::Update() {
 
 void BaseEnemy::UpdateBehind() {
 	//影
-	shadow_->SetTranslate(transform_.translate);
+	ShadowUpdate();
 
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
@@ -87,6 +87,9 @@ void BaseEnemy::UpdateBehind() {
 	for (auto& particle : particles_) {
 		particle.second->Update();
 	}
+
+	//死んだときは当たり判定を取らない
+	if (isDead_) return;
 
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate - colliderSize_;
@@ -260,11 +263,4 @@ void BaseEnemy::StatePatternUpdate() {
 void BaseEnemy::ChangeStatePattern(std::unique_ptr<BaseEnemyState> enemyState) {
 	enemyState_.reset();
 	enemyState_ = std::move(enemyState);
-}
-
-void BaseEnemy::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::playerBullet || 
-		collision->GetType() == CollisionTypes::parryBullet) {
-		IsDamage();
-	}
 }

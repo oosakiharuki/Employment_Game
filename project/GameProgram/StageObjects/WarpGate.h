@@ -28,10 +28,22 @@ public:
 	/// ゲートを小さくして消す
 	/// </summary>
 	void Vanish();
+
+	/// <summary>
+	/// ワープの出口モード
+	/// </summary>
+	/// <param name="translate">登場するプレイヤーの位置</param>
+	void WarpExit(const Vector3& translate);
+
 private:
 	
 	void OnCollision(CollisionSource* collision) override;
-	bool a = false;
+
+	/// <summary>
+	/// プレイヤーに触れたワープゲート処理
+	/// </summary>
+	void TouchWarpGate();
+
 	bool scaleFlag_ = false;
 	float scaleTimer_ = 0.0f;
 
@@ -45,5 +57,12 @@ private:
 	const Vector3 kLargeMax_ = { 1.5f, 1.5f, 1.5f };
 
 	bool largeFlag_ = true;
+
+	bool warpExitMode_ = false;
+	float minUnder_ = 1000.0f;
+
+	Vector3 position_;
+
+	const float kLittleUp_ = 0.01f;
 };
 

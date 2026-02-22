@@ -57,7 +57,7 @@ private:
 	const uint32_t kHp_ = 6;
 
 	//攻撃パーティクルの場所
-	Vector3 particlePosition_;
+	Vector3 particlePosition_{};
 
 	//見える範囲初期化
 	const Vector3 kEyeReach_ = { 20, 0.5f, 0.5f };

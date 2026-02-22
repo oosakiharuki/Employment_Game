@@ -59,21 +59,16 @@ void EnemyBullet::Draw() {
 }
 
 void EnemyBullet::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::player ||
-		collision->GetType() == CollisionTypes::stage ||
+	if (collision->GetType() == CollisionTypes::player || collision->GetType() == CollisionTypes::stage ||
 		collision->GetType() == CollisionTypes::umbrella ||
-		(collision->GetType() == CollisionTypes::enemy) && isParry) {
+		(collision->GetType() == CollisionTypes::enemy && collisionType_ == CollisionTypes::parryBullet) || 
+		(collision->GetType() == CollisionTypes::boss && collisionType_ == CollisionTypes::parryBullet)) {
 		//消滅フラグ
 		isDead_ = true;
 	}
 
 	if (collision->GetType() == CollisionTypes::umbrellaParry) {
-		collisionType_ = CollisionTypes::parryBullet;
-		isParry = true;
+		collisionType_ = CollisionTypes::parryBullet;//タイプ変更(パリィ弾)
+		isParry = true;//跳ね返るフラグ
 	}
-}
-
-void EnemyBullet::Parry_Mode() {
-	//跳ね返るフラグ
-	isParry = true;
 }

@@ -50,8 +50,11 @@ void Boss::Update() {
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
 
+	//死んだときは当たり判定を取らない
+	if (isDeadMotion_) return;
+
 	collisionAABB_.max = transform_.translate + colliderSize_;
-	collisionAABB_.min = transform_.translate + colliderSize_;
+	collisionAABB_.min = transform_.translate - colliderSize_;
 	center_ = transform_.translate;
 	//当たり判定設定
 	CollisionManager::GetInstance().AddCollisions(this);

@@ -330,17 +330,10 @@ void GameScene::WaterWarpExit() {
 	//ワープゲート出口の位置決め
 	Vector3 warpPosition = player_->GetTranslate();
 
-	//当たり判定
-	AABB startWarpAABB;
-	startWarpAABB.max = warpPosition;
-	startWarpAABB.min = warpPosition + Vector3{ 0,startPointY_,0 };
-
-	//プレイヤー初期位置の真下に
-	//warpPosition = CollisionManager::GetInstance().UnderCollision(stagesAABB_, startWarpAABB, playerPoint_);
-	warpPosition.y += kWarpGateUpThanShadow_;//重ならないように影より上にする
-
 	startWarp_->SetPosition(warpPosition);//playerの真下に
 	startWarp_->SetRotation({ kStartWarpGateRange_ ,0.0f,0.0f });//下向きにして水たまりに
+
+	startWarp_->WarpExit(playerPoint_);
 
 	player_->IsPerformanceFlag(true);
 }

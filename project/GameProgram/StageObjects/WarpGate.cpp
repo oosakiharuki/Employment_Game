@@ -22,21 +22,31 @@ void WarpGate::Initialize() {
 }
 
 void WarpGate::Update() {
-
-	if (scaleFlag_ && transform_.scale != kDefaultScale_ && !largeFlag_) {
-		scaleFlag_ = false;
-		scaleTimer_ = 0.0f;
-	}
+	//プレイヤーに触れたワープゲートの処理
+	TouchWarpGate();
 
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
 
-	//当たり判定設定
-	collisionAABB_.min = transform_.translate - colliderSize_;
-	collisionAABB_.max = transform_.translate + colliderSize_;
+	if (warpExitMode_) {
+		transform_.translate = position_;
+		minUnder_ += kLittleUp_;//影と重ならないように
+		transform_.translate.y = minUnder_;
+
+		//当たり判定設定(ワープ出口版)
+		collisionAABB_.min = transform_.translate - Vector3{ 0, minUnder_,0 };
+		collisionAABB_.max = transform_.translate;
+	}
+	else {
+		//当たり判定設定(通常)
+		collisionAABB_.min = transform_.translate - colliderSize_;
+		collisionAABB_.max = transform_.translate + colliderSize_;
+	}
+
 	center_ = transform_.translate;
 
 	CollisionManager::GetInstance().AddCollisions(this);
+	minUnder_ = 1000.0f;
 }
 
 void WarpGate::Draw() {
@@ -67,17 +77,34 @@ void WarpGate::Vanish() {
 	}
 }
 
-void WarpGate::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::player) {
-		scaleTimer_ += kDeltaTime_ * 2.0f;
-		scaleTimer_ = std::clamp(scaleTimer_, 0.0f, 1.0f);
+void WarpGate::WarpExit(const Vector3& translate) {
+	warpExitMode_ = true;
+	position_ = translate;
+}
 
-		transform_.scale = EaseOut(kDefaultScale_ * 1.5f,kDefaultScale_, scaleTimer_);
+void WarpGate::TouchWarpGate() {
+	//ワープ出口モードの時はしない
+	if (warpExitMode_) return;
+	//触れたら拡大、離れたら縮小
+	(scaleFlag_) ? scaleTimer_ += kDeltaTime_ * 2.0f : scaleTimer_ -= kDeltaTime_ * 2.0f;
+	transform_.scale = EaseOut(kDefaultScale_ * 1.5f, kDefaultScale_, scaleTimer_);
+	
+	scaleTimer_ = std::clamp(scaleTimer_, 0.0f, 1.0f);
+	scaleFlag_ = false;//フラグリセット
+}
+
+
+
+void WarpGate::OnCollision(CollisionSource* collision) {
+	if (collision->GetType() == CollisionTypes::player && !warpExitMode_) {
 		scaleFlag_ = true;
-		if (Input::GetInstance().TriggerKey(DIK_E) || a) {
+		if (Input::GetInstance().TriggerKey(DIK_E)) {
 			CollisionManager::GetInstance().SuccessWarp();
-			NextStageSave::GetInstance().SetNextStageFile(fileName_);
-			a = true;
+			NextStageSave::GetInstance().SetNextStageFile(fileName_);//次のステージの名前を導入
 		}
+	}
+
+	if (collision->GetType() == CollisionTypes::stage && warpExitMode_) {
+		CollisionManager::GetInstance().UnderCollision(minUnder_, position_, collision->GetAABB());
 	}
 }
