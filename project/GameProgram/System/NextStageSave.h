@@ -8,8 +8,9 @@
 struct SceneSaveData {
 	uint32_t playerMaxHp;      //プレイヤーの体力
 	uint32_t playerHp;         //プレイヤーの体力
-	uint32_t playerRemain;       //残り残機
+	uint32_t playerRemain;     //残り残機
 	std::string nextStageFile; //次のステージ名
+	Vector3 checkPoint;        //チェックポイント
 };
 
 class NextStageSave
@@ -54,6 +55,12 @@ public:
 	/// </summary>
 	/// <param name="maxHp"></param>
 	void SetPlayerMaxHp(uint32_t maxHp);
+	
+	/// <summary>
+	/// setter_チェックポイントの位置
+	/// </summary>
+	/// <param name="checkPoint">座標位置を設定</param>
+	void SetCheckPoint(const Vector3& chekcPoint);
 private:
 
 	SceneSaveData sceneSaveData_ = {

@@ -8,6 +8,7 @@
 #include <numbers>
 
 #include "ParticleManager.h"
+#include <NextStageSave.h>
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -191,8 +192,8 @@ void Player::AnimationUpdate() {
 	///アニメーション
 	if (umbrella_->GetShieldMode()) {
 		motionName_ = "shield";
-	}//前回の座標と現在の座標が違う = 動いた場合
-	else if (IsMovePosition()) {
+	}//前回の座標と現在の座標が違う = 動いた場合 + 空中
+	else if (IsMovePosition() || !isGround_) {
 		motionName_ = "move";
 	}
 	else {
@@ -590,10 +591,6 @@ void Player::OnCollision(CollisionSource* collision) {
 		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap,*this, *this,collision->GetAABB());
 	}
 
-	if (collision->GetType() == CollisionTypes::stageObject) {
-		SetInit_Position(collision->GetCenter(), GetRotate());
-	}
-
 	if (collision->GetType() == CollisionTypes::event) {
 		//イベント範囲から出れないように
 		eventMin = collision->GetAABB().min + transform_.scale;
@@ -677,7 +674,8 @@ void Player::RespawnPlayer() {
 	remain_--;
 	//0なら初期位置に戻すなどがいらない
 	if (remain_ != 0) {
-		RespawnCommon();	
+		isDead_ = false; //死亡フラグをなしに
+		hp_ = maxHp_;    //体力を満タンに	
 	}
 
 	deadTimer_ = 0.0f;
@@ -686,6 +684,9 @@ void Player::RespawnPlayer() {
 	eventMin = -kMoveMax_;
 	eventMax = kMoveMax_;
 	isRespawn_ = true;
+
+	transform_.translate = NextStageSave::GetInstance().GetNextStageSaveData().checkPoint;
+	transform_.rotate = { 0,180,0 };
 }
 
 //パリィ成功

@@ -1,5 +1,6 @@
 #include "CheckPoint.h"
 #include "CollisionManager.h"
+#include "NextStageSave.h"
 
 using namespace MyMath;
 
@@ -37,5 +38,6 @@ void CheckPoint::Draw() {
 void CheckPoint::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::player) {
 		transform_.rotate.y += 10.0f;
+		NextStageSave::GetInstance().SetCheckPoint(transform_.translate);
 	}
 }

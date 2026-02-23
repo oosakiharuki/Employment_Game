@@ -17,9 +17,6 @@ void SpitOutLevelEditor::CameraStartPointPlayer(std::unique_ptr<CameraControl>& 
 }
 
 void SpitOutLevelEditor::SpitOutPlayer(std::unique_ptr<Player>& player) {
-	//プレイヤーの体力を上書き
-	//player->Initialize();//初期設定
-
 	//プレイヤー配置データがあるときプレイヤーを配置
 	if (!levelEditor_->GetLevelData()->players.empty()) {
 		//一番最初のデータ位置に配置する
@@ -28,8 +25,7 @@ void SpitOutLevelEditor::SpitOutPlayer(std::unique_ptr<Player>& player) {
 		player->SetRotate(playerData.transform.rotate);//向き
 		player->SetUmbrellaRotate();//傘の向き
 		player->SetColliderSize(playerData.colliderSize);//当たり判定
-		//初期状態(位置、回転)設定
-		player->SetInit_Position(playerData.transform.translate, playerData.transform.rotate);
+		NextStageSave::GetInstance().SetCheckPoint(playerData.transform.translate);//チェックポイント設定
 	}
 }
 
@@ -56,9 +52,6 @@ void SpitOutLevelEditor::SpitOutEnemies(std::vector<std::shared_ptr<BaseEnemy>>&
 			enemy->Initialize();//初期設定
 			enemy->SetTranslate(enemyData.transform.translate);//座標
 			enemy->SetRotate(enemyData.transform.rotate);//向き
-			//初期状態(位置、回転)設定
-			enemy->SetInit_Position(enemyData.transform.translate, enemyData.transform.rotate);
-
 			enemy->SetColliderSize(enemyData.colliderSize);//当たり判定
 			//enemy->SetRouteLeftPoint(enemyData.leftPoint);//移動ポイント1
 			//enemy->SetRouteRightPoint(enemyData.rightPoint);//移動ポイント2 (leftPoint < rightPoint)

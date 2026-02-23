@@ -24,3 +24,7 @@ void NextStageSave::SetPlayerRemain(uint32_t remain) {
 void NextStageSave::SetPlayerMaxHp(uint32_t maxHp) {
 	sceneSaveData_.playerMaxHp = maxHp;
 }
+
+void NextStageSave::SetCheckPoint(const Vector3& checkPoint) {
+	sceneSaveData_.checkPoint = checkPoint;
+}

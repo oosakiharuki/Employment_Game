@@ -11,7 +11,7 @@ void GameScene::Initialize() {
 	sceneSaveData_ = NextStageSave::GetInstance().GetNextStageSaveData();
 
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting("stage_1");
+	LevelEditorObjectSetting();
 	
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance().LoadWave("resource/sound/title.wav");
@@ -343,14 +343,12 @@ void GameScene::Respawn() {
 	}
 
 	//敵が復活
-	for (auto& enemy : enemies_) {
-		enemy->RespawnEnemy();
-	}
+	enemies_.clear();//一度リセット
+	spitOut_.SpitOutEnemies(enemies_);//敵の配置
 
 	//突破できてないならやり直し
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->FailureEvent();
-		cameraControl_->CameraInterpolation(levelEditor_.GetLevelData()->cameraInit["MainCamera"], false);
 	}
 
 	//リセット
@@ -359,6 +357,8 @@ void GameScene::Respawn() {
 	spitOut_.SpitOutBoss(boss_);
 
 	player_->RespawnEnd();
+
+	cameraControl_->CameraSettingCheckPoint(levelEditor_.GetLevelData()->cameraInit["MainCamera"]);
 }
 
 void GameScene::SceneUpdate() {

@@ -21,11 +21,6 @@ public:
 	/// </summary>
 	void Draw() override;
 
-	/// <summary>
-	/// リスポーン
-	/// </summary>
-	void RespawnEnemy() override;
-
 private:
 
 	void Active() override;

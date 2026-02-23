@@ -169,13 +169,6 @@ void Enemy_Turret::LaserPoint() {
 	particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::TimerMode);
 }
 
-void Enemy_Turret::RespawnEnemy() {
-	RespawnEnemyCommon();
-	rapidCount_ = 0;
-	coolTime_ = 0;
-}
-
-
 void Enemy_Turret::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::playerBullet ||
 		collision->GetType() == CollisionTypes::parryBullet) {
