@@ -23,11 +23,6 @@ public:
 	void Draw() override;
 
 	/// <summary>
-	/// リスポーン
-	/// </summary>
-	void RespawnEnemy() override;
-	
-	/// <summary>
 	/// 爆発フラグ
 	/// </summary>
 	/// <returns></returns>

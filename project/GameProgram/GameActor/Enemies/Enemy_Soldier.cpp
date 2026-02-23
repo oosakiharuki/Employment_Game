@@ -160,15 +160,6 @@ void Enemy_Soldier::FireBullet() {
 	particles_[particleFire_.name]->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
 }
 
-void Enemy_Soldier::RespawnEnemy() {
-	RespawnEnemyCommon();
-
-	//発泡処理のリセット
-	rapidCount_ = 0;
-	coolTime_ = 0;
-}
-
-
 void Enemy_Soldier::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::playerBullet || 
 		collision->GetType() == CollisionTypes::parryBullet) {

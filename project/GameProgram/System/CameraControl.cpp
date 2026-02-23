@@ -3,15 +3,14 @@
 #include <random>
 #include "ImGuiManager.h"
 #include "Input.h"
+#include <NextStageSave.h>
 
 using namespace MyMath;
 using namespace UseEveryOne;
 
 void CameraControl::Initialize() {
-	wt_.Initialize();
 	isFixedMode_ = false;
-	//Transform更新処理
-	transform_ = wt_.UpdateTransform();
+	transform_ = { kDefaultScale_, {0,0,0}, {0,0,0} };
 }
 
 void CameraControl::Update(Camera* camera) {
@@ -44,8 +43,6 @@ void CameraControl::Update(Camera* camera) {
 
 	//imGui更新処理
 	ImGuiUpdate();
-
-	wt_.UpdateMatrix(transform_);
 
 	camera->SetRotate(transform_.rotate);
 	camera->SetTranslate(transform_.translate);
@@ -211,6 +208,20 @@ void CameraControl::CameraSetting(const CameraInitData& data, bool fixed_Mode_) 
 	//カメラの最小/最大地点
 	SetEndPoint(data.transform.translate + data.leftPoint, data.transform.translate + data.rightPoint);
 	isFixedMode_ = fixed_Mode_;
+}
+
+void CameraControl::CameraSettingCheckPoint(const CameraInitData& data) {
+	//座標と回転
+	transform_.rotate = data.transform.rotate;
+	transform_.translate = NextStageSave::GetInstance().GetNextStageSaveData().checkPoint;
+
+	Vector3 farPosition = transform_.translate;
+	farPosition.z = data.transform.translate.z;
+
+	SetSegment(transform_.translate, farPosition);
+	//カメラの最小/最大地点
+	SetEndPoint(data.transform.translate + data.leftPoint, data.transform.translate + data.rightPoint);
+	isFixedMode_ = false;
 }
 
 void CameraControl::CameraInterpolation(const CameraInitData& data, bool fixed_Mode_) {

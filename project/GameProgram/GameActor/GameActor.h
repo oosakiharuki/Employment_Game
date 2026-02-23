@@ -104,22 +104,6 @@ public:
 	/// </summary>
 	void ShadowUpdate();
 
-
-	/// <summary>
-	/// 復活用の初期位置のデータ
-	/// </summary>
-	/// <param name="translate">座標位置</param>
-	/// <param name="rotate">各回転角度</param>
-	void SetInit_Position(const Vector3& translate, const Vector3& rotate) {
-		initTranslate_ = translate;
-		initRotate_ = rotate;
-	}
-
-	/// <summary>
-	/// 共通リスポーン(体力や初期位置などを戻す)
-	/// </summary>
-	void RespawnCommon();
-
 	/// <summary>
 	/// getter_体力
 	/// </summary>
@@ -178,11 +162,6 @@ protected:
 	//足して大きくする値
 	Vector3 damageScale_ = { 0.1f, 0.1f, 0.1f };
 	const float kDamageMaxTime_ = 0.3f;
-
-
-	//初期位置保管
-	Vector3 initTranslate_;
-	Vector3 initRotate_;
 
 	//パーティクルのコンテナ
 	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;

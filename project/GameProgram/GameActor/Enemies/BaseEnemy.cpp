@@ -179,27 +179,6 @@ void BaseEnemy::SearchRange() {
 	}
 }
 
-
-void BaseEnemy::RespawnEnemyCommon() {
-	//ゲームアクターの共通リスポーン処理
-	GameActor::RespawnCommon();
-
-	isDeleteEnemy_ = false;
-
-	//向きリセット
-	DirectionDegree();
-	////移動ルート位置戻す
-	//move_ = { 0,0,0 };
-
-	////弾はすべて消す
-	//bullets_.remove_if([](auto& bullet) {
-	//	bullet.reset();
-	//	return true;
-	//});
-
-	markTimer_ = 0.0f;
-}
-
 void BaseEnemy::DirectionDegree() {
 
 	//360度以上の場合 [360除算のあまり]

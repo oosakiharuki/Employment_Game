@@ -80,6 +80,13 @@ public:
 	void CameraSetting(const CameraInitData& data, bool fixed_Mode_);
 
 	/// <summary>
+	/// リスポーン時、チェックポイントから出てくる
+	/// </summary>
+	/// <param name="checkPoint">チェックポイント地点</param>
+	/// <param name="data"></param>
+	void CameraSettingCheckPoint(const CameraInitData& data);
+
+	/// <summary>
 	/// 対応するカメラを変更
 	/// </summary>
 	/// <param name="data">変更したいカメラデータ</param>
@@ -122,8 +129,9 @@ private:
 	/// <param name="diff"></param>
 	void SetSegment(const Vector3& origin, const Vector3& diff);
 
-
-
+	/// <summary>
+	/// 変更時の補間処理
+	/// </summary>
 	void ChangeInterpolation();
 
 	//右端、左端
@@ -132,8 +140,7 @@ private:
 	Vector3 minEndPoint_;//最小
 	Vector3 maxEndPoint_;//最大
 
-	//ワールド座標系
-	WorldTransform wt_;
+	//座標
 	Transform transform_{};
 
 	//プレイヤー位置

@@ -67,16 +67,6 @@ public:
 	bool GetDeleteEnemy() { return isDeleteEnemy_; }
 
 	/// <summary>
-	/// リスポーン
-	/// </summary>
-	virtual void RespawnEnemy() = 0;
-
-	/// <summary>
-	/// 共通リスポーン(体力や初期位置などを戻す)
-	/// </summary>
-	void RespawnEnemyCommon();
-
-	/// <summary>
 	/// 角度で向きを変更
 	/// </summary>
 	void DirectionDegree();

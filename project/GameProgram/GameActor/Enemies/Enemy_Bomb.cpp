@@ -178,24 +178,6 @@ void Enemy_Bomb::DirectionPlayer() {
 	distance_ = Normalize(distance_);
 }
 
-
-void Enemy_Bomb::RespawnEnemy() {
-	RespawnEnemyCommon();
-	
-	//追尾モードオフ
-	isHomingStart_ = false;
-	//爆発してない
-	isExplosion_ = false;
-	bombTimer_ = 0.0f;
-	//死亡タイマーリセット
-	deadTimer_ = 0.0f;
-	//点滅タイマーリセット
-	colorTimer_ = 0.0f;
-	//オブジェクト色変更
-	color_ = { 1,1,1,1 };//default
-	object_->SetColor(color_);
-}
-
 void Enemy_Bomb::Explosion() {
 	//爆発範囲AABB
 	bombAABB_.min = transform_.translate - kExplosionRange_;

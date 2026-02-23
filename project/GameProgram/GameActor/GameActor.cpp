@@ -34,15 +34,6 @@ void GameActor::ShadowUpdate() {
 	shadow_->Update();
 }
 
-void GameActor::RespawnCommon() {
-	isDead_ = false; //死亡フラグをなしに
-	hp_ = maxHp_;    //体力を満タンに
-
-	//blenderで配置した設定に戻る
-	transform_.translate = initTranslate_; //座標位置
-	transform_.rotate = initRotate_;       //回転角度
-}
-
 void GameActor::HP_Initialize(uint32_t max) {
 	maxHp_ = max;//最大値を設定
 	hp_ = maxHp_;//体力を設定
