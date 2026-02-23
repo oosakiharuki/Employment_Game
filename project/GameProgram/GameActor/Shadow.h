@@ -24,10 +24,10 @@ public:
 	void Draw();
 
 	/// <summary>
-	/// setter_座標位置
+	/// setter_座標位置の(Y軸はなし)
 	/// </summary>
-	/// <param name="position"></param>代入する座標位置
-	void SetTranslate(const Vector3& position) { transform_.translate = position; }
+	/// <param name="position">代入する座標位置</param>
+	void SetTranslate(const Vector3& position) { actorPosition_ = position; }
 	/// <summary>
 	/// setter_サイズ
 	/// </summary>
@@ -41,11 +41,15 @@ private:
 	WorldTransform wt_;
 	Transform transform_{};
 
-	AABB shadowAABB_;
 	//プレイヤーの真下最大値
-	const float kShadowMinY_ = -1000.0f;
+	const float kShadowMinY_ = 1000.0f;
 	//プレイヤー横幅
 	const float kShadowWidth_ = 0.1f;
 	//色
 	const Vector4 kColor_ = { 0,0,0,1 };
+
+	//一番真下の値
+	float minUnder_ = 0.0f;
+
+	Vector3 actorPosition_{};
 };

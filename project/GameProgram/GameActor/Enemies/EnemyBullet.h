@@ -48,15 +48,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool IsDead() { return isDead_; }
-	/// <summary>
-	/// 当たったフラグ
-	/// </summary>
-	void OnCollision(CollisionSource* collision) override;
 
-	/// <summary>
-	/// 跳ね返す(パリィ)処理
-	/// </summary>
-	void Parry_Mode();
 	/// <summary>
 	/// getter_パリィフラグ
 	/// </summary>
@@ -73,7 +65,12 @@ public:
 	/// <param name="player">プレイヤークラス</param>
 	void SetPlayer(Player* player) { player_ = player; }
 
-private:
+private:	
+	/// <summary>
+	/// 当たったフラグ
+	/// </summary>
+	void OnCollision(CollisionSource* collision) override;
+
 	//
 	std::unique_ptr<Object3d> object = nullptr;
 	WorldTransform wt_;

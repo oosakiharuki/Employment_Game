@@ -26,9 +26,6 @@ void CollisionManager::Finalize() {
 
 void CollisionManager::AddCollisions(CollisionSource* addCollision) {
 	collisions_.push_back(addCollision);
-
-	CollisionOverlap collisionOverlap;
-	collisionOverlap = CollisionManager::GetInstance().SetTarget(addCollision->GetCenter(), addCollision->GetAABB());
 }
 
 void CollisionManager::CreateCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type) {
@@ -45,6 +42,7 @@ void CollisionManager::CreateCollision(const AABB& collisionAABB, const Vector3&
 void CollisionManager::CreateStageCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type) {
 
 	if (isAlreadyInStage_) {
+		//新しくステージ全体の当たり判定を作るためリセット
 		stageCollisions_.clear();
 		isAlreadyInStage_ = false;
 	}
@@ -107,8 +105,12 @@ void CollisionManager::EachCollision(CollisionSource& collisionA, CollisionSourc
 	DetermineType(collisionA, CollisionTypes::enemyBullet, collisionB, CollisionTypes::stage);
 	//ステージオブジェクト
 	DetermineType(collisionA, CollisionTypes::stageObject, collisionB, CollisionTypes::player);
+	DetermineType(collisionA, CollisionTypes::stageObject, collisionB, CollisionTypes::stage);//最初のワープゲートで使う
 	//ボス
 	DetermineType(collisionA, CollisionTypes::boss, collisionB, CollisionTypes::playerBullet);
+	DetermineType(collisionA, CollisionTypes::boss, collisionB, CollisionTypes::parryBullet);
+	//影
+	DetermineType(collisionA,CollisionTypes::shadow,collisionB,CollisionTypes::stage);
 }
 
 void CollisionManager::DetermineType(CollisionSource& collisionA, const CollisionTypes& typeA, CollisionSource& collisionB, const CollisionTypes& typeB) {
@@ -119,33 +121,21 @@ void CollisionManager::DetermineType(CollisionSource& collisionA, const Collisio
 }
 
 
-Vector3 CollisionManager::UnderCollision(const std::vector<AABB>& stageAABB, const AABB& shadowAABB, const Vector3& position) const {
-
+void CollisionManager::UnderCollision(float& minUnder, const Vector3& actorPosition, const AABB& stageAABB) const {
 	//できる限り下の値
-	float underY = kMaxUnder;
-	//プレイヤーとその値の距離(基準点)
-	float lengthMin = Length(position.y, underY);
+	float underY = stageAABB.max.y + kShadowUp_;
 
-	for (auto& stage : stageAABB) {
-		//影の範囲がステージ部分と衝突判定を取った時
-		if (IsCollisionAABB(shadowAABB, stage)) {
-			//プレイヤーとステージの上の長さ
-			float length = Length(position.y, stage.max.y);
+	//プレイヤーと現段階短い距離
+	float lengthMin = Length(actorPosition.y, minUnder);
 
-			//プレイヤーと足場の長さが一番短いところを影の場所とする
-			if (length < lengthMin) {
-				//値が変更
-				lengthMin = length;
-				underY = stage.max.y + kShadowUp_;
-			}
-		}
+	//プレイヤーとステージの上の長さ
+	float length = Length(actorPosition.y, underY);
+
+	//プレイヤーと足場の長さが一番短いところを影の場所とする
+	if (length < lengthMin) {
+		//値が変更
+		minUnder = underY;
 	}
-	//x,z軸は現在のプレイヤー位置と同じ
-	Vector3 result = position;
-	//決定した影の位置を代入
-	result.y = underY;
-
-	return result;
 }
 
 void CollisionManager::GameActorAndStageCollision(CollisionOverlap& collisionOverlap, GameActor& gameActor, GravityActor& gravityActor, const AABB& otherCollisionAABB) {

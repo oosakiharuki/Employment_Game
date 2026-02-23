@@ -35,26 +35,48 @@ public:
 	/// </summary>
 	void Finalize();
 
+	/// <summary>
+	/// 当たり判定を追加
+	/// </summary>
+	/// <param name="addCollision"></param>
 	void AddCollisions(CollisionSource* addCollision);
 
+	/// <summary>
+	/// 当たり判定を追加(派生クラスCollisionSourceでないとき)
+	/// </summary>
+	/// <param name="collisionAABB">当たり判定AABB</param>
+	/// <param name="center">真ん中</param>
+	/// <param name="type">当たり判定のタイプ</param>
 	void CreateCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type);
-
+	
+	/// <summary>
+	/// 当たり判定を追加(ステージ専用)
+	/// </summary>
+	/// <param name="collisionAABB">当たり判定AABB</param>
+	/// <param name="center">真ん中</param>
+	/// <param name="type">当たり判定のタイプ</param>
 	void CreateStageCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type);
-
+	
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void CollisionUpdate();
-
+	
+	/// <summary>
+	/// 各々の当たり判定
+	/// </summary>
+	/// <param name="collisionA">当たり判定</param>
+	/// <param name="collisionB">当たり判定</param>
 	void EachCollision(CollisionSource& collisionA, CollisionSource& collisionB);
-
 
 	/// <summary>
 	/// 対象(プレイヤー、敵など)の真下の床の位置に
 	/// 影などで使用する
 	/// </summary>
-	/// <param name="stageAABB">ステージ地面の全体</param>
-	/// <param name="shadowAABB">対象の影</param>
-	/// <param name="position">対象の場所</param>
-	/// <returns>対象から一番近い地面の上</returns>
-	Vector3 UnderCollision(const std::vector<AABB>& stageAABB, const AABB& shadowAABB, const Vector3& position) const;
+	/// <param name="minUnder">影のポイント</param>
+	/// <param name="actorPosition">ゲームアクターの座標位置</param>
+	/// <param name="stageAABB">ステージの当たり判定AABB</param>
+	void UnderCollision(float& minUnder, const Vector3& actorPosition, const AABB& stageAABB) const;
 
 	/// <summary>
 	/// 対象の重なった分戻す
@@ -70,13 +92,6 @@ public:
 	/// <param name="gravityActor">重力があるゲームアクター</param>
 	/// <param name="stageAABB">ステージ全体当たり判定</param>
 	void GameActorAndStageCollision(CollisionOverlap& collisionOverlap,GameActor& gameActor, GravityActor& gravityActor,const AABB& otherCollisionAABB);
-
-	/// <summary>
-	/// ステージで作成する当たり判定
-	/// </summary>
-	/// <param name="collisionOverlap">重なり部分</param>
-	/// <param name="stageAABB">ステージ全体当たり判定</param>
-	//void StageCollisions(CollisionOverlap& collisionOverlap);
 
 	/// <summary>
 	/// CollisionOverlapのターゲット(player,enemy)の設定
@@ -98,7 +113,14 @@ public:
 		isGoal_ = false;
 	}
 
-private:	
+private:
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="collisionA">当たり判定A</param>
+	/// <param name="typeA">当たり判定Aのタイプ</param>
+	/// <param name="collisionB">当たり判定B</param>
+	/// <param name="typeB">当たり判定Bのタイプ</param>
 	void DetermineType(CollisionSource& collisionA, const CollisionTypes& typeA, CollisionSource& collisionB, const CollisionTypes& typeB);
 
 	//傘のノックバックの値
@@ -107,8 +129,7 @@ private:
 
 	//影で少し上にあげる値
 	const float kShadowUp_ = 0.01f;
-	//一番真下の値
-	const float kMaxUnder = 1000.0f;
+
 
 	//インスタンス
 	static std::unique_ptr<CollisionManager> sInstance_;

@@ -4,11 +4,7 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-void EnemyFireCommand::BulletUpdate() {
-	//弾丸更新処理
-	for (auto& bullet : bullets_) {
-		bullet->Update();
-	}
+void EnemyFireCommand::BulletUpdate() {	
 	//消滅処理
 	bullets_.remove_if([](auto& bullet) {
 		if (bullet->IsDead()) {
@@ -16,7 +12,12 @@ void EnemyFireCommand::BulletUpdate() {
 			return true;
 		}
 		return false;
-		});
+	});
+
+	//弾丸更新処理
+	for (auto& bullet : bullets_) {
+		bullet->Update();
+	}
 }
 
 void EnemyFireCommand::Fire() {

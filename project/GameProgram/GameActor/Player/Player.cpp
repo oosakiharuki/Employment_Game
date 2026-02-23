@@ -158,11 +158,7 @@ void Player::Update() {
 
 }
 
-void Player::BulletUpdate() {
-	//弾丸
-	for (auto& bullet : bullets_) {
-		bullet->Update();
-	}
+void Player::BulletUpdate() {	
 	//消滅処理
 	bullets_.remove_if([](auto& bullet) {
 		if (bullet->IsDead()) {
@@ -171,6 +167,10 @@ void Player::BulletUpdate() {
 		}
 		return false;
 	});
+	//弾丸
+	for (auto& bullet : bullets_) {
+		bullet->Update();
+	}
 }
 
 void Player::InfinityTimeUpdate() {
@@ -274,7 +274,7 @@ void Player::LifeUpdate() {
 	KnockBackUpdate();
 
 	//影の更新
-	shadow_->SetTranslate(transform_.translate);
+	ShadowUpdate();
 
 	//地面にいるとき
 	if (isGround_) {
@@ -681,6 +681,11 @@ void Player::RespawnPlayer() {
 	}
 
 	deadTimer_ = 0.0f;
+
+	//移動範囲を元に戻す
+	eventMin = -kMoveMax_;
+	eventMax = kMoveMax_;
+	isRespawn_ = true;
 }
 
 //パリィ成功

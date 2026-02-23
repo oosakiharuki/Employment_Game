@@ -82,12 +82,6 @@ public:
 	void DirectionDegree();
 
 	/// <summary>
-	/// 影の座標位置
-	/// </summary>
-	/// <param name="position"></param>代入する座標位置(プレイヤーに一番近い床)
-	void SetShadowPosition(const Vector3& position) { shadow_->SetTranslate(position); }
-	
-	/// <summary>
 	/// 見える範囲
 	/// </summary>
 	void SearchRange();
@@ -179,8 +173,6 @@ protected:
 	bool attackSwitch_ = false;
 
 private:
-
-	void OnCollision(CollisionSource* collision) override;
 
 	//ステートパターン
 	std::unique_ptr<BaseEnemyState> enemyState_ = std::make_unique<EnemySearchState>();//ここでも初期化できる

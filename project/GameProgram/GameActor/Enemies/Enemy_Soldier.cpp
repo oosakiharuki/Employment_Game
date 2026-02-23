@@ -94,6 +94,8 @@ void Enemy_Soldier::AttackCommand() {
 void Enemy_Soldier::Dead() {
 	//死んだリアクション
 	DeadReaction();
+	//弾丸の更新
+	BulletUpdate();
 }
 
 void Enemy_Soldier::Performance() {}
@@ -168,7 +170,7 @@ void Enemy_Soldier::RespawnEnemy() {
 
 
 void Enemy_Soldier::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::playerBullet ||
+	if (collision->GetType() == CollisionTypes::playerBullet || 
 		collision->GetType() == CollisionTypes::parryBullet) {
 		IsDamage();
 	}
