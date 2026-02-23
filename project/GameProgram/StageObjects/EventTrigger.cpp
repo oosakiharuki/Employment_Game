@@ -270,44 +270,24 @@ void EventTrigger::FailureEvent() {
 
 void EventTrigger::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::player) {
-		//cameraControl_->CameraInterpolation(levelEditor.GetLevelData()->cameraInit[data.cameraName], true);
-		StartEvent();
+		eventData_.isEvent = true;
 	}
 
 }
 
-//
-//void CollisionManager::PlayerAndEventTrigger(Player* player, const std::vector<std::shared_ptr<EventTrigger>>& eventTriggers,
-//	CameraControl* cameraControl_, LevelEditor& levelEditor) {
-//	CollisionOverlap playerCollisionOverlap;
-//	playerCollisionOverlap = SetTarget(player->GetTranslate(), player->GetAABB());
-//
-//	// - イベントトリガー -
-//	for (auto& eventTrigger : eventTriggers) {
-//		EventData data = eventTrigger->GetEventData();
-//
-//		//イベントが終了した時(順番3)
-//		if (eventTrigger->EventEnd()) {
-//			//一瞬だけ通す
-//			if (cameraControl_->IsFixed()) {
-//				cameraControl_->FixedMode(false);//カメラを固定しない
-//				cameraControl_->CameraInterpolation(levelEditor.GetLevelData()->cameraInit["MainCamera"], false);//メインカメラに戻す
-//			}
-//		}
-//		//イベントが発動している時(順番2)
-//		else if (data.isEvent) {
-//			Vector3 move_range = player->GetTranslate();
-//			Vector3 size = player->GetScale();
-//			//動ける範囲制限
-//			move_range.x = std::clamp(move_range.x, data.aabb.min.x + size.x, data.aabb.max.x - size.x);
-//			move_range.y = std::clamp(move_range.y, data.aabb.min.y + size.y, data.aabb.max.y - size.y);
-//			move_range.z = std::clamp(move_range.z, data.aabb.min.z + size.z, data.aabb.max.z - size.z);
-//			player->SetTranslate(move_range);
-//		}
-//		//イベントトリガーに入った直前(順番1)
-//		else if (IsCollisionAABB(player->GetAABB(), data.aabb)) {
-//			cameraControl_->CameraInterpolation(levelEditor.GetLevelData()->cameraInit[data.cameraName], true);
-//			eventTrigger->StartEvent();
-//		}
-//	}
-//}
+void EventTrigger::ChangeCamera(CameraControl& cameraControl, LevelEditor& levelEditor) {
+	cameraControl.CameraInterpolation(levelEditor.GetLevelData()->cameraInit[eventData_.cameraName], true);
+}
+
+void EventTrigger::ReturnCamera(CameraControl& cameraControl, LevelEditor& levelEditor) {
+	//イベントが終了した時(順番3)
+	if (!isEventEnd_) return;
+
+
+	//一瞬だけ通す
+	if (cameraControl.IsFixed()) {
+		cameraControl.FixedMode(false);//カメラを固定しない
+		cameraControl.CameraInterpolation(levelEditor.GetLevelData()->cameraInit["MainCamera"], false);//メインカメラに戻す
+	}
+}
+

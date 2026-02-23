@@ -9,6 +9,9 @@
 
 #include "CollisionManager.h"
 
+#include "CameraControl.h"
+#include "LevelEditor.h"
+
 /// <summary>
 /// イベントの構造体
 /// </summary>
@@ -95,11 +98,6 @@ public:
 	EventData GetEventData() { return eventData_; }
 
 	/// <summary>
-	/// イベント開始
-	/// </summary>
-	void StartEvent() { eventData_.isEvent = true; }
-
-	/// <summary>
 	/// GameSceneにある
 	/// </summary>
 	/// <param name="E"></param>
@@ -111,6 +109,11 @@ public:
 	/// </summary>
 	/// <returns></returns>イベント終了フラグ
 	bool EventEnd() { return isEventEnd_; }
+
+
+	void ChangeCamera(CameraControl& cameraControl, LevelEditor& levelEditor);
+
+	void ReturnCamera(CameraControl& cameraControl, LevelEditor& levelEditor);
 
 private:
 

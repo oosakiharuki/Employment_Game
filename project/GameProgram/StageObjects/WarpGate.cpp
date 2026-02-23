@@ -98,7 +98,7 @@ void WarpGate::TouchWarpGate() {
 void WarpGate::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::player && !warpExitMode_) {
 		scaleFlag_ = true;
-		if (Input::GetInstance().TriggerKey(DIK_E)) {
+		if (Input::GetInstance().TriggerKey(DIK_E) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_Y)) {
 			CollisionManager::GetInstance().SuccessWarp();
 			NextStageSave::GetInstance().SetNextStageFile(fileName_);//次のステージの名前を導入
 		}

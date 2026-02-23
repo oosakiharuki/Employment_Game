@@ -681,6 +681,11 @@ void Player::RespawnPlayer() {
 	}
 
 	deadTimer_ = 0.0f;
+
+	//移動範囲を元に戻す
+	eventMin = -kMoveMax_;
+	eventMax = kMoveMax_;
+	isRespawn_ = true;
 }
 
 //パリィ成功

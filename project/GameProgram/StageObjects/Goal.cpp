@@ -1,5 +1,6 @@
 #include "Goal.h"
 #include "CollisionManager.h"
+#include "Input.h"
 
 using namespace MyMath;
 
@@ -34,6 +35,10 @@ void Goal::Draw(){
 }
 
 void Goal::OnCollision(CollisionSource* collision) {
-
+	if (collision->GetType() == CollisionTypes::player) {
+		if (Input::GetInstance().TriggerKey(DIK_E) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_Y)) {
+			CollisionManager::GetInstance().SuccessGoal();
+		}
+	}
 }
 

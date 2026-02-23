@@ -11,7 +11,7 @@ void GameScene::Initialize() {
 	sceneSaveData_ = NextStageSave::GetInstance().GetNextStageSaveData();
 
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting();
+	LevelEditorObjectSetting("stage_1");
 	
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance().LoadWave("resource/sound/title.wav");
@@ -151,11 +151,14 @@ void GameScene::PlayerAliveUpdate() {
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->Update();
 		if (eventTrigger->GetEventData().isEvent) {
+			eventTrigger->ChangeCamera(*cameraControl_,levelEditor_);
 			eventTrigger->SetPopEnemies(enemies_);
 			eventTrigger->EventUpdate();
+			
 
 			enemies_ = std::move(eventTrigger->GetPopEnemy());
 		}
+		eventTrigger->ReturnCamera(*cameraControl_, levelEditor_);
 	}
 
 	eventTriggers_.remove_if([](auto& event) {
@@ -292,11 +295,6 @@ void GameScene::SpitOutGameObject() {
 	//イベントトリガーの配置
 	spitOut_.SpitOutEventTrigger(eventTriggers_);
 
-	//敵がステージ全体当たり判定をもらう(プレイヤーを見つける処理に使う)
-	for (auto& enemy : enemies_) {
-		//enemy->SetStages(stagesAABB_);
-	}
-
 	//ボスの配置
 	spitOut_.SpitOutBoss(boss_);
 	if (boss_) {
@@ -340,7 +338,7 @@ void GameScene::WaterWarpExit() {
 
 void GameScene::Respawn() {
 	//死んでしまったとき || 残機が0の時
-	if (!player_->GetIsDead() || player_->GetRemain() == 0) {
+	if (!player_->IsRespawn() || player_->GetRemain() == 0) {
 		return;
 	}
 
@@ -359,6 +357,8 @@ void GameScene::Respawn() {
 	boss_.reset();
 	//ボスの配置
 	spitOut_.SpitOutBoss(boss_);
+
+	player_->RespawnEnd();
 }
 
 void GameScene::SceneUpdate() {

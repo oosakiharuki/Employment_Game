@@ -160,6 +160,17 @@ public:
 	/// <returns></returns>
 	bool BrinkTimeMax();
 
+	/// <summary>
+	/// リスポーンフラグ
+	/// </summary>
+	/// <returns></returns>
+	bool IsRespawn() { return isRespawn_; }
+
+	/// <summary>
+	/// リスポーン終了
+	/// </summary>
+	void RespawnEnd() { isRespawn_ = false; }
+
 private:
 
 	//コマンド処理
@@ -394,4 +405,5 @@ private:
 	//プレイヤーの操作アクション用
 	std::unique_ptr<BasePlayerState> actionState_;
 
+	bool isRespawn_ = false;
 };
