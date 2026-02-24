@@ -686,6 +686,8 @@ void Player::RespawnPlayer() {
 	isRespawn_ = true;
 
 	transform_.translate = NextStageSave::GetInstance().GetNextStageSaveData().checkPoint;
+	transform_.translate.z = 0.0f;
+
 	transform_.rotate = { 0,180,0 };
 }
 
