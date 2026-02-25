@@ -105,6 +105,7 @@ private:
 
 	//場所
 	const float kUmbrellaArrowModePositionX_ = 0.0f;
+	float arrowMoveX = 0.0f;
 
 	//影
 	const float kShadowPositionY_ = -3.79f;//(-3.8f + 0.01f)
@@ -116,6 +117,7 @@ private:
 
 
 	std::unique_ptr<CameraControl> cameraControl_;
+	float cameraRotateX_ = -15.0f;
 
 	LevelEditor levelEditor_;
 	SpitOutLevelEditor spitOut_;

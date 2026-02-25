@@ -52,13 +52,16 @@ void TitleScene::ObjectLoading() {
 	playerShadow_ = std::make_unique<Shadow>();
 	playerShadow_->Initialize();
 	Vector3 shadowPos = transforms_["player_standby"].translate;//影位置
-	shadowPos.y = kShadowPositionY_;//影位置Y
+	//shadowPos.y = kShadowPositionY_;//影位置Y
 	playerShadow_->SetTranslate(shadowPos);
 }
 
 void TitleScene::Update() {
 
+	cameraRotateX_ += kDeltaTime_ * 4;
+	cameraRotateX_ = std::clamp(cameraRotateX_,-45.0f,0.0f);
 	//カメラコントロールの更新
+	cameraControl_->SetRotation({cameraRotateX_,0,0});
 	cameraControl_->Update(&*camera_);
 
 	//プレイヤーが降ってくるところ
@@ -97,7 +100,9 @@ void TitleScene::Update() {
 	if (transforms_["Select_Start"].rotate.y <= 0.0f && transforms_["Select_End"].rotate.y <= 0.0f) {
 		//カメラの方向に文字が見える
 		transforms_["Select_Start"].rotate.y = 0.0f;
-		transforms_["Select_End"].rotate.y = 0.0f;
+		transforms_["Select_End"].rotate.y = 0.0f;	
+		arrowMoveX += kDeltaTime_ * kTwice_;
+		transforms_["umbrella_Open"].translate.x = kUmbrellaArrowModePositionX_ + sin(arrowMoveX) * kDivideByThree_;//プレイヤーより少し右
 	}
 	else {
 		//伏せていた文字を回転
@@ -128,6 +133,14 @@ void TitleScene::UpdateBehind() {
 	for (auto& particle : sceneParticles_) {
 		particle.second->Update();
 	}
+
+	AABB shadowUnderAABB;
+	shadowUnderAABB.min = { playerShadow_->GetCenter().x, 0,playerShadow_->GetCenter().z };
+	shadowUnderAABB.max = { playerShadow_->GetCenter().x + 1, kShadowPositionY_,playerShadow_->GetCenter().z + 1 };
+
+	CollisionManager::GetInstance().CreateCollision(shadowUnderAABB,playerShadow_->GetCenter(),CollisionTypes::stage);
+
+	CollisionManager::GetInstance().CollisionUpdate();
 }
 
 void TitleScene::Draw() {
