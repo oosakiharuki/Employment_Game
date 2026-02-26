@@ -23,12 +23,6 @@ public:
 	void Draw() override;
 
 	/// <summary>
-	/// 爆発フラグ
-	/// </summary>
-	/// <returns></returns>
-	bool IsExplosion()override { return isExplosion_; }
-
-	/// <summary>
 	/// getter‗爆発範囲AABB
 	/// </summary>
 	/// <returns></returns>bombAABB

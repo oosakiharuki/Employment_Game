@@ -51,9 +51,8 @@ void Enemy_Bomb::Active() {
 }
 
 void Enemy_Bomb::Dead() {
-	if (isExplosion_ && deadTimer_ >= kDeadTimeMax_) {
+	if (deadTimer_ >= kDeadTimeMax_) {
 		isDeleteEnemy_ = true;
-		isExplosion_ = false;//爆発フラグオフ
 	}
 	else if (deadTimer_ < kDeltaTime_) {
 		//強制爆発
@@ -67,7 +66,7 @@ void Enemy_Bomb::Performance() {}
 
 void Enemy_Bomb::SearchCommand() {
 	//動く
-	Move();
+	//Move();
 
 	//ボムとプレイヤーの距離
 	DirectionPlayer();
@@ -188,9 +187,6 @@ void Enemy_Bomb::Explosion() {
 	//パーティクルの設定
 	particles_[particleDamage_.name]->SetTranslate(transform_.translate);
 	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
-
-	//爆発フラグオン
-	isExplosion_ = true;
 
 	//当たり判定設定
 	CollisionManager::GetInstance().CreateCollision(bombAABB_, transform_.translate, CollisionTypes::bombExplotion);
