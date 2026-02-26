@@ -53,14 +53,6 @@ void BaseEnemy::Update() {
 		return;
 	}
 
-	//hpが0の時
-	if (hp_ == 0) {
-		isDead_ = true;
-	}
-
-	//捜索範囲更新
-	SearchRange();
-
 	//リアクション
 	reaction_->ScaleReaction(transform_.scale,isDamageMotion_, damageScale_, scaleTimer_, kDamageMaxTime_);
 
@@ -89,7 +81,7 @@ void BaseEnemy::UpdateBehind() {
 	}
 
 	//死んだときは当たり判定を取らない
-	if (isDead_) return;
+	if (hp_ == 0) return;
 
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate - colliderSize_;

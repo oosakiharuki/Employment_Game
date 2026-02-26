@@ -82,6 +82,8 @@ void Enemy_Turret::Active() {
 	}
 
 	PlayerTarget();
+	//捜索範囲更新
+	SearchRange();
 
 	//重力
 	GravityUpdate(transform_.translate.y);

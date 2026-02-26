@@ -156,9 +156,11 @@ void SpitOutLevelEditor::SpitOutBoss(std::unique_ptr<Boss>& boss) {
 		boss->Initialize();
 
 		auto& bossData = levelEditor_->GetLevelData()->bosses[0];
-		//boss->SetTranslate(bossData.transform.translate);
-		boss->SetTransform(bossData.transform);
+		boss->SetTranslate(bossData.transform.translate);
+		boss->SetRotate(bossData.transform.rotate);
 		boss->SetColliderSize(bossData.colliderSize);
+
+		boss->SetBossCenter(bossData.transform.translate);
 	}
 }
 

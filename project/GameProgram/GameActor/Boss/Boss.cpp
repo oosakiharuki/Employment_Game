@@ -5,6 +5,8 @@ using namespace MyMath;
 using namespace UseEveryOne;
 
 void Boss::Initialize() {
+	GameActor::Initialize();
+
 	object_ = std::make_unique<Object_glTF>();
 	object_->Initialize();
 	object_->SetModelFile("Boss.gltf");
@@ -16,48 +18,30 @@ void Boss::Initialize() {
 	bossState_ = std::make_unique<BossMoveState>();
 
 	collisionType_ = CollisionTypes::boss;
+
+	hp_ = 60;
+	
+	moveCenter_ = { 0,13,0 };
+	//右位置設定
+	SetMovePoint(moveCenter_ + kEdge_);
 }
 
 void Boss::Update() {
 
-	transform_.translate += GoDestination(move_) / moveFrame_;
-
-	if (hp_ == 0 && deadTimer_ < kDeltaTime_) {
-		bossState_.reset();
-		bossState_ = std::make_unique<BossDeadMotionState>();
-	}
-
-	//ステートパターン
-	bossState_->Update(*this);
-
-	reaction_->ScaleReaction(transform_.scale, isDamageReaction_,damageReactionPower_,damageReactionTimer_,kDamageReactionTimeMax_);
+	GameActor::Update();//ステートパターンが入っている
 
 	for (auto& bullet : bullets_) {
 		bullet->Update();
 	}
 
 	bullets_.remove_if([](auto& bullet) {
-		if (bullet->IsDead()) {
-			bullet.reset();
-			return true;
-		}
-		return false;
-		});
-
+		return bullet->IsDead();
+	});
 
 	ImGuiUpdate();
 
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
-
-	//死んだときは当たり判定を取らない
-	if (isDeadMotion_) return;
-
-	collisionAABB_.max = transform_.translate + colliderSize_;
-	collisionAABB_.min = transform_.translate - colliderSize_;
-	center_ = transform_.translate;
-	//当たり判定設定
-	CollisionManager::GetInstance().AddCollisions(this);
 }
 
 void Boss::Draw() {
@@ -69,12 +53,92 @@ void Boss::Draw() {
 	}
 }
 
-void Boss::SetMovePoint(const Vector3& point, float speedDivision) {
-	move_.diff = point;//目的地設定
-	moveFrame_ = speedDivision;//スピード分割
+void Boss::Active() {
+
+	//ステートパターン
+	bossState_->Update(*this);
+	bossState_->ChangeCommand(*this);
+	//変更フラグ後
+	if (motionFinish_) {
+		motionFinish_ = false;//リセット
+	}
+
+	reaction_->ScaleReaction(transform_.scale, isDamageReaction_,damageReactionPower_,damageReactionTimer_,kDamageReactionTimeMax_);
+
+	collisionAABB_.max = transform_.translate + colliderSize_;
+	collisionAABB_.min = transform_.translate - colliderSize_;
+	center_ = transform_.translate;
+	//当たり判定設定
+	CollisionManager::GetInstance().AddCollisions(this);
 }
 
-void Boss::Fire(float kFrame, float bulletSpeed, uint32_t bulletMax) {
+void Boss::Dead() {
+
+	if (deadTimer_ < kDeltaTime_) {
+		deadPosition_ = transform_.translate;
+		deadScale_ = transform_.scale;
+	}
+
+	std::random_device seed;
+	std::mt19937 random(seed());
+
+	std::uniform_real_distribution<float>shake(-kShakePower, kShakePower);
+
+	//上下左右にシェイク(z軸は関係ない)
+	transform_.translate = deadPosition_ + Vector3(shake(random), shake(random), 0.0f);
+
+	transform_.translate.x = std::clamp(transform_.translate.x, deadPosition_.x - kShakePower, deadPosition_.x + kShakePower);
+	transform_.translate.y = std::clamp(transform_.translate.y, deadPosition_.y - kShakePower, deadPosition_.y + kShakePower);
+
+	deadTimer_ += kDeltaTime_;
+
+	transform_.scale = deadScale_ - deadTimer_ / kDeadTimeMax_;
+
+	if (deadTimer_ >= kDeadTimeMax_) {
+		isDeadMotionFinish_ = true;
+		transform_.scale = { 0,0,0 };//消えるようにする
+	}
+}
+
+void Boss::Performance() {}
+
+void Boss::CommandMove() {
+	move_.origin.y = transform_.translate.y;
+	move_.diff.y = transform_.translate.y;
+
+	//偶数か奇数か
+	if (std::fmod(addCount_ + actionCount_, 2) == 0) {
+		//右位置設定
+		SetMovePoint(moveCenter_ + kEdge_);
+
+	}
+	else {
+		//左位置設定
+		SetMovePoint(moveCenter_ - kEdge_);
+	}
+
+	LerpMove();
+
+	if (LerpGoal()) {
+		addCount_++;
+	}
+	else {
+		return;
+	}
+
+	if (addCount_ == 3) {
+		//行動前モーションステートに変更
+		motionFinish_ = true;
+		addCount_ = 0;
+	}
+}
+
+void Boss::SetMovePoint(const Vector3& point, float speedDivision) {
+	move_.diff = point;//目的地設定
+	timerMax_ = speedDivision;//スピード(○○秒)
+}
+
+void Boss::CommandFire(float kFrame, float bulletSpeed, uint32_t bulletMax) {
 	//速さを代入
 	bulletSpeed_ = bulletSpeed;
 
@@ -89,14 +153,14 @@ void Boss::Fire(float kFrame, float bulletSpeed, uint32_t bulletMax) {
 	//最大弾丸数を超えた場合
 	if (rapidCount_ == bulletMax) {
 		rapidCount_ = 0;//カウントリセット
-		isStopFire_ = true;//発砲終了
+		motionFinish_ = true;;
 	}
 }
 
 void Boss::FireBullet() {
 	//現在位置の設定
 	Vector3 enemyPosition;
-	enemyPosition = { wt_.GetMatWorld().m[3][0],wt_.GetMatWorld().m[3][1],wt_.GetMatWorld().m[3][2]};
+	enemyPosition = { wt_.GetMatWorld().m[3][0],wt_.GetMatWorld().m[3][1],wt_.GetMatWorld().m[3][2] };
 
 	//弾丸速度
 	Vector3 velocity;
@@ -121,32 +185,111 @@ void Boss::FireBullet() {
 	bullets_.push_back(std::move(bullet));
 }
 
-void Boss::ChangeStatePattern(std::unique_ptr<BaseBossState> state) {
-	bossState_.reset();
-	bossState_ = std::move(state);
-}
+void Boss::CommandAroundMove() {
+	//空っぽか値なしか
+	if (movePoints_.empty() || movePoints_.size() == 0) {
+		//移動を設定
+		movePoints_.push_back({ Vector3(30, 4, 0),2.0f });
+		movePoints_.push_back({ Vector3(-30, 4, 0), 3.0f });
+		movePoints_.push_back({ Vector3(-20, 13, 0), 2.0f });
+		movePoints_.push_back({ Vector3(20, 13, 0), 3.0f });
+	}
 
-void Boss::ArrivedSegmentDiff() {
-	Vector3 a = transform_.translate;
+	//目的地に着いたら
+	if (LerpGoal()) {
+		aroundMoveCount_++;    //カウント加算
+	}
 
-	//目的地についたとき
-	if (GoDestination(a, move_.diff) <= segmentExtreme &&
-		GoDestination(a, move_.diff) >= -segmentExtreme) {
+	LerpMove();
 
-		isMoveSuccess_ = true;
-		transform_.translate= move_.diff;//現在地を目的地にする
-		move_.origin = transform_.translate;//セグメントのスタート値を設定
+	//全てのポイントに移動できたら
+	if (aroundMoveCount_ >= movePoints_.size()) {
+		motionFinish_ = true;
+		aroundMoveCount_ = 0;
+		movePoints_.clear();
+	}
+	else {
+		SetMovePoint(movePoints_[aroundMoveCount_].position, movePoints_[aroundMoveCount_].division);
 	}
 }
 
-void Boss::BeforeActionMotion() {
-	transform_.rotate.z += kRotationX_;
+void Boss::CommandFarMove() {
+
+	SetMovePoint(kFarPlace_);
+
+	LerpMove();
+
+	if (LerpGoal()) {
+		isFarMoveSuccess_ = true;
+	}
+}
+
+void Boss::CommandFarTackle() {
+	if (transform_.translate == kFarPlace_) {
+		SetMovePoint(player_->GetTranslate());
+	}
+
+	transform_.translate  += GoDestination(move_) * (kDeltaTime_ / kTwice_);//[GoDestination / 120.0f]
+
+	if (transform_.translate.z <= kNearEnd) {
+		motionFinish_ = true;
+	}
+}
+
+void Boss::CommandFallPlayer() {
+	fallTimer_ += kDeltaTime_;
+
+	if (fallTimer_ < kPrepareFallTimeMax_) {
+		movePoint_ = player_->GetTranslate();
+		movePoint_.y = kStartPointY_ - fallTimer_;
+		SetTranslate(movePoint_);
+		SetOrigin(movePoint_);
+	}
+	else if (fallTimer_ >= kGoUpTime_) {
+		if (fallTimer_ < kGoUpTime_ + kDeltaTime_) {
+			SetOrigin(transform_.translate);
+			moveTimer_ = 0.0f;
+		}
+		movePoint_.y = kGoUpPointY_;
+		SetMovePoint(movePoint_, moveFrame_);
+		LerpMove();
+		if (LerpGoal()) {
+			motionFinish_ = true;
+			fallTimer_ = 0.0f;
+		}
+	}
+	else {
+		movePoint_.y = kFallPointY_;
+		moveFrame_ = kFallTimeMax_;
+		SetMovePoint(movePoint_, moveFrame_);
+		LerpMove();
+	}
+}
+
+void Boss::CommandBeforeActionMotion() {
 
 	if (transform_.rotate.z >= kRotateOneLap_) {
 		//モーション終了
-		isMotionFinish_ = true;
 		transform_.rotate.z = 0.0f;
 	}
+	else if(moveCoolTimer_ == 0.0f){
+		transform_.rotate.z += kRotationX_;
+		return;
+	}
+
+	if (moveCoolTimer_ < kMoveCoolTimeMax_) {
+		moveCoolTimer_ += kDeltaTime_;
+		return;
+	}
+
+	motionFinish_ = true;
+	moveCoolTimer_ = 0.0f;
+}
+
+
+void Boss::ChangeStatePattern(std::unique_ptr<BaseBossState> state) {
+	bossState_.reset();
+	bossState_ = std::move(state);
 }
 
 void Boss::IsDamage() {
@@ -155,36 +298,6 @@ void Boss::IsDamage() {
 	}
 	hp_--;
 	isDamageReaction_ = true;
-}
-
-void Boss::DeadMotion() {
-
-	isDeadMotion_ = true;
-
-	std::random_device seed;
-	std::mt19937 random(seed());
-
-	std::uniform_real_distribution<float>shake(-kShakePower, kShakePower);
-
-	//上下左右にシェイク(z軸は関係ない)
-	transform_.translate = deadPosition_ + Vector3(shake(random), shake(random), 0.0f);
-
-	transform_.translate.x = std::clamp(transform_.translate.x, deadPosition_.x - kShakePower, deadPosition_.x + kShakePower);
-	transform_.translate.y = std::clamp(transform_.translate.y, deadPosition_.y - kShakePower, deadPosition_.y + kShakePower);
-
-	deadTimer_ += kDeltaTime_;
-
-	transform_.scale = deadScale_ - deadTimer_ / kDeadTimeMax_;
-
-	if (deadTimer_ >= kDeadTimeMax_) {
-		isDead_ = true;
-		transform_.scale = { 0,0,0 };//消えるようにする
-	}
-}
-
-void Boss::DeadPosition() {
-	deadPosition_ = transform_.translate;
-	deadScale_ = transform_.scale;
 }
 
 void Boss::ImGuiUpdate() {
@@ -198,6 +311,24 @@ void Boss::ImGuiUpdate() {
 #endif // USE_IMGUI
 
 }
+
+void Boss::LerpMove() {
+	moveTimer_ += kDeltaTime_;
+	moveTimer_ = std::clamp(moveTimer_, 0.0f, timerMax_);
+	transform_.translate = Lerp(move_.diff, move_.origin, moveTimer_ / timerMax_);
+}
+
+bool Boss::LerpGoal() {
+	if (moveTimer_ == timerMax_) {
+		moveTimer_ = 0.0f;
+		transform_.translate = move_.diff;//現在地を目的地にする
+		move_.origin = transform_.translate;//セグメントのスタート値を設定
+		return true;
+	}
+	
+	return false;
+}
+
 
 void Boss::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::playerBullet ||

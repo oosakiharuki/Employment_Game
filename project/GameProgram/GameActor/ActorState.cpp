@@ -27,7 +27,7 @@ void DeadState::Update(ActorCommand& actorCommand) {
 }
 
 void DeadState::ChangeState(GameActor& actor) {
-	if (!actor.GetIsDead()) {
+	if (!actor.GetHp() == 0) {
 		//復活した(死んでいない)場合LifeStateに変更		
 		actor.ChangeStatePattern(std::make_unique<ActiveState>());
 	}
