@@ -55,7 +55,7 @@ void GameScene::Update() {
 	//カメラコントロール
 	cameraControl_->SetPlayerPosition(player_->GetTranslate());
 	//プレイヤーが倒されたらシェイク
-	(player_->GetIsDead()) ? cameraControl_->ShakeMode(true) : cameraControl_->ResetShakeTime();
+	(player_->GetHp() == 0) ? cameraControl_->ShakeMode(true) : cameraControl_->ResetShakeTime();
 	//更新処理
 	cameraControl_->Update(&*camera_.get());
 
@@ -97,9 +97,7 @@ void GameScene::Update() {
 	Respawn();
 
 	//プレイヤーが死んでしまったら通らない(停止)
-	if (!player_->GetIsDead()) {
-		PlayerAliveUpdate();
-	}
+	PlayerAliveUpdate();
 
 	if (!isStartStage_) {
 		startWarp_->Vanish();//出てきた後消えるようにする	
@@ -136,6 +134,8 @@ void GameScene::Update() {
 }
 
 void GameScene::PlayerAliveUpdate() {
+	if (player_->GetHp() == 0) return;
+
 	//敵の更新
 	for (auto& enemy : enemies_) {
 		enemy->SetPlayer(player_.get());
@@ -392,7 +392,7 @@ void GameScene::SceneUpdate() {
 
 	if (boss_) {
 		//ボスを倒したら
-		if (boss_->IsDead()) {
+		if (boss_->IsDeadMotionFinish()) {
 			SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動
 		}
 	}

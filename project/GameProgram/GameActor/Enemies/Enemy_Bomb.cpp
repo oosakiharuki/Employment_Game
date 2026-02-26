@@ -44,6 +44,8 @@ void Enemy_Bomb::Active() {
 
 	//重力
 	GravityUpdate(transform_.translate.y);
+	//捜索範囲更新
+	SearchRange();
 
 	isGround_ = false;
 }
@@ -108,7 +110,7 @@ void Enemy_Bomb::UpdateImGui() {
 
 void Enemy_Bomb::Draw() {
 	//死んだら移さない
-	if (!isDead_) {
+	if (hp_ != 0) {
 		object_->Draw();
 		shadow_->Draw();
 	}

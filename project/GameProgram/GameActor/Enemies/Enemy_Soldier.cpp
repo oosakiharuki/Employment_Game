@@ -54,7 +54,10 @@ void Enemy_Soldier::Active() {
 
 	//重力
 	GravityUpdate(transform_.translate.y);
+	
 	PlayerTarget();
+	//捜索範囲更新
+	SearchRange();
 	//弾丸の更新
 	BulletUpdate();
 

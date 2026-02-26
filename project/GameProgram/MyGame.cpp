@@ -19,7 +19,7 @@ void MyGame::Initialize() {
 
 	PauseScreen::GetInstance().Initialize();
 
-	SceneManager::GetInstance().ChangeScene("Title");
+	SceneManager::GetInstance().ChangeScene("Select");
 	//シーンの更新処理(変更処理)
 	SceneManager::GetInstance().SceneUpdate();
 

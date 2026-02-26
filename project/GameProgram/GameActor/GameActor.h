@@ -82,12 +82,6 @@ public:
 	void SetColliderSize(const Vector3& size) { colliderSize_ = size; }
 
 	/// <summary>
-	/// getter_倒れた時
-	/// </summary>
-	/// <returns>倒れたフラグ</returns>
-	bool GetIsDead() { return isDead_; }
-
-	/// <summary>
 	/// アニメーションのみを動かす関数(演出で使う)
 	/// </summary>
 	/// <param name="result">trueならアニメーションのみ / falseなら操作可能</param>
@@ -138,8 +132,6 @@ protected:
 	//体力
 	uint32_t maxHp_;//最大値
 	uint32_t hp_;//現在の体力
-
-	bool isDead_ = false;//倒れたフラグ
 
 	//向き(左右)
 	const float kDirectionRight_ = 90.0f;

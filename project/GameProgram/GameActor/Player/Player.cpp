@@ -331,7 +331,6 @@ void Player::Dead() {
 	isDamageMotion_ = false;
 
 	deadTimer_ += kDeltaTime_;
-	isDead_ = true;
 
 	//少しディレイを挟む(カメラのシェイクが終わったら)
 	if (deadTimer_ >= kHitStopTime_) {
@@ -674,7 +673,6 @@ void Player::RespawnPlayer() {
 	remain_--;
 	//0なら初期位置に戻すなどがいらない
 	if (remain_ != 0) {
-		isDead_ = false; //死亡フラグをなしに
 		hp_ = maxHp_;    //体力を満タンに	
 	}
 

@@ -146,7 +146,7 @@ void CollisionManager::GameActorAndStageCollision(CollisionOverlap& collisionOve
 	}
 
 	//演出や死んだときは発動しない
-	if (!gameActor.GetIsDead() && !gameActor.GetPerformanceMode()) {
+	if (!gameActor.GetHp() == 0 && !gameActor.GetPerformanceMode()) {
 		collisionOverlap.stageAABB = otherCollisionAABB;
 		//重なった部分
 		collisionOverlap.overlap = OverAABB(collisionOverlap.targetAABB, otherCollisionAABB);
