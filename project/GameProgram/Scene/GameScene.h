@@ -35,15 +35,15 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 	//敵たち
-	std::vector<std::shared_ptr<BaseEnemy>> enemies_;
+	std::vector<std::unique_ptr<BaseEnemy>> enemies_;
 	//ステージオブジェクトたち
-	std::list<std::shared_ptr<IStageObject>> stageObjects_;
+	std::list<std::unique_ptr<IStageObject>> stageObjects_;
 
 	//ステージ全体のオブジェクト
 	std::unique_ptr<Object3d> stageObj_;
 
 	//イベントトリガー
-	std::list<std::shared_ptr<EventTrigger>> eventTriggers_;
+	std::list<std::unique_ptr<EventTrigger>> eventTriggers_;
 
 	//boss
 	std::unique_ptr<Boss> boss_;

@@ -17,11 +17,12 @@ void EventTrigger::Initialize() {
 	collisionType_ = CollisionTypes::TypeEvent;
 }
 
-void EventTrigger::Update(CameraControl& cameraControl, LevelEditor& levelEditor, std::vector<std::shared_ptr<BaseEnemy>> enemies) {
+void EventTrigger::Update(CameraControl& cameraControl, LevelEditor& levelEditor , std::vector<std::unique_ptr<BaseEnemy>> enemies) {
+
+	popEnemies_ = std::move(enemies);
 
 	if (eventData_.isEvent) {
-		ChangeCamera(cameraControl, levelEditor);
-		popEnemies_ = enemies;
+		ChangeCamera(cameraControl, levelEditor);	
 		EventUpdate();
 	}
 

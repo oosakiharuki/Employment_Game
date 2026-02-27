@@ -143,7 +143,7 @@ void SelectScene::SpitOutGameObject() {
 	//ステージの当たり判定を設定/配置
 	spitOut_.SpitOutStage(stageObj_, stageFileName_);
 	//ステージオブジェクトを配置
-	spitOut_.SpitOutStageObject(stageObjects_);
+	stageObjects_ = std::move(spitOut_.SpitOutStageObject());
 }
 
 void SelectScene::SceneUpdate() {

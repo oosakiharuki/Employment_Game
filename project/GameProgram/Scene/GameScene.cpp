@@ -104,12 +104,11 @@ void GameScene::PlayerAliveUpdate() {
 
 	//イベントトリガーの更新
 	for (auto& eventTrigger : eventTriggers_) {
-		eventTrigger->Update(*cameraControl_,levelEditor_,enemies_);
-		if (eventTrigger->GetEventData().isEvent) {
-			enemies_ = std::move(eventTrigger->GetPopEnemy());
-		}
+		eventTrigger->Update(*cameraControl_, levelEditor_, std::move(enemies_));
+		enemies_ = eventTrigger->GetPopEnemy();//moveで渡したのを返してもらう(eventTriggerで増える)
 	}
 
+	//イベントで全て倒したら削除
 	eventTriggers_.remove_if([](auto& event) {
 		if (event->EventEnd()) {
 			return true;
@@ -238,11 +237,11 @@ void GameScene::SpitOutGameObject() {
 	//ステージの当たり判定を設定/配置
 	spitOut_.SpitOutStage(stageObj_, stageFileName_);
 	//ステージオブジェクトの配置
-	spitOut_.SpitOutStageObject(stageObjects_);
+	stageObjects_ = std::move(spitOut_.SpitOutStageObject());
 	//敵の配置
-	spitOut_.SpitOutEnemies(enemies_);
+	enemies_ = std::move(spitOut_.SpitOutEnemies());
 	//イベントトリガーの配置
-	spitOut_.SpitOutEventTrigger(eventTriggers_);
+	eventTriggers_ = std::move(spitOut_.SpitOutEventTrigger());
 
 	//ボスの配置
 	spitOut_.SpitOutBoss(boss_);
@@ -270,7 +269,7 @@ void GameScene::Respawn() {
 
 	//敵が復活
 	enemies_.clear();//一度リセット
-	spitOut_.SpitOutEnemies(enemies_);//敵の配置
+	enemies_ = std::move(spitOut_.SpitOutEnemies());//敵の配置
 
 	//突破できてないならやり直し
 	for (auto& eventTrigger : eventTriggers_) {

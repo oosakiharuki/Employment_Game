@@ -41,7 +41,7 @@ void TitleScene::InitCamera() {
 
 void TitleScene::ObjectLoading() {
 
-	spitOut_.SpitOutVisualActor(visualActors);
+	visualActors = std::move(spitOut_.SpitOutVisualActor());
 
 
 	for (auto& visualActor : visualActors) {	

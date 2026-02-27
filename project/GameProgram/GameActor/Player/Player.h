@@ -50,14 +50,6 @@ public:
 	Vector3 GetWorldPosition();
 
 	/// <summary>
-	/// getter_弾丸リスト
-	/// </summary>
-	/// <returns></returns>弾丸リスト
-	std::list<std::shared_ptr<PlayerBullet>> GetBullets() {
-		return bullets_;
-	};
-	
-	/// <summary>
 	/// getter_傘
 	/// </summary>
 	/// <returns></returns>使用している傘クラス
@@ -289,7 +281,7 @@ private:
 	const float kFixedGravityPower_ = -0.05f;//滑空時重力値を固定
 
 	/// 弾丸
-	std::list<std::shared_ptr<PlayerBullet>> bullets_;
+	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 	float fireCoolTimer_ = 0.0f;//クールタイマー
 	const float kFireCoolTimeMax_ = 0.5f;//クールタイム最大時間
 	const uint32_t kBulletCount_ = 3;//一度に出る弾丸数

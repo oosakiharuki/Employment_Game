@@ -42,12 +42,6 @@ public:
 	void SetPlayer(Player* player) { player_ = player; }
 
 	/// <summary>
-	/// getter_弾丸
-	/// </summary>
-	/// <returns>弾丸たち</returns>
-	std::list<std::shared_ptr<EnemyBullet>> GetBullets() { return bullets_; }
-
-	/// <summary>
 	/// getter_行動カウント
 	/// </summary>
 	/// <returns>カウント数</returns>
@@ -125,7 +119,7 @@ private:
 
 	std::unique_ptr<Object_glTF> object_;
 
-	std::list<std::shared_ptr<EnemyBullet>> bullets_;
+	std::list<std::unique_ptr<EnemyBullet>> bullets_;
 
 	//プレイヤークラス(追尾用)
 	Player* player_ = nullptr;

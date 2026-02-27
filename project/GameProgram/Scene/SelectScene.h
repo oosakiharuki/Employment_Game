@@ -36,7 +36,7 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 	//ステージオブジェクトたち
-	std::list<std::shared_ptr<IStageObject>> stageObjects_;
+	std::list<std::unique_ptr<IStageObject>> stageObjects_;
 
 	//ステージ全体のオブジェクト
 	std::unique_ptr<Object3d> stageObj_;
