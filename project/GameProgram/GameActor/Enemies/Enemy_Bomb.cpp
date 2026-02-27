@@ -189,16 +189,15 @@ void Enemy_Bomb::Explosion() {
 	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 
 	//当たり判定設定
-	CollisionManager::GetInstance().CreateCollision(bombAABB_, transform_.translate, CollisionTypes::bombExplotion);
+	CollisionManager::GetInstance().CreateCollision(bombAABB_, transform_.translate, CollisionTypes::TypeBombExplotion);
 }
 
 void Enemy_Bomb::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::playerBullet ||
-		collision->GetType() == CollisionTypes::parryBullet) {
+	if (collision->GetType() == CollisionTypes::TypePlayerBullet) {
 		IsDamage();
 	}
 
-	if (collision->GetType() == CollisionTypes::stage) {
+	if (collision->GetType() == CollisionTypes::TypeStage) {
 		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
 	}
 }

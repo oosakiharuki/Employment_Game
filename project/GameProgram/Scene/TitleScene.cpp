@@ -138,7 +138,7 @@ void TitleScene::UpdateBehind() {
 	shadowUnderAABB.min = { playerShadow_->GetCenter().x, 0,playerShadow_->GetCenter().z };
 	shadowUnderAABB.max = { playerShadow_->GetCenter().x + 1, kShadowPositionY_,playerShadow_->GetCenter().z + 1 };
 
-	CollisionManager::GetInstance().CreateCollision(shadowUnderAABB,playerShadow_->GetCenter(),CollisionTypes::stage);
+	CollisionManager::GetInstance().CreateCollision(shadowUnderAABB,playerShadow_->GetCenter(),CollisionTypes::TypeStage);
 
 	CollisionManager::GetInstance().CollisionUpdate();
 }

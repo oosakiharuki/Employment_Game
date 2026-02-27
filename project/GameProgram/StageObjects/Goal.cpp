@@ -15,7 +15,7 @@ void Goal::Initialize(){
 	object_->Initialize();
 	object_->SetModelFile("goal.obj");
 
-	collisionType_ = CollisionTypes::stageObject;
+	collisionType_ = CollisionTypes::TypeStageObject;
 }
 	
 void Goal::Update(){
@@ -35,7 +35,7 @@ void Goal::Draw(){
 }
 
 void Goal::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::player) {
+	if (collision->GetType() == CollisionTypes::TypePlayer) {
 		if (Input::GetInstance().TriggerKey(DIK_E) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_Y)) {
 			CollisionManager::GetInstance().SuccessGoal();
 		}

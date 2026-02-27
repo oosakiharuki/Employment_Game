@@ -2,20 +2,19 @@
 #include "MyMath.h"
 
 enum CollisionTypes {
-	player,
-	playerBullet,
-	umbrella,
-	umbrellaParry,
-	enemy,
-	enemyEye,
-	enemyBullet,
-	parryBullet,
-	stageObject,
-	shadow,
-	stage,
-	boss,
-	bombExplotion,
-	event,
+	TypePlayer,
+	TypePlayerBullet,
+	TypeUmbrella,
+	TypeUmbrellaParry,
+	TypeEnemy,
+	TypeEnemyEye,
+	TypeEnemyBullet,
+	TypeStageObject,
+	TypeShadow,
+	TypeStage,
+	TypeBoss, 
+	TypeBombExplotion,
+	TypeEvent,
 };
 
 class CollisionSource {

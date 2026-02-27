@@ -45,7 +45,7 @@ void Player::Initialize() {
 	actionState_ = std::make_unique<PlayerNormalState>();
 
 	//コリジョンタイプ
-	collisionType_ = CollisionTypes::player;
+	collisionType_ = CollisionTypes::TypePlayer;
 
 	eventMin = -kMoveMax_;
 	eventMax = kMoveMax_;
@@ -578,19 +578,19 @@ void Player::OffShield() {
 
 
 void Player::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::enemyBullet || 
-		collision->GetType() == CollisionTypes::bombExplotion || 
-		collision->GetType() == CollisionTypes::boss) {
+	if (collision->GetType() == CollisionTypes::TypeEnemyBullet || 
+		collision->GetType() == CollisionTypes::TypeBombExplotion || 
+		collision->GetType() == CollisionTypes::TypeBoss) {
 		IsDamage(GetDistance(collision->GetCenter()));
 	}
 
 	//演出中、死亡の時は当たらない
-	if (collision->GetType() == CollisionTypes::stage
+	if (collision->GetType() == CollisionTypes::TypeStage
 		&& hp_ != 0 && !isPerformance_) {
 		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap,*this, *this,collision->GetAABB());
 	}
 
-	if (collision->GetType() == CollisionTypes::event) {
+	if (collision->GetType() == CollisionTypes::TypeEvent) {
 		//イベント範囲から出れないように
 		eventMin = collision->GetAABB().min + transform_.scale;
 		eventMax = collision->GetAABB().max - transform_.scale;

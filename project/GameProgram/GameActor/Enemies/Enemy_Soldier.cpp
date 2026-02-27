@@ -164,12 +164,11 @@ void Enemy_Soldier::FireBullet() {
 }
 
 void Enemy_Soldier::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::playerBullet || 
-		collision->GetType() == CollisionTypes::parryBullet) {
+	if (collision->GetType() == CollisionTypes::TypePlayerBullet) {
 		IsDamage();
 	}
 
-	if (collision->GetType() == CollisionTypes::stage) {
+	if (collision->GetType() == CollisionTypes::TypeStage) {
 		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
 	}
 }

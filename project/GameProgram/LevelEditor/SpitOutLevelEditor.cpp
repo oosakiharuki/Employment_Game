@@ -81,7 +81,7 @@ void SpitOutLevelEditor::SpitOutStage(std::unique_ptr<Object3d>& stageObj, const
 			aabb.min = position - object.colliderSize;
 			aabb.max = position + object.colliderSize;
 
-			CollisionManager::GetInstance().CreateStageCollision(aabb,position,CollisionTypes::stage);
+			CollisionManager::GetInstance().CreateStageCollision(aabb,position,CollisionTypes::TypeStage);
 		}
 	}
 }

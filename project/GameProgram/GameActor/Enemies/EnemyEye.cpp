@@ -6,7 +6,7 @@ using namespace MyMath;
 
 void EnemyEye::Update(const Vector3& enemyPos, const Vector3& foundReach) {
 
-	collisionType_ = CollisionTypes::enemyEye;
+	collisionType_ = CollisionTypes::TypeEnemyEye;
 
 	collisionAABB_.min = enemyPos - foundReach;
 	collisionAABB_.max = enemyPos + foundReach;
@@ -42,13 +42,13 @@ void EnemyEye::Update(const Vector3& enemyPos, const Vector3& foundReach) {
 }
 
 void EnemyEye::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == player && !isWall_) {
+	if (collision->GetType() == CollisionTypes::TypePlayer && !isWall_) {
 		isFound_ = true;
 		playerPosition_ = collision->GetCenter();
 	}
 
 	//順番による
-	if (collision->GetType() == stage) {
+	if (collision->GetType() == CollisionTypes::TypeStage) {
 
 		Segment segment;
 		segment.origin = enemyPosition_;      //敵座標

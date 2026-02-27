@@ -18,7 +18,7 @@ void WarpGate::Initialize() {
 	//Transform更新処理
 	transform_ = wt_.UpdateTransform();
 
-	collisionType_ = CollisionTypes::stageObject;
+	collisionType_ = CollisionTypes::TypeStageObject;
 }
 
 void WarpGate::Update() {
@@ -96,7 +96,7 @@ void WarpGate::TouchWarpGate() {
 
 
 void WarpGate::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::player && !warpExitMode_) {
+	if (collision->GetType() == CollisionTypes::TypePlayer && !warpExitMode_) {
 		scaleFlag_ = true;
 		if (Input::GetInstance().TriggerKey(DIK_E) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_Y)) {
 			CollisionManager::GetInstance().SuccessWarp();
@@ -104,7 +104,7 @@ void WarpGate::OnCollision(CollisionSource* collision) {
 		}
 	}
 
-	if (collision->GetType() == CollisionTypes::stage && warpExitMode_) {
+	if (collision->GetType() == CollisionTypes::TypeStage && warpExitMode_) {
 		CollisionManager::GetInstance().UnderCollision(minUnder_, position_, collision->GetAABB());
 	}
 }

@@ -14,7 +14,7 @@ void EventTrigger::Initialize() {
 	object_->Initialize();
 	object_->SetModelFile("EventGate.gltf");
 
-	collisionType_ = CollisionTypes::event;
+	collisionType_ = CollisionTypes::TypeEvent;
 }
 
 void EventTrigger::Update() {
@@ -269,7 +269,7 @@ void EventTrigger::FailureEvent() {
 }
 
 void EventTrigger::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::player) {
+	if (collision->GetType() == CollisionTypes::TypePlayer) {
 		eventData_.isEvent = true;
 	}
 
