@@ -38,7 +38,7 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 
 	//enemyState_ = std::make_unique<EnemySearchState>();
 
-	collisionType_ = CollisionTypes::enemy;
+	collisionType_ = CollisionTypes::TypeEnemy;
 
 	enemyEye_ = std::make_unique<EnemyEye>();
 }

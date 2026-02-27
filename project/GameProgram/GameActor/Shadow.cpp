@@ -19,7 +19,7 @@ void Shadow::Initialize() {
 	//Transform更新処理
 	transform_ = wt_.UpdateTransform();
 
-	collisionType_ = CollisionTypes::shadow;
+	collisionType_ = CollisionTypes::TypeShadow;
 }
 
 
@@ -53,7 +53,7 @@ void Shadow::Draw() {
 }
 
 void Shadow::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::stage) {
+	if (collision->GetType() == CollisionTypes::TypeStage) {
 		CollisionManager::GetInstance().UnderCollision(minUnder_,actorPosition_,collision->GetAABB());
 
 		////プレイヤーと現段階短い距離

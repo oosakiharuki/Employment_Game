@@ -25,7 +25,7 @@ void Umbrella::Initialize() {
 
 	reaction_ = std::make_unique<Reaction>();
 
-	collisionType_ = CollisionTypes::umbrella;
+	collisionType_ = CollisionTypes::TypeUmbrella;
 }
 
 void Umbrella::Update() {
@@ -67,12 +67,12 @@ void Umbrella::Draw() {
 }
 
 void Umbrella::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::enemyBullet && isShield_) {
+	if (collision->GetType() == CollisionTypes::TypeEnemyBullet && isShield_) {
 		isHit_ = true;
 		scaleTimer_ = 0.0f;
 		transform_.scale = kDefaultScale_;
 
-		if (collisionType_ == CollisionTypes::umbrellaParry) {
+		if (collisionType_ == CollisionTypes::TypeUmbrellaParry) {
 			parryTime_ = kParryTimeMax_;//連続で跳ね返せるように
 			player_->ParrySuccess();//パリィ成功処理
 			return;
@@ -101,11 +101,11 @@ void Umbrella::ShieldMode() {
 void Umbrella::ParryUpdate() {
 	if (!isParry_) {
 		parryTime_ = kParryTimeMax_;
-		collisionType_ = CollisionTypes::umbrella;
+		collisionType_ = CollisionTypes::TypeUmbrella;
 		return;
 	}
 
-	collisionType_ = CollisionTypes::umbrellaParry;
+	collisionType_ = CollisionTypes::TypeUmbrellaParry;
 	parryTime_ -= kDeltaTime_;
 
 	if(parryTime_ <= 0.0f) {

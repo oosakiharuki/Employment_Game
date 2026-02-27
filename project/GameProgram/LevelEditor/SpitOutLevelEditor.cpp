@@ -29,9 +29,10 @@ void SpitOutLevelEditor::SpitOutPlayer(std::unique_ptr<Player>& player) {
 	}
 }
 
-void SpitOutLevelEditor::SpitOutEnemies(std::vector<std::shared_ptr<BaseEnemy>>& enemies) {
+std::vector<std::unique_ptr<BaseEnemy>> SpitOutLevelEditor::SpitOutEnemies() {
+	std::vector<std::unique_ptr<BaseEnemy>> enemies;
 	//- 敵配置 -
-//敵配置データがあるとき
+	//敵配置データがあるとき
 	if (!levelEditor_->GetLevelData()->spawnEnemies.empty()) {
 		for (auto& enemyData : levelEditor_->GetLevelData()->spawnEnemies) {
 
@@ -61,6 +62,7 @@ void SpitOutLevelEditor::SpitOutEnemies(std::vector<std::shared_ptr<BaseEnemy>>&
 			enemies.push_back(std::move(enemy));
 		}
 	}
+	return enemies;
 }
 
 void SpitOutLevelEditor::SpitOutStage(std::unique_ptr<Object3d>& stageObj, const std::string& stageFileName) {
@@ -81,12 +83,14 @@ void SpitOutLevelEditor::SpitOutStage(std::unique_ptr<Object3d>& stageObj, const
 			aabb.min = position - object.colliderSize;
 			aabb.max = position + object.colliderSize;
 
-			CollisionManager::GetInstance().CreateStageCollision(aabb,position,CollisionTypes::stage);
+			CollisionManager::GetInstance().CreateStageCollision(aabb,position,CollisionTypes::TypeStage);
 		}
 	}
 }
 
-void SpitOutLevelEditor::SpitOutStageObject(std::list<std::shared_ptr<IStageObject>>& stageObjects) {
+std::list<std::unique_ptr<IStageObject>> SpitOutLevelEditor::SpitOutStageObject() {
+	std::list<std::unique_ptr<IStageObject>> stageObjects;
+
 	//- ステージオブジェクト(ギミック)配置 -
 	//ステージオブジェクトの配置データがあるとき
 	if (!levelEditor_->GetLevelData()->stageObjects.empty()) {
@@ -113,6 +117,7 @@ void SpitOutLevelEditor::SpitOutStageObject(std::list<std::shared_ptr<IStageObje
 			}
 		}
 	}
+	return stageObjects;
 }
 
 void SpitOutLevelEditor::SettingStageObject(IStageObject& stageObject, LevelEditor::LevelData::StageObjectData data) {
@@ -124,7 +129,9 @@ void SpitOutLevelEditor::SettingStageObject(IStageObject& stageObject, LevelEdit
 }
 
 
-void SpitOutLevelEditor::SpitOutEventTrigger(std::list<std::shared_ptr<EventTrigger>>& eventTriggers) {
+std::list<std::unique_ptr<EventTrigger>> SpitOutLevelEditor::SpitOutEventTrigger() {
+	std::list<std::unique_ptr<EventTrigger>> eventTriggers;
+
 	//- イベントトリガー配置 -
 	//イベントトリガー配置データがあるとき
 	if (!levelEditor_->GetLevelData()->eventTriggerDatas.empty()) {
@@ -147,6 +154,7 @@ void SpitOutLevelEditor::SpitOutEventTrigger(std::list<std::shared_ptr<EventTrig
 			eventTriggers.push_back(std::move(eventTrigger));
 		}
 	}
+	return eventTriggers;
 }
 
 void SpitOutLevelEditor::SpitOutBoss(std::unique_ptr<Boss>& boss) {
@@ -164,7 +172,9 @@ void SpitOutLevelEditor::SpitOutBoss(std::unique_ptr<Boss>& boss) {
 	}
 }
 
-void SpitOutLevelEditor::SpitOutVisualActor(std::vector<std::shared_ptr<VisualActor>>& visualActors) {
+std::vector<std::unique_ptr<VisualActor>> SpitOutLevelEditor::SpitOutVisualActor() {
+	std::vector<std::unique_ptr<VisualActor>> visualActors;
+
 	if (!levelEditor_->GetLevelData()->objects.empty()) {
 		for (auto& objectData : levelEditor_->GetLevelData()->objects) {
 			//fileNameに名前があるとき
@@ -176,4 +186,5 @@ void SpitOutLevelEditor::SpitOutVisualActor(std::vector<std::shared_ptr<VisualAc
 			}
 		}
 	}
+	return visualActors;
 }

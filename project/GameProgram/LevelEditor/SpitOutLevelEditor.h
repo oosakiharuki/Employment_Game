@@ -35,7 +35,7 @@ public:
 	/// 敵の配置
 	/// </summary>
 	/// <param name="enemies">敵の配列</param>
-	void SpitOutEnemies(std::vector<std::shared_ptr<BaseEnemy>>& enemies);
+	std::vector<std::unique_ptr<BaseEnemy>> SpitOutEnemies();
 
 	/// <summary>
 	/// ステージの当たり判定設定
@@ -49,7 +49,7 @@ public:
 	/// ステージオブジェクトの配置
 	/// </summary>
 	/// <param name="stageObjects">ステージオブジェクトの配列</param>
-	void SpitOutStageObject(std::list<std::shared_ptr<IStageObject>>& stageObjects);
+	std::list<std::unique_ptr<IStageObject>> SpitOutStageObject();
 
 	
 	/// <summary>
@@ -63,7 +63,7 @@ public:
 	/// イベントトリガーの配置
 	/// </summary>
 	/// <param name="eventTrigger">イベントトリガーの配列</param>
-	void SpitOutEventTrigger(std::list<std::shared_ptr<EventTrigger>>& eventTrigger);
+	std::list<std::unique_ptr<EventTrigger>> SpitOutEventTrigger();
 
 	/// <summary>
 	/// ボスの配置
@@ -71,7 +71,7 @@ public:
 	/// <param name="boss">ボス</param>
 	void SpitOutBoss(std::unique_ptr<Boss>& boss);
 
-	void SpitOutVisualActor(std::vector<std::shared_ptr<VisualActor>>& visualActors);
+	std::vector<std::unique_ptr<VisualActor>> SpitOutVisualActor();
 
 private:
 	//使用するエディタ

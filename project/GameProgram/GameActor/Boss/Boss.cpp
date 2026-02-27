@@ -17,7 +17,7 @@ void Boss::Initialize() {
 
 	bossState_ = std::make_unique<BossMoveState>();
 
-	collisionType_ = CollisionTypes::boss;
+	collisionType_ = CollisionTypes::TypeBoss;
 
 	hp_ = 60;
 	
@@ -331,8 +331,7 @@ bool Boss::LerpGoal() {
 
 
 void Boss::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::playerBullet ||
-		collision->GetType() == CollisionTypes::parryBullet) {
+	if (collision->GetType() == CollisionTypes::TypePlayerBullet) {
 		IsDamage();
 	}
 }

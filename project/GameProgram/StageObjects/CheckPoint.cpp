@@ -16,7 +16,7 @@ void CheckPoint::Initialize() {
 	object_->Initialize();
 	object_->SetModelFile("checkpoint.obj");
 
-	collisionType_ = CollisionTypes::stageObject;
+	collisionType_ = CollisionTypes::TypeStageObject;
 }
 
 void CheckPoint::Update() {
@@ -36,7 +36,7 @@ void CheckPoint::Draw() {
 }
 
 void CheckPoint::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::player) {
+	if (collision->GetType() == CollisionTypes::TypePlayer) {
 		transform_.rotate.y += 10.0f;
 		NextStageSave::GetInstance().SetCheckPoint(transform_.translate);
 	}

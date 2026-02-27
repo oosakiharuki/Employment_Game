@@ -40,7 +40,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
+	void Update(CameraControl& cameraControl,LevelEditor& levelEditor, std::vector<std::unique_ptr<BaseEnemy>> enemies);
 	/// <summary>
 	/// 描画処理
 	/// </summary>
@@ -97,12 +97,8 @@ public:
 	/// <returns></returns>
 	EventData GetEventData() { return eventData_; }
 
-	/// <summary>
-	/// GameSceneにある
-	/// </summary>
-	/// <param name="E"></param>
-	void SetPopEnemies(const std::vector<std::shared_ptr<BaseEnemy>>& enemies) { popEnemies_ = enemies; }
-	std::vector<std::shared_ptr<BaseEnemy>> GetPopEnemy() const { return popEnemies_; }
+	//void SetPopEnemy(std::vector<std::unique_ptr<BaseEnemy>> enemies) { popEnemies_ = std::move(enemies); }
+	std::vector<std::unique_ptr<BaseEnemy>> GetPopEnemy()  { return std::move(popEnemies_); }
 
 	/// <summary>
 	/// イベント終了
@@ -153,7 +149,7 @@ private:
 	uint32_t enemyDeadCount_ = 0;
 
 	//登場する敵たち
-	std::vector<std::shared_ptr<BaseEnemy>> popEnemies_;
+	std::vector<std::unique_ptr<BaseEnemy>> popEnemies_;
 
 	//イベントのデータ
 	EventData eventData_;

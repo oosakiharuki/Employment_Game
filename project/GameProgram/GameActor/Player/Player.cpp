@@ -45,7 +45,7 @@ void Player::Initialize() {
 	actionState_ = std::make_unique<PlayerNormalState>();
 
 	//コリジョンタイプ
-	collisionType_ = CollisionTypes::player;
+	collisionType_ = CollisionTypes::TypePlayer;
 
 	eventMin = -kMoveMax_;
 	eventMax = kMoveMax_;
@@ -287,6 +287,13 @@ void Player::LifeUpdate() {
 
 	//重力
 	GravityUpdate(transform_.translate.y);
+
+	//落ちた場合
+	IsFall();
+
+	if (CollisionManager::GetInstance().IsGoal() || CollisionManager::GetInstance().IsWarp()) {
+		isPerformance_ = true;
+	}
 }
 
 void Player::Gliding() {
@@ -359,7 +366,35 @@ void Player::Dead() {
 	}
 }
 
-void Player::Performance() {}
+void Player::Performance() {
+
+	if (CollisionManager::GetInstance().IsGoal()) {
+		DirectionTheCamera();//向きをカメラのほうに(-Z方向)
+	}
+	else if (CollisionManager::GetInstance().IsWarp()) {
+		BackDirection();//向きを前に(Z方向)
+	}	
+	else if (isStartPerformance_) {
+		if (pointY_ == kStartPointY_) {
+			playerPoint_ = transform_.translate;
+		}
+
+		float startPointY = playerPoint_.y + pointY_;//プレイヤーが真下からくるように設定する
+
+		//プレイヤー配置座標 + 地面当たり判定によって上げられる分
+		if (startPointY >= playerPoint_.y) {
+			SetTranslate({ playerPoint_.x,startPointY,playerPoint_.z });
+			isStartPerformance_ = false;
+			IsPerformanceFlag(false);//演出モードを終了し操作できるように
+			jumpPower_ = 0.3f;
+			transform_.translate.y += jumpPower_;//強制的にジャンプさせて飛び出たようにする
+		}
+		else {
+			pointY_ += kPlayerUp_;
+			SetTranslate({ playerPoint_.x,startPointY,playerPoint_.z });
+		}
+	}
+}
 
 #pragma region プレイヤーの操作
 
@@ -578,19 +613,19 @@ void Player::OffShield() {
 
 
 void Player::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::enemyBullet || 
-		collision->GetType() == CollisionTypes::bombExplotion || 
-		collision->GetType() == CollisionTypes::boss) {
+	if (collision->GetType() == CollisionTypes::TypeEnemyBullet || 
+		collision->GetType() == CollisionTypes::TypeBombExplotion || 
+		collision->GetType() == CollisionTypes::TypeBoss) {
 		IsDamage(GetDistance(collision->GetCenter()));
 	}
 
 	//演出中、死亡の時は当たらない
-	if (collision->GetType() == CollisionTypes::stage
+	if (collision->GetType() == CollisionTypes::TypeStage
 		&& hp_ != 0 && !isPerformance_) {
 		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap,*this, *this,collision->GetAABB());
 	}
 
-	if (collision->GetType() == CollisionTypes::event) {
+	if (collision->GetType() == CollisionTypes::TypeEvent) {
 		//イベント範囲から出れないように
 		eventMin = collision->GetAABB().min + transform_.scale;
 		eventMax = collision->GetAABB().max - transform_.scale;
@@ -629,9 +664,10 @@ void Player::IsDamage(const Vector3& hitPoint) {
 }
 
 void Player::IsFall() {
-	if (hp_ == 0) {
-		return;
+	if (transform_.translate.y >= kFallEndY_) {
+		return;//落ちていない
 	}
+	//落ちる地点より下の場合
 	//一発K.O
 	hp_ = 0;
 	//ダメージSE再生

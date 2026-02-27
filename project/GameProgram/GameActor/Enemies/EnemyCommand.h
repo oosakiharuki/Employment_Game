@@ -109,18 +109,10 @@ public:
 	/// <returns>プレイヤーからボムの距離</returns>
 	virtual Vector3 GetDistance() = 0;
 
-	/// <summary>
-	/// 爆発しているか
-	/// </summary>
-	/// <returns>爆発フラグ</returns>
-	virtual bool IsExplosion() = 0;
-
 protected:
 
 	//追尾開始
 	bool isHomingStart_ = false;
-	//爆発
-	bool isExplosion_ = false;
 
 	//爆発するまでのタイマー
 	const float kBombTimeMax_ = 5.0f;//max

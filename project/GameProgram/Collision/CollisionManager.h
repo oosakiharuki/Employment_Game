@@ -103,15 +103,23 @@ public:
 
 
 	bool IsWarp() { return isWarp_; }
-	void SuccessWarp() { isWarp_ = true; }
+	void SuccessWarp(const Vector3& center) { 
+		isWarp_ = true;
+		zoomPoint_ = center;
+	}
 
 	bool IsGoal() { return isGoal_; }
-	void SuccessGoal() { isGoal_ = true; }
+	void SuccessGoal(const Vector3& center) {
+		isGoal_ = true;
+		zoomPoint_ = center;
+	}
 
 	void ResetFrag() {
 		isWarp_ = false;
 		isGoal_ = false;
 	}
+
+	const Vector3& GetZoomPoint() { return zoomPoint_; }
 
 private:
 	/// <summary>
@@ -140,6 +148,8 @@ private:
 	bool isGoal_ = false;
 	//ワープで次のステージに進むフラグ
 	bool isWarp_ = false;
+
+	Vector3 zoomPoint_{};
 
 	std::vector<CollisionSource*> collisions_;
 

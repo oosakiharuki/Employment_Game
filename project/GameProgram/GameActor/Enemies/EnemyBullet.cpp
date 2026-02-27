@@ -22,7 +22,7 @@ void EnemyBullet::Initialize() {
 	bulletAABB.min = -kBulletSize_ * kDivideByTwo_;
 	bulletAABB.max = kBulletSize_ * kDivideByTwo_;
 
-	collisionType_ = CollisionTypes::enemyBullet;
+	collisionType_ = CollisionTypes::TypeEnemyBullet;
 }
 
 void EnemyBullet::Update() {
@@ -59,16 +59,16 @@ void EnemyBullet::Draw() {
 }
 
 void EnemyBullet::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::player || collision->GetType() == CollisionTypes::stage ||
-		collision->GetType() == CollisionTypes::umbrella ||
-		(collision->GetType() == CollisionTypes::enemy && collisionType_ == CollisionTypes::parryBullet) || 
-		(collision->GetType() == CollisionTypes::boss && collisionType_ == CollisionTypes::parryBullet)) {
+	if (collision->GetType() == CollisionTypes::TypePlayer || collision->GetType() == CollisionTypes::TypeStage ||
+		collision->GetType() == CollisionTypes::TypeUmbrella ||
+		(collision->GetType() == CollisionTypes::TypeEnemy && collisionType_ == CollisionTypes::TypePlayerBullet) || 
+		(collision->GetType() == CollisionTypes::TypeBoss && collisionType_ == CollisionTypes::TypePlayerBullet)) {
 		//消滅フラグ
 		isDead_ = true;
 	}
 
-	if (collision->GetType() == CollisionTypes::umbrellaParry) {
-		collisionType_ = CollisionTypes::parryBullet;//タイプ変更(パリィ弾)
+	if (collision->GetType() == CollisionTypes::TypeUmbrellaParry) {
+		collisionType_ = CollisionTypes::TypePlayerBullet;//パリィ (コリジョンタイプをプレイヤー弾に変更)
 		isParry = true;//跳ね返るフラグ
 	}
 }

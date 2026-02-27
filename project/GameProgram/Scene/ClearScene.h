@@ -43,7 +43,7 @@ private:
 	LevelEditor levelEditor_;
 	SpitOutLevelEditor spitOut_;
 	//オブジェクト描画
-	std::vector<std::shared_ptr<VisualActor>> visualActors;
+	std::vector<std::unique_ptr<VisualActor>> visualActors;
 	std::unordered_map<std::string, Transform> transforms_;//各々の変更用
 	//プレイヤーを前に向かす
 	const float kPlayerFrontRange_ = 180.0f;

@@ -44,7 +44,7 @@ void ClearScene::InitCamera() {
 }
 
 void ClearScene::InitObject() {
-	spitOut_.SpitOutVisualActor(visualActors);
+	visualActors = std::move(spitOut_.SpitOutVisualActor());
 
 	for (auto& visualActor : visualActors) {
 		transforms_[visualActor->GetObjectName()] = visualActor->GetTransform();

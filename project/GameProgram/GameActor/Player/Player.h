@@ -50,14 +50,6 @@ public:
 	Vector3 GetWorldPosition();
 
 	/// <summary>
-	/// getter_弾丸リスト
-	/// </summary>
-	/// <returns></returns>弾丸リスト
-	std::list<std::shared_ptr<PlayerBullet>> GetBullets() {
-		return bullets_;
-	};
-	
-	/// <summary>
 	/// getter_傘
 	/// </summary>
 	/// <returns></returns>使用している傘クラス
@@ -289,7 +281,7 @@ private:
 	const float kFixedGravityPower_ = -0.05f;//滑空時重力値を固定
 
 	/// 弾丸
-	std::list<std::shared_ptr<PlayerBullet>> bullets_;
+	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 	float fireCoolTimer_ = 0.0f;//クールタイマー
 	const float kFireCoolTimeMax_ = 0.5f;//クールタイム最大時間
 	const uint32_t kBulletCount_ = 3;//一度に出る弾丸数
@@ -327,6 +319,9 @@ private:
 	float knockBackTimer_ = 0.0f;
 	float knockBackTimeMax_ = 0.0f;//最大ノックバック時間
 	const Vector3 kBulletKnockbackPower_ = { 0.0f,0.0f,0.1f };//撃った場合のノックバックパワー
+
+	//落ちる限界
+	const float kFallEndY_ = -10.0f;
 
 	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
 	//残機(remain)
@@ -406,4 +401,15 @@ private:
 	std::unique_ptr<BasePlayerState> actionState_;
 
 	bool isRespawn_ = false;
+
+
+	bool isStartPerformance_ = true;
+
+	//スタート演出(水たまりから飛び出る感じに)
+	Vector3 playerPoint_{};
+
+	const float kStartPointY_ = -10.0f;
+	float pointY_ = kStartPointY_;
+	//スタート時にプレイヤーを上げる変数
+	const float kPlayerUp_ = 0.1f;
 };

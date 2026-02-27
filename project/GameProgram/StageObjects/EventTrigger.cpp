@@ -14,10 +14,20 @@ void EventTrigger::Initialize() {
 	object_->Initialize();
 	object_->SetModelFile("EventGate.gltf");
 
-	collisionType_ = CollisionTypes::event;
+	collisionType_ = CollisionTypes::TypeEvent;
 }
 
-void EventTrigger::Update() {
+void EventTrigger::Update(CameraControl& cameraControl, LevelEditor& levelEditor , std::vector<std::unique_ptr<BaseEnemy>> enemies) {
+
+	popEnemies_ = std::move(enemies);
+
+	if (eventData_.isEvent) {
+		ChangeCamera(cameraControl, levelEditor);	
+		EventUpdate();
+	}
+
+	ReturnCamera(cameraControl, levelEditor);
+
 	//当たり判定設定
 	collisionAABB_ = eventData_.aabb;
 
@@ -269,7 +279,7 @@ void EventTrigger::FailureEvent() {
 }
 
 void EventTrigger::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::player) {
+	if (collision->GetType() == CollisionTypes::TypePlayer) {
 		eventData_.isEvent = true;
 	}
 

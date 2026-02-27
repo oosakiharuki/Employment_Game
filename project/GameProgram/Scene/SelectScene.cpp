@@ -44,11 +44,6 @@ void SelectScene::Update() {
 	for (auto& stageObject : stageObjects_) {
 		stageObject->Update();
 	}
-
-	//ワープしてゲームシーンに移動
-	if (CollisionManager::GetInstance().IsWarp()) {
-		WarpNextScene(*player_.get(),cameraControl_.get(), isNextGameScene);
-	}
 	
 	//カメラコントロールの更新
 	cameraControl_->Update(&*camera_);
@@ -148,17 +143,12 @@ void SelectScene::SpitOutGameObject() {
 	//ステージの当たり判定を設定/配置
 	spitOut_.SpitOutStage(stageObj_, stageFileName_);
 	//ステージオブジェクトを配置
-	spitOut_.SpitOutStageObject(stageObjects_);
+	stageObjects_ = std::move(spitOut_.SpitOutStageObject());
 }
 
 void SelectScene::SceneUpdate() {
 
-	//タイトルに戻る
-	//if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
-	//	SceneManager::GetInstance().ChangeScene("Title");
-	//}
-
-	if (isNextGameScene) {
+	if (CollisionManager::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
 		SceneManager::GetInstance().ChangeScene("Game");
 	}
 

@@ -83,34 +83,32 @@ void CollisionManager::CollisionUpdate() {
 
 void CollisionManager::EachCollision(CollisionSource& collisionA, CollisionSource& collisionB) {
 	//プレイヤー
-	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::enemyBullet);
-	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::enemyEye);
-	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::boss);
-	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::bombExplotion); 
-	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::stage);
-	DetermineType(collisionA, CollisionTypes::player, collisionB, CollisionTypes::event);
+	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeEnemyBullet);
+	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeEnemyEye);
+	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeBoss);
+	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeBombExplotion); 
+	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeStage);
+	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeEvent);
 	//弾丸(player)
-	DetermineType(collisionA,CollisionTypes::playerBullet,collisionB,CollisionTypes::stage);
+	DetermineType(collisionA,CollisionTypes::TypePlayerBullet,collisionB,CollisionTypes::TypeStage);
 	//傘
-	DetermineType(collisionA, CollisionTypes::umbrella, collisionB, CollisionTypes::enemyBullet);
-	DetermineType(collisionA, CollisionTypes::umbrellaParry, collisionB, CollisionTypes::enemyBullet);
+	DetermineType(collisionA, CollisionTypes::TypeUmbrella, collisionB, CollisionTypes::TypeEnemyBullet);
+	DetermineType(collisionA, CollisionTypes::TypeUmbrellaParry, collisionB, CollisionTypes::TypeEnemyBullet);
 	//敵
-	DetermineType(collisionA, CollisionTypes::enemy, collisionB, CollisionTypes::playerBullet);
-	DetermineType(collisionA, CollisionTypes::enemy, collisionB, CollisionTypes::parryBullet);
-	DetermineType(collisionA, CollisionTypes::enemy, collisionB, CollisionTypes::stage);
+	DetermineType(collisionA, CollisionTypes::TypeEnemy, collisionB, CollisionTypes::TypePlayerBullet);
+	DetermineType(collisionA, CollisionTypes::TypeEnemy, collisionB, CollisionTypes::TypeStage);
 	//敵のサーチ範囲
-	DetermineType(collisionA, CollisionTypes::enemyEye, collisionB, CollisionTypes::player);
-	DetermineType(collisionA, CollisionTypes::enemyEye, collisionB , CollisionTypes::stage);
+	DetermineType(collisionA, CollisionTypes::TypeEnemyEye, collisionB, CollisionTypes::TypePlayer);
+	DetermineType(collisionA, CollisionTypes::TypeEnemyEye, collisionB , CollisionTypes::TypeStage);
 	//弾丸(enemy)
-	DetermineType(collisionA, CollisionTypes::enemyBullet, collisionB, CollisionTypes::stage);
+	DetermineType(collisionA, CollisionTypes::TypeEnemyBullet, collisionB, CollisionTypes::TypeStage);
 	//ステージオブジェクト
-	DetermineType(collisionA, CollisionTypes::stageObject, collisionB, CollisionTypes::player);
-	DetermineType(collisionA, CollisionTypes::stageObject, collisionB, CollisionTypes::stage);//最初のワープゲートで使う
+	DetermineType(collisionA, CollisionTypes::TypeStageObject, collisionB, CollisionTypes::TypePlayer);
+	DetermineType(collisionA, CollisionTypes::TypeStageObject, collisionB, CollisionTypes::TypeStage);//最初のワープゲートで使う
 	//ボス
-	DetermineType(collisionA, CollisionTypes::boss, collisionB, CollisionTypes::playerBullet);
-	DetermineType(collisionA, CollisionTypes::boss, collisionB, CollisionTypes::parryBullet);
+	DetermineType(collisionA, CollisionTypes::TypeBoss, collisionB, CollisionTypes::TypePlayerBullet);
 	//影
-	DetermineType(collisionA,CollisionTypes::shadow,collisionB,CollisionTypes::stage);
+	DetermineType(collisionA,CollisionTypes::TypeShadow,collisionB,CollisionTypes::TypeStage);
 }
 
 void CollisionManager::DetermineType(CollisionSource& collisionA, const CollisionTypes& typeA, CollisionSource& collisionB, const CollisionTypes& typeB) {

@@ -36,7 +36,7 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 	//ステージオブジェクトたち
-	std::list<std::shared_ptr<IStageObject>> stageObjects_;
+	std::list<std::unique_ptr<IStageObject>> stageObjects_;
 
 	//ステージ全体のオブジェクト
 	std::unique_ptr<Object3d> stageObj_;
@@ -71,8 +71,6 @@ private:
 	//変更する場所(ジャンプ説明前は移動の説明)
 	Guide kGuideMove_ = { "guide_move","guide_move", kSpriteTranslateMove_, kSpriteSize_, -100.0f, 100.0f };  //移動の説明
 	Guide kGuideWarp_ = { "guide_warp","guide_warp",kSpriteTranslateKeyE_, kSpriteSize_, -100.0f, 100.0f };  //ワープに入る説明
-
-	bool isNextGameScene = false;
 
 	//背景
 	std::unique_ptr<BackGroundObject> backGround = nullptr;

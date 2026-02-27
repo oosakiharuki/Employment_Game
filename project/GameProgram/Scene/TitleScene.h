@@ -58,7 +58,7 @@ private:
 	//パーティクルコンテナ
 	std::unordered_map<std::string, std::unique_ptr<Particle>> sceneParticles_;
 
-	std::vector<std::shared_ptr<VisualActor>> visualActors;
+	std::vector<std::unique_ptr<VisualActor>> visualActors;
 	std::unordered_map<std::string ,Transform> transforms_;//各々の変更用
 
 	std::unique_ptr<Shadow> playerShadow_;//プレイヤー影
