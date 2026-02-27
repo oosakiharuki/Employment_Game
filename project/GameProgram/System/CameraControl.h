@@ -191,4 +191,7 @@ private:
 	bool isChangeCamera_ = false;
 
 	Vector3 segmentExtreme = { 0.1f,0.1f,0.1f };//極限まで数字を近く
+
+	//ズームするときのプレイヤーと少し離れた位置
+	const Vector3 kPlayerAwayPos_ = { 0, 1, -15.0f };
 };

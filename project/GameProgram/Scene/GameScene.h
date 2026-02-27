@@ -63,11 +63,6 @@ private:
 		3,3,3,"stage_0" //初期設定
 	};
 
-	/// <summary>
-	/// プレイヤーがゴールする時の処理
-	/// </summary>
-	void PlayerGoal();
-
 	//パーティクルコンテナ
 	std::unordered_map<std::string, std::unique_ptr<Particle>> sceneParticles_;
 
@@ -91,21 +86,12 @@ private:
 	//BGM
 	SoundData soundData_;
 
-	//スタート演出(水たまりから飛び出る感じに)
-	bool isStartStage_ = true;
-	Vector3 playerPoint_{};
-	const float kStartWarpGateRange_ = 90.0f;
-
-	float startPointY_ = -10.0f;
-	//スタート時のワープゲート
+	//スタート時のワープゲート(水たまりから飛び出る感じに)
 	std::unique_ptr<WarpGate> startWarp_;
-	//スタート時にプレイヤーを上げる変数
-	const float kPlayerUp_ = 0.1f;
+	//角度変更
+	const float kStartWarpGateRange_ = 90.0f;
 	//重ならないように影より上にする変数
 	const float kWarpGateUpThanShadow_ = 0.02f;
-
-	//落ちる限界
-	const float kFallEndY_ = -10.0f;
 
 	/// <summary>
 	/// 水たまりのようなワープゲート出口
@@ -127,8 +113,8 @@ private:
 	void SpitOutGameObject();
 
 	//シーンが変更するフラグ
-	bool isNextLoadingStageScene = false;
-	bool isNextClearScene = false;
+	//bool isNextLoadingStageScene = false;
+	//bool isNextClearScene = false;
 
 	//背景
 	std::unique_ptr<BackGroundObject> backGround = nullptr;

@@ -4,6 +4,7 @@
 #include "ImGuiManager.h"
 #include "Input.h"
 #include <NextStageSave.h>
+#include <CollisionManager.h>
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -14,6 +15,11 @@ void CameraControl::Initialize() {
 }
 
 void CameraControl::Update(Camera* camera) {
+
+	if (CollisionManager::GetInstance().IsGoal() || CollisionManager::GetInstance().IsWarp()) {
+		ZoomStart(CollisionManager::GetInstance().GetZoomPoint() + kPlayerAwayPos_);
+	}
+
 
 	//固定モードでないなら
 	if (!isFixedMode_ && !isFreeMode_ && !isZoom_) {

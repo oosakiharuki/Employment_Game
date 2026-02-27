@@ -328,6 +328,9 @@ private:
 	float knockBackTimeMax_ = 0.0f;//最大ノックバック時間
 	const Vector3 kBulletKnockbackPower_ = { 0.0f,0.0f,0.1f };//撃った場合のノックバックパワー
 
+	//落ちる限界
+	const float kFallEndY_ = -10.0f;
+
 	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
 	//残機(remain)
 	uint32_t remain_;
@@ -406,4 +409,15 @@ private:
 	std::unique_ptr<BasePlayerState> actionState_;
 
 	bool isRespawn_ = false;
+
+
+	bool isStartPerformance_ = true;
+
+	//スタート演出(水たまりから飛び出る感じに)
+	Vector3 playerPoint_{};
+
+	const float kStartPointY_ = -10.0f;
+	float pointY_ = kStartPointY_;
+	//スタート時にプレイヤーを上げる変数
+	const float kPlayerUp_ = 0.1f;
 };

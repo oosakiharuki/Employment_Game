@@ -72,8 +72,6 @@ private:
 	Guide kGuideMove_ = { "guide_move","guide_move", kSpriteTranslateMove_, kSpriteSize_, -100.0f, 100.0f };  //移動の説明
 	Guide kGuideWarp_ = { "guide_warp","guide_warp",kSpriteTranslateKeyE_, kSpriteSize_, -100.0f, 100.0f };  //ワープに入る説明
 
-	bool isNextGameScene = false;
-
 	//背景
 	std::unique_ptr<BackGroundObject> backGround = nullptr;
 };

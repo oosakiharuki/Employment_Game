@@ -17,7 +17,16 @@ void EventTrigger::Initialize() {
 	collisionType_ = CollisionTypes::TypeEvent;
 }
 
-void EventTrigger::Update() {
+void EventTrigger::Update(CameraControl& cameraControl, LevelEditor& levelEditor, std::vector<std::shared_ptr<BaseEnemy>> enemies) {
+
+	if (eventData_.isEvent) {
+		ChangeCamera(cameraControl, levelEditor);
+		popEnemies_ = enemies;
+		EventUpdate();
+	}
+
+	ReturnCamera(cameraControl, levelEditor);
+
 	//当たり判定設定
 	collisionAABB_ = eventData_.aabb;
 

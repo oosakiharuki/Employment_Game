@@ -287,6 +287,13 @@ void Player::LifeUpdate() {
 
 	//重力
 	GravityUpdate(transform_.translate.y);
+
+	//落ちた場合
+	IsFall();
+
+	if (CollisionManager::GetInstance().IsGoal() || CollisionManager::GetInstance().IsWarp()) {
+		isPerformance_ = true;
+	}
 }
 
 void Player::Gliding() {
@@ -359,7 +366,35 @@ void Player::Dead() {
 	}
 }
 
-void Player::Performance() {}
+void Player::Performance() {
+
+	if (CollisionManager::GetInstance().IsGoal()) {
+		DirectionTheCamera();//向きをカメラのほうに(-Z方向)
+	}
+	else if (CollisionManager::GetInstance().IsWarp()) {
+		BackDirection();//向きを前に(Z方向)
+	}	
+	else if (isStartPerformance_) {
+		if (pointY_ == kStartPointY_) {
+			playerPoint_ = transform_.translate;
+		}
+
+		float startPointY = playerPoint_.y + pointY_;//プレイヤーが真下からくるように設定する
+
+		//プレイヤー配置座標 + 地面当たり判定によって上げられる分
+		if (startPointY >= playerPoint_.y) {
+			SetTranslate({ playerPoint_.x,startPointY,playerPoint_.z });
+			isStartPerformance_ = false;
+			IsPerformanceFlag(false);//演出モードを終了し操作できるように
+			jumpPower_ = 0.3f;
+			transform_.translate.y += jumpPower_;//強制的にジャンプさせて飛び出たようにする
+		}
+		else {
+			pointY_ += kPlayerUp_;
+			SetTranslate({ playerPoint_.x,startPointY,playerPoint_.z });
+		}
+	}
+}
 
 #pragma region プレイヤーの操作
 
@@ -629,9 +664,10 @@ void Player::IsDamage(const Vector3& hitPoint) {
 }
 
 void Player::IsFall() {
-	if (hp_ == 0) {
-		return;
+	if (transform_.translate.y >= kFallEndY_) {
+		return;//落ちていない
 	}
+	//落ちる地点より下の場合
 	//一発K.O
 	hp_ = 0;
 	//ダメージSE再生

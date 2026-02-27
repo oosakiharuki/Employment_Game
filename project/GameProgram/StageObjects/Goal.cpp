@@ -37,7 +37,7 @@ void Goal::Draw(){
 void Goal::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypePlayer) {
 		if (Input::GetInstance().TriggerKey(DIK_E) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_Y)) {
-			CollisionManager::GetInstance().SuccessGoal();
+			CollisionManager::GetInstance().SuccessGoal(center_);
 		}
 	}
 }

@@ -40,7 +40,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
+	void Update(CameraControl& cameraControl,LevelEditor& levelEditor, std::vector<std::shared_ptr<BaseEnemy>> enemies);
 	/// <summary>
 	/// 描画処理
 	/// </summary>
@@ -97,11 +97,6 @@ public:
 	/// <returns></returns>
 	EventData GetEventData() { return eventData_; }
 
-	/// <summary>
-	/// GameSceneにある
-	/// </summary>
-	/// <param name="E"></param>
-	void SetPopEnemies(const std::vector<std::shared_ptr<BaseEnemy>>& enemies) { popEnemies_ = enemies; }
 	std::vector<std::shared_ptr<BaseEnemy>> GetPopEnemy() const { return popEnemies_; }
 
 	/// <summary>
