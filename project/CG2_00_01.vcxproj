@@ -113,7 +113,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\GameActor\Enemies\EnemyCommand.cpp" />
     <ClCompile Include="GameProgram\System\BasePauseState.cpp" />
     <ClCompile Include="GameProgram\StageObjects\BackGroundObject.cpp" />
-    <ClCompile Include="Engine\scene\AbstractSceneFactory.cpp" />
     <ClCompile Include="GameProgram\GameActor\Boss\BaseBossState.cpp" />
     <ClCompile Include="GameProgram\GameActor\Boss\Boss.cpp" />
     <ClCompile Include="GameProgram\GameActor\Enemies\BaseEnemyState.cpp" />
@@ -129,7 +128,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\System\LoadingModels.cpp" />
     <ClCompile Include="GameProgram\Scene\ClearScene.cpp" />
     <ClCompile Include="GameProgram\Scene\GameOverScene.cpp" />
-    <ClCompile Include="GameProgram\Scene\SceneFactory.cpp" />
     <ClCompile Include="GameProgram\Scene\SelectScene.cpp" />
     <ClCompile Include="GameProgram\GameActor\Shadow.cpp" />
     <ClCompile Include="GameProgram\StageObjects\CheckPoint.cpp" />
@@ -209,7 +207,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\LevelEditor\SpitOutLevelEditor.cpp" />
     <ClCompile Include="GameProgram\System\UIManager.cpp" />
     <ClCompile Include="Engine\base\Pipeline.cpp" />
-    <ClCompile Include="GameProgram\StageObjects\StageObjectFunction.cpp" />
     <ClCompile Include="GameProgram\GameActor\VisualActor.cpp" />
     <ClCompile Include="GameProgram\System\PauseScreen.cpp" />
   </ItemGroup>
@@ -220,7 +217,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\GameActor\Enemies\EnemyCommand.h" />
     <ClInclude Include="GameProgram\System\BasePauseState.h" />
     <ClInclude Include="GameProgram\StageObjects\BackGroundObject.h" />
-    <ClInclude Include="Engine\scene\AbstractSceneFactory.h" />
     <ClInclude Include="GameProgram\GameActor\Boss\BaseBossState.h" />
     <ClInclude Include="GameProgram\GameActor\Boss\Boss.h" />
     <ClInclude Include="GameProgram\GameActor\Enemies\BaseEnemyState.h" />
@@ -236,7 +232,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\System\LoadingModels.h" />
     <ClInclude Include="GameProgram\Scene\ClearScene.h" />
     <ClInclude Include="GameProgram\Scene\GameOverScene.h" />
-    <ClInclude Include="GameProgram\Scene\SceneFactory.h" />
     <ClInclude Include="GameProgram\Scene\SelectScene.h" />
     <ClInclude Include="GameProgram\GameActor\Shadow.h" />
     <ClInclude Include="GameProgram\StageObjects\CheckPoint.h" />
@@ -313,7 +308,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\LevelEditor\SpitOutLevelEditor.h" />
     <ClInclude Include="GameProgram\System\UIManager.h" />
     <ClInclude Include="Engine\base\Pipeline.h" />
-    <ClInclude Include="GameProgram\StageObjects\StageObjectFunction.h" />
     <ClInclude Include="GameProgram\GameActor\VisualActor.h" />
     <ClInclude Include="GameProgram\System\PauseScreen.h" />
   </ItemGroup>

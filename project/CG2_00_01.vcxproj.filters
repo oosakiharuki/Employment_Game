@@ -339,9 +339,6 @@
     <ClCompile Include="GameProgram\StageObjects\EventTrigger.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\Scene\SceneFactory.cpp">
-      <Filter>ソース ファイル\GameProgram\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\scene\SceneManager.cpp">
       <Filter>ソース ファイル\Engine\scene</Filter>
     </ClCompile>
@@ -393,9 +390,6 @@
     <ClCompile Include="GameProgram\GameActor\Player\BasePlayerState.cpp">
       <Filter>ソース ファイル\GameProgram\Player</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\StageObjects\StageObjectFunction.cpp">
-      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Boss\Boss.cpp">
       <Filter>ソース ファイル\GameProgram\Boss</Filter>
     </ClCompile>
@@ -410,9 +404,6 @@
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\VisualActor.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\scene\AbstractSceneFactory.cpp">
-      <Filter>ソース ファイル\Engine\scene</Filter>
     </ClCompile>
     <ClCompile Include="Engine\scene\BaseScene.cpp">
       <Filter>ソース ファイル\Engine\scene</Filter>
@@ -647,9 +638,6 @@
     <ClInclude Include="GameProgram\StageObjects\EventTrigger.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\Scene\SceneFactory.h">
-      <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\scene\SceneManager.h">
       <Filter>ヘッダー ファイル\Engine\scene</Filter>
     </ClInclude>
@@ -701,9 +689,6 @@
     <ClInclude Include="GameProgram\GameActor\Player\BasePlayerState.h">
       <Filter>ヘッダー ファイル\GameProgram\Player</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\StageObjects\StageObjectFunction.h">
-      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Boss\Boss.h">
       <Filter>ヘッダー ファイル\GameProgram\Boss</Filter>
     </ClInclude>
@@ -720,9 +705,6 @@
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
     <ClInclude Include="Engine\scene\BaseScene.h">
-      <Filter>ヘッダー ファイル\Engine\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\scene\AbstractSceneFactory.h">
       <Filter>ヘッダー ファイル\Engine\scene</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\StageObjects\BackGroundObject.h">

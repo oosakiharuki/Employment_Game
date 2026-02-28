@@ -1,10 +1,14 @@
 #include "GameScene.h"
 #include <sstream>
-#include "StageObjectFunction.h"
 #include "SceneManager.h"
 
+#include "SelectScene.h"
+#include "GameOverScene.h"
+#include "ClearScene.h"
+
+#include "FadeScreen.h"
+
 using namespace MyMath;
-using namespace StageObjectFunction;
 
 void GameScene::Initialize() {
 	//ゲームデータ引継ぎ(Hp,ステージ面)
@@ -30,7 +34,7 @@ void GameScene::Initialize() {
 	backGround->Initialize();
 
 	//ポーズ画面
-	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnSelect.png","Select");
+	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnSelect.png",std::make_unique<SelectScene>());
 
 	CollisionManager::GetInstance().ResetFrag();
 }
@@ -289,34 +293,36 @@ void GameScene::Respawn() {
 void GameScene::SceneUpdate() {
 #ifdef USE_IMGUI
 	if (Input::GetInstance().TriggerKey(DIK_F2)) {
-		SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動
+		SceneManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());//クリアシーンに移動
 	}
 	if (Input::GetInstance().TriggerKey(DIK_F3)) {
-		SceneManager::GetInstance().ChangeScene("GameOver");//ゲームオーバーシーンに移動
+		SceneManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());//ゲームオーバーシーンに移動
 	}
 #endif // USE_IMGUI
-
+	
+	//ゴールした+カメラズームが完了
 	if (CollisionManager::GetInstance().IsGoal() && cameraControl_->ZoomEnd()) {
-		SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動
+		SceneManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());//クリアシーンに移動
 	}
+	//ワープする+カメラズームが完了
 	else if (CollisionManager::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
 		//次のステージに進む時Hpなどパラメータがリセットされないようにする
 		NextStageSave::GetInstance().SetPlayerHp(player_->GetHp()); //現在のプレイヤー体力を保存
 		NextStageSave::GetInstance().SetPlayerRemain(player_->GetRemain()); //現在のプレイヤー残機を保存
-		SceneManager::GetInstance().ChangeScene("Game");//次のステージに移動(ゲームシーンであることは変わらない)
+		SceneManager::GetInstance().ChangeScene(std::make_unique<GameScene>());//次のステージに移動(ゲームシーンであることは変わらない)
 	}
 	else if (player_->GetRemain() == 0) {
-		//残機が0で倒された場合ゲームオーバー
-		FadeScreen::GetInstance().SetMaskTexture("fade02.png");
-		FadeScreen::GetInstance().SetBackGround("black.png");
+		//残機が0の場合ゲームオーバー
+		FadeScreen::GetInstance().SetMaskTexture("fade02.png");//フェードのマスク変更
+		FadeScreen::GetInstance().SetBackGround("black.png");  //フェードのテクスチャ変更
 
-		SceneManager::GetInstance().ChangeScene("GameOver");//ゲームオーバーシーンに移動
+		SceneManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());//ゲームオーバーシーンに移動
 	}
 
 	if (boss_) {
 		//ボスを倒したら
 		if (boss_->IsDeadMotionFinish()) {
-			SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動
+			SceneManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());//クリアシーンに移動
 		}
 	}
 	

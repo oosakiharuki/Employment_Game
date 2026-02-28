@@ -3,7 +3,11 @@
 #include "SceneManager.h"
 #include "FadeScreen.h"
 
-#include "SceneFactory.h"
+#include "TitleScene.h"
+#include "SelectScene.h"
+#include "GameScene.h"
+#include "GameOverScene.h"
+#include "ClearScene.h"
 
 /// <summary>
 /// 自作ゲーム

@@ -1,9 +1,11 @@
 #include "SelectScene.h"
-#include "StageObjectFunction.h"
 #include "SceneManager.h"
+#include "TitleScene.h"
+#include "GameScene.h"
+#include "FadeScreen.h"
+#include "CubeMap.h"
 
 using namespace MyMath;
-using namespace StageObjectFunction;
 
 void SelectScene::Initialize() {
 
@@ -26,7 +28,7 @@ void SelectScene::Initialize() {
 	backGround->Initialize();
 
 	//ポーズ画面
-	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnTitle.png", "Title");
+	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnTitle.png", std::make_unique<TitleScene>());
 
 	CollisionManager::GetInstance().ResetFrag();
 }
@@ -147,9 +149,9 @@ void SelectScene::SpitOutGameObject() {
 }
 
 void SelectScene::SceneUpdate() {
-
+	//ワープする+カメラズームが完了
 	if (CollisionManager::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
-		SceneManager::GetInstance().ChangeScene("Game");
+		SceneManager::GetInstance().ChangeScene(std::make_unique<GameScene>());
 	}
 
 	//次のシーンに移動するとき

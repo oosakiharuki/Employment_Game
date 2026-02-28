@@ -1,26 +1,5 @@
 #pragma once
-#include <cstdint>
 
-#include "MyMath.h"
-#include "Framework.h"
-
-#include "LevelEditor.h"
-#include "Player.h"
-#include "Enemy_Soldier.h"
-#include "Enemy_Turret.h"
-#include "Enemy_Bomb.h"
-#include "CheckPoint.h"
-#include "WarpGate.h"
-#include "Goal.h"
-
-#include "BoxModel.h"
-#include "FadeScreen.h"
-
-#include "EventTrigger.h"
-#include "CameraControl.h"
-
-#include "CollisionManager.h"
-#include "NextStageSave.h"
 /// <summary>
 /// シーン共有処理
 /// </summary>

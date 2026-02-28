@@ -1,11 +1,10 @@
 #pragma once
 #include "BaseScene.h"
 #include "SpitOutLevelEditor.h"
-
 #include "UIManager.h"
-
 #include "BackGroundObject.h"
 #include "PauseScreen.h"
+#include "NextStageSave.h"
 
 /// <summary>
 /// セレクト(ステージ選択)シーン(BaseSceneの派生クラス)

@@ -49,7 +49,7 @@ void PauseScreen::ResetPauseSprite() {
 
 }
 
-void PauseScreen::BeforeChangeScene(const std::string& textureName, const std::string& changeScene) {
+void PauseScreen::BeforeChangeScene(const std::string& textureName, std::unique_ptr<BaseScene> changeScene) {
 	if (spriteSelectSceneChange_ != nullptr) {
 		spriteSelectSceneChange_.reset();
 	}
@@ -59,8 +59,7 @@ void PauseScreen::BeforeChangeScene(const std::string& textureName, const std::s
 
 	ResetPauseSprite();
 
-	nextSceneName_ = changeScene;
-
+	nextScene_ = std::move(changeScene);
 }
 
 

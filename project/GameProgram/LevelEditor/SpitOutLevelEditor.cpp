@@ -1,4 +1,8 @@
 #include "SpitOutLevelEditor.h"
+#include "NextStageSave.h"
+#include "WarpGate.h"
+#include "CheckPoint.h"
+#include "Goal.h"
 
 using namespace MyMath;
 

@@ -4,6 +4,8 @@
 #include "UIManager.h"
 #include "BackGroundObject.h"
 #include "PauseScreen.h"
+#include "NextStageSave.h"
+#include "WarpGate.h"
 
 /// <summary>
 /// ゲームシーン(BaseSceneの派生クラス)

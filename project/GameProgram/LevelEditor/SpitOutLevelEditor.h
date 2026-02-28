@@ -1,7 +1,12 @@
 #pragma once
 #include "BaseScene.h"
+#include "BaseEnemy.h"
 #include "Boss.h"
+#include "IStageObject.h"
+#include "EventTrigger.h"
 #include "VisualActor.h"
+#include "LevelEditor.h"
+
 /// <summary>
 /// レベルエディタの配置
 /// </summary>

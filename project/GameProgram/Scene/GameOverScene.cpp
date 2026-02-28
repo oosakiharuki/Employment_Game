@@ -1,5 +1,9 @@
 #include "GameOverScene.h"
 #include "SceneManager.h"
+#include "SelectScene.h"
+#include "FadeScreen.h"
+#include "NextStageSave.h"
+
 void GameOverScene::Initialize() {
 
 	levelEditor_.LoadLevelEditor("resource/LevelEditor/gameOver_setting.json");
@@ -84,7 +88,7 @@ void GameOverScene::SceneUpdate() {
 	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
 	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||
 		Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance().GetIsFading()) {
-		SceneManager::GetInstance().ChangeScene("Select");
+		SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
 		FadeScreen::GetInstance().SetMaskTexture("fade01.png");
 		FadeScreen::GetInstance().SetBackGround("fadeTexture.png");
 	}
