@@ -48,12 +48,6 @@
     <Filter Include="ヘッダー ファイル\Engine\3d\Primitive">
       <UniqueIdentifier>{2b29ddec-d7f2-46fc-a887-7c963af58bac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\GameProgram\Enemies">
-      <UniqueIdentifier>{e9507568-3eb6-4560-bccc-bf7c120300a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\GameProgram\Player">
-      <UniqueIdentifier>{53cdf185-41ea-4488-b3a6-a6812d9cabc0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\GameProgram\Scene">
       <UniqueIdentifier>{0145c40c-f6f8-4011-ba37-56e69a4de176}</UniqueIdentifier>
     </Filter>
@@ -106,12 +100,6 @@
     <Filter Include="ソース ファイル\GameProgram">
       <UniqueIdentifier>{3cede06d-47e6-4f4c-9759-d4b88a455e9d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GameProgram\Enemies">
-      <UniqueIdentifier>{7e338690-e00c-4118-9659-23b6267dfd90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\GameProgram\Player">
-      <UniqueIdentifier>{7eb339fe-1b8a-46e2-9eb2-77c1a78494da}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\GameProgram\Scene">
       <UniqueIdentifier>{c5623b3f-5406-4d21-a960-cfc3601e4865}</UniqueIdentifier>
     </Filter>
@@ -139,11 +127,29 @@
     <Filter Include="ソース ファイル\GameProgram\StageObjects">
       <UniqueIdentifier>{e7200600-3803-4831-a1a7-5b8eee728d58}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GameProgram\Boss">
+    <Filter Include="ソース ファイル\GameProgram\GameActor">
+      <UniqueIdentifier>{72aab3ee-c089-4018-b5ed-b5db33a676b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\GameActor\Boss">
       <UniqueIdentifier>{93f032a7-3867-4f2e-b707-691a27167f30}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\GameProgram\Boss">
+    <Filter Include="ソース ファイル\GameProgram\GameActor\Enemies">
+      <UniqueIdentifier>{7e338690-e00c-4118-9659-23b6267dfd90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\GameActor\Player">
+      <UniqueIdentifier>{7eb339fe-1b8a-46e2-9eb2-77c1a78494da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\GameActor">
+      <UniqueIdentifier>{e92c4780-034d-4f3e-b339-a5f0aa223e7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Boss">
       <UniqueIdentifier>{f4f3b1a9-26c2-43b8-9108-cb954ac43aa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Enemies">
+      <UniqueIdentifier>{e9507568-3eb6-4560-bccc-bf7c120300a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Player">
+      <UniqueIdentifier>{53cdf185-41ea-4488-b3a6-a6812d9cabc0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -274,25 +280,25 @@
       <Filter>ソース ファイル\Engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Enemies\Enemy_Soldier.cpp">
-      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Enemies\Enemy_Turret.cpp">
-      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Enemies\EnemyBullet.cpp">
-      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Enemies\BaseEnemy.cpp">
-      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Player\Player.cpp">
-      <Filter>ソース ファイル\GameProgram\Player</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Player\PlayerBullet.cpp">
-      <Filter>ソース ファイル\GameProgram\Player</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Player\Umbrella.cpp">
-      <Filter>ソース ファイル\GameProgram\Player</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\Primitive\Primitive.cpp">
       <Filter>ソース ファイル\Engine\3d\Primitive</Filter>
@@ -304,7 +310,7 @@
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Enemies\Enemy_Bomb.cpp">
-      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Scene\ClearScene.cpp">
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
@@ -354,13 +360,7 @@
     <ClCompile Include="GameProgram\System\LoadingModels.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Shadow.cpp">
-      <Filter>ソース ファイル\GameProgram\System</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\System\NextStageSave.cpp">
-      <Filter>ソース ファイル\GameProgram\System</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\GameActor.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\System\ParticleEmitter.cpp">
@@ -385,25 +385,22 @@
       <Filter>ソース ファイル\Engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Enemies\BaseEnemyState.cpp">
-      <Filter>ソース ファイル\GameProgram\Enemies</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Player\BasePlayerState.cpp">
-      <Filter>ソース ファイル\GameProgram\Player</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Boss\Boss.cpp">
-      <Filter>ソース ファイル\GameProgram\Boss</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Boss</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Boss\BaseBossState.cpp">
-      <Filter>ソース ファイル\GameProgram\Boss</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Boss</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\LevelEditor\SpitOutLevelEditor.cpp">
       <Filter>ソース ファイル\GameProgram\LevelEditor</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\MyGame.cpp">
       <Filter>ソース ファイル\GameProgram</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\VisualActor.cpp">
-      <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
     <ClCompile Include="Engine\scene\BaseScene.cpp">
       <Filter>ソース ファイル\Engine\scene</Filter>
@@ -417,20 +414,29 @@
     <ClCompile Include="GameProgram\System\PauseScreen.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Enemies\EnemyCommand.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\GameActor\ActorState.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\GravityActor.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\ActorState.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\GameActor\GameActor.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Shadow.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\VisualActor.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Collision\CollisionSource.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GameProgram\Collsion</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Enemies\EnemyCommand.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Enemies\EnemyEye.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -579,28 +585,28 @@
       <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Enemies\Enemy_Soldier.h">
-      <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Enemies\Enemy_Bomb.h">
-      <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Enemies\Enemy_Turret.h">
-      <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Enemies\EnemyBullet.h">
-      <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Enemies\BaseEnemy.h">
-      <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Player\Player.h">
-      <Filter>ヘッダー ファイル\GameProgram\Player</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Player\PlayerBullet.h">
-      <Filter>ヘッダー ファイル\GameProgram\Player</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Player\Umbrella.h">
-      <Filter>ヘッダー ファイル\GameProgram\Player</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\Scene\ClearScene.h">
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
@@ -644,9 +650,6 @@
     <ClInclude Include="GameProgram\Collision\CollisionManager.h">
       <Filter>ヘッダー ファイル\GameProgram\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Shadow.h">
-      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\System\LoadingModels.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
@@ -657,9 +660,6 @@
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\System\NextStageSave.h">
-      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\GameActor.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\System\ParticleEmitter.h">
@@ -684,25 +684,22 @@
       <Filter>ヘッダー ファイル\Engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Enemies\BaseEnemyState.h">
-      <Filter>ヘッダー ファイル\GameProgram\Enemies</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Player\BasePlayerState.h">
-      <Filter>ヘッダー ファイル\GameProgram\Player</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Boss\Boss.h">
-      <Filter>ヘッダー ファイル\GameProgram\Boss</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Boss</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Boss\BaseBossState.h">
-      <Filter>ヘッダー ファイル\GameProgram\Boss</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Boss</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\LevelEditor\SpitOutLevelEditor.h">
       <Filter>ヘッダー ファイル\GameProgram\LevelEditor</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\MyGame.h">
       <Filter>ヘッダー ファイル\GameProgram</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\VisualActor.h">
-      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
     <ClInclude Include="Engine\scene\BaseScene.h">
       <Filter>ヘッダー ファイル\Engine\scene</Filter>
@@ -716,20 +713,29 @@
     <ClInclude Include="GameProgram\System\BasePauseState.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Enemies\EnemyCommand.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\GameActor\ActorState.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\GravityActor.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\ActorState.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\Collision\CollisionSource.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Enemies\EnemyEye.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Enemies\EnemyCommand.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Collision\CollisionSource.h">
+      <Filter>ヘッダー ファイル\GameProgram\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\VisualActor.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Shadow.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\GameActor.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
