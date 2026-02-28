@@ -187,11 +187,6 @@ void LevelEditor::LoadStageObject(nlohmann::json& object) {
 
 	//コライダー
 	SetCollider(object, stageObjectData.colliderSize, stageObjectData.transform.scale);
-
-	//移動ルート(移動床以外使わない)
-	if (stageObjectData.ObjectName == "MoveGround") {
-		SetTravelRoute(object, stageObjectData.leftPoint, stageObjectData.rightPoint);
-	}
 }
 
 void LevelEditor::LoadEventTrigger(nlohmann::json& object, const Vector3& translate) {

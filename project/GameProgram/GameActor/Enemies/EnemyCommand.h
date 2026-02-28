@@ -23,6 +23,8 @@ public:
 	/// <param name="leftPoint">右端</param>
 	void SetRouteRightPoint(const Vector3& rightPoint) { routePointRight_ = rightPoint; }
 
+	virtual void DirectionMove() = 0;
+
 	/// <summary>
 	/// 動く敵
 	/// </summary>

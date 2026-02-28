@@ -79,6 +79,19 @@ public:
 	std::vector<std::unique_ptr<VisualActor>> SpitOutVisualActor();
 
 private:
+	/// <summary>
+	/// 敵の共通テンプレート処理
+	/// </summary>
+	/// <param name="enemy">敵の基盤/派生クラスを入れる</param>
+	/// <param name="enemyData">LevelEditorからもらった敵データ</param>
+	void EnemyTemplate(BaseEnemy& enemy, LevelEditor::LevelData::EnemySpawnData enemyData);
+	/// <summary>
+	/// 移動能力がある敵キャラ
+	/// </summary>
+	/// <param name="enemy">MoveCommandを持っている敵</param>
+	/// <param name="enemyData">LevelEditorからもらった敵データ</param>
+	void EnemyMoveRoute(EnemyMoveCommand& enemy,LevelEditor::LevelData::EnemySpawnData enemyData);
+
 	//使用するエディタ
 	LevelEditor* levelEditor_;
 };

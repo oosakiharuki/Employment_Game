@@ -29,18 +29,34 @@ void Enemy_Soldier::Initialize() {
 
 	//攻撃(発泡)
 	particles_[particleFire_.name] = ParticleManager::GetInstance().InitParticle(particleFire_);
+
+	speed_.x = kMoveX_;
 }
 
 void Enemy_Soldier::Move() {
 	move_ += speed_;//移動ポイント
-	
+	transform_.translate += speed_;
+
 	//方向転換
 	//敵が右向き
+	if (move_.x <= routePointLeft_.x) {
+		speed_.x = kMoveX_;//右に進む
+		eyeReach_.x = kEyeReach_.x;
+		transform_.rotate.y = kDirectionRight_;//右が正面
+	}
+	//左向き
+	else if (move_.x >= routePointRight_.x) {
+		speed_.x = -kMoveX_;//左に進む
+		eyeReach_.x = -kEyeReach_.x;
+		transform_.rotate.y = kDirectionLeft_;//左が正面
+	}
+}
+
+void Enemy_Soldier::DirectionMove() {
 	if (transform_.rotate.y == kDirectionRight_) {
 		speed_.x = kMoveX_;//右に進む
 		eyeReach_.x = kEyeReach_.x;
 	}
-	//左向き
 	else if (transform_.rotate.y == kDirectionLeft_) {
 		speed_.x = -kMoveX_;//左に進む
 		eyeReach_.x = -kEyeReach_.x;
