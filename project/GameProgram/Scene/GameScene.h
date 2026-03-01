@@ -60,11 +60,6 @@ private:
 	/// <param name="levelEditor_file">指定したい場合は名前を入れることも可能</param>
 	void LevelEditorObjectSetting(const std::string& levelEditor_file = "");
 
-	//前ステージデータ
-	SceneSaveData sceneSaveData_ = {
-		3,3,3,"stage_0" //初期設定
-	};
-
 	//パーティクルコンテナ
 	std::unordered_map<std::string, std::unique_ptr<Particle>> sceneParticles_;
 
@@ -113,10 +108,6 @@ private:
 	/// ゲームオブジェクトの配置処理をまとめた
 	/// </summary>
 	void SpitOutGameObject();
-
-	//シーンが変更するフラグ
-	//bool isNextLoadingStageScene = false;
-	//bool isNextClearScene = false;
 
 	//背景
 	std::unique_ptr<BackGroundObject> backGround = nullptr;

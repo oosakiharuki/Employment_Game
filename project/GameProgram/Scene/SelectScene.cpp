@@ -8,12 +8,8 @@
 using namespace MyMath;
 
 void SelectScene::Initialize() {
-
-	//移行データ初期化
-	sceneSaveData_.nextStageFile = "stage_select";
-
 	//ステージシーンのゲームオブジェクト配置
-	LevelEditorObjectSetting(sceneSaveData_.nextStageFile);
+	LevelEditorObjectSetting("stage_select");
 
 	//ステージの全体層
 	stageObj_ = std::make_unique<Object3d>();
@@ -104,14 +100,10 @@ void SelectScene::LevelEditorObjectSetting(const std::string& levelEditor_file) 
 	//- プレイヤー配置 -
 	player_ = std::make_unique<Player>();
 
-	stageFileName_ = sceneSaveData_.nextStageFile;//ステージの全体層(.obj)
+	stageFileName_ = levelEditor_file;//ステージの全体層(.obj)
 
-	//値が入っている場合
-	if (levelEditor_file != "") {
-		//代入
-		stageFileName_ = levelEditor_file;
-		sceneSaveData_.playerHp = player_->GetMaxHp();
-	}
+	NextStageSave::GetInstance().SetPlayerHp(3); //現在のプレイヤー体力を保存
+	NextStageSave::GetInstance().SetPlayerRemain(3); //現在のプレイヤー残機を保存
 
 	SpitOutGameObject();
 
@@ -138,8 +130,8 @@ void SelectScene::SpitOutGameObject() {
 
 	//プレイヤーの体力を上書き
 	player_->Initialize();//初期設定
-	player_->SetHp(sceneSaveData_.playerHp);
-	player_->SetRemain(sceneSaveData_.playerRemain);
+	player_->SetHp(NextStageSave::GetInstance().GetNextStageSaveData().playerHp);
+	player_->SetRemain(NextStageSave::GetInstance().GetNextStageSaveData().playerRemain);
 	//プレイヤーを配置
 	spitOut_.SpitOutPlayer(player_);
 	//ステージの当たり判定を設定/配置

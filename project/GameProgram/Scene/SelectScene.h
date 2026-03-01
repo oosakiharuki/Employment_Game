@@ -42,12 +42,6 @@ private:
 	//ステージ全体の当たり判定AABB
 	std::vector<AABB> stagesAABB_;
 
-
-	//前ステージデータ
-	SceneSaveData sceneSaveData_ = {
-		3,3,3,"stage_0" //初期設定
-	};
-
 	//ステージの.jsonファイル名
 	std::string stageFileName_;
 

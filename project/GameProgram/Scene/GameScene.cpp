@@ -11,9 +11,6 @@
 using namespace MyMath;
 
 void GameScene::Initialize() {
-	//ゲームデータ引継ぎ(Hp,ステージ面)
-	sceneSaveData_ = NextStageSave::GetInstance().GetNextStageSaveData();
-
 	//ゲームオブジェクト配置
 	LevelEditorObjectSetting();
 	
@@ -189,15 +186,8 @@ void GameScene::LevelEditorObjectSetting(const std::string& levelEditor_file) {
 
 	//- プレイヤー配置 -
 	player_ = std::make_unique<Player>();
+	stageFileName_ = NextStageSave::GetInstance().GetNextStageSaveData().nextStageFile;//ステージの全体層(.obj)
 
-	stageFileName_ = sceneSaveData_.nextStageFile;//ステージの全体層(.obj)
-
-	//値が入っている場合
-	if (levelEditor_file != "") {
-		//代入
-		stageFileName_ = levelEditor_file;
-		sceneSaveData_.playerHp = player_->GetMaxHp();
-	}
 	//jsonファイルで設定したゲームオブジェクトの配置処理をまとめた
 	SpitOutGameObject();
 
@@ -234,8 +224,8 @@ void GameScene::SpitOutGameObject() {
 
 	//プレイヤーの体力を上書き
 	player_->Initialize();//初期設定
-	player_->SetHp(sceneSaveData_.playerHp);
-	player_->SetRemain(sceneSaveData_.playerRemain);
+	player_->SetHp(NextStageSave::GetInstance().GetNextStageSaveData().playerHp);
+	player_->SetRemain(NextStageSave::GetInstance().GetNextStageSaveData().playerRemain);
 	//プレイヤーを配置
 	spitOut_.SpitOutPlayer(player_);
 	//ステージの当たり判定を設定/配置

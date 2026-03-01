@@ -2,19 +2,19 @@
 #include "MyMath.h"
 #include <memory>
 
-/// <summary>
-/// 移行する前に保存するデータ
-/// </summary>
-struct SceneSaveData {
-	uint32_t playerMaxHp;      //プレイヤーの体力
-	uint32_t playerHp;         //プレイヤーの体力
-	uint32_t playerRemain;     //残り残機
-	std::string nextStageFile; //次のステージ名
-	Vector3 checkPoint;        //チェックポイント
-};
+class NextStageSave {
+private:
+	/// <summary>
+	/// 移行する前に保存するデータ
+	/// </summary>
+	struct SceneSaveData {
+		uint32_t playerMaxHp;      //プレイヤーの体力
+		uint32_t playerHp;         //プレイヤーの体力
+		uint32_t playerRemain;     //残り残機
+		std::string nextStageFile; //次のステージ名
+		Vector3 checkPoint;        //チェックポイント
+	};
 
-class NextStageSave
-{
 public:
 	/// <summary>
 	/// インスタンス生成
@@ -37,7 +37,7 @@ public:
 	/// </summary>
 	/// <param name="nextStageFile"></param> 次のステージの全体層のファイルパス
 	void SetNextStageFile(const std::string& nextStageFile) { sceneSaveData_.nextStageFile = nextStageFile; }
-	
+
 	/// <summary>
 	/// setter_体力
 	/// </summary>
@@ -55,7 +55,7 @@ public:
 	/// </summary>
 	/// <param name="maxHp"></param>
 	void SetPlayerMaxHp(uint32_t maxHp);
-	
+
 	/// <summary>
 	/// setter_チェックポイントの位置
 	/// </summary>
