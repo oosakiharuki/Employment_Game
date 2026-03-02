@@ -108,6 +108,14 @@ void PauseScreen::MoveSprite() {
 
 
 void PauseScreen::UpdateGuide() {
+	//コントローラーが接続されているなら
+	if (Input::GetInstance().GetJoystickState()) {
+		spriteGuide_->SetTextureFile("guideList2.png");
+	}
+	else {
+		spriteGuide_->SetTextureFile("guideList.png");
+	}
+
 	spriteGuide_->Update();
 }
 

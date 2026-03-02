@@ -60,6 +60,11 @@ void SelectScene::Update() {
 
 	//背景更新
 	backGround->Update();
+	
+	//操作ガイド更新
+	for (auto& guide : guides_) {
+		guide->Update();
+	}
 }
 
 void SelectScene::Draw() {
@@ -70,6 +75,10 @@ void SelectScene::Draw() {
 
 	//ステージ描画
 	stageObj_->Draw();
+	//操作ガイド描画
+	for (auto& guide : guides_) {
+		guide->Draw();
+	}
 
 	//ステージオブジェクト描画
 	for (auto& stageObject : stageObjects_) {
@@ -106,10 +115,6 @@ void SelectScene::LevelEditorObjectSetting(const std::string& levelEditor_file) 
 	NextStageSave::GetInstance().SetPlayerRemain(3); //現在のプレイヤー残機を保存
 
 	SpitOutGameObject();
-
-	//操作方法スプライト
-	UIManager::GetInstance().CreateGuide(kGuideMove_);
-	UIManager::GetInstance().CreateGuide(kGuideWarp_);
 }
 
 void SelectScene::SpitOutGameObject() {
@@ -138,6 +143,8 @@ void SelectScene::SpitOutGameObject() {
 	spitOut_.SpitOutStage(stageObj_, stageFileName_);
 	//ステージオブジェクトを配置
 	stageObjects_ = std::move(spitOut_.SpitOutStageObject());
+	//操作ガイド設定
+	guides_ = std::move(spitOut_.SpitOutGuide());
 }
 
 void SelectScene::SceneUpdate() {

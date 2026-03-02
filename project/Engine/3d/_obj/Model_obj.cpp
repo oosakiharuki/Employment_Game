@@ -86,7 +86,12 @@ void Model_obj::Draw(const std::string& textureFilePath) {
 	int i = 0;
 	for (auto& multi : modelData_.Data) {
 		//テクスチャを変更
-		multi.materialData.textureFilePath = textureFilePath;
+		multi.materialData.textureFilePath = "resource/Sprite/" + textureFilePath + ".dds";
+
+		//テクスチャ読み込み
+		TextureManager::GetInstance().LoadTexture(multi.materialData.textureFilePath);
+		multi.materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(multi.materialData.textureFilePath);
+
 
 		DirectXCommon::GetInstance().GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_[i]);
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResources_[i]->GetGPUVirtualAddress());

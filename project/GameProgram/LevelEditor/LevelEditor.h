@@ -60,6 +60,12 @@ public:
 			std::string csvFile;
 			std::string cameraName;
 		};
+
+		struct GuideData {
+			Transform transform;
+			std::string textureFile;
+		};
+
 		/// <summary>
 		/// ボスの生成データ
 		/// </summary>
@@ -77,6 +83,7 @@ public:
 		std::vector<StageObjectData> stageObjects;
 		std::vector<EventTriggerData> eventTriggerDatas;
 		std::vector<BossData> bosses;
+		std::vector<GuideData> guides;
 	};
 
 	/// <summary>
@@ -134,6 +141,8 @@ private:
 	/// </summary>
 	/// <param name="object">オブジェクトのデータ配置</param>
 	void LoadBoss(nlohmann::json& object);
+
+	void LoadGuide(nlohmann::json& object);
 
 	/// <summary>
 	/// トランスフォームの設定

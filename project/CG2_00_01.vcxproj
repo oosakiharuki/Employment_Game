@@ -209,6 +209,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\base\Pipeline.cpp" />
     <ClCompile Include="GameProgram\GameActor\VisualActor.cpp" />
     <ClCompile Include="GameProgram\System\PauseScreen.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\Guide.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameProgram\Collision\CollisionSource.h" />
@@ -310,6 +311,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\base\Pipeline.h" />
     <ClInclude Include="GameProgram\GameActor\VisualActor.h" />
     <ClInclude Include="GameProgram\System\PauseScreen.h" />
+    <ClInclude Include="GameProgram\StageObjects\Guide.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

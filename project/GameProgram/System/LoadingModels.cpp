@@ -39,6 +39,8 @@ void LoadingModels::LoadObj() {
 	ModelManager::GetInstance().LoadModel("player_found_mark", ".obj");
 	ModelManager::GetInstance().LoadModel("player_lost_mark", ".obj");
 
+	ModelManager::GetInstance().LoadModel("Guide", ".obj");
+
 }
 
 void LoadingModels::LoadGltf() {

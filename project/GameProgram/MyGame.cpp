@@ -69,7 +69,6 @@ void MyGame::Draw() {
 	SpriteCommon::GetInstance().Command();
 	//説明ガイド
 	UIManager::GetInstance().Draw();
-	UIManager::GetInstance().GuideDraw();
 
 	if (PauseScreen::GetInstance().IsPause()) {
 		PauseScreen::GetInstance().Draw();

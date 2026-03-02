@@ -190,6 +190,20 @@ void SpitOutLevelEditor::SpitOutBoss(std::unique_ptr<Boss>& boss) {
 	}
 }
 
+std::vector<std::unique_ptr<Guide>> SpitOutLevelEditor::SpitOutGuide() {
+	std::vector<std::unique_ptr<Guide>> guides;
+	//- 操作ガイド配置 -
+	//配置データがあるとき
+	if (!levelEditor_->GetLevelData()->guides.empty()) {
+		for (auto& guideData : levelEditor_->GetLevelData()->guides) {
+			std::unique_ptr<Guide> guide = std::make_unique<Guide>();
+			guide->Initialize(guideData.transform,guideData.textureFile);
+			guides.push_back(std::move(guide));
+		}
+	}
+	return guides;
+}
+
 std::vector<std::unique_ptr<VisualActor>> SpitOutLevelEditor::SpitOutVisualActor() {
 	std::vector<std::unique_ptr<VisualActor>> visualActors;
 

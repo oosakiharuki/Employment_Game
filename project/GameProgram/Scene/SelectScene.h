@@ -61,9 +61,8 @@ private:
 	const Vector2 kSpriteTranslateMove_ = { 300,20 };
 	const Vector2 kSpriteTranslateKeyE_ = { 600,20 };
 
-	//変更する場所(ジャンプ説明前は移動の説明)
-	Guide kGuideMove_ = { "guide_move","guide_move", kSpriteTranslateMove_, kSpriteSize_, -100.0f, 100.0f };  //移動の説明
-	Guide kGuideWarp_ = { "guide_warp","guide_warp",kSpriteTranslateKeyE_, kSpriteSize_, -100.0f, 100.0f };  //ワープに入る説明
+	//操作ガイド
+	std::vector<std::unique_ptr<Guide>> guides_;
 
 	//背景
 	std::unique_ptr<BackGroundObject> backGround = nullptr;

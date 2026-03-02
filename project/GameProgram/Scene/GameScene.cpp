@@ -73,6 +73,10 @@ void GameScene::Update() {
 
 	backGround->Update();
 
+	for (auto& guide : guides_) {
+		guide->Update();
+	}
+
 	//プレイヤーが移動したら変更
 	UIManager::GetInstance().SetPlayerTranslate(player_->GetTranslate());
 	//スプライト更新処理
@@ -144,6 +148,9 @@ void GameScene::Draw() {
 
 	stageObj_->Draw();
 
+	for (auto& guide : guides_) {
+		guide->Draw();
+	}
 
 	for (auto& enemy : enemies_) {
 		enemy->Draw();
@@ -190,17 +197,6 @@ void GameScene::LevelEditorObjectSetting(const std::string& levelEditor_file) {
 
 	//jsonファイルで設定したゲームオブジェクトの配置処理をまとめた
 	SpitOutGameObject();
-
-	//チュートリアル用の操作方法スプライト
-	if (stageFileName_ == "stage_0") {
-		UIManager::GetInstance().CreateGuide(kGuideMove_);
-		UIManager::GetInstance().CreateGuide(kGuideJump_);
-		UIManager::GetInstance().CreateGuide(kGuideFire_);
-		UIManager::GetInstance().CreateGuide(kGuideShield_);
-		UIManager::GetInstance().CreateGuide(kGuideBrink_);
-		UIManager::GetInstance().CreateGuide(kGuideGliding_);
-		UIManager::GetInstance().CreateGuide(kGuideWarp_);
-	}
 }
 
 void GameScene::SpitOutGameObject() {
@@ -236,6 +232,11 @@ void GameScene::SpitOutGameObject() {
 	enemies_ = std::move(spitOut_.SpitOutEnemies());
 	//イベントトリガーの配置
 	eventTriggers_ = std::move(spitOut_.SpitOutEventTrigger());
+	
+	//チュートリアル用の操作方法スプライト
+	if (stageFileName_ == "stage_0") {
+		guides_ = std::move(spitOut_.SpitOutGuide());
+	}
 
 	//ボスの配置
 	spitOut_.SpitOutBoss(boss_);

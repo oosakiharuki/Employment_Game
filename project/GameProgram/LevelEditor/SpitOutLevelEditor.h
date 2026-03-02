@@ -4,6 +4,7 @@
 #include "Boss.h"
 #include "IStageObject.h"
 #include "EventTrigger.h"
+#include "Guide.h"
 #include "VisualActor.h"
 #include "LevelEditor.h"
 
@@ -75,6 +76,8 @@ public:
 	/// </summary>
 	/// <param name="boss">ボス</param>
 	void SpitOutBoss(std::unique_ptr<Boss>& boss);
+
+	std::vector<std::unique_ptr<Guide>> SpitOutGuide();
 
 	std::vector<std::unique_ptr<VisualActor>> SpitOutVisualActor();
 

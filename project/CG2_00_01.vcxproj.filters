@@ -438,6 +438,9 @@
     <ClCompile Include="GameProgram\GameActor\Enemies\EnemyEye.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\Guide.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -736,6 +739,9 @@
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\GameActor.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\Guide.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

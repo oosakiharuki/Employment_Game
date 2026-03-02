@@ -67,15 +67,8 @@ private:
 	const Vector2 kSpriteSize_ = { 200,100 };
 	const Vector2 kSpriteTranslate_ = { 300,20 };
 
-	//変更する場所(ジャンプ説明前は移動の説明)
-	Guide kGuideMove_ = { "guide_move","guide_move",kSpriteTranslate_,kSpriteSize_, -100.0f,-70.0f };   //移動の説明
-	Guide kGuideJump_ = { "guide_jump","guide_jump",kSpriteTranslate_,kSpriteSize_, -65.0f, -10.0f };   //ジャンプの説明
-	Guide kGuideFire_ = { "guide_fire","guide_fire",kSpriteTranslate_,kSpriteSize_, -5.0f, 16.0f };     //攻撃の説明
-	Guide kGuideShield_ = { "guide_shield","guide_shield",kSpriteTranslate_,kSpriteSize_, 16.0f, 70.0f }; //守るの説明
-	Guide kGuideBrink_ = { "guide_brink","guide_brink",kSpriteTranslate_,kSpriteSize_, 90.0f, 105.0f };  //ブリンクの説明
-	Guide kGuideGliding_ = { "guide_kakku","guide_kakku",kSpriteTranslate_,kSpriteSize_, 105.0f, 130.0f }; //滑空の説明
-	Guide kGuideWarp_ = { "guide_warp","guide_warp",kSpriteTranslate_,kSpriteSize_, 140.0f, 200.0f };   //滑空の説明
-
+	//操作ガイド
+	std::vector<std::unique_ptr<Guide>> guides_;
 
 	//ステージの.jsonファイル名
 	std::string stageFileName_;
