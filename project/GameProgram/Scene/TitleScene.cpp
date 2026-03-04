@@ -1,6 +1,8 @@
 #include "TitleScene.h"
 #include "SceneManager.h"
+#include "SelectScene.h"
 #include "UseEveryOne.h"
+#include "FadeScreen.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -21,6 +23,7 @@ void TitleScene::Initialize() {
 	sceneParticles_[particleBullet_.name] = ParticleManager::GetInstance().InitParticle(particleBullet_);
 
 	FadeScreen::GetInstance().FadeStart(type_fadeOut);
+	PauseScreen::GetInstance().PauseFlag(false);//ポーズを強制解除
 }
 
 void TitleScene::InitSprite() {
@@ -169,14 +172,6 @@ void TitleScene::Draw() {
 void TitleScene::Finalize() {}
 
 void TitleScene::SceneUpdate() {
-	if (isNextSelectScene) {
-		SceneManager::GetInstance().ChangeScene("Select");
-	}
-
-	if (isNextGameEnd) {
-		isGameEnd_ = true;
-	}
-
 	//次のシーンに移動するとき
 	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//フェードを挟む(FadeIn)
@@ -239,11 +234,11 @@ void TitleScene::MoveTitleLogo() {
 		if (bulletTimer_ >= kBulletTimeMax_) {
 			if (transforms_["umbrella_Open"].translate.y == transforms_["Select_Start"].translate.y) {
 				//セレクトシーンに移動
-				isNextSelectScene = true;
+				SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
 			}
 			else if (transforms_["umbrella_Open"].translate.y == transforms_["Select_End"].translate.y) {
 				//ゲーム終了
-				isNextGameEnd = true;
+				isGameEnd_ = true;
 			}
 		}
 	}

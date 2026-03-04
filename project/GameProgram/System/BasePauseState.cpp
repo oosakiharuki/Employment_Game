@@ -21,8 +21,7 @@ void PauseSelectGuide::Draw(PauseScreen& pauseScreen) {
 }
 
 void PauseSelectSceneChange::Update(PauseScreen& pauseScreen) {
-	pauseScreen.PauseFlag(false);
-	SceneManager::GetInstance().ChangeScene(pauseScreen.GetNextSceneName());
+	SceneManager::GetInstance().ChangeScene(pauseScreen.GetNextScene());
 	pauseScreen.SetPauseState(std::make_unique<PauseMove>());
 }
 void PauseSelectSceneChange::Draw(PauseScreen& pauseScreen) {}

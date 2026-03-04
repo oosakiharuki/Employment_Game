@@ -112,10 +112,6 @@ private:
 
 	const float kStickPower_ = 0.5f;//スティックの倒し具合
 
-	bool isNextSelectScene = false;
-	bool isNextGameEnd = false;
-
-
 	std::unique_ptr<CameraControl> cameraControl_;
 	float cameraRotateX_ = -15.0f;
 

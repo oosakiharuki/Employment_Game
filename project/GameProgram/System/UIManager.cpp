@@ -10,7 +10,6 @@ UIManager& UIManager::GetInstance() {
 }
 
 void UIManager::Finalize() {
-	guides_.clear();
 	sprites_.clear();
 	sInstance_.reset();
 }
@@ -19,15 +18,6 @@ void UIManager::CreateSprite(const SpriteData& spriteData) {
 	std::unique_ptr<Sprite>& iterator = sprites_[spriteData.name];
 
 	InitSprite(iterator, spriteData);
-}
-
-void UIManager::CreateGuide(const Guide& guide) {
-	std::unique_ptr<Sprite>& iterator = spriteGuides_[guide.spriteData.name];
-	
-	InitSprite(iterator,guide.spriteData);
-
-	//Guide構造体をvectorにまとめる
-	guides_.push_back(guide);
 }
 
 void UIManager::InitSprite(std::unique_ptr<Sprite>& sprite, const SpriteData& spriteData) {
@@ -50,17 +40,6 @@ void UIManager::Update() {
 void UIManager::Draw() {
 	for (auto& sprite : sprites_) {
 		sprite.second->Draw();
-	}
-}
-
-void UIManager::GuideDraw() {
-	//チュートリアルの出る順番
-	for (auto& guide : guides_) {
-		//プレイヤーの座標Xがガイドの設定した左端と右端の間にいるか
-		if (playerTranslate_.x >= guide.lookPointX_left &&
-			playerTranslate_.x < guide.lookPointX_right) {
-			spriteGuides_[guide.spriteData.name]->Draw();
-		}
 	}
 }
 

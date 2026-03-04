@@ -1,5 +1,7 @@
 #include "ClearScene.h"
 #include "SceneManager.h"
+#include "SelectScene.h"
+#include "FadeScreen.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -113,7 +115,7 @@ void ClearScene::SceneUpdate() {
 	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
 	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||
 		Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance().GetIsFading()) {
-		SceneManager::GetInstance().ChangeScene("Select");
+		SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
 	}
 
 	//次のシーンに移動するとき

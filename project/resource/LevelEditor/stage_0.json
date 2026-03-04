@@ -665,8 +665,8 @@
                     3.0
                 ],
                 "size": [
-                    2.0,
-                    2.0,
+                    5.0,
+                    10.0,
                     11.0
                 ]
             }
@@ -713,7 +713,7 @@
             "name": "StageObjectSpawn.002",
             "transform": {
                 "translation": [
-                    80.0,
+                    79.0,
                     2.0,
                     11.0
                 ],
@@ -736,8 +736,8 @@
                     3.0
                 ],
                 "size": [
-                    2.0,
-                    2.0,
+                    5.0,
+                    10.0,
                     11.0
                 ]
             }
@@ -904,6 +904,160 @@
                     2.0
                 ]
             }
+        },
+        {
+            "type": "GuideSpawn",
+            "name": "GuideSpawn",
+            "transform": {
+                "translation": [
+                    -79.0,
+                    20.0,
+                    8.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    6.0,
+                    6.0,
+                    6.0
+                ]
+            },
+            "file_name": "GuideMove"
+        },
+        {
+            "type": "GuideSpawn",
+            "name": "GuideSpawn.001",
+            "transform": {
+                "translation": [
+                    -59.0,
+                    20.0,
+                    8.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    6.0,
+                    6.0,
+                    6.0
+                ]
+            },
+            "file_name": "GuideJump"
+        },
+        {
+            "type": "GuideSpawn",
+            "name": "GuideSpawn.002",
+            "transform": {
+                "translation": [
+                    3.0,
+                    20.0,
+                    16.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    6.0,
+                    6.0,
+                    6.0
+                ]
+            },
+            "file_name": "GuideFire"
+        },
+        {
+            "type": "GuideSpawn",
+            "name": "GuideSpawn.003",
+            "transform": {
+                "translation": [
+                    19.0,
+                    20.0,
+                    16.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    6.0,
+                    6.0,
+                    6.0
+                ]
+            },
+            "file_name": "GuideShield"
+        },
+        {
+            "type": "GuideSpawn",
+            "name": "GuideSpawn.004",
+            "transform": {
+                "translation": [
+                    86.0,
+                    20.0,
+                    16.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    6.0,
+                    6.0,
+                    6.0
+                ]
+            },
+            "file_name": "GuideBrink"
+        },
+        {
+            "type": "GuideSpawn",
+            "name": "GuideSpawn.005",
+            "transform": {
+                "translation": [
+                    118.0,
+                    20.0,
+                    14.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    6.0,
+                    6.0,
+                    6.0
+                ]
+            },
+            "file_name": "GuideGliding"
+        },
+        {
+            "type": "GuideSpawn",
+            "name": "GuideSpawn.006",
+            "transform": {
+                "translation": [
+                    144.0,
+                    20.0,
+                    22.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    6.0,
+                    6.0,
+                    6.0
+                ]
+            },
+            "file_name": "GuideWarp"
         }
     ]
 }

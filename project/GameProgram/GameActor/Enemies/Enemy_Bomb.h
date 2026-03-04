@@ -58,6 +58,11 @@ private:
 	/// </summary>
 	void Move() override;
 
+	/// <summary>
+	/// 向きにより最初に移動する方向を決める
+	/// </summary>
+	void DirectionMove() override;
+
 	//Hp
 	const uint32_t kHp_ = 1;
 	//見える範囲初期化

@@ -15,13 +15,12 @@ SceneManager& SceneManager::GetInstance() {
 	return *sInstance_;
 }
 
-void SceneManager::ChangeScene(const std::string& sceneName) {
+void SceneManager::ChangeScene(std::unique_ptr<BaseScene> nextScene) {
 	//すでに値が入っている時
 	if (nextScene_ != nullptr) {
 		return;
 	}
-	assert(sceneFactory_);
-	nextScene_ = sceneFactory_->CreateScene(sceneName);
+	nextScene_ = std::move(nextScene);
 }
 
 void SceneManager::Update() {

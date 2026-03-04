@@ -3,26 +3,21 @@
 #include "UIManager.h"
 
 void MyGame::Initialize() {
-	//フレームワーク処理
+	//フレームワークの初期化
 	Framework::Initialize();
-
-	//ゲームシーン初期化
 
 	//objectをローディング
 	LoadingModels::GetInstance().LoadObjects();
 	LoadingModels::GetInstance().Finalize();
 
+	//フェード処理の初期化
 	FadeScreen::GetInstance().Initialize();
-
-	std::unique_ptr<SceneFactory> sceneFactory_ = std::make_unique<SceneFactory>();
-	SceneManager::GetInstance().SetSceneFactory(std::move(sceneFactory_));
-
+	//ポーズ処理の初期化
 	PauseScreen::GetInstance().Initialize();
-
-	SceneManager::GetInstance().ChangeScene("Select");
+	//最初のシーンの設定
+	SceneManager::GetInstance().ChangeScene(std::make_unique<TitleScene>());
 	//シーンの更新処理(変更処理)
 	SceneManager::GetInstance().SceneUpdate();
-
 }
 
 void MyGame::Update() {
@@ -31,9 +26,8 @@ void MyGame::Update() {
 	ImGuiManager::GetInstance().Begin();
 #endif //  USE_IMGUI
 
+	//フレームワークの更新
 	Framework::Update();
-
-	//ゲームシーン更新
 
 	//フェード中は変更しない
 	if (!FadeScreen::GetInstance().GetIsFading()) {
@@ -75,7 +69,6 @@ void MyGame::Draw() {
 	SpriteCommon::GetInstance().Command();
 	//説明ガイド
 	UIManager::GetInstance().Draw();
-	UIManager::GetInstance().GuideDraw();
 
 	if (PauseScreen::GetInstance().IsPause()) {
 		PauseScreen::GetInstance().Draw();
