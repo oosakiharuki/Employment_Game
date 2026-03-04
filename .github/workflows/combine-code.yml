@@ -13,7 +13,7 @@ env:
   # ターゲット拡張子
   TARGET_EXTENSIONS: .cpp,.h,.hpp,.vcxproj,.vcxproj.filters
   # 除外ディレクトリ
-  EXCLUDE_DIRS: Resources,Novice,Adapter,DirectXTex,imgui
+  EXCLUDE_DIRS: resource,Novice,Adapter,DirectXTex,imgui
 
 jobs:
   publish:
