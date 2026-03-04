@@ -44,10 +44,15 @@ private:
 	/// </summary>
 	void Operation();
 
+	/// <summary>
+	/// ゲームスタートを選択中
+	/// </summary>
 	void ArrowSelectStart(){
 		transforms_["umbrella_Open"].translate.y = transforms_["Select_Start"].translate.y;//ゲームスタート
 	}
-
+	/// <summary>
+	/// ゲーム終了を選択中
+	/// </summary>
 	void ArrowSelectEnd() {
 		transforms_["umbrella_Open"].translate.y = transforms_["Select_End"].translate.y;//ゲーム終了
 	}
