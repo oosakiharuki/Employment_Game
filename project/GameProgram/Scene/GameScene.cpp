@@ -58,9 +58,6 @@ void GameScene::Update() {
 	//プレイヤー更新処理
 	player_->Update();
 
-	//ステージの更新処理
-	stageObj_->Update();
-	
 	//死んでしまった、復活(リスポーン)する時
 	Respawn();
 
@@ -71,6 +68,9 @@ void GameScene::Update() {
 		startWarp_->Vanish();//出てきた後消えるようにする	
 	}
 
+	//使用する当たり判定
+	CollisionManager::GetInstance().CollisionUpdate();
+	//背景更新処理
 	backGround->Update();
 
 	for (auto& guide : guides_) {
@@ -94,7 +94,10 @@ void GameScene::Update() {
 }
 
 void GameScene::PlayerAliveUpdate() {
-	if (player_->GetHp() == 0) return;
+	if (player_->GetHp() == 0 || player_->GetPerformanceMode()) return;
+
+	//ステージの更新処理
+	stageObj_->Update();
 
 	//敵の更新
 	for (auto& enemy : enemies_) {
@@ -125,9 +128,6 @@ void GameScene::PlayerAliveUpdate() {
 		boss_->SetPlayer(player_.get());
 		boss_->Update();
 	}
-	//使用する当たり判定
-	CollisionManager::GetInstance().CollisionUpdate();	
-
 }
 
 void GameScene::Draw() {
@@ -226,6 +226,10 @@ void GameScene::SpitOutGameObject() {
 	spitOut_.SpitOutPlayer(player_);
 	//ステージの当たり判定を設定/配置
 	spitOut_.SpitOutStage(stageObj_, stageFileName_);
+
+	//ステージの更新処理
+	stageObj_->Update();
+
 	//ステージオブジェクトの配置
 	stageObjects_ = std::move(spitOut_.SpitOutStageObject());
 	//敵の配置

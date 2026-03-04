@@ -27,6 +27,7 @@ void SelectScene::Initialize() {
 	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnTitle.png", std::make_unique<TitleScene>());
 
 	CollisionManager::GetInstance().ResetFrag();
+	PauseScreen::GetInstance().PauseFlag(false);//ポーズを強制解除
 }
 
 void SelectScene::Update() {

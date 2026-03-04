@@ -41,11 +41,6 @@ public:
 	/// <param name="pos"></param>
 	void SetPlayerPosition(const Vector3& pos) { playerPos_ = pos; }
 	/// <summary>
-	/// ズーム開始(現在カメラ位置から特定位置まで)
-	/// </summary>
-	/// <param name="goal"></param>特定位置を設定
-	void ZoomStart(const Vector3& goal);
-	/// <summary>
 	/// ズーム終了
 	/// </summary>
 	/// <returns></returns>trueなら終了した
@@ -112,6 +107,11 @@ private:
 	/// カメラズーム(カメラが寄る)
 	/// </summary>
 	void Zoom();
+	/// <summary>
+	/// ズーム開始(現在カメラ位置から特定位置まで)
+	/// </summary>
+	/// <param name="goal"></param>特定位置を設定
+	void ZoomStart(const Vector3& goal);
 	/// <summary>
 	/// シェイク(カメラが揺れる)
 	/// </summary>
