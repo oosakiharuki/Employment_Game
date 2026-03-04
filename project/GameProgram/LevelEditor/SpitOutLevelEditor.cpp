@@ -1,4 +1,8 @@
 #include "SpitOutLevelEditor.h"
+#include "NextStageSave.h"
+#include "WarpGate.h"
+#include "CheckPoint.h"
+#include "Goal.h"
 
 using namespace MyMath;
 
@@ -35,35 +39,49 @@ std::vector<std::unique_ptr<BaseEnemy>> SpitOutLevelEditor::SpitOutEnemies() {
 	//敵配置データがあるとき
 	if (!levelEditor_->GetLevelData()->spawnEnemies.empty()) {
 		for (auto& enemyData : levelEditor_->GetLevelData()->spawnEnemies) {
-
-			std::unique_ptr<BaseEnemy> enemy;
 			//敵の名前で変更する
 			if (enemyData.EnemyName == "Turret") {
 				//固定大砲(タレット)
-				enemy = std::make_unique<Enemy_Turret>();
+				std::unique_ptr<Enemy_Turret> enemy = std::make_unique<Enemy_Turret>();
+				EnemyTemplate(*enemy,enemyData);
+				//vectorに代入
+				enemies.push_back(std::move(enemy));
 			}
 			else if (enemyData.EnemyName == "Bomb") {
 				//自爆特攻(ボム)
-				enemy = std::make_unique<Enemy_Bomb>();
+				std::unique_ptr<Enemy_Bomb> enemy = std::make_unique<Enemy_Bomb>();
+				EnemyTemplate(*enemy, enemyData);
+				EnemyMoveRoute(*enemy, enemyData);//移動する敵
+				//vectorに代入
+				enemies.push_back(std::move(enemy));
 			}
 			else {
 				//兵隊(ソルジャー)
-				enemy = std::make_unique<Enemy_Soldier>();
+				std::unique_ptr<Enemy_Soldier> enemy = std::make_unique<Enemy_Soldier>();
+				EnemyTemplate(*enemy, enemyData);
+				EnemyMoveRoute(*enemy, enemyData);//移動する敵
+				//vectorに代入
+				enemies.push_back(std::move(enemy));
 			}
-			enemy->Initialize();//初期設定
-			enemy->SetTranslate(enemyData.transform.translate);//座標
-			enemy->SetRotate(enemyData.transform.rotate);//向き
-			enemy->SetColliderSize(enemyData.colliderSize);//当たり判定
-			//enemy->SetRouteLeftPoint(enemyData.leftPoint);//移動ポイント1
-			//enemy->SetRouteRightPoint(enemyData.rightPoint);//移動ポイント2 (leftPoint < rightPoint)
-			//オブジェクト向き
-			enemy->DirectionDegree();
-			//vectorに代入
-			enemies.push_back(std::move(enemy));
 		}
 	}
 	return enemies;
 }
+
+void SpitOutLevelEditor::EnemyTemplate(BaseEnemy& enemy, LevelEditor::LevelData::EnemySpawnData enemyData) {
+	enemy.Initialize();//初期設定
+	enemy.SetTranslate(enemyData.transform.translate);//座標
+	enemy.SetRotate(enemyData.transform.rotate);//向き
+	enemy.SetColliderSize(enemyData.colliderSize);//当たり判定
+	//オブジェクト向き
+	enemy.DirectionDegree();
+}
+
+void SpitOutLevelEditor::EnemyMoveRoute(EnemyMoveCommand& enemy, LevelEditor::LevelData::EnemySpawnData enemyData) {
+	enemy.SetRouteLeftPoint(enemyData.leftPoint);//移動ポイント1
+	enemy.SetRouteRightPoint(enemyData.rightPoint);//移動ポイント2 (leftPoint < rightPoint)
+}
+
 
 void SpitOutLevelEditor::SpitOutStage(std::unique_ptr<Object3d>& stageObj, const std::string& stageFileName) {
 	//- ステージ全体の当たり判定設定 -
@@ -170,6 +188,20 @@ void SpitOutLevelEditor::SpitOutBoss(std::unique_ptr<Boss>& boss) {
 
 		boss->SetBossCenter(bossData.transform.translate);
 	}
+}
+
+std::vector<std::unique_ptr<Guide>> SpitOutLevelEditor::SpitOutGuide() {
+	std::vector<std::unique_ptr<Guide>> guides;
+	//- 操作ガイド配置 -
+	//配置データがあるとき
+	if (!levelEditor_->GetLevelData()->guides.empty()) {
+		for (auto& guideData : levelEditor_->GetLevelData()->guides) {
+			std::unique_ptr<Guide> guide = std::make_unique<Guide>();
+			guide->Initialize(guideData.transform,guideData.textureFile);
+			guides.push_back(std::move(guide));
+		}
+	}
+	return guides;
 }
 
 std::vector<std::unique_ptr<VisualActor>> SpitOutLevelEditor::SpitOutVisualActor() {

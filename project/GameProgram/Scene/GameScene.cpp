@@ -1,15 +1,16 @@
 #include "GameScene.h"
 #include <sstream>
-#include "StageObjectFunction.h"
 #include "SceneManager.h"
 
+#include "SelectScene.h"
+#include "GameOverScene.h"
+#include "ClearScene.h"
+
+#include "FadeScreen.h"
+
 using namespace MyMath;
-using namespace StageObjectFunction;
 
 void GameScene::Initialize() {
-	//ゲームデータ引継ぎ(Hp,ステージ面)
-	sceneSaveData_ = NextStageSave::GetInstance().GetNextStageSaveData();
-
 	//ゲームオブジェクト配置
 	LevelEditorObjectSetting();
 	
@@ -30,7 +31,7 @@ void GameScene::Initialize() {
 	backGround->Initialize();
 
 	//ポーズ画面
-	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnSelect.png","Select");
+	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnSelect.png",std::make_unique<SelectScene>());
 
 	CollisionManager::GetInstance().ResetFrag();
 }
@@ -57,9 +58,6 @@ void GameScene::Update() {
 	//プレイヤー更新処理
 	player_->Update();
 
-	//ステージの更新処理
-	stageObj_->Update();
-	
 	//死んでしまった、復活(リスポーン)する時
 	Respawn();
 
@@ -70,7 +68,14 @@ void GameScene::Update() {
 		startWarp_->Vanish();//出てきた後消えるようにする	
 	}
 
+	//使用する当たり判定
+	CollisionManager::GetInstance().CollisionUpdate();
+	//背景更新処理
 	backGround->Update();
+
+	for (auto& guide : guides_) {
+		guide->Update();
+	}
 
 	//プレイヤーが移動したら変更
 	UIManager::GetInstance().SetPlayerTranslate(player_->GetTranslate());
@@ -89,7 +94,10 @@ void GameScene::Update() {
 }
 
 void GameScene::PlayerAliveUpdate() {
-	if (player_->GetHp() == 0) return;
+	if (player_->GetHp() == 0 || player_->GetPerformanceMode()) return;
+
+	//ステージの更新処理
+	stageObj_->Update();
 
 	//敵の更新
 	for (auto& enemy : enemies_) {
@@ -120,9 +128,6 @@ void GameScene::PlayerAliveUpdate() {
 		boss_->SetPlayer(player_.get());
 		boss_->Update();
 	}
-	//使用する当たり判定
-	CollisionManager::GetInstance().CollisionUpdate();	
-
 }
 
 void GameScene::Draw() {
@@ -143,6 +148,9 @@ void GameScene::Draw() {
 
 	stageObj_->Draw();
 
+	for (auto& guide : guides_) {
+		guide->Draw();
+	}
 
 	for (auto& enemy : enemies_) {
 		enemy->Draw();
@@ -185,28 +193,10 @@ void GameScene::LevelEditorObjectSetting(const std::string& levelEditor_file) {
 
 	//- プレイヤー配置 -
 	player_ = std::make_unique<Player>();
+	stageFileName_ = NextStageSave::GetInstance().GetNextStageSaveData().nextStageFile;//ステージの全体層(.obj)
 
-	stageFileName_ = sceneSaveData_.nextStageFile;//ステージの全体層(.obj)
-
-	//値が入っている場合
-	if (levelEditor_file != "") {
-		//代入
-		stageFileName_ = levelEditor_file;
-		sceneSaveData_.playerHp = player_->GetMaxHp();
-	}
 	//jsonファイルで設定したゲームオブジェクトの配置処理をまとめた
 	SpitOutGameObject();
-
-	//チュートリアル用の操作方法スプライト
-	if (stageFileName_ == "stage_0") {
-		UIManager::GetInstance().CreateGuide(kGuideMove_);
-		UIManager::GetInstance().CreateGuide(kGuideJump_);
-		UIManager::GetInstance().CreateGuide(kGuideFire_);
-		UIManager::GetInstance().CreateGuide(kGuideShield_);
-		UIManager::GetInstance().CreateGuide(kGuideBrink_);
-		UIManager::GetInstance().CreateGuide(kGuideGliding_);
-		UIManager::GetInstance().CreateGuide(kGuideWarp_);
-	}
 }
 
 void GameScene::SpitOutGameObject() {
@@ -230,18 +220,27 @@ void GameScene::SpitOutGameObject() {
 
 	//プレイヤーの体力を上書き
 	player_->Initialize();//初期設定
-	player_->SetHp(sceneSaveData_.playerHp);
-	player_->SetRemain(sceneSaveData_.playerRemain);
+	player_->SetHp(NextStageSave::GetInstance().GetNextStageSaveData().playerHp);
+	player_->SetRemain(NextStageSave::GetInstance().GetNextStageSaveData().playerRemain);
 	//プレイヤーを配置
 	spitOut_.SpitOutPlayer(player_);
 	//ステージの当たり判定を設定/配置
 	spitOut_.SpitOutStage(stageObj_, stageFileName_);
+
+	//ステージの更新処理
+	stageObj_->Update();
+
 	//ステージオブジェクトの配置
 	stageObjects_ = std::move(spitOut_.SpitOutStageObject());
 	//敵の配置
 	enemies_ = std::move(spitOut_.SpitOutEnemies());
 	//イベントトリガーの配置
 	eventTriggers_ = std::move(spitOut_.SpitOutEventTrigger());
+	
+	//チュートリアル用の操作方法スプライト
+	if (stageFileName_ == "stage_0") {
+		guides_ = std::move(spitOut_.SpitOutGuide());
+	}
 
 	//ボスの配置
 	spitOut_.SpitOutBoss(boss_);
@@ -289,34 +288,36 @@ void GameScene::Respawn() {
 void GameScene::SceneUpdate() {
 #ifdef USE_IMGUI
 	if (Input::GetInstance().TriggerKey(DIK_F2)) {
-		SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動
+		SceneManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());//クリアシーンに移動
 	}
 	if (Input::GetInstance().TriggerKey(DIK_F3)) {
-		SceneManager::GetInstance().ChangeScene("GameOver");//ゲームオーバーシーンに移動
+		SceneManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());//ゲームオーバーシーンに移動
 	}
 #endif // USE_IMGUI
-
+	
+	//ゴールした+カメラズームが完了
 	if (CollisionManager::GetInstance().IsGoal() && cameraControl_->ZoomEnd()) {
-		SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動
+		SceneManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());//クリアシーンに移動
 	}
+	//ワープする+カメラズームが完了
 	else if (CollisionManager::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
 		//次のステージに進む時Hpなどパラメータがリセットされないようにする
 		NextStageSave::GetInstance().SetPlayerHp(player_->GetHp()); //現在のプレイヤー体力を保存
 		NextStageSave::GetInstance().SetPlayerRemain(player_->GetRemain()); //現在のプレイヤー残機を保存
-		SceneManager::GetInstance().ChangeScene("Game");//次のステージに移動(ゲームシーンであることは変わらない)
+		SceneManager::GetInstance().ChangeScene(std::make_unique<GameScene>());//次のステージに移動(ゲームシーンであることは変わらない)
 	}
 	else if (player_->GetRemain() == 0) {
-		//残機が0で倒された場合ゲームオーバー
-		FadeScreen::GetInstance().SetMaskTexture("fade02.png");
-		FadeScreen::GetInstance().SetBackGround("black.png");
+		//残機が0の場合ゲームオーバー
+		FadeScreen::GetInstance().SetMaskTexture("fade02.png");//フェードのマスク変更
+		FadeScreen::GetInstance().SetBackGround("black.png");  //フェードのテクスチャ変更
 
-		SceneManager::GetInstance().ChangeScene("GameOver");//ゲームオーバーシーンに移動
+		SceneManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());//ゲームオーバーシーンに移動
 	}
 
 	if (boss_) {
 		//ボスを倒したら
 		if (boss_->IsDeadMotionFinish()) {
-			SceneManager::GetInstance().ChangeScene("Clear");//クリアシーンに移動
+			SceneManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());//クリアシーンに移動
 		}
 	}
 	

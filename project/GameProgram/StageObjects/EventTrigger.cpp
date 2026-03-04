@@ -224,35 +224,28 @@ void EventTrigger::EnemyPop() {
 
 	for (auto& enemyPopData : enemyPopDatas_) {
 
-		std::unique_ptr<BaseEnemy> popEnemy;
+		
 		//名前によって変更
 		if (enemyPopData.enemyName == "soldier") {
-			popEnemy = std::make_unique<Enemy_Soldier>();
+			std::unique_ptr<Enemy_Soldier> popEnemy = std::make_unique<Enemy_Soldier>();
+			EnemyTemplate(*popEnemy, enemyPopData);
+			EnemyMoveRoute(*popEnemy, enemyPopData);
+			//vectorに代入
+			popEnemies_.push_back(std::move(popEnemy));
 		}
 		else if (enemyPopData.enemyName == "turret") {
-			popEnemy = std::make_unique<Enemy_Turret>();
+			std::unique_ptr<Enemy_Turret> popEnemy = std::make_unique<Enemy_Turret>();
+			EnemyTemplate(*popEnemy, enemyPopData);
+			//vectorに代入
+			popEnemies_.push_back(std::move(popEnemy));
 		}
 		else if (enemyPopData.enemyName == "bomb") {
-			popEnemy = std::make_unique<Enemy_Bomb>();
+			std::unique_ptr<Enemy_Bomb> popEnemy = std::make_unique<Enemy_Bomb>();
+			EnemyTemplate(*popEnemy, enemyPopData);
+			EnemyMoveRoute(*popEnemy, enemyPopData);
+			//vectorに代入
+			popEnemies_.push_back(std::move(popEnemy));
 		}
-
-		popEnemy->Initialize();
-		popEnemy->SetTranslate(enemyPopData.position);
-		popEnemy->SetRotate(enemyPopData.rotate);
-
-		//少しだけ動けるように
-		Vector3 move = { kMoveX,0,0 };
-
-		//敵の当たり判定更新
-		popEnemy->SetColliderSize(kAABBSize_ * kDivideByTwo_);
-		//popEnemy->SetRouteLeftPoint(enemyPopData.position - move);
-		//popEnemy->SetRouteRightPoint(enemyPopData.position + move);
-		//popEnemy->SetMoveInit(enemyPopData.position);
-
-		popEnemy->DirectionDegree();
-
-		popEnemies_.push_back(std::move(popEnemy));
-
 		//敵の数
 		enemyBornCount_++;
 	}
@@ -301,3 +294,24 @@ void EventTrigger::ReturnCamera(CameraControl& cameraControl, LevelEditor& level
 	}
 }
 
+
+
+void EventTrigger::EnemyTemplate(BaseEnemy& enemy, EnemyPopData enemyData) {
+	enemy.Initialize();//初期設定
+	enemy.SetTranslate(enemyData.position);//座標
+	enemy.SetRotate(enemyData.rotate);//向き
+	enemy.SetColliderSize(enemyData.kAABBSize_ * kDivideByTwo_);//当たり判定
+	//オブジェクト向き
+	enemy.DirectionDegree();
+}
+
+void EventTrigger::EnemyMoveRoute(EnemyMoveCommand& enemy, EnemyPopData enemyData) {
+	//少しだけ動けるように
+	Vector3 move = { kMoveX,0,0 };
+
+	enemy.SetRouteLeftPoint(enemyData.position - move);//移動ポイント1
+	enemy.SetRouteRightPoint(enemyData.position + move);//移動ポイント2 (leftPoint < rightPoint)
+	enemy.SetMoveInit(enemyData.position);//移動ポイント真ん中
+
+	enemy.DirectionMove();
+}

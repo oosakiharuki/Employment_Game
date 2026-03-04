@@ -27,6 +27,8 @@ struct EventData {
 struct EnemyPopData {
 	Vector3 position = {0,0,0};
 	Vector3 rotate = {0,0,0};
+	//AABBのサイズ
+	const Vector3 kAABBSize_ = { 2.0f,2.0f,3.0f };
 	std::string enemyName;
 };
 
@@ -169,9 +171,6 @@ private:
 	//動ける範囲
 	const float kMoveX = 3.0f;
 
-	//AABBのサイズ
-	const Vector3 kAABBSize_ = { 2.0f,2.0f,3.0f };
-
 	//向き(左右)
 	const float kDirectionRight_ = 90.0f;
 	const float kDirectionLeft_ = -90.0f;
@@ -183,4 +182,18 @@ private:
 		"enemies_summon", "resource/Sprite/white.dds", Primitive::CreateSphere(), 10,
 		kSummonMaxTime_ / 6.0f, { gSize,gSize,gSize }
 	};
+
+	/// <summary>
+	/// 敵の共通テンプレート処理
+	/// </summary>
+	/// <param name="enemy">敵の基盤/派生クラスを入れる</param>
+	/// <param name="enemyData">LevelEditorからもらった敵データ</param>
+	void EnemyTemplate(BaseEnemy& enemy, EnemyPopData enemyData);
+	/// <summary>
+	/// 移動能力がある敵キャラ
+	/// </summary>
+	/// <param name="enemy">MoveCommandを持っている敵</param>
+	/// <param name="enemyData">LevelEditorからもらった敵データ</param>
+	void EnemyMoveRoute(EnemyMoveCommand& enemy, EnemyPopData enemyData);
+
 };

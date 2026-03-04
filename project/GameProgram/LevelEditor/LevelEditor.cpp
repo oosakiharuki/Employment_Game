@@ -83,6 +83,9 @@ void LevelEditor::LoadGameObjects(nlohmann::json& object) {
 	}//ボスの配置
 	else if (type.compare("BossSpawn") == 0) {
 		LoadBoss(object);
+	}//操作ガイドの配置
+	else if (type.compare("GuideSpawn") == 0) {
+		LoadGuide(object);
 	}
 }
 
@@ -187,11 +190,6 @@ void LevelEditor::LoadStageObject(nlohmann::json& object) {
 
 	//コライダー
 	SetCollider(object, stageObjectData.colliderSize, stageObjectData.transform.scale);
-
-	//移動ルート(移動床以外使わない)
-	if (stageObjectData.ObjectName == "MoveGround") {
-		SetTravelRoute(object, stageObjectData.leftPoint, stageObjectData.rightPoint);
-	}
 }
 
 void LevelEditor::LoadEventTrigger(nlohmann::json& object, const Vector3& translate) {
@@ -237,6 +235,21 @@ void LevelEditor::LoadBoss(nlohmann::json& object) {
 	//コライダー
 	SetCollider(object, bossData.colliderSize, bossData.transform.scale);
 }
+
+void LevelEditor::LoadGuide(nlohmann::json& object) {
+	levelData_->guides.emplace_back(LevelData::GuideData{});
+	LevelData::GuideData& guideData = levelData_->guides.back();
+
+
+	if (object.contains("file_name")) {
+		//ファイル名
+		guideData.textureFile = object["file_name"];
+	}
+	//BlenderのY軸とZ軸と違うため y = [2],z = [1]
+	//トランスフォーム
+	SetTransform(object, guideData.transform);
+}
+
 
 void LevelEditor::SetTransform(nlohmann::json& object, Transform& objectTransform) {
 	//トランスフォームのパラメータ読み込み

@@ -16,14 +16,12 @@ void PlayerNormalState::CommandInput(Player& player) {
 	if (Input::GetInstance().TriggerKey(DIK_K) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_X) || Input::GetInstance().RightTrigger()) {
 		nextState_ = std::make_unique<PlayerFireState>();
 	}
-	if (Input::GetInstance().TriggerKey(DIK_L) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_B) || Input::GetInstance().LeftTrigger()) {
+	if (Input::GetInstance().TriggerKey(DIK_L) || Input::GetInstance().LeftTrigger()) {
 		//ブリンクの条件を満たしているか
-		if (player.BrinkFlag()) {
-			nextState_ = std::make_unique<PlayerBrinkState>(); 
-		}
-		else {
-			nextState_ = std::make_unique<PlayerShieldState>();
-		}
+		nextState_ = std::make_unique<PlayerShieldState>();
+	}
+	if (player.BrinkFlag() && (Input::GetInstance().TriggerKey(DIK_J) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_B))) {
+		nextState_ = std::make_unique<PlayerBrinkState>(); 
 	}
 }
 
@@ -52,8 +50,8 @@ void PlayerShieldState::Update(PlayerCommand& playerCommand) {
 }
 
 void PlayerShieldState::CommandInput(Player& player) {
-	//ボタンが離れたとき、ステートを変更
-	if (!Input::GetInstance().PushKey(DIK_L) && !Input::GetInstance().PushButton(XINPUT_GAMEPAD_B) && !Input::GetInstance().LeftTriggerLongPress()) {
+	//ボタンが離れたとき、ステートを変更(シールド、ブリンクで使用しているボタン)
+	if (!Input::GetInstance().PushKey(DIK_L) && !Input::GetInstance().PushKey(DIK_J) && !Input::GetInstance().PushButton(XINPUT_GAMEPAD_B) && !Input::GetInstance().LeftTriggerLongPress()) {
 		player.OffShield();//シールドフラグオフ
 		nextState_ = std::make_unique<PlayerNormalState>();
 	}

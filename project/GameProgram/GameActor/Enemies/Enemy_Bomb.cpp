@@ -19,21 +19,36 @@ void Enemy_Bomb::Initialize() {
 
 	//元色
 	object_->SetColor(color_);
+
+	speed_.x = kMoveX_;
 }
 
 void Enemy_Bomb::Move() {
 	move_ += speed_;//移動ポイント
+	transform_.translate += speed_;
 
-	//方向転換
 	//敵が右向き
-	if (transform_.rotate.y == kDirectionRight_) {
-		transform_.rotate.y = kDirectionLeft_;
+	if (move_.x <= routePointLeft_.x) {
 		speed_.x = kMoveX_;//右に進む
+		eyeReach_.x = kEyeReach_.x;
+		transform_.rotate.y = kDirectionRight_;//右が正面
 	}
 	//左向き
-	else if (transform_.rotate.y == kDirectionLeft_) {
-		transform_.rotate.y = kDirectionRight_;
+	else if (move_.x >= routePointRight_.x) {
 		speed_.x = -kMoveX_;//左に進む
+		eyeReach_.x = -kEyeReach_.x;
+		transform_.rotate.y = kDirectionLeft_;//左が正面
+	}
+}
+
+void Enemy_Bomb::DirectionMove() {
+	if (transform_.rotate.y == kDirectionRight_) {
+		speed_.x = kMoveX_;//右に進む
+		eyeReach_.x = kEyeReach_.x;
+	}
+	else if (transform_.rotate.y == kDirectionLeft_) {
+		speed_.x = -kMoveX_;//左に進む
+		eyeReach_.x = -kEyeReach_.x;
 	}
 }
 
@@ -66,7 +81,7 @@ void Enemy_Bomb::Performance() {}
 
 void Enemy_Bomb::SearchCommand() {
 	//動く
-	//Move();
+	Move();
 
 	//ボムとプレイヤーの距離
 	DirectionPlayer();

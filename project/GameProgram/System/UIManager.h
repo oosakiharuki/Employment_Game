@@ -11,15 +11,6 @@ struct SpriteData {
 };
 
 /// <summary>
-/// 構造体_操作説明(ガイド)の設定
-/// </summary>
-struct Guide {
-	SpriteData spriteData;  //スプライトデータ
-	float lookPointX_left;  //見れる範囲_左端
-	float lookPointX_right; //見れる範囲_右端
-};
-
-/// <summary>
 /// 操作ガイド
 /// </summary>
 class UIManager
@@ -33,12 +24,6 @@ public:
 	static UIManager& GetInstance();
 
 	void CreateSprite(const SpriteData& spriteData);
-
-	/// <summary>
-	/// 操作説明スプライトを作る
-	/// </summary>
-	/// <param name="guide">名前や座標が入った構造体</param>
-	void CreateGuide(const Guide& guide);
 
 	/// <summary>
 	/// 更新処理
@@ -55,12 +40,6 @@ public:
 	/// </summary>
 	void Finalize();
 
-	/// <summary>
-	/// 描画処理
-	/// プレイヤーの位置によって移す場所を変える
-	/// </summary>
-	void GuideDraw();
-
 	void SetPlayerTranslate(const Vector3& translate) { playerTranslate_ = translate; }
 
 	void SetSpriteTexture(const std::string name, const std::string& texturePath);
@@ -72,8 +51,7 @@ private:
 	static std::unique_ptr<UIManager> sInstance_;
 	//default_deleteを設定(解放処理を行える)
 	friend struct std::default_delete<UIManager>;
-	std::vector<Guide> guides_;
-	
+
 	std::unordered_map<std::string, std::unique_ptr<Sprite>> sprites_;
 	std::unordered_map<std::string, std::unique_ptr<Sprite>> spriteGuides_;
 

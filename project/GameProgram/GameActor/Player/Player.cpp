@@ -300,8 +300,7 @@ void Player::Gliding() {
 	// - 滑空 - 
 	//開いた状態で地面についていない
 	//傘が上向き(斜め上も)の場合かつプレイヤーが倒されていないとき
-	if (umbrella_->GetShieldMode() && !isGround_ &&
-		(transformGun_.rotate.x >= kUpDis_ - kDiagonalValue_ && transformGun_.rotate.x <= kUpDis_ + kDiagonalValue_)) {
+	if (umbrella_->GetShieldMode() && !isGround_) {
 		GravityDown();
 		//滑空中は上向きのみ(斜めにはならない)
 		transformGun_.rotate.x = kUpDis_;

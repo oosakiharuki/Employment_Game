@@ -39,6 +39,11 @@ private:
 	void Move() override;
 
 	/// <summary>
+	/// 向きにより最初に移動する方向を決める
+	/// </summary>
+	void DirectionMove() override;
+
+	/// <summary>
 	/// 弾丸発射処理
 	/// </summary>
 	void FireBullet() override;

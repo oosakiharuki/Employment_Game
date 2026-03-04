@@ -222,7 +222,7 @@
             "transform": {
                 "translation": [
                     12.0,
-                    0.0,
+                    1.0,
                     10.0
                 ],
                 "rotation": [
@@ -241,7 +241,7 @@
                 "type": "BOX",
                 "center": [
                     0.0,
-                    0.0,
+                    -1.0,
                     0.0
                 ],
                 "size": [
@@ -286,13 +286,13 @@
             }
         },
         {
-            "type": "MESH",
-            "name": "立方体.004",
+            "type": "GuideSpawn",
+            "name": "GuideSpawn",
             "transform": {
                 "translation": [
-                    6.0,
-                    0.0,
-                    3.0
+                    -10.0,
+                    10.0,
+                    17.0
                 ],
                 "rotation": [
                     0.0,
@@ -300,33 +300,21 @@
                     0.0
                 ],
                 "scaling": [
-                    2.0,
-                    6.059999942779541,
-                    2.9000000953674316
+                    2.5,
+                    2.5,
+                    2.5
                 ]
             },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
+            "file_name": "GuideMove"
         },
         {
-            "type": "MESH",
-            "name": "立方体.005",
+            "type": "GuideSpawn",
+            "name": "GuideSpawn.001",
             "transform": {
                 "translation": [
-                    3.0,
-                    0.0,
-                    2.0999999046325684
+                    -1.0,
+                    10.0,
+                    17.0
                 ],
                 "rotation": [
                     0.0,
@@ -334,24 +322,12 @@
                     0.0
                 ],
                 "scaling": [
-                    2.0,
-                    6.059999942779541,
-                    2.0
+                    2.5,
+                    2.5,
+                    2.5
                 ]
             },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
+            "file_name": "GuideWarp"
         }
     ]
 }

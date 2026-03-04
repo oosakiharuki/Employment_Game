@@ -1,17 +1,15 @@
 #include "SelectScene.h"
-#include "StageObjectFunction.h"
 #include "SceneManager.h"
+#include "TitleScene.h"
+#include "GameScene.h"
+#include "FadeScreen.h"
+#include "CubeMap.h"
 
 using namespace MyMath;
-using namespace StageObjectFunction;
 
 void SelectScene::Initialize() {
-
-	//移行データ初期化
-	sceneSaveData_.nextStageFile = "stage_select";
-
 	//ステージシーンのゲームオブジェクト配置
-	LevelEditorObjectSetting(sceneSaveData_.nextStageFile);
+	LevelEditorObjectSetting("stage_select");
 
 	//ステージの全体層
 	stageObj_ = std::make_unique<Object3d>();
@@ -26,9 +24,10 @@ void SelectScene::Initialize() {
 	backGround->Initialize();
 
 	//ポーズ画面
-	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnTitle.png", "Title");
+	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnTitle.png", std::make_unique<TitleScene>());
 
 	CollisionManager::GetInstance().ResetFrag();
+	PauseScreen::GetInstance().PauseFlag(false);//ポーズを強制解除
 }
 
 void SelectScene::Update() {
@@ -62,6 +61,11 @@ void SelectScene::Update() {
 
 	//背景更新
 	backGround->Update();
+	
+	//操作ガイド更新
+	for (auto& guide : guides_) {
+		guide->Update();
+	}
 }
 
 void SelectScene::Draw() {
@@ -72,6 +76,10 @@ void SelectScene::Draw() {
 
 	//ステージ描画
 	stageObj_->Draw();
+	//操作ガイド描画
+	for (auto& guide : guides_) {
+		guide->Draw();
+	}
 
 	//ステージオブジェクト描画
 	for (auto& stageObject : stageObjects_) {
@@ -102,20 +110,12 @@ void SelectScene::LevelEditorObjectSetting(const std::string& levelEditor_file) 
 	//- プレイヤー配置 -
 	player_ = std::make_unique<Player>();
 
-	stageFileName_ = sceneSaveData_.nextStageFile;//ステージの全体層(.obj)
+	stageFileName_ = levelEditor_file;//ステージの全体層(.obj)
 
-	//値が入っている場合
-	if (levelEditor_file != "") {
-		//代入
-		stageFileName_ = levelEditor_file;
-		sceneSaveData_.playerHp = player_->GetMaxHp();
-	}
+	NextStageSave::GetInstance().SetPlayerHp(3); //現在のプレイヤー体力を保存
+	NextStageSave::GetInstance().SetPlayerRemain(3); //現在のプレイヤー残機を保存
 
 	SpitOutGameObject();
-
-	//操作方法スプライト
-	UIManager::GetInstance().CreateGuide(kGuideMove_);
-	UIManager::GetInstance().CreateGuide(kGuideWarp_);
 }
 
 void SelectScene::SpitOutGameObject() {
@@ -136,20 +136,22 @@ void SelectScene::SpitOutGameObject() {
 
 	//プレイヤーの体力を上書き
 	player_->Initialize();//初期設定
-	player_->SetHp(sceneSaveData_.playerHp);
-	player_->SetRemain(sceneSaveData_.playerRemain);
+	player_->SetHp(NextStageSave::GetInstance().GetNextStageSaveData().playerHp);
+	player_->SetRemain(NextStageSave::GetInstance().GetNextStageSaveData().playerRemain);
 	//プレイヤーを配置
 	spitOut_.SpitOutPlayer(player_);
 	//ステージの当たり判定を設定/配置
 	spitOut_.SpitOutStage(stageObj_, stageFileName_);
 	//ステージオブジェクトを配置
 	stageObjects_ = std::move(spitOut_.SpitOutStageObject());
+	//操作ガイド設定
+	guides_ = std::move(spitOut_.SpitOutGuide());
 }
 
 void SelectScene::SceneUpdate() {
-
+	//ワープする+カメラズームが完了
 	if (CollisionManager::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
-		SceneManager::GetInstance().ChangeScene("Game");
+		SceneManager::GetInstance().ChangeScene(std::make_unique<GameScene>());
 	}
 
 	//次のシーンに移動するとき

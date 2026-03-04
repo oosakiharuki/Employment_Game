@@ -3,6 +3,7 @@
 #include "MyMath.h"
 #include "Input.h"
 #include "BasePauseState.h"
+#include "BaseScene.h"
 
 /// <summary>
 /// ポ－ズ画面
@@ -47,7 +48,7 @@ public:
 	/// </summary>
 	/// <param name="textureName">テクスチャ名</param>
 	/// <param name="changeScene">移動するシーン名</param>
-	void BeforeChangeScene(const std::string& textureName, const std::string& changeScene);
+	void BeforeChangeScene(const std::string& textureName, std::unique_ptr<BaseScene> changeScene);
 
 	/// <summary>
 	/// 動く選択UI
@@ -73,7 +74,7 @@ public:
 	/// getter_次のシーン
 	/// </summary>
 	/// <returns>あらかじめ指定したシーン名</returns>
-	const std::string& GetNextSceneName() { return nextSceneName_; }
+	std::unique_ptr<BaseScene> GetNextScene() { return std::move(nextScene_); }
 
 	/// <summary>
 	/// setter_ポーズステート(状態遷移)
@@ -134,5 +135,5 @@ private:
 
 	std::unique_ptr<BasePauseState> pauseState_ = nullptr;
 
-	std::string nextSceneName_;
+	std::unique_ptr<BaseScene> nextScene_;
 };

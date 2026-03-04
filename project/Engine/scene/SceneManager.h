@@ -1,14 +1,6 @@
 #pragma once
-
 #include <memory>
 #include "BaseScene.h"
-#include "GameScene.h"//geme
-#include "TitleScene.h"//title
-#include "SelectScene.h"
-#include "ClearScene.h"
-#include "GameOverScene.h"
-
-#include "AbstractSceneFactory.h"
 
 /// <summary>
 /// シーンマネージャ
@@ -56,10 +48,7 @@ public:
 	/// <summary>
 	/// シーン入れ替え
 	/// </summary>
-	void ChangeScene(const std::string& sceneName);
-
-	void SetSceneFactory(std::unique_ptr<AbstractSceneFactory> sceneFactory) { sceneFactory_ = std::move(sceneFactory); }
-
+	void ChangeScene(const std::unique_ptr<BaseScene> nextScene);
 private:
 	//インスタンス
 	static std::unique_ptr<SceneManager> sInstance_;
@@ -68,6 +57,4 @@ private:
 
 	std::unique_ptr<BaseScene> scene_ = nullptr;//現在シーン
 	std::unique_ptr<BaseScene> nextScene_ = nullptr;//次のシーン
-
-	std::unique_ptr<AbstractSceneFactory> sceneFactory_ = nullptr;
 };
