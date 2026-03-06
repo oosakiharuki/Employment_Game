@@ -6,9 +6,14 @@
 /// </summary>
 class Dissolve : public BasePostEffect {
 public:
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// 処理コマンド(描画)
+	/// </summary>
 	void Command() override;
-
 	/// <summary>
 	/// 背景
 	/// </summary>

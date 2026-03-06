@@ -10,7 +10,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static SpriteCommon& GetInstance();
 	/// <summary>
 	/// 解放処理
@@ -19,7 +19,6 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="dxCommon"></param>
 	void Initialize() override;
 
 	/// <summary>

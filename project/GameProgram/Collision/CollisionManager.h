@@ -61,13 +61,6 @@ public:
 	/// 更新処理
 	/// </summary>
 	void CollisionUpdate();
-	
-	/// <summary>
-	/// 各々の当たり判定
-	/// </summary>
-	/// <param name="collisionA">当たり判定</param>
-	/// <param name="collisionB">当たり判定</param>
-	void EachCollision(CollisionSource& collisionA, CollisionSource& collisionB);
 
 	/// <summary>
 	/// 対象(プレイヤー、敵など)の真下の床の位置に
@@ -101,35 +94,46 @@ public:
 	/// <returns>設定された構造体CollisionOverlap</returns>
 	CollisionOverlap SetTarget(const Vector3& position,const AABB& aabb);
 
-
+	/// <summary>
+	/// ワープする判定
+	/// </summary>
+	/// <returns>する判定ならtrue</returns>
 	bool IsWarp() { return isWarp_; }
+	/// <summary>
+	/// ワープを始める
+	/// </summary>
+	/// <param name="center">ワープゲートの真ん中座標(ズームして近づけるため)</param>
 	void SuccessWarp(const Vector3& center) { 
 		isWarp_ = true;
 		zoomPoint_ = center;
 	}
-
+	/// <summary>
+	/// ゴールする判定
+	/// </summary>
+	/// <returns>する判定ならtrue</returns>
 	bool IsGoal() { return isGoal_; }
+	/// <summary>
+	/// ゴールになる処理
+	/// </summary>
+	/// <param name="center">ゴールの旗の座標(ズームして近づけるため)</param>
 	void SuccessGoal(const Vector3& center) {
 		isGoal_ = true;
 		zoomPoint_ = center;
 	}
-
+	/// <summary>
+	/// ゴール、ワープするフラグをリセット
+	/// </summary>
 	void ResetFrag() {
 		isWarp_ = false;
 		isGoal_ = false;
 	}
-
+	/// <summary>
+	/// getter_ズームポイント
+	/// </summary>
+	/// <returns>現在のズームポイント</returns>
 	const Vector3& GetZoomPoint() { return zoomPoint_; }
 
 private:
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="collisionA">当たり判定A</param>
-	/// <param name="typeA">当たり判定Aのタイプ</param>
-	/// <param name="collisionB">当たり判定B</param>
-	/// <param name="typeB">当たり判定Bのタイプ</param>
-	void DetermineType(CollisionSource& collisionA, const CollisionTypes& typeA, CollisionSource& collisionB, const CollisionTypes& typeB);
 
 	//傘のノックバックの値
 	const Vector3 kUmbrellaKnockBackPower_ = { 0.0f,0.0f,0.3f };
@@ -148,11 +152,10 @@ private:
 	bool isGoal_ = false;
 	//ワープで次のステージに進むフラグ
 	bool isWarp_ = false;
-
+	//ズームポイント
 	Vector3 zoomPoint_{};
-
+	//当たり判定たち
 	std::vector<CollisionSource*> collisions_;
-
 	//ステージ用
 	std::vector<std::unique_ptr<CollisionSource>> stageCollisions_;
 	bool isAlreadyInStage_ = false;//すでにステージ入っている

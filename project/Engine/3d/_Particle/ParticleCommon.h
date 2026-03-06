@@ -11,7 +11,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static ParticleCommon& GetInstance();
 	/// <summary>
 	/// 解放処理
@@ -20,7 +20,6 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="dxCommon"></param>使用しているdirectXCommon
 	void Initialize() override;
 
 	/// <summary>
@@ -30,12 +29,12 @@ public:
 	/// <summary>
 	/// setter_デフォルトカメラ
 	/// </summary>
-	/// <param name="camera"></param>使用するカメラ
+	/// <param name="camera">使用するカメラ</param>
 	void SetDefaultCamera(Camera* camera) { defaultCamera_ = camera; }
 	/// <summary>
 	/// getter_デフォルトカメラ
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在使用しているカメラ</returns>
 	Camera* GetDefaultCamera() const { return defaultCamera_; }
 private:
 

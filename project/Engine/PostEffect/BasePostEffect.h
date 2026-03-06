@@ -42,7 +42,9 @@ protected:
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[2] = {};
 
 public:
-	
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize() override;
 
 	/// <summary>
@@ -61,19 +63,27 @@ public:
 	/// <returns></returns>
 	int GetEffectNo() { return sEffectNo_; }
 
+	/// <summary>
+	/// エフェクト特有初期化処理
+	/// </summary>
 	virtual void EffectInit() = 0;
 
 	/// <summary>
 	/// imGuiで値を動かせるようにする
 	/// </summary>
 	virtual void EffectUpdate() = 0;
-
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	virtual ~BasePostEffect();
 	/// <summary>
 	/// ポストエフェクト変更処理
 	/// </summary>
 	void ChangeNumber();
-
+	/// <summary>
+	/// エフェクトのGPU
+	/// </summary>
+	/// <returns>SRVHandleGPU</returns>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetEffect() { return srvHandleGPU_; }
 
 	/// <summary>

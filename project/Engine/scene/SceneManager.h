@@ -13,8 +13,13 @@ public:
 	/// <returns></returns>
 	static SceneManager& GetInstance();
 
-
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	SceneManager();
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~SceneManager();
 
 	/// <summary>

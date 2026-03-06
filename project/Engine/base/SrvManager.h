@@ -5,7 +5,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static SrvManager& GetInstance();
 	/// <summary>
 	/// 解放処理
@@ -14,46 +14,55 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="dxCommon"></param>
 	void Initialize();
 	/// <summary>
 	/// カウント
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>SRVの数</returns>
 	uint32_t Allocate();
 	/// <summary>
 	/// sMaxSRVCount以上でないか
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>trueで上限に達した、falseで上限に達していない</returns>
 	bool Max();
 	/// <summary>
 	/// CPUデスクリプターハンドル追加
 	/// </summary>
-	/// <param name="index"></param>
-	/// <returns></returns>
+	/// <param name="index">SRVIndex</param>
+	/// <returns>CPUのデスクリプターハンドル</returns>
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index);
 	/// <summary>
 	/// GPUデスクリプターハンドル追加
 	/// </summary>
-	/// <param name="index"></param>
-	/// <returns></returns>
+	/// <param name="index">SRVIndex</param>
+	/// <returns>GPUのデスクリプターハンドル</returns>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(uint32_t index);
 	
 	/// <summary>
-	/// Srv_テクスチャ
+	/// SRV_テクスチャ
 	/// </summary>
+	/// <param name="srvIndex">SRVの番号</param>
+	/// <param name="pResource">テクスチャのリソース</param>
+	/// <param name="Format">フォーマット</param>
+	/// <param name="MipLevels">ミットマップ</param>
 	void CreateSRVForTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, DXGI_FORMAT Format, UINT MipLevels);
 	/// <summary>
-	/// Srv_オブジェクト
+	/// SRV_オブジェクト
 	/// </summary>
+	/// <param name="srvDesc"></param>
+	/// <param name="srvIndex">SRVの番号</param>
+	/// <param name="pResource">テクスチャのリソース</param>
+	/// <param name="numElements"></param>
+	/// <param name="structureByteStride"></param>
 	void CreateSRVForStructureBuffer(D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc,uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride);
-	//描画コマンド
+	/// <summary>
+	/// 描画コマンド
+	/// </summary>
 	void PreDraw();
-	void SetGraphicsRootDescriptorTable(UINT RootParameterIndex, uint32_t srvIndex);
 	/// <summary>
 	/// getter_デスクリプターハンドル
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>デスクリプターハンドル</returns>
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDescriptorHeap() { return descriptorHeap_; }
 
 	//最大SRV数

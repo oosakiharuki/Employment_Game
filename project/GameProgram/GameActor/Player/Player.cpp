@@ -615,7 +615,7 @@ void Player::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypeEnemyBullet || 
 		collision->GetType() == CollisionTypes::TypeBombExplotion || 
 		collision->GetType() == CollisionTypes::TypeBoss) {
-		IsDamage(GetDistance(collision->GetCenter()));
+		IsDamage(DistanceCollisionCenter(collision->GetCenter()));
 	}
 
 	//演出中、死亡の時は当たらない

@@ -429,3 +429,33 @@ SkinCluster Model_glTF::CreateSkinCluster(const Skeleton& skeleton,const ModelDa
 void Model_glTF::SetEnvironment(const std::string& mapFile) {
 	EnvironmentFile_ = mapFile;
 }
+
+
+Skeleton Model_glTF::CreateSkelton(const Node& rootNode) {
+	Skeleton skeleton;
+	skeleton.root = CreateJoint(rootNode, {}, skeleton.joints);
+
+	for (const Joint& joint : skeleton.joints) {
+		skeleton.jointMap.emplace(joint.name, joint.index);
+	}
+	return skeleton;
+}
+
+int32_t Model_glTF::CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints) {
+	Joint joint;
+	joint.name = node.name;
+	joint.localMatrix = node.localMatrix;
+	joint.skeletonSpaceMatrix = MakeIdentity4x4();
+	joint.transform = node.transform;
+	joint.index = int32_t(joints.size());
+	joint.parent = parent;
+	joints.push_back(joint);
+
+	//再帰関数
+	for (const Node& child : node.children) {
+		int32_t childIndex = CreateJoint(child, joint.index, joints);
+		joints[joint.index].children.push_back(childIndex);
+	}
+
+	return joint.index;
+}

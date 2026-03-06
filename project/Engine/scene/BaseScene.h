@@ -25,7 +25,9 @@ public:
 	/// 解放処理
 	/// </summary>
 	virtual void Finalize() = 0;
-
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	virtual ~BaseScene();
 
 	/// <summary>

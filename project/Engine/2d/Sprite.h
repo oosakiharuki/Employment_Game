@@ -5,6 +5,7 @@
 #include "DirectXCommon.h"
 
 class SpriteCommon;
+
 /// <summary>
 /// スプライト
 /// </summary>
@@ -13,7 +14,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="textureFilePath"></param>
+	/// <param name="textureFilePath">テクスチャ名</param>
 	void Initialize(const std::string& textureFilePath);
 	/// <summary>
 	/// 更新処理
@@ -27,116 +28,123 @@ public:
 	/// <summary>
 	/// getter_座標
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の座標</returns>
 	const Vector2& GetPosition()const { return position_; }
 	/// <summary>
 	/// setter_座標
 	/// </summary>
-	/// <param name="position"></param>
+	/// <param name="position">指定する座標</param>
 	void SetPosition(const Vector2& position) { this->position_ = position; }
 
 	/// <summary>
 	/// getter_回転角度
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の回転角度</returns>
 	float GetRotate() const { return rotation_; }
 	/// <summary>
 	/// setter_回転角度
 	/// </summary>
-	/// <param name="rotation"></param>
+	/// <param name="rotation">指定した回転角度</param>
 	void SetRotate(float rotation) { this->rotation_ = rotation; }
 
 	/// <summary>
 	/// getter_色
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の色</returns>
 	const Vector4& GetColor()const { return materialData_->color; }
 	/// <summary>
 	/// setter_色
 	/// </summary>
-	/// <param name="color"></param>
+	/// <param name="color">指定する色(Vector4)</param>
 	void SetColor(const Vector4& color) { materialData_->color = color; }
-
+	/// <summary>
+	/// getter_サイズ
+	/// </summary>
+	/// <returns>現在のサイズ</returns>
 	const Vector2& GetSize()const { return size_; }
+	/// <summary>
+	/// setter_サイズ
+	/// </summary>
+	/// <param name="size">指定する大きさ</param>
 	void SetSize(const Vector2& size) { this->size_ = size; }
 
 	/// <summary>
 	/// getter_アンカーポイント
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在のアンカーポイント</returns>
 	const Vector2& GetAnchorPoint()const { return anchorPoint_; }
 	
 	/// <summary>
 	/// setter_アンカーポイント
 	/// </summary>
-	/// <param name="anchorPoint"></param>
+	/// <param name="anchorPoint">指定するアンカーポイント座標</param>
 	void SetAnchorPoint(const Vector2& anchorPoint) { this->anchorPoint_ = anchorPoint; }
 
 	/// <summary>
 	/// getter_テクスチャ反転横
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在のテクスチャ反転横</returns>
 	const bool& GetFlipX() const { return isFlipX_; }
 
 	/// <summary>
 	/// setter_テクスチャ反転横
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>指定するテクスチャ反転横</returns>
 	void SetFlipX(bool isFlipX) { this->isFlipX_ = isFlipX; }
 
 	/// <summary>
 	/// getter_テクスチャ反転縦
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在のテクスチャ反転縦</returns>
 	const bool& GetFlipY() const { return isFlipY_; }
 
 	/// <summary>
 	/// setter_テクスチャ反転縦
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>指定するテクスチャ反転縦</returns>
 	void SetFlipY(bool isFlipY) { this->isFlipY_ = isFlipY; }
 
 	/// <summary>
 	/// getter_左上の位置
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の左上の位置</returns>
 	const Vector2& GetTextureLT() const { return textureLeftTop_; }
 
 	/// <summary>
 	/// setter_左上の位置
 	/// </summary>
-	/// <param name="textureLeftTop"></param>
+	/// <param name="textureLeftTop">指定する左上の位置</param>
 	void SetTextureLT(const Vector2& textureLeftTop) { this->textureLeftTop_ = textureLeftTop; }
 	
 	/// <summary>
 	/// getter_テクスチャサイズ
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在のテクスチャサイズ</returns>
 	const Vector2& GetTextureSize() const { return textureSize_; }
 
 	/// <summary>
 	/// setter_テクスチャサイズ
 	/// </summary>
-	/// <param name="textureSize"></param>
+	/// <param name="textureSize">テクスチャ自体のサイズ</param>
 	void SetTextureSize(const Vector2& textureSize) { this->textureSize_ = textureSize; }
 
 	/// <summary>
 	/// getter_テクスチャファイル
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在使用しているテクスチャファイル名</returns>
 	std::string GetTextureFile() const;
 
 	/// <summary>
 	/// setter_テクスチャファイル
 	/// </summary>
-	/// <param name="textureFile"></param>
+	/// <param name="textureFile">変更するテクスチャファイルパス</param>
 	void SetTextureFile(const std::string& textureFile);
 
 
 	/// <summary>
 	/// getter_SpriteのResource
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>使用しているハンドルGPU</returns>
 	const D3D12_GPU_DESCRIPTOR_HANDLE GetResource() const ;
 
 private:

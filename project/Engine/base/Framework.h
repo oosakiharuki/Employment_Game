@@ -46,12 +46,12 @@ public:
 	/// <summary>
 	/// ゲームを終了する
 	/// </summary>
-	/// <returns></returns>trueで終了
+	/// <returns>trueで終了</returns>
 	virtual bool IsEndRequest() { return isRequest_; }
 	/// <summary>
 	/// ゲームを終了するか
 	/// </summary>
-	/// <param name="result"></param>
+	/// <param name="result">終了フラグ</param>
 	virtual void SetIsEndRequest(bool result) { isRequest_ = result; }
 
 	virtual ~Framework() = default;

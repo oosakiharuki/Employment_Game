@@ -9,7 +9,7 @@ void BasePostEffect::ChangeNumber() {
 
 #ifdef _DEBUG
 	if (Input::GetInstance().TriggerKey(DIK_F1)) {
-		sEffectNo_++;
+		sEffectNo_++;//加算
 	}
 	//最大→0に
 	if (sEffectNo_ == Max) {

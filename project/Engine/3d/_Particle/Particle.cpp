@@ -63,9 +63,6 @@ void Particle::Initialize(const std::string& particleName, const std::string& te
 	//Particle用マテリアル
 	InitMaterial();
 
-	//ライト用のリソース
-	InitLight();
-
 	//
 	InitParameter();
 
@@ -127,10 +124,8 @@ void Particle::Draw() {
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance().GetSrvHandleGPU(textureFile_));
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource_->GetGPUVirtualAddress());
-
-		//4のやつ particle専用
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(4, ParticleManager::GetInstance().GetSrvHandleGPU(fileName_));
+		//particle専用
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(3, ParticleManager::GetInstance().GetSrvHandleGPU(fileName_));
 		DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), numInstance_, 0, 0);
 	}
 	numInstance_ = 0;
@@ -185,14 +180,4 @@ void Particle::InitParameter() {
 
 	//パーティクル発生初期設定
 	particleBorn_ = ParticleBorn::Stop;
-}
-
-void Particle::InitLight() {
-	directionalLightSphereResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(DirectionalLight));
-	//書き込むためのアドレス
-	directionalLightSphereResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightSphereData_));
-	//色の設定
-	directionalLightSphereData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightSphereData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightSphereData_->intensity = 1.0f;
 }

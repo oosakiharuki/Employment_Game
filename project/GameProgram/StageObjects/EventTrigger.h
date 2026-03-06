@@ -99,7 +99,6 @@ public:
 	/// <returns></returns>
 	EventData GetEventData() { return eventData_; }
 
-	//void SetPopEnemy(std::vector<std::unique_ptr<BaseEnemy>> enemies) { popEnemies_ = std::move(enemies); }
 	std::vector<std::unique_ptr<BaseEnemy>> GetPopEnemy()  { return std::move(popEnemies_); }
 
 	/// <summary>

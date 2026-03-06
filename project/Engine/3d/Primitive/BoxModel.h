@@ -14,6 +14,10 @@ public:
 	/// </summary>
 	/// <param name="textureFile"></param>
 	void Initialize(const std::string& textureFile);
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="matWorld">ワールド行列を設定</param>
 	void Update(const Matrix4x4& matWorld);
 	/// <summary>
 	/// 描画処理
@@ -22,7 +26,7 @@ public:
 	/// <summary>
 	/// setter_色
 	/// </summary>
-	/// <param name="color"></param>
+	/// <param name="color">色を設定</param>
 	void SetColor(const Vector4& color) { color_ = color; }
 
 private:

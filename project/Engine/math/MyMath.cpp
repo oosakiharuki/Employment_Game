@@ -945,35 +945,6 @@ namespace MyMath {
 		return result;
 	}
 
-	Skeleton CreateSkelton(const Node& rootNode) {
-		Skeleton skeleton;
-		skeleton.root = CreateJoint(rootNode, {},skeleton.joints);
-
-		for (const Joint& joint : skeleton.joints) {
-			skeleton.jointMap.emplace(joint.name, joint.index);
-		}
-		return skeleton;
-	}
-
-	int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints) {
-		Joint joint;
-		joint.name = node.name;
-		joint.localMatrix = node.localMatrix;
-		joint.skeletonSpaceMatrix = MakeIdentity4x4();
-		joint.transform = node.transform;
-		joint.index = int32_t(joints.size());
-		joint.parent = parent;
-		joints.push_back(joint);
-
-		//再帰関数
-		for (const Node& child : node.children) {
-			int32_t childIndex = CreateJoint(child, joint.index, joints);
-			joints[joint.index].children.push_back(childIndex);
-		}
-
-		return joint.index;
-	}
-
 	Quaternion operator-(const Quaternion& q) {
 		Quaternion result;
 		result.x = -q.x;
@@ -1065,18 +1036,6 @@ namespace MyMath {
 		result.m[3][2] = m.m[2][3];
 		result.m[3][3] = m.m[3][3];
 
-		return result;
-	}
-
-	VertexData AddVert(const VertexData& v1, const VertexData& v2) {
-		VertexData result{};
-
-		result.position.x = v1.position.x + v2.position.x;
-		result.position.y = v1.position.y + v2.position.y;
-		result.position.z = v1.position.z + v2.position.z;
-		result.position.s = v1.position.s + v2.position.s;
-		result.texcoord.x = v1.texcoord.x + v2.texcoord.x;
-		result.texcoord.y = v1.texcoord.y + v2.texcoord.y;
 		return result;
 	}
 

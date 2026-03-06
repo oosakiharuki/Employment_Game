@@ -47,7 +47,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static Audio& GetInstance();
 	/// <summary>
 	/// 初期化処理
@@ -60,8 +60,8 @@ public:
 	/// <summary>
 	/// 音声をロードする
 	/// </summary>
-	/// <param name="filename"></param>
-	/// <returns></returns>
+	/// <param name="filename">waveファイル名</param>
+	/// <returns>ロードされたサウンドデータ</returns>
 	SoundData LoadWave(const char* filename);
 
 	/// <summary>
@@ -95,7 +95,10 @@ private:
 	/// <returns>出来上がったデータ</returns>
 	SoundData SoundLoadWave(const char* filename);//string?
 
-	//音声データの解放 delete
+	/// <summary>
+	/// 音声データの解放 delete
+	/// </summary>
+	/// <param name="soundData">サウンドデータ</param>
 	void SoundUnload(SoundData* soundData);
 
 	SoundData soundData_;

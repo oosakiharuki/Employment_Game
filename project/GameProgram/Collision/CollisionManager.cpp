@@ -72,52 +72,15 @@ void CollisionManager::CollisionUpdate() {
 				continue;
 			}
 			//当たり判定
+			//AABB同士が触れたとき+タイプが同じでないとき
 			if (IsCollisionAABB(collisions_[i]->GetAABB(), collisions_[j]->GetAABB()) && collisions_[i]->GetType() != collisions_[j]->GetType()) {
-				EachCollision(*collisions_[i], *collisions_[j]);
+				collisions_[i]->OnCollision(collisions_[j]);
 			}
 		}
 	}
 	//リセット
 	collisions_.clear();
 }
-
-void CollisionManager::EachCollision(CollisionSource& collisionA, CollisionSource& collisionB) {
-	//プレイヤー
-	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeEnemyBullet);
-	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeEnemyEye);
-	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeBoss);
-	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeBombExplotion); 
-	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeStage);
-	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeEvent);
-	//弾丸(player)
-	DetermineType(collisionA,CollisionTypes::TypePlayerBullet,collisionB,CollisionTypes::TypeStage);
-	//傘
-	DetermineType(collisionA, CollisionTypes::TypeUmbrella, collisionB, CollisionTypes::TypeEnemyBullet);
-	DetermineType(collisionA, CollisionTypes::TypeUmbrellaParry, collisionB, CollisionTypes::TypeEnemyBullet);
-	//敵
-	DetermineType(collisionA, CollisionTypes::TypeEnemy, collisionB, CollisionTypes::TypePlayerBullet);
-	DetermineType(collisionA, CollisionTypes::TypeEnemy, collisionB, CollisionTypes::TypeStage);
-	//敵のサーチ範囲
-	DetermineType(collisionA, CollisionTypes::TypeEnemyEye, collisionB, CollisionTypes::TypePlayer);
-	DetermineType(collisionA, CollisionTypes::TypeEnemyEye, collisionB , CollisionTypes::TypeStage);
-	//弾丸(enemy)
-	DetermineType(collisionA, CollisionTypes::TypeEnemyBullet, collisionB, CollisionTypes::TypeStage);
-	//ステージオブジェクト
-	DetermineType(collisionA, CollisionTypes::TypeStageObject, collisionB, CollisionTypes::TypePlayer);
-	DetermineType(collisionA, CollisionTypes::TypeStageObject, collisionB, CollisionTypes::TypeStage);//最初のワープゲートで使う
-	//ボス
-	DetermineType(collisionA, CollisionTypes::TypeBoss, collisionB, CollisionTypes::TypePlayerBullet);
-	//影
-	DetermineType(collisionA,CollisionTypes::TypeShadow,collisionB,CollisionTypes::TypeStage);
-}
-
-void CollisionManager::DetermineType(CollisionSource& collisionA, const CollisionTypes& typeA, CollisionSource& collisionB, const CollisionTypes& typeB) {
-	if (collisionA.GetType() == typeA && collisionB.GetType() == typeB) {
-		collisionA.OnCollision(&collisionB);
-		collisionB.OnCollision(&collisionA);
-	}
-}
-
 
 void CollisionManager::UnderCollision(float& minUnder, const Vector3& actorPosition, const AABB& stageAABB) const {
 	//できる限り下の値
