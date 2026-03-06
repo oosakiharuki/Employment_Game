@@ -28,6 +28,8 @@ void EventTrigger::Update(CameraControl& cameraControl, LevelEditor& levelEditor
 
 	ReturnCamera(cameraControl, levelEditor);
 
+	if (isEventEnd_) return;//終わった後当たり判定は作らない
+
 	//当たり判定設定
 	collisionAABB_ = eventData_.aabb;
 

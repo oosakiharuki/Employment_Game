@@ -49,7 +49,7 @@ void TextureManager::Byte(const std::string& filePath) {
 	//テクスチャファイル // byte関連
 	std::wstring filePathW = ConvertString(filePath);
 	HRESULT hr;
-	if (filePathW.ends_with(L".dds")) {
+	if (filePathW.ends_with(L".dds")) {//拡張子が.ddsなら
 		//sRGB搭載のためFLAGは立てない
 		hr = DirectX::LoadFromDDSFile(filePathW.c_str(), DirectX::DDS_FLAGS_NONE, nullptr, image);
 	}

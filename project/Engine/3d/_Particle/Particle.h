@@ -72,9 +72,9 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="particleName"></param>パーティクルの名前
-	/// <param name="textureFile"></param>使用するテクスチャ名
-	/// <param name="type"></param>形(Primitive)
+	/// <param name="particleName">パーティクルの名前</param>
+	/// <param name="textureFile">使用するテクスチャ名</param>
+	/// <param name="type">形(Primitive)</param>
 	void Initialize(const std::string& particleName,const std::string& textureFile, const ModelData& modelData);
 	/// <summary>
 	/// 更新処理
@@ -88,37 +88,37 @@ public:
 	/// <summary>
 	/// setter_拡大縮小
 	/// </summary>
-	/// <param name="scale"></param>emitterで
+	/// <param name="scale">エミッタで指定する大きさ</param>
 	void SetScale(const Vector3& scale) { emitter_.transform.scale = scale; }
 	/// <summary>
 	/// getter_拡大縮小
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の大きさ</returns>
 	const Vector3& GetScale() const { return emitter_.transform.scale; }	
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
-	/// <param name="translate"></param>
+	/// <param name="translate">エミッタで指定できる座標位置</param>
 	void SetTranslate(const Vector3& translate) { emitter_.transform.translate = translate; }
 	/// <summary>
 	/// getter_座標位置
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の位置</returns>
 	const Vector3& GetTranslate()const { return emitter_.transform.translate; }
 	/// <summary>
 	/// setter_回転
 	/// </summary>
-	/// <param name="rotate"></param>
+	/// <param name="rotate">エミッタで指定できる回転角度</param>
 	void SetRotate(const Vector3& rotate) { emitter_.transform.rotate = rotate; }
 	/// <summary>
 	/// getter_回転
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の回転角度</returns>
 	const Vector3& GetRotate() const { return emitter_.transform.rotate; }
 	/// <summary>
 	/// setter_発生時間
 	/// </summary>
-	/// <param name="time"></param>発生させる時間
+	/// <param name="time">発生させる時間</param>
 	void SetFrequency(float time) { 
 		emitter_.frequency = time;
 		emitter_.frequencyTime = time;
@@ -126,18 +126,18 @@ public:
 	/// <summary>
 	/// setter_カメラ
 	/// </summary>
-	/// <param name="camera"></param>現在使っているカメラ
+	/// <param name="camera">現在使っているカメラ</param>
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
 	/// <summary>
 	/// パーティクル発動モード
 	/// </summary>
-	/// <param name="mode"></param>時間で出る/一度だけ/出さない
+	/// <param name="mode">時間で出る/一度だけ/出さない</param>
 	void SetParticleBorn(ParticleBorn mode) { particleBorn_ = mode; }
 	/// <summary>
 	/// パーティクルの発生数
 	/// </summary>
-	/// <param name="count"></param>
+	/// <param name="count">発生数を決める</param>
 	void SetParticleCount(uint32_t count) { emitter_.count = count; }
 
 private:
@@ -198,8 +198,8 @@ private:
 	/// </summary>
 	void InitMaterial();
 
-
+	/// <summary>
+	/// パラメータの初期化
+	/// </summary>
 	void InitParameter();
-
-	void InitLight();
 };

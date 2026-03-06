@@ -16,6 +16,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="worldTransform">ワールド座標系</param>
 	void Update(WorldTransform& worldTransform) override;
 	/// <summary>
 	/// 更新処理
@@ -29,7 +30,10 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw(const std::string& textureData) override;
-
+	/// <summary>
+	/// setter_モデル
+	/// </summary>
+	/// <param name="model">指定したモデル</param>
 	void SetModel(Model_obj* model) { this->model_ = model; }
 
 	/// <summary>

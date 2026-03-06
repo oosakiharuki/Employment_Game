@@ -24,7 +24,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static DirectXCommon& GetInstance();
 	/// <summary>
 	/// 初期化処理
@@ -88,28 +88,28 @@ public:
 	/// <summary>
 	/// コンパイルシェーダ作成
 	/// </summary>
-	/// <param name="filePath"></param> HLSLの名前
-	/// <param name="profile"></param> vs_6_0 or ps_6_0
-	/// <returns></returns>
+	/// <param name="filePath">HLSLの名前</param> 
+	/// <param name="profile">vs_6_0 or ps_6_0</param> 
+	/// <returns>コンパイルシェーダ</returns>
 	Microsoft::WRL::ComPtr <IDxcBlob> CompileShader(const std::wstring& filePath, const wchar_t* profile);
 	/// <summary>
 	/// シェーダで使用するバッファ
 	/// </summary>
-	/// <param name="sizeInBytes"></param>
-	/// <returns></returns>
+	/// <param name="sizeInBytes">バイトサイズ</param>
+	/// <returns>出来上がった</returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 	/// <summary>
-	/// シェーダで使用するバッファ
+	/// シェーダで使用するバッファ(RenderTextureResourceで使用)
 	/// </summary>
-	/// <param name="metadata"></param>
-	/// <returns></returns>
+	/// <param name="metadata">メタデータ</param>
+	/// <returns>バッファ</returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateTextureResource(const DirectX::TexMetadata& metadata);
 	/// <summary>
 	/// テクスチャデータ
 	/// </summary>
-	/// <param name="texture"></param>
-	/// <param name="mipImages"></param>
-	/// <returns></returns>
+	/// <param name="texture">テクスチャ名</param>
+	/// <param name="mipImages">ミップマップ</param>
+	/// <returns>テクスチャデータリソースを作成</returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages);
 
 	/// <summary>
@@ -124,55 +124,55 @@ public:
 	/// <summary>
 	/// getter_Drive
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>ドライブ</returns>
 	ID3D12Device*  GetDevice()const { return device_.Get(); }
 	/// <summary>
 	/// getter_コマンドリスト
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在のコマンドリスト</returns>
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_.Get(); }
 	/// <summary>
 	/// getter_DSVのハンドル
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>使用しているDepthStencilViewのハンドル</returns>
 	D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle() const { return dsvHandle_; }
 	/// <summary>
 	/// getter_fenceEvent
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>フェンス</returns>
 	HANDLE GetFenceEvent() const { return fenceEvent_; }
 	/// <summary>
 	/// getter_rtvDesc
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>使用しているRenderTargetView</returns>
 	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc() const { return rtvDesc_; }
 	/// <summary>
 	/// getter_デスクリプターヒープ
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>でスクリプターヒープ</returns>
 	ID3D12DescriptorHeap* GetSrvDescriptorHeap() { return srvDescriptorHeap_.Get(); }
 	/// <summary>
 	/// スワップチェーンのリソースナンバー
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>バッファカウント</returns>
 	size_t GetSwapChainResourceNum() const { return swapChainDesc_.BufferCount; }
 
 	/// <summary>
 	/// RTVのリソース作成(device,width,heightは省略)
 	/// </summary>
-	/// <param name="format"></param>
-	/// <param name="clearColor"></param>
-	/// <returns></returns>
+	/// <param name="format">フォーマット</param>
+	/// <param name="clearColor">clearした時の色</param>
+	/// <returns>出来上がったRTVのリソース</returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateRenderTextureResource(DXGI_FORMAT format, const Vector4& clearColor);
 	/// <summary>
 	/// getter_RTVのリソース
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>RTVのリソース</returns>
 	ID3D12Resource* GetRenderTexture() { return renderTextureResource_.Get(); }
 	/// <summary>
 	/// getter_DSVのリソース
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>DSVのリソース</returns>
 	ID3D12Resource* GetOutlineResource() { return depthStencilResource_.Get(); }
 	/// <summary>
 	/// レンダーテクスチャ用の描画バリア開始

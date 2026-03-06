@@ -5,7 +5,13 @@
 /// </summary>
 class Normal_Image : public BasePostEffect {
 public:
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// 処理コマンド(描画)
+	/// </summary>
 	void Command() override;
 private:
 	/// <summary>

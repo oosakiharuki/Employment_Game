@@ -21,13 +21,13 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="winApp"></param>
+	/// <param name="winApp">ウィンドウズの設定</param>
 	void Initialize(WinApp* winApp);
 	
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static ImGuiManager& GetInstance();
 
 	/// <summary>

@@ -246,6 +246,8 @@ void GameScene::SpitOutGameObject() {
 	spitOut_.SpitOutBoss(boss_);
 	if (boss_) {
 		cameraControl_->CameraYFixed(true);
+		boss_->SetPlayer(player_.get());
+		boss_->Update();
 	}
 }
 

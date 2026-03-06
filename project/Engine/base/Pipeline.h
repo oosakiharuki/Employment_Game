@@ -30,8 +30,9 @@ public:
 	/// <summary>
 	/// テーブル設定
 	/// </summary>
-	/// <param name="descriptorRange">使用するRange</param>
-	void CreateTABLE(D3D12_SHADER_VISIBILITY sharder, D3D12_DESCRIPTOR_RANGE* descriptorRange);
+	/// <param name="shader">Shader名(VERTEX / PIXEL)</param>
+	/// <param name="descriptorRange">デスクリプター</param>
+	void CreateTABLE(D3D12_SHADER_VISIBILITY shader, D3D12_DESCRIPTOR_RANGE* descriptorRange);
 	/// <summary>
 	/// 共通のパラメータ
 	/// [0] PS b0

@@ -3,7 +3,7 @@
 #include <memory>
 
 /// <summary>
-/// Modelの基盤クラス
+/// Model(基盤クラス)
 /// </summary>
 class BaseModel
 {
@@ -11,14 +11,28 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="directoryPath"></param>
-	/// <param name="fileName"></param>
+	/// <param name="directoryPath">リソースファイル名(resource)</param>
+	/// <param name="fileName">オブジェクト名</param>
 	virtual void Initialize(const std::string& directoryPath, const std::string& fileName) = 0;
 
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	virtual void Draw() = 0;
+
+	/// <summary>
+	/// マテリアルの色を変更
+	/// </summary>
+	/// <param name="color">変更カラー</param>
+	void SetColor(const Vector4& color);
+
+	/// <summary>
+	/// ライト設定
+	/// </summary>
+	/// <param name="Light">trueでオン / falseでオフ</param>
+	void LightOn(bool Light);
+
+protected:
 
 	/// <summary>
 	/// VertexResource作成(初期化)
@@ -37,20 +51,6 @@ public:
 	/// </summary>
 	/// <param name="modelData">モデルデータ</param>
 	virtual void InitIndexResource(ModelData modelData) = 0;
-
-	/// <summary>
-	/// マテリアルの色を変更
-	/// </summary>
-	/// <param name="color">変更カラー</param>
-	void SetColor(const Vector4& color);
-
-	/// <summary>
-	/// ライト設定
-	/// </summary>
-	/// <param name="Light"></param>
-	void LightOn(bool Light);
-
-protected:
 
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexResource_;
 	std::vector<D3D12_VERTEX_BUFFER_VIEW> vertexBufferView_;

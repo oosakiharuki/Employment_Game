@@ -10,7 +10,13 @@ class GLTFCommon;
 class Object_glTF : public BaseObject
 {
 public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	Object_glTF();
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Object_glTF();
 
 	/// <summary>
@@ -20,7 +26,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	/// <param name="worldTransform"></param> ワールド座標系
+	/// <param name="worldTransform">ワールド座標系</param> 
 	void Update(WorldTransform& worldTransform) override;
 	/// <summary>
 	/// 更新処理
@@ -45,7 +51,7 @@ public:
 	/// <summary>
 	/// ライトのon/off
 	/// </summary>
-	/// <param name="isLight"></param>
+	/// <param name="isLight">ライトのオンオフ</param>
 	void LightSwitch(bool isLight)override;
 
 	/// <summary>
@@ -57,7 +63,7 @@ public:
 	/// <summary>
 	/// 環境マップ用
 	/// </summary>
-	/// <param name="filePath"></param>
+	/// <param name="filePath">環境マップ用テクスチャパス(.dds)</param>
 	void SetEnvironment(const std::string& filePath);
 
 	/// <summary>

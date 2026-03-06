@@ -26,9 +26,9 @@ void BaseObject::CreateDirectionalLight() {
 	//書き込むためのアドレス
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
 	//色の設定
-	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightData_->intensity = 0.0f;
+	directionalLightData_->color = kDefaultColor_;
+	directionalLightData_->direction = kDirectionalLightDirection_;
+	directionalLightData_->intensity = kIntensity_;
 }
 
 void BaseObject::CreatePointLight() {
@@ -37,11 +37,11 @@ void BaseObject::CreatePointLight() {
 	//書き込むためのアドレス
 	pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
 	//_
-	pointLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	pointLightData_->position = { 0.0f,2.0f,0.0f };
-	pointLightData_->intensity = 1.0f;
-	pointLightData_->radius = 5.0f;
-	pointLightData_->decay = 1.0f;
+	pointLightData_->color = kDefaultColor_;
+	pointLightData_->position = kPointLightPosition_;
+	pointLightData_->intensity = kIntensity_;
+	pointLightData_->radius =kPointLightRadius_;
+	pointLightData_->decay = kPointLightDecay_;
 }
 
 void BaseObject::CreateSpotLight() {
@@ -50,12 +50,12 @@ void BaseObject::CreateSpotLight() {
 	//書き込むためのアドレス
 	spotLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&spotLightData_));
 	//設定
-	spotLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	spotLightData_->position = { 2.0f,1.25f,0.0f };
-	spotLightData_->distance = 70.0f;
-	spotLightData_->direction = Normalize({ -1.0f,-1.0f,0.0f });
+	spotLightData_->color = kDefaultColor_;
+	spotLightData_->position = kSpotLightPosition_;
+	spotLightData_->distance = kSpotLightDistance_;
+	spotLightData_->direction = Normalize(kSpotLightDirection_);
 	spotLightData_->intensity = 0.0f;
-	spotLightData_->decay = 2.0f;
-	spotLightData_->cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
-	spotLightData_->cosFalloffStart = std::cos(std::numbers::pi_v<float> / 4.0f);
+	spotLightData_->decay = kPointLightDecay_;
+	spotLightData_->cosAngle = kCosAngle;
+	spotLightData_->cosFalloffStart = kCosFalloffStart;
 }

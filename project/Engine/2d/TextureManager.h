@@ -15,7 +15,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static TextureManager& GetInstance();
 	/// <summary>
 	/// 初期化処理
@@ -28,25 +28,25 @@ public:
 	/// <summary>
 	/// テクスチャを読み込む
 	/// </summary>
-	/// <param name="filePath"></param>
+	/// <param name="filePath">読み込むテクスチャパス</param>
 	void LoadTexture(const std::string& filePath);
 	/// <summary>
 	/// getter_srvIndex
 	/// </summary>
-	/// <param name="filePath"></param>
-	/// <returns></returns>
+	/// <param name="filePath">テクスチャパス</param>
+	/// <returns>そのテクスチャのsrvIndex</returns>
 	uint32_t GetSrvIndex(const std::string& filePath);
 	/// <summary>
 	/// getter_srvHandle
 	/// </summary>
-	/// <param name="filePath"></param>
-	/// <returns></returns>
+	/// <param name="filePath">テクスチャパス</param>
+	/// <returns>そのテクスチャのsrvHandle</returns>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(const std::string& filePath);
 	/// <summary>
 	/// getter_メタデータ
 	/// </summary>
-	/// <param name="filePath"></param>
-	/// <returns></returns>
+	/// <param name="filePath">テクスチャパス</param>
+	/// <returns>そのテクスチャのメタデータ</returns>
 	const DirectX::TexMetadata& GetMetaData(const std::string& filePath);
 private:
 	//インスタンス
@@ -66,6 +66,9 @@ private:
 	/// <param name="filePath">ファイルパス</param>
 	void Byte(const std::string& filePath);
 
+	/// <summary>
+	/// 構造体_テクスチャのデータ
+	/// </summary>
 	struct TextureData {
 		DirectX::TexMetadata metadata; //width,height
 		Microsoft::WRL::ComPtr<ID3D12Resource>resource; // テクスチャリソース
@@ -74,8 +77,13 @@ private:
 		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;
 	};
 
+	/// <summary>
+	/// ShaderResourceViewを作成
+	/// </summary>
+	/// <param name="textureData">テクスチャデータ</param>
+	/// <param name="metadata">メタデータ</param>
 	void CreateSRV(TextureData& textureData, const DirectX::TexMetadata metadata);
-
+	//テクスチャデータのコンテナ
 	std::unordered_map<std::string, TextureData> textureDatas_;
 	
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> intermediateResources_;

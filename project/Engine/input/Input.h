@@ -41,47 +41,75 @@ public:
 	/// キーボードインプット(長押し)
 	/// </summary>
 	/// <param name="keyNumber">キーを選択</param>
-	/// <returns></returns>
+	/// <returns>trueで押している</returns>
 	bool PushKey(BYTE keyNumber);
 	/// <summary>
-	/// キーボードインプット(単押し)
+	/// キーボードインプット(短押し)
 	/// </summary>
 	/// <param name="keyNumber">キーを選択</param>
-	/// <returns></returns>
+	/// <returns>trueで押している</returns>
 	bool TriggerKey(BYTE keyNumber);
 	/// <summary>
 	/// ゲームパットボタン操作(長押し)
 	/// </summary>
 	/// <param name="button">ボタンを選択</param>
-	/// <returns></returns>
+	/// <returns>trueで押している</returns>
 	bool PushButton(int button);
 	/// <summary>
-	/// ゲームパットボタン(単押し)
+	/// ゲームパットボタン(短押し)
 	/// </summary>
 	/// <param name="button">ボタンを選択</param>
-	/// <returns></returns>
+	/// <returns>trueで押している</returns>
 	bool TriggerButton(int button);
-
+	/// <summary>
+	/// ゲームパットのLT(長押し)
+	/// </summary>
+	/// <returns>trueで押している</returns>
 	bool LeftTriggerLongPress();
+	/// <summary>
+	/// ゲームパットのRT(長押し)
+	/// </summary>
+	/// <returns>trueで押している</returns>
 	bool RightTriggerLongPress();
-
+	/// <summary>
+	/// ゲームパットのLT(短押し)
+	/// </summary>
+	/// <returns>trueで押している</returns>
 	bool LeftTrigger();
+	/// <summary>
+	/// ゲームパットのRT(短押し)
+	/// </summary>
+	/// <returns>trueで押している</returns>
 	bool RightTrigger();
-
+	/// <summary>
+	/// ゲームパットのLスティックの横の傾き具合
+	/// </summary>
+	/// <returns>横の傾き具合</returns>
 	float LeftStickX();
+	/// <summary>
+	/// ゲームパットのLスティックの縦の傾き具合
+	/// </summary>
+	/// <returns>縦の傾き具合</returns>
 	float LeftStickY();
-
+	/// <summary>
+	/// ゲームパットのRスティックの横の傾き具合
+	/// </summary>
+	/// <returns>横の傾き具合</returns>
 	float RightStickX();
+	/// <summary>
+	/// ゲームパットのRスティックの縦の傾き具合
+	/// </summary>
+	/// <returns>縦の傾き具合</returns>
 	float RightStickY();
-		/// <summary>
+	/// <summary>
 	/// ゲームパット
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>アクティブであるか+更新</returns>
 	bool GetJoystickState();
 	/// <summary>
 	/// ゲームパット(アクティブかのみ)
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>アクティブであるか</returns>
 	bool GetActiveGamePad();
 private:
 

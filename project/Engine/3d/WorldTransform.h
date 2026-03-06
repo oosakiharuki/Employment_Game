@@ -23,6 +23,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="transform">トランスフォーム</param>
 	void UpdateMatrix(Transform transform);
 	/// <summary>
 	/// <summary>

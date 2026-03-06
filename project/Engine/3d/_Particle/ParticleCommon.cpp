@@ -29,9 +29,8 @@ void ParticleCommon::RootSignature() {
 	//RootParameter作成__
 	RootParameterCommon();
 
-	CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 1);//[3] ps b1
-	CreateTABLE(D3D12_SHADER_VISIBILITY_VERTEX,descriptorRangeForInstancing_);//[4] vs t1
-	rootParameters_[4].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing_);
+	CreateTABLE(D3D12_SHADER_VISIBILITY_VERTEX,descriptorRangeForInstancing_);//[3] vs t1
+	rootParameters_[3].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing_);
 
 	//2でまとめる
 	DefaultSampler(0);

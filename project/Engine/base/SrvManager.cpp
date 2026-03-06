@@ -30,10 +30,10 @@ uint32_t SrvManager::Allocate() {
 
 bool SrvManager::Max() {
 	if (sMaxSRVCount_ < useIndex_) {
-		return false;
+		return false;//上限に達して「いない」
 	}
 	else {
-		return true;//上限に達して「ない」
+		return true;
 	}
 	return false;
 }
@@ -66,8 +66,4 @@ void SrvManager::CreateSRVForStructureBuffer(D3D12_SHADER_RESOURCE_VIEW_DESC srv
 void SrvManager::PreDraw() {
 	ID3D12DescriptorHeap* descriptorHeaps[] = { descriptorHeap_.Get() };
 	DirectXCommon::GetInstance().GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
-}
-
-void SrvManager::SetGraphicsRootDescriptorTable(UINT RootParameterIndex, uint32_t srvIndex) {
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(RootParameterIndex, GetGPUDescriptorHandle(srvIndex));
 }

@@ -1,7 +1,7 @@
 #include "CollisionSource.h"
 
 
-Vector3 CollisionSource::GetDistance(const Vector3& otherCenter) {
+Vector3 CollisionSource::DistanceCollisionCenter(const Vector3& otherCenter) {
 	Vector3 result{};
 	result.x = std::abs(otherCenter.x) - std::abs(center_.x);
 	result.y = std::abs(otherCenter.y) - std::abs(center_.y);

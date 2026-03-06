@@ -13,6 +13,6 @@ namespace Primitive {
 	ModelData CreateSphere();
 
 	ModelData CreateCone();//円錐
-	ModelData CreateBeam();//
+	ModelData CreateBeam();//ビーム
 
 }

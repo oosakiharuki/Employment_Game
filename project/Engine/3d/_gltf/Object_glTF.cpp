@@ -72,16 +72,13 @@ void Object_glTF::Update() {
 }
 
 void Object_glTF::AnimationUpdate() {
-
 	//作るときはフレームレートを60FPSにする
 	uint32_t i = 0;
-
 	animationTime_ += kDeltaTime_;
 
 	for (auto& animation_ : animations_) {
 		//アニメーションが最大時間を超えたら巻き戻す
 		animationTime_ = std::fmod(animationTime_, animation_.duration);
-
 		//スキニング処理
 		if (model_->IsSkinning()) {
 			if (isChange_) {
@@ -99,7 +96,6 @@ void Object_glTF::AnimationUpdate() {
 			}
 		}
 	}
-
 	//スキニング
 	if (model_->IsSkinning()) {
 		for (auto& skeleton : skeletons_) {
@@ -107,7 +103,6 @@ void Object_glTF::AnimationUpdate() {
 			SkinClusterUpdate(skinClusters_[i], skeleton);
 		}
 	}
-
 	//フレームアニメーション
 	FrameAnimation();
 }
@@ -266,12 +261,14 @@ void Object_glTF::SetModelFile(const std::string& filePath) {
 
 void Object_glTF::LightSwitch(bool isLight) {
 	if (model_) {
+		//ライト更新
 		model_->LightOn(isLight);
 	}
 }
 
 void Object_glTF::SetColor(const Vector4& color) {
 	if (model_) {
+		//色変更
 		model_->SetColor(color);
 	}
 }
@@ -279,6 +276,7 @@ void Object_glTF::SetColor(const Vector4& color) {
 //環境マップのファイルパス
 void Object_glTF::SetEnvironment(const std::string& filePath) {
 	if (model_) {
+		//環境マップのテクスチャパス変更
 		model_->SetEnvironment(filePath);
 	}
 }
@@ -369,7 +367,7 @@ void Object_glTF::ChangeAnimation(const std::string& filePath) {
 	skinClusters_ = model_->GetSkinCluster();
 
 	//animationTimeを1.0f/60.0fに
-	//Sleapなどで0より小さい値を出さないようにする
+	//SLeapなどで0より小さい値を出さないようにする
 	//はじめは少しカクつくが、アニメーション補間が終えた後がスムーズ
 	changeTime_ += 1.0f / 60.0f;
 	animationTime_ = changeTime_;
@@ -383,16 +381,17 @@ void Object_glTF::ChangeAnimation(const std::string& filePath) {
 	}
 	//アニメーション補間中に変更があった時
 	if (isChange_) {
-		changeTime_ = 0.9f - changeTime_;
+		changeTime_ = 1.0f - changeTime_;
 	}
 
 	isChange_ = true;
 
-	//Sleapなどで1より大きい値を出さないようにする
+	//SLeapなどで1より大きい値を出さないようにする
 	for (auto& preAnimation : preAnimations_) {
-		if (preAnimation.duration > 1.0f) {
-			preAnimation.duration = 0.9f;
-		}
+		preAnimation.duration = max(preAnimation.duration,1.0f);
+		//if (preAnimation.duration > 1.0f) {
+		//	preAnimation.duration = 0.99f;
+		//}
 	}
 
 	//初期環境マップ

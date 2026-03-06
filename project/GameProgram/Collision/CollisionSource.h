@@ -19,25 +19,52 @@ enum CollisionTypes {
 
 class CollisionSource {
 public:
-
+	/// <summary>
+	/// getter_当たり判定AABB
+	/// </summary>
+	/// <returns>AABB</returns>
 	AABB GetAABB() { return collisionAABB_; }
+	/// <summary>
+	/// setter_当たり判定AABB
+	/// </summary>
+	/// <param name="aabb">設定したAABB</param>
 	void SetAABB(const AABB& aabb) { collisionAABB_ = aabb; }
-
+	/// <summary>
+	/// getter_当たり判定のタイプ
+	/// </summary>
+	/// <returns>当たり判定のタイプ</returns>
 	CollisionTypes GetType() { return collisionType_; }
+	/// <summary>
+	/// setter_当たり判定のタイプ
+	/// </summary>
+	/// <param name="type">設定するタイプ(CollisionTypes)</param>
 	void SetType(const CollisionTypes& type) { collisionType_ = type; }
-
+	/// <summary>
+	/// getter_センター
+	/// </summary>
+	/// <returns>真ん中の座標</returns>
 	const Vector3& GetCenter() { return center_; }
+	/// <summary>
+	/// setter_センター
+	/// </summary>
+	/// <param name="center">真ん中座標の設定</param>
 	void SetCenter(const Vector3& center) { center_ = center; }
-
-	Vector3 GetDistance(const Vector3& otherCenter);
-
+	/// <summary>
+	/// 当たった座標との距離
+	/// </summary>
+	/// <param name="otherCenter">もう一つのセンター座標</param>
+	/// <returns>この当たり判定ともう一つの当たり判定の距離</returns>
+	Vector3 DistanceCollisionCenter(const Vector3& otherCenter);
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	virtual void OnCollision(CollisionSource* collision);
 
 protected:
-
-	CollisionTypes collisionType_;
-	AABB collisionAABB_;
-	Vector3 center_;
+	CollisionTypes collisionType_;//タイプ
+	AABB collisionAABB_;          //当たり判定AABB
+	Vector3 center_;              //センター(真ん中座標)
 };
 
 

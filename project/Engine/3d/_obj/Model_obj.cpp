@@ -161,7 +161,7 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 	//mtlファイルを読み取る
 	std::string materialFilename;
 
-
+	//各モデルデータで読み出しするデータ
 	ModelData iModelData;
 
 
@@ -179,7 +179,7 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 		s >> identifier; //先頭の義別子 (v ,vt, vn, f) を読み取る
 
 		//modelDataの建築
-		if (identifier == "v") {
+		if (identifier == "v") {//点座標
 			Vector4 position;
 			s >> position.x >> position.y >> position.z;//左から順に消費 = 飛ばしたり、もう一度使うことはできない	
 			position.s = 1.0f;
@@ -188,7 +188,7 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 			position.x *= -1.0f;
 			positions.push_back(position);
 		}
-		else if (identifier == "vt") {
+		else if (identifier == "vt") {//texcord
 			Vector2 texcoord;
 			s >> texcoord.x >> texcoord.y;
 
@@ -197,7 +197,7 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 
 			texcoords.push_back(texcoord);
 		}
-		else if (identifier == "vn") {
+		else if (identifier == "vn") {//法線
 			Vector3 normal;
 			s >> normal.x >> normal.y >> normal.z;
 
@@ -218,18 +218,11 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 					std::string index;
 					std::getline(v, index, '/'); //  "/"でインデックスを区切る
 					elementIndices[element] = std::stoi(index);
-
 				}
-
-
 				Vector4 position = positions[elementIndices[0] - 1];
 				Vector2 texcoord = texcoords[elementIndices[1] - 1];
 				Vector3 normal = normals[elementIndices[2] - 1];
-				//VertexData vertex = { position,texcoord,normal };
-				//modelData.vertices.push_back(vertex);
-
 				triangle[faceVertex] = { position,texcoord,normal };
-
 			}
 			iVertices.push_back(triangle[2]);
 			iVertices.push_back(triangle[1]);
@@ -242,9 +235,9 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 		else if (identifier == "o") {
 			//各マテリアルの頂点情報を取得
 			if (firstMaterial) {
-				iModelData.vertices = iVertices;
-				vertexNum++;
-				iVertices.clear();
+				iModelData.vertices = iVertices;//vectorで追加するmodelDataのvertexDataに導入
+				vertexNum++;//カウントを進む
+				iVertices.clear();//データをリセット
 			} else {
 				//最初の o はパス
 				firstMaterial = true;
@@ -254,13 +247,14 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 			std::string mtlName;
 			s >> mtlName;
 			MaterialData material;
-
+			//マテリアルを読み取る
 			material = LoadMaterialTemplateFile(directoryPath, filename + "/" + materialFilename, mtlName);
-			iModelData.materialData = material;
+			iModelData.materialData = material;//vectorで追加するmodelDataのmaterialDataに導入
 			materialNum++;
 		}
-
+		//マテリアル、頂点データともに読み取った時(両方とも0のときは発動しない)
 		if (materialNum == vertexNum && materialNum > 0) {
+			//値を導入
 			modelData.Data.push_back(iModelData);
 		}
 

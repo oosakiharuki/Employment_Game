@@ -11,7 +11,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static GLTFCommon& GetInstance();
 	/// <summary>
 	/// 解放処理
@@ -29,12 +29,12 @@ public:
 	/// <summary>
 	/// setter_デフォルトカメラ
 	/// </summary>
-	/// <returns></returns> 現在使っているカメラ
+	/// <returns>シーンで使用しているカメラ</returns>
 	void SetDefaultCamera(Camera* camera) { this->defaultCamera_ = camera; }
 	/// <summary>
 	/// getter_デフォルトカメラ
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在使用しているカメラ</returns>
 	Camera* GetDefaultCamera() const { return defaultCamera_; }
 
 private:

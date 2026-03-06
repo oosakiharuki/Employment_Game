@@ -36,15 +36,15 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static PostEffectManager& GetInstance();
 
 private:
 	/// <summary>
 	/// ポストエフェクト変更
 	/// </summary>
-	/// <param name="prev"></param>前
-	/// <param name="current"></param>次
+	/// <param name="prev">前のポストエフェクト</param>
+	/// <param name="current">次のポストエフェクト</param>
 	void Change(int prev, int current);
 
 	//最大数
