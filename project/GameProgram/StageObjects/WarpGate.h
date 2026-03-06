@@ -7,11 +7,22 @@
 class WarpGate : public IStageObject
 {
 public:
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~WarpGate() override;
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw() override;
-
 	/// <summary>
 	/// setter_次のステージ
 	/// </summary>
@@ -36,7 +47,10 @@ public:
 	void WarpExit(const Vector3& translate);
 
 private:
-	
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 
 	/// <summary>

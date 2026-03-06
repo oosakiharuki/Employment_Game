@@ -32,7 +32,7 @@ public:
 	/// <summary>
 	/// 移動用に真ん中を設定
 	/// </summary>
-	/// <param name="center">初期値をセンターにに</param>
+	/// <param name="center">初期値をセンターに</param>
 	void SetBossCenter(const Vector3& center) { moveCenter_ = center; }
 
 	/// <summary>
@@ -72,19 +72,49 @@ public:
 
 private:
 
-
+	/// <summary>
+	/// 生存状態
+	/// </summary>
 	void Active() override;
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
 	void Dead() override;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
 	void Performance() override;
-
+	/// <summary>
+	/// 移動コマンド
+	/// </summary>
 	void CommandMove()  override;
+	/// <summary>
+	/// 弾丸を発砲する攻撃コマンド
+	/// </summary>
+	/// <param name="kFrame">弾の間 〇秒数</param>
+	/// <param name="bulletSpeed">弾丸速度</param>
+	/// <param name="bulletMax">弾丸数</param>
 	void CommandFire(float kFrame, float bulletSpeed, uint32_t bulletMax) override;
+	/// <summary>
+	/// 下から回る移動コマンド
+	/// </summary>
 	void CommandAroundMove() override;
+	/// <summary>
+	/// ステージの奥に移動コマンド
+	/// </summary>
 	void CommandFarMove() override;
+	/// <summary>
+	/// 奥側から発砲攻撃コマンド
+	/// </summary>
 	void CommandFarTackle() override;
+	/// <summary>
+	/// プレイヤーに向かって突進攻撃コマンド
+	/// </summary>
 	void CommandFallPlayer() override;
+	/// <summary>
+	/// プレイヤーの真上から落ちてくる攻撃コマンド
+	/// </summary>
 	void CommandBeforeActionMotion() override;
-
 
 	/// <summary>
 	/// 移動ポイントの設定
@@ -94,9 +124,9 @@ private:
 	void SetMovePoint(const Vector3& point, float speedDivision = 3.0f);
 
 	/// <summary>
-	/// 
+	/// setter_移動セグメントのオリジン
 	/// </summary>
-	/// <param name="value"></param>
+	/// <param name="value">座標を設定</param>
 	void SetOrigin(const Vector3& value) { move_.origin = value; }
 
 	/// <summary>
@@ -114,7 +144,10 @@ private:
 	/// <returns>trueで成功(タイマーもリセット)</returns>
 	bool LerpGoal();
 
-
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 
 	std::unique_ptr<Object_glTF> object_;

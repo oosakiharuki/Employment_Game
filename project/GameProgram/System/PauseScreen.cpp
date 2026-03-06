@@ -149,9 +149,9 @@ void PauseScreen::SelectResult() {
 	if (select_.y == kSelectReturnEndPosition_.y) {
 		isPause_ = false;
 	}else if (select_.y == kSelectGuideEndPosition_.y) {
-		SetPauseState(std::make_unique<PauseSelectGuide>());
+		ChangePauseState(std::make_unique<PauseSelectGuide>());
 	}else if (select_.y == kSelectSceneChangeEndPosition_.y) {
-		SetPauseState(std::make_unique<PauseSelectSceneChange>());
+		ChangePauseState(std::make_unique<PauseSelectSceneChange>());
 	}
 }
 
@@ -174,4 +174,9 @@ void PauseScreen::DrawSelectMode() {
 	spriteSelectReturn_->Draw();
 	spriteSelectGuide_->Draw();
 	spriteSelectSceneChange_->Draw();
+}
+
+void PauseScreen::ChangePauseState(std::unique_ptr<BasePauseState> nextState) {
+	pauseState_.reset();//一度リセット
+	pauseState_ = std::move(nextState); //変更する
 }

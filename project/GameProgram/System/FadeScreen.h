@@ -12,6 +12,10 @@ enum FadeType {
 /// </summary>
 class FadeScreen {
 public:
+	/// <summary>
+	/// インスタンス生成
+	/// </summary>
+	/// <returns>インスタンス</returns>
 	static FadeScreen& GetInstance();
 
 	/// <summary>
@@ -46,8 +50,15 @@ public:
 	/// </summary>
 	/// <returns></returns>フェード中ならtrue
 	bool GetIsFading() const{ return isFading_; }
-	
+	/// <summary>
+	/// setter_マスク画像
+	/// </summary>
+	/// <param name="textureFile">変更するテクスチャ</param>
 	void SetMaskTexture( const std::string& textureFile) { dissolveTexture_ = textureFile; }
+	/// <summary>
+	/// setter_下地のテクスチャ
+	/// </summary>
+	/// <param name="textureFile">変更するテクスチャ</param>
 	void SetBackGround( const std::string& textureFile) { sprite_->SetTextureFile(textureFile); }
 
 private:

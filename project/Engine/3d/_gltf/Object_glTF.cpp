@@ -174,10 +174,7 @@ void Object_glTF::Draw() {
 	//モデル
 	for (uint32_t i = 0; i < modelData_.Data.size();i++) {
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResources_[i]->GetGPUVirtualAddress());
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource_->GetGPUVirtualAddress());
+		DrawCommand();
 		if (model_) {
 			model_->Draw();
 		}
@@ -389,9 +386,6 @@ void Object_glTF::ChangeAnimation(const std::string& filePath) {
 	//SLeapなどで1より大きい値を出さないようにする
 	for (auto& preAnimation : preAnimations_) {
 		preAnimation.duration = max(preAnimation.duration,1.0f);
-		//if (preAnimation.duration > 1.0f) {
-		//	preAnimation.duration = 0.99f;
-		//}
 	}
 
 	//初期環境マップ

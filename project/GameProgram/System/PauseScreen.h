@@ -10,9 +10,16 @@
 /// </summary>
 class PauseScreen {
 public:
-
+	/// <summary>
+	/// インスタンス生成
+	/// </summary>
+	/// <returns>インスタンス</returns>
 	static PauseScreen& GetInstance();
 
+	/// <summary>
+	/// ポーズスイッチ
+	/// </summary>
+	/// <param name="a">trueオン / falseオフ</param>
 	void PauseFlag(bool a) { isPause_ = a; }
 
 	/// <summary>
@@ -35,7 +42,7 @@ public:
 	/// <summary>
 	/// ポーズ中であるか
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>trueでポーズ中</returns>
 	bool IsPause() { return isPause_; }
 
 	/// <summary>
@@ -75,15 +82,12 @@ public:
 	/// </summary>
 	/// <returns>あらかじめ指定したシーン名</returns>
 	std::unique_ptr<BaseScene> GetNextScene() { return std::move(nextScene_); }
-
+	
 	/// <summary>
-	/// setter_ポーズステート(状態遷移)
+	/// ポーズステート(状態遷移)
 	/// </summary>
 	/// <param name="nextState">変更先のステート</param>
-	void SetPauseState(std::unique_ptr<BasePauseState> nextState) { 
-		pauseState_.reset();//一度リセット
-		pauseState_ = std::move(nextState); //変更する
-	}
+	void ChangePauseState(std::unique_ptr<BasePauseState> nextState);
 	/// <summary>
 	/// 項目から選択
 	/// </summary>

@@ -31,10 +31,14 @@ public:
 	/// <summary>
 	/// setter_サイズ
 	/// </summary>
-	/// <param name="scale"></param>代入する大きさ
+	/// <param name="scale">代入する大きさ</param>
 	void SetScale(const Vector3& scale) { transform_.scale = scale; }
 
 private:
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 
 	std::unique_ptr<Object3d> object_;

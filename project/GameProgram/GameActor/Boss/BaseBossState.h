@@ -4,14 +4,41 @@
 
 class Boss;
 
+/// <summary>
+/// ボスの行動コマンド
+/// </summary>
 class BossCommand {
 public:
+	/// <summary>
+	/// 移動コマンド
+	/// </summary>
 	virtual void CommandMove() = 0;
+	/// <summary>
+	/// 弾丸を発砲する攻撃コマンド
+	/// </summary>
+	/// <param name="kFrame">弾の間 〇秒数</param>
+	/// <param name="bulletSpeed">弾丸速度</param>
+	/// <param name="bulletMax">弾丸数</param>
 	virtual void CommandFire(float kFrame, float bulletSpeed, uint32_t bulletMax) = 0;
+	/// <summary>
+	/// 下から回る移動コマンド
+	/// </summary>
 	virtual void CommandAroundMove() = 0;
+	/// <summary>
+	/// ステージの奥に移動コマンド
+	/// </summary>
 	virtual void CommandFarMove() = 0;
+	/// <summary>
+	/// 奥側から発砲攻撃コマンド
+	/// </summary>
 	virtual void CommandFarTackle() = 0;
+	/// <summary>
+	/// プレイヤーに向かって突進攻撃コマンド
+	/// </summary>
 	virtual void CommandFallPlayer() = 0;
+	/// <summary>
+	/// プレイヤーの真上から落ちてくる攻撃コマンド
+	/// </summary>
 	virtual void CommandBeforeActionMotion() = 0;
 
 	/// <summary>
@@ -24,9 +51,9 @@ public:
 	void ResetActionCount() { actionCount_ = 0; }
 
 	/// <summary>
-	/// 
+	/// 奥側の移動に成功しているか
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>成功ならtrue</returns>
 	bool FarMoveSuccess();
 
 protected:
@@ -99,7 +126,15 @@ protected:
 /// </summary>
 class BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	virtual void Update(BossCommand& bossCommand) = 0;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	virtual void ChangeCommand(Boss& boss) = 0;
 
 	/// <summary>
@@ -128,7 +163,15 @@ protected:
 /// </summary>
 class BossMoveState : public BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	void Update(BossCommand& bossCommand) override;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	void ChangeCommand(Boss& boss) override;
 private:
 
@@ -139,7 +182,15 @@ private:
 /// </summary>
 class BossAttackState : public BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	void Update(BossCommand& bossCommand) override;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	void ChangeCommand(Boss& boss) override;
 private:
 	//秒数
@@ -155,17 +206,17 @@ private:
 /// </summary>
 class BossAroundMoveState : public BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	void Update(BossCommand& bossCommand) override;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	void ChangeCommand(Boss& boss) override;
 private:
-	//uint32_t aroundMoveCount_ = 0;
-
-	//struct MovePoint {
-	//	Vector3 position;
-	//	float division;
-	//};
-
-	//std::vector<MovePoint> movePoints_;
 };
 
 /// <summary>
@@ -173,14 +224,19 @@ private:
 /// </summary>
 class BossBeforeActionMotionState : public BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	void Update(BossCommand& bossCommand) override;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	void ChangeCommand(Boss& boss) override;
 private:
 	const uint32_t kMoveCountMax_ = 2;
 	const uint32_t kDeepAttackCountMax_ = 3;
-
-
-
 };
 
 /// <summary>
@@ -188,7 +244,15 @@ private:
 /// </summary>
 class BossFarAttackState : public BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	void Update(BossCommand& bossCommand) override;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	void ChangeCommand(Boss& boss) override;
 private:
 	//秒数
@@ -203,7 +267,15 @@ private:
 
 class BossFarTackleState : public BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	void Update(BossCommand& bossCommand) override;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	void ChangeCommand(Boss& boss) override;
 private:
 	bool isStart_ = true;
@@ -215,8 +287,15 @@ private:
 
 class BossFallPlayerState : public BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	void Update(BossCommand& bossCommand) override;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	void ChangeCommand(Boss& boss) override;
 private:
-
 };

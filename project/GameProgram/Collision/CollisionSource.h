@@ -17,6 +17,9 @@ enum CollisionTypes {
 	TypeEvent,
 };
 
+/// <summary>
+/// 当たり判定の設計
+/// </summary>
 class CollisionSource {
 public:
 	/// <summary>

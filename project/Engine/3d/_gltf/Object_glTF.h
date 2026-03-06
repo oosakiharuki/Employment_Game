@@ -86,8 +86,10 @@ private:
 	/// <summary>
 	/// カメラ更新処理
 	/// </summary>
-	void CameraUpdate();
-
+	void CameraUpdate() override;
+	/// <summary>
+	/// WVPの作成
+	/// </summary>
 	void CreateWVP();
 
 	/// <summary>

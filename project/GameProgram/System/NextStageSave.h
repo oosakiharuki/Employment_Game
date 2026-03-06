@@ -2,6 +2,9 @@
 #include "MyMath.h"
 #include <memory>
 
+/// <summary>
+/// ステージ移動で使用する保存データ
+/// </summary>
 class NextStageSave {
 private:
 	/// <summary>
@@ -19,7 +22,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static NextStageSave& GetInstance();
 
 	/// <summary>
@@ -30,30 +33,30 @@ public:
 	/// <summary>
 	/// getter_前に受け取ったデータを渡す
 	/// </summary>
-	/// <returns></returns> 前に受け取ったデータ
+	/// <returns>前に受け取ったデータ</returns> 
 	SceneSaveData GetNextStageSaveData() { return sceneSaveData_; }
 	/// <summary>
 	/// setter_次のステージの全体層
 	/// </summary>
-	/// <param name="nextStageFile"></param> 次のステージの全体層のファイルパス
+	/// <param name="nextStageFile">次のステージの全体層のファイルパス</param> 
 	void SetNextStageFile(const std::string& nextStageFile) { sceneSaveData_.nextStageFile = nextStageFile; }
 
 	/// <summary>
 	/// setter_体力
 	/// </summary>
-	/// <param name="playerHp"></param> 
+	/// <param name="playerHp">プレイヤーの体力</param> 
 	void SetPlayerHp(uint32_t playerHp);
 
 	/// <summary>
 	/// setter_残機
 	/// </summary>
-	/// <param name="remain"></param>
+	/// <param name="remain">現在の残機</param>
 	void SetPlayerRemain(uint32_t remain);
 
 	/// <summary>
 	/// setter_最大体力
 	/// </summary>
-	/// <param name="maxHp"></param>
+	/// <param name="maxHp">最大体力</param>
 	void SetPlayerMaxHp(uint32_t maxHp);
 
 	/// <summary>

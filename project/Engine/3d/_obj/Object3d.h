@@ -53,6 +53,11 @@ public:
 	void SetColor(const Vector4& color) override;
 
 private:
+	/// <summary>
+	/// カメラ更新処理
+	/// </summary>
+	void CameraUpdate() override;
+
 	Object3dCommon* object3dCommon_ = nullptr;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;

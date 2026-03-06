@@ -1,7 +1,9 @@
 #pragma once
 #include "MyMath.h"
 #include "BaseEnemy.h"
-
+/// <summary>
+/// 敵の移動コマンド
+/// </summary>
 class EnemyMoveCommand {
 public:
 
@@ -42,7 +44,9 @@ protected:
 	Vector3 move_ = { 0,0,0 };
 	const float kMoveX_ = 0.03f;
 };
-
+/// <summary>
+/// 敵の発砲コマンド
+/// </summary>
 class EnemyFireCommand {
 public:
 
@@ -95,7 +99,9 @@ protected:
 	/// </summary>
 	virtual void FireBullet() = 0;
 };
-
+/// <summary>
+/// ボムの爆発コマンド
+/// </summary>
 class EnemyExplosionCommand {
 public:
 

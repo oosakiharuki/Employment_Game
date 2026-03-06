@@ -1,8 +1,9 @@
 #pragma once
 #include "Object_glTF.h"
 
-
-
+/// <summary>
+/// 背景オブジェクト(skydome)
+/// </summary>
 class BackGroundObject
 {
 public:
