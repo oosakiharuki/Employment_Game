@@ -90,7 +90,7 @@ public:
 	/// <summary>
 	/// 演出中であるか
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>演出フラグ</returns>
 	bool GetPerformanceMode() { return isPerformance_; }
 
 	/// <summary>
@@ -101,13 +101,13 @@ public:
 	/// <summary>
 	/// getter_体力
 	/// </summary>
-	/// <returns></returns>現在の体力
+	/// <returns>現在の体力</returns>
 	uint32_t GetHp() { return hp_; }
 
 	/// <summary>
 	/// setter_体力
 	/// </summary>
-	/// <param name="preHp"></param>代入する体力数
+	/// <param name="preHp">代入する体力数</param>
 	void SetHp(uint32_t preHp) { hp_ = preHp; }
 
 	/// <summary>

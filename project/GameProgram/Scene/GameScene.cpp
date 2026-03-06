@@ -77,8 +77,6 @@ void GameScene::Update() {
 		guide->Update();
 	}
 
-	//プレイヤーが移動したら変更
-	UIManager::GetInstance().SetPlayerTranslate(player_->GetTranslate());
 	//スプライト更新処理
 	UIManager::GetInstance().Update();
 
@@ -245,7 +243,7 @@ void GameScene::SpitOutGameObject() {
 	//ボスの配置
 	spitOut_.SpitOutBoss(boss_);
 	if (boss_) {
-		cameraControl_->CameraYFixed(true);
+		cameraControl_->CameraYFixed();
 		boss_->SetPlayer(player_.get());
 		boss_->Update();
 	}

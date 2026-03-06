@@ -48,13 +48,23 @@ public:
 	/// <param name="isLight">オンオフ</param>
 	virtual void LightSwitch(bool isLight) = 0;
 	/// <summary>
-	/// settter_色
+	/// setter_色
 	/// </summary>
 	/// <param name="color">設定する色</param>
 	virtual void SetColor(const Vector4& color) = 0;
 
 protected:
-	
+
+	/// <summary>
+	///	カメラ更新処理
+	/// </summary>
+	virtual void CameraUpdate() = 0;
+
+	/// <summary>
+	/// コマンド共通描画処理
+	/// </summary>
+	void DrawCommand();
+
 	/// <summary>
 	/// カメラ初期化処理
 	/// </summary>

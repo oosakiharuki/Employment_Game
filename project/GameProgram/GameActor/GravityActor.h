@@ -7,6 +7,7 @@ public:
 	/// <summary>
 	/// 重力の更新処理
 	/// </summary>
+	/// <param name="translateY">y座標</param>
 	void GravityUpdate(float& translateY);
 
 	/// <summary>

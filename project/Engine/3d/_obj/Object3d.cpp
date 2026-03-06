@@ -44,42 +44,32 @@ void Object3d::Update() {
 }
 
 void Object3d::Draw() {
-	if (camera_) {
-		Matrix4x4 projectionMatrix = camera_->GetViewProjectionMatrix();
-		wvpData_->WVP = worldMatrix_ * projectionMatrix;
-	}
-	else {
-		wvpData_->WVP = worldMatrix_;
-	}
-
+	CameraUpdate();
 	//モデル
 	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource_->GetGPUVirtualAddress());
+	DrawCommand();
 	if (model_) {
 		model_->Draw();
 	}
 }
 
 void Object3d::Draw(const std::string& textureData) {
+	CameraUpdate();
+	//モデル
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+	DrawCommand();
+	if (model_) {
+		model_->Draw(textureData);
+	}
+}
+
+void Object3d::CameraUpdate() {
 	if (camera_) {
 		Matrix4x4 projectionMatrix = camera_->GetViewProjectionMatrix();
 		wvpData_->WVP = worldMatrix_ * projectionMatrix;
 	}
 	else {
 		wvpData_->WVP = worldMatrix_;
-	}
-
-	//モデル
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource_->GetGPUVirtualAddress());
-	if (model_) {
-		model_->Draw(textureData);
 	}
 }
 

@@ -9,8 +9,13 @@
 /// </summary>
 class IStageObject : public CollisionSource {
 public:
-
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	IStageObject();
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	virtual ~IStageObject();
 	/// <summary>
 	/// 初期化処理
@@ -78,13 +83,13 @@ public:
 	/// <summary>
 	/// setter_次のステージ
 	/// </summary>
-	/// <param name="fileName"></param>ステージ名(例:stage_01)
+	/// <param name="fileName">ステージ名(例:stage_01)</param>
 	virtual void SetNextStage(const std::string& fileName);
 
 	/// <summary>
 	/// getter_次のステージ
 	/// </summary>
-	/// <returns></returns>次のステージ
+	/// <returns>次のステージ</returns>
 	virtual std::string GetNextStage();
 
 protected:

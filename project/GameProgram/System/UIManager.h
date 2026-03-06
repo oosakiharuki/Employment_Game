@@ -20,7 +20,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static UIManager& GetInstance();
 
 	void CreateSprite(const SpriteData& spriteData);
@@ -40,10 +40,17 @@ public:
 	/// </summary>
 	void Finalize();
 
-	void SetPlayerTranslate(const Vector3& translate) { playerTranslate_ = translate; }
-
+	/// <summary>
+	/// setter_スプライトのテクスチャ
+	/// </summary>
+	/// <param name="name">コンテナの名前</param>
+	/// <param name="texturePath">テクスチャパス</param>
 	void SetSpriteTexture(const std::string name, const std::string& texturePath);
-
+	/// <summary>
+	/// getter_スプライトのテクスチャ
+	/// </summary>
+	/// <param name="name">コンテナの名前</param>
+	/// <returns>テクスチャのファイルパス</returns>
 	std::string GetSpriteTexture(const std::string name);
 
 private:
@@ -51,15 +58,14 @@ private:
 	static std::unique_ptr<UIManager> sInstance_;
 	//default_deleteを設定(解放処理を行える)
 	friend struct std::default_delete<UIManager>;
-
+	//スプライトのコンテナ
 	std::unordered_map<std::string, std::unique_ptr<Sprite>> sprites_;
-	std::unordered_map<std::string, std::unique_ptr<Sprite>> spriteGuides_;
-
-	Vector3 playerTranslate_;
 
 	/// <summary>
 	/// スプライトの初期設定
 	/// </summary>
+	/// <param name="sprite">スプライトクラス</param>
+	/// <param name="spriteData">スプライトデータ</param>
 	void InitSprite(std::unique_ptr<Sprite>& sprite, const SpriteData& spriteData);
 };
 

@@ -52,6 +52,11 @@ protected:
 	/// <param name="modelData">モデルデータ</param>
 	virtual void InitIndexResource(ModelData modelData) = 0;
 
+	/// <summary>
+	/// カメラ更新処理
+	/// </summary>
+	void CameraUpdate();
+
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexResource_;
 	std::vector<D3D12_VERTEX_BUFFER_VIEW> vertexBufferView_;
 	VertexData* vertexData_ = nullptr;

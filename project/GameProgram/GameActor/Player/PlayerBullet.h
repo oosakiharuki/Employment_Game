@@ -8,7 +8,9 @@
 /// </summary>
 class PlayerBullet : public CollisionSource {
 public:
-
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~PlayerBullet();
 
 	/// <summary>

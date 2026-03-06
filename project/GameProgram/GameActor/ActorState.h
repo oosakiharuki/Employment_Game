@@ -4,17 +4,39 @@
 
 class GameActor;
 
+/// <summary>
+/// ゲームアクターの状態ステート
+/// </summary>
 class ActorCommand {
 public:
+	/// <summary>
+	/// 生存状態
+	/// </summary>
 	virtual void Active() = 0;
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
 	virtual void Dead() = 0;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
 	virtual void Performance() = 0;
 };
 
-
+/// <summary>
+/// ゲームアクター状態ステート(基盤クラス)
+/// </summary>
 class BaseActorState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="command">ゲームアクターのコマンドクラス</param>
 	virtual void Update(ActorCommand& command) = 0;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="actor">ゲームアクタークラス</param>
 	virtual void ChangeState(GameActor& actor) = 0;
 
 	/// <summary>
@@ -43,11 +65,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="command">ゲームアクターのコマンドクラス</param>
 	void Update(ActorCommand& actorCommand) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="actor">使用しているゲームアクター</param>
+	/// <param name="actor">ゲームアクタークラス</param>
 	void ChangeState(GameActor& actor) override;
 };
 
@@ -56,11 +79,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update(ActorCommand& ActorCommand) override;
+	/// <param name="command">ゲームアクターのコマンドクラス</param>
+	void Update(ActorCommand& actorCommand) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="actor">使用しているゲームアクター</param>
+	/// <param name="actor">ゲームアクタークラス</param>
 	void ChangeState(GameActor& actor) override;
 };
 
@@ -70,10 +94,11 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update(ActorCommand& ActorCommand) override;
+	/// <param name="command">ゲームアクターのコマンドクラス</param>
+	void Update(ActorCommand& actorCommand) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="actor">使用しているゲームアクター</param>
+	/// <param name="actor">ゲームアクタークラス</param>
 	void ChangeState(GameActor& actor) override;
 };

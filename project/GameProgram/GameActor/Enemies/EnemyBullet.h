@@ -10,7 +10,9 @@ class Player;
 /// </summary>
 class EnemyBullet : public CollisionSource {
 public:
-
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~EnemyBullet();
 
 	/// <summary>
@@ -67,8 +69,9 @@ public:
 
 private:	
 	/// <summary>
-	/// 当たったフラグ
+	/// 当たり判定コマンド
 	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 
 	//

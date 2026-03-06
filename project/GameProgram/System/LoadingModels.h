@@ -9,7 +9,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static LoadingModels& GetInstance();
 	
 	/// <summary>

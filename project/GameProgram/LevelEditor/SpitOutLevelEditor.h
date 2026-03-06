@@ -77,8 +77,15 @@ public:
 	/// <param name="boss">ボス</param>
 	void SpitOutBoss(std::unique_ptr<Boss>& boss);
 
+	/// <summary>
+	/// 操作ガイドの配置
+	/// </summary>
+	/// <returns>操作ガイド(配列)</returns>
 	std::vector<std::unique_ptr<Guide>> SpitOutGuide();
-
+	/// <summary>
+	/// ビジュアルアクターの配置
+	/// </summary>
+	/// <returns>ビジュアルアクター(配列)</returns>
 	std::vector<std::unique_ptr<VisualActor>> SpitOutVisualActor();
 
 private:

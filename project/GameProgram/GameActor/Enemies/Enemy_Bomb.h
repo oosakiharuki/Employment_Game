@@ -8,6 +8,9 @@
 /// </summary>
 class Enemy_Bomb : public BaseEnemy, public EnemyMoveCommand, public EnemyExplosionCommand, public GravityActor {
 public:
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Enemy_Bomb() override;
 	/// <summary>
 	/// 初期化処理
@@ -40,19 +43,31 @@ public:
 	void DirectionPlayer();
 
 private:
-
+	/// <summary>
+	/// 生存状態
+	/// </summary>
 	void Active() override;
-	
+	/// <summary>
+	/// 捜索態勢
+	/// </summary>
 	void SearchCommand() override;
+	/// <summary>
+	/// 攻撃態勢
+	/// </summary>
 	void AttackCommand() override;
-	
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
 	void Dead() override;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
 	void Performance() override;
-
-
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
-
-
 	/// <summary>
 	/// 移動
 	/// </summary>

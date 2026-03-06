@@ -11,12 +11,11 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static SkinningCommon& GetInstance();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="dxCommon"></param>
 	void Initialize() override;
 	/// <summary>
 	/// 解放処理
@@ -29,12 +28,12 @@ public:
 	/// <summary>
 	/// setter_デフォルトカメラ
 	/// </summary>
-	/// <param name="camera"></param>現在使っているカメラ
+	/// <param name="camera">現在使っているカメラ</param>
 	void SetDefaultCamera(Camera* camera) { this->defaultCamera_ = camera; }
 	/// <summary>
 	/// getter_デフォルトカメラ
 	/// </summary>
-	/// <param name="camera"></param>
+	/// <param name="camera">カメラを設定</param>
 	Camera* GetDefaultCamera() const { return defaultCamera_; }
 
 private:

@@ -10,7 +10,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static ParticleEmitter& GetInstance();
 
 	/// <summary>

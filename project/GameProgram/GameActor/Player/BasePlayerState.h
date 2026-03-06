@@ -3,13 +3,30 @@
 #include <memory>
 
 class Player;
-
+/// <summary>
+/// プレイヤーの行動コマンド
+/// </summary>
 class PlayerCommand {
 public:
+	/// <summary>
+	/// 移動
+	/// </summary>
 	virtual void CommandMove() = 0;
+	/// <summary>
+	/// ジャンプ
+	/// </summary>
 	virtual void CommandJump() = 0;
+	/// <summary>
+	/// 発砲攻撃
+	/// </summary>
 	virtual void CommandFire() = 0;
+	/// <summary>
+	/// 傘シールド
+	/// </summary>
 	virtual void CommandShield() = 0;
+	/// <summary>
+	/// ブリンク
+	/// </summary>
 	virtual void CommandBrink() = 0;
 
 protected:
@@ -42,9 +59,20 @@ protected:
 	
 };
 
+/// <summary>
+/// プレイヤー基盤ステート
+/// </summary>
 class BasePlayerState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="command">プレイヤーコマンドクラス</param>
 	virtual void Update(PlayerCommand& command) = 0;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="player">プレイヤークラス</param>
 	virtual void CommandInput(Player& player) = 0;
 
 	/// <summary>
@@ -76,11 +104,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="command">プレイヤーコマンドクラス</param>
 	void Update(PlayerCommand& playerCommond) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="player">使っているプレイヤー</param>
+	/// <param name="player">プレイヤークラス</param>
 	void CommandInput(Player& player) override;
 };
 
@@ -92,11 +121,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="command">プレイヤーコマンドクラス</param>
 	void Update(PlayerCommand& playerCommond) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="player">使っているプレイヤー</param>
+	/// <param name="player">プレイヤークラス</param>
 	void CommandInput(Player& player) override;
 };
 
@@ -109,11 +139,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="command">プレイヤーコマンドクラス</param>
 	void Update(PlayerCommand& playerCommond) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="player">使っているプレイヤー</param>
+	/// <param name="player">プレイヤークラス</param>
 	void CommandInput(Player& player) override;
 };
 
@@ -125,11 +156,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="command">プレイヤーコマンドクラス</param>
 	void Update(PlayerCommand& playerCommond) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="player">使っているプレイヤー</param>
+	/// <param name="player">プレイヤークラス</param>
 	void CommandInput(Player& player) override;
 };
 
@@ -141,11 +173,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="command">プレイヤーコマンドクラス</param>
 	void Update(PlayerCommand& playerCommond) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="player">使っているプレイヤー</param>
+	/// <param name="player">プレイヤークラス</param>
 	void CommandInput(Player& player) override;
 };
 

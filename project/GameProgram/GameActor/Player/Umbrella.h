@@ -12,6 +12,9 @@ class Player;
 /// </summary>
 class Umbrella : public CollisionSource {
 public:
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Umbrella();
 	/// <summary>
 	/// 初期化処理
@@ -71,18 +74,31 @@ public:
 	/// <param name="isShield">trueはシールドモードに変更</param>
 	void ShieldMode();
 
+	/// <summary>
+	/// シールド解除
+	/// </summary>
 	void OffShield() { isShield_ = false; }
-
+	/// <summary>
+	/// シールドモードのフラグ確認
+	/// </summary>
+	/// <returns>シールドモードフラグ</returns>
 	bool GetShieldMode() { return isShield_; }
 
 	/// <summary>
 	/// 連続ヒットの場合タイマーをリセット
 	/// </summary>
 	void ResetScaleTimer() { scaleTimer_ = 0.0f; }
-
+	/// <summary>
+	/// setter_プレイヤー
+	/// </summary>
+	/// <param name="player">プレイヤークラス</param>
 	void SetPlayer(Player* player) { player_ = player; }
 
 private:
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 
 	/// <summary>

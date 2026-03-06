@@ -31,10 +31,6 @@ void UIManager::Update() {
 	for (auto& sprite : sprites_) {
 		sprite.second->Update();
 	}
-
-	for (auto& guide : spriteGuides_) {
-		guide.second->Update();
-	}
 }
 
 void UIManager::Draw() {

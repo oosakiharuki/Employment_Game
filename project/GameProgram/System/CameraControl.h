@@ -16,7 +16,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	/// <param name="camera"></param>現在のカメラ
+	/// <param name="camera">現在のカメラ</param>
 	void Update(Camera* camera);
 
 	/// <summary>
@@ -36,30 +36,30 @@ public:
 	/// <param name="right">右端</param>
 	void SetEndPoint(const Vector3& left,const Vector3& right);
 	/// <summary>
-	/// setter_
+	/// setter_プレイヤーの座標位置
 	/// </summary>
-	/// <param name="pos"></param>
+	/// <param name="pos">プレイヤー座標</param>
 	void SetPlayerPosition(const Vector3& pos) { playerPos_ = pos; }
 	/// <summary>
 	/// ズーム終了
 	/// </summary>
-	/// <returns></returns>trueなら終了した
+	/// <returns>trueなら終了した</returns>
 	const bool ZoomEnd();
 	/// <summary>
 	/// 固定モード
 	/// </summary>
-	/// <param name="result"></param> trueでオン / falseでオフ
+	/// <param name="result">trueでオン / falseでオフ</param> 
 	void FixedMode(bool result) { isFixedMode_ = result; }
 	/// <summary>
 	/// 固定モードであるか
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>trueなら固定モードである</returns>
 	bool IsFixed() const { return isFixedMode_; }
 
 	/// <summary>
 	/// シェイクモード
 	/// </summary>
-	/// <param name="result"></param> trueでオン / falseでオフ
+	/// <param name="result">trueでオン / falseでオフ</param> 
 	void ShakeMode(bool result) { isShakeMode_ = result; }
 
 	/// <summary>
@@ -70,15 +70,14 @@ public:
 	/// <summary>
 	/// カメラを設定する
 	/// </summary>
-	/// <param name="data"></param>レベルエディタのカメラデータ(cameraInit)
-	/// <param name="fixed_Mode_"></param>trueでカメラを固定する
+	/// <param name="data">レベルエディタのカメラデータ(cameraInit)</param>
+	/// <param name="fixed_Mode_">trueでカメラを固定する</param>
 	void CameraSetting(const CameraInitData& data, bool fixed_Mode_);
 
 	/// <summary>
 	/// リスポーン時、チェックポイントから出てくる
 	/// </summary>
-	/// <param name="checkPoint">チェックポイント地点</param>
-	/// <param name="data"></param>
+	/// <param name="data">メインカメラのデータ</param>
 	void CameraSettingCheckPoint(const CameraInitData& data);
 
 	/// <summary>
@@ -87,7 +86,11 @@ public:
 	/// <param name="data">変更したいカメラデータ</param>
 	/// <param name="fixed_Mode_">固定する場合</param>
 	void CameraInterpolation(const CameraInitData& data, bool fixed_Mode_);
-
+	/// <summary>
+	/// プレイヤーのポイント
+	/// </summary>
+	/// <param name="data">カメラデータ</param>
+	/// <param name="playerPosition">プレイヤーの座標</param>
 	void CameraStartPointPlayer(const CameraInitData& data, const Vector3& playerPosition);
 
 
@@ -95,8 +98,10 @@ public:
 	/// 十字キーで移動する
 	/// </summary>
 	void DebugMove();
-
-	void CameraYFixed(bool result) { isCameraYFixed_ = result; }
+	/// <summary>
+	/// カメラのy軸移動を停止(ボス戦で使用)
+	/// </summary>
+	void CameraYFixed() { isCameraYFixed_ = true; }
 
 private:
 	/// <summary>
@@ -110,7 +115,7 @@ private:
 	/// <summary>
 	/// ズーム開始(現在カメラ位置から特定位置まで)
 	/// </summary>
-	/// <param name="goal"></param>特定位置を設定
+	/// <param name="goal">特定位置を設定</param>
 	void ZoomStart(const Vector3& goal);
 	/// <summary>
 	/// シェイク(カメラが揺れる)
@@ -125,8 +130,8 @@ private:
 	/// <summary>
 	/// セグメント
 	/// </summary>
-	/// <param name="origin"></param>
-	/// <param name="diff"></param>
+	/// <param name="origin">始点</param>
+	/// <param name="diff">終点</param>
 	void SetSegment(const Vector3& origin, const Vector3& diff);
 
 	/// <summary>

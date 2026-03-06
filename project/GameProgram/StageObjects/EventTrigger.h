@@ -32,6 +32,9 @@ struct EnemyPopData {
 	std::string enemyName;
 };
 
+/// <summary>
+/// 敵ラッシュのイベントトリガー
+/// </summary>
 class EventTrigger : public CollisionSource {
 public:
 

@@ -17,7 +17,13 @@
 /// </summary>
 class Player : public GameActor, public GravityActor, public PlayerCommand {
 public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	Player();
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Player();
 
 	/// <summary>
@@ -55,6 +61,9 @@ public:
 	/// <returns></returns>使用している傘クラス
 	Umbrella* GetUmbrella() { return umbrella_.get(); }
 
+	/// <summary>
+	/// 傘の向きをプレイヤーの手前に
+	/// </summary>
 	void SetUmbrellaRotate();
 
 	/// <summary>
@@ -165,18 +174,45 @@ public:
 
 private:
 
-	//コマンド処理
-	void CommandMove() override;
-	void CommandJump() override;
-	void CommandFire() override;
-	void CommandShield() override;
-	void CommandBrink() override;
+	///コマンド処理///
 
+	/// <summary>
+	/// 移動
+	/// </summary>
+	void CommandMove() override;
+	/// <summary>
+	/// ジャンプ
+	/// </summary>
+	void CommandJump() override;
+	/// <summary>
+	/// 発砲攻撃
+	/// </summary>
+	void CommandFire() override;
+	/// <summary>
+	/// 傘シールド
+	/// </summary>
+	void CommandShield() override;
+	/// <summary>
+	/// ブリンク
+	/// </summary>
+	void CommandBrink() override;
+	/// <summary>
+	/// 生存状態
+	/// </summary>
 	void Active() override;
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
 	void Dead() override;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
 	void Performance() override;
 
-
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 
 	/// <summary>
@@ -184,17 +220,20 @@ private:
 	/// </summary>
 	void LifeUpdate();
 
-
+	/// <summary>
+	/// アクションコマンド更新処理(ジャンプ、発砲攻撃など)
+	/// </summary>
 	void ActionUpdate();
 
-
-	//スプライトの変化
+	/// <summary>
+	/// スプライトの変化
+	/// </summary>
 	void SpriteUpdate();
 
 	/// <summary>
 	/// 傘の8方向の回転
 	/// </summary>
-	/// <param name="direction"></param>回転角度
+	/// <param name="direction">回転角度</param>
 	void UmbrellaRange(float direction);
 
 	/// <summary>
@@ -202,17 +241,15 @@ private:
 	/// </summary>
 	void ShootBullet();
 
-
 	/// <summary>
 	/// 滑空処理
 	/// </summary>
 	void Gliding();
 
 	/// <summary>
-	/// 
+	/// 重力の低下
 	/// </summary>
 	void GravityDown();
-
 
 	/// <summary>
 	/// オブジェクトの初期化処理
@@ -238,7 +275,6 @@ private:
 	/// 音声処理(SE,BGM)
 	/// </summary>
 	void InitAudio();
-
 
 	/// <summary>
 	/// 弾丸の更新処理
@@ -273,7 +309,6 @@ private:
 	/// ノックバックする更新処理
 	/// </summary>
 	void KnockBackUpdate();
-
 
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object_;
