@@ -36,15 +36,6 @@
     <Filter Include="ヘッダー ファイル\Engine\PostEffect">
       <UniqueIdentifier>{ad0a51d1-26d1-4779-ad87-6059fa1492fb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Engine\3d\_gltf">
-      <UniqueIdentifier>{3bc82e47-6192-4cd4-9855-eb010ef464a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Engine\3d\_obj">
-      <UniqueIdentifier>{4e2d655d-444c-400b-902d-2f9f83379b17}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Engine\3d\_Particle">
-      <UniqueIdentifier>{bdc4f52e-376b-4e2d-bc16-ef27416c49f0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\Engine\3d\Primitive">
       <UniqueIdentifier>{2b29ddec-d7f2-46fc-a887-7c963af58bac}</UniqueIdentifier>
     </Filter>
@@ -66,18 +57,6 @@
     </Filter>
     <Filter Include="ソース ファイル\Engine\3d">
       <UniqueIdentifier>{180c8c76-a122-465c-91ed-1a680a934e3e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\3d\_gltf">
-      <UniqueIdentifier>{7dd7b758-fb2b-43e2-a84e-6193a2dcc8ef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\3d\_obj">
-      <UniqueIdentifier>{727cc592-5d53-493e-97fb-4a6a734d0d69}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\3d\_Particle">
-      <UniqueIdentifier>{d8d85738-7095-4115-93c0-678e0261052d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Engine\3d\Primitive">
-      <UniqueIdentifier>{fe0ca8ca-e9ff-405f-a10f-d7bf3d7f1fdd}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\Engine\base">
       <UniqueIdentifier>{9b559435-8421-48c2-b59c-4897517ff2fe}</UniqueIdentifier>
@@ -151,6 +130,51 @@
     <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Player">
       <UniqueIdentifier>{53cdf185-41ea-4488-b3a6-a6812d9cabc0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\3d\camera">
+      <UniqueIdentifier>{ee8fdf40-e874-45bb-b98e-d4e3ef6e748f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3d\model">
+      <UniqueIdentifier>{7dd7b758-fb2b-43e2-a84e-6193a2dcc8ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3d\object">
+      <UniqueIdentifier>{727cc592-5d53-493e-97fb-4a6a734d0d69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3d\particle">
+      <UniqueIdentifier>{d8d85738-7095-4115-93c0-678e0261052d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3d\primitive">
+      <UniqueIdentifier>{fe0ca8ca-e9ff-405f-a10f-d7bf3d7f1fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3d\pipeline">
+      <UniqueIdentifier>{639c56df-0d60-46e8-a7fd-365dae4b180a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\3d\pipeline">
+      <UniqueIdentifier>{b077e629-e493-4b38-ae42-6cfceff61556}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\3d\model">
+      <UniqueIdentifier>{3bc82e47-6192-4cd4-9855-eb010ef464a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\3d\object">
+      <UniqueIdentifier>{4e2d655d-444c-400b-902d-2f9f83379b17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\3d\camera">
+      <UniqueIdentifier>{d4a5e470-ec36-4130-ab82-0a0a59bcc85f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\3d\particle">
+      <UniqueIdentifier>{bdc4f52e-376b-4e2d-bc16-ef27416c49f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\PostEffect\filter">
+      <UniqueIdentifier>{68383ceb-60d3-4901-8657-0d02ecc85ab4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\PostEffect\outline">
+      <UniqueIdentifier>{0a990526-2853-4592-906d-807ecb1df6f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\PostEffect\filter">
+      <UniqueIdentifier>{b35e2f33-9d44-4df8-ab20-72e16c270742}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\PostEffect\outline">
+      <UniqueIdentifier>{153b4e20-fbc9-4418-812f-82a8e5368000}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\Sprite.cpp">
@@ -158,9 +182,6 @@
     </ClCompile>
     <ClCompile Include="Engine\2d\SpriteCommon.cpp">
       <Filter>ソース ファイル\Engine\2d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\ModelManager.cpp">
-      <Filter>ソース ファイル\Engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\2d\TextureManager.cpp">
       <Filter>ソース ファイル\Engine\2d</Filter>
@@ -185,9 +206,6 @@
     </ClCompile>
     <ClCompile Include="Engine\math\MyMath.cpp">
       <Filter>ソース ファイル\Engine\math</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Camera.cpp">
-      <Filter>ソース ファイル\Engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="Engine\base\SrvManager.cpp">
       <Filter>ソース ファイル\Engine\base</Filter>
@@ -216,22 +234,10 @@
     <ClCompile Include="Engine\PostEffect\Vignette.cpp">
       <Filter>ソース ファイル\Engine\PostEffect</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PostEffect\BoxFilter.cpp">
-      <Filter>ソース ファイル\Engine\PostEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\PostEffect\GaussianFilter.cpp">
-      <Filter>ソース ファイル\Engine\PostEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\PostEffect\LuminanceBasedOutline.cpp">
-      <Filter>ソース ファイル\Engine\PostEffect</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\PostEffect\Grayscale.cpp">
       <Filter>ソース ファイル\Engine\PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PostEffect\Normal_Image.cpp">
-      <Filter>ソース ファイル\Engine\PostEffect</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\PostEffect\DepthBasedOutline.cpp">
       <Filter>ソース ファイル\Engine\PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PostEffect\Dissolve.cpp">
@@ -240,44 +246,26 @@
     <ClCompile Include="Engine\PostEffect\Random.cpp">
       <Filter>ソース ファイル\Engine\PostEffect</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\_gltf\GLTFCommon.cpp">
-      <Filter>ソース ファイル\Engine\3d\_gltf</Filter>
+    <ClCompile Include="Engine\3d\model\Model_glTF.cpp">
+      <Filter>ソース ファイル\Engine\3d\model</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\_gltf\Model_glTF.cpp">
-      <Filter>ソース ファイル\Engine\3d\_gltf</Filter>
+    <ClCompile Include="Engine\3d\object\Object3d.cpp">
+      <Filter>ソース ファイル\Engine\3d\object</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\_gltf\Object_glTF.cpp">
-      <Filter>ソース ファイル\Engine\3d\_gltf</Filter>
+    <ClCompile Include="Engine\3d\particle\Particle.cpp">
+      <Filter>ソース ファイル\Engine\3d\particle</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\_obj\Model_obj.cpp">
-      <Filter>ソース ファイル\Engine\3d\_obj</Filter>
+    <ClCompile Include="Engine\3d\particle\ParticleCommon.cpp">
+      <Filter>ソース ファイル\Engine\3d\particle</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\_obj\Object3d.cpp">
-      <Filter>ソース ファイル\Engine\3d\_obj</Filter>
+    <ClCompile Include="Engine\3d\particle\ParticleManager.cpp">
+      <Filter>ソース ファイル\Engine\3d\particle</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\_obj\Object3dCommon.cpp">
-      <Filter>ソース ファイル\Engine\3d\_obj</Filter>
+    <ClCompile Include="Engine\3d\primitive\BoxModel.cpp">
+      <Filter>ソース ファイル\Engine\3d\primitive</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\_Particle\Particle.cpp">
-      <Filter>ソース ファイル\Engine\3d\_Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\_Particle\ParticleCommon.cpp">
-      <Filter>ソース ファイル\Engine\3d\_Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\_Particle\ParticleManager.cpp">
-      <Filter>ソース ファイル\Engine\3d\_Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Primitive\BoxModel.cpp">
-      <Filter>ソース ファイル\Engine\3d\Primitive</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Primitive\SphereModel.cpp">
-      <Filter>ソース ファイル\Engine\3d\Primitive</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\Cubemap.cpp">
-      <Filter>ソース ファイル\Engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\DebugWireframes.cpp">
-      <Filter>ソース ファイル\Engine\3d</Filter>
+    <ClCompile Include="Engine\3d\primitive\SphereModel.cpp">
+      <Filter>ソース ファイル\Engine\3d\primitive</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Enemies\Enemy_Soldier.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
@@ -300,8 +288,8 @@
     <ClCompile Include="GameProgram\GameActor\Player\Umbrella.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\3d\Primitive\Primitive.cpp">
-      <Filter>ソース ファイル\Engine\3d\Primitive</Filter>
+    <ClCompile Include="Engine\3d\primitive\Primitive.cpp">
+      <Filter>ソース ファイル\Engine\3d\primitive</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\CheckPoint.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
@@ -323,9 +311,6 @@
     </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\Goal.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\_gltf\SkinningCommon.cpp">
-      <Filter>ソース ファイル\Engine\3d\_gltf</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\IStageObject.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
@@ -377,12 +362,6 @@
     </ClCompile>
     <ClCompile Include="Engine\base\Pipeline.cpp">
       <Filter>ソース ファイル\Engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\BaseModel.cpp">
-      <Filter>ソース ファイル\Engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\3d\BaseObject.cpp">
-      <Filter>ソース ファイル\Engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Enemies\BaseEnemyState.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
@@ -441,6 +420,51 @@
     <ClCompile Include="GameProgram\StageObjects\Guide.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\3d\camera\Camera.cpp">
+      <Filter>ソース ファイル\Engine\3d\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\model\BaseModel.cpp">
+      <Filter>ソース ファイル\Engine\3d\model</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\pipeline\GLTFCommon.cpp">
+      <Filter>ソース ファイル\Engine\3d\pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\pipeline\SkinningCommon.cpp">
+      <Filter>ソース ファイル\Engine\3d\pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\pipeline\DebugWireframes.cpp">
+      <Filter>ソース ファイル\Engine\3d\pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\pipeline\Cubemap.cpp">
+      <Filter>ソース ファイル\Engine\3d\pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\model\Model_obj.cpp">
+      <Filter>ソース ファイル\Engine\3d\model</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\object\Object_glTF.cpp">
+      <Filter>ソース ファイル\Engine\3d\object</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\pipeline\Object3dCommon.cpp">
+      <Filter>ソース ファイル\Engine\3d\pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\object\BaseObject.cpp">
+      <Filter>ソース ファイル\Engine\3d\object</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\model\ModelManager.cpp">
+      <Filter>ソース ファイル\Engine\3d\model</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\filter\BoxFilter.cpp">
+      <Filter>ソース ファイル\Engine\PostEffect\filter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\filter\GaussianFilter.cpp">
+      <Filter>ソース ファイル\Engine\PostEffect\filter</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\outline\LuminanceBasedOutline.cpp">
+      <Filter>ソース ファイル\Engine\PostEffect\outline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\outline\DepthBasedOutline.cpp">
+      <Filter>ソース ファイル\Engine\PostEffect\outline</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -455,58 +479,31 @@
     <ClInclude Include="Engine\2d\TextureManager.h">
       <Filter>ヘッダー ファイル\Engine\2d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Camera.h">
-      <Filter>ヘッダー ファイル\Engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\Cubemap.h">
-      <Filter>ヘッダー ファイル\Engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\DebugWireframes.h">
-      <Filter>ヘッダー ファイル\Engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\ModelManager.h">
-      <Filter>ヘッダー ファイル\Engine\3d</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\3d\WorldTransform.h">
       <Filter>ヘッダー ファイル\Engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\_gltf\GLTFCommon.h">
-      <Filter>ヘッダー ファイル\Engine\3d\_gltf</Filter>
+    <ClInclude Include="Engine\3d\model\Model_glTF.h">
+      <Filter>ヘッダー ファイル\Engine\3d\model</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\_gltf\Model_glTF.h">
-      <Filter>ヘッダー ファイル\Engine\3d\_gltf</Filter>
+    <ClInclude Include="Engine\3d\object\Object3d.h">
+      <Filter>ヘッダー ファイル\Engine\3d\object</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\_gltf\Object_glTF.h">
-      <Filter>ヘッダー ファイル\Engine\3d\_gltf</Filter>
+    <ClInclude Include="Engine\3d\particle\Particle.h">
+      <Filter>ヘッダー ファイル\Engine\3d\particle</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\_gltf\SkinningCommon.h">
-      <Filter>ヘッダー ファイル\Engine\3d\_gltf</Filter>
+    <ClInclude Include="Engine\3d\particle\ParticleCommon.h">
+      <Filter>ヘッダー ファイル\Engine\3d\particle</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\_obj\Model_obj.h">
-      <Filter>ヘッダー ファイル\Engine\3d\_obj</Filter>
+    <ClInclude Include="Engine\3d\particle\ParticleManager.h">
+      <Filter>ヘッダー ファイル\Engine\3d\particle</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\_obj\Object3d.h">
-      <Filter>ヘッダー ファイル\Engine\3d\_obj</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\_obj\Object3dCommon.h">
-      <Filter>ヘッダー ファイル\Engine\3d\_obj</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\_Particle\Particle.h">
-      <Filter>ヘッダー ファイル\Engine\3d\_Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\_Particle\ParticleCommon.h">
-      <Filter>ヘッダー ファイル\Engine\3d\_Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\_Particle\ParticleManager.h">
-      <Filter>ヘッダー ファイル\Engine\3d\_Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\Primitive\BoxModel.h">
+    <ClInclude Include="Engine\3d\primitive\BoxModel.h">
       <Filter>ヘッダー ファイル\Engine\3d\Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Primitive\Primitive.h">
+    <ClInclude Include="Engine\3d\primitive\Primitive.h">
       <Filter>ヘッダー ファイル\Engine\3d\Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\Primitive\SphereModel.h">
+    <ClInclude Include="Engine\3d\primitive\SphereModel.h">
       <Filter>ヘッダー ファイル\Engine\3d\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="Engine\audio\Audio.h">
@@ -551,25 +548,13 @@
     <ClInclude Include="Engine\math\Vector4.h">
       <Filter>ヘッダー ファイル\Engine\math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PostEffect\BoxFilter.h">
-      <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\PostEffect\DepthBasedOutline.h">
+    <ClInclude Include="Engine\PostEffect\filter\BoxFilter.h">
       <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\Dissolve.h">
       <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PostEffect\GaussianFilter.h">
-      <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\PostEffect\Grayscale.h">
-      <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\PostEffect\BasePostEffect.h">
-      <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\PostEffect\LuminanceBasedOutline.h">
       <Filter>ヘッダー ファイル\Engine\PostEffect</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\Normal_Image.h">
@@ -680,12 +665,6 @@
     <ClInclude Include="Engine\base\Pipeline.h">
       <Filter>ヘッダー ファイル\Engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\BaseModel.h">
-      <Filter>ヘッダー ファイル\Engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\3d\BaseObject.h">
-      <Filter>ヘッダー ファイル\Engine\3d</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Enemies\BaseEnemyState.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClInclude>
@@ -742,6 +721,51 @@
     </ClInclude>
     <ClInclude Include="GameProgram\StageObjects\Guide.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\camera\Camera.h">
+      <Filter>ヘッダー ファイル\Engine\3d\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\pipeline\GLTFCommon.h">
+      <Filter>ヘッダー ファイル\Engine\3d\pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\pipeline\SkinningCommon.h">
+      <Filter>ヘッダー ファイル\Engine\3d\pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\object\Object_glTF.h">
+      <Filter>ヘッダー ファイル\Engine\3d\object</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\model\Model_obj.h">
+      <Filter>ヘッダー ファイル\Engine\3d\model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\pipeline\Object3dCommon.h">
+      <Filter>ヘッダー ファイル\Engine\3d\pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\model\BaseModel.h">
+      <Filter>ヘッダー ファイル\Engine\3d\model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\object\BaseObject.h">
+      <Filter>ヘッダー ファイル\Engine\3d\object</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\pipeline\Cubemap.h">
+      <Filter>ヘッダー ファイル\Engine\3d\pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\pipeline\DebugWireframes.h">
+      <Filter>ヘッダー ファイル\Engine\3d\pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\model\ModelManager.h">
+      <Filter>ヘッダー ファイル\Engine\3d\model</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\outline\DepthBasedOutline.h">
+      <Filter>ヘッダー ファイル\Engine\PostEffect\outline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\outline\LuminanceBasedOutline.h">
+      <Filter>ヘッダー ファイル\Engine\PostEffect\outline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\filter\GaussianFilter.h">
+      <Filter>ヘッダー ファイル\Engine\PostEffect\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\BasePostEffect.h">
+      <Filter>ヘッダー ファイル\Engine\PostEffect\filter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
