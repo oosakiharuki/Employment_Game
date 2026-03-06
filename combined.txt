@@ -1728,13 +1728,13 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="winApp"></param>
+	/// <param name="winApp">ウィンドウズの設定</param>
 	void Initialize(WinApp* winApp);
 	
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static ImGuiManager& GetInstance();
 
 	/// <summary>
@@ -1966,6 +1966,7 @@ File Path: project/Engine/2d/Sprite.h
 #include "DirectXCommon.h"
 
 class SpriteCommon;
+
 /// <summary>
 /// スプライト
 /// </summary>
@@ -1974,7 +1975,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="textureFilePath"></param>
+	/// <param name="textureFilePath">テクスチャ名</param>
 	void Initialize(const std::string& textureFilePath);
 	/// <summary>
 	/// 更新処理
@@ -1988,116 +1989,123 @@ public:
 	/// <summary>
 	/// getter_座標
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の座標</returns>
 	const Vector2& GetPosition()const { return position_; }
 	/// <summary>
 	/// setter_座標
 	/// </summary>
-	/// <param name="position"></param>
+	/// <param name="position">指定する座標</param>
 	void SetPosition(const Vector2& position) { this->position_ = position; }
 
 	/// <summary>
 	/// getter_回転角度
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の回転角度</returns>
 	float GetRotate() const { return rotation_; }
 	/// <summary>
 	/// setter_回転角度
 	/// </summary>
-	/// <param name="rotation"></param>
+	/// <param name="rotation">指定した回転角度</param>
 	void SetRotate(float rotation) { this->rotation_ = rotation; }
 
 	/// <summary>
 	/// getter_色
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の色</returns>
 	const Vector4& GetColor()const { return materialData_->color; }
 	/// <summary>
 	/// setter_色
 	/// </summary>
-	/// <param name="color"></param>
+	/// <param name="color">指定する色(Vector4)</param>
 	void SetColor(const Vector4& color) { materialData_->color = color; }
-
+	/// <summary>
+	/// getter_サイズ
+	/// </summary>
+	/// <returns>現在のサイズ</returns>
 	const Vector2& GetSize()const { return size_; }
+	/// <summary>
+	/// setter_サイズ
+	/// </summary>
+	/// <param name="size">指定する大きさ</param>
 	void SetSize(const Vector2& size) { this->size_ = size; }
 
 	/// <summary>
 	/// getter_アンカーポイント
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在のアンカーポイント</returns>
 	const Vector2& GetAnchorPoint()const { return anchorPoint_; }
 	
 	/// <summary>
 	/// setter_アンカーポイント
 	/// </summary>
-	/// <param name="anchorPoint"></param>
+	/// <param name="anchorPoint">指定するアンカーポイント座標</param>
 	void SetAnchorPoint(const Vector2& anchorPoint) { this->anchorPoint_ = anchorPoint; }
 
 	/// <summary>
 	/// getter_テクスチャ反転横
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在のテクスチャ反転横</returns>
 	const bool& GetFlipX() const { return isFlipX_; }
 
 	/// <summary>
 	/// setter_テクスチャ反転横
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>指定するテクスチャ反転横</returns>
 	void SetFlipX(bool isFlipX) { this->isFlipX_ = isFlipX; }
 
 	/// <summary>
 	/// getter_テクスチャ反転縦
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在のテクスチャ反転縦</returns>
 	const bool& GetFlipY() const { return isFlipY_; }
 
 	/// <summary>
 	/// setter_テクスチャ反転縦
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>指定するテクスチャ反転縦</returns>
 	void SetFlipY(bool isFlipY) { this->isFlipY_ = isFlipY; }
 
 	/// <summary>
 	/// getter_左上の位置
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の左上の位置</returns>
 	const Vector2& GetTextureLT() const { return textureLeftTop_; }
 
 	/// <summary>
 	/// setter_左上の位置
 	/// </summary>
-	/// <param name="textureLeftTop"></param>
+	/// <param name="textureLeftTop">指定する左上の位置</param>
 	void SetTextureLT(const Vector2& textureLeftTop) { this->textureLeftTop_ = textureLeftTop; }
 	
 	/// <summary>
 	/// getter_テクスチャサイズ
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在のテクスチャサイズ</returns>
 	const Vector2& GetTextureSize() const { return textureSize_; }
 
 	/// <summary>
 	/// setter_テクスチャサイズ
 	/// </summary>
-	/// <param name="textureSize"></param>
+	/// <param name="textureSize">テクスチャ自体のサイズ</param>
 	void SetTextureSize(const Vector2& textureSize) { this->textureSize_ = textureSize; }
 
 	/// <summary>
 	/// getter_テクスチャファイル
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在使用しているテクスチャファイル名</returns>
 	std::string GetTextureFile() const;
 
 	/// <summary>
 	/// setter_テクスチャファイル
 	/// </summary>
-	/// <param name="textureFile"></param>
+	/// <param name="textureFile">変更するテクスチャファイルパス</param>
 	void SetTextureFile(const std::string& textureFile);
 
 
 	/// <summary>
 	/// getter_SpriteのResource
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>使用しているハンドルGPU</returns>
 	const D3D12_GPU_DESCRIPTOR_HANDLE GetResource() const ;
 
 private:
@@ -2297,7 +2305,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static SpriteCommon& GetInstance();
 	/// <summary>
 	/// 解放処理
@@ -2306,7 +2314,6 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="dxCommon"></param>
 	void Initialize() override;
 
 	/// <summary>
@@ -2410,7 +2417,7 @@ void TextureManager::Byte(const std::string& filePath) {
 	//テクスチャファイル // byte関連
 	std::wstring filePathW = ConvertString(filePath);
 	HRESULT hr;
-	if (filePathW.ends_with(L".dds")) {
+	if (filePathW.ends_with(L".dds")) {//拡張子が.ddsなら
 		//sRGB搭載のためFLAGは立てない
 		hr = DirectX::LoadFromDDSFile(filePathW.c_str(), DirectX::DDS_FLAGS_NONE, nullptr, image);
 	}
@@ -2504,7 +2511,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static TextureManager& GetInstance();
 	/// <summary>
 	/// 初期化処理
@@ -2517,25 +2524,25 @@ public:
 	/// <summary>
 	/// テクスチャを読み込む
 	/// </summary>
-	/// <param name="filePath"></param>
+	/// <param name="filePath">読み込むテクスチャパス</param>
 	void LoadTexture(const std::string& filePath);
 	/// <summary>
 	/// getter_srvIndex
 	/// </summary>
-	/// <param name="filePath"></param>
-	/// <returns></returns>
+	/// <param name="filePath">テクスチャパス</param>
+	/// <returns>そのテクスチャのsrvIndex</returns>
 	uint32_t GetSrvIndex(const std::string& filePath);
 	/// <summary>
 	/// getter_srvHandle
 	/// </summary>
-	/// <param name="filePath"></param>
-	/// <returns></returns>
+	/// <param name="filePath">テクスチャパス</param>
+	/// <returns>そのテクスチャのsrvHandle</returns>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvHandleGPU(const std::string& filePath);
 	/// <summary>
 	/// getter_メタデータ
 	/// </summary>
-	/// <param name="filePath"></param>
-	/// <returns></returns>
+	/// <param name="filePath">テクスチャパス</param>
+	/// <returns>そのテクスチャのメタデータ</returns>
 	const DirectX::TexMetadata& GetMetaData(const std::string& filePath);
 private:
 	//インスタンス
@@ -2555,6 +2562,9 @@ private:
 	/// <param name="filePath">ファイルパス</param>
 	void Byte(const std::string& filePath);
 
+	/// <summary>
+	/// 構造体_テクスチャのデータ
+	/// </summary>
 	struct TextureData {
 		DirectX::TexMetadata metadata; //width,height
 		Microsoft::WRL::ComPtr<ID3D12Resource>resource; // テクスチャリソース
@@ -2563,8 +2573,13 @@ private:
 		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU;
 	};
 
+	/// <summary>
+	/// ShaderResourceViewを作成
+	/// </summary>
+	/// <param name="textureData">テクスチャデータ</param>
+	/// <param name="metadata">メタデータ</param>
 	void CreateSRV(TextureData& textureData, const DirectX::TexMetadata metadata);
-
+	//テクスチャデータのコンテナ
 	std::unordered_map<std::string, TextureData> textureDatas_;
 	
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> intermediateResources_;
@@ -2609,7 +2624,7 @@ File Path: project/Engine/3d/BaseModel.h
 #include <memory>
 
 /// <summary>
-/// Modelの基盤クラス
+/// Model(基盤クラス)
 /// </summary>
 class BaseModel
 {
@@ -2617,14 +2632,28 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="directoryPath"></param>
-	/// <param name="fileName"></param>
+	/// <param name="directoryPath">リソースファイル名(resource)</param>
+	/// <param name="fileName">オブジェクト名</param>
 	virtual void Initialize(const std::string& directoryPath, const std::string& fileName) = 0;
 
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	virtual void Draw() = 0;
+
+	/// <summary>
+	/// マテリアルの色を変更
+	/// </summary>
+	/// <param name="color">変更カラー</param>
+	void SetColor(const Vector4& color);
+
+	/// <summary>
+	/// ライト設定
+	/// </summary>
+	/// <param name="Light">trueでオン / falseでオフ</param>
+	void LightOn(bool Light);
+
+protected:
 
 	/// <summary>
 	/// VertexResource作成(初期化)
@@ -2645,18 +2674,9 @@ public:
 	virtual void InitIndexResource(ModelData modelData) = 0;
 
 	/// <summary>
-	/// マテリアルの色を変更
+	/// カメラ更新処理
 	/// </summary>
-	/// <param name="color">変更カラー</param>
-	void SetColor(const Vector4& color);
-
-	/// <summary>
-	/// ライト設定
-	/// </summary>
-	/// <param name="Light"></param>
-	void LightOn(bool Light);
-
-protected:
+	void CameraUpdate();
 
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> vertexResource_;
 	std::vector<D3D12_VERTEX_BUFFER_VIEW> vertexBufferView_;
@@ -2678,13 +2698,19 @@ File Path: project/Engine/3d/BaseObject.cpp
 
 using namespace MyMath;
 
+void BaseObject::DrawCommand() {
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource_->GetGPUVirtualAddress());
+}
+
 void BaseObject::InitCamera() {
 	cameraResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(CameraForGPU));
 	cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraData_));
 
 	cameraData_->worldPosition = { 0,0,0 };
 }
-
 
 void BaseObject::InitLight() {
 	//ディレクショナルライト(平方向)
@@ -2701,9 +2727,9 @@ void BaseObject::CreateDirectionalLight() {
 	//書き込むためのアドレス
 	directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
 	//色の設定
-	directionalLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightData_->intensity = 0.0f;
+	directionalLightData_->color = kDefaultColor_;
+	directionalLightData_->direction = kDirectionalLightDirection_;
+	directionalLightData_->intensity = kIntensity_;
 }
 
 void BaseObject::CreatePointLight() {
@@ -2712,11 +2738,11 @@ void BaseObject::CreatePointLight() {
 	//書き込むためのアドレス
 	pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
 	//_
-	pointLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	pointLightData_->position = { 0.0f,2.0f,0.0f };
-	pointLightData_->intensity = 1.0f;
-	pointLightData_->radius = 5.0f;
-	pointLightData_->decay = 1.0f;
+	pointLightData_->color = kDefaultColor_;
+	pointLightData_->position = kPointLightPosition_;
+	pointLightData_->intensity = kIntensity_;
+	pointLightData_->radius =kPointLightRadius_;
+	pointLightData_->decay = kPointLightDecay_;
 }
 
 void BaseObject::CreateSpotLight() {
@@ -2725,14 +2751,14 @@ void BaseObject::CreateSpotLight() {
 	//書き込むためのアドレス
 	spotLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&spotLightData_));
 	//設定
-	spotLightData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	spotLightData_->position = { 2.0f,1.25f,0.0f };
-	spotLightData_->distance = 70.0f;
-	spotLightData_->direction = Normalize({ -1.0f,-1.0f,0.0f });
+	spotLightData_->color = kDefaultColor_;
+	spotLightData_->position = kSpotLightPosition_;
+	spotLightData_->distance = kSpotLightDistance_;
+	spotLightData_->direction = Normalize(kSpotLightDirection_);
 	spotLightData_->intensity = 0.0f;
-	spotLightData_->decay = 2.0f;
-	spotLightData_->cosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
-	spotLightData_->cosFalloffStart = std::cos(std::numbers::pi_v<float> / 4.0f);
+	spotLightData_->decay = kPointLightDecay_;
+	spotLightData_->cosAngle = kCosAngle;
+	spotLightData_->cosFalloffStart = kCosFalloffStart;
 }
 
 ============================================================
@@ -2748,22 +2774,62 @@ File Path: project/Engine/3d/BaseObject.h
 
 #include "Camera.h"
 #include "WorldTransform.h"
-
+/// <summary>
+/// オブジェクト(基盤クラス)
+/// </summary>
 class BaseObject
 {
 public:
+
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	virtual void Initialize() = 0;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="worldTransform"></param>
 	virtual void Update(WorldTransform& worldTransform) = 0;
+	/// <summary>
+	/// 更新処理()
+	/// </summary>
 	virtual void Update() = 0;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	virtual void Draw() = 0;
+	/// <summary>
+	/// 描画処理(テクスチャの変更あり)
+	/// </summary>
+	/// <param name="textureData">変更したいテクスチャのファイルパス</param>
 	virtual void Draw(const std::string& textureData) = 0;
-
-
+	/// <summary>
+	/// モデルデータ
+	/// </summary>
+	/// <param name="filePath">モデル名</param>
 	virtual void SetModelFile(const std::string& filePath) = 0;
+	/// <summary>
+	/// ライトスイッチ
+	/// </summary>
+	/// <param name="isLight">オンオフ</param>
 	virtual void LightSwitch(bool isLight) = 0;
+	/// <summary>
+	/// setter_色
+	/// </summary>
+	/// <param name="color">設定する色</param>
 	virtual void SetColor(const Vector4& color) = 0;
 
 protected:
+
+	/// <summary>
+	///	カメラ更新処理
+	/// </summary>
+	virtual void CameraUpdate() = 0;
+
+	/// <summary>
+	/// コマンド共通描画処理
+	/// </summary>
+	void DrawCommand();
 
 	/// <summary>
 	/// カメラ初期化処理
@@ -2813,6 +2879,23 @@ protected:
 
 	//ワールド行列
 	Matrix4x4 worldMatrix_{};
+
+	//ライト初期値
+	const Vector4 kDefaultColor_ = { 1,1,1,1 };
+	const float kIntensity_ = 1.0f;
+	//ディレクショナルライト初期値
+	const Vector3 kDirectionalLightDirection_ = { 0.0f,-1.0f,0.0f };
+	//ポイントライト初期値
+	const Vector3 kPointLightPosition_ = { 0.0f,2.0f,0.0f };
+	const float kPointLightRadius_ = 5.0f;
+	const float kPointLightDecay_ = 1.0f;
+	//スポットライト初期値
+	const Vector3 kSpotLightPosition_ = { 2.0f,1.25f,0.0f };
+	const float kSpotLightDistance_ = 70.0f;
+	const Vector3 kSpotLightDirection_ = { -1.0f,-1.0f,0.0f };
+	const float kSpotLightDecay_ = 2.0f;
+	const float kCosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
+	const float kCosFalloffStart = std::cos(std::numbers::pi_v<float> / 4.0f);
 };
 
 
@@ -2858,6 +2941,9 @@ File Path: project/Engine/3d/Camera.h
 /// </summary>
 class Camera {
 public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	Camera();
 	/// <summary>
 	/// 更新処理
@@ -2867,53 +2953,53 @@ public:
 	/// <summary>
 	/// setter_回転
 	/// </summary>
-	/// <param name="rotate"></param>
+	/// <param name="rotate">指定する回転</param>
 	void SetRotate(const Vector3& rotate) { transform_.rotate = rotate; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
-	/// <param name="translate"></param>
+	/// <param name="translate">指定する座標位置</param>
 	void SetTranslate(const Vector3& translate) { transform_.translate = translate; }
 	/// <summary>
-	/// setter_親子関係
+	/// 親子関係追加
 	/// </summary>
-	/// <param name="parent"></param>親となるオブジェクト(カメラは子)
+	/// <param name="parent">親となるオブジェクト(カメラは子)</param>
 	void SetParent(const WorldTransform* parent) { worldTransform_.SetParent(*parent); }
 
 	/// <summary>
 	/// setter_視野角
 	/// </summary>
-	/// <param name="ForY"></param>
+	/// <param name="ForY">視野角の設定</param>
 	void SetForY(float ForY) { forY_ = ForY; }
 	/// <summary>
 	/// setter_アスペクト比
 	/// </summary>
-	/// <param name="aspectRatio"></param>
+	/// <param name="aspectRatio">アスペクト比の設定</param>
 	void SetAspectRatio(float aspectRatio) { aspect_ = aspectRatio; }
 	/// <summary>
 	/// setter_描画範囲_near
 	/// </summary>
-	/// <param name="Clip"></param>
+	/// <param name="Clip">描画範囲設定</param>
 	void SetNearClip(float Clip) { nearClip_ = Clip; }
 	/// <summary>
 	/// setter_描画範囲_far
 	/// </summary>
-	/// <param name="Clip"></param>
+	/// <param name="Clip">描画範囲設定</param>
 	void SetFarClip(float Clip) { farClip_ = Clip; }
 	/// <summary>
 	/// getter_ワールド行列
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>カメラのワールド行列</returns>
 	const Matrix4x4& GetWorldMatrix() const { return worldMatrix_; }
 	/// <summary>
 	/// getter_ビュー行列
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>カメラのビュー行列</returns>
 	const Matrix4x4& GetViewMatrix() const { return viewMatrix_; }
 	/// <summary>
 	/// getter_プロジェクション行列
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>カメラのプロジェクション座標</returns>
 	const Matrix4x4& GetProjectionMatrix() const { return projectionMatrix_; }
 	/// <summary>
 	/// getter_ビュープロジェクション行列
@@ -2923,12 +3009,12 @@ public:
 	/// <summary>
 	/// getter_回転
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>回転角度</returns>
 	const Vector3& GetRotate() const { return transform_.rotate; }
 	/// <summary>
 	/// getter_座標位置
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>座標位置</returns>
 	const Vector3& GetTranslate() const { return transform_.translate; }
 
 private:
@@ -3353,7 +3439,9 @@ File Path: project/Engine/3d/ModelManager.h
 
 #include "Model_obj.h"
 #include "Model_glTF.h"
-
+/// <summary>
+/// モデルマネージャ
+/// </summary>
 class ModelManager{
 public:
 	/// <summary>
@@ -3368,13 +3456,22 @@ public:
 	/// <summary>
 	/// モデル読み込み
 	/// </summary>
-	/// <param name="filePath"></param>オブジェクトの名前
-	/// <param name="objType"></param>オブジェクトの拡張子(obj/gltf)
-	/// <param name="isAnimation"></param>アニメーションがあるか
-	/// <param name="isSkinning"></param>スキニングがあるか
+	/// <param name="filePath">オブジェクトの名前</param>
+	/// <param name="objType">オブジェクトの拡張子(obj/gltf)</param>
+	/// <param name="isAnimation">アニメーションがあるか</param>
+	/// <param name="isSkinning">スキニングがあるか</param>
 	void LoadModel(const std::string& filePath, const std::string& objType, bool isAnimation = false, bool isSkinning = false);
-	
+	/// <summary>
+	/// .gltfのモデルを取り出す
+	/// </summary>
+	/// <param name="filePath">.gltfのモデルパス名</param>
+	/// <returns>ファイルパスで指定した.gltf型のモデル</returns>
 	Model_glTF* FindModel_gltf(const std::string& filePath);
+	/// <summary>
+	/// .objのモデルを取り出す
+	/// </summary>
+	/// <param name="filePath">.objのモデルパス名</param>
+	/// <returns>ファイルパスで指定した.obj型のモデル</returns>
 	Model_obj* FindModel_obj(const std::string& filePath);
 
 private:
@@ -3484,6 +3581,10 @@ public:
 	/// </summary>
 	/// <param name="textureFile"></param>
 	void Initialize(const std::string& textureFile);
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="matWorld">ワールド行列を設定</param>
 	void Update(const Matrix4x4& matWorld);
 	/// <summary>
 	/// 描画処理
@@ -3492,7 +3593,7 @@ public:
 	/// <summary>
 	/// setter_色
 	/// </summary>
-	/// <param name="color"></param>
+	/// <param name="color">色を設定</param>
 	void SetColor(const Vector4& color) { color_ = color; }
 
 private:
@@ -4009,7 +4110,7 @@ namespace Primitive {
 	ModelData CreateSphere();
 
 	ModelData CreateCone();//円錐
-	ModelData CreateBeam();//
+	ModelData CreateBeam();//ビーム
 
 }
 
@@ -4117,7 +4218,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	/// <param name="matworld"></param>
+	/// <param name="matWorld">ワールド行列を設定</param>
 	void Update(const Matrix4x4& matworld);
 	/// <summary>
 	/// 描画処理
@@ -4126,7 +4227,7 @@ public:
 	/// <summary>
 	/// setter_色
 	/// </summary>
-	/// <param name="color"></param>
+	/// <param name="color">色を設定</param>
 	void SetColor(const Vector4& color) { color_ = color; }
 
 private:
@@ -4225,6 +4326,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="transform">トランスフォーム</param>
 	void UpdateMatrix(Transform transform);
 	/// <summary>
 	/// <summary>
@@ -4327,9 +4429,6 @@ void Particle::Initialize(const std::string& particleName, const std::string& te
 	//Particle用マテリアル
 	InitMaterial();
 
-	//ライト用のリソース
-	InitLight();
-
 	//
 	InitParameter();
 
@@ -4391,10 +4490,8 @@ void Particle::Draw() {
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance().GetSrvHandleGPU(textureFile_));
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightSphereResource_->GetGPUVirtualAddress());
-
-		//4のやつ particle専用
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(4, ParticleManager::GetInstance().GetSrvHandleGPU(fileName_));
+		//particle専用
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(3, ParticleManager::GetInstance().GetSrvHandleGPU(fileName_));
 		DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), numInstance_, 0, 0);
 	}
 	numInstance_ = 0;
@@ -4449,16 +4546,6 @@ void Particle::InitParameter() {
 
 	//パーティクル発生初期設定
 	particleBorn_ = ParticleBorn::Stop;
-}
-
-void Particle::InitLight() {
-	directionalLightSphereResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(DirectionalLight));
-	//書き込むためのアドレス
-	directionalLightSphereResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightSphereData_));
-	//色の設定
-	directionalLightSphereData_->color = { 1.0f,1.0f,1.0f,1.0f };
-	directionalLightSphereData_->direction = { 0.0f,-1.0f,0.0f };
-	directionalLightSphereData_->intensity = 1.0f;
 }
 
 
@@ -4539,9 +4626,9 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="particleName"></param>パーティクルの名前
-	/// <param name="textureFile"></param>使用するテクスチャ名
-	/// <param name="type"></param>形(Primitive)
+	/// <param name="particleName">パーティクルの名前</param>
+	/// <param name="textureFile">使用するテクスチャ名</param>
+	/// <param name="type">形(Primitive)</param>
 	void Initialize(const std::string& particleName,const std::string& textureFile, const ModelData& modelData);
 	/// <summary>
 	/// 更新処理
@@ -4555,37 +4642,37 @@ public:
 	/// <summary>
 	/// setter_拡大縮小
 	/// </summary>
-	/// <param name="scale"></param>emitterで
+	/// <param name="scale">エミッタで指定する大きさ</param>
 	void SetScale(const Vector3& scale) { emitter_.transform.scale = scale; }
 	/// <summary>
 	/// getter_拡大縮小
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の大きさ</returns>
 	const Vector3& GetScale() const { return emitter_.transform.scale; }	
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
-	/// <param name="translate"></param>
+	/// <param name="translate">エミッタで指定できる座標位置</param>
 	void SetTranslate(const Vector3& translate) { emitter_.transform.translate = translate; }
 	/// <summary>
 	/// getter_座標位置
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の位置</returns>
 	const Vector3& GetTranslate()const { return emitter_.transform.translate; }
 	/// <summary>
 	/// setter_回転
 	/// </summary>
-	/// <param name="rotate"></param>
+	/// <param name="rotate">エミッタで指定できる回転角度</param>
 	void SetRotate(const Vector3& rotate) { emitter_.transform.rotate = rotate; }
 	/// <summary>
 	/// getter_回転
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の回転角度</returns>
 	const Vector3& GetRotate() const { return emitter_.transform.rotate; }
 	/// <summary>
 	/// setter_発生時間
 	/// </summary>
-	/// <param name="time"></param>発生させる時間
+	/// <param name="time">発生させる時間</param>
 	void SetFrequency(float time) { 
 		emitter_.frequency = time;
 		emitter_.frequencyTime = time;
@@ -4593,18 +4680,18 @@ public:
 	/// <summary>
 	/// setter_カメラ
 	/// </summary>
-	/// <param name="camera"></param>現在使っているカメラ
+	/// <param name="camera">現在使っているカメラ</param>
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
 	/// <summary>
 	/// パーティクル発動モード
 	/// </summary>
-	/// <param name="mode"></param>時間で出る/一度だけ/出さない
+	/// <param name="mode">時間で出る/一度だけ/出さない</param>
 	void SetParticleBorn(ParticleBorn mode) { particleBorn_ = mode; }
 	/// <summary>
 	/// パーティクルの発生数
 	/// </summary>
-	/// <param name="count"></param>
+	/// <param name="count">発生数を決める</param>
 	void SetParticleCount(uint32_t count) { emitter_.count = count; }
 
 private:
@@ -4665,10 +4752,10 @@ private:
 	/// </summary>
 	void InitMaterial();
 
-
+	/// <summary>
+	/// パラメータの初期化
+	/// </summary>
 	void InitParameter();
-
-	void InitLight();
 };
 
 ============================================================
@@ -4705,9 +4792,8 @@ void ParticleCommon::RootSignature() {
 	//RootParameter作成__
 	RootParameterCommon();
 
-	CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 1);//[3] ps b1
-	CreateTABLE(D3D12_SHADER_VISIBILITY_VERTEX,descriptorRangeForInstancing_);//[4] vs t1
-	rootParameters_[4].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing_);
+	CreateTABLE(D3D12_SHADER_VISIBILITY_VERTEX,descriptorRangeForInstancing_);//[3] vs t1
+	rootParameters_[3].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeForInstancing_);
 
 	//2でまとめる
 	DefaultSampler(0);
@@ -4787,7 +4873,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static ParticleCommon& GetInstance();
 	/// <summary>
 	/// 解放処理
@@ -4796,7 +4882,6 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="dxCommon"></param>使用しているdirectXCommon
 	void Initialize() override;
 
 	/// <summary>
@@ -4806,12 +4891,12 @@ public:
 	/// <summary>
 	/// setter_デフォルトカメラ
 	/// </summary>
-	/// <param name="camera"></param>使用するカメラ
+	/// <param name="camera">使用するカメラ</param>
 	void SetDefaultCamera(Camera* camera) { defaultCamera_ = camera; }
 	/// <summary>
 	/// getter_デフォルトカメラ
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在使用しているカメラ</returns>
 	Camera* GetDefaultCamera() const { return defaultCamera_; }
 private:
 
@@ -5368,7 +5453,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static GLTFCommon& GetInstance();
 	/// <summary>
 	/// 解放処理
@@ -5386,12 +5471,12 @@ public:
 	/// <summary>
 	/// setter_デフォルトカメラ
 	/// </summary>
-	/// <returns></returns> 現在使っているカメラ
+	/// <returns>シーンで使用しているカメラ</returns>
 	void SetDefaultCamera(Camera* camera) { this->defaultCamera_ = camera; }
 	/// <summary>
 	/// getter_デフォルトカメラ
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在使用しているカメラ</returns>
 	Camera* GetDefaultCamera() const { return defaultCamera_; }
 
 private:
@@ -5875,6 +5960,36 @@ void Model_glTF::SetEnvironment(const std::string& mapFile) {
 	EnvironmentFile_ = mapFile;
 }
 
+
+Skeleton Model_glTF::CreateSkelton(const Node& rootNode) {
+	Skeleton skeleton;
+	skeleton.root = CreateJoint(rootNode, {}, skeleton.joints);
+
+	for (const Joint& joint : skeleton.joints) {
+		skeleton.jointMap.emplace(joint.name, joint.index);
+	}
+	return skeleton;
+}
+
+int32_t Model_glTF::CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints) {
+	Joint joint;
+	joint.name = node.name;
+	joint.localMatrix = node.localMatrix;
+	joint.skeletonSpaceMatrix = MakeIdentity4x4();
+	joint.transform = node.transform;
+	joint.index = int32_t(joints.size());
+	joint.parent = parent;
+	joints.push_back(joint);
+
+	//再帰関数
+	for (const Node& child : node.children) {
+		int32_t childIndex = CreateJoint(child, joint.index, joints);
+		joints[joint.index].children.push_back(childIndex);
+	}
+
+	return joint.index;
+}
+
 ============================================================
 File Path: project/Engine/3d/_gltf/Model_glTF.h
 ============================================================
@@ -5883,7 +5998,39 @@ File Path: project/Engine/3d/_gltf/Model_glTF.h
 #include <assimp/scene.h>
 
 /// <summary>
-/// .gltf版のモデル
+/// 構造体_スケルトンデータ
+/// </summary>
+struct Skeleton {
+	int32_t root;//RootJointのIndex
+	std::map <std::string, int32_t>jointMap;//コンテナ
+	std::vector<Joint> joints;//所属ジョイント
+};
+
+/// <summary>
+/// 構造体_スケルトンで使用
+/// </summary>
+struct WellForGPU {
+	Matrix4x4 skeletonSpaceMatrix; //位置用
+	Matrix4x4 skeletonSpaceInverseTransposeMatrix; //法線用
+};
+
+//std::spanは「配列の上限がない」みたいなやつ（決めることもできる）
+
+/// <summary>
+/// 構造体_スキニング
+/// </summary>
+struct SkinCluster {
+	std::vector<Matrix4x4> inverseBindPoseMatrices;
+	Microsoft::WRL::ComPtr<ID3D12Resource> influenceResource;
+	D3D12_VERTEX_BUFFER_VIEW influenceBufferView;
+	std::span<VertexInfluence> mappedInfluence;
+	Microsoft::WRL::ComPtr<ID3D12Resource> paletteResource;
+	std::span<WellForGPU> mappedPalette;
+	std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> paletteSrvHandle;
+};
+
+/// <summary>
+/// .gltf版のモデル(派生クラス)
 /// </summary>
 class Model_glTF : public BaseModel{
 public:
@@ -5906,6 +6053,63 @@ public:
 	/// </summary>
 	void Draw() override;
 
+	/// <summary>
+	/// setter_環境マップの設定
+	/// </summary>
+	/// <param name="mapFile">環境マップ</param>
+	void SetEnvironment(const std::string& mapFile);
+
+	/// <summary>
+	/// getter_モデルデータ
+	/// </summary>
+	/// <returns>現在使用しているモデルのデータ</returns>
+	ModelDataMulti GetModelData() { return modelData_; }
+
+	/// <summary>
+	/// getter_アニメーションデータ
+	/// </summary>
+	/// <returns>現在使用しているアニメーションのデータ</returns>
+	std::vector<Animation> GetAnimationData() { return animation_; }
+
+	/// <summary>
+	/// getter_スケルトンデータ
+	/// </summary>
+	/// <returns>現在使用しているアニメーションのスケルトンデータ</returns>
+	std::vector<Skeleton> GetSkeleton() { return skeletons_; }
+	/// <summary>
+	/// getter_スキニングデータ
+	/// </summary>
+	/// <returns>現在使用しているアニメーションのスキニングデータ</returns>	
+	std::vector<SkinCluster> GetSkinCluster() { return skinClusters_; }
+	/// <summary>
+	/// スキニングの作成
+	/// </summary>
+	/// <param name="skeleton">現在のアニメーションのスケルトンデータ</param>
+	/// <param name="modelData">モデルデータ</param>
+	/// <returns>完成したスキニングデータ</returns>
+	SkinCluster CreateSkinCluster(const Skeleton& skeleton, const ModelDataMulti& modelData);
+	/// <summary>
+	/// getter_マテリアルデータ
+	/// </summary>
+	/// <returns>現在のモデルのマテリアルデータ</returns>
+	Material* GetMaterial() { return materialData_; }
+	/// <summary>
+	/// スキニングを使用しているか
+	/// </summary>
+	/// <returns>true している / false していない</returns>
+	bool IsSkinning() const { return isSkinning_; }
+	/// <summary>
+	/// アニメーションを使用しているか
+	/// </summary>
+	/// <returns>true している / false していない</returns>
+	bool IsAnimation() const { return isAnimation_; }
+
+	/// <summary>
+	/// マルチメッシュで使う用のカウントをリセット
+	/// </summary>
+	void ResetMeshCount() { multiMeshCount_ = 0; }
+
+private:
 
 	/// <summary>
 	/// VertexResource作成(初期化)
@@ -5925,81 +6129,46 @@ public:
 	/// <param name="modelData">モデルデータ</param>
 	void InitIndexResource(ModelData modelData) override;
 
+	/// <summary>
+	/// ノードを読み込む
+	/// </summary>
+	/// <param name="node">ノード</param>
+	/// <returns>アニメーションのノードを作成</returns>
+	static Node ReadNode(aiNode* node);
 
 	/// <summary>
 	/// モデルを読み込む
 	/// </summary>
-	/// <param name="directoryPath">リソースファイルパス</param>
-	/// <param name="filename"></param>
+	/// <param name="directoryPath">リソースファイル(resource)</param>
+	/// <param name="filename">使用するテクスチャ名</param>
 	/// <returns>完成したモデルデータ</returns>
 	static ModelDataMulti LoadModelFile(const std::string& directoryPath, const std::string& filename);
-	
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="directoryPath"></param>
-	/// <param name="filename"></param>
-	/// <param name="Number"></param>
-	/// <returns></returns>
-	static std::vector<Animation> LoadAnimationFile(const std::string& directoryPath, const std::string& filename,uint32_t Number);
-	
 
 	/// <summary>
-	/// 環境マップの設定
+	/// アニメーションを読み込む
 	/// </summary>
-	/// <param name="mapFile"></param>
-	void SetEnvironment(const std::string& mapFile);
+	/// <param name="directoryPath">リソースファイル(resource)</param>
+	/// <param name="filename">使用するテクスチャ名</param>
+	/// <param name="Number">アニメーションの数(マルチメッシュ用)</param>
+	/// <returns>完成したアニメーション</returns>
+	static std::vector<Animation> LoadAnimationFile(const std::string& directoryPath, const std::string& filename, uint32_t Number);
+
 
 	/// <summary>
-	/// 
+	/// スケルトンを生成
 	/// </summary>
-	/// <param name="node"></param>
-	/// <returns></returns>
-	static Node ReadNode(aiNode* node);
+	/// <param name="rootNode">ノード</param>
+	/// <returns>作成したスケルトン</returns>
+	Skeleton CreateSkelton(const Node& rootNode);
 
 	/// <summary>
-	/// getter_オブジェクトデータ
+	/// ジョイント(関節部分)を生成
 	/// </summary>
-	/// <returns></returns>
-	ModelDataMulti GetModelData() { return modelData_; }
-
-	/// <summary>
-	/// getter_アニメーションデータ
-	/// </summary>
-	/// <returns></returns>
-	std::vector<Animation> GetAnimationData() { return animation_; }
-
-	/// <summary>
-	/// getter_スケルトンデータ
-	/// </summary>
-	/// <returns></returns>
-	std::vector<Skeleton> GetSkeleton() { return skeletons_; }
-	/// <summary>
-	/// getter_スキンデータ
-	/// </summary>
-	/// <returns></returns>	
-	std::vector<SkinCluster> GetSkinCluster() { return skinClusters_; }
-
-	SkinCluster CreateSkinCluster(const Skeleton& skeleton, const ModelDataMulti& modelData);
-
-	Material* GetMaterial() { return materialData_; }
-	/// <summary>
-	/// スキニングデータを使用しているか
-	/// </summary>
-	/// <returns></returns>
-	bool IsSkinning() const { return isSkinning_; }
-	/// <summary>
-	/// アニメーションを使用しているか
-	/// </summary>
-	/// <returns></returns>
-	bool IsAnimation() const { return isAnimation_; }
-
-	/// <summary>
-	/// マルチメッシュで使う用のカウントをリセット
-	/// </summary>
-	void ResetMeshCount() { multiMeshCount_ = 0; }
-
-private:
+	/// <param name="node">ノード</param>
+	/// <param name="parent">親子関係</param>
+	/// <param name="joints">ジョイント</param>
+	/// <returns>生成したジョイント</returns>
+	int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
 
 	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource_; //index
 
@@ -6011,19 +6180,19 @@ private:
 	
 	//アニメーション
 	std::vector<Animation> animation_;
-
+	//スケルトン
 	std::vector<Skeleton> skeletons_;
-
+	//スキニング
 	std::vector<SkinCluster> skinClusters_;
-
+	//VertexBufferView二つ(通常アニメーション用、スキニングアニメーション用)
 	D3D12_VERTEX_BUFFER_VIEW vbvs_[2];
-	
+	//環境マップのファイルパス
 	std::string EnvironmentFile_;
 
-	bool isAnimation_ = false;
-	bool isSkinning_ = false;
+	bool isAnimation_ = false;//アニメーション使用フラグ
+	bool isSkinning_ = false;//スキニング使用フラグ
 
-	uint32_t multiMeshCount_ = 0;
+	uint32_t multiMeshCount_ = 0;//メッシュの数をカウントする
 
 };
 
@@ -6104,16 +6273,13 @@ void Object_glTF::Update() {
 }
 
 void Object_glTF::AnimationUpdate() {
-
 	//作るときはフレームレートを60FPSにする
 	uint32_t i = 0;
-
 	animationTime_ += kDeltaTime_;
 
 	for (auto& animation_ : animations_) {
 		//アニメーションが最大時間を超えたら巻き戻す
 		animationTime_ = std::fmod(animationTime_, animation_.duration);
-
 		//スキニング処理
 		if (model_->IsSkinning()) {
 			if (isChange_) {
@@ -6131,7 +6297,6 @@ void Object_glTF::AnimationUpdate() {
 			}
 		}
 	}
-
 	//スキニング
 	if (model_->IsSkinning()) {
 		for (auto& skeleton : skeletons_) {
@@ -6139,7 +6304,6 @@ void Object_glTF::AnimationUpdate() {
 			SkinClusterUpdate(skinClusters_[i], skeleton);
 		}
 	}
-
 	//フレームアニメーション
 	FrameAnimation();
 }
@@ -6211,10 +6375,7 @@ void Object_glTF::Draw() {
 	//モデル
 	for (uint32_t i = 0; i < modelData_.Data.size();i++) {
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResources_[i]->GetGPUVirtualAddress());
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource_->GetGPUVirtualAddress());
+		DrawCommand();
 		if (model_) {
 			model_->Draw();
 		}
@@ -6298,12 +6459,14 @@ void Object_glTF::SetModelFile(const std::string& filePath) {
 
 void Object_glTF::LightSwitch(bool isLight) {
 	if (model_) {
+		//ライト更新
 		model_->LightOn(isLight);
 	}
 }
 
 void Object_glTF::SetColor(const Vector4& color) {
 	if (model_) {
+		//色変更
 		model_->SetColor(color);
 	}
 }
@@ -6311,6 +6474,7 @@ void Object_glTF::SetColor(const Vector4& color) {
 //環境マップのファイルパス
 void Object_glTF::SetEnvironment(const std::string& filePath) {
 	if (model_) {
+		//環境マップのテクスチャパス変更
 		model_->SetEnvironment(filePath);
 	}
 }
@@ -6401,7 +6565,7 @@ void Object_glTF::ChangeAnimation(const std::string& filePath) {
 	skinClusters_ = model_->GetSkinCluster();
 
 	//animationTimeを1.0f/60.0fに
-	//Sleapなどで0より小さい値を出さないようにする
+	//SLeapなどで0より小さい値を出さないようにする
 	//はじめは少しカクつくが、アニメーション補間が終えた後がスムーズ
 	changeTime_ += 1.0f / 60.0f;
 	animationTime_ = changeTime_;
@@ -6415,16 +6579,14 @@ void Object_glTF::ChangeAnimation(const std::string& filePath) {
 	}
 	//アニメーション補間中に変更があった時
 	if (isChange_) {
-		changeTime_ = 0.9f - changeTime_;
+		changeTime_ = 1.0f - changeTime_;
 	}
 
 	isChange_ = true;
 
-	//Sleapなどで1より大きい値を出さないようにする
+	//SLeapなどで1より大きい値を出さないようにする
 	for (auto& preAnimation : preAnimations_) {
-		if (preAnimation.duration > 1.0f) {
-			preAnimation.duration = 0.9f;
-		}
+		preAnimation.duration = max(preAnimation.duration,1.0f);
 	}
 
 	//初期環境マップ
@@ -6463,7 +6625,13 @@ class GLTFCommon;
 class Object_glTF : public BaseObject
 {
 public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	Object_glTF();
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Object_glTF();
 
 	/// <summary>
@@ -6473,7 +6641,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	/// <param name="worldTransform"></param> ワールド座標系
+	/// <param name="worldTransform">ワールド座標系</param> 
 	void Update(WorldTransform& worldTransform) override;
 	/// <summary>
 	/// 更新処理
@@ -6498,7 +6666,7 @@ public:
 	/// <summary>
 	/// ライトのon/off
 	/// </summary>
-	/// <param name="isLight"></param>
+	/// <param name="isLight">ライトのオンオフ</param>
 	void LightSwitch(bool isLight)override;
 
 	/// <summary>
@@ -6510,7 +6678,7 @@ public:
 	/// <summary>
 	/// 環境マップ用
 	/// </summary>
-	/// <param name="filePath"></param>
+	/// <param name="filePath">環境マップ用テクスチャパス(.dds)</param>
 	void SetEnvironment(const std::string& filePath);
 
 	/// <summary>
@@ -6533,8 +6701,10 @@ private:
 	/// <summary>
 	/// カメラ更新処理
 	/// </summary>
-	void CameraUpdate();
-
+	void CameraUpdate() override;
+	/// <summary>
+	/// WVPの作成
+	/// </summary>
 	void CreateWVP();
 
 	/// <summary>
@@ -6721,12 +6891,11 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static SkinningCommon& GetInstance();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="dxCommon"></param>
 	void Initialize() override;
 	/// <summary>
 	/// 解放処理
@@ -6739,12 +6908,12 @@ public:
 	/// <summary>
 	/// setter_デフォルトカメラ
 	/// </summary>
-	/// <param name="camera"></param>現在使っているカメラ
+	/// <param name="camera">現在使っているカメラ</param>
 	void SetDefaultCamera(Camera* camera) { this->defaultCamera_ = camera; }
 	/// <summary>
 	/// getter_デフォルトカメラ
 	/// </summary>
-	/// <param name="camera"></param>
+	/// <param name="camera">カメラを設定</param>
 	Camera* GetDefaultCamera() const { return defaultCamera_; }
 
 private:
@@ -6960,7 +7129,7 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 	//mtlファイルを読み取る
 	std::string materialFilename;
 
-
+	//各モデルデータで読み出しするデータ
 	ModelData iModelData;
 
 
@@ -6978,7 +7147,7 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 		s >> identifier; //先頭の義別子 (v ,vt, vn, f) を読み取る
 
 		//modelDataの建築
-		if (identifier == "v") {
+		if (identifier == "v") {//点座標
 			Vector4 position;
 			s >> position.x >> position.y >> position.z;//左から順に消費 = 飛ばしたり、もう一度使うことはできない	
 			position.s = 1.0f;
@@ -6987,7 +7156,7 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 			position.x *= -1.0f;
 			positions.push_back(position);
 		}
-		else if (identifier == "vt") {
+		else if (identifier == "vt") {//texcord
 			Vector2 texcoord;
 			s >> texcoord.x >> texcoord.y;
 
@@ -6996,7 +7165,7 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 
 			texcoords.push_back(texcoord);
 		}
-		else if (identifier == "vn") {
+		else if (identifier == "vn") {//法線
 			Vector3 normal;
 			s >> normal.x >> normal.y >> normal.z;
 
@@ -7017,18 +7186,11 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 					std::string index;
 					std::getline(v, index, '/'); //  "/"でインデックスを区切る
 					elementIndices[element] = std::stoi(index);
-
 				}
-
-
 				Vector4 position = positions[elementIndices[0] - 1];
 				Vector2 texcoord = texcoords[elementIndices[1] - 1];
 				Vector3 normal = normals[elementIndices[2] - 1];
-				//VertexData vertex = { position,texcoord,normal };
-				//modelData.vertices.push_back(vertex);
-
 				triangle[faceVertex] = { position,texcoord,normal };
-
 			}
 			iVertices.push_back(triangle[2]);
 			iVertices.push_back(triangle[1]);
@@ -7041,9 +7203,9 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 		else if (identifier == "o") {
 			//各マテリアルの頂点情報を取得
 			if (firstMaterial) {
-				iModelData.vertices = iVertices;
-				vertexNum++;
-				iVertices.clear();
+				iModelData.vertices = iVertices;//vectorで追加するmodelDataのvertexDataに導入
+				vertexNum++;//カウントを進む
+				iVertices.clear();//データをリセット
 			} else {
 				//最初の o はパス
 				firstMaterial = true;
@@ -7053,13 +7215,14 @@ ModelDataMulti Model_obj::LoadObjFile(const std::string& directoryPath, const st
 			std::string mtlName;
 			s >> mtlName;
 			MaterialData material;
-
+			//マテリアルを読み取る
 			material = LoadMaterialTemplateFile(directoryPath, filename + "/" + materialFilename, mtlName);
-			iModelData.materialData = material;
+			iModelData.materialData = material;//vectorで追加するmodelDataのmaterialDataに導入
 			materialNum++;
 		}
-
+		//マテリアル、頂点データともに読み取った時(両方とも0のときは発動しない)
 		if (materialNum == vertexNum && materialNum > 0) {
+			//値を導入
 			modelData.Data.push_back(iModelData);
 		}
 
@@ -7083,7 +7246,7 @@ File Path: project/Engine/3d/_obj/Model_obj.h
 #include "BaseModel.h"
 
 /// <summary>
-/// .obj版のモデル
+/// .obj版のモデル(派生クラス)
 /// </summary>
 class Model_obj : public BaseModel{
 public:
@@ -7099,6 +7262,14 @@ public:
 	/// </summary>
 	void Draw() override;
 
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	/// <param name="textureFilePath"></param>テクスチャ変更
+	void Draw(const std::string& textureFilePath);
+
+private:	
+	
 	/// <summary>
 	/// VertexResource作成(初期化)
 	/// </summary>
@@ -7117,30 +7288,21 @@ public:
 	/// <param name="modelData">モデルデータ</param>
 	void InitIndexResource(ModelData modelData) override;
 
-
-	/// <summary>
-	/// 描画処理
-	/// </summary>
-	/// <param name="textureFilePath"></param>テクスチャ変更
-	void Draw(const std::string& textureFilePath);
-
-private:	
-	
 	/// <summary>
 	/// テクスチャとマテリアルの作成
 	/// </summary>
-	/// <param name="directoryPath"></param>
-	/// <param name="filename"></param>
-	/// <param name="useMtl"></param>
+	/// <param name="directoryPath">リソースファイル(resource)</param>
+	/// <param name="filename">テクスチャファイルパス</param>
+	/// <param name="useMtl">マテリアル名</param>
 	/// <returns></returns>
 	static MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename, const std::string& useMtl);
 	/// <summary>
-	/// .objファイルを読み取る
+	/// .objファイルを読み取りモデルデータを作る
 	/// </summary>
-	/// <param name="directoryPath"></param>
-	/// <param name="filename"></param>
-	/// <param name="objName"></param>
-	/// <returns></returns>
+	/// <param name="directoryPath">リソースファイル(resource)</param>
+	/// <param name="filename">テクスチャファイルパス</param>
+	/// <param name="objName">オブジェクト拡張子</param>
+	/// <returns>完成したモデルデータ(マルチマテリアル付き)</returns>
 	static ModelDataMulti LoadObjFile(const std::string& directoryPath, const std::string& filename, const std::string& objName);
 
 	ModelDataMulti InitialData_;
@@ -7195,42 +7357,32 @@ void Object3d::Update() {
 }
 
 void Object3d::Draw() {
-	if (camera_) {
-		Matrix4x4 projectionMatrix = camera_->GetViewProjectionMatrix();
-		wvpData_->WVP = worldMatrix_ * projectionMatrix;
-	}
-	else {
-		wvpData_->WVP = worldMatrix_;
-	}
-
+	CameraUpdate();
 	//モデル
 	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource_->GetGPUVirtualAddress());
+	DrawCommand();
 	if (model_) {
 		model_->Draw();
 	}
 }
 
 void Object3d::Draw(const std::string& textureData) {
+	CameraUpdate();
+	//モデル
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+	DrawCommand();
+	if (model_) {
+		model_->Draw(textureData);
+	}
+}
+
+void Object3d::CameraUpdate() {
 	if (camera_) {
 		Matrix4x4 projectionMatrix = camera_->GetViewProjectionMatrix();
 		wvpData_->WVP = worldMatrix_ * projectionMatrix;
 	}
 	else {
 		wvpData_->WVP = worldMatrix_;
-	}
-
-	//モデル
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(4, cameraResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource_->GetGPUVirtualAddress());
-	if (model_) {
-		model_->Draw(textureData);
 	}
 }
 
@@ -7271,6 +7423,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="worldTransform">ワールド座標系</param>
 	void Update(WorldTransform& worldTransform) override;
 	/// <summary>
 	/// 更新処理
@@ -7284,7 +7437,10 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw(const std::string& textureData) override;
-
+	/// <summary>
+	/// setter_モデル
+	/// </summary>
+	/// <param name="model">指定したモデル</param>
 	void SetModel(Model_obj* model) { this->model_ = model; }
 
 	/// <summary>
@@ -7304,6 +7460,11 @@ public:
 	void SetColor(const Vector4& color) override;
 
 private:
+	/// <summary>
+	/// カメラ更新処理
+	/// </summary>
+	void CameraUpdate() override;
+
 	Object3dCommon* object3dCommon_ = nullptr;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource_;
@@ -7497,7 +7658,7 @@ void BasePostEffect::ChangeNumber() {
 
 #ifdef _DEBUG
 	if (Input::GetInstance().TriggerKey(DIK_F1)) {
-		sEffectNo_++;
+		sEffectNo_++;//加算
 	}
 	//最大→0に
 	if (sEffectNo_ == Max) {
@@ -7604,7 +7765,9 @@ protected:
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[2] = {};
 
 public:
-	
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize() override;
 
 	/// <summary>
@@ -7623,19 +7786,27 @@ public:
 	/// <returns></returns>
 	int GetEffectNo() { return sEffectNo_; }
 
+	/// <summary>
+	/// エフェクト特有初期化処理
+	/// </summary>
 	virtual void EffectInit() = 0;
 
 	/// <summary>
 	/// imGuiで値を動かせるようにする
 	/// </summary>
 	virtual void EffectUpdate() = 0;
-
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	virtual ~BasePostEffect();
 	/// <summary>
 	/// ポストエフェクト変更処理
 	/// </summary>
 	void ChangeNumber();
-
+	/// <summary>
+	/// エフェクトのGPU
+	/// </summary>
+	/// <returns>SRVHandleGPU</returns>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetEffect() { return srvHandleGPU_; }
 
 	/// <summary>
@@ -7730,7 +7901,13 @@ File Path: project/Engine/PostEffect/BoxFilter.h
 /// </summary>
 class BoxFilter : public BasePostEffect {
 public:
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// 処理コマンド(描画)
+	/// </summary>
 	void Command() override;
 
 private:
@@ -7858,7 +8035,13 @@ File Path: project/Engine/PostEffect/DepthBasedOutline.h
 /// </summary>
 class DepthBasedOutline : public BasePostEffect {
 public:
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// 処理コマンド(描画)
+	/// </summary>
 	void Command() override;
 private:
 	/// <summary>
@@ -8057,9 +8240,14 @@ File Path: project/Engine/PostEffect/Dissolve.h
 /// </summary>
 class Dissolve : public BasePostEffect {
 public:
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// 処理コマンド(描画)
+	/// </summary>
 	void Command() override;
-
 	/// <summary>
 	/// 背景
 	/// </summary>
@@ -8181,7 +8369,13 @@ File Path: project/Engine/PostEffect/GaussianFilter.h
 /// </summary>
 class GaussianFilter : public BasePostEffect {
 public:
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// 処理コマンド(描画)
+	/// </summary>
 	void Command() override;
 private:
 	/// <summary>
@@ -8285,7 +8479,13 @@ File Path: project/Engine/PostEffect/Grayscale.h
 /// </summary>
 class Grayscale : public BasePostEffect {
 public:
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// 処理コマンド(描画)
+	/// </summary>
 	void Command() override;
 private:
 	/// <summary>
@@ -8378,7 +8578,13 @@ File Path: project/Engine/PostEffect/LuminanceBasedOutline.h
 /// </summary>
 class LuminanceBasedOutline: public BasePostEffect {
 public:
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// 処理コマンド(描画)
+	/// </summary>
 	void Command() override;
 private:
 	/// <summary>
@@ -8460,7 +8666,13 @@ File Path: project/Engine/PostEffect/Normal_Image.h
 /// </summary>
 class Normal_Image : public BasePostEffect {
 public:
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// 処理コマンド(描画)
+	/// </summary>
 	void Command() override;
 private:
 	/// <summary>
@@ -8629,15 +8841,15 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static PostEffectManager& GetInstance();
 
 private:
 	/// <summary>
 	/// ポストエフェクト変更
 	/// </summary>
-	/// <param name="prev"></param>前
-	/// <param name="current"></param>次
+	/// <param name="prev">前のポストエフェクト</param>
+	/// <param name="current">次のポストエフェクト</param>
 	void Change(int prev, int current);
 
 	//最大数
@@ -8711,7 +8923,13 @@ File Path: project/Engine/PostEffect/RadialBlur.h
 /// </summary>
 class  RadialBlur : public BasePostEffect {
 public:	
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// 処理コマンド(描画)
+	/// </summary>
 	void Command() override;
 private:
 	/// <summary>
@@ -8803,7 +9021,13 @@ File Path: project/Engine/PostEffect/Random.h
 /// </summary>
 class Random : public BasePostEffect {
 public:
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// 処理コマンド(描画)
+	/// </summary>
 	void Command() override;
 private:
 	/// <summary>
@@ -8927,7 +9151,13 @@ File Path: project/Engine/PostEffect/Vignette.h
 /// </summary>
 class Vignette : public BasePostEffect {
 public:
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// 処理コマンド(描画)
+	/// </summary>
 	void Command() override;
 private:
 	/// <summary>
@@ -9170,7 +9400,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static Audio& GetInstance();
 	/// <summary>
 	/// 初期化処理
@@ -9183,8 +9413,8 @@ public:
 	/// <summary>
 	/// 音声をロードする
 	/// </summary>
-	/// <param name="filename"></param>
-	/// <returns></returns>
+	/// <param name="filename">waveファイル名</param>
+	/// <returns>ロードされたサウンドデータ</returns>
 	SoundData LoadWave(const char* filename);
 
 	/// <summary>
@@ -9218,7 +9448,10 @@ private:
 	/// <returns>出来上がったデータ</returns>
 	SoundData SoundLoadWave(const char* filename);//string?
 
-	//音声データの解放 delete
+	/// <summary>
+	/// 音声データの解放 delete
+	/// </summary>
+	/// <param name="soundData">サウンドデータ</param>
 	void SoundUnload(SoundData* soundData);
 
 	SoundData soundData_;
@@ -9979,7 +10212,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static DirectXCommon& GetInstance();
 	/// <summary>
 	/// 初期化処理
@@ -10043,28 +10276,28 @@ public:
 	/// <summary>
 	/// コンパイルシェーダ作成
 	/// </summary>
-	/// <param name="filePath"></param> HLSLの名前
-	/// <param name="profile"></param> vs_6_0 or ps_6_0
-	/// <returns></returns>
+	/// <param name="filePath">HLSLの名前</param> 
+	/// <param name="profile">vs_6_0 or ps_6_0</param> 
+	/// <returns>コンパイルシェーダ</returns>
 	Microsoft::WRL::ComPtr <IDxcBlob> CompileShader(const std::wstring& filePath, const wchar_t* profile);
 	/// <summary>
 	/// シェーダで使用するバッファ
 	/// </summary>
-	/// <param name="sizeInBytes"></param>
-	/// <returns></returns>
+	/// <param name="sizeInBytes">バイトサイズ</param>
+	/// <returns>出来上がった</returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 	/// <summary>
-	/// シェーダで使用するバッファ
+	/// シェーダで使用するバッファ(RenderTextureResourceで使用)
 	/// </summary>
-	/// <param name="metadata"></param>
-	/// <returns></returns>
+	/// <param name="metadata">メタデータ</param>
+	/// <returns>バッファ</returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateTextureResource(const DirectX::TexMetadata& metadata);
 	/// <summary>
 	/// テクスチャデータ
 	/// </summary>
-	/// <param name="texture"></param>
-	/// <param name="mipImages"></param>
-	/// <returns></returns>
+	/// <param name="texture">テクスチャ名</param>
+	/// <param name="mipImages">ミップマップ</param>
+	/// <returns>テクスチャデータリソースを作成</returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages);
 
 	/// <summary>
@@ -10079,55 +10312,55 @@ public:
 	/// <summary>
 	/// getter_Drive
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>ドライブ</returns>
 	ID3D12Device*  GetDevice()const { return device_.Get(); }
 	/// <summary>
 	/// getter_コマンドリスト
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在のコマンドリスト</returns>
 	ID3D12GraphicsCommandList* GetCommandList() const { return commandList_.Get(); }
 	/// <summary>
 	/// getter_DSVのハンドル
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>使用しているDepthStencilViewのハンドル</returns>
 	D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle() const { return dsvHandle_; }
 	/// <summary>
 	/// getter_fenceEvent
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>フェンス</returns>
 	HANDLE GetFenceEvent() const { return fenceEvent_; }
 	/// <summary>
 	/// getter_rtvDesc
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>使用しているRenderTargetView</returns>
 	D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc() const { return rtvDesc_; }
 	/// <summary>
 	/// getter_デスクリプターヒープ
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>でスクリプターヒープ</returns>
 	ID3D12DescriptorHeap* GetSrvDescriptorHeap() { return srvDescriptorHeap_.Get(); }
 	/// <summary>
 	/// スワップチェーンのリソースナンバー
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>バッファカウント</returns>
 	size_t GetSwapChainResourceNum() const { return swapChainDesc_.BufferCount; }
 
 	/// <summary>
 	/// RTVのリソース作成(device,width,heightは省略)
 	/// </summary>
-	/// <param name="format"></param>
-	/// <param name="clearColor"></param>
-	/// <returns></returns>
+	/// <param name="format">フォーマット</param>
+	/// <param name="clearColor">clearした時の色</param>
+	/// <returns>出来上がったRTVのリソース</returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateRenderTextureResource(DXGI_FORMAT format, const Vector4& clearColor);
 	/// <summary>
 	/// getter_RTVのリソース
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>RTVのリソース</returns>
 	ID3D12Resource* GetRenderTexture() { return renderTextureResource_.Get(); }
 	/// <summary>
 	/// getter_DSVのリソース
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>DSVのリソース</returns>
 	ID3D12Resource* GetOutlineResource() { return depthStencilResource_.Get(); }
 	/// <summary>
 	/// レンダーテクスチャ用の描画バリア開始
@@ -10474,12 +10707,12 @@ public:
 	/// <summary>
 	/// ゲームを終了する
 	/// </summary>
-	/// <returns></returns>trueで終了
+	/// <returns>trueで終了</returns>
 	virtual bool IsEndRequest() { return isRequest_; }
 	/// <summary>
 	/// ゲームを終了するか
 	/// </summary>
-	/// <param name="result"></param>
+	/// <param name="result">終了フラグ</param>
 	virtual void SetIsEndRequest(bool result) { isRequest_ = result; }
 
 	virtual ~Framework() = default;
@@ -10520,6 +10753,10 @@ File Path: project/Engine/base/Logger.h
 #include <string>
 
 namespace Logger {
+	/// <summary>
+	/// ログ
+	/// </summary>
+	/// <param name="message">文字を入れる</param>
 	void log(const std::string& message);
 };
 
@@ -10715,8 +10952,9 @@ public:
 	/// <summary>
 	/// テーブル設定
 	/// </summary>
-	/// <param name="descriptorRange">使用するRange</param>
-	void CreateTABLE(D3D12_SHADER_VISIBILITY sharder, D3D12_DESCRIPTOR_RANGE* descriptorRange);
+	/// <param name="shader">Shader名(VERTEX / PIXEL)</param>
+	/// <param name="descriptorRange">デスクリプター</param>
+	void CreateTABLE(D3D12_SHADER_VISIBILITY shader, D3D12_DESCRIPTOR_RANGE* descriptorRange);
 	/// <summary>
 	/// 共通のパラメータ
 	/// [0] PS b0
@@ -10886,10 +11124,10 @@ uint32_t SrvManager::Allocate() {
 
 bool SrvManager::Max() {
 	if (sMaxSRVCount_ < useIndex_) {
-		return false;
+		return false;//上限に達して「いない」
 	}
 	else {
-		return true;//上限に達して「ない」
+		return true;
 	}
 	return false;
 }
@@ -10924,9 +11162,6 @@ void SrvManager::PreDraw() {
 	DirectXCommon::GetInstance().GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
 }
 
-void SrvManager::SetGraphicsRootDescriptorTable(UINT RootParameterIndex, uint32_t srvIndex) {
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(RootParameterIndex, GetGPUDescriptorHandle(srvIndex));
-}
 
 ============================================================
 File Path: project/Engine/base/SrvManager.h
@@ -10938,7 +11173,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static SrvManager& GetInstance();
 	/// <summary>
 	/// 解放処理
@@ -10947,46 +11182,55 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	/// <param name="dxCommon"></param>
 	void Initialize();
 	/// <summary>
 	/// カウント
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>SRVの数</returns>
 	uint32_t Allocate();
 	/// <summary>
 	/// sMaxSRVCount以上でないか
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>trueで上限に達した、falseで上限に達していない</returns>
 	bool Max();
 	/// <summary>
 	/// CPUデスクリプターハンドル追加
 	/// </summary>
-	/// <param name="index"></param>
-	/// <returns></returns>
+	/// <param name="index">SRVIndex</param>
+	/// <returns>CPUのデスクリプターハンドル</returns>
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index);
 	/// <summary>
 	/// GPUデスクリプターハンドル追加
 	/// </summary>
-	/// <param name="index"></param>
-	/// <returns></returns>
+	/// <param name="index">SRVIndex</param>
+	/// <returns>GPUのデスクリプターハンドル</returns>
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(uint32_t index);
 	
 	/// <summary>
-	/// Srv_テクスチャ
+	/// SRV_テクスチャ
 	/// </summary>
+	/// <param name="srvIndex">SRVの番号</param>
+	/// <param name="pResource">テクスチャのリソース</param>
+	/// <param name="Format">フォーマット</param>
+	/// <param name="MipLevels">ミットマップ</param>
 	void CreateSRVForTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, DXGI_FORMAT Format, UINT MipLevels);
 	/// <summary>
-	/// Srv_オブジェクト
+	/// SRV_オブジェクト
 	/// </summary>
+	/// <param name="srvDesc"></param>
+	/// <param name="srvIndex">SRVの番号</param>
+	/// <param name="pResource">テクスチャのリソース</param>
+	/// <param name="numElements"></param>
+	/// <param name="structureByteStride"></param>
 	void CreateSRVForStructureBuffer(D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc,uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride);
-	//描画コマンド
+	/// <summary>
+	/// 描画コマンド
+	/// </summary>
 	void PreDraw();
-	void SetGraphicsRootDescriptorTable(UINT RootParameterIndex, uint32_t srvIndex);
 	/// <summary>
 	/// getter_デスクリプターハンドル
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>デスクリプターハンドル</returns>
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDescriptorHeap() { return descriptorHeap_; }
 
 	//最大SRV数
@@ -11103,10 +11347,10 @@ void WinApp::Initialize() {
 }
 
 
-LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 #ifdef USE_IMGUI
-	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wParam, lParam)) {
 		return true;
 	}
 #endif // USE_IMGUI
@@ -11122,7 +11366,7 @@ LRESULT CALLBACK WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM l
 
 
 	//標準のメッセージ処理を行う
-	return DefWindowProc(hwnd, msg, wparam, lparam);
+	return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
 bool WinApp::ProcessMessage() {
@@ -11157,12 +11401,8 @@ File Path: project/Engine/base/WinApp.h
 /// <summary>
 /// ウィンドウ作成
 /// </summary>
-class WinApp
-{	
-public://静寂メンバ関数
-	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
-
-public://メンバ関数
+class WinApp{	
+public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -11170,17 +11410,42 @@ public://メンバ関数
 	/// <summary>
 	/// 解放処理
 	/// </summary>
-	void Finalize(); //API終了処理　(delete)
+	void Finalize(); //API終了処理
 
 	//クライアント領域のサイズ　横　縦
 	static const int32_t kClientWidth_ = 1280;
 	static const int32_t kClientHeight_ = 720;
 
+	/// <summary>
+	/// getter_HWND
+	/// </summary>
+	/// <returns></returns>
 	HWND GetHwnd()const { return hwnd_; }
+	/// <summary>
+	/// getter_
+	/// </summary>
+	/// <returns></returns>
 	HINSTANCE GetHInstance() const { return wc_.hInstance; }
+	/// <summary>
+	/// メッセージを出す
+	/// </summary>
+	/// <returns>メッセージがある場合true</returns>
 	bool ProcessMessage();
 
-private:
+private:	
+	
+	//静寂メンバ関数
+	
+	/// <summary>
+	/// ウィンドウプロシージャ
+	/// </summary>
+	/// <param name="hwnd">ウィンドウズハンドル</param>
+	/// <param name="msg">メッセージ</param>
+	/// <param name="wParam">メッセージ処理で使用</param>
+	/// <param name="lParam">メッセージ処理で使用</param>
+	/// <returns>ウィンドウプロシージャ</returns>
+	static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 	WNDCLASS wc_{};
 	HWND hwnd_ = nullptr;
 };
@@ -11440,47 +11705,75 @@ public:
 	/// キーボードインプット(長押し)
 	/// </summary>
 	/// <param name="keyNumber">キーを選択</param>
-	/// <returns></returns>
+	/// <returns>trueで押している</returns>
 	bool PushKey(BYTE keyNumber);
 	/// <summary>
-	/// キーボードインプット(単押し)
+	/// キーボードインプット(短押し)
 	/// </summary>
 	/// <param name="keyNumber">キーを選択</param>
-	/// <returns></returns>
+	/// <returns>trueで押している</returns>
 	bool TriggerKey(BYTE keyNumber);
 	/// <summary>
 	/// ゲームパットボタン操作(長押し)
 	/// </summary>
 	/// <param name="button">ボタンを選択</param>
-	/// <returns></returns>
+	/// <returns>trueで押している</returns>
 	bool PushButton(int button);
 	/// <summary>
-	/// ゲームパットボタン(単押し)
+	/// ゲームパットボタン(短押し)
 	/// </summary>
 	/// <param name="button">ボタンを選択</param>
-	/// <returns></returns>
+	/// <returns>trueで押している</returns>
 	bool TriggerButton(int button);
-
+	/// <summary>
+	/// ゲームパットのLT(長押し)
+	/// </summary>
+	/// <returns>trueで押している</returns>
 	bool LeftTriggerLongPress();
+	/// <summary>
+	/// ゲームパットのRT(長押し)
+	/// </summary>
+	/// <returns>trueで押している</returns>
 	bool RightTriggerLongPress();
-
+	/// <summary>
+	/// ゲームパットのLT(短押し)
+	/// </summary>
+	/// <returns>trueで押している</returns>
 	bool LeftTrigger();
+	/// <summary>
+	/// ゲームパットのRT(短押し)
+	/// </summary>
+	/// <returns>trueで押している</returns>
 	bool RightTrigger();
-
+	/// <summary>
+	/// ゲームパットのLスティックの横の傾き具合
+	/// </summary>
+	/// <returns>横の傾き具合</returns>
 	float LeftStickX();
+	/// <summary>
+	/// ゲームパットのLスティックの縦の傾き具合
+	/// </summary>
+	/// <returns>縦の傾き具合</returns>
 	float LeftStickY();
-
+	/// <summary>
+	/// ゲームパットのRスティックの横の傾き具合
+	/// </summary>
+	/// <returns>横の傾き具合</returns>
 	float RightStickX();
+	/// <summary>
+	/// ゲームパットのRスティックの縦の傾き具合
+	/// </summary>
+	/// <returns>縦の傾き具合</returns>
 	float RightStickY();
-		/// <summary>
+	/// <summary>
 	/// ゲームパット
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>アクティブであるか+更新</returns>
 	bool GetJoystickState();
 	/// <summary>
 	/// ゲームパット(アクティブかのみ)
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>アクティブであるか</returns>
 	bool GetActiveGamePad();
 private:
 
@@ -12494,35 +12787,6 @@ namespace MyMath {
 		return result;
 	}
 
-	Skeleton CreateSkelton(const Node& rootNode) {
-		Skeleton skeleton;
-		skeleton.root = CreateJoint(rootNode, {},skeleton.joints);
-
-		for (const Joint& joint : skeleton.joints) {
-			skeleton.jointMap.emplace(joint.name, joint.index);
-		}
-		return skeleton;
-	}
-
-	int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints) {
-		Joint joint;
-		joint.name = node.name;
-		joint.localMatrix = node.localMatrix;
-		joint.skeletonSpaceMatrix = MakeIdentity4x4();
-		joint.transform = node.transform;
-		joint.index = int32_t(joints.size());
-		joint.parent = parent;
-		joints.push_back(joint);
-
-		//再帰関数
-		for (const Node& child : node.children) {
-			int32_t childIndex = CreateJoint(child, joint.index, joints);
-			joints[joint.index].children.push_back(childIndex);
-		}
-
-		return joint.index;
-	}
-
 	Quaternion operator-(const Quaternion& q) {
 		Quaternion result;
 		result.x = -q.x;
@@ -12617,18 +12881,6 @@ namespace MyMath {
 		return result;
 	}
 
-	VertexData AddVert(const VertexData& v1, const VertexData& v2) {
-		VertexData result{};
-
-		result.position.x = v1.position.x + v2.position.x;
-		result.position.y = v1.position.y + v2.position.y;
-		result.position.z = v1.position.z + v2.position.z;
-		result.position.s = v1.position.s + v2.position.s;
-		result.texcoord.x = v1.texcoord.x + v2.texcoord.x;
-		result.texcoord.y = v1.texcoord.y + v2.texcoord.y;
-		return result;
-	}
-
 	bool IsCollisionAABB_Segment(const AABB& aabb, const Segment& segment) {
 
 		//二次元の四角の点を作る
@@ -12714,6 +12966,9 @@ struct VertexData {
 	Vector3 normal;
 };
 
+/// <summary>
+/// 構造体_クオータニオン
+/// </summary>
 struct Quaternion {
 	float x;
 	float y;
@@ -12750,12 +13005,6 @@ struct Joint {
 	std::optional<int32_t> parent;//親JointのIndexリスト
 };
 
-struct Skeleton {
-	int32_t root;//RootJointのIndex
-	std::map <std::string, int32_t>jointMap;//コンテナ
-	std::vector<Joint> joints;//所属ジョイント
-};
-
 struct VertexWeightData {
 	float weight;
 	uint32_t vertexIndex;
@@ -12770,23 +13019,6 @@ const uint32_t kNumMaxInfluence = 4;
 struct VertexInfluence {
 	std::array<float, kNumMaxInfluence> weights;
 	std::array<int32_t, kNumMaxInfluence> jointIndices;
-};
-
-struct WellForGPU {
-	Matrix4x4 skeletonSpaceMatrix; //位置用
-	Matrix4x4 skeletonSpaceInverseTransposeMatrix; //法線用
-};
-
-//std::spanは「配列の上限がない」みたいなやつ（決めることもできる）
-
-struct SkinCluster {
-	std::vector<Matrix4x4> inverseBindPoseMatrices;
-	Microsoft::WRL::ComPtr<ID3D12Resource> influenceResource;
-	D3D12_VERTEX_BUFFER_VIEW influenceBufferView;
-	std::span<VertexInfluence> mappedInfluence;
-	Microsoft::WRL::ComPtr<ID3D12Resource> paletteResource;
-	std::span<WellForGPU> mappedPalette;
-	std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> paletteSrvHandle;
 };
 
 struct ModelData {
@@ -13212,21 +13444,28 @@ namespace MyMath {
 	Quaternion operator+(const Quaternion& q0, const Quaternion& q1);
 
 	float MultiplyQuaternion(const Quaternion& q1, const Quaternion& q2);
+	/// <summary>
+	/// 補間_SLerp
+	/// </summary>
+	/// <param name="q0">制御点0</param>
+	/// <param name="q1">制御点1</param>
+	/// <param name="t">割合</param>
+	/// <returns>現在の位置</returns>
 	Quaternion SLerp(const Quaternion& q0, const Quaternion& q1, float t);
 
-	Skeleton CreateSkelton(const Node& rootNode);
-	int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
-
+	/// <summary>
+	/// 反転
+	/// </summary>
+	/// <param name="m">変更する行列</param>
+	/// <returns>反転した行列</returns>
 	Matrix4x4 Transpose(const Matrix4x4& m);
-
-	VertexData AddVert(const VertexData& v1, const VertexData& v2);
 
 	/// <summary>
 	/// 目線の当たり判定(ステージを貫通し、見えた判定にならないように)
 	/// </summary>
 	/// <param name="aabb">当たり判定</param>
 	/// <param name="segment">自分の位置(origin)とターゲットの位置(diff)</param>
-	/// <returns></returns>
+	/// <returns>セグメント間にAABBがいないか(true/false)</returns>
 	bool IsCollisionAABB_Segment(const AABB& aabb, const Segment& segment);
 
 	/// <summary>
@@ -13339,7 +13578,9 @@ public:
 	/// 解放処理
 	/// </summary>
 	virtual void Finalize() = 0;
-
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	virtual ~BaseScene();
 
 	/// <summary>
@@ -13445,8 +13686,13 @@ public:
 	/// <returns></returns>
 	static SceneManager& GetInstance();
 
-
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	SceneManager();
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~SceneManager();
 
 	/// <summary>
@@ -13568,52 +13814,15 @@ void CollisionManager::CollisionUpdate() {
 				continue;
 			}
 			//当たり判定
+			//AABB同士が触れたとき+タイプが同じでないとき
 			if (IsCollisionAABB(collisions_[i]->GetAABB(), collisions_[j]->GetAABB()) && collisions_[i]->GetType() != collisions_[j]->GetType()) {
-				EachCollision(*collisions_[i], *collisions_[j]);
+				collisions_[i]->OnCollision(collisions_[j]);
 			}
 		}
 	}
 	//リセット
 	collisions_.clear();
 }
-
-void CollisionManager::EachCollision(CollisionSource& collisionA, CollisionSource& collisionB) {
-	//プレイヤー
-	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeEnemyBullet);
-	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeEnemyEye);
-	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeBoss);
-	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeBombExplotion); 
-	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeStage);
-	DetermineType(collisionA, CollisionTypes::TypePlayer, collisionB, CollisionTypes::TypeEvent);
-	//弾丸(player)
-	DetermineType(collisionA,CollisionTypes::TypePlayerBullet,collisionB,CollisionTypes::TypeStage);
-	//傘
-	DetermineType(collisionA, CollisionTypes::TypeUmbrella, collisionB, CollisionTypes::TypeEnemyBullet);
-	DetermineType(collisionA, CollisionTypes::TypeUmbrellaParry, collisionB, CollisionTypes::TypeEnemyBullet);
-	//敵
-	DetermineType(collisionA, CollisionTypes::TypeEnemy, collisionB, CollisionTypes::TypePlayerBullet);
-	DetermineType(collisionA, CollisionTypes::TypeEnemy, collisionB, CollisionTypes::TypeStage);
-	//敵のサーチ範囲
-	DetermineType(collisionA, CollisionTypes::TypeEnemyEye, collisionB, CollisionTypes::TypePlayer);
-	DetermineType(collisionA, CollisionTypes::TypeEnemyEye, collisionB , CollisionTypes::TypeStage);
-	//弾丸(enemy)
-	DetermineType(collisionA, CollisionTypes::TypeEnemyBullet, collisionB, CollisionTypes::TypeStage);
-	//ステージオブジェクト
-	DetermineType(collisionA, CollisionTypes::TypeStageObject, collisionB, CollisionTypes::TypePlayer);
-	DetermineType(collisionA, CollisionTypes::TypeStageObject, collisionB, CollisionTypes::TypeStage);//最初のワープゲートで使う
-	//ボス
-	DetermineType(collisionA, CollisionTypes::TypeBoss, collisionB, CollisionTypes::TypePlayerBullet);
-	//影
-	DetermineType(collisionA,CollisionTypes::TypeShadow,collisionB,CollisionTypes::TypeStage);
-}
-
-void CollisionManager::DetermineType(CollisionSource& collisionA, const CollisionTypes& typeA, CollisionSource& collisionB, const CollisionTypes& typeB) {
-	if (collisionA.GetType() == typeA && collisionB.GetType() == typeB) {
-		collisionA.OnCollision(&collisionB);
-		collisionB.OnCollision(&collisionA);
-	}
-}
-
 
 void CollisionManager::UnderCollision(float& minUnder, const Vector3& actorPosition, const AABB& stageAABB) const {
 	//できる限り下の値
@@ -13763,13 +13972,6 @@ public:
 	/// 更新処理
 	/// </summary>
 	void CollisionUpdate();
-	
-	/// <summary>
-	/// 各々の当たり判定
-	/// </summary>
-	/// <param name="collisionA">当たり判定</param>
-	/// <param name="collisionB">当たり判定</param>
-	void EachCollision(CollisionSource& collisionA, CollisionSource& collisionB);
 
 	/// <summary>
 	/// 対象(プレイヤー、敵など)の真下の床の位置に
@@ -13803,35 +14005,46 @@ public:
 	/// <returns>設定された構造体CollisionOverlap</returns>
 	CollisionOverlap SetTarget(const Vector3& position,const AABB& aabb);
 
-
+	/// <summary>
+	/// ワープする判定
+	/// </summary>
+	/// <returns>する判定ならtrue</returns>
 	bool IsWarp() { return isWarp_; }
+	/// <summary>
+	/// ワープを始める
+	/// </summary>
+	/// <param name="center">ワープゲートの真ん中座標(ズームして近づけるため)</param>
 	void SuccessWarp(const Vector3& center) { 
 		isWarp_ = true;
 		zoomPoint_ = center;
 	}
-
+	/// <summary>
+	/// ゴールする判定
+	/// </summary>
+	/// <returns>する判定ならtrue</returns>
 	bool IsGoal() { return isGoal_; }
+	/// <summary>
+	/// ゴールになる処理
+	/// </summary>
+	/// <param name="center">ゴールの旗の座標(ズームして近づけるため)</param>
 	void SuccessGoal(const Vector3& center) {
 		isGoal_ = true;
 		zoomPoint_ = center;
 	}
-
+	/// <summary>
+	/// ゴール、ワープするフラグをリセット
+	/// </summary>
 	void ResetFrag() {
 		isWarp_ = false;
 		isGoal_ = false;
 	}
-
+	/// <summary>
+	/// getter_ズームポイント
+	/// </summary>
+	/// <returns>現在のズームポイント</returns>
 	const Vector3& GetZoomPoint() { return zoomPoint_; }
 
 private:
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name="collisionA">当たり判定A</param>
-	/// <param name="typeA">当たり判定Aのタイプ</param>
-	/// <param name="collisionB">当たり判定B</param>
-	/// <param name="typeB">当たり判定Bのタイプ</param>
-	void DetermineType(CollisionSource& collisionA, const CollisionTypes& typeA, CollisionSource& collisionB, const CollisionTypes& typeB);
 
 	//傘のノックバックの値
 	const Vector3 kUmbrellaKnockBackPower_ = { 0.0f,0.0f,0.3f };
@@ -13850,11 +14063,10 @@ private:
 	bool isGoal_ = false;
 	//ワープで次のステージに進むフラグ
 	bool isWarp_ = false;
-
+	//ズームポイント
 	Vector3 zoomPoint_{};
-
+	//当たり判定たち
 	std::vector<CollisionSource*> collisions_;
-
 	//ステージ用
 	std::vector<std::unique_ptr<CollisionSource>> stageCollisions_;
 	bool isAlreadyInStage_ = false;//すでにステージ入っている
@@ -13868,7 +14080,7 @@ File Path: project/GameProgram/Collision/CollisionSource.cpp
 #include "CollisionSource.h"
 
 
-Vector3 CollisionSource::GetDistance(const Vector3& otherCenter) {
+Vector3 CollisionSource::DistanceCollisionCenter(const Vector3& otherCenter) {
 	Vector3 result{};
 	result.x = std::abs(otherCenter.x) - std::abs(center_.x);
 	result.y = std::abs(otherCenter.y) - std::abs(center_.y);
@@ -13901,27 +14113,57 @@ enum CollisionTypes {
 	TypeEvent,
 };
 
+/// <summary>
+/// 当たり判定の設計
+/// </summary>
 class CollisionSource {
 public:
-
+	/// <summary>
+	/// getter_当たり判定AABB
+	/// </summary>
+	/// <returns>AABB</returns>
 	AABB GetAABB() { return collisionAABB_; }
+	/// <summary>
+	/// setter_当たり判定AABB
+	/// </summary>
+	/// <param name="aabb">設定したAABB</param>
 	void SetAABB(const AABB& aabb) { collisionAABB_ = aabb; }
-
+	/// <summary>
+	/// getter_当たり判定のタイプ
+	/// </summary>
+	/// <returns>当たり判定のタイプ</returns>
 	CollisionTypes GetType() { return collisionType_; }
+	/// <summary>
+	/// setter_当たり判定のタイプ
+	/// </summary>
+	/// <param name="type">設定するタイプ(CollisionTypes)</param>
 	void SetType(const CollisionTypes& type) { collisionType_ = type; }
-
+	/// <summary>
+	/// getter_センター
+	/// </summary>
+	/// <returns>真ん中の座標</returns>
 	const Vector3& GetCenter() { return center_; }
+	/// <summary>
+	/// setter_センター
+	/// </summary>
+	/// <param name="center">真ん中座標の設定</param>
 	void SetCenter(const Vector3& center) { center_ = center; }
-
-	Vector3 GetDistance(const Vector3& otherCenter);
-
+	/// <summary>
+	/// 当たった座標との距離
+	/// </summary>
+	/// <param name="otherCenter">もう一つのセンター座標</param>
+	/// <returns>この当たり判定ともう一つの当たり判定の距離</returns>
+	Vector3 DistanceCollisionCenter(const Vector3& otherCenter);
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	virtual void OnCollision(CollisionSource* collision);
 
 protected:
-
-	CollisionTypes collisionType_;
-	AABB collisionAABB_;
-	Vector3 center_;
+	CollisionTypes collisionType_;//タイプ
+	AABB collisionAABB_;          //当たり判定AABB
+	Vector3 center_;              //センター(真ん中座標)
 };
 
 
@@ -13984,17 +14226,39 @@ File Path: project/GameProgram/GameActor/ActorState.h
 
 class GameActor;
 
+/// <summary>
+/// ゲームアクターの状態ステート
+/// </summary>
 class ActorCommand {
 public:
+	/// <summary>
+	/// 生存状態
+	/// </summary>
 	virtual void Active() = 0;
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
 	virtual void Dead() = 0;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
 	virtual void Performance() = 0;
 };
 
-
+/// <summary>
+/// ゲームアクター状態ステート(基盤クラス)
+/// </summary>
 class BaseActorState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="command">ゲームアクターのコマンドクラス</param>
 	virtual void Update(ActorCommand& command) = 0;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="actor">ゲームアクタークラス</param>
 	virtual void ChangeState(GameActor& actor) = 0;
 
 	/// <summary>
@@ -14023,11 +14287,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="command">ゲームアクターのコマンドクラス</param>
 	void Update(ActorCommand& actorCommand) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="actor">使用しているゲームアクター</param>
+	/// <param name="actor">ゲームアクタークラス</param>
 	void ChangeState(GameActor& actor) override;
 };
 
@@ -14036,11 +14301,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update(ActorCommand& ActorCommand) override;
+	/// <param name="command">ゲームアクターのコマンドクラス</param>
+	void Update(ActorCommand& actorCommand) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="actor">使用しているゲームアクター</param>
+	/// <param name="actor">ゲームアクタークラス</param>
 	void ChangeState(GameActor& actor) override;
 };
 
@@ -14050,11 +14316,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update(ActorCommand& ActorCommand) override;
+	/// <param name="command">ゲームアクターのコマンドクラス</param>
+	void Update(ActorCommand& actorCommand) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="actor">使用しているゲームアクター</param>
+	/// <param name="actor">ゲームアクタークラス</param>
 	void ChangeState(GameActor& actor) override;
 };
 
@@ -14185,14 +14452,41 @@ File Path: project/GameProgram/GameActor/Boss/BaseBossState.h
 
 class Boss;
 
+/// <summary>
+/// ボスの行動コマンド
+/// </summary>
 class BossCommand {
 public:
+	/// <summary>
+	/// 移動コマンド
+	/// </summary>
 	virtual void CommandMove() = 0;
+	/// <summary>
+	/// 弾丸を発砲する攻撃コマンド
+	/// </summary>
+	/// <param name="kFrame">弾の間 〇秒数</param>
+	/// <param name="bulletSpeed">弾丸速度</param>
+	/// <param name="bulletMax">弾丸数</param>
 	virtual void CommandFire(float kFrame, float bulletSpeed, uint32_t bulletMax) = 0;
+	/// <summary>
+	/// 下から回る移動コマンド
+	/// </summary>
 	virtual void CommandAroundMove() = 0;
+	/// <summary>
+	/// ステージの奥に移動コマンド
+	/// </summary>
 	virtual void CommandFarMove() = 0;
+	/// <summary>
+	/// 奥側から発砲攻撃コマンド
+	/// </summary>
 	virtual void CommandFarTackle() = 0;
+	/// <summary>
+	/// プレイヤーに向かって突進攻撃コマンド
+	/// </summary>
 	virtual void CommandFallPlayer() = 0;
+	/// <summary>
+	/// プレイヤーの真上から落ちてくる攻撃コマンド
+	/// </summary>
 	virtual void CommandBeforeActionMotion() = 0;
 
 	/// <summary>
@@ -14205,9 +14499,9 @@ public:
 	void ResetActionCount() { actionCount_ = 0; }
 
 	/// <summary>
-	/// 
+	/// 奥側の移動に成功しているか
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>成功ならtrue</returns>
 	bool FarMoveSuccess();
 
 protected:
@@ -14280,7 +14574,15 @@ protected:
 /// </summary>
 class BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	virtual void Update(BossCommand& bossCommand) = 0;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	virtual void ChangeCommand(Boss& boss) = 0;
 
 	/// <summary>
@@ -14309,7 +14611,15 @@ protected:
 /// </summary>
 class BossMoveState : public BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	void Update(BossCommand& bossCommand) override;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	void ChangeCommand(Boss& boss) override;
 private:
 
@@ -14320,7 +14630,15 @@ private:
 /// </summary>
 class BossAttackState : public BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	void Update(BossCommand& bossCommand) override;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	void ChangeCommand(Boss& boss) override;
 private:
 	//秒数
@@ -14336,17 +14654,17 @@ private:
 /// </summary>
 class BossAroundMoveState : public BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	void Update(BossCommand& bossCommand) override;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	void ChangeCommand(Boss& boss) override;
 private:
-	//uint32_t aroundMoveCount_ = 0;
-
-	//struct MovePoint {
-	//	Vector3 position;
-	//	float division;
-	//};
-
-	//std::vector<MovePoint> movePoints_;
 };
 
 /// <summary>
@@ -14354,14 +14672,19 @@ private:
 /// </summary>
 class BossBeforeActionMotionState : public BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	void Update(BossCommand& bossCommand) override;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	void ChangeCommand(Boss& boss) override;
 private:
 	const uint32_t kMoveCountMax_ = 2;
 	const uint32_t kDeepAttackCountMax_ = 3;
-
-
-
 };
 
 /// <summary>
@@ -14369,7 +14692,15 @@ private:
 /// </summary>
 class BossFarAttackState : public BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	void Update(BossCommand& bossCommand) override;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	void ChangeCommand(Boss& boss) override;
 private:
 	//秒数
@@ -14384,7 +14715,15 @@ private:
 
 class BossFarTackleState : public BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	void Update(BossCommand& bossCommand) override;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	void ChangeCommand(Boss& boss) override;
 private:
 	bool isStart_ = true;
@@ -14396,10 +14735,17 @@ private:
 
 class BossFallPlayerState : public BaseBossState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bossCommand">ボスコマンドクラス</param>
 	void Update(BossCommand& bossCommand) override;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="boss">ボスクラス</param>
 	void ChangeCommand(Boss& boss) override;
 private:
-
 };
 
 
@@ -14781,7 +15127,7 @@ public:
 	/// <summary>
 	/// 移動用に真ん中を設定
 	/// </summary>
-	/// <param name="center">初期値をセンターにに</param>
+	/// <param name="center">初期値をセンターに</param>
 	void SetBossCenter(const Vector3& center) { moveCenter_ = center; }
 
 	/// <summary>
@@ -14821,19 +15167,49 @@ public:
 
 private:
 
-
+	/// <summary>
+	/// 生存状態
+	/// </summary>
 	void Active() override;
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
 	void Dead() override;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
 	void Performance() override;
-
+	/// <summary>
+	/// 移動コマンド
+	/// </summary>
 	void CommandMove()  override;
+	/// <summary>
+	/// 弾丸を発砲する攻撃コマンド
+	/// </summary>
+	/// <param name="kFrame">弾の間 〇秒数</param>
+	/// <param name="bulletSpeed">弾丸速度</param>
+	/// <param name="bulletMax">弾丸数</param>
 	void CommandFire(float kFrame, float bulletSpeed, uint32_t bulletMax) override;
+	/// <summary>
+	/// 下から回る移動コマンド
+	/// </summary>
 	void CommandAroundMove() override;
+	/// <summary>
+	/// ステージの奥に移動コマンド
+	/// </summary>
 	void CommandFarMove() override;
+	/// <summary>
+	/// 奥側から発砲攻撃コマンド
+	/// </summary>
 	void CommandFarTackle() override;
+	/// <summary>
+	/// プレイヤーに向かって突進攻撃コマンド
+	/// </summary>
 	void CommandFallPlayer() override;
+	/// <summary>
+	/// プレイヤーの真上から落ちてくる攻撃コマンド
+	/// </summary>
 	void CommandBeforeActionMotion() override;
-
 
 	/// <summary>
 	/// 移動ポイントの設定
@@ -14843,9 +15219,9 @@ private:
 	void SetMovePoint(const Vector3& point, float speedDivision = 3.0f);
 
 	/// <summary>
-	/// 
+	/// setter_移動セグメントのオリジン
 	/// </summary>
-	/// <param name="value"></param>
+	/// <param name="value">座標を設定</param>
 	void SetOrigin(const Vector3& value) { move_.origin = value; }
 
 	/// <summary>
@@ -14863,7 +15239,10 @@ private:
 	/// <returns>trueで成功(タイマーもリセット)</returns>
 	bool LerpGoal();
 
-
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 
 	std::unique_ptr<Object_glTF> object_;
@@ -15509,7 +15888,9 @@ class Player;
 /// </summary>
 class EnemyBullet : public CollisionSource {
 public:
-
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~EnemyBullet();
 
 	/// <summary>
@@ -15566,8 +15947,9 @@ public:
 
 private:	
 	/// <summary>
-	/// 当たったフラグ
+	/// 当たり判定コマンド
 	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 
 	//
@@ -15653,7 +16035,9 @@ File Path: project/GameProgram/GameActor/Enemies/EnemyCommand.h
 #pragma once
 #include "MyMath.h"
 #include "BaseEnemy.h"
-
+/// <summary>
+/// 敵の移動コマンド
+/// </summary>
 class EnemyMoveCommand {
 public:
 
@@ -15694,7 +16078,9 @@ protected:
 	Vector3 move_ = { 0,0,0 };
 	const float kMoveX_ = 0.03f;
 };
-
+/// <summary>
+/// 敵の発砲コマンド
+/// </summary>
 class EnemyFireCommand {
 public:
 
@@ -15747,7 +16133,9 @@ protected:
 	/// </summary>
 	virtual void FireBullet() = 0;
 };
-
+/// <summary>
+/// ボムの爆発コマンド
+/// </summary>
 class EnemyExplosionCommand {
 public:
 
@@ -15881,13 +16269,26 @@ File Path: project/GameProgram/GameActor/Enemies/EnemyEye.h
 #include "MyMath.h"
 #include "CollisionSource.h"
 
-
+/// <summary>
+/// 敵の捜索範囲
+/// </summary>
 class EnemyEye : public CollisionSource {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="enemyPos">敵の座標位置</param>
+	/// <param name="foundReach">範囲</param>
 	void Update(const Vector3& enemyPos,const Vector3& foundReach);
-
+	/// <summary>
+	/// プレイヤーを見つけたか
+	/// </summary>
+	/// <returns>見つけたフラグ</returns>
 	bool IsFound() { return isFound_; }
-
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 
 private:
@@ -16139,6 +16540,9 @@ File Path: project/GameProgram/GameActor/Enemies/Enemy_Bomb.h
 /// </summary>
 class Enemy_Bomb : public BaseEnemy, public EnemyMoveCommand, public EnemyExplosionCommand, public GravityActor {
 public:
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Enemy_Bomb() override;
 	/// <summary>
 	/// 初期化処理
@@ -16171,19 +16575,31 @@ public:
 	void DirectionPlayer();
 
 private:
-
+	/// <summary>
+	/// 生存状態
+	/// </summary>
 	void Active() override;
-	
+	/// <summary>
+	/// 捜索態勢
+	/// </summary>
 	void SearchCommand() override;
+	/// <summary>
+	/// 攻撃態勢
+	/// </summary>
 	void AttackCommand() override;
-	
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
 	void Dead() override;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
 	void Performance() override;
-
-
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
-
-
 	/// <summary>
 	/// 移動
 	/// </summary>
@@ -16428,6 +16844,9 @@ File Path: project/GameProgram/GameActor/Enemies/Enemy_Soldier.h
 /// </summary>
 class Enemy_Soldier : public BaseEnemy, public EnemyFireCommand,public EnemyMoveCommand, public GravityActor {
 public:
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Enemy_Soldier() override;
 	/// <summary>
 	/// 初期化処理
@@ -16443,17 +16862,31 @@ public:
 	void Draw() override;
 
 private:
-
+	/// <summary>
+	/// 生存状態
+	/// </summary>
 	void Active() override;
-
+	/// <summary>
+	/// 捜索態勢
+	/// </summary>
 	void SearchCommand() override;
+	/// <summary>
+	/// 攻撃態勢
+	/// </summary>
 	void AttackCommand() override;
-
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
 	void Dead() override;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
 	void Performance() override;
-
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
-
 	/// <summary>
 	/// 移動
 	/// </summary>
@@ -16681,7 +17114,9 @@ File Path: project/GameProgram/GameActor/Enemies/Enemy_Turret.h
 /// </summary>
 class Enemy_Turret : public BaseEnemy, public EnemyFireCommand, public GravityActor {
 public:
-
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Enemy_Turret() override;
 	/// <summary>
 	/// 初期化処理
@@ -16697,15 +17132,30 @@ public:
 	void Draw() override;
 
 private:
-
+	/// <summary>
+	/// 生存状態
+	/// </summary>
 	void Active() override;
-
+	/// <summary>
+	/// 捜索態勢
+	/// </summary>
 	void SearchCommand() override;
+	/// <summary>
+	/// 攻撃態勢
+	/// </summary>
 	void AttackCommand() override;
-
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
 	void Dead() override;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
 	void Performance() override;
-
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 
 	/// <summary>
@@ -16900,7 +17350,7 @@ public:
 	/// <summary>
 	/// 演出中であるか
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>演出フラグ</returns>
 	bool GetPerformanceMode() { return isPerformance_; }
 
 	/// <summary>
@@ -16911,13 +17361,13 @@ public:
 	/// <summary>
 	/// getter_体力
 	/// </summary>
-	/// <returns></returns>現在の体力
+	/// <returns>現在の体力</returns>
 	uint32_t GetHp() { return hp_; }
 
 	/// <summary>
 	/// setter_体力
 	/// </summary>
-	/// <param name="preHp"></param>代入する体力数
+	/// <param name="preHp">代入する体力数</param>
 	void SetHp(uint32_t preHp) { hp_ = preHp; }
 
 	/// <summary>
@@ -17016,6 +17466,7 @@ public:
 	/// <summary>
 	/// 重力の更新処理
 	/// </summary>
+	/// <param name="translateY">y座標</param>
 	void GravityUpdate(float& translateY);
 
 	/// <summary>
@@ -17123,13 +17574,30 @@ File Path: project/GameProgram/GameActor/Player/BasePlayerState.h
 #include <memory>
 
 class Player;
-
+/// <summary>
+/// プレイヤーの行動コマンド
+/// </summary>
 class PlayerCommand {
 public:
+	/// <summary>
+	/// 移動
+	/// </summary>
 	virtual void CommandMove() = 0;
+	/// <summary>
+	/// ジャンプ
+	/// </summary>
 	virtual void CommandJump() = 0;
+	/// <summary>
+	/// 発砲攻撃
+	/// </summary>
 	virtual void CommandFire() = 0;
+	/// <summary>
+	/// 傘シールド
+	/// </summary>
 	virtual void CommandShield() = 0;
+	/// <summary>
+	/// ブリンク
+	/// </summary>
 	virtual void CommandBrink() = 0;
 
 protected:
@@ -17162,9 +17630,20 @@ protected:
 	
 };
 
+/// <summary>
+/// プレイヤー基盤ステート
+/// </summary>
 class BasePlayerState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="command">プレイヤーコマンドクラス</param>
 	virtual void Update(PlayerCommand& command) = 0;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="player">プレイヤークラス</param>
 	virtual void CommandInput(Player& player) = 0;
 
 	/// <summary>
@@ -17196,11 +17675,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="command">プレイヤーコマンドクラス</param>
 	void Update(PlayerCommand& playerCommond) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="player">使っているプレイヤー</param>
+	/// <param name="player">プレイヤークラス</param>
 	void CommandInput(Player& player) override;
 };
 
@@ -17212,11 +17692,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="command">プレイヤーコマンドクラス</param>
 	void Update(PlayerCommand& playerCommond) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="player">使っているプレイヤー</param>
+	/// <param name="player">プレイヤークラス</param>
 	void CommandInput(Player& player) override;
 };
 
@@ -17229,11 +17710,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="command">プレイヤーコマンドクラス</param>
 	void Update(PlayerCommand& playerCommond) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="player">使っているプレイヤー</param>
+	/// <param name="player">プレイヤークラス</param>
 	void CommandInput(Player& player) override;
 };
 
@@ -17245,11 +17727,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="command">プレイヤーコマンドクラス</param>
 	void Update(PlayerCommand& playerCommond) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="player">使っているプレイヤー</param>
+	/// <param name="player">プレイヤークラス</param>
 	void CommandInput(Player& player) override;
 };
 
@@ -17261,11 +17744,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
+	/// <param name="command">プレイヤーコマンドクラス</param>
 	void Update(PlayerCommand& playerCommond) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="player">使っているプレイヤー</param>
+	/// <param name="player">プレイヤークラス</param>
 	void CommandInput(Player& player) override;
 };
 
@@ -17891,7 +18375,7 @@ void Player::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypeEnemyBullet || 
 		collision->GetType() == CollisionTypes::TypeBombExplotion || 
 		collision->GetType() == CollisionTypes::TypeBoss) {
-		IsDamage(GetDistance(collision->GetCenter()));
+		IsDamage(DistanceCollisionCenter(collision->GetCenter()));
 	}
 
 	//演出中、死亡の時は当たらない
@@ -18080,7 +18564,13 @@ File Path: project/GameProgram/GameActor/Player/Player.h
 /// </summary>
 class Player : public GameActor, public GravityActor, public PlayerCommand {
 public:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	Player();
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Player();
 
 	/// <summary>
@@ -18118,6 +18608,9 @@ public:
 	/// <returns></returns>使用している傘クラス
 	Umbrella* GetUmbrella() { return umbrella_.get(); }
 
+	/// <summary>
+	/// 傘の向きをプレイヤーの手前に
+	/// </summary>
 	void SetUmbrellaRotate();
 
 	/// <summary>
@@ -18228,18 +18721,45 @@ public:
 
 private:
 
-	//コマンド処理
-	void CommandMove() override;
-	void CommandJump() override;
-	void CommandFire() override;
-	void CommandShield() override;
-	void CommandBrink() override;
+	///コマンド処理///
 
+	/// <summary>
+	/// 移動
+	/// </summary>
+	void CommandMove() override;
+	/// <summary>
+	/// ジャンプ
+	/// </summary>
+	void CommandJump() override;
+	/// <summary>
+	/// 発砲攻撃
+	/// </summary>
+	void CommandFire() override;
+	/// <summary>
+	/// 傘シールド
+	/// </summary>
+	void CommandShield() override;
+	/// <summary>
+	/// ブリンク
+	/// </summary>
+	void CommandBrink() override;
+	/// <summary>
+	/// 生存状態
+	/// </summary>
 	void Active() override;
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
 	void Dead() override;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
 	void Performance() override;
 
-
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 
 	/// <summary>
@@ -18247,17 +18767,20 @@ private:
 	/// </summary>
 	void LifeUpdate();
 
-
+	/// <summary>
+	/// アクションコマンド更新処理(ジャンプ、発砲攻撃など)
+	/// </summary>
 	void ActionUpdate();
 
-
-	//スプライトの変化
+	/// <summary>
+	/// スプライトの変化
+	/// </summary>
 	void SpriteUpdate();
 
 	/// <summary>
 	/// 傘の8方向の回転
 	/// </summary>
-	/// <param name="direction"></param>回転角度
+	/// <param name="direction">回転角度</param>
 	void UmbrellaRange(float direction);
 
 	/// <summary>
@@ -18265,17 +18788,15 @@ private:
 	/// </summary>
 	void ShootBullet();
 
-
 	/// <summary>
 	/// 滑空処理
 	/// </summary>
 	void Gliding();
 
 	/// <summary>
-	/// 
+	/// 重力の低下
 	/// </summary>
 	void GravityDown();
-
 
 	/// <summary>
 	/// オブジェクトの初期化処理
@@ -18301,7 +18822,6 @@ private:
 	/// 音声処理(SE,BGM)
 	/// </summary>
 	void InitAudio();
-
 
 	/// <summary>
 	/// 弾丸の更新処理
@@ -18336,7 +18856,6 @@ private:
 	/// ノックバックする更新処理
 	/// </summary>
 	void KnockBackUpdate();
-
 
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object_;
@@ -18554,7 +19073,9 @@ File Path: project/GameProgram/GameActor/Player/PlayerBullet.h
 /// </summary>
 class PlayerBullet : public CollisionSource {
 public:
-
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~PlayerBullet();
 
 	/// <summary>
@@ -18753,6 +19274,9 @@ class Player;
 /// </summary>
 class Umbrella : public CollisionSource {
 public:
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Umbrella();
 	/// <summary>
 	/// 初期化処理
@@ -18812,18 +19336,31 @@ public:
 	/// <param name="isShield">trueはシールドモードに変更</param>
 	void ShieldMode();
 
+	/// <summary>
+	/// シールド解除
+	/// </summary>
 	void OffShield() { isShield_ = false; }
-
+	/// <summary>
+	/// シールドモードのフラグ確認
+	/// </summary>
+	/// <returns>シールドモードフラグ</returns>
 	bool GetShieldMode() { return isShield_; }
 
 	/// <summary>
 	/// 連続ヒットの場合タイマーをリセット
 	/// </summary>
 	void ResetScaleTimer() { scaleTimer_ = 0.0f; }
-
+	/// <summary>
+	/// setter_プレイヤー
+	/// </summary>
+	/// <param name="player">プレイヤークラス</param>
 	void SetPlayer(Player* player) { player_ = player; }
 
 private:
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 
 	/// <summary>
@@ -18980,10 +19517,14 @@ public:
 	/// <summary>
 	/// setter_サイズ
 	/// </summary>
-	/// <param name="scale"></param>代入する大きさ
+	/// <param name="scale">代入する大きさ</param>
 	void SetScale(const Vector3& scale) { transform_.scale = scale; }
 
 private:
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 
 	std::unique_ptr<Object3d> object_;
@@ -19049,8 +19590,13 @@ File Path: project/GameProgram/GameActor/VisualActor.h
 /// </summary>
 class VisualActor {
 public:
-
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	VisualActor();
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~VisualActor();
 	/// <summary>
 	/// 初期化処理
@@ -19068,12 +19614,12 @@ public:
 	/// <summary>
 	/// setter_トランスフォーム
 	/// </summary>
-	/// <param name="transform"></param>
+	/// <param name="transform">トランスフォームを設定</param>
 	void SetTransform(const Transform& transform) { transform_ = transform; }
 	/// <summary>
 	/// getter_トランスフォーム
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在のトランスフォーム</returns>
 	const Transform& GetTransform() { return transform_; }
 	/// <summary>
 	/// setter_座標位置
@@ -19439,7 +19985,10 @@ struct CameraInitData {
 /// </summary>
 class LevelEditor {
 public:
-
+	/// <summary>
+	/// レベルエディタをロードする
+	/// </summary>
+	/// <param name="jsonName">Blenderで生み出した.jsonファイル</param>
 	void LoadLevelEditor(const std::string& jsonName);
 
 	//LevelData型
@@ -19512,14 +20061,23 @@ public:
 	/// <summary>
 	/// getter‗レベルエディタ
 	/// </summary>
-	/// <returns></returns>作成したレベルエディタ
+	/// <returns>作成したレベルエディタ</returns>
 	LevelData* GetLevelData() { return levelData_.get(); }
 
 private:
 
-	//Json文字列から解凍したデータ
-	nlohmann::json LoadJsonFile(const std::string& kFullpath);
+	//
 
+	/// <summary>
+	/// Json文字列から解凍したデータ
+	/// </summary>
+	/// <param name="kFullpath">.jsonファイル</param>
+	/// <returns>解凍に成功したjsonファイル</returns>
+	nlohmann::json LoadJsonFile(const std::string& kFullpath);
+	/// <summary>
+	/// ゲームオブジェクトの読み込み
+	/// </summary>
+	/// <param name="object">オブジェクト</param>
 	void LoadGameObjects(nlohmann::json& object);
 
 	/// <summary>
@@ -19562,9 +20120,13 @@ private:
 	/// <summary>
 	/// ボスの配置
 	/// </summary>
-	/// <param name="object">オブジェクトのデータ配置</param>
+	/// <param name="object">オブジェクトのデータ配列</param>
 	void LoadBoss(nlohmann::json& object);
 
+	/// <summary>
+	/// 操作ガイドの配置
+	/// </summary>
+	/// <param name="object">オブジェクトのデータ配列</param>
 	void LoadGuide(nlohmann::json& object);
 
 	/// <summary>
@@ -19906,8 +20468,15 @@ public:
 	/// <param name="boss">ボス</param>
 	void SpitOutBoss(std::unique_ptr<Boss>& boss);
 
+	/// <summary>
+	/// 操作ガイドの配置
+	/// </summary>
+	/// <returns>操作ガイド(配列)</returns>
 	std::vector<std::unique_ptr<Guide>> SpitOutGuide();
-
+	/// <summary>
+	/// ビジュアルアクターの配置
+	/// </summary>
+	/// <returns>ビジュアルアクター(配列)</returns>
 	std::vector<std::unique_ptr<VisualActor>> SpitOutVisualActor();
 
 private:
@@ -20225,10 +20794,25 @@ File Path: project/GameProgram/Scene/ClearScene.h
 /// </summary>
 class ClearScene : public BaseScene{
 public:
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw() override;
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// シーン変更処理
+	/// </summary>
 	void SceneUpdate() override;
 private:
 	/// <summary>
@@ -20408,10 +20992,25 @@ File Path: project/GameProgram/Scene/GameOverScene.h
 /// </summary>
 class GameOverScene : public BaseScene{
 public:
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw() override;
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// シーン変更処理
+	/// </summary>
 	void SceneUpdate() override;
 private:
 	/// <summary>
@@ -20533,8 +21132,6 @@ void GameScene::Update() {
 		guide->Update();
 	}
 
-	//プレイヤーが移動したら変更
-	UIManager::GetInstance().SetPlayerTranslate(player_->GetTranslate());
 	//スプライト更新処理
 	UIManager::GetInstance().Update();
 
@@ -20701,7 +21298,9 @@ void GameScene::SpitOutGameObject() {
 	//ボスの配置
 	spitOut_.SpitOutBoss(boss_);
 	if (boss_) {
-		cameraControl_->CameraYFixed(true);
+		cameraControl_->CameraYFixed();
+		boss_->SetPlayer(player_.get());
+		boss_->Update();
 	}
 }
 
@@ -20803,10 +21402,25 @@ File Path: project/GameProgram/Scene/GameScene.h
 /// </summary>
 class GameScene : public BaseScene {
 public:
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw() override;
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// シーン変更処理
+	/// </summary>
 	void SceneUpdate() override;
 private:
 
@@ -21079,10 +21693,25 @@ File Path: project/GameProgram/Scene/SelectScene.h
 /// </summary>
 class SelectScene : public BaseScene{
 public:
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw() override;
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// シーン変更処理
+	/// </summary>
 	void SceneUpdate() override;
 private:
 
@@ -21404,10 +22033,25 @@ File Path: project/GameProgram/Scene/TitleScene.h
 /// </summary>
 class TitleScene : public BaseScene {
 public:
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw() override;
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// シーン変更処理
+	/// </summary>
 	void SceneUpdate() override;
 private:
 
@@ -21548,8 +22192,9 @@ File Path: project/GameProgram/StageObjects/BackGroundObject.h
 #pragma once
 #include "Object_glTF.h"
 
-
-
+/// <summary>
+/// 背景オブジェクト(skydome)
+/// </summary>
 class BackGroundObject
 {
 public:
@@ -21636,11 +22281,27 @@ File Path: project/GameProgram/StageObjects/CheckPoint.h
 /// </summary>
 class CheckPoint : public IStageObject {
 public:
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~CheckPoint() override;
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw() override;
 private:
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 };
 
@@ -21678,6 +22339,8 @@ void EventTrigger::Update(CameraControl& cameraControl, LevelEditor& levelEditor
 	}
 
 	ReturnCamera(cameraControl, levelEditor);
+
+	if (isEventEnd_) return;//終わった後当たり判定は作らない
 
 	//当たり判定設定
 	collisionAABB_ = eventData_.aabb;
@@ -22005,6 +22668,9 @@ struct EnemyPopData {
 	std::string enemyName;
 };
 
+/// <summary>
+/// 敵ラッシュのイベントトリガー
+/// </summary>
 class EventTrigger : public CollisionSource {
 public:
 
@@ -22072,7 +22738,6 @@ public:
 	/// <returns></returns>
 	EventData GetEventData() { return eventData_; }
 
-	//void SetPopEnemy(std::vector<std::unique_ptr<BaseEnemy>> enemies) { popEnemies_ = std::move(enemies); }
 	std::vector<std::unique_ptr<BaseEnemy>> GetPopEnemy()  { return std::move(popEnemies_); }
 
 	/// <summary>
@@ -22231,12 +22896,27 @@ File Path: project/GameProgram/StageObjects/Goal.h
 /// </summary>
 class Goal : public IStageObject {
 public:
-
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Goal() override;
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw() override;
 private:
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 };
 
@@ -22282,7 +22962,9 @@ File Path: project/GameProgram/StageObjects/Guide.h
 #pragma once
 #include <memory>
 #include "Object3d.h"
-
+/// <summary>
+/// 操作ガイド
+/// </summary>
 class Guide {
 public:
 	/// <summary>
@@ -22346,8 +23028,13 @@ File Path: project/GameProgram/StageObjects/IStageObject.h
 /// </summary>
 class IStageObject : public CollisionSource {
 public:
-
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	IStageObject();
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	virtual ~IStageObject();
 	/// <summary>
 	/// 初期化処理
@@ -22415,13 +23102,13 @@ public:
 	/// <summary>
 	/// setter_次のステージ
 	/// </summary>
-	/// <param name="fileName"></param>ステージ名(例:stage_01)
+	/// <param name="fileName">ステージ名(例:stage_01)</param>
 	virtual void SetNextStage(const std::string& fileName);
 
 	/// <summary>
 	/// getter_次のステージ
 	/// </summary>
-	/// <returns></returns>次のステージ
+	/// <returns>次のステージ</returns>
 	virtual std::string GetNextStage();
 
 protected:
@@ -22562,11 +23249,22 @@ File Path: project/GameProgram/StageObjects/WarpGate.h
 class WarpGate : public IStageObject
 {
 public:
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~WarpGate() override;
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw() override;
-
 	/// <summary>
 	/// setter_次のステージ
 	/// </summary>
@@ -22591,7 +23289,10 @@ public:
 	void WarpExit(const Vector3& translate);
 
 private:
-	
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
 
 	/// <summary>
@@ -22641,16 +23342,16 @@ void PauseMove::Draw(PauseScreen& pauseScreen) {
 void PauseSelectGuide::Update(PauseScreen& pauseScreen) {
 	pauseScreen.UpdateGuide();
 	if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
-		pauseScreen.SetPauseState(std::make_unique<PauseMove>());
+		pauseScreen.ChangePauseState(std::make_unique<PauseMove>());//ポーズ選択画面に戻る
 	}
 }
 void PauseSelectGuide::Draw(PauseScreen& pauseScreen) {
-	pauseScreen.DrawGuide();
+	pauseScreen.DrawGuide();//操作ガイドの表示
 }
 
 void PauseSelectSceneChange::Update(PauseScreen& pauseScreen) {
 	SceneManager::GetInstance().ChangeScene(pauseScreen.GetNextScene());
-	pauseScreen.SetPauseState(std::make_unique<PauseMove>());
+	pauseScreen.ChangePauseState(std::make_unique<PauseMove>());
 }
 void PauseSelectSceneChange::Draw(PauseScreen& pauseScreen) {}
 
@@ -22661,28 +23362,68 @@ File Path: project/GameProgram/System/BasePauseState.h
 #pragma once
 
 class PauseScreen;
-
+/// <summary>
+/// ポーズ選択処理(基盤)
+/// </summary>
 class BasePauseState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="pauseScreen">ポーズスクリーンクラス</param>
 	virtual void Update(PauseScreen& pauseScreen) = 0;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	/// <param name="pauseScreen">ポーズスクリーンクラス</param>
 	virtual void Draw(PauseScreen& pauseScreen) = 0;
 };
-
+/// <summary>
+/// 選択中(通常)
+/// </summary>
 class PauseMove : public BasePauseState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="pauseScreen">ポーズスクリーンクラス</param>
 	void Update(PauseScreen& pauseScreen) override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	/// <param name="pauseScreen">ポーズスクリーンクラス</param>
 	void Draw(PauseScreen& pauseScreen) override;
 };
-
+/// <summary>
+/// 操作ガイドを選択
+/// </summary>
 class PauseSelectGuide : public BasePauseState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="pauseScreen">ポーズスクリーンクラス</param>
 	void Update(PauseScreen& pauseScreen) override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	/// <param name="pauseScreen">ポーズスクリーンクラス</param>
 	void Draw(PauseScreen& pauseScreen) override;
 };
-
+/// <summary>
+/// 戻るを選択(ゲームからセレクト、セレクトからタイトル)
+/// </summary>
 class PauseSelectSceneChange : public BasePauseState {
 public:
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="pauseScreen">ポーズスクリーンクラス</param>
 	void Update(PauseScreen& pauseScreen) override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	/// <param name="pauseScreen">ポーズスクリーンクラス</param>
 	void Draw(PauseScreen& pauseScreen) override;
 };
 
@@ -22964,7 +23705,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	/// <param name="camera"></param>現在のカメラ
+	/// <param name="camera">現在のカメラ</param>
 	void Update(Camera* camera);
 
 	/// <summary>
@@ -22984,30 +23725,30 @@ public:
 	/// <param name="right">右端</param>
 	void SetEndPoint(const Vector3& left,const Vector3& right);
 	/// <summary>
-	/// setter_
+	/// setter_プレイヤーの座標位置
 	/// </summary>
-	/// <param name="pos"></param>
+	/// <param name="pos">プレイヤー座標</param>
 	void SetPlayerPosition(const Vector3& pos) { playerPos_ = pos; }
 	/// <summary>
 	/// ズーム終了
 	/// </summary>
-	/// <returns></returns>trueなら終了した
+	/// <returns>trueなら終了した</returns>
 	const bool ZoomEnd();
 	/// <summary>
 	/// 固定モード
 	/// </summary>
-	/// <param name="result"></param> trueでオン / falseでオフ
+	/// <param name="result">trueでオン / falseでオフ</param> 
 	void FixedMode(bool result) { isFixedMode_ = result; }
 	/// <summary>
 	/// 固定モードであるか
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>trueなら固定モードである</returns>
 	bool IsFixed() const { return isFixedMode_; }
 
 	/// <summary>
 	/// シェイクモード
 	/// </summary>
-	/// <param name="result"></param> trueでオン / falseでオフ
+	/// <param name="result">trueでオン / falseでオフ</param> 
 	void ShakeMode(bool result) { isShakeMode_ = result; }
 
 	/// <summary>
@@ -23018,15 +23759,14 @@ public:
 	/// <summary>
 	/// カメラを設定する
 	/// </summary>
-	/// <param name="data"></param>レベルエディタのカメラデータ(cameraInit)
-	/// <param name="fixed_Mode_"></param>trueでカメラを固定する
+	/// <param name="data">レベルエディタのカメラデータ(cameraInit)</param>
+	/// <param name="fixed_Mode_">trueでカメラを固定する</param>
 	void CameraSetting(const CameraInitData& data, bool fixed_Mode_);
 
 	/// <summary>
 	/// リスポーン時、チェックポイントから出てくる
 	/// </summary>
-	/// <param name="checkPoint">チェックポイント地点</param>
-	/// <param name="data"></param>
+	/// <param name="data">メインカメラのデータ</param>
 	void CameraSettingCheckPoint(const CameraInitData& data);
 
 	/// <summary>
@@ -23035,7 +23775,11 @@ public:
 	/// <param name="data">変更したいカメラデータ</param>
 	/// <param name="fixed_Mode_">固定する場合</param>
 	void CameraInterpolation(const CameraInitData& data, bool fixed_Mode_);
-
+	/// <summary>
+	/// プレイヤーのポイント
+	/// </summary>
+	/// <param name="data">カメラデータ</param>
+	/// <param name="playerPosition">プレイヤーの座標</param>
 	void CameraStartPointPlayer(const CameraInitData& data, const Vector3& playerPosition);
 
 
@@ -23043,8 +23787,10 @@ public:
 	/// 十字キーで移動する
 	/// </summary>
 	void DebugMove();
-
-	void CameraYFixed(bool result) { isCameraYFixed_ = result; }
+	/// <summary>
+	/// カメラのy軸移動を停止(ボス戦で使用)
+	/// </summary>
+	void CameraYFixed() { isCameraYFixed_ = true; }
 
 private:
 	/// <summary>
@@ -23058,7 +23804,7 @@ private:
 	/// <summary>
 	/// ズーム開始(現在カメラ位置から特定位置まで)
 	/// </summary>
-	/// <param name="goal"></param>特定位置を設定
+	/// <param name="goal">特定位置を設定</param>
 	void ZoomStart(const Vector3& goal);
 	/// <summary>
 	/// シェイク(カメラが揺れる)
@@ -23073,8 +23819,8 @@ private:
 	/// <summary>
 	/// セグメント
 	/// </summary>
-	/// <param name="origin"></param>
-	/// <param name="diff"></param>
+	/// <param name="origin">始点</param>
+	/// <param name="diff">終点</param>
 	void SetSegment(const Vector3& origin, const Vector3& diff);
 
 	/// <summary>
@@ -23252,6 +23998,10 @@ enum FadeType {
 /// </summary>
 class FadeScreen {
 public:
+	/// <summary>
+	/// インスタンス生成
+	/// </summary>
+	/// <returns>インスタンス</returns>
 	static FadeScreen& GetInstance();
 
 	/// <summary>
@@ -23286,8 +24036,15 @@ public:
 	/// </summary>
 	/// <returns></returns>フェード中ならtrue
 	bool GetIsFading() const{ return isFading_; }
-	
+	/// <summary>
+	/// setter_マスク画像
+	/// </summary>
+	/// <param name="textureFile">変更するテクスチャ</param>
 	void SetMaskTexture( const std::string& textureFile) { dissolveTexture_ = textureFile; }
+	/// <summary>
+	/// setter_下地のテクスチャ
+	/// </summary>
+	/// <param name="textureFile">変更するテクスチャ</param>
 	void SetBackGround( const std::string& textureFile) { sprite_->SetTextureFile(textureFile); }
 
 private:
@@ -23412,7 +24169,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static LoadingModels& GetInstance();
 	
 	/// <summary>
@@ -23482,6 +24239,9 @@ File Path: project/GameProgram/System/NextStageSave.h
 #include "MyMath.h"
 #include <memory>
 
+/// <summary>
+/// ステージ移動で使用する保存データ
+/// </summary>
 class NextStageSave {
 private:
 	/// <summary>
@@ -23499,7 +24259,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static NextStageSave& GetInstance();
 
 	/// <summary>
@@ -23510,30 +24270,30 @@ public:
 	/// <summary>
 	/// getter_前に受け取ったデータを渡す
 	/// </summary>
-	/// <returns></returns> 前に受け取ったデータ
+	/// <returns>前に受け取ったデータ</returns> 
 	SceneSaveData GetNextStageSaveData() { return sceneSaveData_; }
 	/// <summary>
 	/// setter_次のステージの全体層
 	/// </summary>
-	/// <param name="nextStageFile"></param> 次のステージの全体層のファイルパス
+	/// <param name="nextStageFile">次のステージの全体層のファイルパス</param> 
 	void SetNextStageFile(const std::string& nextStageFile) { sceneSaveData_.nextStageFile = nextStageFile; }
 
 	/// <summary>
 	/// setter_体力
 	/// </summary>
-	/// <param name="playerHp"></param> 
+	/// <param name="playerHp">プレイヤーの体力</param> 
 	void SetPlayerHp(uint32_t playerHp);
 
 	/// <summary>
 	/// setter_残機
 	/// </summary>
-	/// <param name="remain"></param>
+	/// <param name="remain">現在の残機</param>
 	void SetPlayerRemain(uint32_t remain);
 
 	/// <summary>
 	/// setter_最大体力
 	/// </summary>
-	/// <param name="maxHp"></param>
+	/// <param name="maxHp">最大体力</param>
 	void SetPlayerMaxHp(uint32_t maxHp);
 
 	/// <summary>
@@ -23787,7 +24547,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static ParticleEmitter& GetInstance();
 
 	/// <summary>
@@ -23972,9 +24732,9 @@ void PauseScreen::SelectResult() {
 	if (select_.y == kSelectReturnEndPosition_.y) {
 		isPause_ = false;
 	}else if (select_.y == kSelectGuideEndPosition_.y) {
-		SetPauseState(std::make_unique<PauseSelectGuide>());
+		ChangePauseState(std::make_unique<PauseSelectGuide>());
 	}else if (select_.y == kSelectSceneChangeEndPosition_.y) {
-		SetPauseState(std::make_unique<PauseSelectSceneChange>());
+		ChangePauseState(std::make_unique<PauseSelectSceneChange>());
 	}
 }
 
@@ -23999,6 +24759,10 @@ void PauseScreen::DrawSelectMode() {
 	spriteSelectSceneChange_->Draw();
 }
 
+void PauseScreen::ChangePauseState(std::unique_ptr<BasePauseState> nextState) {
+	pauseState_.reset();//一度リセット
+	pauseState_ = std::move(nextState); //変更する
+}
 
 ============================================================
 File Path: project/GameProgram/System/PauseScreen.h
@@ -24015,9 +24779,16 @@ File Path: project/GameProgram/System/PauseScreen.h
 /// </summary>
 class PauseScreen {
 public:
-
+	/// <summary>
+	/// インスタンス生成
+	/// </summary>
+	/// <returns>インスタンス</returns>
 	static PauseScreen& GetInstance();
 
+	/// <summary>
+	/// ポーズスイッチ
+	/// </summary>
+	/// <param name="a">trueオン / falseオフ</param>
 	void PauseFlag(bool a) { isPause_ = a; }
 
 	/// <summary>
@@ -24040,7 +24811,7 @@ public:
 	/// <summary>
 	/// ポーズ中であるか
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>trueでポーズ中</returns>
 	bool IsPause() { return isPause_; }
 
 	/// <summary>
@@ -24080,15 +24851,12 @@ public:
 	/// </summary>
 	/// <returns>あらかじめ指定したシーン名</returns>
 	std::unique_ptr<BaseScene> GetNextScene() { return std::move(nextScene_); }
-
+	
 	/// <summary>
-	/// setter_ポーズステート(状態遷移)
+	/// ポーズステート(状態遷移)
 	/// </summary>
 	/// <param name="nextState">変更先のステート</param>
-	void SetPauseState(std::unique_ptr<BasePauseState> nextState) { 
-		pauseState_.reset();//一度リセット
-		pauseState_ = std::move(nextState); //変更する
-	}
+	void ChangePauseState(std::unique_ptr<BasePauseState> nextState);
 	/// <summary>
 	/// 項目から選択
 	/// </summary>
@@ -24292,10 +25060,6 @@ void UIManager::Update() {
 	for (auto& sprite : sprites_) {
 		sprite.second->Update();
 	}
-
-	for (auto& guide : spriteGuides_) {
-		guide.second->Update();
-	}
 }
 
 void UIManager::Draw() {
@@ -24344,7 +25108,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static UIManager& GetInstance();
 
 	void CreateSprite(const SpriteData& spriteData);
@@ -24364,10 +25128,17 @@ public:
 	/// </summary>
 	void Finalize();
 
-	void SetPlayerTranslate(const Vector3& translate) { playerTranslate_ = translate; }
-
+	/// <summary>
+	/// setter_スプライトのテクスチャ
+	/// </summary>
+	/// <param name="name">コンテナの名前</param>
+	/// <param name="texturePath">テクスチャパス</param>
 	void SetSpriteTexture(const std::string name, const std::string& texturePath);
-
+	/// <summary>
+	/// getter_スプライトのテクスチャ
+	/// </summary>
+	/// <param name="name">コンテナの名前</param>
+	/// <returns>テクスチャのファイルパス</returns>
 	std::string GetSpriteTexture(const std::string name);
 
 private:
@@ -24375,15 +25146,14 @@ private:
 	static std::unique_ptr<UIManager> sInstance_;
 	//default_deleteを設定(解放処理を行える)
 	friend struct std::default_delete<UIManager>;
-
+	//スプライトのコンテナ
 	std::unordered_map<std::string, std::unique_ptr<Sprite>> sprites_;
-	std::unordered_map<std::string, std::unique_ptr<Sprite>> spriteGuides_;
-
-	Vector3 playerTranslate_;
 
 	/// <summary>
 	/// スプライトの初期設定
 	/// </summary>
+	/// <param name="sprite">スプライトクラス</param>
+	/// <param name="spriteData">スプライトデータ</param>
 	void InitSprite(std::unique_ptr<Sprite>& sprite, const SpriteData& spriteData);
 };
 
