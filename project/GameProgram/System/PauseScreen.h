@@ -102,42 +102,50 @@ private:
 	/// 選んだ後の処理
 	/// </summary>
 	void SelectResult();
+	/// <summary>
+	/// ゲームパッドで選択
+	/// </summary>
+	void SelectGamePad();
+	/// <summary>
+	/// キーボードで選択
+	/// </summary>
+	void SelectKeyBoard();
 
+	//スプライトたち
 	std::unique_ptr<Sprite> backScreen_ = nullptr;
-
 	std::unique_ptr<Sprite> selectPoint_ = nullptr;
-
 	std::unique_ptr<Sprite> spriteSelectSceneChange_ = nullptr;
 	std::unique_ptr<Sprite> spriteSelectGuide_ = nullptr;
 	std::unique_ptr<Sprite> spriteSelectReturn_ = nullptr;
-
 	std::unique_ptr<Sprite> spriteGuide_ = nullptr;
 
-
+	//プレイヤーの選択枠座標
 	Vector2 select_;
-
+	//項目の座標
 	Vector2 moveSelectReturn_;
 	Vector2 moveSelectGuide_;
 	Vector2 moveSelectSceneChange_;
-
+	//項目を移動する(始点)
 	const Vector2 kSelectReturnStartPosition_ = { -320,160 };
 	const Vector2 kSelectGuideStartPosition_ = { -320,368 };
 	const Vector2 kSelectSceneChangeStartPosition_ = { -320,576 };
-
+	//項目を移動する(終点)
 	const Vector2 kSelectReturnEndPosition_ = { 64,160 };
 	const Vector2 kSelectGuideEndPosition_ = { 120,368 };
 	const Vector2 kSelectSceneChangeEndPosition_ = { 176,576 };
-
+	//EaseOutで使用
 	float interpolation_ = 0.0f;
 
-
+	//項目の判別
 	uint32_t selectNumber = 0;
-
+	//選択したフラグ
 	bool isSelect_ = false;
-
+	//ポーズしているフラグ
 	bool isPause_ = false;
-
+	//ゲームパッドでスティックを傾けたかフラグ
+	bool isMoveStick_ = false;
+	//ポーズ選択後のステートパターン
 	std::unique_ptr<BasePauseState> pauseState_ = nullptr;
-
+	//シーンを変更する時に使うBaseScene
 	std::unique_ptr<BaseScene> nextScene_;
 };

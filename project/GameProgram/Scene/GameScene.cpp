@@ -38,10 +38,10 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 	if (PauseScreen::GetInstance().IsPause()) {
-		PauseScreen::GetInstance().Update(); 
+		PauseScreen::GetInstance().Update();
 		return;
 	}
-	if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
+	if (Input::GetInstance().TriggerKey(DIK_ESCAPE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START)) {
 		PauseScreen::GetInstance().PauseFlag(true);
 	}
 
@@ -63,6 +63,11 @@ void GameScene::Update() {
 
 	//プレイヤーが死んでしまったら通らない(停止)
 	PlayerAliveUpdate();
+
+	//ステージオブジェクトの更新
+	for (auto& stageObject : stageObjects_) {
+		stageObject->Update();
+	}
 
 	if (!player_->GetPerformanceMode()) {
 		startWarp_->Vanish();//出てきた後消えるようにする	
@@ -92,6 +97,7 @@ void GameScene::Update() {
 }
 
 void GameScene::PlayerAliveUpdate() {
+	//プレイヤー演出中、死亡した状態は敵は動かさない
 	if (player_->GetHp() == 0 || player_->GetPerformanceMode()) return;
 
 	//ステージの更新処理
@@ -101,11 +107,6 @@ void GameScene::PlayerAliveUpdate() {
 	for (auto& enemy : enemies_) {
 		enemy->SetPlayer(player_.get());
 		enemy->Update();
-	}
-
-	//ステージオブジェクトの更新
-	for (auto& stageObject : stageObjects_) {
-		stageObject->Update();
 	}
 
 	//イベントトリガーの更新

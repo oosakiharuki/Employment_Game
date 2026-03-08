@@ -35,7 +35,7 @@ void SelectScene::Update() {
 		PauseScreen::GetInstance().Update();
 		return;
 	}
-	if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
+	if (Input::GetInstance().TriggerKey(DIK_ESCAPE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START)) {
 		PauseScreen::GetInstance().PauseFlag(true);
 	}
 
