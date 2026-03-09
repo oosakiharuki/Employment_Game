@@ -216,3 +216,11 @@ void Enemy_Bomb::OnCollision(CollisionSource* collision) {
 		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
 	}
 }
+
+bool Enemy_Bomb::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypePlayerBullet ||
+		collisionType == CollisionTypes::TypeStage) {
+		return true;
+	}
+	return false;
+}

@@ -82,6 +82,13 @@ void Umbrella::OnCollision(CollisionSource* collision) {
 	}
 }
 
+bool Umbrella::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypeEnemyBullet && isShield_) {
+		return true;
+	}
+	return false;
+}
+
 void Umbrella::ShieldMode() {
 	//既に開いている場合はスキップ
 	if (!isShield_) {		

@@ -117,3 +117,11 @@ void WarpGate::OnCollision(CollisionSource* collision) {
 		CollisionManager::GetInstance().UnderCollision(minUnder_, position_, collision->GetAABB());
 	}
 }
+
+bool WarpGate::TypeCheckUp(const CollisionTypes& collisionType) {
+	if ((collisionType == CollisionTypes::TypePlayer && !warpExitMode_) ||
+		(collisionType == CollisionTypes::TypeStage && warpExitMode_)) {
+		return true;
+	}
+	return false;
+}

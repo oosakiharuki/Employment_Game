@@ -72,3 +72,16 @@ void EnemyBullet::OnCollision(CollisionSource* collision) {
 		isParry = true;//跳ね返るフラグ
 	}
 }
+
+bool EnemyBullet::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypePlayer || 
+		collisionType == CollisionTypes::TypeStage ||
+		collisionType == CollisionTypes::TypeUmbrella || 
+		collisionType == CollisionTypes::TypeUmbrellaParry ||
+		(collisionType == CollisionTypes::TypeEnemy && collisionType_ == CollisionTypes::TypePlayerBullet) ||
+		(collisionType == CollisionTypes::TypeBoss && collisionType_ == CollisionTypes::TypePlayerBullet)) {
+		return true;
+	}
+
+	return false;
+}

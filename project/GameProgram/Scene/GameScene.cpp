@@ -44,8 +44,8 @@ void GameScene::Update() {
 		return;
 	}
 
-	//演出用のワープゲート出口
-	startWarp_->Update(player_.get());
+	//死んでしまった、復活(リスポーン)する時
+	Respawn();
 
 	//更新処理
 	cameraControl_->Update(&*camera_.get(),player_.get());
@@ -53,8 +53,8 @@ void GameScene::Update() {
 	//プレイヤー更新処理
 	player_->Update();
 
-	//死んでしまった、復活(リスポーン)する時
-	Respawn();
+	//演出用のワープゲート出口
+	startWarp_->Update(player_.get());
 
 	//プレイヤーが死んでしまったら通らない(停止)
 	PlayerAliveUpdate();
@@ -91,17 +91,17 @@ void GameScene::PlayerAliveUpdate() {
 	//ステージの更新処理
 	stageObj_->Update();
 
+	//イベントトリガーの更新
+	for (auto& eventTrigger : eventTriggers_) {
+		eventTrigger->Update(*cameraControl_, levelEditor_, std::move(enemies_));
+		enemies_ = eventTrigger->GetPopEnemy();//moveで渡したのを返してもらう(eventTriggerで増える)
+	}
 	//敵の更新
 	for (auto& enemy : enemies_) {
 		enemy->SetPlayer(player_.get());
 		enemy->Update();
 	}
 
-	//イベントトリガーの更新
-	for (auto& eventTrigger : eventTriggers_) {
-		eventTrigger->Update(*cameraControl_, levelEditor_, std::move(enemies_));
-		enemies_ = eventTrigger->GetPopEnemy();//moveで渡したのを返してもらう(eventTriggerで増える)
-	}
 
 	//イベントで全て倒したら削除
 	eventTriggers_.remove_if([](auto& event) {

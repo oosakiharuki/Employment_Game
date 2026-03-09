@@ -63,6 +63,12 @@ public:
 	/// </summary>
 	/// <param name="collision">相手側の当たり判定ソース</param>
 	virtual void OnCollision(CollisionSource* collision);
+	/// <summary>
+	/// 当たり判定をとるタイプかをチェック
+	/// </summary>
+	/// <param name="collisionType">相手の当たり判定タイプ</param>
+	/// <returns>該当するタイプがあるなら true</returns>
+	virtual bool TypeCheckUp(const CollisionTypes& collisionType);
 
 protected:
 	CollisionTypes collisionType_;//タイプ

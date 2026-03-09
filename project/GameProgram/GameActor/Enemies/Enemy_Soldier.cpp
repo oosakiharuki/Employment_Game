@@ -188,3 +188,10 @@ void Enemy_Soldier::OnCollision(CollisionSource* collision) {
 		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
 	}
 }
+bool Enemy_Soldier::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypePlayerBullet ||
+		collisionType == CollisionTypes::TypeStage) {
+		return true;
+	}
+	return false;
+}

@@ -41,3 +41,10 @@ void CheckPoint::OnCollision(CollisionSource* collision) {
 		NextStageSave::GetInstance().SetCheckPoint(transform_.translate);
 	}
 }
+
+bool CheckPoint::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypePlayer) {
+		return true;
+	}
+	return false;
+}

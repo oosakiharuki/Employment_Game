@@ -10,3 +10,5 @@ Vector3 CollisionSource::DistanceCollisionCenter(const Vector3& otherCenter) {
 }
 
 void CollisionSource::OnCollision(CollisionSource* collision) {}
+
+bool CollisionSource::TypeCheckUp(const CollisionTypes& collisionType) { return false; }

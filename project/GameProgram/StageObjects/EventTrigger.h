@@ -117,7 +117,17 @@ public:
 
 private:
 
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
+	/// <summary>
+	/// 当たり判定をとるタイプかをチェック
+	/// </summary>
+	/// <param name="collisionType">相手の当たり判定タイプ</param>
+	/// <returns>該当するタイプがあるなら true</returns>
+	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
 	/// <summary>
 	/// 召喚した敵を数えて
