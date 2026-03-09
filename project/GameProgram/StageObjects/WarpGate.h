@@ -1,5 +1,6 @@
 #pragma once
 #include "IStageObject.h"
+#include "Player.h"
 
 /// <summary>
 /// ワープゲート(IStageObjectの派生クラス)
@@ -19,6 +20,13 @@ public:
 	/// 更新処理
 	/// </summary>
 	void Update() override;
+
+	/// <summary>
+	/// スタート演出時に使える更新処理
+	/// </summary>
+	/// <param name="player">プレイヤー情報</param>
+	void Update(Player* player);
+
 	/// <summary>
 	/// 描画処理
 	/// </summary>

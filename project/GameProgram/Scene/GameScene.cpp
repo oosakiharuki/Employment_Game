@@ -37,23 +37,18 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-	if (PauseScreen::GetInstance().IsPause()) {
+	//ボタンを押して、ポーズ中であるか。プレイヤー演出,死亡状態でないとき
+	if ((Input::GetInstance().TriggerKey(DIK_ESCAPE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START) || PauseScreen::GetInstance().IsPause()) &&
+		(!player_->GetPerformanceMode() && player_->GetHp() != 0)) {
 		PauseScreen::GetInstance().Update();
 		return;
 	}
-	if (Input::GetInstance().TriggerKey(DIK_ESCAPE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START)) {
-		PauseScreen::GetInstance().PauseFlag(true);
-	}
 
 	//演出用のワープゲート出口
-	startWarp_->Update();
+	startWarp_->Update(player_.get());
 
-	//カメラコントロール
-	cameraControl_->SetPlayerPosition(player_->GetTranslate());
-	//プレイヤーが倒されたらシェイク
-	(player_->GetHp() == 0) ? cameraControl_->ShakeMode(true) : cameraControl_->ResetShakeTime();
 	//更新処理
-	cameraControl_->Update(&*camera_.get());
+	cameraControl_->Update(&*camera_.get(),player_.get());
 
 	//プレイヤー更新処理
 	player_->Update();
@@ -69,21 +64,14 @@ void GameScene::Update() {
 		stageObject->Update();
 	}
 
-	if (!player_->GetPerformanceMode()) {
-		startWarp_->Vanish();//出てきた後消えるようにする	
-	}
-
 	//使用する当たり判定
 	CollisionManager::GetInstance().CollisionUpdate();
 	//背景更新処理
 	backGround->Update();
-
+	//操作ガイド更新処理
 	for (auto& guide : guides_) {
 		guide->Update();
 	}
-
-	//スプライト更新処理
-	UIManager::GetInstance().Update();
 
 #ifdef  USE_IMGUI
 
@@ -244,7 +232,7 @@ void GameScene::SpitOutGameObject() {
 	//ボスの配置
 	spitOut_.SpitOutBoss(boss_);
 	if (boss_) {
-		cameraControl_->CameraYFixed();
+		cameraControl_->CameraYFixed();//ボスの時カメラのy座標を動かさない
 		boss_->SetPlayer(player_.get());
 		boss_->Update();
 	}
@@ -257,7 +245,7 @@ void GameScene::WaterWarpExit() {
 
 	startWarp_->SetRotation({ kStartWarpGateRange_ ,0.0f,0.0f });//下向きにして水たまりに
 	startWarp_->WarpExit(player_->GetTranslate());
-
+	
 	player_->IsPerformanceFlag(true);
 }
 
@@ -277,13 +265,21 @@ void GameScene::Respawn() {
 	}
 
 	//リセット
-	boss_.reset();
-	//ボスの配置
-	spitOut_.SpitOutBoss(boss_);
-
-	player_->RespawnEnd();
+	if (boss_) {
+		boss_.reset();
+		//ボスの配置
+		spitOut_.SpitOutBoss(boss_);
+		boss_->SetPlayer(player_.get());
+		boss_->Update();
+	}
 
 	cameraControl_->CameraSettingCheckPoint(levelEditor_.GetLevelData()->cameraInit["MainCamera"]);
+
+	startWarp_.reset();
+	WaterWarpExit();	
+	
+	//リスポーンが終了
+	player_->RespawnEnd();
 }
 
 void GameScene::SceneUpdate() {

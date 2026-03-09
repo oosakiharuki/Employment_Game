@@ -27,16 +27,15 @@ void SelectScene::Initialize() {
 	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnTitle.png", std::make_unique<TitleScene>());
 
 	CollisionManager::GetInstance().ResetFrag();
-	PauseScreen::GetInstance().PauseFlag(false);//ポーズを強制解除
+	PauseScreen::GetInstance().OffPause();//ポーズを強制解除
 }
 
 void SelectScene::Update() {
-	if (PauseScreen::GetInstance().IsPause()) {
+	//ボタンを押して、ポーズ中であるか。プレイヤー演出,死亡状態でないとき
+	if ((Input::GetInstance().TriggerKey(DIK_ESCAPE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START) || PauseScreen::GetInstance().IsPause()) &&
+		(!player_->GetPerformanceMode() && player_->GetHp() != 0)) {
 		PauseScreen::GetInstance().Update();
 		return;
-	}
-	if (Input::GetInstance().TriggerKey(DIK_ESCAPE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START)) {
-		PauseScreen::GetInstance().PauseFlag(true);
 	}
 
 	//ステージオブジェクト更新
@@ -55,9 +54,6 @@ void SelectScene::Update() {
 
 	//当たり判定
 	CollisionManager::GetInstance().CollisionUpdate();
-
-	//ガイド更新処理
-	UIManager::GetInstance().Update();
 
 	//背景更新
 	backGround->Update();

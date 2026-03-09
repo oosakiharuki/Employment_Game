@@ -152,19 +152,19 @@ public:
 	/// <summary>
 	///	ブリンク発動条件
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>発動している</returns>
 	bool BrinkFlag();
 
 	/// <summary>
 	/// ブリンクタイマー
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>ブリンクタイマーがMaxに到達した時true</returns>
 	bool BrinkTimeMax();
 
 	/// <summary>
 	/// リスポーンフラグ
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>リスポーンフラグ</returns>
 	bool IsRespawn() { return isRespawn_; }
 
 	/// <summary>
@@ -434,11 +434,8 @@ private:
 	//ステートパターン
 	//プレイヤーの操作アクション用
 	std::unique_ptr<BasePlayerState> actionState_;
-
+	//リスポーンフラグ
 	bool isRespawn_ = false;
-
-
-	bool isStartPerformance_ = true;
 
 	//スタート演出(水たまりから飛び出る感じに)
 	Vector3 playerPoint_{};

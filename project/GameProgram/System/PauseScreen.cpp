@@ -64,6 +64,8 @@ void PauseScreen::BeforeChangeScene(const std::string& textureName, std::unique_
 
 
 void PauseScreen::Update() {
+	isPause_ = true;
+
 	//スプライトがスライド移動
 	pauseState_->Update(*this);
 

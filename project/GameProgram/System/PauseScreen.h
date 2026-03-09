@@ -17,10 +17,9 @@ public:
 	static PauseScreen& GetInstance();
 
 	/// <summary>
-	/// ポーズスイッチ
+	/// ポーズをオフに
 	/// </summary>
-	/// <param name="a">trueオン / falseオフ</param>
-	void PauseFlag(bool a) { isPause_ = a; }
+	void OffPause() { isPause_ = false; }
 
 	/// <summary>
 	/// 初期化処理
