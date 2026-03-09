@@ -18,13 +18,19 @@ public:
 	/// </summary>
 	/// <returns>見つけたフラグ</returns>
 	bool IsFound() { return isFound_; }
+
+private:
 	/// <summary>
 	/// 当たり判定コマンド
 	/// </summary>
 	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
-
-private:
+	/// <summary>
+	/// 当たり判定をとるタイプかをチェック
+	/// </summary>
+	/// <param name="collisionType">相手の当たり判定タイプ</param>
+	/// <returns>該当するタイプがあるなら true</returns>
+	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
 	//発見フラグ
 	bool isFound_ = false;

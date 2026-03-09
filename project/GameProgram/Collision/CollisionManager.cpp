@@ -25,18 +25,20 @@ void CollisionManager::Finalize() {
 }
 
 void CollisionManager::AddCollisions(CollisionSource* addCollision) {
-	collisions_.push_back(addCollision);
+	collisions_.push_back(addCollision);//追加
 }
 
 void CollisionManager::CreateCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type) {
-	std::unique_ptr<CollisionSource> collision;
-	collision = std::make_unique<CollisionSource>();
-
-	collision->SetAABB(collisionAABB);
-	collision->SetCenter(center);
-	collision->SetType(type);
-
-	collisions_.push_back(&*collision);
+	//入っているなら
+	if (collisionTemplate) {
+		collisionTemplate.reset();
+	}
+	//継承じゃなくても作れる
+	collisionTemplate = std::make_unique<CollisionSource>();
+	collisionTemplate->SetAABB(collisionAABB);
+	collisionTemplate->SetCenter(center);
+	collisionTemplate->SetType(type);
+	collisions_.push_back(&*collisionTemplate);//追加
 }
 
 void CollisionManager::CreateStageCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type) {
@@ -67,13 +69,13 @@ void CollisionManager::CollisionUpdate() {
 
 	for (uint32_t i = 0; i < collisions_.size();i++) {
 		for (uint32_t j = 0; j < collisions_.size(); j++) {
-			//iとjが同じ値ではしない(自分自身なので)
-			if (i == j) {
+			//該当するタイプがない場合、iとjが同じ値ではしない(自分自身なので)
+			if (!collisions_[i]->TypeCheckUp(collisions_[j]->GetType()) || i == j) {
 				continue;
 			}
 			//当たり判定
 			//AABB同士が触れたとき+タイプが同じでないとき
-			if (IsCollisionAABB(collisions_[i]->GetAABB(), collisions_[j]->GetAABB()) && collisions_[i]->GetType() != collisions_[j]->GetType()) {
+			if (IsCollisionAABB(collisions_[i]->GetAABB(), collisions_[j]->GetAABB())) {
 				collisions_[i]->OnCollision(collisions_[j]);
 			}
 		}
@@ -140,9 +142,8 @@ void CollisionManager::BackPosition(CollisionOverlap& collisionOverlap) {
 		//真ん中から 下の場合 - / 上の場合 +
 		float push = (targetCenterY < areaCenterY) ? -collisionOverlap.overlap.y : collisionOverlap.overlap.y;
 
-
-		//床 or 天井 (0以上は床、0未満は天井)
-		if (push >= 0.0f) {
+		//床 or 天井 (targetCenterYが上は床、areaCenterYが上は天井)
+		if (targetCenterY > areaCenterY) {
 			// 着地判定を立てる
 			collisionOverlap.isGround = true;
 		}

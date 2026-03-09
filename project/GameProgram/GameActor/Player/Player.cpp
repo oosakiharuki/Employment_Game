@@ -617,26 +617,33 @@ void Player::OnCollision(CollisionSource* collision) {
 		collision->GetType() == CollisionTypes::TypeBoss) {
 		IsDamage(DistanceCollisionCenter(collision->GetCenter()));
 	}
-
 	//演出中、死亡の時は当たらない
 	if (collision->GetType() == CollisionTypes::TypeStage
 		&& hp_ != 0 && !isPerformance_) {
 		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap,*this, *this,collision->GetAABB());
 	}
-
 	if (collision->GetType() == CollisionTypes::TypeEvent) {
 		//イベント範囲から出れないように
 		eventMin = collision->GetAABB().min + transform_.scale;
 		eventMax = collision->GetAABB().max - transform_.scale;
 		isEvent_ = true;
 	}
-
 	if (!isEvent_) {
 		//イベント範囲解放
 		eventMin = -kMoveMax_;
 		eventMax = kMoveMax_;
 	}
+}
 
+bool Player::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypeEnemyBullet ||
+		collisionType == CollisionTypes::TypeBombExplotion ||
+		collisionType == CollisionTypes::TypeBoss ||
+		(collisionType == CollisionTypes::TypeStage && hp_ != 0 && !isPerformance_) ||
+		collisionType == CollisionTypes::TypeEvent) {
+		return true;
+	}
+	return false;
 }
 
 

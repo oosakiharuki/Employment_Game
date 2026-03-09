@@ -26,13 +26,13 @@ void Boss::Update() {
 
 	GameActor::Update();//ステートパターンが入っている
 
-	for (auto& bullet : bullets_) {
-		bullet->Update();
-	}
-
 	bullets_.remove_if([](auto& bullet) {
 		return bullet->IsDead();
 	});
+
+	for (auto& bullet : bullets_) {
+		bullet->Update();
+	}
 
 	ImGuiUpdate();
 
@@ -337,4 +337,11 @@ void Boss::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypePlayerBullet) {
 		IsDamage();
 	}
+}
+
+bool Boss::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypePlayerBullet) {
+		return true;
+	}
+	return false;
 }

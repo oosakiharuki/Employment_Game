@@ -143,12 +143,22 @@ private:
 	/// </summary>
 	/// <returns>trueで成功(タイマーもリセット)</returns>
 	bool LerpGoal();
+	/// <summary>
+	/// imGui更新処理
+	/// </summary>
+	void ImGuiUpdate();
 
 	/// <summary>
 	/// 当たり判定コマンド
 	/// </summary>
 	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
+	/// <summary>
+	/// 当たり判定をとるタイプかをチェック
+	/// </summary>
+	/// <param name="collisionType">相手の当たり判定タイプ</param>
+	/// <returns>該当するタイプがあるなら true</returns>
+	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
 	std::unique_ptr<Object_glTF> object_;
 	//弾丸
@@ -174,11 +184,6 @@ private:
 	//死亡モーションも終了したフラグ
 	bool isDeadMotionFinish_ = false;
 
-	/// <summary>
-	/// imGui更新処理
-	/// </summary>
-	void ImGuiUpdate();
-	
 	//ステートパターン
 	std::unique_ptr<BaseBossState> bossState_;
 

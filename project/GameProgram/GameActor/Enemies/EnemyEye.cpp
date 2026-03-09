@@ -47,8 +47,8 @@ void EnemyEye::OnCollision(CollisionSource* collision) {
 		playerPosition_ = collision->GetCenter();
 	}
 
-	//順番による
-	if (collision->GetType() == CollisionTypes::TypeStage) {
+	//見つかった時
+	if (collision->GetType() == CollisionTypes::TypeStage && isFound_) {
 
 		Segment segment;
 		segment.origin = enemyPosition_;      //敵座標
@@ -59,4 +59,12 @@ void EnemyEye::OnCollision(CollisionSource* collision) {
 			isWall_ = true;
 		}	
 	}
+}
+
+bool EnemyEye::TypeCheckUp(const CollisionTypes& collisionType) {
+	if ((collisionType == CollisionTypes::TypePlayer && !isWall_) ||
+		(collisionType == CollisionTypes::TypeStage && isFound_)) {
+		return true;
+	}
+	return false;
 }

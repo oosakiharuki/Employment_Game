@@ -277,7 +277,13 @@ void EventTrigger::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypePlayer) {
 		eventData_.isEvent = true;
 	}
+}
 
+bool EventTrigger::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypePlayer) {
+		return true;
+	}
+	return false;
 }
 
 void EventTrigger::ChangeCamera(CameraControl& cameraControl, LevelEditor& levelEditor) {

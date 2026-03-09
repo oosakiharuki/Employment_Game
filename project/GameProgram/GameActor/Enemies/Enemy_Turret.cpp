@@ -180,3 +180,11 @@ void Enemy_Turret::OnCollision(CollisionSource* collision) {
 		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
 	}
 }
+
+bool Enemy_Turret::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypePlayerBullet ||
+		collisionType == CollisionTypes::TypeStage) {
+		return true;
+	}
+	return false;
+}

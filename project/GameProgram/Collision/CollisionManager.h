@@ -159,5 +159,8 @@ private:
 	//ステージ用
 	std::vector<std::unique_ptr<CollisionSource>> stageCollisions_;
 	bool isAlreadyInStage_ = false;//すでにステージ入っている
+
+	//当たり判定(継承なし)
+	std::unique_ptr<CollisionSource> collisionTemplate;
 };
 

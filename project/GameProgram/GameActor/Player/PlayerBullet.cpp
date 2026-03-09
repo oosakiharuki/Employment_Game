@@ -58,3 +58,12 @@ void PlayerBullet::OnCollision(CollisionSource* collision) {
 		isDead_ = true;
 	}
 }
+
+bool PlayerBullet::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypeStage ||
+		collisionType == CollisionTypes::TypeEnemy ||
+		collisionType == CollisionTypes::TypeBoss) {
+		return true;
+	}
+	return false;
+}

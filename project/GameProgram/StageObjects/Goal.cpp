@@ -42,3 +42,9 @@ void Goal::OnCollision(CollisionSource* collision) {
 	}
 }
 
+bool Goal::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypePlayer) {
+		return true;
+	}
+	return false;
+}
