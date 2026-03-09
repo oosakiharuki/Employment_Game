@@ -36,8 +36,6 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 	//Transform更新処理
 	transformMark_ = wtMark_.UpdateTransform();
 
-	//enemyState_ = std::make_unique<EnemySearchState>();
-
 	collisionType_ = CollisionTypes::TypeEnemy;
 
 	enemyEye_ = std::make_unique<EnemyEye>();
@@ -72,8 +70,8 @@ void BaseEnemy::UpdateBehind() {
 	//影
 	ShadowUpdate();
 
-	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
+	object_->Update(wt_);
 
 	//設定した全てのパーティクル更新処理
 	for (auto& particle : particles_) {

@@ -44,7 +44,8 @@ void MyGame::Update() {
 
 	//フェード更新
 	FadeScreen::GetInstance().Update();
-	
+	//スプライト更新処理
+	UIManager::GetInstance().Update();
 	//ポストエフェクト更新/変更
 	PostEffectManager::GetInstance().Update();
 

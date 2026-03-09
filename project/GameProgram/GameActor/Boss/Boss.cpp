@@ -19,11 +19,7 @@ void Boss::Initialize() {
 
 	collisionType_ = CollisionTypes::TypeBoss;
 
-	hp_ = 60;
-	
-	moveCenter_ = { 0,13,0 };
-	//右位置設定
-	SetMovePoint(moveCenter_ + kEdge_);
+	hp_ = kMaxHp_;
 }
 
 void Boss::Update() {
@@ -40,8 +36,8 @@ void Boss::Update() {
 
 	ImGuiUpdate();
 
-	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
+	object_->Update(wt_);
 }
 
 void Boss::Draw() {
@@ -290,6 +286,13 @@ void Boss::CommandBeforeActionMotion() {
 void Boss::ChangeStatePattern(std::unique_ptr<BaseBossState> state) {
 	bossState_.reset();
 	bossState_ = std::move(state);
+}
+
+void Boss::BossCenter(const Vector3& center) {
+	//センターを設定
+	moveCenter_ = center;
+	//右位置をセグメント終点に設定
+	SetMovePoint(moveCenter_ + kEdge_);
 }
 
 void Boss::IsDamage() {

@@ -14,7 +14,14 @@ void CameraControl::Initialize() {
 	transform_ = { kDefaultScale_, {0,0,0}, {0,0,0} };
 }
 
-void CameraControl::Update(Camera* camera) {
+void CameraControl::Update(Camera* camera, Player* player) {
+	//プレイヤー関連処理
+	if (player) {
+		//カメラコントロール
+		SetPlayerPosition(player->GetTranslate());
+		//プレイヤーが倒されたらシェイク
+		(player->GetHp() == 0) ? ShakeMode(true) : ResetShakeTime();
+	}
 
 	if (CollisionManager::GetInstance().IsGoal() || CollisionManager::GetInstance().IsWarp()) {
 		ZoomStart(CollisionManager::GetInstance().GetZoomPoint() + kPlayerAwayPos_);
@@ -106,7 +113,7 @@ void CameraControl::Move() {
 	else {
 		cameraSegment_.diff.y = playerPos_.y;
 	}
-	
+
 	//Y座標範囲
 	cameraSegment_.diff.y = std::clamp(cameraSegment_.diff.y, minEndPoint_.y, maxEndPoint_.y);
 

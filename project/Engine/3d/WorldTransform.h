@@ -24,8 +24,7 @@ public:
 	/// 更新処理
 	/// </summary>
 	/// <param name="transform">トランスフォーム</param>
-	void UpdateMatrix(Transform transform);
-	/// <summary>
+	void UpdateMatrix(const Transform& transform);
 	/// <summary>
 	/// getter_ワールド行列(座標変換行列)
 	/// </summary>

@@ -48,15 +48,6 @@ void Input::Initialize(WinApp* winApp) {
 
 	result = mouseInput_->SetDataFormat(&c_dfDIMouse2);
 	assert(SUCCEEDED(result));
-
-
-	//ウィンドウズのクライアント領域の真ん中座標をとる処理
-	p.x = centerX;
-	p.y = centerY;
-
-	ClientToScreen(winApp_->GetHwnd(), &p);
-	SetCursorPos(p.x, p.y);
-
 }
 
 void Input::Update() {
@@ -69,27 +60,6 @@ void Input::Update() {
 	result = keyboard_->GetDeviceState(sizeof(key_), key_);
 
 	result = mouseInput_->Acquire();
-
-	result = mouseInput_->GetDeviceState(sizeof(mouseState_), &mouseState_);
-
-	mouseX_ += float(mouseState_.lX);
-	mouseY_ += float(mouseState_.lY);
-
-
-	if (mouseState_.rgbButtons[0] & 0x80) {
-		//SetCursorPos(centerX, centerY);
-	}
-
-	mouseX_ = std::clamp(mouseX_, float(p.x - centerX) , float(p.x + centerX));
-	mouseY_ = std::clamp(mouseY_, float(p.y - centerY), float(p.y + centerY));
-
-#ifdef USE_IMGUI
-	
-	ImGui::Begin("input");
-	ImGui::Text("%f,%f",mouseX_, mouseY_);
-	ImGui::End();
-
-#endif // USE_IMGUI
 
 	//現在の状態から前回の状態に
 	preState_ = state_;

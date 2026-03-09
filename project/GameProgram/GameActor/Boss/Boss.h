@@ -33,7 +33,7 @@ public:
 	/// 移動用に真ん中を設定
 	/// </summary>
 	/// <param name="center">初期値をセンターに</param>
-	void SetBossCenter(const Vector3& center) { moveCenter_ = center; }
+	void BossCenter(const Vector3& center);
 
 	/// <summary>
 	/// setter_プレイヤー
@@ -120,7 +120,7 @@ private:
 	/// 移動ポイントの設定
 	/// </summary>
 	/// <param name="point">移動させるポイント</param>
-	/// <param name="speedDivision">移動の分割数</param>
+	/// <param name="speedDivision">移動時間(三秒をデフォルトとする)</param>
 	void SetMovePoint(const Vector3& point, float speedDivision = 3.0f);
 
 	/// <summary>
@@ -151,8 +151,10 @@ private:
 	void OnCollision(CollisionSource* collision) override;
 
 	std::unique_ptr<Object_glTF> object_;
-
+	//弾丸
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
+	//ボスの最大体力
+	const uint32_t kMaxHp_ = 60;
 
 	//プレイヤークラス(追尾用)
 	Player* player_ = nullptr;
@@ -169,7 +171,7 @@ private:
 	Vector3 deadScale_{};
 	float deadTimer_ = 0.0f;
 	const float kDeadTimeMax_ = 6.0f;
-
+	//死亡モーションも終了したフラグ
 	bool isDeadMotionFinish_ = false;
 
 	/// <summary>
@@ -183,6 +185,6 @@ private:
 	//真ん中座標、左右移動に使う
 	Vector3 moveCenter_{};
 
-	//new
+	//コマンドの行動を終えたフラグ(次のコマンドへ移動の合図となる)
 	bool motionFinish_ = false; 
 };

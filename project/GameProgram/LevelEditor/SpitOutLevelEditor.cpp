@@ -176,17 +176,17 @@ std::list<std::unique_ptr<EventTrigger>> SpitOutLevelEditor::SpitOutEventTrigger
 }
 
 void SpitOutLevelEditor::SpitOutBoss(std::unique_ptr<Boss>& boss) {
-
+	//bossがいない場合はスキップ
 	if (!levelEditor_->GetLevelData()->bosses.empty()) {
 		boss = std::make_unique<Boss>();
 		boss->Initialize();
-
+		//データを渡す
 		auto& bossData = levelEditor_->GetLevelData()->bosses[0];
 		boss->SetTranslate(bossData.transform.translate);
 		boss->SetRotate(bossData.transform.rotate);
 		boss->SetColliderSize(bossData.colliderSize);
-
-		boss->SetBossCenter(bossData.transform.translate);
+		//真ん中を設定(横移動で使用)
+		boss->BossCenter(bossData.transform.translate);
 	}
 }
 

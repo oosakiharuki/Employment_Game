@@ -7,7 +7,7 @@ using namespace MyMath;
 WorldTransform::WorldTransform(){}
 WorldTransform::~WorldTransform(){}
 
-void WorldTransform::UpdateMatrix(Transform transform) {
+void WorldTransform::UpdateMatrix(const Transform& transform) {
 	//動いていないなら通らない
 	if (transform_ != transform) {
 		//値を変更

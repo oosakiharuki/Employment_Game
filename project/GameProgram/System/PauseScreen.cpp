@@ -64,6 +64,8 @@ void PauseScreen::BeforeChangeScene(const std::string& textureName, std::unique_
 
 
 void PauseScreen::Update() {
+	isPause_ = true;
+
 	//スプライトがスライド移動
 	pauseState_->Update(*this);
 
@@ -120,38 +122,75 @@ void PauseScreen::UpdateGuide() {
 }
 
 void PauseScreen::SelectMode() {
+	//選択方法
+	if (Input::GetInstance().GetActiveGamePad()) {
+		SelectGamePad();//ゲームパッド
+	}
+	else {
+		SelectKeyBoard();//キーボード
+	}
+
+	//選択している項目に緑枠を入れる
+	if (selectNumber == 0) {
+		select_ = kSelectReturnEndPosition_;
+	}
+	else if (selectNumber == 1) {
+		select_ = kSelectGuideEndPosition_;
+	}
+	else if (selectNumber == 2) {
+		select_ = kSelectSceneChangeEndPosition_;
+	}
+
+	if ((Input::GetInstance().TriggerKey(DIK_SPACE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && interpolation_ >= 1.0f) {
+		isSelect_ = true;
+	}
+
+	if ((Input::GetInstance().TriggerKey(DIK_ESCAPE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START)) && interpolation_ >= 1.0f) {
+		select_ = kSelectReturnEndPosition_;
+		isSelect_ = true;
+	}
+}
+
+void PauseScreen::SelectGamePad() {
+	if (Input::GetInstance().LeftStickY() >= -0.5f && Input::GetInstance().LeftStickY() <= 0.5f) {
+		isMoveStick_ = false;//傾きを直した
+	}
+	//一度傾けを戻さないと進まない
+	if (isMoveStick_) return;
+
+	//上に傾けた場合
+	if (Input::GetInstance().LeftStickY() > 0.5f && selectNumber > 0) {
+		selectNumber--;
+		isMoveStick_ = true;
+	}//下に傾けた場合
+	else if (Input::GetInstance().LeftStickY() < -0.5f && selectNumber < 2) {
+		selectNumber++;
+		isMoveStick_ = true;
+	}
+}
+
+void PauseScreen::SelectKeyBoard() {
 	if (Input::GetInstance().TriggerKey(DIK_W) && selectNumber > 0) {
 		selectNumber--;
 	}
 	else if (Input::GetInstance().TriggerKey(DIK_S) && selectNumber < 2) {
 		selectNumber++;
 	}
-
-	if (selectNumber == 0) {
-		select_ = kSelectReturnEndPosition_;
-	}else if (selectNumber == 1) {
-		select_ = kSelectGuideEndPosition_;
-	}else if (selectNumber == 2) {
-		select_ = kSelectSceneChangeEndPosition_;
-	}
-
-	if (Input::GetInstance().TriggerKey(DIK_SPACE) && interpolation_ >= 1.0f) {
-		isSelect_ = true;
-	}
-
-	if (Input::GetInstance().TriggerKey(DIK_ESCAPE) && interpolation_ >= 1.0f) {
-		select_ = kSelectReturnEndPosition_;
-		isSelect_ = true;
-	}
 }
 
 void PauseScreen::SelectResult() {
 	if (select_.y == kSelectReturnEndPosition_.y) {
 		isPause_ = false;
-	}else if (select_.y == kSelectGuideEndPosition_.y) {
+		ResetPauseSprite();
+		selectNumber = 0;
+	}
+	else if (select_.y == kSelectGuideEndPosition_.y) {
 		ChangePauseState(std::make_unique<PauseSelectGuide>());
-	}else if (select_.y == kSelectSceneChangeEndPosition_.y) {
+		ResetPauseSprite();
+	}
+	else if (select_.y == kSelectSceneChangeEndPosition_.y) {
 		ChangePauseState(std::make_unique<PauseSelectSceneChange>());
+		selectNumber = 0;
 	}
 }
 

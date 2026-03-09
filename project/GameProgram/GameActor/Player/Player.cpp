@@ -277,6 +277,7 @@ void Player::LifeUpdate() {
 	//影の更新
 	ShadowUpdate();
 
+	//ジャンプによる変動
 	//地面にいるとき
 	if (isGround_) {
 		jumpPower_ = 0.0f;//ジャンプ可能
@@ -373,7 +374,8 @@ void Player::Performance() {
 	else if (CollisionManager::GetInstance().IsWarp()) {
 		BackDirection();//向きを前に(Z方向)
 	}	
-	else if (isStartPerformance_) {
+	else {
+		//水たまりから出てくるスタート演出処理
 		if (pointY_ == kStartPointY_) {
 			playerPoint_ = transform_.translate;
 		}
@@ -382,17 +384,15 @@ void Player::Performance() {
 
 		//プレイヤー配置座標 + 地面当たり判定によって上げられる分
 		if (startPointY >= playerPoint_.y) {
-			SetTranslate({ playerPoint_.x,startPointY,playerPoint_.z });
-			isStartPerformance_ = false;
+			transform_.translate = { playerPoint_.x,startPointY,playerPoint_.z };
 			IsPerformanceFlag(false);//演出モードを終了し操作できるように
-			jumpPower_ = 0.3f;
-			transform_.translate.y += jumpPower_;//強制的にジャンプさせて飛び出たようにする
+			jumpPower_ = kJumpPowerMax_;
 		}
 		else {
 			pointY_ += kPlayerUp_;
-			SetTranslate({ playerPoint_.x,startPointY,playerPoint_.z });
+			transform_.translate = { playerPoint_.x,startPointY,playerPoint_.z };
 		}
-	}
+	}	
 }
 
 #pragma region プレイヤーの操作
@@ -455,7 +455,7 @@ void Player::CommandMove() {
 
 void Player::CommandJump() {
 	if (isGround_) {
-		jumpPower_ = 0.3f;
+		jumpPower_ = kJumpPowerMax_;
 	}
 	isGround_ = false;
 }
@@ -720,7 +720,15 @@ void Player::RespawnPlayer() {
 
 	transform_.translate = NextStageSave::GetInstance().GetNextStageSaveData().checkPoint;
 	transform_.translate.z = 0.0f;
-
+	//スタート演出の値設定
+	playerPoint_ = transform_.translate;
+	pointY_ = kStartPointY_;
+	isGround_ = false;
+	//ノーマルステートに戻す
+	ChangeStatePatternAction(std::make_unique<PlayerNormalState>());
+	OffShield();
+	brinkTimer_ = 0.0f;
+			
 	transform_.rotate = { 0,180,0 };
 }
 

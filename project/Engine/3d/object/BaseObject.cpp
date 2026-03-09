@@ -34,7 +34,7 @@ void BaseObject::CreateDirectionalLight() {
 	//色の設定
 	directionalLightData_->color = kDefaultColor_;
 	directionalLightData_->direction = kDirectionalLightDirection_;
-	directionalLightData_->intensity = kIntensity_;
+	directionalLightData_->intensity = 0.0f;
 }
 
 void BaseObject::CreatePointLight() {

@@ -1,9 +1,10 @@
 #pragma once
-#include "WorldTransform.h"
 #include "Camera.h"
 #include "MyMath.h"
-#include <LevelEditor.h>
+#include "LevelEditor.h"
 #include "UseEveryOne.h"
+#include "Player.h"
+
 /// <summary>
 /// カメラをコントロールする
 /// </summary>
@@ -17,7 +18,8 @@ public:
 	/// 更新処理
 	/// </summary>
 	/// <param name="camera">現在のカメラ</param>
-	void Update(Camera* camera);
+	/// <param name="player">プレイヤー情報</param>
+	void Update(Camera* camera,Player* player = nullptr);
 
 	/// <summary>
 	/// setter_座標位置

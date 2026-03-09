@@ -49,6 +49,15 @@ void WarpGate::Update() {
 	minUnder_ = 1000.0f;
 }
 
+void WarpGate::Update(Player* player) {
+	//通常更新処理
+
+	Update();
+	if (!player->GetPerformanceMode()) {
+		Vanish();//出てきた後消えるようにする
+	}
+}
+
 void WarpGate::Draw() {
 	//完全に小さくなったら映さない
 	if (transform_.scale.x <= 0 && transform_.scale.y <= 0 && transform_.scale.z <= 0) {

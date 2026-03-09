@@ -23,7 +23,7 @@ void TitleScene::Initialize() {
 	sceneParticles_[particleBullet_.name] = ParticleManager::GetInstance().InitParticle(particleBullet_);
 
 	FadeScreen::GetInstance().FadeStart(type_fadeOut);
-	PauseScreen::GetInstance().PauseFlag(false);//ポーズを強制解除
+	PauseScreen::GetInstance().OffPause();//ポーズを強制解除
 }
 
 void TitleScene::InitSprite() {
