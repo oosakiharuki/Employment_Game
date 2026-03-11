@@ -315,6 +315,12 @@ private:
 	/// ノックバックする更新処理
 	/// </summary>
 	void KnockBackUpdate();
+	
+	/// <summary>
+	/// プレイヤーが動いているか判定
+	/// </summary>
+	/// <returns></returns>
+	const bool IsMovePosition();
 
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object_;
@@ -412,12 +418,6 @@ private:
 
 	//前回座標の保存場所
 	Vector3 prePosition_;
-	
-	/// <summary>
-	/// プレイヤーが動いているか判定
-	/// </summary>
-	/// <returns></returns>
-	const bool IsMovePosition();
 
 	//オブジェクトたち
 	std::unordered_map<std::string, std::string> objectMotions_;
@@ -442,6 +442,9 @@ private:
 	std::unique_ptr<BasePlayerState> actionState_;
 	//リスポーンフラグ
 	bool isRespawn_ = false;
+
+	float appearanceAnimationTimer_ = 0.0f;
+	const float appearanceAnimationFinishTime_ = 2.5f;
 
 	//スタート演出(水たまりから飛び出る感じに)
 	Vector3 playerPoint_{};

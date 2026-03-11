@@ -56,6 +56,7 @@ void Player::InitMainBody() {
 	objectMotions_["move"] = "player_move.gltf";
 	objectMotions_["shield"] = "player_shield.gltf";
 	objectMotions_["clear"] = "player_clear.gltf";
+	objectMotions_["appearance"] = "player_appearance.gltf";
 
 	//プレイヤー初期化/オブジェクト読み込み
 	object_ = std::make_unique<Object_glTF>();
@@ -202,6 +203,10 @@ void Player::AnimationUpdate() {
 
 	if (isPerformance_) {
 		motionName_ = "clear";
+		//タイマーが進まない場合
+		if (appearanceAnimationTimer_ > 0.0f) {
+			motionName_ = "appearance";
+		}
 	}
 
 	//animationが変わった場合切り替える
@@ -375,22 +380,13 @@ void Player::Performance() {
 		BackDirection();//向きを前に(Z方向)
 	}	
 	else {
+		appearanceAnimationTimer_ += kDeltaTime_;
 		//水たまりから出てくるスタート演出処理
-		if (pointY_ == kStartPointY_) {
-			playerPoint_ = transform_.translate;
-		}
-
-		float startPointY = playerPoint_.y + pointY_;//プレイヤーが真下からくるように設定する
-
-		//プレイヤー配置座標 + 地面当たり判定によって上げられる分
-		if (startPointY >= playerPoint_.y) {
-			transform_.translate = { playerPoint_.x,startPointY,playerPoint_.z };
+		if (appearanceAnimationTimer_ >= appearanceAnimationFinishTime_) {
 			IsPerformanceFlag(false);//演出モードを終了し操作できるように
+			appearanceAnimationTimer_ = 0.0f;
 			jumpPower_ = kJumpPowerMax_;
-		}
-		else {
-			pointY_ += kPlayerUp_;
-			transform_.translate = { playerPoint_.x,startPointY,playerPoint_.z };
+			transform_.translate.y += jumpPower_;
 		}
 	}	
 }
@@ -537,7 +533,7 @@ void Player::Draw() {
 	//プレイヤー本体
 	object_->Draw();
 
-	if (hp_ != 0) {
+	if (hp_ != 0 && !isPerformance_) {
 		//傘
 		umbrella_->Draw();
 		//影

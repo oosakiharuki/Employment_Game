@@ -37,7 +37,8 @@ void CheckPoint::Draw() {
 
 void CheckPoint::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypePlayer) {
-		transform_.rotate.y += 10.0f;
+		transform_.rotate.x -= 45.0f;
+		transform_.rotate.x = std::clamp(transform_.rotate.x,-90.0f,0.0f);
 		NextStageSave::GetInstance().SetCheckPoint(transform_.translate);
 	}
 }
