@@ -33,7 +33,7 @@ public:
 	/// getter_座標位置
 	/// </summary>
 	/// <returns>現在の座標位置</returns>
-	Vector3 GetTranslate() const { return transform_.translate; }
+	const Vector3& GetTranslate()  { return transform_.translate; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
@@ -44,7 +44,7 @@ public:
 	/// getter_回転
 	/// </summary>
 	/// <returns>現在の回転</returns>
-	Vector3 GetRotate() const { return transform_.rotate; }
+	const Vector3& GetRotate() { return transform_.rotate; }
 	/// <summary>
 	/// setter_回転
 	/// </summary>

@@ -9,15 +9,11 @@
 /// <summary>
 /// 敵の基盤クラス
 /// </summary>
-class BaseEnemy : public GameActor, public EnemyCommand{
+class BaseEnemy : public GravityActor, public EnemyCommand{
 public:
 
 	BaseEnemy();
 	virtual ~BaseEnemy();
-	///// <summary>
-	///// 初期化処理
-	///// </summary>
-	//virtual void Initialize() = 0;
 	/// <summary>
 	/// 共有する初期化処理
 	/// </summary>

@@ -5,7 +5,7 @@
 /// <summary>
 /// 傭兵の敵(BaseEnemyの派生クラス)
 /// </summary>
-class Enemy_Soldier : public BaseEnemy, public EnemyFireCommand,public EnemyMoveCommand, public GravityActor {
+class Enemy_Soldier : public BaseEnemy, public EnemyFireCommand,public EnemyMoveCommand {
 public:
 	/// <summary>
 	/// デストラクタ

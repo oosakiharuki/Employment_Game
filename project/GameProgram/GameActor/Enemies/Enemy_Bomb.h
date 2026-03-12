@@ -6,7 +6,7 @@
 /// <summary>
 /// ボムの敵(BaseEnemyの派生クラス)
 /// </summary>
-class Enemy_Bomb : public BaseEnemy, public EnemyMoveCommand, public EnemyExplosionCommand, public GravityActor {
+class Enemy_Bomb : public BaseEnemy, public EnemyMoveCommand, public EnemyExplosionCommand {
 public:
 	/// <summary>
 	/// デストラクタ

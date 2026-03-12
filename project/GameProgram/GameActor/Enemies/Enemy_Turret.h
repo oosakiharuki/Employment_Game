@@ -5,7 +5,7 @@
 /// <summary>
 /// ターレットの敵(BaseEnemyの派生クラス)
 /// </summary>
-class Enemy_Turret : public BaseEnemy, public EnemyFireCommand, public GravityActor {
+class Enemy_Turret : public BaseEnemy, public EnemyFireCommand {
 public:
 	/// <summary>
 	/// デストラクタ

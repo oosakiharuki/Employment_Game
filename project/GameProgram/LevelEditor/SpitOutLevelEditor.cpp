@@ -27,7 +27,7 @@ void SpitOutLevelEditor::SpitOutPlayer(std::unique_ptr<Player>& player) {
 		auto& playerData = levelEditor_->GetLevelData()->players[0];
 		player->SetTranslate(playerData.transform.translate);//座標
 		player->SetRotate(playerData.transform.rotate);//向き
-		player->SetUmbrellaRotate();//傘の向き
+		player->InitUmbrellaRotateY();//傘の向き
 		player->SetColliderSize(playerData.colliderSize);//当たり判定
 		NextStageSave::GetInstance().SetCheckPoint(playerData.transform.translate);//チェックポイント設定
 	}
