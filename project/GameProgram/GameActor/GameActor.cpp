@@ -23,10 +23,6 @@ void GameActor::Update() {
 	//状態ステート(生存(active)、死亡(dead)、演出(performance))
 	actorState_->Update(*this);
 	actorState_->ChangeState(*this);
-
-	if (actorState_->GetIsInput()) {
-		ChangeStatePattern(actorState_->GetNextState());
-	}
 }
 
 void GameActor::ShadowUpdate() {

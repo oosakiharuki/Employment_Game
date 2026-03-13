@@ -19,7 +19,7 @@
 /// プレイヤー、敵のような動く、攻撃すると
 /// ゲームで使う基盤クラス
 /// </summary>
-class GameActor : public ActorCommand, public CollisionSource
+class GameActor : public CollisionSource
 {
 public:
 
@@ -35,6 +35,19 @@ public:
 	/// 描画処理
 	/// </summary>
 	virtual void Draw() = 0;
+
+	/// <summary>
+	/// 生存状態
+	/// </summary>
+	virtual void Active() = 0;
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
+	virtual void Dead() = 0;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
+	virtual void Performance() = 0;
 
 	/// <summary>
 	/// getter_座標位置

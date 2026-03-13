@@ -5,8 +5,8 @@
 
 using namespace UseEveryOne;
 
-void ActiveState::Update(ActorCommand& actorCommand) {
-	actorCommand.Active();
+void ActiveState::Update(GameActor& actor) {
+	actor.Active();
 }
 
 void ActiveState::ChangeState(GameActor& actor) {
@@ -22,8 +22,8 @@ void ActiveState::ChangeState(GameActor& actor) {
 }
 
 
-void DeadState::Update(ActorCommand& actorCommand) {
-	actorCommand.Dead();
+void DeadState::Update(GameActor& actor) {
+	actor.Dead();
 }
 
 void DeadState::ChangeState(GameActor& actor) {
@@ -33,8 +33,8 @@ void DeadState::ChangeState(GameActor& actor) {
 	}
 }
 
-void PerformanceState::Update(ActorCommand& actorCommand) {
-	actorCommand.Performance();
+void PerformanceState::Update(GameActor& actor) {
+	actor.Performance();
 }
 
 void PerformanceState::ChangeState(GameActor& actor) {

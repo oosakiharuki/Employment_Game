@@ -175,7 +175,6 @@ void Boss::FireBullet() {
 	//弾丸を生み出す
 	std::unique_ptr<EnemyBullet> bullet = std::make_unique<EnemyBullet>();
 	bullet->Initialize();
-	bullet->SetPlayer(player_);//プレイヤーと当たりノックバックパラメータで使う
 	bullet->SetTranslate(enemyPosition);
 	bullet->SetVelocity(velocity);
 	bullets_.push_back(std::move(bullet));

@@ -134,9 +134,6 @@ void BaseEnemy::DrawParticle() {
 	}
 }
 
-
-
-
 void BaseEnemy::IsDamage() {
 	//ダメージのパーティクルを出す
 	particles_[particleDamage_.name]->SetTranslate(transform_.translate); //座標を読み取る
@@ -223,10 +220,6 @@ bool BaseEnemy::IsLostFound() {
 void BaseEnemy::StatePatternUpdate() {
 	enemyState_->Update(*this);	
 	enemyState_->ChangeState(*this);
-
-	if (enemyState_->GetIsInput()) {
-		ChangeStatePattern(enemyState_->GetNextState());
-	}
 }
 
 void BaseEnemy::ChangeStatePattern(std::unique_ptr<BaseEnemyState> enemyState) {

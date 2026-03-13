@@ -44,6 +44,18 @@ protected:
 	Vector3 move_ = { 0,0,0 };
 	const float kMoveX_ = 0.03f;
 };
+
+/// <summary>
+/// 弾丸を発砲できる敵
+/// </summary>
+class EnemyCanFireBullet {
+public:
+	/// <summary>
+	/// 弾丸発射処理
+	/// </summary>
+	virtual void FireBullet() = 0;
+};
+
 /// <summary>
 /// 敵の発砲コマンド
 /// </summary>
@@ -51,18 +63,60 @@ class EnemyFireCommand {
 public:
 
 	/// <summary>
-	/// 銃弾の処理
+	/// 弾丸更新処理
 	/// </summary>
-	/// <returns>銃弾リスト</returns>
-	std::list<EnemyBullet*> GetBullets() { 
-		std::list<EnemyBullet*> bullets;
-		for (auto& bullet : bullets_) {
-			bullets.push_back(bullet.get());
-		}
-		return bullets;
-	}
+	void BulletUpdate();
+	/// <summary>
+	/// 弾丸描画処理
+	/// </summary>
+	void BulletDraw();
+	/// <summary>
+	/// 弾丸削除処理
+	/// </summary>
+	void BulletReset();
 
-protected:
+	/// <summary>
+	/// 発泡
+	/// </summary>
+	void Fire(EnemyCanFireBullet& enemyCanFireBullet);
+
+	/// <summary>
+	/// 攻撃フラグ
+	/// </summary>
+	/// <returns>true攻撃する / false攻撃しない</returns>
+	bool IsFire() { return isFire_; }
+	/// <summary>
+	/// 攻撃処理
+	/// </summary>
+	void FireStart() { isFire_ = true; }
+	/// <summary>
+	/// getter_放った弾丸
+	/// </summary>
+	/// <returns>現在の放った弾丸数</returns>
+	uint32_t GetRapidCount() { return rapidCount_; }
+	/// <summary>
+	/// setter_放つ弾丸Max
+	/// </summary>
+	/// <param name="rapidCountMax">放つ弾丸の最大数を設定</param>
+	void SetRapidCountMax(uint32_t rapidCountMax) { rapidCountMax_ = rapidCountMax; }
+	/// <summary>
+	/// 弾丸を追加
+	/// </summary>
+	/// <param name="startPoint">弾丸が出る座標</param>
+	/// <param name="velocity">速度</param>
+	void AddBullet(const Vector3& startPoint, const Vector3& velocity);
+	/// <summary>
+	/// getter_パーティクル攻撃の名前
+	/// </summary>
+	/// <returns>パーティクル攻撃の名前部分を渡す</returns>
+	const std::string& GetParticleFireName() { return particleFire_.name; }
+	/// <summary>
+	/// getter_パーティクル攻撃そのもの
+	/// </summary>
+	/// <returns>パーティクル攻撃を渡す</returns>
+	const ParticleParameters& GetParticleFireParameter() { return particleFire_; }
+
+private:
 	//弾丸リスト
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
 
@@ -83,79 +137,4 @@ protected:
 	};
 
 	bool isFire_ = true;
-
-	/// <summary>
-	/// 弾丸更新処理
-	/// </summary>
-	void BulletUpdate();
-
-	/// <summary>
-	/// 発泡
-	/// </summary>
-	void Fire();
-
-	/// <summary>
-	/// 発泡方法
-	/// </summary>
-	virtual void FireBullet() = 0;
-};
-/// <summary>
-/// ボムの爆発コマンド
-/// </summary>
-class EnemyExplosionCommand {
-public:
-
-	/// <summary>
-	/// getter‗爆発範囲AABB
-	/// </summary>
-	/// <returns>bombAABB</returns>
-	virtual AABB GetBombAABB() = 0;
-
-	/// <summary>
-	/// getter_距離
-	/// </summary>
-	/// <returns>プレイヤーからボムの距離</returns>
-	virtual Vector3 GetDistance() = 0;
-
-protected:
-
-	//追尾開始
-	bool isHomingStart_ = false;
-
-	//爆発するまでのタイマー
-	const float kBombTimeMax_ = 5.0f;//max
-	float bombTimer_ = 0.0f;
-
-	//爆発範囲AABB
-	AABB bombAABB_;
-	const Vector3 kExplosionRange_ = { 5,5,5 };//大きさ
-
-	//リアクション(拡大縮小)
-	Vector3 bombScale_ = { 0.05f, 0.05f, 0.05f };
-	const float kScaleMax_ = 0.2f;//スケール最大値
-	const float kOnTheVerge = 3.5f;//爆発寸前のタイマー
-	const float kScaleSpeedUp_ = 2.0f;
-	//リアクション(色)
-	Vector4 color_ = { 1,1,1,1 };
-	float colorTimer_ = 0.0f;//時間
-	float colorTimeMax_ = 0.2f;//色変化の最大時間
-	const float kColorChangePower_ = 0.1f;//足し引きするパワー
-
-	float deadTimer_ = 0.0f;
-	const float kDeadTimeMax_ = 0.5f;//爆発する間の時間
-
-	/// <summary>
-	/// 爆発する
-	/// </summary>
-	virtual void Explosion() = 0;
-
-	/// <summary>
-	/// タイムリミット
-	/// </summary>
-	virtual void TimeLimit() = 0;
-
-	/// <summary>
-	/// 赤の点滅
-	/// </summary>
-	virtual void RedBlinking() = 0;
 };
