@@ -171,10 +171,10 @@ void Object_glTF::Draw() {
 		}
 	}
 
+	DrawCommand();
 	//モデル
 	for (uint32_t i = 0; i < modelData_.Data.size();i++) {
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResources_[i]->GetGPUVirtualAddress());
-		DrawCommand();
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResources_[i]->GetGPUVirtualAddress());	
 		if (model_) {
 			model_->Draw();
 		}
