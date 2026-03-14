@@ -46,14 +46,6 @@ void PlayerCommand::JumpUpdate() {
 	player_->SetTranslate(translate);
 }
 
-
-
-
-
-
-
-
-
 void PlayerCommand::CommandMove() {
 	//ゲームパット操作の場合
 	if (Input::GetInstance().GetActiveGamePad()) {
@@ -252,20 +244,6 @@ bool PlayerCommand::BrinkTimeMax() {
 void PlayerCommand::OffShield() {
 	player_->OffUmbrellaShield();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 void PlayerNormalState::Update(PlayerCommand& playerCommand) {

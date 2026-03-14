@@ -26,7 +26,7 @@ void SelectScene::Initialize() {
 	//ポーズ画面
 	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnTitle.png", std::make_unique<TitleScene>());
 
-	CollisionManager::GetInstance().ResetFrag();
+	CollisionUtility::GetInstance().ResetFrag();
 	PauseScreen::GetInstance().OffPause();//ポーズを強制解除
 }
 
@@ -146,7 +146,7 @@ void SelectScene::SpitOutGameObject() {
 
 void SelectScene::SceneUpdate() {
 	//ワープする+カメラズームが完了
-	if (CollisionManager::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
+	if (CollisionUtility::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
 		SceneManager::GetInstance().ChangeScene(std::make_unique<GameScene>());
 	}
 

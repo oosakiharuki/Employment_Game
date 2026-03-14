@@ -23,8 +23,8 @@ void CameraControl::Update(Camera* camera, Player* player) {
 		(player->GetHp() == 0) ? ShakeMode(true) : ResetShakeTime();
 	}
 
-	if (CollisionManager::GetInstance().IsGoal() || CollisionManager::GetInstance().IsWarp()) {
-		ZoomStart(CollisionManager::GetInstance().GetZoomPoint() + kPlayerAwayPos_);
+	if (CollisionUtility::GetInstance().IsGoal() || CollisionUtility::GetInstance().IsWarp()) {
+		ZoomStart(CollisionUtility::GetInstance().GetZoomPoint() + kPlayerAwayPos_);
 	}
 
 

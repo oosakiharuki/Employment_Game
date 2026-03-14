@@ -26,12 +26,10 @@ public:
 	/// </summary>
 	void BulletDraw();
 
-
-
-
-
-
-
+	/// <summary>
+	/// ジャンプの更新処理
+	/// </summary>
+	void JumpUpdate();
 
 	/// <summary>
 	/// 移動
@@ -64,14 +62,11 @@ public:
 	/// </summary>
 	/// <returns>ブリンクタイマーがMaxに到達した時true</returns>
 	bool BrinkTimeMax();
-
 	/// <summary>
 	/// シールド解除
 	/// </summary>
 	void OffShield();
 
-
-	void JumpUpdate();
 private:
 
 	/// <summary>
@@ -133,9 +128,7 @@ private:
 	const float kFireCoolTimeMax_ = 0.5f;//クールタイム最大時間
 	const uint32_t kBulletCount_ = 3;//一度に出る弾丸数
 	
-	
 	const Vector3 kBulletKnockbackPower_ = { 0.0f,0.0f,0.1f };//撃った場合のノックバックパワー
-
 
 	//傘の位置設定時に使う
 	const float kBrinkPower_ = 1.25f;

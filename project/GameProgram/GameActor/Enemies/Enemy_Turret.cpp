@@ -169,7 +169,7 @@ void Enemy_Turret::OnCollision(CollisionSource* collision) {
 	}
 
 	if (collision->GetType() == CollisionTypes::TypeStage) {
-		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
+		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
 	}
 }
 

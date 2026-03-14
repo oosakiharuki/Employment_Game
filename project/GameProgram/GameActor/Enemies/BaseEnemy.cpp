@@ -87,7 +87,7 @@ void BaseEnemy::UpdateBehind() {
 	center_ = transform_.translate;
 
 	CollisionManager::GetInstance().FrameCollision(this);
-	collisionOverlap = CollisionManager::GetInstance().SetTarget(GetTranslate(), GetAABB());
+	collisionOverlap = CollisionUtility::GetInstance().SetTarget(GetTranslate(), GetAABB());
 
 }
 
