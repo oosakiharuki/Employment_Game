@@ -33,7 +33,7 @@ void GameScene::Initialize() {
 	//ポーズ画面
 	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnSelect.png",std::make_unique<SelectScene>());
 
-	CollisionManager::GetInstance().ResetFrag();
+	CollisionUtility::GetInstance().ResetFrag();
 }
 
 void GameScene::Update() {
@@ -297,11 +297,11 @@ void GameScene::SceneUpdate() {
 #endif // USE_IMGUI
 	
 	//ゴールした+カメラズームが完了
-	if (CollisionManager::GetInstance().IsGoal() && cameraControl_->ZoomEnd()) {
+	if (CollisionUtility::GetInstance().IsGoal() && cameraControl_->ZoomEnd()) {
 		SceneManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());//クリアシーンに移動
 	}
 	//ワープする+カメラズームが完了
-	else if (CollisionManager::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
+	else if (CollisionUtility::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
 		//次のステージに進む時Hpなどパラメータがリセットされないようにする
 		NextStageSave::GetInstance().SetPlayerHp(player_->GetHp()); //現在のプレイヤー体力を保存
 		NextStageSave::GetInstance().SetPlayerRemain(player_->GetRemain()); //現在のプレイヤー残機を保存

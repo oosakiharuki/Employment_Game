@@ -54,7 +54,7 @@ void Shadow::Draw() {
 
 void Shadow::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypeStage) {
-		CollisionManager::GetInstance().UnderCollision(minUnder_,actorPosition_,collision->GetAABB());
+		CollisionUtility::GetInstance().UnderCollision(minUnder_,actorPosition_,collision->GetAABB());
 	}
 }
 

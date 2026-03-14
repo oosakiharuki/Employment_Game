@@ -176,7 +176,7 @@ void Enemy_Soldier::OnCollision(CollisionSource* collision) {
 	}
 
 	if (collision->GetType() == CollisionTypes::TypeStage) {
-		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
+		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
 	}
 }
 bool Enemy_Soldier::TypeCheckUp(const CollisionTypes& collisionType) {

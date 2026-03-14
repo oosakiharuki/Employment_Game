@@ -161,7 +161,7 @@ void Player::Update() {
 	center_ = transform_.translate;//真ん中の座標
 
 	CollisionManager::GetInstance().FrameCollision(this);
-	collisionOverlap = CollisionManager::GetInstance().SetTarget(GetTranslate(), GetAABB());
+	collisionOverlap = CollisionUtility::GetInstance().SetTarget(GetTranslate(), GetAABB());
 	isGround_ = false;
 
 }
@@ -277,7 +277,7 @@ void Player::LifeUpdate() {
 	//落ちた場合
 	IsFall();
 
-	if (CollisionManager::GetInstance().IsGoal() || CollisionManager::GetInstance().IsWarp()) {
+	if (CollisionUtility::GetInstance().IsGoal() || CollisionUtility::GetInstance().IsWarp()) {
 		isPerformance_ = true;
 	}
 }
@@ -341,10 +341,10 @@ void Player::Dead() {
 
 void Player::Performance() {
 
-	if (CollisionManager::GetInstance().IsGoal()) {
+	if (CollisionUtility::GetInstance().IsGoal()) {
 		DirectionTheCamera();//向きをカメラのほうに(-Z方向)
 	}
-	else if (CollisionManager::GetInstance().IsWarp()) {
+	else if (CollisionUtility::GetInstance().IsWarp()) {
 		BackDirection();//向きを前に(Z方向)
 	}	
 	else {
@@ -438,7 +438,7 @@ void Player::OnCollision(CollisionSource* collision) {
 	//演出中、死亡の時は当たらない
 	if (collision->GetType() == CollisionTypes::TypeStage
 		&& hp_ != 0 && !isPerformance_) {
-		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap,*this, *this,collision->GetAABB());
+		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap,*this, *this,collision->GetAABB());
 	}
 	if (collision->GetType() == CollisionTypes::TypeEvent) {
 		//イベント範囲から出れないように
