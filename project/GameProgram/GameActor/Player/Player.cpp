@@ -41,6 +41,9 @@ void Player::Initialize() {
 		SettingSpriteHp(i);
 	}
 
+	actionCommand_ = std::make_unique<PlayerCommand>();
+	actionCommand_->SetPlayer(this);
+
 	//ステートパターン
 	actionState_ = std::make_unique<PlayerNormalState>();
 
@@ -56,6 +59,7 @@ void Player::InitMainBody() {
 	objectMotions_["move"] = "player_move.gltf";
 	objectMotions_["shield"] = "player_shield.gltf";
 	objectMotions_["clear"] = "player_clear.gltf";
+	objectMotions_["appearance"] = "player_appearance.gltf";
 
 	//プレイヤー初期化/オブジェクト読み込み
 	object_ = std::make_unique<Object_glTF>();
@@ -103,8 +107,8 @@ void Player::InitAudio() {
 }
 
 void Player::ActionUpdate() {
-	actionState_->Update(*this);
-	actionState_->CommandInput(*this);
+	actionState_->Update(*actionCommand_);
+	actionState_->CommandInput(*actionCommand_);
 
 	if (actionState_->GetIsInput()) {
 		ChangeStatePatternAction(actionState_->GetNextState());
@@ -116,10 +120,13 @@ void Player::Update() {
 	GameActor::Update();
 
 	//弾丸更新処理
-	BulletUpdate();
+	actionCommand_->BulletUpdate();
 
 	//無敵時間
 	InfinityTimeUpdate();
+
+	//影の更新
+	ShadowUpdate();
 
 	//リアクション
 	ReactionsUpdate();
@@ -153,25 +160,10 @@ void Player::Update() {
 
 	center_ = transform_.translate;//真ん中の座標
 
-	CollisionManager::GetInstance().AddCollisions(this);
+	CollisionManager::GetInstance().FrameCollision(this);
 	collisionOverlap = CollisionManager::GetInstance().SetTarget(GetTranslate(), GetAABB());
 	isGround_ = false;
 
-}
-
-void Player::BulletUpdate() {	
-	//消滅処理
-	bullets_.remove_if([](auto& bullet) {
-		if (bullet->IsDead()) {
-			bullet.reset();
-			return true;
-		}
-		return false;
-	});
-	//弾丸
-	for (auto& bullet : bullets_) {
-		bullet->Update();
-	}
 }
 
 void Player::InfinityTimeUpdate() {
@@ -202,6 +194,10 @@ void Player::AnimationUpdate() {
 
 	if (isPerformance_) {
 		motionName_ = "clear";
+		//タイマーが進まない場合
+		if (appearanceAnimationTimer_ > 0.0f) {
+			motionName_ = "appearance";
+		}
 	}
 
 	//animationが変わった場合切り替える
@@ -262,9 +258,6 @@ void Player::BehindUpdate() {
 
 
 void Player::LifeUpdate() {
-	//発砲のクールタイム
-	fireCoolTimer_ -= kDeltaTime_;
-	fireCoolTimer_ = std::clamp(fireCoolTimer_, 0.0f, kFireCoolTimeMax_);
 
 	//傘の方向を読み取る
 	umbrellaRange_ = transformGun_.rotate;
@@ -274,17 +267,9 @@ void Player::LifeUpdate() {
 	//ノックバック発動
 	KnockBackUpdate();
 
-	//影の更新
-	ShadowUpdate();
-
 	//ジャンプによる変動
-	//地面にいるとき
-	if (isGround_) {
-		jumpPower_ = 0.0f;//ジャンプ可能
-		isOneBrink_ = false;//ブリンク可能
-	}else {
-		transform_.translate.y += jumpPower_;
-	}
+	actionCommand_->JumpUpdate();
+
 
 	//重力
 	GravityUpdate(transform_.translate.y);
@@ -297,24 +282,6 @@ void Player::LifeUpdate() {
 	}
 }
 
-void Player::Gliding() {
-	// - 滑空 - 
-	//開いた状態で地面についていない
-	//傘が上向き(斜め上も)の場合かつプレイヤーが倒されていないとき
-	if (umbrella_->GetShieldMode() && !isGround_) {
-		GravityDown();
-		//滑空中は上向きのみ(斜めにはならない)
-		transformGun_.rotate.x = kUpDis_;
-	}
-}
-
-void Player::GravityDown() {
-	//ジャンプパワーリセット(ジャンプできない)
-	jumpPower_ = 0.0f;
-	//重力を固定することでゆっくり落ちる
-	gravity_ = kFixedGravityPower_;
-}
-
 
 void Player::Active() {
 	//プレイヤー操作
@@ -324,12 +291,18 @@ void Player::Active() {
 	//生きている状態の更新処理
 	LifeUpdate();
 
-	//動ける範囲制限
-	transform_.translate.x = std::clamp(transform_.translate.x, eventMin.x, eventMax.x);
-	transform_.translate.y = std::clamp(transform_.translate.y, eventMin.y, eventMax.y);
-	transform_.translate.z = std::clamp(transform_.translate.z, eventMin.z, eventMax.z);
+	if (!isEvent_) {
+		//イベント範囲解放
+		eventMin = -kMoveMax_;
+		eventMax = kMoveMax_;
+	}
+	else {
+		//動ける範囲制限
+		transform_.translate.x = std::clamp(transform_.translate.x, eventMin.x, eventMax.x);
+		transform_.translate.y = std::clamp(transform_.translate.y, eventMin.y, eventMax.y);
+		transform_.translate.z = std::clamp(transform_.translate.z, eventMin.z, eventMax.z);
+	}
 	isEvent_ = false;
-
 }
 
 void Player::Dead() {
@@ -375,141 +348,21 @@ void Player::Performance() {
 		BackDirection();//向きを前に(Z方向)
 	}	
 	else {
+		appearanceAnimationTimer_ += kDeltaTime_;
 		//水たまりから出てくるスタート演出処理
-		if (pointY_ == kStartPointY_) {
-			playerPoint_ = transform_.translate;
-		}
-
-		float startPointY = playerPoint_.y + pointY_;//プレイヤーが真下からくるように設定する
-
-		//プレイヤー配置座標 + 地面当たり判定によって上げられる分
-		if (startPointY >= playerPoint_.y) {
-			transform_.translate = { playerPoint_.x,startPointY,playerPoint_.z };
+		if (appearanceAnimationTimer_ >= appearanceAnimationFinishTime_) {
 			IsPerformanceFlag(false);//演出モードを終了し操作できるように
-			jumpPower_ = kJumpPowerMax_;
+			appearanceAnimationTimer_ = 0.0f;
+			isGround_ = true;
+			actionCommand_->CommandJump();	
+			//ジャンプによる変動
+			actionCommand_->JumpUpdate();
 		}
-		else {
-			pointY_ += kPlayerUp_;
-			transform_.translate = { playerPoint_.x,startPointY,playerPoint_.z };
-		}
+
 	}	
 }
 
 #pragma region プレイヤーの操作
-
-void Player::CommandMove() {
-	//ゲームパット操作の場合
-	if (Input::GetInstance().GetActiveGamePad()) {
-		//Lスティック
-		float padX = Input::GetInstance().LeftStickX();
-		float padY = Input::GetInstance().LeftStickY();
-		//左
-		(padX > kStickPower_) ? isPushD_ = true : isPushD_ = false;
-		//右
-		(padX < -kStickPower_) ? isPushA_ = true : isPushA_ = false;
-		//上
-		(padY > kStickPower_) ? isPushW_ = true : isPushW_ = false;
-		//下
-		(padY < -kStickPower_) ? isPushS_ = true : isPushS_ = false;
-	}
-	else {
-		//キーボード操作
-		//左
-		(Input::GetInstance().PushKey(DIK_A)) ? isPushA_ = true : isPushA_ = false;
-		//右
-		(Input::GetInstance().PushKey(DIK_D)) ? isPushD_ = true : isPushD_ = false;
-		//上
-		(Input::GetInstance().PushKey(DIK_W)) ? isPushW_ = true : isPushW_ = false;
-		//下
-		(Input::GetInstance().PushKey(DIK_S)) ? isPushS_ = true : isPushS_ = false;
-	}
-	//シールド中足が遅くなる
-	//(滑空中は影響しない)
-	if (umbrella_->GetShieldMode() && isGround_) {
-		//スピードを半減させる
-		const float gSlowSpeed = 0.5f;//半減する数値
-		speed_ = kStandardSpeed_ * gSlowSpeed;
-	}
-	else {
-		//元の速さ
-		speed_ = kStandardSpeed_;
-	}
-
-	if (isPushA_) {
-		transform_.translate.x -= speed_;//左に移動
-		transform_.rotate.y = kDirectionLeft_;//左が正面に
-		UmbrellaRange(kLeftDis_);//傘を左に
-	}
-	else if (isPushD_) {
-		transform_.translate.x += speed_;//右に移動
-		transform_.rotate.y = kDirectionRight_;//右が正面に
-		UmbrellaRange(kRightDis_);//傘を右に
-	}
-	else if (isPushW_) {
-		UmbrellaRange(kUpDis_);//傘を上に
-	}
-	else if (isPushS_) {
-		UmbrellaRange(kDownDis_);//傘を下に
-	}
-}
-
-void Player::CommandJump() {
-	if (isGround_) {
-		jumpPower_ = kJumpPowerMax_;
-	}
-	isGround_ = false;
-}
-
-void Player::CommandFire() {
-	//クールタイムは終了した時
-	if (fireCoolTimer_ == 0.0f) {
-		ShootBullet();
-		fireCoolTimer_ = kFireCoolTimeMax_;
-	}
-}
-
-void Player::CommandShield() {
-	umbrella_->ShieldMode();
-	Gliding();
-}
-
-void Player::CommandBrink() {
-	//傘は開く
-	umbrella_->ShieldMode();
-
-	brinkTimer_ += kDeltaTime_;
-	isOneBrink_ = true;//ブリンク一回目
-	transform_.translate += EaseOut({ 0,0,0 }, TransformNormal({ 0,0,kBrinkPower_ }, wtGun_.GetMatWorld()), brinkTimer_ / kBrinkTimeMax_);
-
-	//飛んだ瞬間後ろにパーティクルをだす
-	if (brinkTimer_ <= kDeltaTime_) {
-		Vector3 gTranslate = transform_.translate + TransformNormal(-kPlayerFront_, wtGun_.GetMatWorld());
-		particles_[particleBrink_.name]->SetTranslate(gTranslate);
-		particles_[particleBrink_.name]->SetRotate(umbrellaRange_);
-		particles_[particleBrink_.name]->SetParticleBorn(ParticleBorn::MomentMode);
-	}
-	//地面についている場合、下向きのブリンクは発動しない
-	if (isGround_ && (transformGun_.rotate.x > 0.0f && transformGun_.rotate.x < kLeftDis_)) {
-		brinkTimer_ = kBrinkTimeMax_;
-	}
-
-	GravityDown();
-}
-
-bool Player::BrinkFlag() {
-	if ((isPushA_ || isPushD_ || isPushW_ || isPushS_) && !isOneBrink_) {
-		return true;
-	}
-	return false;
-}
-
-bool Player::BrinkTimeMax() {
-	if (brinkTimer_ >= kBrinkTimeMax_) {
-		brinkTimer_ = 0.0f; //タイマーリセット
-		return true;
-	}
-	return false;
-}
 
 void Player::KnockBackUpdate() {
 	if (isKnockback_) {
@@ -529,7 +382,6 @@ void Player::KnockBackUpdate() {
 		}
 	}
 }
-
 #pragma endregion
 
 void Player::Draw() {
@@ -537,7 +389,7 @@ void Player::Draw() {
 	//プレイヤー本体
 	object_->Draw();
 
-	if (hp_ != 0) {
+	if (hp_ != 0 && !isPerformance_) {
 		//傘
 		umbrella_->Draw();
 		//影
@@ -547,9 +399,7 @@ void Player::Draw() {
 	Object3dCommon::GetInstance().Command();
 
 	//弾丸
-	for (auto& bullet : bullets_) {
-		bullet->Draw();
-	}
+	actionCommand_->BulletDraw();
 }
 
 void Player::DrawParticle() {
@@ -570,43 +420,11 @@ Vector3 Player::GetWorldPosition()  {
 	return worldPos;
 }
 
-void Player::SetUmbrellaRotate() {
-	//プレイヤーと同じY方向
-	transformGun_.rotate.y = transform_.rotate.y;
+void Player::OnUmbrellaShield() {
+	umbrella_->ShieldMode();
 }
 
-void Player::ShootBullet() {	
-
-	//傘から出るため
-	Vector3 translate = umbrella_->GetTranslate();
-
-	//真ん中を0にする値(3の場合、1,0,-1 | 5の場合、2,1,0,-1,-2)
-	float halfCount = float((kBulletCount_ - 1) * kDivideByTwo_);//二で割る
-
-	for (float i = -(halfCount); i <= halfCount; ++i) {
-		//弾が分散するように
-		Vector3 velocity = { 0.0f,i * kDispersionBetween_ ,kBulletSpeed_ };
-		//飛ばす向きをwtGun_に合わせる
-		velocity = TransformNormal(velocity, wtGun_.GetMatWorld());
-
-		//弾丸を生み出す
-		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
-		bullet->Initialize();
-		bullet->SetTranslate(translate);//発泡初期位置
-		bullet->SetVelocity(velocity);//速さ
-		bullets_.push_back(std::move(bullet));
-	}
-
-	//攻撃パーティクル発生
-	particles_[particleFire_.name]->SetTranslate(translate);
-	particles_[particleFire_.name]->SetRotate(umbrellaRange_);
-	particles_[particleFire_.name]->SetParticleBorn(ParticleBorn::MomentMode);
-
-	///撃った方向と反対方向にノックバック
-	KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
-}
-
-void Player::OffShield() {
+void Player::OffUmbrellaShield() {
 	umbrella_->OffShield();
 }
 
@@ -627,11 +445,6 @@ void Player::OnCollision(CollisionSource* collision) {
 		eventMin = collision->GetAABB().min + transform_.scale;
 		eventMax = collision->GetAABB().max - transform_.scale;
 		isEvent_ = true;
-	}
-	if (!isEvent_) {
-		//イベント範囲解放
-		eventMin = -kMoveMax_;
-		eventMax = kMoveMax_;
 	}
 }
 
@@ -733,9 +546,11 @@ void Player::RespawnPlayer() {
 	isGround_ = false;
 	//ノーマルステートに戻す
 	ChangeStatePatternAction(std::make_unique<PlayerNormalState>());
-	OffShield();
-	brinkTimer_ = 0.0f;
-			
+	
+	actionCommand_.reset();
+	actionCommand_ = std::make_unique<PlayerCommand>();
+	actionCommand_->SetPlayer(this);
+
 	transform_.rotate = { 0,180,0 };
 }
 
@@ -752,6 +567,26 @@ void Player::ParrySuccess() {
 	particles_[particleParry_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 }
 
+
+void  Player::ParticleFire(const Vector3& translate) {
+	//攻撃パーティクル発生
+	particles_[particleFire_.name]->SetTranslate(translate);
+	particles_[particleFire_.name]->SetRotate(umbrellaRange_);
+	particles_[particleFire_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+}
+
+void  Player::ParticleBrink() {
+	Vector3 translate = GetTranslate() + TransformNormal(-kPlayerFront_, GetUmbrellaMatWorld());
+	particles_[particleBrink_.name]->SetTranslate(translate);
+	particles_[particleBrink_.name]->SetRotate(umbrellaRange_);
+	particles_[particleBrink_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+}
+
+void Player::GravityDown() {
+	//重力を固定することでゆっくり落ちる
+	gravity_ = kFixedGravityPower_;
+}
+
 void Player::SpriteUpdate() {
 	for (uint32_t i = 0; i < kPlayerMaxHp_; i++) {
 		//Hpに応じてテクスチャを変化させる
@@ -764,26 +599,7 @@ void Player::SpriteUpdate() {
 	}
 }
 
-void Player::UmbrellaRange(float direction) {
-	//ブリンク中は角度を変更しない
-	//上下左右
-	transformGun_.rotate.x = direction;
 
-	//斜めの時
-	//左上と右下
-	if ((isPushA_ && isPushW_) || (isPushD_ && isPushS_)) {
-		transformGun_.rotate.x += kDiagonalValue_;
-	}
-	//左下と右上
-	else if ((isPushA_ && isPushS_) || (isPushD_ && isPushW_)) {
-		transformGun_.rotate.x -= kDiagonalValue_;
-	}
-
-	//360度を超えたらマイナスする
-	if (transformGun_.rotate.x > kMaxAngle) {
-		transformGun_.rotate.x -= kMaxAngle;
-	}
-}
 
 const bool Player::IsMovePosition() {
 	if (transform_.translate.x != prePosition_.x || transform_.translate.y != prePosition_.y) {

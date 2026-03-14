@@ -5,7 +5,7 @@
 /// <summary>
 /// ターレットの敵(BaseEnemyの派生クラス)
 /// </summary>
-class Enemy_Turret : public BaseEnemy, public EnemyFireCommand, public GravityActor {
+class Enemy_Turret : public BaseEnemy , public EnemyCanFireBullet {
 public:
 	/// <summary>
 	/// デストラクタ
@@ -91,5 +91,8 @@ private:
 
 	//弾丸速度
 	const float kBulletSpeed_ = 0.5f;
+
+	//発砲攻撃
+	std::unique_ptr<EnemyFireCommand> fireCommand_ = nullptr;
 };
 

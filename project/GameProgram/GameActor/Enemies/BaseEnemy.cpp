@@ -86,7 +86,7 @@ void BaseEnemy::UpdateBehind() {
 	collisionAABB_.max = transform_.translate + colliderSize_;
 	center_ = transform_.translate;
 
-	CollisionManager::GetInstance().AddCollisions(this);
+	CollisionManager::GetInstance().FrameCollision(this);
 	collisionOverlap = CollisionManager::GetInstance().SetTarget(GetTranslate(), GetAABB());
 
 }
@@ -133,9 +133,6 @@ void BaseEnemy::DrawParticle() {
 		particle.second->Draw();
 	}
 }
-
-
-
 
 void BaseEnemy::IsDamage() {
 	//ダメージのパーティクルを出す
@@ -223,10 +220,6 @@ bool BaseEnemy::IsLostFound() {
 void BaseEnemy::StatePatternUpdate() {
 	enemyState_->Update(*this);	
 	enemyState_->ChangeState(*this);
-
-	if (enemyState_->GetIsInput()) {
-		ChangeStatePattern(enemyState_->GetNextState());
-	}
 }
 
 void BaseEnemy::ChangeStatePattern(std::unique_ptr<BaseEnemyState> enemyState) {

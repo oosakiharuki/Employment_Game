@@ -43,7 +43,7 @@ void Shadow::Update() {
 	collisionAABB_.max = actorPosition_ + Vector3{ kShadowWidth_, 0.0f, kShadowWidth_ };
 	center_ = transform_.translate;
 
-	CollisionManager::GetInstance().AddCollisions(this);
+	CollisionManager::GetInstance().FrameCollision(this);
 	minUnder_ = -kShadowMinY_;
 }
 

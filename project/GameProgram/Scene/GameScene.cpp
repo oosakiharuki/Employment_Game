@@ -178,6 +178,10 @@ void GameScene::Finalize() {
 
 void GameScene::LevelEditorObjectSetting(const std::string& levelEditor_file) {
 
+	if (levelEditor_file != "") {
+		NextStageSave::GetInstance().SetNextStageFile(levelEditor_file);
+	}
+
 	//- プレイヤー配置 -
 	player_ = std::make_unique<Player>();
 	stageFileName_ = NextStageSave::GetInstance().GetNextStageSaveData().nextStageFile;//ステージの全体層(.obj)

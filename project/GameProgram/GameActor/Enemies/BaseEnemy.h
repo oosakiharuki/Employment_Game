@@ -9,15 +9,11 @@
 /// <summary>
 /// 敵の基盤クラス
 /// </summary>
-class BaseEnemy : public GameActor, public EnemyCommand{
+class BaseEnemy : public GravityActor {
 public:
 
 	BaseEnemy();
 	virtual ~BaseEnemy();
-	///// <summary>
-	///// 初期化処理
-	///// </summary>
-	//virtual void Initialize() = 0;
 	/// <summary>
 	/// 共有する初期化処理
 	/// </summary>
@@ -27,16 +23,20 @@ public:
 	/// 共有する更新処理
 	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// 捜索処理
+	/// </summary>
+	virtual void SearchCommand() = 0;
+	/// <summary>
+	/// 攻撃処理
+	/// </summary>
+	virtual void AttackCommand() = 0;
 
 	/// <summary>
 	/// 最後にオブジェクト更新処理
 	/// </summary>
 	void UpdateBehind();
 
-	///// <summary>
-	///// 描画処理
-	///// </summary>
-	//virtual void Draw() = 0;
 	/// <summary>
 	/// 共有する更新処理
 	/// </summary>
@@ -161,7 +161,7 @@ protected:
 	std::unique_ptr<EnemyEye> enemyEye_ = nullptr;
 
 	bool attackSwitch_ = false;
-
+	
 private:
 
 	//ステートパターン

@@ -230,9 +230,9 @@
             "name": "立方体.002",
             "transform": {
                 "translation": [
-                    -9.636302947998047,
+                    -8.786301612854004,
                     -8.911773647923837e-07,
-                    22.632816314697266
+                    21.954242706298828
                 ],
                 "rotation": [
                     0.0,
@@ -240,7 +240,7 @@
                     0.0
                 ],
                 "scaling": [
-                    6.5,
+                    7.865000247955322,
                     10.0,
                     1.0
                 ]
@@ -298,9 +298,9 @@
             "name": "立方体.006",
             "transform": {
                 "translation": [
-                    -2.636303424835205,
+                    -2.5991013050079346,
                     -8.911773647923837e-07,
-                    20.114179611206055
+                    18.514179229736328
                 ],
                 "rotation": [
                     0.0,
@@ -310,7 +310,7 @@
                 "scaling": [
                     0.6300000548362732,
                     10.0,
-                    3.5200002193450928
+                    2.710399627685547
                 ]
             },
             "collider": {
@@ -859,7 +859,7 @@
                 "translation": [
                     -9.0,
                     0.0,
-                    25.499990463256836
+                    24.499990463256836
                 ],
                 "rotation": [
                     0.0,
@@ -1017,41 +1017,6 @@
         },
         {
             "type": "StageObjectSpawn",
-            "StageObjectName": "Checkpoint",
-            "name": "StageObjectSpawn",
-            "transform": {
-                "translation": [
-                    6.0,
-                    2.0,
-                    19.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    -2.0,
-                    1.0
-                ],
-                "size": [
-                    2.0,
-                    10.0,
-                    6.0
-                ]
-            }
-        },
-        {
-            "type": "StageObjectSpawn",
             "StageObjectName": "WarpGate",
             "name": "StageObjectSpawn.001",
             "transform": {
@@ -1173,6 +1138,41 @@
                     2.0,
                     2.0,
                     2.0
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "Checkpoint",
+            "name": "StageObjectSpawn.002",
+            "transform": {
+                "translation": [
+                    4.699999809265137,
+                    2.0,
+                    17.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    -1.0,
+                    3.0
+                ],
+                "size": [
+                    2.0,
+                    10.0,
+                    8.0
                 ]
             }
         }

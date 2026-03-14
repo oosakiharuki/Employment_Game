@@ -5,7 +5,7 @@
 /// <summary>
 /// 傭兵の敵(BaseEnemyの派生クラス)
 /// </summary>
-class Enemy_Soldier : public BaseEnemy, public EnemyFireCommand,public EnemyMoveCommand, public GravityActor {
+class Enemy_Soldier : public BaseEnemy, public EnemyMoveCommand, public EnemyCanFireBullet {
 public:
 	/// <summary>
 	/// デストラクタ
@@ -82,4 +82,7 @@ private:
 
 	//最大弾丸数
 	const uint32_t kRapidCountMax_ = 3;
+
+	//発砲攻撃
+	std::unique_ptr<EnemyFireCommand> fireCommand_ = nullptr;
 };

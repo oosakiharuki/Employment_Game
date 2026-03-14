@@ -1,9 +1,7 @@
 #include "BaseEnemyState.h"
 #include "BaseEnemy.h"
 
-void BaseEnemyState::Update(EnemyCommand& enemy) {}
-
-void EnemySearchState::Update(EnemyCommand& enemy) {
+void EnemySearchState::Update(BaseEnemy& enemy) {
 	enemy.SearchCommand();
 }
 
@@ -15,8 +13,7 @@ void EnemySearchState::ChangeState(BaseEnemy& enemy) {
 	}
 }
 
-
-void EnemyAttackState::Update(EnemyCommand& enemy) {
+void EnemyAttackState::Update(BaseEnemy& enemy) {
 	enemy.AttackCommand();
 }
 void EnemyAttackState::ChangeState(BaseEnemy& enemy) {

@@ -1,11 +1,9 @@
 #pragma once
 #include "Object_glTF.h"
-#include "PlayerBullet.h"
 #include "Umbrella.h"
 #include "Audio.h"
 #include "Input.h"
 
-#include "GameActor.h"
 #include "GravityActor.h"
 
 #include "UIManager.h"
@@ -15,7 +13,7 @@
 /// <summary>
 /// プレイヤー
 /// </summary>
-class Player : public GameActor, public GravityActor, public PlayerCommand {
+class Player : public GravityActor {
 public:
 	/// <summary>
 	/// コンストラクタ
@@ -54,27 +52,53 @@ public:
 	/// </summary>
 	/// <returns>平行移動成分を搭載したプレイヤー座標</returns>
 	Vector3 GetWorldPosition();
+	/// <summary>
+	/// getter_シールドモード
+	/// </summary>
+	/// <returns>傘がシールドモードであるか</returns>
+	bool GetUmbrellaShieldMode() { return umbrella_->GetShieldMode(); }
+	/// <summary>
+	/// getter_傘の行列
+	/// </summary>
+	/// <returns>現在の傘の行列</returns>
+	const Matrix4x4& GetUmbrellaMatWorld() { return wtGun_.GetMatWorld(); }
+	/// <summary>
+	/// getter_傘座標
+	/// </summary>
+	/// <returns>現在の傘の座標</returns>
+	const Vector3& GetUmbrellaTranslate() { return umbrella_->GetTranslate(); }
+	/// <summary>
+	/// getter_傘回転
+	/// </summary>
+	/// <returns>現在の傘の回転角度</returns>
+	const Vector3& GetUmbrellaRotate() { return umbrella_->GetRotate(); }
+	/// <summary>
+	/// setter_傘回転
+	/// </summary>
+	/// <param name="rotate">傘を回転する角度</param>
+	void SetUmbrellaRotate(const Vector3& rotate) { transformGun_.rotate = rotate; }
 
 	/// <summary>
-	/// getter_傘
+	/// 傘の初期回転角度
 	/// </summary>
-	/// <returns></returns>使用している傘クラス
-	Umbrella* GetUmbrella() { return umbrella_.get(); }
+	void InitUmbrellaRotateY() {
+		//プレイヤーと同じY方向
+		transformGun_.rotate.y = transform_.rotate.y;
+	}
 
 	/// <summary>
-	/// 傘の向きをプレイヤーの手前に
+	/// シールド発動
 	/// </summary>
-	void SetUmbrellaRotate();
-
+	void OnUmbrellaShield();
 	/// <summary>
 	/// シールド解除
 	/// </summary>
-	void OffShield();
+	void OffUmbrellaShield();
 
 	/// <summary>
 	/// ダメージを食らった
 	/// </summary>
-	/// <param name="hitPoint"></param>当たった場所
+	/// <param name="hitPoint">当たった場所</param>
 	void IsDamage(const Vector3& hitPoint);
 	/// <summary>
 	/// 落下した(即死)
@@ -84,20 +108,20 @@ public:
 	/// <summary>
 	/// プレイヤーが当たったノックバック
 	/// </summary>
-	/// <param name="Power"></param>ノックバックの強さ
-	/// <param name="TimerMax"></param>ノックバックする時間(EaseInを仕様しているため)
+	/// <param name="Power">ノックバックの強さ</param>
+	/// <param name="TimerMax">ノックバックする時間(EaseInを仕様しているため)</param>
 	void KnockBackPlayer(const Vector3& Power, float TimerMax);
 	/// <summary>
 	/// 傘が当たったノックバック
 	/// </summary>
-	/// <param name="Power"></param>ノックバックの強さ
-	/// <param name="TimerMax"></param>ノックバックする時間(EaseInを仕様しているため)
+	/// <param name="Power">ノックバックの強さ</param>
+	/// <param name="TimerMax">ノックバックする時間(EaseInを仕様しているため)</param>
 	void KnockBackUmbrella(const Vector3& Power,float TimerMax);
 
 	/// <summary>
 	/// ノックバック共通部分
 	/// </summary>
-	/// <param name="TimeMax"></param>
+	/// <param name="TimeMax">ノックバックする時間(EaseInを仕様しているため)</param>
 	void KnockBackCommon(float TimeMax);
 
 	/// <summary>
@@ -111,21 +135,37 @@ public:
 	void ParrySuccess();
 
 	/// <summary>
+	/// パーティクル攻撃発動時
+	/// </summary>
+	/// <param name="translate"></param>
+	void ParticleFire(const Vector3& translate);
+
+	/// <summary>
+	/// パーティクルブリンク発動時
+	/// </summary>
+	void ParticleBrink();
+
+	/// <summary>
+	/// 重力をゆっくりにする(滑空)
+	/// </summary>
+	void GravityDown();
+
+	/// <summary>
 	/// setter_体力
 	/// </summary>
-	/// <param name="preHp"></param>代入する体力数
+	/// <param name="preHp">代入する体力数</param>
 	const uint32_t GetMaxHp() { return kPlayerMaxHp_; }
 
 	/// <summary>
 	/// getter_残機
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>残機</returns>
 	const uint32_t GetRemain() { return remain_; }
 
 	/// <summary>
 	/// setter_残機
 	/// </summary>
-	/// <param name="remain"></param>
+	/// <param name="remain">残機の設定</param>
 	void SetRemain(uint32_t remain) { remain_ = remain; }
 
 	/// <summary>
@@ -148,19 +188,6 @@ public:
 	/// <param name="enemyState">次のステートパターン</param>
 	void ChangeStatePatternAction(std::unique_ptr<BasePlayerState> state);
 
-
-	/// <summary>
-	///	ブリンク発動条件
-	/// </summary>
-	/// <returns>発動している</returns>
-	bool BrinkFlag();
-
-	/// <summary>
-	/// ブリンクタイマー
-	/// </summary>
-	/// <returns>ブリンクタイマーがMaxに到達した時true</returns>
-	bool BrinkTimeMax();
-
 	/// <summary>
 	/// リスポーンフラグ
 	/// </summary>
@@ -173,29 +200,6 @@ public:
 	void RespawnEnd() { isRespawn_ = false; }
 
 private:
-
-	///コマンド処理///
-
-	/// <summary>
-	/// 移動
-	/// </summary>
-	void CommandMove() override;
-	/// <summary>
-	/// ジャンプ
-	/// </summary>
-	void CommandJump() override;
-	/// <summary>
-	/// 発砲攻撃
-	/// </summary>
-	void CommandFire() override;
-	/// <summary>
-	/// 傘シールド
-	/// </summary>
-	void CommandShield() override;
-	/// <summary>
-	/// ブリンク
-	/// </summary>
-	void CommandBrink() override;
 	/// <summary>
 	/// 生存状態
 	/// </summary>
@@ -237,27 +241,6 @@ private:
 	void SpriteUpdate();
 
 	/// <summary>
-	/// 傘の8方向の回転
-	/// </summary>
-	/// <param name="direction">回転角度</param>
-	void UmbrellaRange(float direction);
-
-	/// <summary>
-	/// 弾を発射する(ショットガン風)
-	/// </summary>
-	void ShootBullet();
-
-	/// <summary>
-	/// 滑空処理
-	/// </summary>
-	void Gliding();
-
-	/// <summary>
-	/// 重力の低下
-	/// </summary>
-	void GravityDown();
-
-	/// <summary>
 	/// オブジェクトの初期化処理
 	/// </summary>
 	void InitMainBody();
@@ -282,10 +265,7 @@ private:
 	/// </summary>
 	void InitAudio();
 
-	/// <summary>
-	/// 弾丸の更新処理
-	/// </summary>
-	void BulletUpdate();
+
 	/// <summary>
 	/// 無敵時間の経過処理
 	/// </summary>
@@ -315,30 +295,17 @@ private:
 	/// ノックバックする更新処理
 	/// </summary>
 	void KnockBackUpdate();
+	
+	/// <summary>
+	/// プレイヤーが動いているか判定
+	/// </summary>
+	/// <returns></returns>
+	const bool IsMovePosition();
 
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object_;
 
 	const float kFixedGravityPower_ = -0.05f;//滑空時重力値を固定
-
-	/// 弾丸
-	std::list<std::unique_ptr<PlayerBullet>> bullets_;
-	float fireCoolTimer_ = 0.0f;//クールタイマー
-	const float kFireCoolTimeMax_ = 0.5f;//クールタイム最大時間
-	const uint32_t kBulletCount_ = 3;//一度に出る弾丸数
-	
-	const float kDispersionBetween_ = 0.1f;//分散する間
-	const float kBulletSpeed_ = 0.5f;//弾丸の前方向の速さ
-
-
-	//向き
-	const float kUpDis_ = 270.0f;//上
-	const float kDownDis_ = 90.0f;//下
-	const float kLeftDis_ = 180.0f;//左
-	const float kRightDis_ = 360.0f;//右
-
-	const float kDiagonalValue_ = 45.0f;//斜めにする変数
-	const float kPlayerFrontRange_ = 180.0f;//プレイヤーがカメラから見て正面を向く
 
 	//ゴール時前を向くように
 	const Vector3 kPlayerFrontAngle_ = { 0.0f,180.0f,0.0f };
@@ -359,7 +326,7 @@ private:
 	Vector3 backPower_ = { 0,0,0 };
 	float knockBackTimer_ = 0.0f;
 	float knockBackTimeMax_ = 0.0f;//最大ノックバック時間
-	const Vector3 kBulletKnockbackPower_ = { 0.0f,0.0f,0.1f };//撃った場合のノックバックパワー
+	
 
 	//落ちる限界
 	const float kFallEndY_ = -10.0f;
@@ -412,12 +379,6 @@ private:
 
 	//前回座標の保存場所
 	Vector3 prePosition_;
-	
-	/// <summary>
-	/// プレイヤーが動いているか判定
-	/// </summary>
-	/// <returns></returns>
-	const bool IsMovePosition();
 
 	//オブジェクトたち
 	std::unordered_map<std::string, std::string> objectMotions_;
@@ -443,6 +404,9 @@ private:
 	//リスポーンフラグ
 	bool isRespawn_ = false;
 
+	float appearanceAnimationTimer_ = 0.0f;
+	const float appearanceAnimationFinishTime_ = 2.5f;
+
 	//スタート演出(水たまりから飛び出る感じに)
 	Vector3 playerPoint_{};
 
@@ -450,4 +414,9 @@ private:
 	float pointY_ = kStartPointY_;
 	//スタート時にプレイヤーを上げる変数
 	const float kPlayerUp_ = 0.1f;
+
+	std::unique_ptr<PlayerCommand> actionCommand_;
+
+	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
+
 };

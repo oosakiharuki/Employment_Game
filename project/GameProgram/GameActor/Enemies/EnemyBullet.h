@@ -61,11 +61,6 @@ public:
 	/// </summary>
 	/// <returns>プレイヤーと弾の距離</returns>
 	const Vector3& GetDistance() const { return distance; }
-	/// <summary>
-	/// setter_プレイヤー
-	/// </summary>
-	/// <param name="player">プレイヤークラス</param>
-	void SetPlayer(Player* player) { player_ = player; }
 
 private:	
 	/// <summary>
@@ -101,8 +96,5 @@ private:
 
 	//当たり所
 	Vector3 distance;
-
-	//プレイヤークラス
-	Player* player_ = nullptr;
 };
 

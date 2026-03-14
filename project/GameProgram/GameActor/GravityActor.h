@@ -1,7 +1,8 @@
 #pragma once
 #include "MyMath.h"
+#include "GameActor.h"
 
-class GravityActor
+class GravityActor : public GameActor
 {
 public:
 	/// <summary>

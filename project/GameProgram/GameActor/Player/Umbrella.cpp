@@ -101,7 +101,8 @@ void Umbrella::ShieldMode() {
 	collisionAABB_.max = transform_.translate + umbrellaAABB_.max;
 	center_ = transform_.translate;
 
-	CollisionManager::GetInstance().AddCollisions(this);
+	CollisionManager::GetInstance().FrameCollision(this);
+
 	object_->ChangeAnimation("umbrella_Open.gltf");//開いた傘
 }
 

@@ -470,7 +470,7 @@
                 "translation": [
                     7.0,
                     0.0,
-                    51.0
+                    50.0
                 ],
                 "rotation": [
                     0.0,
@@ -480,7 +480,7 @@
                 "scaling": [
                     11.0,
                     10.0,
-                    1.0
+                    2.5
                 ]
             },
             "collider": {
@@ -604,7 +604,7 @@
             "name": "立方体.016",
             "transform": {
                 "translation": [
-                    6.5,
+                    6.4007062911987305,
                     0.0,
                     60.0
                 ],
@@ -614,7 +614,7 @@
                     0.0
                 ],
                 "scaling": [
-                    5.5,
+                    4.400000095367432,
                     10.0,
                     1.0
                 ]
@@ -638,9 +638,9 @@
             "name": "立方体.017",
             "transform": {
                 "translation": [
-                    2.0,
+                    3.0,
                     0.0,
-                    64.0
+                    63.0
                 ],
                 "rotation": [
                     0.0,
@@ -672,7 +672,7 @@
             "name": "立方体.018",
             "transform": {
                 "translation": [
-                    -8.0,
+                    -7.0,
                     0.0,
                     66.0
                 ],
@@ -682,7 +682,7 @@
                     0.0
                 ],
                 "scaling": [
-                    10.0,
+                    11.0,
                     10.0,
                     1.0
                 ]
@@ -1409,41 +1409,6 @@
             }
         },
         {
-            "type": "StageObjectSpawn",
-            "StageObjectName": "Checkpoint",
-            "name": "StageObjectSpawn",
-            "transform": {
-                "translation": [
-                    9.0,
-                    2.0,
-                    54.61050033569336
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    -2.0,
-                    1.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    7.0
-                ]
-            }
-        },
-        {
             "type": "EnemySpawn",
             "EnemyName": "Soldier",
             "name": "EnemySpawn.007",
@@ -1651,6 +1616,41 @@
                     2.0,
                     2.0,
                     2.0
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "Checkpoint",
+            "name": "StageObjectSpawn",
+            "transform": {
+                "translation": [
+                    9.0,
+                    1.0,
+                    52.900001525878906
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    -1.0,
+                    3.0
+                ],
+                "size": [
+                    2.0,
+                    10.0,
+                    6.0
                 ]
             }
         }

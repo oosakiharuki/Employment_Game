@@ -50,7 +50,7 @@ void LoadingModels::LoadGltf() {
 	ModelManager::GetInstance().LoadModel("player_shield", ".gltf");
 	ModelManager::GetInstance().LoadModel("player_GameOver", ".gltf");
 	ModelManager::GetInstance().LoadModel("player_clear", ".gltf", true);
-
+	ModelManager::GetInstance().LoadModel("player_appearance", ".gltf", true);
 
 	ModelManager::GetInstance().LoadModel("umbrella_Close", ".gltf");
 	ModelManager::GetInstance().LoadModel("umbrella_Open", ".gltf");

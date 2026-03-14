@@ -34,7 +34,7 @@ void EventTrigger::Update(CameraControl& cameraControl, LevelEditor& levelEditor
 	collisionAABB_ = eventData_.aabb;
 
 	center_ = transform_.translate;
-	CollisionManager::GetInstance().AddCollisions(this);
+	CollisionManager::GetInstance().FrameCollision(this);
 }
 
 void EventTrigger::EventUpdate() {

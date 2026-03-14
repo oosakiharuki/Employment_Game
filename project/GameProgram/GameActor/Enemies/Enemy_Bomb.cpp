@@ -204,7 +204,7 @@ void Enemy_Bomb::Explosion() {
 	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
 
 	//当たり判定設定
-	CollisionManager::GetInstance().CreateCollision(bombAABB_, transform_.translate, CollisionTypes::TypeBombExplotion);
+	CollisionManager::GetInstance().FrameCollision(bombAABB_, transform_.translate, CollisionTypes::TypeBombExplotion);
 }
 
 void Enemy_Bomb::OnCollision(CollisionSource* collision) {

@@ -6,7 +6,7 @@
 /// <summary>
 /// ボムの敵(BaseEnemyの派生クラス)
 /// </summary>
-class Enemy_Bomb : public BaseEnemy, public EnemyMoveCommand, public EnemyExplosionCommand, public GravityActor {
+class Enemy_Bomb : public BaseEnemy, public EnemyMoveCommand {
 public:
 	/// <summary>
 	/// デストラクタ
@@ -24,23 +24,6 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw() override;
-
-	/// <summary>
-	/// getter‗爆発範囲AABB
-	/// </summary>
-	/// <returns></returns>bombAABB
-	AABB GetBombAABB()override { return bombAABB_; }
-
-	/// <summary>
-	/// getter_距離
-	/// </summary>
-	/// <returns></returns>プレイヤーからボムの距離
-	Vector3 GetDistance()override { return distance_; }
-
-	/// <summary>
-	/// プレイヤーの位置を測る
-	/// </summary>
-	void DirectionPlayer();
 
 private:
 	/// <summary>
@@ -85,6 +68,11 @@ private:
 	/// </summary>
 	void DirectionMove() override;
 
+	/// <summary>
+	/// プレイヤーの位置を測る
+	/// </summary>
+	void DirectionPlayer();
+
 	//Hp
 	const uint32_t kHp_ = 1;
 	//見える範囲初期化
@@ -94,19 +82,45 @@ private:
 	Vector3 distance_;
 	const float kSpeed_ = -0.15f;
 
+
+	//追尾開始
+	bool isHomingStart_ = false;
+
+	//爆発するまでのタイマー
+	const float kBombTimeMax_ = 5.0f;//max
+	float bombTimer_ = 0.0f;
+
+	//爆発範囲AABB
+	AABB bombAABB_;
+	const Vector3 kExplosionRange_ = { 5,5,5 };//大きさ
+
+	//リアクション(拡大縮小)
+	Vector3 bombScale_ = { 0.05f, 0.05f, 0.05f };
+	const float kScaleMax_ = 0.2f;//スケール最大値
+	const float kOnTheVerge = 3.5f;//爆発寸前のタイマー
+	const float kScaleSpeedUp_ = 2.0f;
+	//リアクション(色)
+	Vector4 color_ = { 1,1,1,1 };
+	float colorTimer_ = 0.0f;//時間
+	float colorTimeMax_ = 0.2f;//色変化の最大時間
+	const float kColorChangePower_ = 0.1f;//足し引きするパワー
+
+	float deadTimer_ = 0.0f;
+	const float kDeadTimeMax_ = 0.5f;//爆発する間の時間
+
 	/// <summary>
 	/// 爆発する
 	/// </summary>
-	void Explosion() override;
+	void Explosion();
 
 	/// <summary>
 	/// タイムリミット
 	/// </summary>
-	void TimeLimit() override;
+	void TimeLimit();
 
 	/// <summary>
 	/// 赤の点滅
 	/// </summary>
-	void RedBlinking() override;
+	void RedBlinking();
 };
 

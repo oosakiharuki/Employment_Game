@@ -27,7 +27,7 @@ void SpitOutLevelEditor::SpitOutPlayer(std::unique_ptr<Player>& player) {
 		auto& playerData = levelEditor_->GetLevelData()->players[0];
 		player->SetTranslate(playerData.transform.translate);//座標
 		player->SetRotate(playerData.transform.rotate);//向き
-		player->SetUmbrellaRotate();//傘の向き
+		player->InitUmbrellaRotateY();//傘の向き
 		player->SetColliderSize(playerData.colliderSize);//当たり判定
 		NextStageSave::GetInstance().SetCheckPoint(playerData.transform.translate);//チェックポイント設定
 	}
@@ -101,7 +101,7 @@ void SpitOutLevelEditor::SpitOutStage(std::unique_ptr<Object3d>& stageObj, const
 			aabb.min = position - object.colliderSize;
 			aabb.max = position + object.colliderSize;
 
-			CollisionManager::GetInstance().CreateStageCollision(aabb,position,CollisionTypes::TypeStage);
+			CollisionManager::GetInstance().FixedCollision(aabb,position,CollisionTypes::TypeStage);
 		}
 	}
 }

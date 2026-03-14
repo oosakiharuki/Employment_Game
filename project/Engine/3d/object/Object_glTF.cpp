@@ -171,10 +171,10 @@ void Object_glTF::Draw() {
 		}
 	}
 
+	DrawCommand();
 	//モデル
 	for (uint32_t i = 0; i < modelData_.Data.size();i++) {
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResources_[i]->GetGPUVirtualAddress());
-		DrawCommand();
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResources_[i]->GetGPUVirtualAddress());	
 		if (model_) {
 			model_->Draw();
 		}
@@ -367,7 +367,7 @@ void Object_glTF::ChangeAnimation(const std::string& filePath) {
 	//SLeapなどで0より小さい値を出さないようにする
 	//はじめは少しカクつくが、アニメーション補間が終えた後がスムーズ
 	changeTime_ += 1.0f / 60.0f;
-	animationTime_ = changeTime_;
+	//animationTime_ = changeTime_;
 	uint32_t i = 0;
 	for (auto& skeleton : skeletons_) {
 		Interpolation(skeleton, animations_[i], preAnimations_[i], changeTime_);

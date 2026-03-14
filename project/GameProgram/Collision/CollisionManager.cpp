@@ -24,14 +24,14 @@ void CollisionManager::Finalize() {
 	sInstance_.reset();
 }
 
-void CollisionManager::AddCollisions(CollisionSource* addCollision) {
+void CollisionManager::FrameCollision(CollisionSource* addCollision) {
 	collisions_.push_back(addCollision);//追加
 }
 
-void CollisionManager::CreateCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type) {
-	//入っているなら
+void CollisionManager::FrameCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type) {
+	//出し入れする
 	if (collisionTemplate) {
-		collisionTemplate.reset();
+		collisionTemplate.reset();//リセット
 	}
 	//継承じゃなくても作れる
 	collisionTemplate = std::make_unique<CollisionSource>();
@@ -41,12 +41,15 @@ void CollisionManager::CreateCollision(const AABB& collisionAABB, const Vector3&
 	collisions_.push_back(&*collisionTemplate);//追加
 }
 
-void CollisionManager::CreateStageCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type) {
+void CollisionManager::FixedCollision(std::unique_ptr<CollisionSource> addCollision) {
+	fixedCollisions_.push_back(std::move(addCollision));//追加
+}
 
-	if (isAlreadyInStage_) {
+void CollisionManager::FixedCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type) {	
+	if (isAlready_) {
 		//新しくステージ全体の当たり判定を作るためリセット
-		stageCollisions_.clear();
-		isAlreadyInStage_ = false;
+		fixedCollisions_.clear();
+		isAlready_ = false;
 	}
 
 	std::unique_ptr<CollisionSource> collision;
@@ -56,15 +59,15 @@ void CollisionManager::CreateStageCollision(const AABB& collisionAABB, const Vec
 	collision->SetCenter(center);
 	collision->SetType(type);
 
-	stageCollisions_.push_back(std::move(collision));
+	fixedCollisions_.push_back(std::move(collision));//追加
 }
 
 void CollisionManager::CollisionUpdate() {
 
-	isAlreadyInStage_ = true;
+	isAlready_ = true;
 
-	for (auto& stageCollision : stageCollisions_) {
-		collisions_.push_back(&*stageCollision);
+	for (auto& fixedCollision : fixedCollisions_) {
+		collisions_.push_back(&*fixedCollision);
 	}
 
 	for (uint32_t i = 0; i < collisions_.size();i++) {
