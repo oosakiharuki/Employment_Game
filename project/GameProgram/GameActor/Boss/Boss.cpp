@@ -65,7 +65,7 @@ void Boss::Active() {
 	collisionAABB_.min = transform_.translate - colliderSize_;
 	center_ = transform_.translate;
 	//当たり判定設定
-	CollisionManager::GetInstance().AddCollisions(this);
+	CollisionManager::GetInstance().FrameCollision(this);
 }
 
 void Boss::Dead() {

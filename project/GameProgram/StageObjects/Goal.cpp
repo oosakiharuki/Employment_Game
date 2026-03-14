@@ -27,7 +27,7 @@ void Goal::Update(){
 	collisionAABB_.max = transform_.translate + colliderSize_;
 	center_ = transform_.translate;
 
-	CollisionManager::GetInstance().AddCollisions(this);
+	CollisionManager::GetInstance().FrameCollision(this);
 }
 	
 void Goal::Draw(){

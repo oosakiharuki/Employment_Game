@@ -25,7 +25,7 @@ void EnemyEye::Update(const Vector3& enemyPos, const Vector3& foundReach) {
 
 	center_ = Length(enemyPos / 2.0f, foundReach);
 
-	CollisionManager::GetInstance().AddCollisions(this);
+	CollisionManager::GetInstance().FrameCollision(this);
 
 	enemyPosition_ = enemyPos;
 	isFound_ = false;

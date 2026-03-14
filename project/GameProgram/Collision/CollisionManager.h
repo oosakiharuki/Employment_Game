@@ -36,27 +36,35 @@ public:
 	void Finalize();
 
 	/// <summary>
-	/// 当たり判定を追加
+	/// 当たり判定を追加(毎フレーム読み取り)
 	/// </summary>
-	/// <param name="addCollision"></param>
-	void AddCollisions(CollisionSource* addCollision);
+	/// <param name="addCollision">コリジョンソース</param>
+	void FrameCollision(CollisionSource* addCollision);
+	/// <summary>
+	/// 当たり判定を追加(毎フレーム読み取り)
+	/// 派生クラスCollisionSourceでないとき
+	/// </summary>
+	/// <param name="collisionAABB">当たり判定AABB</param>
+	/// <param name="center">真ん中</param>
+	/// <param name="type">当たり判定のタイプ</param>
+	void FrameCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type);
 
 	/// <summary>
-	/// 当たり判定を追加(派生クラスCollisionSourceでないとき)
+	/// 当たり判定を追加(一度読み取り)
 	/// </summary>
-	/// <param name="collisionAABB">当たり判定AABB</param>
-	/// <param name="center">真ん中</param>
-	/// <param name="type">当たり判定のタイプ</param>
-	void CreateCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type);
-	
+	/// <param name="addCollision">コリジョンソース</param>
+	void FixedCollision(std::unique_ptr<CollisionSource> addCollision);
 	/// <summary>
-	/// 当たり判定を追加(ステージ専用)
+	/// 当たり判定を追加(一度読み取り)
+	/// 派生クラスCollisionSourceでないとき
 	/// </summary>
 	/// <param name="collisionAABB">当たり判定AABB</param>
 	/// <param name="center">真ん中</param>
 	/// <param name="type">当たり判定のタイプ</param>
-	void CreateStageCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type);
-	
+	void FixedCollision(const AABB& collisionAABB, const Vector3& center, const CollisionTypes& type);
+
+
+
 	/// <summary>
 	/// 更新処理
 	/// </summary>
@@ -135,13 +143,8 @@ public:
 
 private:
 
-	//傘のノックバックの値
-	const Vector3 kUmbrellaKnockBackPower_ = { 0.0f,0.0f,0.3f };
-	const float kUmbrellaKnockBackTime_ = 0.0f;
-
 	//影で少し上にあげる値
 	const float kShadowUp_ = 0.01f;
-
 
 	//インスタンス
 	static std::unique_ptr<CollisionManager> sInstance_;
@@ -154,11 +157,11 @@ private:
 	bool isWarp_ = false;
 	//ズームポイント
 	Vector3 zoomPoint_{};
-	//当たり判定たち
+	//フレームずつ当たり判定を読み取る
 	std::vector<CollisionSource*> collisions_;
-	//ステージ用
-	std::vector<std::unique_ptr<CollisionSource>> stageCollisions_;
-	bool isAlreadyInStage_ = false;//すでにステージ入っている
+	//常に当たり判定を読み取る
+	std::vector<std::unique_ptr<CollisionSource>> fixedCollisions_;
+	bool isAlready_ = false;//
 
 	//当たり判定(継承なし)
 	std::unique_ptr<CollisionSource> collisionTemplate;

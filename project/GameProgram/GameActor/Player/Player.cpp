@@ -160,7 +160,7 @@ void Player::Update() {
 
 	center_ = transform_.translate;//真ん中の座標
 
-	CollisionManager::GetInstance().AddCollisions(this);
+	CollisionManager::GetInstance().FrameCollision(this);
 	collisionOverlap = CollisionManager::GetInstance().SetTarget(GetTranslate(), GetAABB());
 	isGround_ = false;
 

@@ -44,7 +44,7 @@ void PlayerBullet::Update() {
 	collisionAABB_.min = transform_.translate + bulletAABB_.min;
 	collisionAABB_.max = transform_.translate + bulletAABB_.max;
 	center_ = transform_.translate;
-	CollisionManager::GetInstance().AddCollisions(this);
+	CollisionManager::GetInstance().FrameCollision(this);
 }
 
 void PlayerBullet::Draw() {

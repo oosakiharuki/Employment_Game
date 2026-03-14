@@ -45,7 +45,7 @@ void WarpGate::Update() {
 
 	center_ = transform_.translate;
 
-	CollisionManager::GetInstance().AddCollisions(this);
+	CollisionManager::GetInstance().FrameCollision(this);
 	minUnder_ = 1000.0f;
 }
 

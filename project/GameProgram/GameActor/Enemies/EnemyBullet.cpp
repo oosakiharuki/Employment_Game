@@ -51,7 +51,7 @@ void EnemyBullet::Update() {
 	collisionAABB_.max = transform_.translate + kBulletSize_ * kDivideByTwo_;
 
 	center_ = transform_.translate;//真ん中の座標
-	CollisionManager::GetInstance().AddCollisions(this);
+	CollisionManager::GetInstance().FrameCollision(this);
 }
 
 void EnemyBullet::Draw() {
