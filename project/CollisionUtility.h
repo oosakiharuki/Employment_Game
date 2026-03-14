@@ -17,6 +17,9 @@ struct CollisionOverlap {
 	AABB stageAABB = { { 0,0,0 }, { 0,0,0 } };
 };
 
+/// <summary>
+/// 当たり判定絡みの関数
+/// </summary>
 class CollisionUtility
 {
 public:
