@@ -64,6 +64,7 @@ void LoadingModels::LoadGltf() {
 
 	ModelManager::GetInstance().LoadModel("Boss", ".gltf", true);
 	ModelManager::GetInstance().LoadModel("skybox", ".gltf");
+	ModelManager::GetInstance().LoadModel("backGroundObject", ".gltf");
 
 	ModelManager::GetInstance().LoadModel("Box", ".gltf");
 	ModelManager::GetInstance().LoadModel("BrokenBox", ".gltf", true);
