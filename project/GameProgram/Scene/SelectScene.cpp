@@ -28,6 +28,9 @@ void SelectScene::Initialize() {
 
 	CollisionUtility::GetInstance().ResetFrag();
 	PauseScreen::GetInstance().OffPause();//ポーズを強制解除
+
+	brokenBox_ = std::make_unique<BrokenBox>();
+	brokenBox_->Initialize();
 }
 
 void SelectScene::Update() {
@@ -51,6 +54,8 @@ void SelectScene::Update() {
 
 	//ステージ更新
 	stageObj_->Update();
+
+	brokenBox_->Update();
 
 	//当たり判定
 	CollisionManager::GetInstance().CollisionUpdate();
@@ -85,6 +90,9 @@ void SelectScene::Draw() {
 	GLTFCommon::GetInstance().Command();
 	//背景描画
 	backGround->Draw();
+	
+	brokenBox_->Draw();
+	
 	//プレイヤー描画
 	player_->Draw();
 

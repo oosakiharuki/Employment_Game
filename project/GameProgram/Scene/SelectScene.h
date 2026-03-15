@@ -6,6 +6,9 @@
 #include "PauseScreen.h"
 #include "NextStageSave.h"
 
+
+#include "BrokenBox.h"
+
 /// <summary>
 /// セレクト(ステージ選択)シーン(BaseSceneの派生クラス)
 /// </summary>
@@ -81,4 +84,6 @@ private:
 
 	//背景
 	std::unique_ptr<BackGroundObject> backGround = nullptr;
+
+	std::unique_ptr<BrokenBox> brokenBox_;
 };

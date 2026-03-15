@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BrokenBox.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionUtility.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionSource.cpp" />
     <ClCompile Include="GameProgram\GameActor\Enemies\common\EnemyEye.cpp" />
@@ -213,6 +214,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\StageObjects\Guide.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BrokenBox.h" />
     <ClInclude Include="GameProgram\Collision\CollisionUtility.h" />
     <ClInclude Include="GameProgram\Collision\CollisionSource.h" />
     <ClInclude Include="GameProgram\GameActor\Enemies\common\EnemyEye.h" />

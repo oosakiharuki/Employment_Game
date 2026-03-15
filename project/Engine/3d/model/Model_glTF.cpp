@@ -264,7 +264,7 @@ ModelDataMulti Model_glTF::LoadModelFile(const std::string& directoryPath, const
 		}
 
 		//使用するマテリアルを導入
-		iModelData.materialData = materialDatas[materialNum];
+		iModelData.materialData = materialDatas[mesh->mMaterialIndex];
 
 		modelData.Data.push_back(iModelData);
 		materialNum++;
