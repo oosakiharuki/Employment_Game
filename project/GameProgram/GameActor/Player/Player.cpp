@@ -346,6 +346,7 @@ void Player::Performance() {
 	}
 	else if (CollisionUtility::GetInstance().IsWarp()) {
 		BackDirection();//向きを前に(Z方向)
+		appearanceAnimationTimer_ = 0.0f;
 	}	
 	else {
 		appearanceAnimationTimer_ += kDeltaTime_;

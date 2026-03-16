@@ -16,7 +16,7 @@ void GameActor::Initialize() {
 	//リアクションクラス
 	reaction_ = std::make_unique<Reaction>();
 
-	actorState_ = std::make_unique<ActiveState>();
+	actorState_ = std::make_unique<PerformanceState>();
 }
 
 void GameActor::Update() {
