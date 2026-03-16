@@ -26,6 +26,6 @@ private:
 	WorldTransform wt_;
 	Transform transform_{};
 
-	const float kSize_ = 1000.0f;
+	const float kSize_ = 1.0f;
 };
 

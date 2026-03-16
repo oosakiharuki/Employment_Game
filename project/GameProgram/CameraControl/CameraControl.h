@@ -190,7 +190,7 @@ private:
 	//imGui
 	bool isFreeMode_ = false;
 
-	float movePower_ = 0.2f;
+	float movePower_ = 1.0f;
 
 	//Y座標は固定するフラグ
 	bool isCameraYFixed_ = false;

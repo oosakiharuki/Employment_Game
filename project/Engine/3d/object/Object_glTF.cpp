@@ -363,31 +363,39 @@ void Object_glTF::ChangeAnimation(const std::string& filePath) {
 	skeletons_ = model_->GetSkeleton();
 	skinClusters_ = model_->GetSkinCluster();
 
-	//animationTimeを1.0f/60.0fに
-	//SLeapなどで0より小さい値を出さないようにする
-	//はじめは少しカクつくが、アニメーション補間が終えた後がスムーズ
-	changeTime_ += 1.0f / 60.0f;
-	//animationTime_ = changeTime_;
-	uint32_t i = 0;
-	for (auto& skeleton : skeletons_) {
-		Interpolation(skeleton, animations_[i], preAnimations_[i], changeTime_);
-		SkeletonUpdate(skeleton);
-		for (auto& skinCluster : skinClusters_) {
-			SkinClusterUpdate(skinCluster, skeleton);
+	//WVPの再構築
+	CreateWVP();
+
+	if (model_->IsSkinning()) {
+		//animationTimeを1.0f/60.0fに
+		//SLeapなどで0より小さい値を出さないようにする
+		//はじめは少しカクつくが、アニメーション補間が終えた後がスムーズ
+		changeTime_ += 1.0f / 60.0f;
+		animationTime_ = changeTime_;
+		uint32_t i = 0;
+		for (auto& skeleton : skeletons_) {
+			Interpolation(skeleton, animations_[i], preAnimations_[i], changeTime_);
+			SkeletonUpdate(skeleton);
+			for (auto& skinCluster : skinClusters_) {
+				SkinClusterUpdate(skinCluster, skeleton);
+			}
+		}
+		//アニメーション補間中に変更があった時
+		if (isChange_) {
+			changeTime_ = 1.0f - changeTime_;
+		}
+
+		isChange_ = true;
+
+		//SLeapなどで1より大きい値を出さないようにする
+		for (auto& preAnimation : preAnimations_) {
+			preAnimation.duration = max(preAnimation.duration, 1.0f);
 		}
 	}
-	//アニメーション補間中に変更があった時
-	if (isChange_) {
-		changeTime_ = 1.0f - changeTime_;
+	else {
+		//アニメーションを初めから
+		animationTime_ = 0.0f;
 	}
-
-	isChange_ = true;
-
-	//SLeapなどで1より大きい値を出さないようにする
-	for (auto& preAnimation : preAnimations_) {
-		preAnimation.duration = max(preAnimation.duration,1.0f);
-	}
-
 	//初期環境マップ
 	TextureManager::GetInstance().LoadTexture("resource/rostock_laage_airport_4k.dds");
 	model_->SetEnvironment("resource/rostock_laage_airport_4k.dds");

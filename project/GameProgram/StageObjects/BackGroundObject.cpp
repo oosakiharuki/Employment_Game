@@ -3,12 +3,12 @@
 void BackGroundObject::Initialize() {
 	object_ = std::make_unique<Object_glTF>();
 	object_->Initialize();
-	object_->SetModelFile("skybox.gltf");
+	object_->SetModelFile("backGroundObject.gltf");
 
 	wt_.Initialize();
-
-	//サイズを大きく
-	transform_.scale = { kSize_, kSize_, kSize_ };
+	transform_ = wt_.UpdateTransform();
+	transform_.translate.y = -10.0f;
+	transform_.translate.z += 100.0f;
 	wt_.UpdateMatrix(transform_);
 }
 

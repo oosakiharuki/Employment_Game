@@ -12,7 +12,7 @@ using namespace MyMath;
 
 void GameScene::Initialize() {
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting();
+	LevelEditorObjectSetting("stage_4");
 	
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance().LoadWave("resource/sound/title.wav");
@@ -276,6 +276,10 @@ void GameScene::Respawn() {
 		boss_->SetPlayer(player_.get());
 		boss_->Update();
 	}
+
+	//ステージオブジェクトのリセット
+	stageObjects_.clear();
+	stageObjects_ = std::move(spitOut_.SpitOutStageObject());
 
 	cameraControl_->CameraSettingCheckPoint(levelEditor_.GetLevelData()->cameraInit["MainCamera"]);
 

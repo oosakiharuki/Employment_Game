@@ -3,6 +3,8 @@
 #include "WarpGate.h"
 #include "CheckPoint.h"
 #include "Goal.h"
+#include "BrokenBox.h"
+#include "Needle.h"
 
 using namespace MyMath;
 
@@ -133,13 +135,25 @@ std::list<std::unique_ptr<IStageObject>> SpitOutLevelEditor::SpitOutStageObject(
 				SettingStageObject(*stageObject.get(), stageObjectData);
 				stageObjects.push_back(std::move(stageObject));
 			}
+			else if (stageObjectData.ObjectName == "BreakBox") {
+				std::unique_ptr<BrokenBox>stageObject = std::make_unique<BrokenBox>();
+				SettingStageObject(*stageObject.get(), stageObjectData);
+				stageObjects.push_back(std::move(stageObject));
+			}
+			else if (stageObjectData.ObjectName == "Needle") {
+				std::unique_ptr<Needle>stageObject = std::make_unique<Needle>();
+				SettingStageObject(*stageObject.get(), stageObjectData);
+				stageObject->SetTravelRoute(stageObjectData.transform.translate,
+					stageObjectData.transform.translate + stageObjectData.leftPoint,
+					stageObjectData.transform.translate + stageObjectData.rightPoint);
+				stageObjects.push_back(std::move(stageObject));
+			}
 		}
 	}
 	return stageObjects;
 }
 
 void SpitOutLevelEditor::SettingStageObject(IStageObject& stageObject, LevelEditor::LevelData::StageObjectData data) {
-	stageObject.SetObjectName(data.ObjectName);//オブジェクトの名前保存
 	stageObject.Initialize();//初期化
 	stageObject.SetPosition(data.transform.translate);//座標位置
 	stageObject.SetScale(data.transform.scale);

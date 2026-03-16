@@ -30,6 +30,7 @@
 struct MaterialData {
 	std::string textureFilePath;
 	uint32_t textureIndex;
+	Matrix4x4 uvTransform;
 	Vector4 materialColor;
 };
 

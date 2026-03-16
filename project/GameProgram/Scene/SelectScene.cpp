@@ -85,6 +85,7 @@ void SelectScene::Draw() {
 	GLTFCommon::GetInstance().Command();
 	//背景描画
 	backGround->Draw();
+
 	//プレイヤー描画
 	player_->Draw();
 

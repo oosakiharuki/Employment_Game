@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BrokenBox.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionUtility.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionSource.cpp" />
     <ClCompile Include="GameProgram\GameActor\Enemies\common\EnemyEye.cpp" />
@@ -211,8 +212,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\GameActor\VisualActor.cpp" />
     <ClCompile Include="GameProgram\System\Pause\PauseScreen.cpp" />
     <ClCompile Include="GameProgram\StageObjects\Guide.cpp" />
+    <ClCompile Include="Needle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BrokenBox.h" />
     <ClInclude Include="GameProgram\Collision\CollisionUtility.h" />
     <ClInclude Include="GameProgram\Collision\CollisionSource.h" />
     <ClInclude Include="GameProgram\GameActor\Enemies\common\EnemyEye.h" />
@@ -314,6 +317,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\GameActor\VisualActor.h" />
     <ClInclude Include="GameProgram\System\Pause\PauseScreen.h" />
     <ClInclude Include="GameProgram\StageObjects\Guide.h" />
+    <ClInclude Include="Needle.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

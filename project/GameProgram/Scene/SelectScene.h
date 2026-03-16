@@ -6,6 +6,9 @@
 #include "PauseScreen.h"
 #include "NextStageSave.h"
 
+
+#include "BrokenBox.h"
+
 /// <summary>
 /// セレクト(ステージ選択)シーン(BaseSceneの派生クラス)
 /// </summary>

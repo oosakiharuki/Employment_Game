@@ -53,6 +53,9 @@ public:
 			std::string fileName;
 			Transform transform;
 			Vector3 colliderSize;
+			//移動ルート
+			Vector3 leftPoint;
+			Vector3 rightPoint;
 		};
 
 		//イベントトリガーの生成場所

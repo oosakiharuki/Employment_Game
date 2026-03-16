@@ -85,7 +85,8 @@ void Model_glTF::InitMaterialResource(ModelData modelData) {
 		materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 	materialData_->enableLighting = false;
-	materialData_->uvTransform = MakeIdentity4x4();
+	materialData_->uvTransform = modelData.materialData.uvTransform;
+
 	materialData_->shininess = 70;
 	materialData_->environmentCoefficient = 0.0f;
 
@@ -162,6 +163,20 @@ ModelDataMulti Model_glTF::LoadModelFile(const std::string& directoryPath, const
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
+			
+			//テクスチャUVのトランスフォーム
+			aiUVTransform uvTransform;
+			materialData.uvTransform = MakeIdentity4x4();//通常行列
+			
+			//マッピングがあるとき
+			if (material->Get(AI_MATKEY_UVTRANSFORM(aiTextureType_DIFFUSE, 0), uvTransform) == AI_SUCCESS) {
+				//座標位置の変更
+				Vector3 uvOffset = { uvTransform.mTranslation.x ,uvTransform.mTranslation.y ,0.0f };//位置を設定
+				materialData.uvTransform = MakeTranslateMatrix(uvOffset);//行列にして移行
+				//通常行列にスケールをかける
+				Vector3 uvScale = { uvTransform.mScaling.x,uvTransform.mScaling.y,1.0f };//大きさを設定
+				materialData.uvTransform = materialData.uvTransform * MakeScaleMatrix(uvScale);//行列にしてかける
+			}
 
 			size_t pos1;
 			std::string texture = textureFilePath.C_Str();//stringに変更
@@ -264,7 +279,7 @@ ModelDataMulti Model_glTF::LoadModelFile(const std::string& directoryPath, const
 		}
 
 		//使用するマテリアルを導入
-		iModelData.materialData = materialDatas[materialNum];
+		iModelData.materialData = materialDatas[mesh->mMaterialIndex];
 
 		modelData.Data.push_back(iModelData);
 		materialNum++;

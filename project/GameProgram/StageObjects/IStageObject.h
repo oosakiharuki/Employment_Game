@@ -71,27 +71,6 @@ public:
 	/// <param name="size">大きさ</param>
 	void SetColliderSize(const Vector3& size) { colliderSize_ = size; }
 
-	/// <summary>
-	/// オブジェクトのクラスを知るための名前
-	/// </summary>
-	void SetObjectName(const std::string& name);
-
-	const std::string& GetObjectName() { return objectName_; }
-
-	///ワープゲートで使う
-
-	/// <summary>
-	/// setter_次のステージ
-	/// </summary>
-	/// <param name="fileName">ステージ名(例:stage_01)</param>
-	virtual void SetNextStage(const std::string& fileName);
-
-	/// <summary>
-	/// getter_次のステージ
-	/// </summary>
-	/// <returns>次のステージ</returns>
-	virtual std::string GetNextStage();
-
 protected:
 
 	std::unique_ptr<Object3d> object_ = nullptr;
@@ -99,6 +78,4 @@ protected:
 	Transform transform_{};
 
 	Vector3 colliderSize_;
-
-	std::string objectName_;
 };
