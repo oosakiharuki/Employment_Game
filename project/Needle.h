@@ -3,6 +3,9 @@
 #include "Object_glTF.h"
 #include "Shadow.h"
 
+/// <summary>
+/// トゲボール[ギミック]
+/// </summary>
 class Needle : public IStageObject {
 public:
 	/// <summary>
@@ -18,13 +21,23 @@ public:
 	/// </summary>
 	void Draw() override;
 
+	/// <summary>
+	/// setter_移動ルート
+	/// </summary>
+	/// <param name="nowPoint">現在の場所</param>
+	/// <param name="pointS">ポイント始点</param>
+	/// <param name="pointE">ポイント終点</param>
 	void SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, const Vector3& pointE);
 
 
 private:
-
+	/// <summary>
+	/// 移動
+	/// </summary>
 	void Move();
-
+	/// <summary>
+	/// 回転するアニメーション
+	/// </summary>
 	void AnimationRotate();
 
 	/// <summary>
@@ -48,7 +61,7 @@ private:
 	Vector3 endPoint_ = { 0,0,0 };
 
 	float timer_ = 0.0f;
-	const float moveMaxTime_ = 5.0f;//二秒かけて進む
+	const float moveMaxTime_ = 5.0f;//遅くする
 
 	float animationTimer_ = 0.0f;
 	const float kAnimationTimeSpeed_ = 2.0f;

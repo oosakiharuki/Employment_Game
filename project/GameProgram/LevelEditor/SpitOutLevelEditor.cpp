@@ -5,6 +5,7 @@
 #include "Goal.h"
 #include "BrokenBox.h"
 #include "Needle.h"
+#include "MoveGround.h"
 
 using namespace MyMath;
 
@@ -142,6 +143,14 @@ std::list<std::unique_ptr<IStageObject>> SpitOutLevelEditor::SpitOutStageObject(
 			}
 			else if (stageObjectData.ObjectName == "Needle") {
 				std::unique_ptr<Needle>stageObject = std::make_unique<Needle>();
+				SettingStageObject(*stageObject.get(), stageObjectData);
+				stageObject->SetTravelRoute(stageObjectData.transform.translate,
+					stageObjectData.transform.translate + stageObjectData.leftPoint,
+					stageObjectData.transform.translate + stageObjectData.rightPoint);
+				stageObjects.push_back(std::move(stageObject));
+			}
+			else if (stageObjectData.ObjectName == "MoveGround") {
+				std::unique_ptr<MoveGround>stageObject = std::make_unique<MoveGround>();
 				SettingStageObject(*stageObject.get(), stageObjectData);
 				stageObject->SetTravelRoute(stageObjectData.transform.translate,
 					stageObjectData.transform.translate + stageObjectData.leftPoint,

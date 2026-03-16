@@ -2,6 +2,53 @@
     "name": "scene",
     "objects": [
         {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "MoveGround",
+            "name": "StageObjectSpawn.016",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    62.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    7.0,
+                    6.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "travel_route": {
+                "start": [
+                    -5.0,
+                    0.0,
+                    -10.0
+                ],
+                "end": [
+                    5.0,
+                    0.0,
+                    4.0
+                ]
+            }
+        },
+        {
             "type": "MESH",
             "name": "ground",
             "transform": {
