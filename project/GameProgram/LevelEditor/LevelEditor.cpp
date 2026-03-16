@@ -190,6 +190,8 @@ void LevelEditor::LoadStageObject(nlohmann::json& object) {
 
 	//コライダー
 	SetCollider(object, stageObjectData.colliderSize, stageObjectData.transform.scale);
+	//移動ルート
+	SetTravelRoute(object, stageObjectData.leftPoint, stageObjectData.rightPoint);
 }
 
 void LevelEditor::LoadEventTrigger(nlohmann::json& object, const Vector3& translate) {

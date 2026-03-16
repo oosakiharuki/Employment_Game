@@ -29,6 +29,7 @@ void LoadingModels::LoadObj() {
 	ModelManager::GetInstance().LoadModel("stage_1", ".obj");
 	ModelManager::GetInstance().LoadModel("stage_2", ".obj");
 	ModelManager::GetInstance().LoadModel("stage_3", ".obj");
+	ModelManager::GetInstance().LoadModel("stage_4", ".obj");
 	ModelManager::GetInstance().LoadModel("stage_boss",".obj");
 	ModelManager::GetInstance().LoadModel("stage_select", ".obj");
 	ModelManager::GetInstance().LoadModel("warpGate", ".obj");
@@ -68,4 +69,5 @@ void LoadingModels::LoadGltf() {
 
 	ModelManager::GetInstance().LoadModel("Box", ".gltf");
 	ModelManager::GetInstance().LoadModel("BrokenBox", ".gltf", true);
+	ModelManager::GetInstance().LoadModel("needle", ".gltf");
 }

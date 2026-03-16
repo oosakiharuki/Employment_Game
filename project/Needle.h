@@ -1,29 +1,31 @@
 #pragma once
-#include "Object_glTF.h"
 #include "IStageObject.h"
+#include "Object_glTF.h"
+#include "Shadow.h"
 
-/// <summary>
-/// 壊せる箱[ギミック]
-/// </summary>
-class BrokenBox : public IStageObject
-{
+class Needle : public IStageObject {
 public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
 	void Initialize() override;
-
 	/// <summary>
 	/// 更新処理
 	/// </summary>
 	void Update() override;
-
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	void Draw() override;
 
+	void SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, const Vector3& pointE);
+
+
 private:
+
+	void Move();
+
+	void AnimationRotate();
 
 	/// <summary>
 	/// 当たり判定コマンド
@@ -37,13 +39,21 @@ private:
 	/// <returns>該当するタイプがあるなら true</returns>
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
-	std::unique_ptr<Object_glTF> objectBox_ = nullptr;
+	std::unique_ptr<Object_glTF> objectNeedle_ = nullptr;
 
-	//壊したフラグ
-	bool isBroken_ = false;
-	bool isFinish_ = false;
+	Vector3 nowPoint_ = { 0,0,0 };
+	Segment movePoint_{};
 
-	float timer = 0.0f;
-	const float kAnimationTimeMax_ = 2.4f;
+	Vector3 startPoint_ = { 0,0,0 };	
+	Vector3 endPoint_ = { 0,0,0 };
+
+	float timer_ = 0.0f;
+	const float moveMaxTime_ = 5.0f;//二秒かけて進む
+
+	float animationTimer_ = 0.0f;
+	const float kAnimationTimeSpeed_ = 2.0f;
+
+
+	std::unique_ptr<Shadow> shadow_;
 };
 

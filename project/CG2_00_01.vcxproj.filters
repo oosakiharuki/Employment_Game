@@ -507,6 +507,9 @@
     <ClCompile Include="BrokenBox.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Needle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -813,6 +816,9 @@
       <Filter>ヘッダー ファイル\GameProgram\System\Pause</Filter>
     </ClInclude>
     <ClInclude Include="BrokenBox.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Needle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
