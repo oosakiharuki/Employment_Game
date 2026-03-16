@@ -1,11 +1,11 @@
 #pragma once
 #include "Object_glTF.h"
-#include "CollisionManager.h"
+#include "IStageObject.h"
 
 /// <summary>
 /// 壊せる箱[ギミック]
 /// </summary>
-class BrokenBox : public CollisionSource
+class BrokenBox : public IStageObject
 {
 public:
 	/// <summary>
@@ -37,10 +37,7 @@ private:
 	/// <returns>該当するタイプがあるなら true</returns>
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
-
-	std::unique_ptr<Object_glTF> object_ = nullptr;
-	WorldTransform wt_;
-	Transform transform_;
+	std::unique_ptr<Object_glTF> objectBox_ = nullptr;
 
 	//壊したフラグ
 	bool isBroken_ = false;

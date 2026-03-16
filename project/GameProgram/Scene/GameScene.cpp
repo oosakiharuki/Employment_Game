@@ -277,6 +277,10 @@ void GameScene::Respawn() {
 		boss_->Update();
 	}
 
+	//ステージオブジェクトのリセット
+	stageObjects_.clear();
+	stageObjects_ = std::move(spitOut_.SpitOutStageObject());
+
 	cameraControl_->CameraSettingCheckPoint(levelEditor_.GetLevelData()->cameraInit["MainCamera"]);
 
 	startWarp_.reset();

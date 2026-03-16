@@ -84,6 +84,4 @@ private:
 
 	//背景
 	std::unique_ptr<BackGroundObject> backGround = nullptr;
-
-	std::unique_ptr<BrokenBox> brokenBox_;
 };

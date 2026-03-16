@@ -265,9 +265,9 @@
             "name": "立方体.006",
             "transform": {
                 "translation": [
-                    8.688888549804688,
-                    0.0,
-                    9.0
+                    16.288888931274414,
+                    7.0,
+                    18.0
                 ],
                 "rotation": [
                     0.0,
@@ -275,9 +275,9 @@
                     0.0
                 ],
                 "scaling": [
-                    1.0,
+                    2.299999952316284,
                     10.0,
-                    1.5950000286102295
+                    2.7115001678466797
                 ]
             },
             "collider": {
@@ -676,53 +676,6 @@
         {
             "type": "EnemySpawn",
             "EnemyName": "Soldier",
-            "name": "EnemySpawn",
-            "transform": {
-                "translation": [
-                    17.0,
-                    0.0,
-                    10.0
-                ],
-                "rotation": [
-                    0.0,
-                    0.0,
-                    -89.99999237060547
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    3.0
-                ]
-            },
-            "travel_route": {
-                "start": [
-                    -5.0,
-                    0.0,
-                    0.0
-                ],
-                "end": [
-                    5.0,
-                    0.0,
-                    0.0
-                ]
-            }
-        },
-        {
-            "type": "EnemySpawn",
-            "EnemyName": "Soldier",
             "name": "EnemySpawn.001",
             "transform": {
                 "translation": [
@@ -1056,6 +1009,216 @@
                     2.0,
                     2.0,
                     2.0
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.005",
+            "transform": {
+                "translation": [
+                    15.100000381469727,
+                    0.0,
+                    9.699999809265137
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.003",
+            "transform": {
+                "translation": [
+                    17.500001907348633,
+                    0.0,
+                    9.699999809265137
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.004",
+            "transform": {
+                "translation": [
+                    15.100000381469727,
+                    0.0,
+                    11.899999618530273
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.006",
+            "transform": {
+                "translation": [
+                    17.500001907348633,
+                    0.0,
+                    11.899999618530273
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.007",
+            "transform": {
+                "translation": [
+                    17.500001907348633,
+                    0.0,
+                    14.09999942779541
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.008",
+            "transform": {
+                "translation": [
+                    15.100001335144043,
+                    0.0,
+                    14.09999942779541
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
                 ]
             }
         }

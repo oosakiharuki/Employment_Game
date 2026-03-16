@@ -2,17 +2,16 @@
 #include "UseEveryOne.h"
 #include "MyMath.h"
 
+#include "GLTFCommon.h"
+#include "Object3dCommon.h"
+
 using namespace UseEveryOne;
 using namespace MyMath;
 
 void BrokenBox::Initialize() {
-	object_ = std::make_unique<Object_glTF>();
-	object_->Initialize();
-	object_->SetModelFile("Box.gltf");
-
-	wt_.Initialize();
-	transform_ = wt_.UpdateTransform();
-	transform_.translate.y += 5.0f;
+	objectBox_ = std::make_unique<Object_glTF>();
+	objectBox_->Initialize();
+	objectBox_->SetModelFile("Box.gltf");
 
 	collisionType_ = CollisionTypes::TypeStage;
 }
@@ -22,7 +21,7 @@ void BrokenBox::Update() {
 
 	if (isBroken_) {
 		//壊れたアニメーションに変更
-		object_->ChangeAnimation("BrokenBox.gltf");
+		objectBox_->ChangeAnimation("BrokenBox.gltf");
 		
 		if (timer >= kAnimationTimeMax_) {
 			isFinish_ = true;
@@ -33,13 +32,13 @@ void BrokenBox::Update() {
 	}
 
 	wt_.UpdateMatrix(transform_);
-	object_->Update(wt_);
+	objectBox_->Update(wt_);
 
 	if (isBroken_) return;
 
 	//当たり判定設定
-	collisionAABB_.min = transform_.translate - (kDefaultScale_);
-	collisionAABB_.max = transform_.translate + (kDefaultScale_);
+	collisionAABB_.min = transform_.translate - colliderSize_;
+	collisionAABB_.max = transform_.translate + colliderSize_;
 	center_ = transform_.translate;
 
 	CollisionManager::GetInstance().FrameCollision(this);
@@ -47,8 +46,13 @@ void BrokenBox::Update() {
 }
 void BrokenBox::Draw() {
 	if (isFinish_) return;
-	object_->Draw();
 	
+	GLTFCommon::GetInstance().Command();
+
+	objectBox_->Draw();
+	
+	Object3dCommon::GetInstance().Command();
+
 }
 
 void BrokenBox::OnCollision(CollisionSource* collision) {
