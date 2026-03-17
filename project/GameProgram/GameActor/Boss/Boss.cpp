@@ -317,7 +317,7 @@ void Boss::ImGuiUpdate() {
 void Boss::LerpMove() {
 	moveTimer_ += kDeltaTime_;
 	moveTimer_ = std::clamp(moveTimer_, 0.0f, timerMax_);
-	transform_.translate = Lerp(move_.diff, move_.origin, moveTimer_ / timerMax_);
+	transform_.translate = Lerp(move_.origin, move_.diff, moveTimer_ / timerMax_);
 }
 
 bool Boss::LerpGoal() {

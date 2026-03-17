@@ -228,10 +228,8 @@ void GameScene::SpitOutGameObject() {
 	//イベントトリガーの配置
 	eventTriggers_ = std::move(spitOut_.SpitOutEventTrigger());
 	
-	//チュートリアル用の操作方法スプライト
-	if (stageFileName_ == "stage_0") {
-		guides_ = std::move(spitOut_.SpitOutGuide());
-	}
+	//操作方法
+	guides_ = std::move(spitOut_.SpitOutGuide());
 
 	//ボスの配置
 	spitOut_.SpitOutBoss(boss_);

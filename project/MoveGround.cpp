@@ -54,7 +54,7 @@ void MoveGround::Move() {
 	timer_ += kDeltaTime_ / addLength;//時間を移動の長さ分割る
 	timer_ = std::clamp(timer_, 0.0f, 1.0f);
 	//現在ポイントの変更
-	nowPoint_ = Lerp(movePoint_.diff, movePoint_.origin, timer_);
+	nowPoint_ = Lerp(movePoint_.origin, movePoint_.diff, timer_);
 
 	//移動方法(始点終点を往復する)
 	//現在ポイントが終点に着いたとき
