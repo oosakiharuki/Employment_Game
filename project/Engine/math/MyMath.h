@@ -502,19 +502,11 @@ namespace MyMath {
 	/// <summary>
 	/// 補間
 	/// </summary>
-	/// <param name="p0">ポイント1</param>
-	/// <param name="p1">ポイント2</param>
+	/// <param name="p0">ポイント1(始点)</param>
+	/// <param name="p1">ポイント2(終点)</param>
 	/// <param name="t">補間単位</param>
 	/// <returns>保管した座標</returns>
 	Vector3 Lerp(const Vector3& p0, const Vector3& p1, float t);
-	/// <summary>
-	/// 補間_クオータニオン版
-	/// </summary>
-	/// <param name="p0">ポイント1</param>
-	/// <param name="p1">ポイント2</param>
-	/// <param name="t">補間単位</param>
-	/// <returns>保管した座標</returns>
-	Quaternion Lerp(const Quaternion& p0, const Quaternion& p1, float t);
 
 	Quaternion operator-(const Quaternion& q);
 	Quaternion operator*(float f, const Quaternion& q);

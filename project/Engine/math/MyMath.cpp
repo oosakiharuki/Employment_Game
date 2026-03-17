@@ -860,8 +860,7 @@ namespace MyMath {
 			//jointが動いていたら
 			if (keyframes.keyframes[index].time <= time && time <= keyframes.keyframes[nextIndex].time) {
 				float t = (time - keyframes.keyframes[index].time) / (keyframes.keyframes[nextIndex].time - keyframes.keyframes[index].time);
-
-				return Lerp(keyframes.keyframes[index].value, keyframes.keyframes[nextIndex].value, t);
+				return SLerp(keyframes.keyframes[index].value, keyframes.keyframes[nextIndex].value, t);
 			}
 		}
 
@@ -913,7 +912,7 @@ namespace MyMath {
 			size_t nextIndex = index + 1;
 			if (key1.keyframes[index].time <= time && time <= key1.keyframes[nextIndex].time) {
 				float t = (time - key1.keyframes[index].time) / (key1.keyframes[nextIndex].time - key1.keyframes[index].time);
-				animation1 = Lerp(key1.keyframes[index].value, key1.keyframes[nextIndex].value, t);
+				animation1 = SLerp(key1.keyframes[index].value, key1.keyframes[nextIndex].value, t);
 			}
 		}
 
@@ -922,7 +921,7 @@ namespace MyMath {
 			size_t nextIndex = index + 1;
 			if (key2.keyframes[index].time <= time && time <= key2.keyframes[nextIndex].time) {
 				float t = (time - key2.keyframes[index].time) / (key2.keyframes[nextIndex].time - key2.keyframes[index].time);
-				animation2 = Lerp(key2.keyframes[index].value, key2.keyframes[nextIndex].value, t);
+				animation2 = SLerp(key2.keyframes[index].value, key2.keyframes[nextIndex].value, t);
 			}
 		}
 
@@ -931,18 +930,9 @@ namespace MyMath {
 
 
 	Vector3 Lerp(const Vector3& p0, const Vector3& p1, float t) {
-		Vector3 pointA = p0 * t;
-		Vector3 pointB = p1 * (1.0f - t);
+		Vector3 pointA = p0 * (1.0f - t);
+		Vector3 pointB = p1 * t;
 		return pointA + pointB;
-	}
-
-	Quaternion Lerp(const Quaternion& p0, const Quaternion& p1, float t) {
-		Vector3 pointA = Vector3(p0.x, p0.y, p0.z) * t;
-		Vector3 pointB = Vector3(p1.x, p1.y, p1.z) * (1.0f - t);
-		Vector3 c = pointA + pointB;
-		//クオータニオンに変更
-		Quaternion result = { c.x,c.y,c.z,p0.w };
-		return result;
 	}
 
 	Quaternion operator-(const Quaternion& q) {
