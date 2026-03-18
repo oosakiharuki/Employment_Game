@@ -44,7 +44,7 @@ void SelectScene::Update() {
 	}
 	
 	//カメラコントロールの更新
-	cameraControl_->Update(&*camera_);
+	cameraControl_->Update(&*camera_, player_.get());
 
 	//プレイヤー更新
 	player_->Update();
