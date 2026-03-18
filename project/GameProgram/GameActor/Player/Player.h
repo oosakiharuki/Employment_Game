@@ -326,7 +326,7 @@ private:
 	Vector3 backPower_ = { 0,0,0 };
 	float knockBackTimer_ = 0.0f;
 	float knockBackTimeMax_ = 0.0f;//最大ノックバック時間
-	
+
 
 	//落ちる限界
 	const float kFallEndY_ = -10.0f;

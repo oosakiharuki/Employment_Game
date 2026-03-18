@@ -434,7 +434,7 @@ void Player::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypeEnemyBullet || 
 		collision->GetType() == CollisionTypes::TypeBombExplotion || 
 		collision->GetType() == CollisionTypes::TypeBoss) {
-		IsDamage(DistanceCollisionCenter(collision->GetCenter()));
+		IsDamage(collision->GetCenter());
 	}
 	//演出中、死亡の時は当たらない
 	if (collision->GetType() == CollisionTypes::TypeStage
@@ -477,7 +477,19 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		Audio::GetInstance().SoundPlayWave(hitSound_, kVolume_);
 		infinityTimer_ = 0.0f;//無敵時間発動
 		//ノックバック(時間の三分の一ぶんまで)
-		KnockBackPlayer(hitPoint , kInfinityTimeMax_ * kDivideByThree_);
+
+		Vector3 power = Length(transform_.translate,hitPoint);
+
+		//当たり所が右の場合
+		if (transform_.translate.x > hitPoint.x) {
+			power.x = -power.x;
+		}//当たり所が上の場合
+		if (transform_.translate.y > hitPoint.y) {
+			power.y = -power.y;
+		}
+
+
+		KnockBackPlayer(power , kInfinityTimeMax_ * kDivideByThree_);
 	}
 	//リアクションフラグ
 	isDamageMotion_ = true;

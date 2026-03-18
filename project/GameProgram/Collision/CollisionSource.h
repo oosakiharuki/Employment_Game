@@ -53,12 +53,6 @@ public:
 	/// <param name="center">真ん中座標の設定</param>
 	void SetCenter(const Vector3& center) { center_ = center; }
 	/// <summary>
-	/// 当たった座標との距離
-	/// </summary>
-	/// <param name="otherCenter">もう一つのセンター座標</param>
-	/// <returns>この当たり判定ともう一つの当たり判定の距離</returns>
-	Vector3 DistanceCollisionCenter(const Vector3& otherCenter);
-	/// <summary>
 	/// 当たり判定コマンド
 	/// </summary>
 	/// <param name="collision">相手側の当たり判定ソース</param>
