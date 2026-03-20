@@ -33,6 +33,12 @@ void CameraControl::Update(Camera* camera, Player* player) {
 		Move();
 	}
 
+	if (player) {
+		if (player->GetPerformanceMode()) {
+			moveFrames_.y = kMoveFrameStrong_;//補間フレーム「長」に変更
+		}
+	}
+
 	if (isFreeMode_) {
 		DebugMove();
 	}
@@ -50,7 +56,7 @@ void CameraControl::Update(Camera* camera, Player* player) {
 	if (!isFreeMode_) {
 		//カメラセグメントの更新
 		//目標位置(diff)と現在位置(origin)の距離を比較し離れている距離分足していく
-		transform_.translate += GoDestination(cameraSegment_) * moveFrame_;
+		transform_.translate += GoDestination(cameraSegment_) * moveFrames_;
 		cameraSegment_.origin = transform_.translate;//originを常に更新し徐々に距離が狭くなる
 	}
 
@@ -122,15 +128,20 @@ void CameraControl::Move() {
 }
 
 void CameraControl::ChangeInterpolation() {
-	//補間変更
+	//補間変更x
 	if (Length(cameraSegment_.origin.x, cameraSegment_.diff.x) >= kLittleFront_ * kTwice_) {
-		moveFrame_ = kMoveFrameWeek_;//補間フレーム「弱」に変更
+		moveFrames_.x = kMoveFrameWeek_;//補間フレーム「短」に変更
 	}
 	else if (Length(cameraSegment_.origin.x, cameraSegment_.diff.x) >= kLittleFront_) {
-		moveFrame_ = kMoveFrameMedium_;//補間フレーム「中」に変更
+		moveFrames_.x = kMoveFrameMedium_;//補間フレーム「中」に変更
 	}
 	else {
-		moveFrame_ = kMoveFrameStrong_;//補間フレーム「強」に変更
+		moveFrames_.x = kMoveFrameStrong_;//補間フレーム「長」に変更
+	}
+
+	//補間変更y
+	if (Length(cameraSegment_.origin.x, cameraSegment_.diff.x) >= kFixedY_) {
+		moveFrames_.y = kMoveFrameWeek_;//補間フレーム「短」に変更
 	}
 }
 
@@ -192,10 +203,10 @@ void CameraControl::Shaking() {
 		std::random_device seed;
 		std::mt19937 random(seed());
 
-		std::uniform_real_distribution<float> yure(-kShakePower, kShakePower);
+		std::uniform_real_distribution<float> shake(-kShakePower, kShakePower);
 
 		//上下左右にシェイク(z軸は関係ない)
-		transform_.translate += Vector3{ yure(random), yure(random), 0.0f };
+		transform_.translate += Vector3{ shake(random), shake(random), 0.0f };
 	}
 }
 

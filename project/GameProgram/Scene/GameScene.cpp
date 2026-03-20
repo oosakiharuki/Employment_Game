@@ -32,7 +32,7 @@ void GameScene::Initialize() {
 
 	//ポーズ画面
 	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnSelect.png",std::make_unique<SelectScene>());
-
+	//ゴール、ワープフラグをリセット
 	CollisionUtility::GetInstance().ResetFrag();
 }
 

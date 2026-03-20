@@ -175,11 +175,12 @@ private:
 	Segment cameraSegment_ = {};
 	float interpolation = 0.0f;
 
-	float moveFrame_;//使用する補間フレーム
 	const float kLittleFront_ = kInterpolationPointX_ + 1.0f;//プレイヤーの少し前方向
-	const float kMoveFrameStrong_ = 1.0f / 60.0f;//補間フレーム強(補間が長い)
+	const float kMoveFrameStrong_ = 1.0f / 60.0f;//補間フレーム長(補間が長い)
 	const float kMoveFrameMedium_ = 1.0f / 20.0f;//補間フレーム中
-	const float kMoveFrameWeek_ = 1.0f / 10.0f;//補間フレーム弱(補間が短い)
+	const float kMoveFrameWeek_ = 1.0f / 10.0f;//補間フレーム短(補間が短い)
+
+	Vector3 moveFrames_ = { kMoveFrameStrong_,kMoveFrameStrong_ ,kMoveFrameStrong_ };
 
 	float zoomTimer_ = 0.0f;
 	//ズーム時間最大値
