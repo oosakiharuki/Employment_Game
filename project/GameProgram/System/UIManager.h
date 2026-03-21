@@ -3,13 +3,6 @@
 #include "Sprite.h"
 #include "Player.h"
 
-struct SpriteData {
-	std::string name;        //コンテナの名前
-	std::string texturePath; //テクスチャ名
-	Vector2 position;
-	Vector2 size;
-};
-
 /// <summary>
 /// 操作ガイド
 /// </summary>
@@ -23,7 +16,16 @@ public:
 	/// <returns>インスタンス</returns>
 	static UIManager& GetInstance();
 
-	void CreateSprite(const SpriteData& spriteData);
+	/// <summary>
+	/// フレーム更新型スプライトを作成
+	/// </summary>
+	/// <param name="sprite">スプライトを読み込む</param>
+	void FrameSprite(Sprite* sprite);
+	/// <summary>
+	/// 一度だけ読み取る型スプライトを作成
+	/// </summary>
+	/// <param name="sprite">スプライトを読み込む</param>
+	void FixedSprite(Sprite* sprite);
 
 	/// <summary>
 	/// 更新処理
@@ -40,32 +42,14 @@ public:
 	/// </summary>
 	void Finalize();
 
-	/// <summary>
-	/// setter_スプライトのテクスチャ
-	/// </summary>
-	/// <param name="name">コンテナの名前</param>
-	/// <param name="texturePath">テクスチャパス</param>
-	void SetSpriteTexture(const std::string name, const std::string& texturePath);
-	/// <summary>
-	/// getter_スプライトのテクスチャ
-	/// </summary>
-	/// <param name="name">コンテナの名前</param>
-	/// <returns>テクスチャのファイルパス</returns>
-	std::string GetSpriteTexture(const std::string name);
-
 private:
 	//インスタン
 	static std::unique_ptr<UIManager> sInstance_;
 	//default_deleteを設定(解放処理を行える)
 	friend struct std::default_delete<UIManager>;
-	//スプライトのコンテナ
-	std::unordered_map<std::string, std::unique_ptr<Sprite>> sprites_;
-
-	/// <summary>
-	/// スプライトの初期設定
-	/// </summary>
-	/// <param name="sprite">スプライトクラス</param>
-	/// <param name="spriteData">スプライトデータ</param>
-	void InitSprite(std::unique_ptr<Sprite>& sprite, const SpriteData& spriteData);
+	//フレーム更新スプライトたち
+	std::vector<Sprite*> frameSprites_;
+	//一度読み取りの保存されるスプライトたち
+	std::vector<Sprite*> fixedSprites_;
 };
 

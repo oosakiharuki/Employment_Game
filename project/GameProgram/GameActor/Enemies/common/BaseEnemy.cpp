@@ -39,6 +39,16 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 	collisionType_ = CollisionTypes::TypeEnemy;
 
 	enemyEye_ = std::make_unique<EnemyEye>();
+
+
+
+	hpSprite_ = std::make_unique<Sprite>();
+	hpSprite_->Initialize("enemyHp.png");
+	hpSprite_->SetSize(kHpSpriteSize_);
+
+	underBarSprite_ = std::make_unique<Sprite>();
+	underBarSprite_->Initialize("hpBar.png");
+	underBarSprite_->SetSize(kHpSpriteSize_);
 }
 
 void BaseEnemy::Update() {
@@ -53,6 +63,9 @@ void BaseEnemy::Update() {
 
 	//リアクション
 	reaction_->ScaleReaction(transform_.scale,isDamageMotion_, damageScale_, scaleTimer_, kDamageMaxTime_);
+
+	//体力バースプライト更新
+	HpSpriteUpdate();
 
 #ifdef USE_IMGUI
 	
@@ -216,6 +229,34 @@ bool BaseEnemy::IsLostFound() {
 	}
 	return false;
 }
+
+void BaseEnemy::HpSpriteUpdate() {
+	//ダメージを食らったら、タイマーがリセットされてないなら
+	if (isDamageMotion_ || hpSpriteTimer_ < kMaxHpSpriteTimer_) {
+		//ウィンドウズの画像範囲
+		Vector2 windows = { (float)WinApp::kClientWidth_,(float)WinApp::kClientHeight_ };
+		windows *= kSpriteWindowsPosition_;
+		//バーの設定
+		underBarSprite_->SetPosition(windows);
+
+		Vector2 hpPosition = { windows.x + kHpSpriteSize_.x * kSpriteRatio_ * kDivideByTwo_,windows.y };//バーに左右両方間をあける
+		float nowHp = (float)hp_ / (float)maxHp_;//現在体力と最大体力の比率
+		float barRatio = (1.0f - kSpriteRatio_);//少しだけ小さく(これもバーに左右両方間をあけるため)
+		//体力バーの設定
+		hpSprite_->SetPosition(hpPosition);
+		hpSprite_->SetSize({ (kHpSpriteSize_.x * nowHp) * barRatio, kHpSpriteSize_.y });
+		//フレーム読み込み
+		UIManager::GetInstance().FrameSprite(&*underBarSprite_);
+		UIManager::GetInstance().FrameSprite(&*hpSprite_);
+
+		hpSpriteTimer_ -= kDeltaTime_;
+	}
+
+	if (hpSpriteTimer_ < 0.0f) {
+		hpSpriteTimer_ = kMaxHpSpriteTimer_;
+	}
+}
+
 
 void BaseEnemy::StatePatternUpdate() {
 	enemyState_->Update(*this);	

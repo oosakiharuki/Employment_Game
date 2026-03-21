@@ -160,6 +160,11 @@ private:
 	/// <returns>該当するタイプがあるなら true</returns>
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
+	/// <summary>
+	/// 体力バースプライト更新	 
+	/// </summary>
+	void HpSpriteUpdate();
+
 	std::unique_ptr<Object_glTF> object_;
 	//弾丸
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
@@ -192,4 +197,15 @@ private:
 
 	//コマンドの行動を終えたフラグ(次のコマンドへ移動の合図となる)
 	bool motionFinish_ = false; 
+
+
+	//体力スプライト
+	std::unique_ptr<Sprite> hpSprite_;
+	std::unique_ptr<Sprite> underBarSprite_;
+
+	//パラメータ
+	const Vector2 kSpriteWindowsPosition_ = { 0.7f,0.85f };
+
+	const Vector2 kHpSpriteSize_ = { 256,64 };
+	const float kSpriteRatio_ = 0.1f;
 };
