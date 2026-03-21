@@ -116,6 +116,20 @@ protected:
 	/// </summary>
 	virtual void UpdateImGui() = 0;
 
+	/// <summary>
+	/// 見つかけた時のリアクション処理
+	/// </summary>
+	void FoundReaction();
+	/// <summary>
+	/// 倒されたリアクション処理
+	/// </summary>
+	void DeadReaction();
+
+	/// <summary>
+	/// ステート変更(捜索(search)、攻撃(attack))
+	/// </summary>
+	void StatePatternUpdate();
+
 	//オブジェクト
 	std::unique_ptr<Object3d> object_;
 
@@ -140,23 +154,11 @@ protected:
 	const float kMarkMaxTime_ = 1.0f;
 	float markTimer_ = 0.0f;
 
-	/// <summary>
-	/// 見つかけた時のリアクション処理
-	/// </summary>
-	void FoundReaction();
-
 	//見つかけたリアクションのパラメータ
 	bool isFoundReaction_ = false;
 	const float kFoundReactionMaxTime_ = kMarkMaxTime_ / 5.0f;//リアクションで伸び縮みする時間
 	Vector3 preTranslate_;//リアクション前の座標
 	float foundTimer_ = 0.0f;//見つけるモーションの時間
-
-	void DeadReaction();
-
-	/// <summary>
-	/// ステート変更(捜索(search)、攻撃(attack))
-	/// </summary>
-	void StatePatternUpdate();
 
 	std::unique_ptr<EnemyEye> enemyEye_ = nullptr;
 
@@ -177,4 +179,19 @@ private:
 
 	const float kFoundMotionMaxTime_ = kMarkMaxTime_ / 5.0f;
 
+	//体力スプライト
+	std::unique_ptr<Sprite> hpSprite_;
+	std::unique_ptr<Sprite> underBarSprite_;
+	//パラメータ
+	const Vector2 kSpriteWindowsPosition_ = { 0.7f,0.85f };
+	const Vector2 kHpSpriteSize_ = { 256,64 };
+	const float kSpriteRatio_ = 0.1f;
+
+	const float kMaxHpSpriteTimer_ = 1.5f;
+	float hpSpriteTimer_ = kMaxHpSpriteTimer_;
+
+	/// <summary>
+	/// 体力バースプライト更新	 
+	/// </summary>
+	void HpSpriteUpdate();
 };

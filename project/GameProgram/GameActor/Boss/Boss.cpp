@@ -20,6 +20,16 @@ void Boss::Initialize() {
 	collisionType_ = CollisionTypes::TypeBoss;
 
 	hp_ = kMaxHp_;
+	maxHp_ = kMaxHp_;
+
+
+	hpSprite_ = std::make_unique<Sprite>();
+	hpSprite_->Initialize("bossHp.png");
+	hpSprite_->SetSize(kHpSpriteSize_);
+
+	underBarSprite_ = std::make_unique<Sprite>();
+	underBarSprite_->Initialize("bossHpBar.png");
+	underBarSprite_->SetSize(kHpSpriteSize_);
 }
 
 void Boss::Update() {
@@ -59,7 +69,10 @@ void Boss::Active() {
 		motionFinish_ = false;//リセット
 	}
 
-	reaction_->ScaleReaction(transform_.scale, isDamageReaction_,damageReactionPower_,damageReactionTimer_,kDamageReactionTimeMax_);
+	reaction_->ScaleReaction(transform_.scale, isDamageReaction_, damageReactionPower_, damageReactionTimer_, kDamageReactionTimeMax_);
+	
+	//体力バースプライト更新
+	HpSpriteUpdate();
 
 	collisionAABB_.max = transform_.translate + colliderSize_;
 	collisionAABB_.min = transform_.translate - colliderSize_;
@@ -343,4 +356,22 @@ bool Boss::TypeCheckUp(const CollisionTypes& collisionType) {
 		return true;
 	}
 	return false;
+}	
+
+void Boss::HpSpriteUpdate(){
+	//ウィンドウズの画像範囲
+	Vector2 windows = { (float)WinApp::kClientWidth_,(float)WinApp::kClientHeight_ };
+	windows *= kSpriteWindowsPosition_;
+	//バーの設定
+	underBarSprite_->SetPosition(windows);
+
+	Vector2 hpPosition = { windows.x + kHpSpriteSize_.x * kSpriteRatio_ * kDivideByTwo_,windows.y };//バーに左右両方間をあける
+	float nowHp = (float)hp_ / (float)maxHp_;//現在体力と最大体力の比率
+	float barRatio = (1.0f - kSpriteRatio_);//少しだけ小さく(これもバーに左右両方間をあけるため)
+	//体力バーの設定
+	hpSprite_->SetPosition(hpPosition);
+	hpSprite_->SetSize({ (kHpSpriteSize_.x * nowHp) * barRatio, kHpSpriteSize_.y });
+	//フレーム読み込み
+	UIManager::GetInstance().FrameSprite(&*underBarSprite_);
+	UIManager::GetInstance().FrameSprite(&*hpSprite_);
 }

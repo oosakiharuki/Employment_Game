@@ -1,8 +1,10 @@
 #include "CheckPoint.h"
 #include "CollisionManager.h"
 #include "NextStageSave.h"
+#include "UseEveryOne.h"
 
 using namespace MyMath;
+using namespace UseEveryOne;
 
 CheckPoint::~CheckPoint() {}
 
@@ -23,12 +25,18 @@ void CheckPoint::Update() {
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
 	
+	if (isTouch_) {
+		rotateTimer_ += kDeltaTime_ * kTwice_;//二倍速
+		rotateTimer_ = std::clamp(rotateTimer_, 0.0f, 1.0f);
+		transform_.rotate.x = EaseOut(kRotateMax_, 0.0f, rotateTimer_);
+	}
+
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate - colliderSize_;
 	collisionAABB_.max = transform_.translate + colliderSize_;
 	center_ = transform_.translate;
 
-	CollisionManager::GetInstance().FrameCollision(this);
+	CollisionManager::GetInstance().FrameCollision(this);		
 }
 
 void CheckPoint::Draw() {
@@ -37,8 +45,7 @@ void CheckPoint::Draw() {
 
 void CheckPoint::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypePlayer) {
-		transform_.rotate.x -= 45.0f;
-		transform_.rotate.x = std::clamp(transform_.rotate.x,-90.0f,0.0f);
+		isTouch_ = true;
 		NextStageSave::GetInstance().SetCheckPoint(transform_.translate);
 	}
 }

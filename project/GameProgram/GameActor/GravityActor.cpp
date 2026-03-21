@@ -11,6 +11,8 @@ void GravityActor::IsGround(bool result) {
 void GravityActor::GravityUpdate(float& translateY) {
 	//重力
 	gravity_ -= kGravityPower_;
+	gravity_ = std::clamp(gravity_,kGravityMax_,0.0f);//上限設定
+
 	//地面についていない
 	if (!isGround_) {
 		translateY += gravity_;

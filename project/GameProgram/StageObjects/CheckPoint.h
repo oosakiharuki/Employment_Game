@@ -36,5 +36,9 @@ private:
 	/// <returns>該当するタイプがあるなら true</returns>
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
+	float rotateTimer_ = 0.0f;
+	const float kRotateMax_ = -90.0f;
+	//チェックポイントに触れた
+	bool isTouch_ = false;
 };
 

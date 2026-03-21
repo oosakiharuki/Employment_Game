@@ -203,10 +203,17 @@ private:
 	//切り取りサイズ
 	Vector2 textureSize_ = { 64.0f,64.0f };
 
-	//本来のテクスチャの大きさにする
+	std::string filePath_;
+
+	/// <summary>
+	/// 本来のテクスチャの大きさにする
+	/// </summary>
 	void AdjustTextureSize();
 
-	std::string filePath_;
+	/// <summary>
+	/// テクスチャサイズ更新処理
+	/// </summary>
+	void TextureSizeUpdate();
 
 	/// <summary>
 	/// vertexResourceの初期化

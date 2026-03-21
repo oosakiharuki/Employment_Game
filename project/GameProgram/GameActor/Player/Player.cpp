@@ -41,6 +41,7 @@ void Player::Initialize() {
 		SettingSpriteHp(i);
 	}
 
+
 	actionCommand_ = std::make_unique<PlayerCommand>();
 	actionCommand_->SetPlayer(this);
 
@@ -91,12 +92,12 @@ void Player::InitUmbrella() {
 }
 
 void Player::SettingSpriteHp(uint32_t num) {
-	SpriteData iterator;
-	iterator.name = "playerHp" + std::to_string(num);
-	iterator.texturePath = "Hp";
-	iterator.position = { kInitializePointHp_.x + kTextureSizeHp_.x * num , kInitializePointHp_.y - num * kDistanceYHp_ };
-	iterator.size = kTextureSizeHp_;
-	UIManager::GetInstance().CreateSprite(iterator);
+	std::unique_ptr<Sprite> sprite = std::make_unique<Sprite>();
+	sprite->Initialize("Hp.png");
+	sprite->SetPosition({ kInitializePointHp_.x + kTextureSizeHp_.x * num , kInitializePointHp_.y - num * kDistanceYHp_ });
+	sprite->SetSize(kTextureSizeHp_);
+
+	hpSprites_.push_back(std::move(sprite));
 }
 
 void Player::InitAudio() {
@@ -601,14 +602,17 @@ void Player::GravityDown() {
 }
 
 void Player::SpriteUpdate() {
-	for (uint32_t i = 0; i < kPlayerMaxHp_; i++) {
-		//Hpに応じてテクスチャを変化させる
-		if (i >= hp_) {
-			UIManager::GetInstance().SetSpriteTexture("playerHp" + std::to_string(i), "NoHp");
+	uint32_t nowHp = 0;
+	for (auto& sprite : hpSprites_) {
+		if (nowHp >= hp_) {
+			sprite->SetTextureFile("NoHp.png");
 		}//テクスチャ体力ない状態なら変更
-		else if (UIManager::GetInstance().GetSpriteTexture("playerHp" + std::to_string(i)) == "NoHp.png") {
-			UIManager::GetInstance().SetSpriteTexture("playerHp" + std::to_string(i), "Hp");
+		else if (sprite->GetTextureFile() != "Hp.png") {
+			sprite->SetTextureFile("Hp.png");
 		}
+
+		UIManager::GetInstance().FrameSprite(&*sprite);
+		nowHp++;
 	}
 }
 

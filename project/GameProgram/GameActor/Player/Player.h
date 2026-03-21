@@ -392,6 +392,9 @@ private:
 	const Vector2 kInitializePointHp_ = { 20.0f,45.0f };//スプライトの初期位置
 	const float kDistanceYHp_ = 10.0f;//スプライトのY軸幅
 
+	std::vector<std::unique_ptr<Sprite>> hpSprites_;
+
+
 	bool isEvent_ = false;
 
 	Vector3 kMoveMax_ = { 1000.0f,1000.0f,1000.0f };//最大移動

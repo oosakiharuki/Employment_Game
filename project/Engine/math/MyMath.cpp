@@ -780,9 +780,9 @@ namespace MyMath {
 	}
 #pragma endregion
 
-	Matrix4x4 MakePerspectiveFovMatrix(float forY, float aspectRatio, float nearClip, float farClip) {
+	Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
 		Matrix4x4 result;
-		float cot = 1 / tanf(forY / 2);
+		float cot = 1 / tanf(fovY / 2);
 
 		result.m[0][0] = (1 / aspectRatio) * cot;
 		result.m[1][1] = cot;
