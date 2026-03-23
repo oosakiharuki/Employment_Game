@@ -211,6 +211,30 @@
     <Filter Include="ヘッダー ファイル\GameProgram\CameraControl">
       <UniqueIdentifier>{5acfebb8-2025-4128-bb79-86d37e5e6547}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\base\DirectX">
+      <UniqueIdentifier>{3fd65449-87ee-4196-b062-71351f804f0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\base\Log">
+      <UniqueIdentifier>{26321a6a-9dd0-4781-959b-677302a125fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\StageObjects\Gimmick">
+      <UniqueIdentifier>{461c9046-b944-42d7-9fe6-767a8542b860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\StageObjects\PlayerInterfere">
+      <UniqueIdentifier>{86df015c-117c-4283-a5b7-fc5b84b226e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\base\DirectX">
+      <UniqueIdentifier>{9f79e1b3-1e29-41d4-bf54-13719e662a17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\base\Log">
+      <UniqueIdentifier>{f2ddea75-1c3e-4e35-802f-bbbb5c90e4f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\StageObjects\Gimmick">
+      <UniqueIdentifier>{915b4240-0257-4ec0-8272-eb72d041db55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere">
+      <UniqueIdentifier>{48cc3fb3-40af-4815-b451-df07c3110e45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\Sprite.cpp">
@@ -222,19 +246,7 @@
     <ClCompile Include="Engine\2d\TextureManager.cpp">
       <Filter>ソース ファイル\Engine\2d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\DirectXCommon.cpp">
-      <Filter>ソース ファイル\Engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\Logger.cpp">
-      <Filter>ソース ファイル\Engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\StringUtility.cpp">
-      <Filter>ソース ファイル\Engine\base</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\base\WinApp.cpp">
-      <Filter>ソース ファイル\Engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\D3DResourceLeakChecker.cpp">
       <Filter>ソース ファイル\Engine\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\input\Input.cpp">
@@ -297,12 +309,6 @@
     <ClCompile Include="Engine\3d\primitive\Primitive.cpp">
       <Filter>ソース ファイル\Engine\3d\primitive</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\StageObjects\CheckPoint.cpp">
-      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\StageObjects\WarpGate.cpp">
-      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Enemies\Enemy_Bomb.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClCompile>
@@ -314,9 +320,6 @@
     </ClCompile>
     <ClCompile Include="GameProgram\Scene\SelectScene.cpp">
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\StageObjects\Goal.cpp">
-      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\IStageObject.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
@@ -332,9 +335,6 @@
     </ClCompile>
     <ClCompile Include="GameProgram\LevelEditor\LevelEditor.cpp">
       <Filter>ソース ファイル\GameProgram\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\StageObjects\EventTrigger.cpp">
-      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
     <ClCompile Include="Engine\scene\SceneManager.cpp">
       <Filter>ソース ファイル\Engine\scene</Filter>
@@ -504,14 +504,38 @@
     <ClCompile Include="GameProgram\GameActor\Enemies\common\BaseEnemy.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Enemies\common</Filter>
     </ClCompile>
-    <ClCompile Include="BrokenBox.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\base\DirectX\DirectXCommon.cpp">
+      <Filter>ソース ファイル\Engine\base\DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="Needle.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\base\DirectX\D3DResourceLeakChecker.cpp">
+      <Filter>ソース ファイル\Engine\base\DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="MoveGround.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\base\Log\Logger.cpp">
+      <Filter>ソース ファイル\Engine\base\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Log\StringUtility.cpp">
+      <Filter>ソース ファイル\Engine\base\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\Gimmick\Needle.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\Gimmick\MoveGround.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\Gimmick\BrokenBox.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\CheckPoint.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\Goal.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\Gimmick\EventTrigger.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\WarpGate.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -557,19 +581,7 @@
     <ClInclude Include="Engine\audio\Audio.h">
       <Filter>ヘッダー ファイル\Engine\audio</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\D3DResourceLeakChecker.h">
-      <Filter>ヘッダー ファイル\Engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\DirectXCommon.h">
-      <Filter>ヘッダー ファイル\Engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\Logger.h">
-      <Filter>ヘッダー ファイル\Engine\base</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\base\SrvManager.h">
-      <Filter>ヘッダー ファイル\Engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\StringUtility.h">
       <Filter>ヘッダー ファイル\Engine\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\WinApp.h">
@@ -626,16 +638,7 @@
     <ClInclude Include="GameProgram\Scene\SelectScene.h">
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\StageObjects\CheckPoint.h">
-      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\StageObjects\Goal.h">
-      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\StageObjects\IStageObject.h">
-      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\StageObjects\WarpGate.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Framework.h">
@@ -649,9 +652,6 @@
     </ClInclude>
     <ClInclude Include="GameProgram\LevelEditor\LevelEditor.h">
       <Filter>ヘッダー ファイル\GameProgram\LevelEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\StageObjects\EventTrigger.h">
-      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
     <ClInclude Include="Engine\scene\SceneManager.h">
       <Filter>ヘッダー ファイル\Engine\scene</Filter>
@@ -818,14 +818,38 @@
     <ClInclude Include="GameProgram\System\Pause\PauseScreen.h">
       <Filter>ヘッダー ファイル\GameProgram\System\Pause</Filter>
     </ClInclude>
-    <ClInclude Include="BrokenBox.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\base\DirectX\D3DResourceLeakChecker.h">
+      <Filter>ヘッダー ファイル\Engine\base\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="Needle.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\base\DirectX\DirectXCommon.h">
+      <Filter>ヘッダー ファイル\Engine\base\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="MoveGround.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\base\Log\StringUtility.h">
+      <Filter>ヘッダー ファイル\Engine\base\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Log\Logger.h">
+      <Filter>ヘッダー ファイル\Engine\base\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\Gimmick\BrokenBox.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\Gimmick\MoveGround.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\Gimmick\Needle.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\CheckPoint.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\Goal.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\Gimmick\EventTrigger.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\WarpGate.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
