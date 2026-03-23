@@ -56,7 +56,7 @@ void Framework::ObjectCommons() {
 	//パーティクル共有処理
 	ParticleCommon::GetInstance().Initialize();
 	//パーティクルマネージャ初期化
-	ParticleManager::GetInstance();
+	ParticleManager::GetInstance().InitializeParameter();
 
 	//ワイヤーフレーム処理
 	DebugWireframes::GetInstance().Initialize();

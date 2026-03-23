@@ -5,6 +5,10 @@
 
 #include "Camera.h"
 
+#include <json.hpp>
+#include <fstream>
+
+
 using namespace MyMath;
 using namespace Primitive;
 
@@ -88,11 +92,15 @@ Microsoft::WRL::ComPtr<ID3D12Resource> ParticleManager::GetResource( const std::
 	return particleG.resource;
 }
 
-std::list<ParticleData> ParticleManager::GetParticle( const std::string& filePath) {
+Particle* ParticleManager::GetParticle(const std::string& filePath) {
 	assert(SrvManager::GetInstance().Max());
 
-	ParticleGroup& particleG = particleGroups[filePath];
-	return particleG.particles;
+	Particle* particleG = particles_[filePath].get();
+	return particleG;
+}
+
+ParticleParameters ParticleManager::GetParticleParameter(const std::string& filePath) {
+	return particleParameters_[filePath];
 }
 
 void ParticleManager::Update( const std::string& filePath, ParticleForGPU* wvpData) {
@@ -237,11 +245,20 @@ void ParticleManager::ResetParticle(const std::string& filePath) {
 	particleG.particles.clear();
 }
 
-std::unique_ptr<Particle> ParticleManager::InitParticle(const ParticleParameters& parameters) {
+std::unique_ptr<Particle> ParticleManager::InitParticle(const std::string& name) {
+	//パラメータに設定されてないものの場合
+	if (!particleParameters_.contains(name)) {
+		return nullptr;
+	}
+
 	//使用するパーティクルを選ぶ
-	std::unique_ptr<Particle>& particle = particles_[parameters.name];
+	std::unique_ptr<Particle>& particle = particles_[name];
 	//パーティクルを設定
 	particle = std::make_unique<Particle>();
+
+	//設定されたパラメータを読み込む
+	ParticleParameters& parameters = particleParameters_[name];
+
 	//初期化(名前,テクスチャファイル,モデルの形)
 	particle->Initialize(parameters.name, parameters.textureFile, parameters.primitive);
 	particle->SetParticleCount(parameters.count); //生成数を設定
@@ -249,4 +266,82 @@ std::unique_ptr<Particle> ParticleManager::InitParticle(const ParticleParameters
 	particle->SetScale(parameters.basicSize);     //基本サイズを設定
 
 	return std::move(particle);
+}
+
+void ParticleManager::InitializeParameter() {
+
+	//Json文字列から解凍したデータ
+	nlohmann::json deserialized;
+
+	//ファイルストリーム
+	std::ifstream file;
+
+	//読み取れない場合
+	file.open("resource/particle.json");
+
+	if (file.fail()) {
+		assert(0);
+	}
+
+	//解凍処理
+	file >> deserialized;
+
+	assert(deserialized.is_object());//オブジェクトがあるか
+	assert(deserialized.contains("name"));//名前があるか
+	assert(deserialized["name"].is_string());//stringであるか
+
+	//["name"]文字列として取得
+	std::string name = deserialized["name"].get<std::string>();
+
+	//正しいレベルデータファイルなのか
+	assert(name.compare("Particle") == 0);
+
+	for (nlohmann::json& object : deserialized["particles"]) {
+		assert(object.contains("particleName"));
+
+		//使用するパーティクルを選ぶ
+		ParticleParameters& particle = particleParameters_[object["particleName"]];
+		particle.name = object["particleName"];
+		particle.textureFile = object["textureFile"];
+		particle.primitive = LoadObject(object["objectType"]);
+
+		nlohmann::json parameter = object["parameter"];
+
+		particle.count = parameter["count"]; //生成数を設定
+		particle.frequency = parameter["frequency"]; //頻度 / 生存時間を設定
+
+		Vector3 basicSize;
+		basicSize.x = parameter["basicSize"][0];
+		basicSize.y = parameter["basicSize"][1];
+		basicSize.z = parameter["basicSize"][2];
+
+		particle.basicSize = basicSize;//基本サイズを設定
+	}
+}
+
+ModelData ParticleManager::LoadObject(const std::string& primitiveName) {
+	ModelData result;
+	
+	if (primitiveName == "Box") {
+		result = Primitive::CreateBox();
+	}
+	else if (primitiveName == "Cone") {
+		result = Primitive::CreateCone();
+	}
+	else if (primitiveName == "Ring") {
+		result = Primitive::CreateRing();
+	}
+	else if (primitiveName == "Sphere") {
+		result = Primitive::CreateSphere();
+	}
+	else if (primitiveName == "Beam") {
+		result = Primitive::CreateBeam();
+	}
+	else if (primitiveName == "Plane") {
+		result = Primitive::CreatePlane();
+	}
+	else if (primitiveName == "Cylineder") {
+		result = Primitive::CreateCylinder();
+	}
+	return result;
 }

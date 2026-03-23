@@ -177,9 +177,6 @@ private:
 	//敵を配置する変数
 	std::list<EnemyPopData> enemyPopDatas_;
 
-	//パーティクルサイズ
-	const float gSize = 0.5f;
-
 	//動ける範囲
 	const float kMoveX = 3.0f;
 
@@ -190,10 +187,7 @@ private:
 	//召喚するとき
 	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
 
-	ParticleParameters particleSummon_ = {
-		"enemies_summon", "resource/Sprite/white.dds", Primitive::CreateSphere(), 10,
-		kSummonMaxTime_ / 6.0f, { gSize,gSize,gSize }
-	};
+	const std::string& particleSummon_ = "enemies_summon";
 
 	/// <summary>
 	/// 敵の共通テンプレート処理

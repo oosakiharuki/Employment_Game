@@ -1,0 +1,149 @@
+{
+    "name": "Particle",
+    "particles": [
+        {
+            "particleName": "player_walk",
+            "textureFile": "resource/Sprite/white.dds" ,
+            "objectType": "Box",
+            "parameter":{
+                "count": 5,
+                "frequency": 0.15,
+                "basicSize":[
+                    0.5,0.5,0.5
+                ]
+            }
+        },
+        {
+            "particleName": "player_brink",
+            "textureFile": "resource/Sprite/cone.dds" ,
+            "objectType": "Cone",
+            "parameter":{
+                "count": 1,
+                "frequency": 0.3,
+                "basicSize":[
+                    2,2,2
+                ]
+            }
+        },
+        {
+            "particleName": "player_fire",
+            "textureFile": "resource/Sprite/cone.dds" ,
+            "objectType": "Cone",
+            "parameter":{
+                "count": 1,
+                "frequency": 0.3,
+                "basicSize":[
+                    1,1,1
+                ]
+            }
+        },
+        {
+            "particleName": "player_damage",
+            "textureFile": "resource/Sprite/circle.dds" ,
+            "objectType": "Ring",
+            "parameter":{
+                "count": 20,
+                "frequency": 0.6,
+                "basicSize":[
+                    1,1,1
+                ]
+            }
+        },
+        {
+            "particleName": "player_parry",
+            "textureFile": "resource/Sprite/white.dds" ,
+            "objectType": "Cone",
+            "parameter":{
+                "count": 1,
+                "frequency": 0.5,
+                "basicSize":[
+                    2,0.2,2
+                ]
+            }
+        },
+        {
+            "particleName": "player_dead",
+            "textureFile": "resource/Sprite/white.dds" ,
+            "objectType": "Sphere",
+            "parameter":{
+                "count": 3,
+                "frequency": 0.1,
+                "basicSize":[
+                    0.5,0.5,0.5
+                ]
+            }
+        },
+        {
+            "particleName": "enemy_damage",
+            "textureFile": "resource/Sprite/circle.dds" ,
+            "objectType": "Ring",
+            "parameter":{
+                "count": 20,
+                "frequency": 0.6,
+                "basicSize":[
+                    1,1,1
+                ]
+            }
+        },
+        {
+            "particleName": "enemy_fire",
+            "textureFile": "resource/Sprite/cone.dds" ,
+            "objectType": "Cone",
+            "parameter":{
+                "count": 1,
+                "frequency": 0.1,
+                "basicSize":[
+                    1,1,1
+                ]
+            }
+        },
+        {
+            "particleName": "enemies_summon",
+            "textureFile": "resource/Sprite/white.dds",
+            "objectType": "Sphere",
+            "parameter": {
+                "count": 10,
+                "frequency": 0.2,
+                "basicSize":[
+                    0.5,0.5,0.5
+                ]
+            }
+        },
+        {
+            "particleName": "tullet_laser",
+            "textureFile": "resource/Sprite/3YvXH.dds" ,
+            "objectType": "Beam",
+            "parameter":{
+                "count": 1,
+                "frequency": 0.001,
+                "basicSize":[
+                    0.1,0.1,0.1
+                ]
+            }
+        },
+        {
+            "particleName": "title_bullet",
+            "textureFile": "resource/Sprite/cone.dds" ,
+            "objectType": "Cone",
+            "parameter":{
+                "count": 1,
+                "frequency": 0.5,
+                "basicSize":[
+                    1,1,1
+                ]
+            }
+        },
+        {
+            "particleName": "clear_fanfare",
+            "textureFile": "resource/Sprite/white.dds" ,
+            "objectType": "Plane",
+            "parameter":{
+                "count": 10,
+                "frequency": 1.5,
+                "basicSize":[
+                    1,1,1
+                ]
+            }
+        }
+    ]
+}

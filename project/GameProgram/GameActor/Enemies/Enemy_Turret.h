@@ -68,9 +68,7 @@ private:
 	Vector3 particleLaserSize_ = { 0.1f,0.1f,0.1f };
 
 	//見える範囲のパーティクルパラメータ
-	ParticleParameters particleLaser_ = {
-		"tullet_laser","resource/Sprite/3YvXH.dds",Primitive::CreateBeam(), 1, 0.001f, particleLaserSize_
-	};
+	const std::string& particleLaser_ = "tullet_laser";
 
 	const Vector3 kParticleFireSize_ = { 1.5f, 1.5f, 1.5f };
 

@@ -124,6 +124,12 @@ public:
 		emitter_.frequencyTime = time;
 	}
 	/// <summary>
+	/// getter_発生時間
+	/// </summary>
+	/// <returns>設定された発生時間</returns>
+	float GetFrequency() { return emitter_.frequency; }
+
+	/// <summary>
 	/// setter_カメラ
 	/// </summary>
 	/// <param name="camera">現在使っているカメラ</param>

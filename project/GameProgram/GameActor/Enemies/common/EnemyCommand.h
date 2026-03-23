@@ -109,12 +109,7 @@ public:
 	/// getter_パーティクル攻撃の名前
 	/// </summary>
 	/// <returns>パーティクル攻撃の名前部分を渡す</returns>
-	const std::string& GetParticleFireName() { return particleFire_.name; }
-	/// <summary>
-	/// getter_パーティクル攻撃そのもの
-	/// </summary>
-	/// <returns>パーティクル攻撃を渡す</returns>
-	const ParticleParameters& GetParticleFireParameter() { return particleFire_; }
+	const std::string& GetParticleFireName() { return particleFire_; }
 
 private:
 	//弾丸リスト
@@ -132,9 +127,7 @@ private:
 	uint32_t rapidCountMax_ = 3;
 
 	//攻撃するとき
-	ParticleParameters particleFire_ = {
-		"enemy_fire", "resource/Sprite/cone.dds", Primitive::CreateCone(), 1, 0.1f, {1 ,1 ,1}
-	};
+	const std::string& particleFire_ = "enemy_fire";
 
 	bool isFire_ = true;
 };

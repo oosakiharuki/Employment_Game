@@ -78,9 +78,8 @@ private:
 	//紙吹雪のパーティクルたち
 	const uint32_t kParticleMaxNum_ = 3;
 	
-	ParticleParameters particleFanfare_ = {
-		"clear_fanfare", "resource/Sprite/white.dds", Primitive::CreatePlane(),10,1.5f,{ 1,1,1 }
-	};
+	const std::string& particleFanfare_ = "clear_fanfare";
+
 	std::vector<std::unique_ptr<Particle>> particleFanfares_;
 
 	//紙吹雪パーティクルたちの座標をずらす

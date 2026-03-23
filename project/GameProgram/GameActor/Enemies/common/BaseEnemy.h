@@ -146,10 +146,7 @@ protected:
 
 	//パーティクル
 	//ダメージを食らったとき
-	ParticleParameters particleDamage_ = {
-		"enemy_damage", "resource/Sprite/circle.dds", Primitive::CreateRing(), 20, 0.6f, {1 ,1 ,1}
-	};
-
+	const std::string& particleDamage_ = "enemy_damage";
 
 	const float kMarkMaxTime_ = 1.0f;
 	float markTimer_ = 0.0f;

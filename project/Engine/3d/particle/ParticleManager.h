@@ -52,13 +52,17 @@ public:
 	/// <param name="filePath">パーティクルの名前</param>
 	/// <returns></returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> GetResource(const std::string& filePath);
+	
 	/// <summary>
 	/// getter_パーティクルデータ
 	/// </summary>
 	/// <param name="filePath">パーティクルの名前</param>
 	/// <returns></returns>
-	std::list<ParticleData> GetParticle(const std::string& filePath);
+	Particle* GetParticle(const std::string& filePath);
 	
+	ParticleParameters GetParticleParameter(const std::string& filePath);
+
+
 	uint32_t& GetNum(const std::string& filePath);
 
 	/// <summary>
@@ -87,12 +91,18 @@ public:
 	/// </summary>
 	/// <param name="filePath">パーティクルグループ名を選ぶ</param>
 	void ResetParticle(const std::string& filePath);
+
+	/// <summary>
+	/// パーティクルパラメータJson読み込み
+	/// </summary>
+	void InitializeParameter();
 	
 	/// <summary>
 	/// パーティクル初期化処理テンプレート
 	/// </summary>
 	/// <param name="parameters">パーティクルのパラメータをまとめたもの</param>
-	std::unique_ptr<Particle> InitParticle(const ParticleParameters& parameters);
+	std::unique_ptr<Particle> InitParticle(const std::string& name);
+
 
 private:
 	//インスタンス
@@ -125,6 +135,8 @@ private:
 	//パーティクルコンテナ
 	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
 
+	std::unordered_map<std::string, ParticleParameters> particleParameters_;
+
 	Camera* camera = nullptr;
 	static const uint32_t kNumMaxInstance = 100;
 
@@ -136,6 +148,13 @@ private:
 	Matrix4x4 CreateBillBoardMatrix(const Matrix4x4& scaleMatrix, const Matrix4x4& rotateMatrix, const Matrix4x4& translateMatrix);
 
 	void Timer(ParticleData& particleData);
+
+	/// <summary>
+	/// プリミティブオブジェクト作成
+	/// </summary>
+	/// <param name="primitiveName">形の選択</param>
+	/// <returns></returns>
+	ModelData LoadObject(const std::string& primitiveName);
 
 	float alpha = 0.0f;
 };

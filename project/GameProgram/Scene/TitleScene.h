@@ -84,9 +84,7 @@ private:
 	std::unique_ptr<Shadow> playerShadow_;//プレイヤー影
 	std::unique_ptr<Sprite> spriteMojiTitle_;//タイトル名
 
-	ParticleParameters particleBullet_ = {
-		"title_bullet", "resource/Sprite/cone.dds", Primitive::CreateCone(), 1, 0.5f, {1,1,1}
-	};
+	const std::string& particleBullet_ = "title_bullet";
 
 	//決定したら弾を発射
 	bool isSelect_ = false;

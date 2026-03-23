@@ -353,29 +353,17 @@ private:
 
 	//-パーティクル-
 	//歩く
-	ParticleParameters particleWalk_ = {
-		"player_walk", "resource/Sprite/white.dds", Primitive::CreateBox(), 5, 0.15f, {1,1,1}
-	};
+	const std::string& particleWalk_ = "player_walk";
 	//ブリンク
-	ParticleParameters particleBrink_ = {
-		"player_brink","resource/Sprite/cone.dds", Primitive::CreateCone(), 1, 0.3f, {2.0f,2.0f,2.0f}
-	}; 
+	const std::string& particleBrink_ = "player_brink";
 	//撃つ
-	ParticleParameters  particleFire_ = {
-		"player_fire","resource/Sprite/cone.dds", Primitive::CreateCone(), 1, 0.3f,{1,1,1}
-	};
+	const std::string& particleFire_ = "player_fire";
 	//ダメージを食らった
-	ParticleParameters particleDamage_ = {
-		"player_damage", "resource/Sprite/circle.dds", Primitive::CreateRing(), 20, 0.6f,{1,1,1}
-	};
+	const std::string& particleDamage_ = "player_damage";
 	//パリィ成功
-	ParticleParameters particleParry_ = {
-		"player_parry", "resource/Sprite/white.dds", Primitive::CreateCone(), 1, 0.5f,{2.0f,0.2f,2.0f}
-	};
+	const std::string& particleParry_ = "player_parry";
 	//倒された演出
-	ParticleParameters particleDead_ = {
-		"player_dead", "resource/Sprite/white.dds", Primitive::CreateSphere(), 3,0.1f,{0.5f, 0.5f, 0.5f}
-	};
+	const std::string& particleDead_ = "player_dead";
 
 	//前回座標の保存場所
 	Vector3 prePosition_;

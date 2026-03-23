@@ -27,7 +27,7 @@ void Enemy_Soldier::Initialize() {
 	fireCommand_->SetRapidCountMax(kRapidCountMax_);
 
 	//攻撃(発泡)
-	particles_[fireCommand_->GetParticleFireName()] = ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireParameter());
+	particles_[fireCommand_->GetParticleFireName()] = ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireName());
 
 	speed_.x = kMoveX_;
 }

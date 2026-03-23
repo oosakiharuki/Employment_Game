@@ -57,11 +57,9 @@ void EventTrigger::EventUpdate() {
 		particle->Update();
 	}
 	//敵が出終わった後ちょっとしてからリセットする
-	if (summonTimer_ <= -particleSummon_.frequency * kTwice_) {
+	if (summonTimer_ <= -ParticleManager::GetInstance().GetParticleParameter(particleSummon_).frequency * kTwice_) {
 		summon_particles_.clear();
 	}
-
-	EventData data = GetEventData();
 }
 
 void EventTrigger::Draw() {
@@ -212,9 +210,9 @@ void EventTrigger::LoadPopEnemy(std::istringstream& line_stream, std::string& wo
 	enemyPopDatas_.push_back(enemyPopData);
 
 	//召喚パーティクル
-	particles_[particleSummon_.name] = ParticleManager::GetInstance().InitParticle(particleSummon_);
-	particles_[particleSummon_.name]->SetTranslate(enemyPopData.position);
-	summon_particles_.push_back(std::move(particles_[particleSummon_.name]));
+	particles_[particleSummon_] = ParticleManager::GetInstance().InitParticle(particleSummon_);
+	particles_[particleSummon_]->SetTranslate(enemyPopData.position);
+	summon_particles_.push_back(std::move(particles_[particleSummon_]));
 }
 
 void EventTrigger::EnemyPop() {

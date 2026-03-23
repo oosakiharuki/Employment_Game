@@ -70,12 +70,12 @@ void Player::InitMainBody() {
 
 
 void Player::InitParticles() {
-	particles_[particleWalk_.name] = ParticleManager::GetInstance().InitParticle(particleWalk_);
-	particles_[particleBrink_.name] = ParticleManager::GetInstance().InitParticle(particleBrink_);
-	particles_[particleFire_.name] = ParticleManager::GetInstance().InitParticle(particleFire_);
-	particles_[particleDamage_.name] = ParticleManager::GetInstance().InitParticle(particleDamage_);
-	particles_[particleParry_.name] = ParticleManager::GetInstance().InitParticle(particleParry_);
-	particles_[particleDead_.name] = ParticleManager::GetInstance().InitParticle(particleDead_);
+	particles_[particleWalk_] = ParticleManager::GetInstance().InitParticle(particleWalk_);
+	particles_[particleBrink_] = ParticleManager::GetInstance().InitParticle(particleBrink_);
+	particles_[particleFire_] = ParticleManager::GetInstance().InitParticle(particleFire_);
+	particles_[particleDamage_] = ParticleManager::GetInstance().InitParticle(particleDamage_);
+	particles_[particleParry_] = ParticleManager::GetInstance().InitParticle(particleParry_);
+	particles_[particleDead_] = ParticleManager::GetInstance().InitParticle(particleDead_);
 
 }
 
@@ -212,12 +212,11 @@ void Player::SmockParticle() {
 	//移動しているとパーティクルを発生
 	if (isGround_ && IsMovePosition()) {
 		// 歩く煙パーティクル
-		particles_[particleWalk_.name]->SetParticleBorn(ParticleBorn::TimerMode);
-		particles_[particleWalk_.name]->SetTranslate(transform_.translate + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.GetMatWorld()));
-		particles_[particleWalk_.name]->SetScale({ 0.5f,0.5f,0.5f });
+		particles_[particleWalk_]->SetParticleBorn(ParticleBorn::TimerMode);
+		particles_[particleWalk_]->SetTranslate(transform_.translate + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.GetMatWorld()));
 	}
 	else {
-		particles_[particleWalk_.name]->SetParticleBorn(ParticleBorn::Stop);
+		particles_[particleWalk_]->SetParticleBorn(ParticleBorn::Stop);
 	}
 }
 
@@ -316,8 +315,8 @@ void Player::Dead() {
 	//少しディレイを挟む(カメラのシェイクが終わったら)
 	if (deadTimer_ >= kHitStopTime_) {
 		//倒されたパーティクル配置+発動
-		particles_[particleDead_.name]->SetTranslate(transform_.translate);
-		particles_[particleDead_.name]->SetParticleBorn(ParticleBorn::TimerMode);
+		particles_[particleDead_]->SetTranslate(transform_.translate);
+		particles_[particleDead_]->SetParticleBorn(ParticleBorn::TimerMode);
 
 		DirectionTheCamera();//カメラのほうに向く
 		transform_.rotate.z += kPlayerDeadRotating_;//回転する
@@ -330,7 +329,7 @@ void Player::Dead() {
 		if (deadTimer_ >= kDeadTimeMax_) {
 			RespawnPlayer();
 			//パーティクル発動停止
-			particles_[particleDead_.name]->SetParticleBorn(ParticleBorn::Stop);
+			particles_[particleDead_]->SetParticleBorn(ParticleBorn::Stop);
 		}
 	}
 	else {
@@ -472,8 +471,8 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		//体力 -1
 		hp_--;
 		//ダメージのパーティクル発生
-		particles_[particleDamage_.name]->SetTranslate(transform_.translate + Normalize(hitPoint));
-		particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+		particles_[particleDamage_]->SetTranslate(transform_.translate + Normalize(hitPoint));
+		particles_[particleDamage_]->SetParticleBorn(ParticleBorn::MomentMode);
 		//ダメージのSE再生
 		Audio::GetInstance().SoundPlayWave(hitSound_, kVolume_);
 		infinityTimer_ = 0.0f;//無敵時間発動
@@ -576,24 +575,24 @@ void Player::ParrySuccess() {
 	//傘の座標を読み取る
 	Vector3 translate = umbrella_->GetTranslate();
 	translate += TransformNormal(kPlayerFront_, wtGun_.GetMatWorld());//出す場所をwtGun_の向きの前に
-	particles_[particleParry_.name]->SetTranslate(translate);
-	particles_[particleParry_.name]->SetRotate(umbrellaRange_);
-	particles_[particleParry_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleParry_]->SetTranslate(translate);
+	particles_[particleParry_]->SetRotate(umbrellaRange_);
+	particles_[particleParry_]->SetParticleBorn(ParticleBorn::MomentMode);
 }
 
 
 void  Player::ParticleFire(const Vector3& translate) {
 	//攻撃パーティクル発生
-	particles_[particleFire_.name]->SetTranslate(translate);
-	particles_[particleFire_.name]->SetRotate(umbrellaRange_);
-	particles_[particleFire_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleFire_]->SetTranslate(translate);
+	particles_[particleFire_]->SetRotate(umbrellaRange_);
+	particles_[particleFire_]->SetParticleBorn(ParticleBorn::MomentMode);
 }
 
 void  Player::ParticleBrink() {
 	Vector3 translate = GetTranslate() + TransformNormal(-kPlayerFront_, GetUmbrellaMatWorld());
-	particles_[particleBrink_.name]->SetTranslate(translate);
-	particles_[particleBrink_.name]->SetRotate(umbrellaRange_);
-	particles_[particleBrink_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleBrink_]->SetTranslate(translate);
+	particles_[particleBrink_]->SetRotate(umbrellaRange_);
+	particles_[particleBrink_]->SetParticleBorn(ParticleBorn::MomentMode);
 }
 
 void Player::GravityDown() {
