@@ -1,8 +1,6 @@
 ### 🌳 Codebase File Tree (Excluding ignored directories)
 
 └── project/
-    ├── BrokenBox.cpp
-    ├── BrokenBox.h
     ├── CG2_00_01.vcxproj
     ├── CG2_00_01.vcxproj.filters
     ├── Engine/
@@ -95,20 +93,22 @@
     └── └── ├── Audio.cpp
     └── └── └── Audio.h
     └── ├── base/
-    └── └── ├── D3DResourceLeakChecker.cpp
-    └── └── ├── D3DResourceLeakChecker.h
-    └── └── ├── DirectXCommon.cpp
-    └── └── ├── DirectXCommon.h
+    └── └── ├── DirectX/
+    └── └── └── ├── D3DResourceLeakChecker.cpp
+    └── └── └── ├── D3DResourceLeakChecker.h
+    └── └── └── ├── DirectXCommon.cpp
+    └── └── └── └── DirectXCommon.h
     └── └── ├── Framework.cpp
     └── └── ├── Framework.h
-    └── └── ├── Logger.cpp
-    └── └── ├── Logger.h
+    └── └── ├── Log/
+    └── └── └── ├── Logger.cpp
+    └── └── └── ├── Logger.h
+    └── └── └── ├── StringUtility.cpp
+    └── └── └── └── StringUtility.h
     └── └── ├── Pipeline.cpp
     └── └── ├── Pipeline.h
     └── └── ├── SrvManager.cpp
     └── └── ├── SrvManager.h
-    └── └── ├── StringUtility.cpp
-    └── └── ├── StringUtility.h
     └── └── ├── WinApp.cpp
     └── └── └── WinApp.h
     └── ├── input/
@@ -203,18 +203,26 @@
     └── ├── StageObjects/
     └── └── ├── BackGroundObject.cpp
     └── └── ├── BackGroundObject.h
-    └── └── ├── CheckPoint.cpp
-    └── └── ├── CheckPoint.h
-    └── └── ├── EventTrigger.cpp
-    └── └── ├── EventTrigger.h
-    └── └── ├── Goal.cpp
-    └── └── ├── Goal.h
+    └── └── ├── Gimmick/
+    └── └── └── ├── BrokenBox.cpp
+    └── └── └── ├── BrokenBox.h
+    └── └── └── ├── EventTrigger.cpp
+    └── └── └── ├── EventTrigger.h
+    └── └── └── ├── MoveGround.cpp
+    └── └── └── ├── MoveGround.h
+    └── └── └── ├── Needle.cpp
+    └── └── └── └── Needle.h
     └── └── ├── Guide.cpp
     └── └── ├── Guide.h
     └── └── ├── IStageObject.cpp
     └── └── ├── IStageObject.h
-    └── └── ├── WarpGate.cpp
-    └── └── └── WarpGate.h
+    └── └── └── PlayerInterfere/
+    └── └──     ├── CheckPoint.cpp
+    └── └──     ├── CheckPoint.h
+    └── └──     ├── Goal.cpp
+    └── └──     ├── Goal.h
+    └── └──     ├── WarpGate.cpp
+    └── └──     └── WarpGate.h
     └── └── System/
     └──     ├── Load/
     └──     └── ├── FadeScreen.cpp
@@ -236,10 +244,6 @@
     └──     ├── UIManager.h
     └──     ├── UseEveryOne.cpp
     └──     └── UseEveryOne.h
-    ├── MoveGround.cpp
-    ├── MoveGround.h
-    ├── Needle.cpp
-    ├── Needle.h
     ├── externals/
     └── ├── assimp/
     └── └── ├── include/
@@ -339,132 +343,6 @@
 
 
 ============================================================
-File Path: project/BrokenBox.cpp
-============================================================
-#include "BrokenBox.h"
-#include "UseEveryOne.h"
-#include "MyMath.h"
-
-#include "GLTFCommon.h"
-#include "Object3dCommon.h"
-
-using namespace UseEveryOne;
-using namespace MyMath;
-
-void BrokenBox::Initialize() {
-	objectBox_ = std::make_unique<Object_glTF>();
-	objectBox_->Initialize();
-	objectBox_->SetModelFile("Box.gltf");
-
-	collisionType_ = CollisionTypes::TypeStage;
-}
-
-void BrokenBox::Update() {	
-	if (isFinish_) return;
-
-	if (isBroken_) {
-		//壊れたアニメーションに変更
-		objectBox_->ChangeAnimation("BrokenBox.gltf");
-		
-		if (timer >= kAnimationTimeMax_) {
-			isFinish_ = true;
-		}
-		else {
-			timer += kDeltaTime_;
-		}
-	}
-
-	wt_.UpdateMatrix(transform_);
-	objectBox_->Update(wt_);
-
-	if (isBroken_) return;
-
-	//当たり判定設定
-	collisionAABB_.min = transform_.translate - colliderSize_;
-	collisionAABB_.max = transform_.translate + colliderSize_;
-	center_ = transform_.translate;
-
-	CollisionManager::GetInstance().FrameCollision(this);
-
-}
-void BrokenBox::Draw() {
-	if (isFinish_) return;
-	
-	GLTFCommon::GetInstance().Command();
-
-	objectBox_->Draw();
-	
-	Object3dCommon::GetInstance().Command();
-
-}
-
-void BrokenBox::OnCollision(CollisionSource* collision) {
-	isBroken_ = true;//壊れるフラグオン
-}
-
-bool BrokenBox::TypeCheckUp(const CollisionTypes& collisionType) {
-	if (collisionType == CollisionTypes::TypePlayerBullet) {
-		return true;
-	}
-	return false;
-}
-
-
-============================================================
-File Path: project/BrokenBox.h
-============================================================
-#pragma once
-#include "Object_glTF.h"
-#include "IStageObject.h"
-
-/// <summary>
-/// 壊せる箱[ギミック]
-/// </summary>
-class BrokenBox : public IStageObject
-{
-public:
-	/// <summary>
-	/// 初期化処理
-	/// </summary>
-	void Initialize() override;
-
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void Update() override;
-
-	/// <summary>
-	/// 描画処理
-	/// </summary>
-	void Draw() override;
-
-private:
-
-	/// <summary>
-	/// 当たり判定コマンド
-	/// </summary>
-	/// <param name="collision">相手側の当たり判定ソース</param>
-	void OnCollision(CollisionSource* collision) override;
-	/// <summary>
-	/// 当たり判定をとるタイプかをチェック
-	/// </summary>
-	/// <param name="collisionType">相手の当たり判定タイプ</param>
-	/// <returns>該当するタイプがあるなら true</returns>
-	bool TypeCheckUp(const CollisionTypes& collisionType) override;
-
-	std::unique_ptr<Object_glTF> objectBox_ = nullptr;
-
-	//壊したフラグ
-	bool isBroken_ = false;
-	bool isFinish_ = false;
-
-	float timer = 0.0f;
-	const float kAnimationTimeMax_ = 2.4f;
-};
-
-
-
-============================================================
 File Path: project/CG2_00_01.vcxproj
 ============================================================
 ﻿<?xml version="1.0" encoding="utf-8"?>
@@ -534,7 +412,7 @@ File Path: project/CG2_00_01.vcxproj
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -560,7 +438,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\base;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -576,7 +454,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BrokenBox.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\Gimmick\BrokenBox.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionUtility.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionSource.cpp" />
     <ClCompile Include="GameProgram\GameActor\Enemies\common\EnemyEye.cpp" />
@@ -601,7 +479,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\Scene\GameOverScene.cpp" />
     <ClCompile Include="GameProgram\Scene\SelectScene.cpp" />
     <ClCompile Include="GameProgram\GameActor\Shadow.cpp" />
-    <ClCompile Include="GameProgram\StageObjects\CheckPoint.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\CheckPoint.cpp" />
     <ClCompile Include="GameProgram\GameActor\Enemies\Enemy_Bomb.cpp" />
     <ClCompile Include="Engine\3d\primitive\Primitive.cpp" />
     <ClCompile Include="GameProgram\GameActor\Enemies\common\EnemyBullet.cpp" />
@@ -620,8 +498,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\System\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\3d\particle\ParticleManager.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
-    <ClCompile Include="Engine\base\D3DResourceLeakChecker.cpp" />
-    <ClCompile Include="Engine\base\DirectXCommon.cpp" />
+    <ClCompile Include="Engine\base\DirectX\D3DResourceLeakChecker.cpp" />
+    <ClCompile Include="Engine\base\DirectX\DirectXCommon.cpp" />
     <ClCompile Include="Engine\base\SrvManager.cpp" />
     <ClCompile Include="Engine\base\Framework.cpp" />
     <ClCompile Include="GameProgram\LevelEditor\LevelEditor.cpp" />
@@ -641,7 +519,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\input\Input.cpp">
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
-    <ClCompile Include="Engine\base\Logger.cpp" />
+    <ClCompile Include="Engine\base\Log\Logger.cpp" />
     <ClCompile Include="Engine\scene\BaseScene.cpp" />
     <ClCompile Include="Engine\main.cpp">
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MultiThreadedDebug</RuntimeLibrary>
@@ -653,7 +531,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\pipeline\Object3dCommon.cpp" />
     <ClCompile Include="Engine\2d\Sprite.cpp" />
     <ClCompile Include="Engine\2d\SpriteCommon.cpp" />
-    <ClCompile Include="Engine\base\StringUtility.cpp" />
+    <ClCompile Include="Engine\base\Log\StringUtility.cpp" />
     <ClCompile Include="Engine\2d\TextureManager.cpp" />
     <ClCompile Include="Engine\base\WinApp.cpp">
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MultiThreadedDebug</RuntimeLibrary>
@@ -668,10 +546,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\GameActor\Player\PlayerBullet.cpp" />
     <ClCompile Include="GameProgram\GameActor\Enemies\common\BaseEnemy.cpp" />
     <ClCompile Include="GameProgram\GameActor\Player\Umbrella.cpp" />
-    <ClCompile Include="GameProgram\StageObjects\EventTrigger.cpp" />
-    <ClCompile Include="GameProgram\StageObjects\Goal.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\Gimmick\EventTrigger.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\Goal.cpp" />
     <ClCompile Include="GameProgram\StageObjects\IStageObject.cpp" />
-    <ClCompile Include="GameProgram\StageObjects\WarpGate.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\WarpGate.cpp" />
     <ClCompile Include="GameProgram\System\Load\NextStageSave.cpp" />
     <ClCompile Include="GameProgram\System\UseEveryOne.cpp" />
     <ClCompile Include="GameProgram\System\Reaction.cpp" />
@@ -681,11 +559,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\GameActor\VisualActor.cpp" />
     <ClCompile Include="GameProgram\System\Pause\PauseScreen.cpp" />
     <ClCompile Include="GameProgram\StageObjects\Guide.cpp" />
-    <ClCompile Include="MoveGround.cpp" />
-    <ClCompile Include="Needle.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\Gimmick\MoveGround.cpp" />
+    <ClCompile Include="GameProgram\StageObjects\Gimmick\Needle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BrokenBox.h" />
+    <ClInclude Include="GameProgram\StageObjects\Gimmick\BrokenBox.h" />
     <ClInclude Include="GameProgram\Collision\CollisionUtility.h" />
     <ClInclude Include="GameProgram\Collision\CollisionSource.h" />
     <ClInclude Include="GameProgram\GameActor\Enemies\common\EnemyEye.h" />
@@ -710,7 +588,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\Scene\GameOverScene.h" />
     <ClInclude Include="GameProgram\Scene\SelectScene.h" />
     <ClInclude Include="GameProgram\GameActor\Shadow.h" />
-    <ClInclude Include="GameProgram\StageObjects\CheckPoint.h" />
+    <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\CheckPoint.h" />
     <ClInclude Include="GameProgram\GameActor\Enemies\Enemy_Bomb.h" />
     <ClInclude Include="Engine\3d\primitive\Primitive.h" />
     <ClInclude Include="GameProgram\GameActor\Enemies\common\EnemyBullet.h" />
@@ -729,8 +607,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\System\ParticleEmitter.h" />
     <ClInclude Include="Engine\3d\particle\ParticleManager.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
-    <ClInclude Include="Engine\base\D3DResourceLeakChecker.h" />
-    <ClInclude Include="Engine\base\DirectXCommon.h" />
+    <ClInclude Include="Engine\base\DirectX\D3DResourceLeakChecker.h" />
+    <ClInclude Include="Engine\base\DirectX\DirectXCommon.h" />
     <ClInclude Include="Engine\base\SrvManager.h" />
     <ClInclude Include="Engine\base\Framework.h" />
     <ClInclude Include="GameProgram\LevelEditor\LevelEditor.h" />
@@ -748,7 +626,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\scene\SceneManager.h" />
     <ClInclude Include="GameProgram\Scene\GameScene.h" />
     <ClInclude Include="Engine\input\Input.h" />
-    <ClInclude Include="Engine\base\Logger.h" />
+    <ClInclude Include="Engine\base\Log\Logger.h" />
     <ClInclude Include="Engine\3d\model\ModelManager.h" />
     <ClInclude Include="Engine\scene\BaseScene.h" />
     <ClInclude Include="Engine\math\MyMath.h" />
@@ -757,7 +635,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\pipeline\Object3dCommon.h" />
     <ClInclude Include="Engine\2d\Sprite.h" />
     <ClInclude Include="Engine\2d\SpriteCommon.h" />
-    <ClInclude Include="Engine\base\StringUtility.h" />
+    <ClInclude Include="Engine\base\Log\StringUtility.h" />
     <ClInclude Include="Engine\2d\TextureManager.h" />
     <ClInclude Include="Engine\math\Transform.h" />
     <ClInclude Include="Engine\math\Vector2.h" />
@@ -774,10 +652,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\GameActor\Player\PlayerBullet.h" />
     <ClInclude Include="GameProgram\GameActor\Enemies\common\BaseEnemy.h" />
     <ClInclude Include="GameProgram\GameActor\Player\Umbrella.h" />
-    <ClInclude Include="GameProgram\StageObjects\EventTrigger.h" />
-    <ClInclude Include="GameProgram\StageObjects\Goal.h" />
+    <ClInclude Include="GameProgram\StageObjects\Gimmick\EventTrigger.h" />
+    <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\Goal.h" />
     <ClInclude Include="GameProgram\StageObjects\IStageObject.h" />
-    <ClInclude Include="GameProgram\StageObjects\WarpGate.h" />
+    <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\WarpGate.h" />
     <ClInclude Include="GameProgram\System\Load\NextStageSave.h" />
     <ClInclude Include="GameProgram\System\UseEveryOne.h" />
     <ClInclude Include="GameProgram\System\Reaction.h" />
@@ -787,8 +665,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\GameActor\VisualActor.h" />
     <ClInclude Include="GameProgram\System\Pause\PauseScreen.h" />
     <ClInclude Include="GameProgram\StageObjects\Guide.h" />
-    <ClInclude Include="MoveGround.h" />
-    <ClInclude Include="Needle.h" />
+    <ClInclude Include="GameProgram\StageObjects\Gimmick\MoveGround.h" />
+    <ClInclude Include="GameProgram\StageObjects\Gimmick\Needle.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
@@ -1146,6 +1024,30 @@ File Path: project/CG2_00_01.vcxproj.filters
     <Filter Include="ヘッダー ファイル\GameProgram\CameraControl">
       <UniqueIdentifier>{5acfebb8-2025-4128-bb79-86d37e5e6547}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\base\DirectX">
+      <UniqueIdentifier>{3fd65449-87ee-4196-b062-71351f804f0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\base\Log">
+      <UniqueIdentifier>{26321a6a-9dd0-4781-959b-677302a125fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\StageObjects\Gimmick">
+      <UniqueIdentifier>{461c9046-b944-42d7-9fe6-767a8542b860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\StageObjects\PlayerInterfere">
+      <UniqueIdentifier>{86df015c-117c-4283-a5b7-fc5b84b226e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\base\DirectX">
+      <UniqueIdentifier>{9f79e1b3-1e29-41d4-bf54-13719e662a17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\base\Log">
+      <UniqueIdentifier>{f2ddea75-1c3e-4e35-802f-bbbb5c90e4f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\StageObjects\Gimmick">
+      <UniqueIdentifier>{915b4240-0257-4ec0-8272-eb72d041db55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere">
+      <UniqueIdentifier>{48cc3fb3-40af-4815-b451-df07c3110e45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\Sprite.cpp">
@@ -1157,19 +1059,7 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClCompile Include="Engine\2d\TextureManager.cpp">
       <Filter>ソース ファイル\Engine\2d</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\base\DirectXCommon.cpp">
-      <Filter>ソース ファイル\Engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\Logger.cpp">
-      <Filter>ソース ファイル\Engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\StringUtility.cpp">
-      <Filter>ソース ファイル\Engine\base</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\base\WinApp.cpp">
-      <Filter>ソース ファイル\Engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\D3DResourceLeakChecker.cpp">
       <Filter>ソース ファイル\Engine\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\input\Input.cpp">
@@ -1232,12 +1122,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClCompile Include="Engine\3d\primitive\Primitive.cpp">
       <Filter>ソース ファイル\Engine\3d\primitive</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\StageObjects\CheckPoint.cpp">
-      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\StageObjects\WarpGate.cpp">
-      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Enemies\Enemy_Bomb.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClCompile>
@@ -1249,9 +1133,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     </ClCompile>
     <ClCompile Include="GameProgram\Scene\SelectScene.cpp">
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\StageObjects\Goal.cpp">
-      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\IStageObject.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
@@ -1267,9 +1148,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     </ClCompile>
     <ClCompile Include="GameProgram\LevelEditor\LevelEditor.cpp">
       <Filter>ソース ファイル\GameProgram\LevelEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\StageObjects\EventTrigger.cpp">
-      <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
     </ClCompile>
     <ClCompile Include="Engine\scene\SceneManager.cpp">
       <Filter>ソース ファイル\Engine\scene</Filter>
@@ -1439,14 +1317,38 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClCompile Include="GameProgram\GameActor\Enemies\common\BaseEnemy.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Enemies\common</Filter>
     </ClCompile>
-    <ClCompile Include="BrokenBox.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\base\DirectX\DirectXCommon.cpp">
+      <Filter>ソース ファイル\Engine\base\DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="Needle.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\base\DirectX\D3DResourceLeakChecker.cpp">
+      <Filter>ソース ファイル\Engine\base\DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="MoveGround.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\base\Log\Logger.cpp">
+      <Filter>ソース ファイル\Engine\base\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Log\StringUtility.cpp">
+      <Filter>ソース ファイル\Engine\base\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\Gimmick\Needle.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\Gimmick\MoveGround.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\Gimmick\BrokenBox.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\CheckPoint.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\Goal.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\Gimmick\EventTrigger.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\WarpGate.cpp">
+      <Filter>ソース ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1492,19 +1394,7 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClInclude Include="Engine\audio\Audio.h">
       <Filter>ヘッダー ファイル\Engine\audio</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\D3DResourceLeakChecker.h">
-      <Filter>ヘッダー ファイル\Engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\DirectXCommon.h">
-      <Filter>ヘッダー ファイル\Engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\Logger.h">
-      <Filter>ヘッダー ファイル\Engine\base</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\base\SrvManager.h">
-      <Filter>ヘッダー ファイル\Engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\StringUtility.h">
       <Filter>ヘッダー ファイル\Engine\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\WinApp.h">
@@ -1561,16 +1451,7 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClInclude Include="GameProgram\Scene\SelectScene.h">
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\StageObjects\CheckPoint.h">
-      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\StageObjects\Goal.h">
-      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\StageObjects\IStageObject.h">
-      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\StageObjects\WarpGate.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
     <ClInclude Include="Engine\base\Framework.h">
@@ -1584,9 +1465,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     </ClInclude>
     <ClInclude Include="GameProgram\LevelEditor\LevelEditor.h">
       <Filter>ヘッダー ファイル\GameProgram\LevelEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\StageObjects\EventTrigger.h">
-      <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
     <ClInclude Include="Engine\scene\SceneManager.h">
       <Filter>ヘッダー ファイル\Engine\scene</Filter>
@@ -1753,14 +1631,38 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClInclude Include="GameProgram\System\Pause\PauseScreen.h">
       <Filter>ヘッダー ファイル\GameProgram\System\Pause</Filter>
     </ClInclude>
-    <ClInclude Include="BrokenBox.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\base\DirectX\D3DResourceLeakChecker.h">
+      <Filter>ヘッダー ファイル\Engine\base\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="Needle.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\base\DirectX\DirectXCommon.h">
+      <Filter>ヘッダー ファイル\Engine\base\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="MoveGround.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\base\Log\StringUtility.h">
+      <Filter>ヘッダー ファイル\Engine\base\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Log\Logger.h">
+      <Filter>ヘッダー ファイル\Engine\base\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\Gimmick\BrokenBox.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\Gimmick\MoveGround.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\Gimmick\Needle.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\CheckPoint.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\Goal.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\Gimmick\EventTrigger.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\WarpGate.h">
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2054,45 +1956,8 @@ void Sprite::InitVertexResource() {
 }
 
 void Sprite::InitVertexData() {
-	float left = 0.0f - anchorPoint_.x;
-	float right = 1.0f - anchorPoint_.x;
-	float top = 0.0f - anchorPoint_.y;
-	float bottom = 1.0f - anchorPoint_.y;
-
-	//左右反転
-	if (isFlipX_) {
-		left = -left;
-		right = -right;
-	}
-
-	//上下反転
-	if (isFlipY_) {
-		top = -top;
-		bottom = -bottom;
-	}
-
 	AdjustTextureSize();
-	const DirectX::TexMetadata& kMetadata = TextureManager::GetInstance().GetMetaData(filePath_);
-	float tex_left = textureLeftTop_.x / kMetadata.width;
-	float tex_right = textureLeftTop_.x + textureSize_.x / kMetadata.width;
-	float tex_top = textureLeftTop_.y / kMetadata.height;
-	float tex_bottom = textureLeftTop_.y + textureSize_.y / kMetadata.height;
-
-	vertexData_[0].position = { left,bottom,0.0f,1.0f };//0
-	vertexData_[0].texcoord = { tex_left,tex_bottom };
-	vertexData_[0].normal = { 0.0f,0.0f,-1.0f };
-
-	vertexData_[1].position = { left,top,0.0f,1.0f };//1,3
-	vertexData_[1].texcoord = { tex_left,tex_top };
-	vertexData_[1].normal = { 0.0f,0.0f,-1.0f };
-
-	vertexData_[2].position = { right,bottom,0.0f,1.0f };//2,5
-	vertexData_[2].texcoord = { tex_right,tex_bottom };
-	vertexData_[2].normal = { 0.0f,0.0f,-1.0f };
-
-	vertexData_[3].position = { right,top,0.0f,1.0f };//4
-	vertexData_[3].texcoord = { tex_right,tex_top };
-	vertexData_[3].normal = { 0.0f,0.0f,-1.0f };
+	TextureSizeUpdate();
 }
 
 void Sprite::InitIndexData() {
@@ -2148,19 +2013,61 @@ void Sprite::AdjustTextureSize() {
 	size_ = textureSize_;
 }
 
+void Sprite::TextureSizeUpdate() {
+	float left = 0.0f - anchorPoint_.x;
+	float right = 1.0f - anchorPoint_.x;
+	float top = 0.0f - anchorPoint_.y;
+	float bottom = 1.0f - anchorPoint_.y;
+
+	//左右反転
+	if (isFlipX_) {
+		left = -left;
+		right = -right;
+	}
+
+	//上下反転
+	if (isFlipY_) {
+		top = -top;
+		bottom = -bottom;
+	}
+
+	float tex_left = textureLeftTop_.x / size_.x;
+	float tex_right = textureLeftTop_.x + size_.x / size_.x;
+	float tex_top = textureLeftTop_.y / size_.y;
+	float tex_bottom = textureLeftTop_.y + size_.y / size_.y;
+
+	vertexData_[0].position = { left,bottom,0.0f,1.0f };//0
+	vertexData_[0].texcoord = { tex_left,tex_bottom };
+	vertexData_[0].normal = { 0.0f,0.0f,-1.0f };
+
+	vertexData_[1].position = { left,top,0.0f,1.0f };//1,3
+	vertexData_[1].texcoord = { tex_left,tex_top };
+	vertexData_[1].normal = { 0.0f,0.0f,-1.0f };
+
+	vertexData_[2].position = { right,bottom,0.0f,1.0f };//2,5
+	vertexData_[2].texcoord = { tex_right,tex_bottom };
+	vertexData_[2].normal = { 0.0f,0.0f,-1.0f };
+
+	vertexData_[3].position = { right,top,0.0f,1.0f };//4
+	vertexData_[3].texcoord = { tex_right,tex_top };
+	vertexData_[3].normal = { 0.0f,0.0f,-1.0f };
+}
+
 
 void Sprite::Update() {
 
 	transform_.translate = { position_.x,position_.y,0.0f };
 	transform_.rotate = { 0.0f,0.0f,rotation_ };
 	transform_.scale = { size_.x,size_.y,1.0f };
+	
+	TextureSizeUpdate();
 
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
 	Matrix4x4 viewMatrix = MakeIdentity4x4();
 	Matrix4x4 projectionMatrix = MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApp::kClientWidth_, (float)WinApp::kClientHeight_, 0.0f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 
-	transformationMatrixData_->WVP = worldViewProjectionMatrix;
+	transformationMatrixData_->WVP = worldViewProjectionMatrix;	
 	transformationMatrixData_->World = worldMatrix;
 }
 
@@ -2400,10 +2307,17 @@ private:
 	//切り取りサイズ
 	Vector2 textureSize_ = { 64.0f,64.0f };
 
-	//本来のテクスチャの大きさにする
+	std::string filePath_;
+
+	/// <summary>
+	/// 本来のテクスチャの大きさにする
+	/// </summary>
 	void AdjustTextureSize();
 
-	std::string filePath_;
+	/// <summary>
+	/// テクスチャサイズ更新処理
+	/// </summary>
+	void TextureSizeUpdate();
 
 	/// <summary>
 	/// vertexResourceの初期化
@@ -9723,7 +9637,7 @@ private:
 };
 
 ============================================================
-File Path: project/Engine/base/D3DResourceLeakChecker.cpp
+File Path: project/Engine/base/DirectX/D3DResourceLeakChecker.cpp
 ============================================================
 #include "D3DResourceLeakChecker.h"
 #include <dxgidebug.h>
@@ -9742,7 +9656,7 @@ D3DResourceLeakChecker::~D3DResourceLeakChecker() {
 }
 
 ============================================================
-File Path: project/Engine/base/D3DResourceLeakChecker.h
+File Path: project/Engine/base/DirectX/D3DResourceLeakChecker.h
 ============================================================
 #pragma once
 /// <summary>
@@ -9757,7 +9671,7 @@ public:
 };
 
 ============================================================
-File Path: project/Engine/base/DirectXCommon.cpp
+File Path: project/Engine/base/DirectX/DirectXCommon.cpp
 ============================================================
 #include "DirectXCommon.h"
 #include <cassert>
@@ -10442,7 +10356,7 @@ void DirectXCommon::Finalize() {
 }
 
 ============================================================
-File Path: project/Engine/base/DirectXCommon.h
+File Path: project/Engine/base/DirectX/DirectXCommon.h
 ============================================================
 #pragma once
 
@@ -10994,7 +10908,7 @@ private:
 };
 
 ============================================================
-File Path: project/Engine/base/Logger.cpp
+File Path: project/Engine/base/Log/Logger.cpp
 ============================================================
 #include "Logger.h"
 #include<Windows.h>
@@ -11006,7 +10920,7 @@ namespace Logger {
 };
 
 ============================================================
-File Path: project/Engine/base/Logger.h
+File Path: project/Engine/base/Log/Logger.h
 ============================================================
 #include <string>
 
@@ -11017,6 +10931,53 @@ namespace Logger {
 	/// <param name="message">文字を入れる</param>
 	void log(const std::string& message);
 };
+
+============================================================
+File Path: project/Engine/base/Log/StringUtility.cpp
+============================================================
+#include "StringUtility.h"
+#include<Windows.h>
+
+namespace StringUtility{
+std::wstring ConvertString(const std::string& str) {
+	if (str.empty()) {
+		return std::wstring();
+	}
+
+	auto sizeNeeded = MultiByteToWideChar(CP_UTF8, 0, reinterpret_cast<const char*>(&str[0]), static_cast<int>(str.size()), NULL, 0);
+	if (sizeNeeded == 0) {
+		return std::wstring();
+	}
+	std::wstring result(sizeNeeded, 0);
+	MultiByteToWideChar(CP_UTF8, 0, reinterpret_cast<const char*>(&str[0]), static_cast<int>(str.size()), &result[0], sizeNeeded);
+	return result;
+}
+
+std::string ConvertString(const std::wstring& str) {
+	if (str.empty()) {
+		return std::string();
+	}
+
+	auto sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, str.data(), static_cast<int>(str.size()), NULL, 0, NULL, NULL);
+	if (sizeNeeded == 0) {
+		return std::string();
+	}
+	std::string result(sizeNeeded, 0);
+	WideCharToMultiByte(CP_UTF8, 0, str.data(), static_cast<int>(str.size()), result.data(), sizeNeeded, NULL, NULL);
+	return result;
+}
+}
+
+============================================================
+File Path: project/Engine/base/Log/StringUtility.h
+============================================================
+#include <string>
+
+namespace StringUtility {
+	std::wstring ConvertString(const std::string& str);
+
+	std::string ConvertString(const std::wstring& str);
+}
 
 ============================================================
 File Path: project/Engine/base/Pipeline.cpp
@@ -11506,53 +11467,6 @@ private:
 	//default_deleteを設定(解放処理を行える)
 	friend struct std::default_delete<SrvManager>;
 };
-
-============================================================
-File Path: project/Engine/base/StringUtility.cpp
-============================================================
-#include "StringUtility.h"
-#include<Windows.h>
-
-namespace StringUtility{
-std::wstring ConvertString(const std::string& str) {
-	if (str.empty()) {
-		return std::wstring();
-	}
-
-	auto sizeNeeded = MultiByteToWideChar(CP_UTF8, 0, reinterpret_cast<const char*>(&str[0]), static_cast<int>(str.size()), NULL, 0);
-	if (sizeNeeded == 0) {
-		return std::wstring();
-	}
-	std::wstring result(sizeNeeded, 0);
-	MultiByteToWideChar(CP_UTF8, 0, reinterpret_cast<const char*>(&str[0]), static_cast<int>(str.size()), &result[0], sizeNeeded);
-	return result;
-}
-
-std::string ConvertString(const std::wstring& str) {
-	if (str.empty()) {
-		return std::string();
-	}
-
-	auto sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, str.data(), static_cast<int>(str.size()), NULL, 0, NULL, NULL);
-	if (sizeNeeded == 0) {
-		return std::string();
-	}
-	std::string result(sizeNeeded, 0);
-	WideCharToMultiByte(CP_UTF8, 0, str.data(), static_cast<int>(str.size()), result.data(), sizeNeeded, NULL, NULL);
-	return result;
-}
-}
-
-============================================================
-File Path: project/Engine/base/StringUtility.h
-============================================================
-#include <string>
-
-namespace StringUtility {
-	std::wstring ConvertString(const std::string& str);
-
-	std::string ConvertString(const std::wstring& str);
-}
 
 ============================================================
 File Path: project/Engine/base/WinApp.cpp
@@ -12838,9 +12752,9 @@ namespace MyMath {
 	}
 #pragma endregion
 
-	Matrix4x4 MakePerspectiveFovMatrix(float forY, float aspectRatio, float nearClip, float farClip) {
+	Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
 		Matrix4x4 result;
-		float cot = 1 / tanf(forY / 2);
+		float cot = 1 / tanf(fovY / 2);
 
 		result.m[0][0] = (1 / aspectRatio) * cot;
 		result.m[1][1] = cot;
@@ -13618,7 +13532,7 @@ namespace MyMath {
 	Matrix4x4 Inverse(const Matrix4x4& m);
 #pragma endregion
 
-	Matrix4x4 MakePerspectiveFovMatrix(float forY, float aspectRatio, float nearClip, float farClip);
+	Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip);
 
 	Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip);
 
@@ -13974,6 +13888,12 @@ void CameraControl::Update(Camera* camera, Player* player) {
 		Move();
 	}
 
+	if (player) {
+		if (player->GetPerformanceMode()) {
+			moveFrames_.y = kMoveFrameStrong_;//補間フレーム「長」に変更
+		}
+	}
+
 	if (isFreeMode_) {
 		DebugMove();
 	}
@@ -13991,7 +13911,7 @@ void CameraControl::Update(Camera* camera, Player* player) {
 	if (!isFreeMode_) {
 		//カメラセグメントの更新
 		//目標位置(diff)と現在位置(origin)の距離を比較し離れている距離分足していく
-		transform_.translate += GoDestination(cameraSegment_) * moveFrame_;
+		transform_.translate += GoDestination(cameraSegment_) * moveFrames_;
 		cameraSegment_.origin = transform_.translate;//originを常に更新し徐々に距離が狭くなる
 	}
 
@@ -14063,15 +13983,20 @@ void CameraControl::Move() {
 }
 
 void CameraControl::ChangeInterpolation() {
-	//補間変更
+	//補間変更x
 	if (Length(cameraSegment_.origin.x, cameraSegment_.diff.x) >= kLittleFront_ * kTwice_) {
-		moveFrame_ = kMoveFrameWeek_;//補間フレーム「弱」に変更
+		moveFrames_.x = kMoveFrameWeek_;//補間フレーム「短」に変更
 	}
 	else if (Length(cameraSegment_.origin.x, cameraSegment_.diff.x) >= kLittleFront_) {
-		moveFrame_ = kMoveFrameMedium_;//補間フレーム「中」に変更
+		moveFrames_.x = kMoveFrameMedium_;//補間フレーム「中」に変更
 	}
 	else {
-		moveFrame_ = kMoveFrameStrong_;//補間フレーム「強」に変更
+		moveFrames_.x = kMoveFrameStrong_;//補間フレーム「長」に変更
+	}
+
+	//補間変更y
+	if (Length(cameraSegment_.origin.x, cameraSegment_.diff.x) >= kFixedY_) {
+		moveFrames_.y = kMoveFrameWeek_;//補間フレーム「短」に変更
 	}
 }
 
@@ -14133,10 +14058,10 @@ void CameraControl::Shaking() {
 		std::random_device seed;
 		std::mt19937 random(seed());
 
-		std::uniform_real_distribution<float> yure(-kShakePower, kShakePower);
+		std::uniform_real_distribution<float> shake(-kShakePower, kShakePower);
 
 		//上下左右にシェイク(z軸は関係ない)
-		transform_.translate += Vector3{ yure(random), yure(random), 0.0f };
+		transform_.translate += Vector3{ shake(random), shake(random), 0.0f };
 	}
 }
 
@@ -14380,11 +14305,12 @@ private:
 	Segment cameraSegment_ = {};
 	float interpolation = 0.0f;
 
-	float moveFrame_;//使用する補間フレーム
 	const float kLittleFront_ = kInterpolationPointX_ + 1.0f;//プレイヤーの少し前方向
-	const float kMoveFrameStrong_ = 1.0f / 60.0f;//補間フレーム強(補間が長い)
+	const float kMoveFrameStrong_ = 1.0f / 60.0f;//補間フレーム長(補間が長い)
 	const float kMoveFrameMedium_ = 1.0f / 20.0f;//補間フレーム中
-	const float kMoveFrameWeek_ = 1.0f / 10.0f;//補間フレーム弱(補間が短い)
+	const float kMoveFrameWeek_ = 1.0f / 10.0f;//補間フレーム短(補間が短い)
+
+	Vector3 moveFrames_ = { kMoveFrameStrong_,kMoveFrameStrong_ ,kMoveFrameStrong_ };
 
 	float zoomTimer_ = 0.0f;
 	//ズーム時間最大値
@@ -15479,6 +15405,16 @@ void Boss::Initialize() {
 	collisionType_ = CollisionTypes::TypeBoss;
 
 	hp_ = kMaxHp_;
+	maxHp_ = kMaxHp_;
+
+
+	hpSprite_ = std::make_unique<Sprite>();
+	hpSprite_->Initialize("bossHp.png");
+	hpSprite_->SetSize(kHpSpriteSize_);
+
+	underBarSprite_ = std::make_unique<Sprite>();
+	underBarSprite_->Initialize("bossHpBar.png");
+	underBarSprite_->SetSize(kHpSpriteSize_);
 }
 
 void Boss::Update() {
@@ -15518,7 +15454,10 @@ void Boss::Active() {
 		motionFinish_ = false;//リセット
 	}
 
-	reaction_->ScaleReaction(transform_.scale, isDamageReaction_,damageReactionPower_,damageReactionTimer_,kDamageReactionTimeMax_);
+	reaction_->ScaleReaction(transform_.scale, isDamageReaction_, damageReactionPower_, damageReactionTimer_, kDamageReactionTimeMax_);
+	
+	//体力バースプライト更新
+	HpSpriteUpdate();
 
 	collisionAABB_.max = transform_.translate + colliderSize_;
 	collisionAABB_.min = transform_.translate - colliderSize_;
@@ -15802,6 +15741,24 @@ bool Boss::TypeCheckUp(const CollisionTypes& collisionType) {
 		return true;
 	}
 	return false;
+}	
+
+void Boss::HpSpriteUpdate(){
+	//ウィンドウズの画像範囲
+	Vector2 windows = { (float)WinApp::kClientWidth_,(float)WinApp::kClientHeight_ };
+	windows *= kSpriteWindowsPosition_;
+	//バーの設定
+	underBarSprite_->SetPosition(windows);
+
+	Vector2 hpPosition = { windows.x + kHpSpriteSize_.x * kSpriteRatio_ * kDivideByTwo_,windows.y };//バーに左右両方間をあける
+	float nowHp = (float)hp_ / (float)maxHp_;//現在体力と最大体力の比率
+	float barRatio = (1.0f - kSpriteRatio_);//少しだけ小さく(これもバーに左右両方間をあけるため)
+	//体力バーの設定
+	hpSprite_->SetPosition(hpPosition);
+	hpSprite_->SetSize({ (kHpSpriteSize_.x * nowHp) * barRatio, kHpSpriteSize_.y });
+	//フレーム読み込み
+	UIManager::GetInstance().FrameSprite(&*underBarSprite_);
+	UIManager::GetInstance().FrameSprite(&*hpSprite_);
 }
 
 ============================================================
@@ -15969,6 +15926,11 @@ private:
 	/// <returns>該当するタイプがあるなら true</returns>
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
+	/// <summary>
+	/// 体力バースプライト更新	 
+	/// </summary>
+	void HpSpriteUpdate();
+
 	std::unique_ptr<Object_glTF> object_;
 	//弾丸
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
@@ -16001,6 +15963,17 @@ private:
 
 	//コマンドの行動を終えたフラグ(次のコマンドへ移動の合図となる)
 	bool motionFinish_ = false; 
+
+
+	//体力スプライト
+	std::unique_ptr<Sprite> hpSprite_;
+	std::unique_ptr<Sprite> underBarSprite_;
+
+	//パラメータ
+	const Vector2 kSpriteWindowsPosition_ = { 0.7f,0.85f };
+
+	const Vector2 kHpSpriteSize_ = { 256,64 };
+	const float kSpriteRatio_ = 0.1f;
 };
 
 
@@ -16985,6 +16958,16 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 	collisionType_ = CollisionTypes::TypeEnemy;
 
 	enemyEye_ = std::make_unique<EnemyEye>();
+
+
+
+	hpSprite_ = std::make_unique<Sprite>();
+	hpSprite_->Initialize("enemyHp.png");
+	hpSprite_->SetSize(kHpSpriteSize_);
+
+	underBarSprite_ = std::make_unique<Sprite>();
+	underBarSprite_->Initialize("hpBar.png");
+	underBarSprite_->SetSize(kHpSpriteSize_);
 }
 
 void BaseEnemy::Update() {
@@ -16999,6 +16982,9 @@ void BaseEnemy::Update() {
 
 	//リアクション
 	reaction_->ScaleReaction(transform_.scale,isDamageMotion_, damageScale_, scaleTimer_, kDamageMaxTime_);
+
+	//体力バースプライト更新
+	HpSpriteUpdate();
 
 #ifdef USE_IMGUI
 	
@@ -17163,6 +17149,34 @@ bool BaseEnemy::IsLostFound() {
 	return false;
 }
 
+void BaseEnemy::HpSpriteUpdate() {
+	//ダメージを食らったら、タイマーがリセットされてないなら
+	if (isDamageMotion_ || hpSpriteTimer_ < kMaxHpSpriteTimer_) {
+		//ウィンドウズの画像範囲
+		Vector2 windows = { (float)WinApp::kClientWidth_,(float)WinApp::kClientHeight_ };
+		windows *= kSpriteWindowsPosition_;
+		//バーの設定
+		underBarSprite_->SetPosition(windows);
+
+		Vector2 hpPosition = { windows.x + kHpSpriteSize_.x * kSpriteRatio_ * kDivideByTwo_,windows.y };//バーに左右両方間をあける
+		float nowHp = (float)hp_ / (float)maxHp_;//現在体力と最大体力の比率
+		float barRatio = (1.0f - kSpriteRatio_);//少しだけ小さく(これもバーに左右両方間をあけるため)
+		//体力バーの設定
+		hpSprite_->SetPosition(hpPosition);
+		hpSprite_->SetSize({ (kHpSpriteSize_.x * nowHp) * barRatio, kHpSpriteSize_.y });
+		//フレーム読み込み
+		UIManager::GetInstance().FrameSprite(&*underBarSprite_);
+		UIManager::GetInstance().FrameSprite(&*hpSprite_);
+
+		hpSpriteTimer_ -= kDeltaTime_;
+	}
+
+	if (hpSpriteTimer_ < 0.0f) {
+		hpSpriteTimer_ = kMaxHpSpriteTimer_;
+	}
+}
+
+
 void BaseEnemy::StatePatternUpdate() {
 	enemyState_->Update(*this);	
 	enemyState_->ChangeState(*this);
@@ -17295,6 +17309,20 @@ protected:
 	/// </summary>
 	virtual void UpdateImGui() = 0;
 
+	/// <summary>
+	/// 見つかけた時のリアクション処理
+	/// </summary>
+	void FoundReaction();
+	/// <summary>
+	/// 倒されたリアクション処理
+	/// </summary>
+	void DeadReaction();
+
+	/// <summary>
+	/// ステート変更(捜索(search)、攻撃(attack))
+	/// </summary>
+	void StatePatternUpdate();
+
 	//オブジェクト
 	std::unique_ptr<Object3d> object_;
 
@@ -17319,23 +17347,11 @@ protected:
 	const float kMarkMaxTime_ = 1.0f;
 	float markTimer_ = 0.0f;
 
-	/// <summary>
-	/// 見つかけた時のリアクション処理
-	/// </summary>
-	void FoundReaction();
-
 	//見つかけたリアクションのパラメータ
 	bool isFoundReaction_ = false;
 	const float kFoundReactionMaxTime_ = kMarkMaxTime_ / 5.0f;//リアクションで伸び縮みする時間
 	Vector3 preTranslate_;//リアクション前の座標
 	float foundTimer_ = 0.0f;//見つけるモーションの時間
-
-	void DeadReaction();
-
-	/// <summary>
-	/// ステート変更(捜索(search)、攻撃(attack))
-	/// </summary>
-	void StatePatternUpdate();
 
 	std::unique_ptr<EnemyEye> enemyEye_ = nullptr;
 
@@ -17356,6 +17372,21 @@ private:
 
 	const float kFoundMotionMaxTime_ = kMarkMaxTime_ / 5.0f;
 
+	//体力スプライト
+	std::unique_ptr<Sprite> hpSprite_;
+	std::unique_ptr<Sprite> underBarSprite_;
+	//パラメータ
+	const Vector2 kSpriteWindowsPosition_ = { 0.7f,0.85f };
+	const Vector2 kHpSpriteSize_ = { 256,64 };
+	const float kSpriteRatio_ = 0.1f;
+
+	const float kMaxHpSpriteTimer_ = 1.5f;
+	float hpSpriteTimer_ = kMaxHpSpriteTimer_;
+
+	/// <summary>
+	/// 体力バースプライト更新	 
+	/// </summary>
+	void HpSpriteUpdate();
 };
 
 
@@ -18210,6 +18241,8 @@ void GravityActor::IsGround(bool result) {
 void GravityActor::GravityUpdate(float& translateY) {
 	//重力
 	gravity_ -= kGravityPower_;
+	gravity_ = std::clamp(gravity_,kGravityMax_,0.0f);//上限設定
+
 	//地面についていない
 	if (!isGround_) {
 		translateY += gravity_;
@@ -18255,6 +18288,7 @@ protected:
 	//重力
 	float gravity_ = 0.0f;
 	const float kGravityPower_ = 0.01f;//重力の質量
+	const float kGravityMax_ = -1.0f;//最大重力
 
 };
 
@@ -18892,6 +18926,7 @@ void Player::Initialize() {
 		SettingSpriteHp(i);
 	}
 
+
 	actionCommand_ = std::make_unique<PlayerCommand>();
 	actionCommand_->SetPlayer(this);
 
@@ -18942,12 +18977,12 @@ void Player::InitUmbrella() {
 }
 
 void Player::SettingSpriteHp(uint32_t num) {
-	SpriteData iterator;
-	iterator.name = "playerHp" + std::to_string(num);
-	iterator.texturePath = "Hp";
-	iterator.position = { kInitializePointHp_.x + kTextureSizeHp_.x * num , kInitializePointHp_.y - num * kDistanceYHp_ };
-	iterator.size = kTextureSizeHp_;
-	UIManager::GetInstance().CreateSprite(iterator);
+	std::unique_ptr<Sprite> sprite = std::make_unique<Sprite>();
+	sprite->Initialize("Hp.png");
+	sprite->SetPosition({ kInitializePointHp_.x + kTextureSizeHp_.x * num , kInitializePointHp_.y - num * kDistanceYHp_ });
+	sprite->SetSize(kTextureSizeHp_);
+
+	hpSprites_.push_back(std::move(sprite));
 }
 
 void Player::InitAudio() {
@@ -19452,14 +19487,17 @@ void Player::GravityDown() {
 }
 
 void Player::SpriteUpdate() {
-	for (uint32_t i = 0; i < kPlayerMaxHp_; i++) {
-		//Hpに応じてテクスチャを変化させる
-		if (i >= hp_) {
-			UIManager::GetInstance().SetSpriteTexture("playerHp" + std::to_string(i), "NoHp");
+	uint32_t nowHp = 0;
+	for (auto& sprite : hpSprites_) {
+		if (nowHp >= hp_) {
+			sprite->SetTextureFile("NoHp.png");
 		}//テクスチャ体力ない状態なら変更
-		else if (UIManager::GetInstance().GetSpriteTexture("playerHp" + std::to_string(i)) == "NoHp.png") {
-			UIManager::GetInstance().SetSpriteTexture("playerHp" + std::to_string(i), "Hp");
+		else if (sprite->GetTextureFile() != "Hp.png") {
+			sprite->SetTextureFile("Hp.png");
 		}
+
+		UIManager::GetInstance().FrameSprite(&*sprite);
+		nowHp++;
 	}
 }
 
@@ -19873,6 +19911,9 @@ private:
 	const Vector2 kTextureSizeHp_ = { 64,64 };//スプライトサイズ
 	const Vector2 kInitializePointHp_ = { 20.0f,45.0f };//スプライトの初期位置
 	const float kDistanceYHp_ = 10.0f;//スプライトのY軸幅
+
+	std::vector<std::unique_ptr<Sprite>> hpSprites_;
+
 
 	bool isEvent_ = false;
 
@@ -21665,6 +21706,8 @@ void ClearScene::InitCamera() {
 	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
 	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
 	ParticleCommon::GetInstance().SetDefaultCamera(camera_.get());
+	//ゴール、ワープフラグをリセット
+	CollisionUtility::GetInstance().ResetFrag();
 }
 
 void ClearScene::InitObject() {
@@ -21886,6 +21929,8 @@ void GameOverScene::InitCamera() {
 
 	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
 	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
+	//ゴール、ワープフラグをリセット
+	CollisionUtility::GetInstance().ResetFrag();
 }
 
 void GameOverScene::InitObject() {
@@ -22056,7 +22101,7 @@ void GameScene::Initialize() {
 
 	//ポーズ画面
 	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnSelect.png",std::make_unique<SelectScene>());
-
+	//ゴール、ワープフラグをリセット
 	CollisionUtility::GetInstance().ResetFrag();
 }
 
@@ -22514,6 +22559,7 @@ void SelectScene::Initialize() {
 	//ポーズ画面
 	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnTitle.png", std::make_unique<TitleScene>());
 
+	//ゴール、ワープフラグをリセット
 	CollisionUtility::GetInstance().ResetFrag();
 	PauseScreen::GetInstance().OffPause();//ポーズを強制解除
 }
@@ -23195,55 +23241,71 @@ private:
 
 
 ============================================================
-File Path: project/GameProgram/StageObjects/CheckPoint.cpp
+File Path: project/GameProgram/StageObjects/Gimmick/BrokenBox.cpp
 ============================================================
-#include "CheckPoint.h"
-#include "CollisionManager.h"
-#include "NextStageSave.h"
+#include "BrokenBox.h"
+#include "UseEveryOne.h"
+#include "MyMath.h"
 
+#include "GLTFCommon.h"
+#include "Object3dCommon.h"
+
+using namespace UseEveryOne;
 using namespace MyMath;
 
-CheckPoint::~CheckPoint() {}
+void BrokenBox::Initialize() {
+	objectBox_ = std::make_unique<Object_glTF>();
+	objectBox_->Initialize();
+	objectBox_->SetModelFile("Box.gltf");
 
-
-void CheckPoint::Initialize() {
-	wt_.Initialize();
-	//Transform更新処理
-	transform_ = wt_.UpdateTransform();
-
-	object_ = std::make_unique<Object3d>();
-	object_->Initialize();
-	object_->SetModelFile("checkpoint.obj");
-
-	collisionType_ = CollisionTypes::TypeStageObject;
+	collisionType_ = CollisionTypes::TypeStage;
 }
 
-void CheckPoint::Update() {
-	object_->Update(wt_);
+void BrokenBox::Update() {	
+	if (isFinish_) return;
+
+	if (isBroken_) {
+		//壊れたアニメーションに変更
+		objectBox_->ChangeAnimation("BrokenBox.gltf");
+		
+		if (timer >= kAnimationTimeMax_) {
+			isFinish_ = true;
+		}
+		else {
+			timer += kDeltaTime_;
+		}
+	}
+
 	wt_.UpdateMatrix(transform_);
-	
+	objectBox_->Update(wt_);
+
+	if (isBroken_) return;
+
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate - colliderSize_;
 	collisionAABB_.max = transform_.translate + colliderSize_;
 	center_ = transform_.translate;
 
 	CollisionManager::GetInstance().FrameCollision(this);
+
+}
+void BrokenBox::Draw() {
+	if (isFinish_) return;
+	
+	GLTFCommon::GetInstance().Command();
+
+	objectBox_->Draw();
+	
+	Object3dCommon::GetInstance().Command();
+
 }
 
-void CheckPoint::Draw() {
-	object_->Draw();
+void BrokenBox::OnCollision(CollisionSource* collision) {
+	isBroken_ = true;//壊れるフラグオン
 }
 
-void CheckPoint::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::TypePlayer) {
-		transform_.rotate.x -= 45.0f;
-		transform_.rotate.x = std::clamp(transform_.rotate.x,-90.0f,0.0f);
-		NextStageSave::GetInstance().SetCheckPoint(transform_.translate);
-	}
-}
-
-bool CheckPoint::TypeCheckUp(const CollisionTypes& collisionType) {
-	if (collisionType == CollisionTypes::TypePlayer) {
+bool BrokenBox::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypePlayerBullet) {
 		return true;
 	}
 	return false;
@@ -23251,39 +23313,40 @@ bool CheckPoint::TypeCheckUp(const CollisionTypes& collisionType) {
 
 
 ============================================================
-File Path: project/GameProgram/StageObjects/CheckPoint.h
+File Path: project/GameProgram/StageObjects/Gimmick/BrokenBox.h
 ============================================================
 #pragma once
+#include "Object_glTF.h"
 #include "IStageObject.h"
 
 /// <summary>
-/// チェックポイント(IStageObjectの派生クラス)
+/// 壊せる箱[ギミック]
 /// </summary>
-class CheckPoint : public IStageObject {
+class BrokenBox : public IStageObject
+{
 public:
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~CheckPoint() override;
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
 	void Initialize() override;
+
 	/// <summary>
 	/// 更新処理
 	/// </summary>
 	void Update() override;
+
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	void Draw() override;
+
 private:
+
 	/// <summary>
 	/// 当たり判定コマンド
 	/// </summary>
 	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
-
 	/// <summary>
 	/// 当たり判定をとるタイプかをチェック
 	/// </summary>
@@ -23291,12 +23354,20 @@ private:
 	/// <returns>該当するタイプがあるなら true</returns>
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
+	std::unique_ptr<Object_glTF> objectBox_ = nullptr;
+
+	//壊したフラグ
+	bool isBroken_ = false;
+	bool isFinish_ = false;
+
+	float timer = 0.0f;
+	const float kAnimationTimeMax_ = 2.4f;
 };
 
 
 
 ============================================================
-File Path: project/GameProgram/StageObjects/EventTrigger.cpp
+File Path: project/GameProgram/StageObjects/Gimmick/EventTrigger.cpp
 ============================================================
 #include "EventTrigger.h"
 #include "UseEveryOne.h"
@@ -23626,7 +23697,7 @@ void EventTrigger::EnemyMoveRoute(EnemyMoveCommand& enemy, EnemyPopData enemyDat
 
 
 ============================================================
-File Path: project/GameProgram/StageObjects/EventTrigger.h
+File Path: project/GameProgram/StageObjects/Gimmick/EventTrigger.h
 ============================================================
 #pragma once
 #include "MyMath.h"
@@ -23841,75 +23912,97 @@ private:
 };
 
 ============================================================
-File Path: project/GameProgram/StageObjects/Goal.cpp
+File Path: project/GameProgram/StageObjects/Gimmick/MoveGround.cpp
 ============================================================
-#include "Goal.h"
-#include "CollisionManager.h"
-#include "Input.h"
+#include "MoveGround.h"
 
+using namespace UseEveryOne;
 using namespace MyMath;
 
-Goal::~Goal() {}
+MoveGround::~MoveGround() {}
 
-void Goal::Initialize(){
+void MoveGround::Initialize() {
 	wt_.Initialize();
-	//Transform更新処理
-	transform_ = wt_.UpdateTransform();
-
 	object_ = std::make_unique<Object3d>();
 	object_->Initialize();
-	object_->SetModelFile("goal.obj");
+	object_->SetModelFile("moveGround.obj");
 
-	collisionType_ = CollisionTypes::TypeStageObject;
+	collisionType_ = TypeStage;//地面判定を付けるため
 }
-	
-void Goal::Update(){
-	object_->Update(wt_);
-	wt_.UpdateMatrix(transform_);
 
-	//当たり判定設定
+void MoveGround::Update() {
+	//移動
+	Move();
+
+	wt_.UpdateMatrix(transform_);
+	object_->Update(wt_);
+
 	collisionAABB_.min = transform_.translate - colliderSize_;
 	collisionAABB_.max = transform_.translate + colliderSize_;
 	center_ = transform_.translate;
 
 	CollisionManager::GetInstance().FrameCollision(this);
 }
-	
-void Goal::Draw(){
+
+void MoveGround::Draw() {
 	object_->Draw();
 }
 
-void Goal::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::TypePlayer) {
-		if (Input::GetInstance().TriggerKey(DIK_E) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_Y)) {
-			CollisionUtility::GetInstance().SuccessGoal(center_);
-		}
-	}
+void MoveGround::SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, const Vector3& pointE) {
+	//現在の位置を設定
+	nowPoint_ = nowPoint;
+	//移動箇所を設定(現在二か所)
+	startPoint_ = pointS;
+	endPoint_ = pointE;
+	//
+	movePoint_.origin = nowPoint;
+	movePoint_.diff = pointE;
 }
 
-bool Goal::TypeCheckUp(const CollisionTypes& collisionType) {
-	if (collisionType == CollisionTypes::TypePlayer) {
-		return true;
+void MoveGround::Move() {
+	//現在のポイントに移行
+	transform_.translate = nowPoint_;
+
+	//全体の長さを加算
+	Vector3 length = Length(movePoint_.origin, movePoint_.diff);
+	float addLength = (length.x + length.y + length.z) / moveMaxTime_;
+
+	timer_ += kDeltaTime_ / addLength;//時間を移動の長さ分割る
+	timer_ = std::clamp(timer_, 0.0f, 1.0f);
+	//現在ポイントの変更
+	nowPoint_ = Lerp(movePoint_.origin, movePoint_.diff, timer_);
+
+	//移動方法(始点終点を往復する)
+	//現在ポイントが終点に着いたとき
+	if (nowPoint_ == endPoint_) {
+		//終点から始点に移動
+		movePoint_.origin = endPoint_;
+		movePoint_.diff = startPoint_;
+		timer_ = 0.0f;//タイマーリセット
+	}//現在ポイントが始点に着いたとき
+	else if (nowPoint_ == startPoint_) {
+		//始点から終点に移動
+		movePoint_.origin = startPoint_;
+		movePoint_.diff = endPoint_;
+		timer_ = 0.0f;//タイマーリセット
 	}
-	return false;
+
 }
 
 
 ============================================================
-File Path: project/GameProgram/StageObjects/Goal.h
+File Path: project/GameProgram/StageObjects/Gimmick/MoveGround.h
 ============================================================
 #pragma once
 #include "IStageObject.h"
+#include "Object_glTF.h"
 
 /// <summary>
-/// ゴール(IStageObjectの派生クラス)
+/// 動く足場[ギミック]
 /// </summary>
-class Goal : public IStageObject {
+class MoveGround : public IStageObject{
 public:
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~Goal() override;
+	~MoveGround() override;
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -23922,13 +24015,202 @@ public:
 	/// 描画処理
 	/// </summary>
 	void Draw() override;
+
+	/// <summary>
+	/// setter_移動ルート
+	/// </summary>
+	/// <param name="nowPoint">現在の場所</param>
+	/// <param name="pointS">ポイント始点</param>
+	/// <param name="pointE">ポイント終点</param>
+	void SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, const Vector3& pointE);
+
 private:
+	/// <summary>
+	/// 移動
+	/// </summary>
+	void Move();
+
+	Vector3 pointA_{};
+	Vector3 pointB_{};
+
+	Segment segment_{};
+
+
+	Vector3 nowPoint_ = { 0,0,0 };
+	Segment movePoint_{};
+
+	Vector3 startPoint_ = { 0,0,0 };
+	Vector3 endPoint_ = { 0,0,0 };
+
+
+	float timer_ = 0.0f;
+	const float moveMaxTime_ = 5.0f;//遅くする
+};
+
+
+
+============================================================
+File Path: project/GameProgram/StageObjects/Gimmick/Needle.cpp
+============================================================
+#include "Needle.h"
+
+#include "Object3dCommon.h"
+#include "GLTFCommon.h"
+
+
+using namespace MyMath;
+using namespace UseEveryOne;
+
+void Needle::Initialize() {
+	objectNeedle_ = std::make_unique<Object_glTF>();
+	objectNeedle_->Initialize();
+	objectNeedle_->SetModelFile("needle.gltf");
+
+	shadow_ = std::make_unique<Shadow>();
+	shadow_->Initialize();
+
+	wt_.Initialize();
+	transform_ = wt_.UpdateTransform();
+
+	collisionType_ = CollisionTypes::TypeEnemyBullet;//ダメージ
+}
+
+void Needle::Update() {
+
+	Move();
+
+	AnimationRotate();
+
+	wt_.UpdateMatrix(transform_);
+	objectNeedle_->Update(wt_);
+
+	shadow_->SetTranslate(transform_.translate);
+	shadow_->SetScale(transform_.scale);
+	shadow_->Update();
+
+	collisionAABB_.min = transform_.translate - colliderSize_;
+	collisionAABB_.max = transform_.translate + colliderSize_;
+	center_ = transform_.translate;
+
+	CollisionManager::GetInstance().FrameCollision(this);
+}
+
+void Needle::Draw() {
+	GLTFCommon::GetInstance().Command();
+
+	objectNeedle_->Draw();
+	
+	Object3dCommon::GetInstance().Command();
+
+	shadow_->Draw();
+}
+
+void Needle::SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, const Vector3& pointE) {
+	//現在の位置を設定
+	nowPoint_ = nowPoint;
+	//移動箇所を設定(現在二か所)
+	startPoint_ = pointS;
+	endPoint_ = pointE;
+	//
+	movePoint_.origin = nowPoint;
+	movePoint_.diff = pointE;
+}
+
+void Needle::Move() {
+	//現在のポイントに移行
+	transform_.translate = nowPoint_;
+
+	//全体の長さを加算
+	Vector3 length = Length(movePoint_.origin, movePoint_.diff);
+	float addLength = (length.x + length.y + length.z) / moveMaxTime_;
+
+	timer_ += kDeltaTime_ / addLength;//時間を移動の長さ分割る
+	timer_ = std::clamp(timer_, 0.0f, 1.0f);
+	//現在ポイントの変更
+	nowPoint_ = Lerp(movePoint_.origin, movePoint_.diff, timer_);
+	
+	//移動方法(始点終点を往復する)
+	//現在ポイントが終点に着いたとき
+	if (nowPoint_ == endPoint_) {
+		//終点から始点に移動
+		movePoint_.origin = endPoint_;
+		movePoint_.diff = startPoint_;
+		timer_ = 0.0f;//タイマーリセット
+	}//現在ポイントが始点に着いたとき
+	else if (nowPoint_ == startPoint_) {
+		//始点から終点に移動
+		movePoint_.origin = startPoint_;
+		movePoint_.diff = endPoint_;
+		timer_ = 0.0f;//タイマーリセット
+	}
+}
+
+void Needle::AnimationRotate() {
+	animationTimer_ += kAnimationTimeSpeed_;
+	transform_.rotate.z = animationTimer_;
+}
+
+
+void Needle::OnCollision(CollisionSource* collisionSource) {
+	//無敵だからないかも
+}
+
+bool Needle::TypeCheckUp(const CollisionTypes& collisionType) {
+	return false;
+}
+
+
+
+============================================================
+File Path: project/GameProgram/StageObjects/Gimmick/Needle.h
+============================================================
+#pragma once
+#include "IStageObject.h"
+#include "Object_glTF.h"
+#include "Shadow.h"
+
+/// <summary>
+/// トゲボール[ギミック]
+/// </summary>
+class Needle : public IStageObject {
+public:
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	void Draw() override;
+
+	/// <summary>
+	/// setter_移動ルート
+	/// </summary>
+	/// <param name="nowPoint">現在の場所</param>
+	/// <param name="pointS">ポイント始点</param>
+	/// <param name="pointE">ポイント終点</param>
+	void SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, const Vector3& pointE);
+
+
+private:
+	/// <summary>
+	/// 移動
+	/// </summary>
+	void Move();
+	/// <summary>
+	/// 回転するアニメーション
+	/// </summary>
+	void AnimationRotate();
+
 	/// <summary>
 	/// 当たり判定コマンド
 	/// </summary>
 	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
-
 	/// <summary>
 	/// 当たり判定をとるタイプかをチェック
 	/// </summary>
@@ -23936,7 +24218,25 @@ private:
 	/// <returns>該当するタイプがあるなら true</returns>
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
+	std::unique_ptr<Object_glTF> objectNeedle_ = nullptr;
+
+	Vector3 nowPoint_ = { 0,0,0 };
+	Segment movePoint_{};
+
+	Vector3 startPoint_ = { 0,0,0 };	
+	Vector3 endPoint_ = { 0,0,0 };
+
+	float timer_ = 0.0f;
+	const float moveMaxTime_ = 5.0f;//遅くする
+
+	float animationTimer_ = 0.0f;
+	const float kAnimationTimeSpeed_ = 2.0f;
+
+
+	std::unique_ptr<Shadow> shadow_;
 };
+
+
 
 ============================================================
 File Path: project/GameProgram/StageObjects/Guide.cpp
@@ -24110,7 +24410,215 @@ protected:
 };
 
 ============================================================
-File Path: project/GameProgram/StageObjects/WarpGate.cpp
+File Path: project/GameProgram/StageObjects/PlayerInterfere/CheckPoint.cpp
+============================================================
+#include "CheckPoint.h"
+#include "CollisionManager.h"
+#include "NextStageSave.h"
+#include "UseEveryOne.h"
+
+using namespace MyMath;
+using namespace UseEveryOne;
+
+CheckPoint::~CheckPoint() {}
+
+
+void CheckPoint::Initialize() {
+	wt_.Initialize();
+	//Transform更新処理
+	transform_ = wt_.UpdateTransform();
+
+	object_ = std::make_unique<Object3d>();
+	object_->Initialize();
+	object_->SetModelFile("checkpoint.obj");
+
+	collisionType_ = CollisionTypes::TypeStageObject;
+}
+
+void CheckPoint::Update() {
+	object_->Update(wt_);
+	wt_.UpdateMatrix(transform_);
+	
+	if (isTouch_) {
+		rotateTimer_ += kDeltaTime_ * kTwice_;//二倍速
+		rotateTimer_ = std::clamp(rotateTimer_, 0.0f, 1.0f);
+		transform_.rotate.x = EaseOut(kRotateMax_, 0.0f, rotateTimer_);
+	}
+
+	//当たり判定設定
+	collisionAABB_.min = transform_.translate - colliderSize_;
+	collisionAABB_.max = transform_.translate + colliderSize_;
+	center_ = transform_.translate;
+
+	CollisionManager::GetInstance().FrameCollision(this);		
+}
+
+void CheckPoint::Draw() {
+	object_->Draw();
+}
+
+void CheckPoint::OnCollision(CollisionSource* collision) {
+	if (collision->GetType() == CollisionTypes::TypePlayer) {
+		isTouch_ = true;
+		NextStageSave::GetInstance().SetCheckPoint(transform_.translate);
+	}
+}
+
+bool CheckPoint::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypePlayer) {
+		return true;
+	}
+	return false;
+}
+
+
+============================================================
+File Path: project/GameProgram/StageObjects/PlayerInterfere/CheckPoint.h
+============================================================
+#pragma once
+#include "IStageObject.h"
+
+/// <summary>
+/// チェックポイント(IStageObjectの派生クラス)
+/// </summary>
+class CheckPoint : public IStageObject {
+public:
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~CheckPoint() override;
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	void Draw() override;
+private:
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
+	void OnCollision(CollisionSource* collision) override;
+
+	/// <summary>
+	/// 当たり判定をとるタイプかをチェック
+	/// </summary>
+	/// <param name="collisionType">相手の当たり判定タイプ</param>
+	/// <returns>該当するタイプがあるなら true</returns>
+	bool TypeCheckUp(const CollisionTypes& collisionType) override;
+
+	float rotateTimer_ = 0.0f;
+	const float kRotateMax_ = -90.0f;
+	//チェックポイントに触れた
+	bool isTouch_ = false;
+};
+
+
+
+============================================================
+File Path: project/GameProgram/StageObjects/PlayerInterfere/Goal.cpp
+============================================================
+#include "Goal.h"
+#include "CollisionManager.h"
+#include "Input.h"
+
+using namespace MyMath;
+
+Goal::~Goal() {}
+
+void Goal::Initialize(){
+	wt_.Initialize();
+	//Transform更新処理
+	transform_ = wt_.UpdateTransform();
+
+	object_ = std::make_unique<Object3d>();
+	object_->Initialize();
+	object_->SetModelFile("goal.obj");
+
+	collisionType_ = CollisionTypes::TypeStageObject;
+}
+	
+void Goal::Update(){
+	object_->Update(wt_);
+	wt_.UpdateMatrix(transform_);
+
+	//当たり判定設定
+	collisionAABB_.min = transform_.translate - colliderSize_;
+	collisionAABB_.max = transform_.translate + colliderSize_;
+	center_ = transform_.translate;
+
+	CollisionManager::GetInstance().FrameCollision(this);
+}
+	
+void Goal::Draw(){
+	object_->Draw();
+}
+
+void Goal::OnCollision(CollisionSource* collision) {
+	if (collision->GetType() == CollisionTypes::TypePlayer) {
+		CollisionUtility::GetInstance().SuccessGoal(center_);//当たったらゴール
+	}
+}
+
+bool Goal::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypePlayer) {
+		return true;
+	}
+	return false;
+}
+
+
+============================================================
+File Path: project/GameProgram/StageObjects/PlayerInterfere/Goal.h
+============================================================
+#pragma once
+#include "IStageObject.h"
+
+/// <summary>
+/// ゴール(IStageObjectの派生クラス)
+/// </summary>
+class Goal : public IStageObject {
+public:
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~Goal() override;
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	void Draw() override;
+private:
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
+	void OnCollision(CollisionSource* collision) override;
+
+	/// <summary>
+	/// 当たり判定をとるタイプかをチェック
+	/// </summary>
+	/// <param name="collisionType">相手の当たり判定タイプ</param>
+	/// <returns>該当するタイプがあるなら true</returns>
+	bool TypeCheckUp(const CollisionTypes& collisionType) override;
+
+};
+
+============================================================
+File Path: project/GameProgram/StageObjects/PlayerInterfere/WarpGate.cpp
 ============================================================
 #include "WarpGate.h"
 #include "UseEveryOne.h"
@@ -24242,7 +24750,7 @@ bool WarpGate::TypeCheckUp(const CollisionTypes& collisionType) {
 
 
 ============================================================
-File Path: project/GameProgram/StageObjects/WarpGate.h
+File Path: project/GameProgram/StageObjects/PlayerInterfere/WarpGate.h
 ============================================================
 #pragma once
 #include "IStageObject.h"
@@ -25640,47 +26148,33 @@ UIManager& UIManager::GetInstance() {
 }
 
 void UIManager::Finalize() {
-	sprites_.clear();
 	sInstance_.reset();
 }
 
-void UIManager::CreateSprite(const SpriteData& spriteData) {
-	std::unique_ptr<Sprite>& iterator = sprites_[spriteData.name];
-
-	InitSprite(iterator, spriteData);
+void UIManager::FrameSprite(Sprite* sprite) {
+	frameSprites_.push_back(sprite);
 }
-
-void UIManager::InitSprite(std::unique_ptr<Sprite>& sprite, const SpriteData& spriteData) {
-	sprite = std::make_unique<Sprite>();
-	sprite->Initialize(spriteData.texturePath + ".png");//初期化
-	sprite->SetSize(spriteData.size);          //サイズ設定
-	sprite->SetPosition(spriteData.position); //座標設定
+void UIManager::FixedSprite(Sprite* sprite) {
+	fixedSprites_.push_back(sprite);
 }
-
 void UIManager::Update() {
-	for (auto& sprite : sprites_) {
-		sprite.second->Update();
+	//フレーム更新と一度読み取りを合わせる
+	for (auto& sprite : fixedSprites_) {
+		frameSprites_.push_back(sprite);
+	}
+	//更新処理
+	for (auto& sprite : frameSprites_) {
+		sprite->Update();
 	}
 }
 
 void UIManager::Draw() {
-	for (auto& sprite : sprites_) {
-		sprite.second->Draw();
+	//描画処理
+	for (auto& sprite : frameSprites_) {
+		sprite->Draw();
 	}
-}
-
-void UIManager::SetSpriteTexture(const std::string name, const std::string& texturePath) {
-	std::unique_ptr<Sprite>& iterator = sprites_[name];
-
-	if (iterator->GetTextureFile() != texturePath + ".png") {
-		iterator->SetTextureFile(texturePath + ".png");
-	}
-}
-
-std::string UIManager::GetSpriteTexture(const std::string name) {
-	std::unique_ptr<Sprite>& iterator = sprites_[name];
-
-	return iterator->GetTextureFile();
+	//役目を終えたためリセット
+	frameSprites_.clear();
 }
 
 
@@ -25691,13 +26185,6 @@ File Path: project/GameProgram/System/UIManager.h
 #include "MyMath.h"
 #include "Sprite.h"
 #include "Player.h"
-
-struct SpriteData {
-	std::string name;        //コンテナの名前
-	std::string texturePath; //テクスチャ名
-	Vector2 position;
-	Vector2 size;
-};
 
 /// <summary>
 /// 操作ガイド
@@ -25712,7 +26199,16 @@ public:
 	/// <returns>インスタンス</returns>
 	static UIManager& GetInstance();
 
-	void CreateSprite(const SpriteData& spriteData);
+	/// <summary>
+	/// フレーム更新型スプライトを作成
+	/// </summary>
+	/// <param name="sprite">スプライトを読み込む</param>
+	void FrameSprite(Sprite* sprite);
+	/// <summary>
+	/// 一度だけ読み取る型スプライトを作成
+	/// </summary>
+	/// <param name="sprite">スプライトを読み込む</param>
+	void FixedSprite(Sprite* sprite);
 
 	/// <summary>
 	/// 更新処理
@@ -25729,33 +26225,15 @@ public:
 	/// </summary>
 	void Finalize();
 
-	/// <summary>
-	/// setter_スプライトのテクスチャ
-	/// </summary>
-	/// <param name="name">コンテナの名前</param>
-	/// <param name="texturePath">テクスチャパス</param>
-	void SetSpriteTexture(const std::string name, const std::string& texturePath);
-	/// <summary>
-	/// getter_スプライトのテクスチャ
-	/// </summary>
-	/// <param name="name">コンテナの名前</param>
-	/// <returns>テクスチャのファイルパス</returns>
-	std::string GetSpriteTexture(const std::string name);
-
 private:
 	//インスタン
 	static std::unique_ptr<UIManager> sInstance_;
 	//default_deleteを設定(解放処理を行える)
 	friend struct std::default_delete<UIManager>;
-	//スプライトのコンテナ
-	std::unordered_map<std::string, std::unique_ptr<Sprite>> sprites_;
-
-	/// <summary>
-	/// スプライトの初期設定
-	/// </summary>
-	/// <param name="sprite">スプライトクラス</param>
-	/// <param name="spriteData">スプライトデータ</param>
-	void InitSprite(std::unique_ptr<Sprite>& sprite, const SpriteData& spriteData);
+	//フレーム更新スプライトたち
+	std::vector<Sprite*> frameSprites_;
+	//一度読み取りの保存されるスプライトたち
+	std::vector<Sprite*> fixedSprites_;
 };
 
 
@@ -25790,333 +26268,6 @@ namespace UseEveryOne {
 	//元の大きさ
 	const Vector3 kDefaultScale_ = { 1,1,1 };
 }
-
-
-============================================================
-File Path: project/MoveGround.cpp
-============================================================
-#include "MoveGround.h"
-
-using namespace UseEveryOne;
-using namespace MyMath;
-
-MoveGround::~MoveGround() {}
-
-void MoveGround::Initialize() {
-	wt_.Initialize();
-	object_ = std::make_unique<Object3d>();
-	object_->Initialize();
-	object_->SetModelFile("moveGround.obj");
-
-	collisionType_ = TypeStage;//地面判定を付けるため
-}
-
-void MoveGround::Update() {
-	//移動
-	Move();
-
-	wt_.UpdateMatrix(transform_);
-	object_->Update(wt_);
-
-	collisionAABB_.min = transform_.translate - colliderSize_;
-	collisionAABB_.max = transform_.translate + colliderSize_;
-	center_ = transform_.translate;
-
-	CollisionManager::GetInstance().FrameCollision(this);
-}
-
-void MoveGround::Draw() {
-	object_->Draw();
-}
-
-void MoveGround::SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, const Vector3& pointE) {
-	//現在の位置を設定
-	nowPoint_ = nowPoint;
-	//移動箇所を設定(現在二か所)
-	startPoint_ = pointS;
-	endPoint_ = pointE;
-	//
-	movePoint_.origin = nowPoint;
-	movePoint_.diff = pointE;
-}
-
-void MoveGround::Move() {
-	//現在のポイントに移行
-	transform_.translate = nowPoint_;
-
-	//全体の長さを加算
-	Vector3 length = Length(movePoint_.origin, movePoint_.diff);
-	float addLength = (length.x + length.y + length.z) / moveMaxTime_;
-
-	timer_ += kDeltaTime_ / addLength;//時間を移動の長さ分割る
-	timer_ = std::clamp(timer_, 0.0f, 1.0f);
-	//現在ポイントの変更
-	nowPoint_ = Lerp(movePoint_.origin, movePoint_.diff, timer_);
-
-	//移動方法(始点終点を往復する)
-	//現在ポイントが終点に着いたとき
-	if (nowPoint_ == endPoint_) {
-		//終点から始点に移動
-		movePoint_.origin = endPoint_;
-		movePoint_.diff = startPoint_;
-		timer_ = 0.0f;//タイマーリセット
-	}//現在ポイントが始点に着いたとき
-	else if (nowPoint_ == startPoint_) {
-		//始点から終点に移動
-		movePoint_.origin = startPoint_;
-		movePoint_.diff = endPoint_;
-		timer_ = 0.0f;//タイマーリセット
-	}
-
-}
-
-
-============================================================
-File Path: project/MoveGround.h
-============================================================
-#pragma once
-#include "IStageObject.h"
-#include "Object_glTF.h"
-
-/// <summary>
-/// 動く足場[ギミック]
-/// </summary>
-class MoveGround : public IStageObject{
-public:
-	~MoveGround() override;
-	/// <summary>
-	/// 初期化処理
-	/// </summary>
-	void Initialize() override;
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void Update() override;
-	/// <summary>
-	/// 描画処理
-	/// </summary>
-	void Draw() override;
-
-	/// <summary>
-	/// setter_移動ルート
-	/// </summary>
-	/// <param name="nowPoint">現在の場所</param>
-	/// <param name="pointS">ポイント始点</param>
-	/// <param name="pointE">ポイント終点</param>
-	void SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, const Vector3& pointE);
-
-private:
-	/// <summary>
-	/// 移動
-	/// </summary>
-	void Move();
-
-	Vector3 pointA_{};
-	Vector3 pointB_{};
-
-	Segment segment_{};
-
-
-	Vector3 nowPoint_ = { 0,0,0 };
-	Segment movePoint_{};
-
-	Vector3 startPoint_ = { 0,0,0 };
-	Vector3 endPoint_ = { 0,0,0 };
-
-
-	float timer_ = 0.0f;
-	const float moveMaxTime_ = 5.0f;//遅くする
-};
-
-
-
-============================================================
-File Path: project/Needle.cpp
-============================================================
-#include "Needle.h"
-
-#include "Object3dCommon.h"
-#include "GLTFCommon.h"
-
-
-using namespace MyMath;
-using namespace UseEveryOne;
-
-void Needle::Initialize() {
-	objectNeedle_ = std::make_unique<Object_glTF>();
-	objectNeedle_->Initialize();
-	objectNeedle_->SetModelFile("needle.gltf");
-
-	shadow_ = std::make_unique<Shadow>();
-	shadow_->Initialize();
-
-	wt_.Initialize();
-	transform_ = wt_.UpdateTransform();
-
-	collisionType_ = CollisionTypes::TypeEnemyBullet;//ダメージ
-}
-
-void Needle::Update() {
-
-	Move();
-
-	AnimationRotate();
-
-	wt_.UpdateMatrix(transform_);
-	objectNeedle_->Update(wt_);
-
-	shadow_->SetTranslate(transform_.translate);
-	shadow_->SetScale(transform_.scale);
-	shadow_->Update();
-
-	collisionAABB_.min = transform_.translate - colliderSize_;
-	collisionAABB_.max = transform_.translate + colliderSize_;
-	center_ = transform_.translate;
-
-	CollisionManager::GetInstance().FrameCollision(this);
-}
-
-void Needle::Draw() {
-	GLTFCommon::GetInstance().Command();
-
-	objectNeedle_->Draw();
-	
-	Object3dCommon::GetInstance().Command();
-
-	shadow_->Draw();
-}
-
-void Needle::SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, const Vector3& pointE) {
-	//現在の位置を設定
-	nowPoint_ = nowPoint;
-	//移動箇所を設定(現在二か所)
-	startPoint_ = pointS;
-	endPoint_ = pointE;
-	//
-	movePoint_.origin = nowPoint;
-	movePoint_.diff = pointE;
-}
-
-void Needle::Move() {
-	//現在のポイントに移行
-	transform_.translate = nowPoint_;
-
-	//全体の長さを加算
-	Vector3 length = Length(movePoint_.origin, movePoint_.diff);
-	float addLength = (length.x + length.y + length.z) / moveMaxTime_;
-
-	timer_ += kDeltaTime_ / addLength;//時間を移動の長さ分割る
-	timer_ = std::clamp(timer_, 0.0f, 1.0f);
-	//現在ポイントの変更
-	nowPoint_ = Lerp(movePoint_.origin, movePoint_.diff, timer_);
-	
-	//移動方法(始点終点を往復する)
-	//現在ポイントが終点に着いたとき
-	if (nowPoint_ == endPoint_) {
-		//終点から始点に移動
-		movePoint_.origin = endPoint_;
-		movePoint_.diff = startPoint_;
-		timer_ = 0.0f;//タイマーリセット
-	}//現在ポイントが始点に着いたとき
-	else if (nowPoint_ == startPoint_) {
-		//始点から終点に移動
-		movePoint_.origin = startPoint_;
-		movePoint_.diff = endPoint_;
-		timer_ = 0.0f;//タイマーリセット
-	}
-}
-
-void Needle::AnimationRotate() {
-	animationTimer_ += kAnimationTimeSpeed_;
-	transform_.rotate.z = animationTimer_;
-}
-
-
-void Needle::OnCollision(CollisionSource* collisionSource) {
-	//無敵だからないかも
-}
-
-bool Needle::TypeCheckUp(const CollisionTypes& collisionType) {
-	return false;
-}
-
-
-
-============================================================
-File Path: project/Needle.h
-============================================================
-#pragma once
-#include "IStageObject.h"
-#include "Object_glTF.h"
-#include "Shadow.h"
-
-/// <summary>
-/// トゲボール[ギミック]
-/// </summary>
-class Needle : public IStageObject {
-public:
-	/// <summary>
-	/// 初期化処理
-	/// </summary>
-	void Initialize() override;
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void Update() override;
-	/// <summary>
-	/// 描画処理
-	/// </summary>
-	void Draw() override;
-
-	/// <summary>
-	/// setter_移動ルート
-	/// </summary>
-	/// <param name="nowPoint">現在の場所</param>
-	/// <param name="pointS">ポイント始点</param>
-	/// <param name="pointE">ポイント終点</param>
-	void SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, const Vector3& pointE);
-
-
-private:
-	/// <summary>
-	/// 移動
-	/// </summary>
-	void Move();
-	/// <summary>
-	/// 回転するアニメーション
-	/// </summary>
-	void AnimationRotate();
-
-	/// <summary>
-	/// 当たり判定コマンド
-	/// </summary>
-	/// <param name="collision">相手側の当たり判定ソース</param>
-	void OnCollision(CollisionSource* collision) override;
-	/// <summary>
-	/// 当たり判定をとるタイプかをチェック
-	/// </summary>
-	/// <param name="collisionType">相手の当たり判定タイプ</param>
-	/// <returns>該当するタイプがあるなら true</returns>
-	bool TypeCheckUp(const CollisionTypes& collisionType) override;
-
-	std::unique_ptr<Object_glTF> objectNeedle_ = nullptr;
-
-	Vector3 nowPoint_ = { 0,0,0 };
-	Segment movePoint_{};
-
-	Vector3 startPoint_ = { 0,0,0 };	
-	Vector3 endPoint_ = { 0,0,0 };
-
-	float timer_ = 0.0f;
-	const float moveMaxTime_ = 5.0f;//遅くする
-
-	float animationTimer_ = 0.0f;
-	const float kAnimationTimeSpeed_ = 2.0f;
-
-
-	std::unique_ptr<Shadow> shadow_;
-};
-
 
 
 ============================================================
