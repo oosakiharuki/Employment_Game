@@ -50,6 +50,8 @@ void MyGame::Update() {
 	PostEffectManager::GetInstance().Update();
 
 #ifdef  USE_IMGUI
+	ParticleManager::GetInstance().ParameterImGui();
+
 	ImGuiManager::GetInstance().End();
 #endif //  USE_IMGUI
 

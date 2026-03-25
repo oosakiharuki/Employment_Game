@@ -8,6 +8,7 @@
 #include <json.hpp>
 #include <fstream>
 
+#include "ImGuiManager.h"
 
 using namespace MyMath;
 using namespace Primitive;
@@ -303,6 +304,8 @@ void ParticleManager::InitializeParameter() {
 		ParticleParameters& particle = particleParameters_[object["particleName"]];
 		particle.name = object["particleName"];
 		particle.textureFile = object["textureFile"];
+
+		particle.objectName = object["objectType"];
 		particle.primitive = LoadObject(object["objectType"]);
 
 		nlohmann::json parameter = object["parameter"];
@@ -344,4 +347,85 @@ ModelData ParticleManager::LoadObject(const std::string& primitiveName) {
 		result = Primitive::CreateCylinder();
 	}
 	return result;
+}
+
+void ParticleManager::ParameterImGui() {
+#ifdef USE_IMGUI
+
+	ImGui::Begin("ParticleParameter");
+	
+	ImGui::InputText("ParameterName", imGuiName.data(), size_t(50));
+	
+	ParticleParameters changeParameter;
+
+	for (auto& parameter : particleParameters_) {
+		//該当する名前が存在しているなら
+		if (imGuiName.c_str() == parameter.first) {
+			//設定されたパラメータを読み込む
+			int nowCount = parameter.second.count;
+			ImGui::InputInt("count", &nowCount);
+			ImGui::InputText("textureFile", parameter.second.textureFile.data(), size_t(50));
+			ImGui::InputFloat("frequency", &parameter.second.frequency);
+			ImGui::InputFloat("basicSizeX", &parameter.second.basicSize.x);
+			ImGui::InputFloat("basicSizeY", &parameter.second.basicSize.y);
+			ImGui::InputFloat("basicSizeZ", &parameter.second.basicSize.z);
+
+			parameter.second.count = nowCount;
+			changeParameter = parameter.second;//変更した値を挿入
+
+			break;
+		}
+	}
+		
+	if (ImGui::Button("Change")) {
+
+		nlohmann::json jsonFile;
+
+		jsonFile["name"] = "Particle";
+		
+		uint32_t i = 0;
+		for (auto& parameter : particleParameters_) {
+			//imGuiNameで選択したパラメータを変更した値を上書き保存
+			if (changeParameter.name == parameter.second.name) {
+				jsonFile["particles"][i]["particleName"] = changeParameter.name;
+				jsonFile["particles"][i]["textureFile"] = changeParameter.textureFile;
+				jsonFile["particles"][i]["objectType"] = changeParameter.objectName;
+				jsonFile["particles"][i]["parameter"]["count"] = changeParameter.count;
+
+				jsonFile["particles"][i]["parameter"]["frequency"] = DecimalPointCut(changeParameter.frequency);
+				jsonFile["particles"][i]["parameter"]["basicSize"][0] = DecimalPointCut(changeParameter.basicSize.x);
+				jsonFile["particles"][i]["parameter"]["basicSize"][1] = DecimalPointCut(changeParameter.basicSize.y);
+				jsonFile["particles"][i]["parameter"]["basicSize"][2] = DecimalPointCut(changeParameter.basicSize.z);
+			}
+			else {
+				jsonFile["particles"][i]["particleName"] = parameter.second.name;
+				jsonFile["particles"][i]["textureFile"] = parameter.second.textureFile;
+				jsonFile["particles"][i]["objectType"] = parameter.second.objectName;
+				jsonFile["particles"][i]["parameter"]["count"] = parameter.second.count;
+
+				jsonFile["particles"][i]["parameter"]["frequency"] = DecimalPointCut(parameter.second.frequency);
+				jsonFile["particles"][i]["parameter"]["basicSize"][0] = DecimalPointCut(parameter.second.basicSize.x);
+				jsonFile["particles"][i]["parameter"]["basicSize"][1] = DecimalPointCut(parameter.second.basicSize.y);
+				jsonFile["particles"][i]["parameter"]["basicSize"][2] = DecimalPointCut(parameter.second.basicSize.z);
+			}
+			i++;
+		}
+
+		std::ofstream file("resource/particle.json");
+
+		if (file.is_open()) {
+			file << jsonFile.dump(4);
+			file.close();
+		}
+	}
+
+	ImGui::End();
+
+#endif // USE_IMGUI
+
+}
+
+double ParticleManager::DecimalPointCut(float value) {
+	float answer = std::round(value * 1000.0f);
+	return answer / 1000.0f;
 }

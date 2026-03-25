@@ -57,6 +57,7 @@ enum class ParticleBorn {
 struct ParticleParameters {
 	std::string name;        //パーティクルの名前
 	std::string textureFile; //テクスチャファイル名
+	std::string objectName;
 	ModelData primitive; //パーティクルの形(プリミティブ)
 	uint32_t count;          //生成数
 	float frequency;         //頻度 / 生存時間
