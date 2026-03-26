@@ -52,13 +52,26 @@ public:
 	/// <param name="filePath">パーティクルの名前</param>
 	/// <returns></returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> GetResource(const std::string& filePath);
+	
 	/// <summary>
 	/// getter_パーティクルデータ
 	/// </summary>
 	/// <param name="filePath">パーティクルの名前</param>
-	/// <returns></returns>
-	std::list<ParticleData> GetParticle(const std::string& filePath);
-	
+	/// <returns>選択したパーティクル</returns>
+	Particle* GetParticle(const std::string& filePath);
+
+	/// <summary>
+	/// getter_パーティクルパラメータ
+	/// </summary>
+	/// <param name="filePath">パーティクルの名前</param>
+	/// <returns>選択したパーティクルのパラメータ</returns>
+	ParticleParameters GetParticleParameter(const std::string& filePath);
+
+	/// <summary>
+	/// getter_パーティクルの数
+	/// </summary>
+	/// <param name="filePath">パーティクルの名前</param>
+	/// <returns>現在選択したパーティクルの総数</returns>
 	uint32_t& GetNum(const std::string& filePath);
 
 	/// <summary>
@@ -80,19 +93,32 @@ public:
 	/// </summary>
 	/// <param name="camera_">カメラ</param>
 	void SetCamera(Camera* camera_) { camera = camera_; }
-
+	/// <summary>
+	/// 数のリセット
+	/// </summary>
+	/// <param name="filePath">選択するパーティクル</param>
 	void ResetNum(const std::string& filePath);
 	/// <summary>
 	/// パーティクルを一度消す
 	/// </summary>
 	/// <param name="filePath">パーティクルグループ名を選ぶ</param>
 	void ResetParticle(const std::string& filePath);
+
+	/// <summary>
+	/// パーティクルパラメータJson読み込み
+	/// </summary>
+	void InitializeParameter();
 	
 	/// <summary>
 	/// パーティクル初期化処理テンプレート
 	/// </summary>
 	/// <param name="parameters">パーティクルのパラメータをまとめたもの</param>
-	std::unique_ptr<Particle> InitParticle(const ParticleParameters& parameters);
+	std::unique_ptr<Particle> InitParticle(const std::string& name);
+
+	/// <summary>
+	/// パラメータをいじくる
+	/// </summary>
+	void ParameterImGui();
 
 private:
 	//インスタンス
@@ -125,17 +151,53 @@ private:
 	//パーティクルコンテナ
 	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
 
+	std::unordered_map<std::string, ParticleParameters> particleParameters_;
+
 	Camera* camera = nullptr;
 	static const uint32_t kNumMaxInstance = 100;
 
+	//生存時間
+	float alpha = 0.0f;
 
+	//パラメータ名選択用
+	std::string imGuiName = "";
+
+	/// <summary>
+	/// パーティクルの動き
+	/// </summary>
+	/// <param name="particleData">パラメータデータ</param>
 	void VelocityMove(ParticleData& particleData);
-
+	/// <summary>
+	/// ワールド行列に変更
+	/// </summary>
+	/// <param name="particleData">パラメータデータ</param>
+	/// <returns>ワールドに変換した行列</returns>
 	Matrix4x4 CreateWorldMatrix(ParticleData& particleData);
-
+	/// <summary>
+	/// ビルボード行列
+	/// </summary>
+	/// <param name="scaleMatrix">大きさの行列</param>
+	/// <param name="rotateMatrix">回転行列</param>
+	/// <param name="translateMatrix">座標行列</param>
+	/// <returns>ビルボードに変換した行列</returns>
 	Matrix4x4 CreateBillBoardMatrix(const Matrix4x4& scaleMatrix, const Matrix4x4& rotateMatrix, const Matrix4x4& translateMatrix);
-
+	/// <summary>
+	/// パーティクルの生存タイマー
+	/// </summary>
+	/// <param name="particleData">パラメータデータ</param>
 	void Timer(ParticleData& particleData);
 
-	float alpha = 0.0f;
+	/// <summary>
+	/// プリミティブオブジェクト作成
+	/// </summary>
+	/// <param name="primitiveName">形の選択</param>
+	/// <returns>プリミティブオブジェクトのモデルデータ</returns>
+	ModelData LoadObject(const std::string& primitiveName);
+
+	/// <summary>
+	/// 小数点切り捨て
+	/// </summary>
+	/// <param name="value"></param>
+	/// <returns></returns>
+	double DecimalPointCut(float value);
 };

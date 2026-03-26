@@ -1,0 +1,173 @@
+{
+    "name": "Particle",
+    "particles": [
+        {
+            "objectType": "Box",
+            "parameter": {
+                "basicSize": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "count": 5,
+                "frequency": 0.15000000596046448
+            },
+            "particleName": "player_walk",
+            "textureFile": "resource/Sprite/white.dds"
+        },
+        {
+            "objectType": "Ring",
+            "parameter": {
+                "basicSize": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "count": 20,
+                "frequency": 0.6000000238418579
+            },
+            "particleName": "player_damage",
+            "textureFile": "resource/Sprite/circle.dds"
+        },
+        {
+            "objectType": "Cone",
+            "parameter": {
+                "basicSize": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "count": 1,
+                "frequency": 0.10000000149011612
+            },
+            "particleName": "enemy_fire",
+            "textureFile": "resource/Sprite/cone.dds"
+        },
+        {
+            "objectType": "Cone",
+            "parameter": {
+                "basicSize": [
+                    2.0,
+                    2.0,
+                    2.0
+                ],
+                "count": 1,
+                "frequency": 0.30000001192092896
+            },
+            "particleName": "player_brink",
+            "textureFile": "resource/Sprite/cone.dds"
+        },
+        {
+            "objectType": "Beam",
+            "parameter": {
+                "basicSize": [
+                    0.10000000149011612,
+                    0.10000000149011612,
+                    0.10000000149011612
+                ],
+                "count": 1,
+                "frequency": 0.009999999776482582
+            },
+            "particleName": "tullet_laser",
+            "textureFile": "resource/Sprite/3YvXH.dds"
+        },
+        {
+            "objectType": "Sphere",
+            "parameter": {
+                "basicSize": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "count": 3,
+                "frequency": 0.10000000149011612
+            },
+            "particleName": "player_dead",
+            "textureFile": "resource/Sprite/white.dds"
+        },
+        {
+            "objectType": "Cone",
+            "parameter": {
+                "basicSize": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "count": 1,
+                "frequency": 0.30000001192092896
+            },
+            "particleName": "player_fire",
+            "textureFile": "resource/Sprite/cone.dds"
+        },
+        {
+            "objectType": "Ring",
+            "parameter": {
+                "basicSize": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "count": 20,
+                "frequency": 0.6000000238418579
+            },
+            "particleName": "enemy_damage",
+            "textureFile": "resource/Sprite/circle.dds"
+        },
+        {
+            "objectType": "Cone",
+            "parameter": {
+                "basicSize": [
+                    2.0,
+                    0.20000000298023224,
+                    2.0
+                ],
+                "count": 1,
+                "frequency": 0.5
+            },
+            "particleName": "player_parry",
+            "textureFile": "resource/Sprite/white.dds"
+        },
+        {
+            "objectType": "Sphere",
+            "parameter": {
+                "basicSize": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "count": 10,
+                "frequency": 0.20000000298023224
+            },
+            "particleName": "enemies_summon",
+            "textureFile": "resource/Sprite/white.dds"
+        },
+        {
+            "objectType": "Cone",
+            "parameter": {
+                "basicSize": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "count": 1,
+                "frequency": 0.5
+            },
+            "particleName": "title_bullet",
+            "textureFile": "resource/Sprite/cone.dds"
+        },
+        {
+            "objectType": "Plane",
+            "parameter": {
+                "basicSize": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "count": 10,
+                "frequency": 1.5
+            },
+            "particleName": "clear_fanfare",
+            "textureFile": "resource/Sprite/white.dds"
+        }
+    ]
+}

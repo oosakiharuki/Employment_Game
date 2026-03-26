@@ -200,8 +200,8 @@ void Enemy_Bomb::Explosion() {
 	bombAABB_.max = transform_.translate + kExplosionRange_;
 
 	//パーティクルの設定
-	particles_[particleDamage_.name]->SetTranslate(transform_.translate);
-	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleDamage_]->SetTranslate(transform_.translate);
+	particles_[particleDamage_]->SetParticleBorn(ParticleBorn::MomentMode);
 
 	//当たり判定設定
 	CollisionManager::GetInstance().FrameCollision(bombAABB_, transform_.translate, CollisionTypes::TypeBombExplotion);

@@ -29,7 +29,7 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 
 	//パーティクル
 	//ダメージ
-	particles_[particleDamage_.name] = ParticleManager::GetInstance().InitParticle(particleDamage_);
+	particles_[particleDamage_] = ParticleManager::GetInstance().InitParticle(particleDamage_);
 
 	//マークのワールド座標
 	wtMark_.Initialize();	
@@ -149,8 +149,8 @@ void BaseEnemy::DrawParticle() {
 
 void BaseEnemy::IsDamage() {
 	//ダメージのパーティクルを出す
-	particles_[particleDamage_.name]->SetTranslate(transform_.translate); //座標を読み取る
-	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode); // 発生モード(一度だけ)の変更
+	particles_[particleDamage_]->SetTranslate(transform_.translate); //座標を読み取る
+	particles_[particleDamage_]->SetParticleBorn(ParticleBorn::MomentMode); // 発生モード(一度だけ)の変更
 	isDamageMotion_ = true;
 
 	//連続ヒット時、元に戻す
