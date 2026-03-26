@@ -512,6 +512,31 @@ namespace MyMath {
 		return result;
 	}
 
+
+	float EaseInOut(float startPoint, float endPoint, float t) {
+
+		float easeT = powf(1.0f - (t * t), 2.0f);
+
+		return (1.0f - easeT) * startPoint + easeT * endPoint;
+	}
+
+	Vector2 EaseInOut(const Vector2& startPoint, const Vector2& endPoint, float t) {
+		Vector2 result{};
+		result.x = EaseInOut(startPoint.x, endPoint.x, t);
+		result.y = EaseInOut(startPoint.y, endPoint.y, t);
+		return result;
+	}
+
+
+	Vector3 EaseInOut(const Vector3& startPoint, const Vector3& endPoint, float t) {
+		Vector3 result{};
+		result.x = EaseInOut(startPoint.x, endPoint.x, t);
+		result.y = EaseInOut(startPoint.y, endPoint.y, t);
+		result.z = EaseInOut(startPoint.z, endPoint.z, t);
+		return result;
+	}
+
+
 #pragma region Affine
 
 	Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {

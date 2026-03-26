@@ -2,18 +2,18 @@
     "name": "Particle",
     "particles": [
         {
-            "objectType": "Cone",
+            "objectType": "Box",
             "parameter": {
                 "basicSize": [
-                    1.0,
-                    1.0,
-                    1.0
+                    0.5,
+                    0.5,
+                    0.5
                 ],
-                "count": 1,
-                "frequency": 0.10000000149011612
+                "count": 5,
+                "frequency": 0.15000000596046448
             },
-            "particleName": "enemy_fire",
-            "textureFile": "resource/Sprite/cone.dds"
+            "particleName": "player_walk",
+            "textureFile": "resource/Sprite/white.dds"
         },
         {
             "objectType": "Ring",
@@ -30,18 +30,32 @@
             "textureFile": "resource/Sprite/circle.dds"
         },
         {
-            "objectType": "Box",
+            "objectType": "Cone",
             "parameter": {
                 "basicSize": [
-                    0.5,
-                    0.5,
-                    0.5
+                    1.0,
+                    1.0,
+                    1.0
                 ],
-                "count": 5,
-                "frequency": 0.15000000596046448
+                "count": 1,
+                "frequency": 0.10000000149011612
             },
-            "particleName": "player_walk",
-            "textureFile": "resource/Sprite/white.dds"
+            "particleName": "enemy_fire",
+            "textureFile": "resource/Sprite/cone.dds"
+        },
+        {
+            "objectType": "Cone",
+            "parameter": {
+                "basicSize": [
+                    2.0,
+                    2.0,
+                    2.0
+                ],
+                "count": 1,
+                "frequency": 0.30000001192092896
+            },
+            "particleName": "player_brink",
+            "textureFile": "resource/Sprite/cone.dds"
         },
         {
             "objectType": "Beam",
@@ -52,7 +66,7 @@
                     0.10000000149011612
                 ],
                 "count": 1,
-                "frequency": 0.0
+                "frequency": 0.009999999776482582
             },
             "particleName": "tullet_laser",
             "textureFile": "resource/Sprite/3YvXH.dds"
@@ -70,20 +84,6 @@
             },
             "particleName": "player_dead",
             "textureFile": "resource/Sprite/white.dds"
-        },
-        {
-            "objectType": "Cone",
-            "parameter": {
-                "basicSize": [
-                    2.0,
-                    2.0,
-                    2.0
-                ],
-                "count": 1,
-                "frequency": 0.30000001192092896
-            },
-            "particleName": "player_brink",
-            "textureFile": "resource/Sprite/cone.dds"
         },
         {
             "objectType": "Cone",

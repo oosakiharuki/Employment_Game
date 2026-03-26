@@ -302,6 +302,11 @@ private:
 	/// <returns></returns>
 	const bool IsMovePosition();
 
+	/// <summary>
+	/// 移動床に乗っている処理
+	/// </summary>
+	void OnMoveGround();
+
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object_;
 
@@ -410,4 +415,9 @@ private:
 
 	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
 
+	//移動床からもらう変数
+	Vector3 move_;
+	Vector3 preMove_ = {0,0,0};
+	Vector3 value_;
+	bool isMoveGround_ = false;
 };

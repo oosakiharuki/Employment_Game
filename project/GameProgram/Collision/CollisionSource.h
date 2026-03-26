@@ -12,6 +12,7 @@ enum CollisionTypes {
 	TypeStageObject,
 	TypeShadow,
 	TypeStage,
+	TypeMoveGround,
 	TypeBoss, 
 	TypeBombExplotion,
 	TypeEvent,

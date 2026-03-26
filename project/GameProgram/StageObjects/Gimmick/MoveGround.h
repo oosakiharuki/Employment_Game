@@ -48,7 +48,7 @@ private:
 	Vector3 endPoint_ = { 0,0,0 };
 
 
-	float timer_ = 0.0f;
-	const float moveMaxTime_ = 5.0f;//遅くする
+	float interpolation_ = 0.0f;
+	const float kMoveFrame_ = 3.0f;
 };
 

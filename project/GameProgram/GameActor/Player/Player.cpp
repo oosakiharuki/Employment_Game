@@ -146,6 +146,9 @@ void Player::Update() {
 	//現在座標に前回座標を代入
 	prePosition_ = transform_.translate;
 
+	//移動床に乗った時のの処理
+	OnMoveGround();
+
 	//imGui更新処理
 	ImGuiUpdate();
 
@@ -242,9 +245,10 @@ void Player::ImGuiUpdate() {
 }
 
 void Player::BehindUpdate() {
-	object_->Update(wt_);
 
 	wt_.UpdateMatrix(transform_);
+	object_->Update(wt_);
+
 	wtGun_.UpdateMatrix(transformGun_);
 	// - 傘の銃 -
 	//プレイヤーの手前に
@@ -441,6 +445,26 @@ void Player::OnCollision(CollisionSource* collision) {
 		&& hp_ != 0 && !isPerformance_) {
 		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap,*this, *this,collision->GetAABB());
 	}
+
+	if (collision->GetType() == CollisionTypes::TypeMoveGround
+		&& hp_ != 0 && !isPerformance_) {
+		move_ = collision->GetCenter();//現在の位置
+		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
+		//乗っている場合
+		if (collisionOverlap.isGround) {
+			//当たり判定で離れないように
+			transform_.translate.y -= 0.1f;
+		}
+		isMoveGround_ = true;
+
+		//当たった初回
+		if (preMove_ == Vector3(0, 0, 0)) {
+			preMove_ = move_;//同じにすることで移動量をなしにする
+		}
+		//移動量を計算
+		value_ = move_ - preMove_;
+	}
+
 	if (collision->GetType() == CollisionTypes::TypeEvent) {
 		//イベント範囲から出れないように
 		eventMin = collision->GetAABB().min + transform_.scale;
@@ -453,7 +477,8 @@ bool Player::TypeCheckUp(const CollisionTypes& collisionType) {
 	if (collisionType == CollisionTypes::TypeEnemyBullet ||
 		collisionType == CollisionTypes::TypeBombExplotion ||
 		collisionType == CollisionTypes::TypeBoss ||
-		(collisionType == CollisionTypes::TypeStage && hp_ != 0 && !isPerformance_) ||
+		(collisionType == CollisionTypes::TypeStage && hp_ != 0 && !isPerformance_) || 
+		(collisionType == CollisionTypes::TypeMoveGround && hp_ != 0 && !isPerformance_) ||
 		collisionType == CollisionTypes::TypeEvent) {
 		return true;
 	}
@@ -615,14 +640,32 @@ void Player::SpriteUpdate() {
 	}
 }
 
-
-
 const bool Player::IsMovePosition() {
+	if (isMoveGround_ && !Input::GetInstance().PushKey(DIK_D) && !Input::GetInstance().PushKey(DIK_A) && 
+		Input::GetInstance().LeftStickX() > -0.5f && Input::GetInstance().LeftStickX() < 0.5f &&
+		Input::GetInstance().LeftStickY() > -0.5f && Input::GetInstance().LeftStickY() < 0.5f) {
+		return false;
+	}
+
 	if (transform_.translate.x != prePosition_.x || transform_.translate.y != prePosition_.y) {
 		return true;
 	}
 	return false;
 }
+
+void Player::OnMoveGround() {
+	if (isMoveGround_) {
+		transform_.translate += value_;//移動した分加算
+		preMove_ = move_;//現在の位置を前回位置として使う
+	}
+	else {
+		//リセット
+		move_ = { 0,0,0 };
+		preMove_ = move_;
+	}
+	isMoveGround_ = false;
+}
+
 
 void Player::ChangeStatePatternAction(std::unique_ptr<BasePlayerState> playerState) {
 	actionState_.reset();
