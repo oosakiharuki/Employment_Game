@@ -189,7 +189,7 @@ void Player::AnimationUpdate() {
 	if (umbrella_->GetShieldMode()) {
 		motionName_ = "shield";
 	}//前回の座標と現在の座標が違う = 動いた場合 + 空中
-	else if (IsMovePosition() || !isGround_) {
+	else if (actionCommand_->IsMovePosition() || !isGround_) {
 		motionName_ = "move";
 	}
 	else {
@@ -213,7 +213,7 @@ void Player::AnimationUpdate() {
 
 void Player::SmockParticle() {
 	//移動しているとパーティクルを発生
-	if (isGround_ && IsMovePosition()) {
+	if (isGround_ && actionCommand_->IsMovePosition()) {
 		// 歩く煙パーティクル
 		particles_[particleWalk_]->SetParticleBorn(ParticleBorn::TimerMode);
 		particles_[particleWalk_]->SetTranslate(transform_.translate + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.GetMatWorld()));
@@ -441,28 +441,28 @@ void Player::OnCollision(CollisionSource* collision) {
 		IsDamage(collision->GetCenter());
 	}
 	//演出中、死亡の時は当たらない
-	if (collision->GetType() == CollisionTypes::TypeStage
-		&& hp_ != 0 && !isPerformance_) {
+	if (collision->GetType() == CollisionTypes::TypeStage) {
 		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap,*this, *this,collision->GetAABB());
 	}
 
-	if (collision->GetType() == CollisionTypes::TypeMoveGround
-		&& hp_ != 0 && !isPerformance_) {
+	if (collision->GetType() == CollisionTypes::TypeMoveGround) {
 		move_ = collision->GetCenter();//現在の位置
 		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
-		//乗っている場合
-		if (collisionOverlap.isGround) {
-			//当たり判定で離れないように
-			transform_.translate.y -= 0.1f;
-		}
-		isMoveGround_ = true;
 
 		//当たった初回
 		if (preMove_ == Vector3(0, 0, 0)) {
 			preMove_ = move_;//同じにすることで移動量をなしにする
-		}
+		}		
+
 		//移動量を計算
 		value_ = move_ - preMove_;
+
+		//乗っている場合
+		if (collisionOverlap.isGround && !Input::GetInstance().TriggerKey(DIK_SPACE)) {
+			//当たり判定で離れないように
+			value_.y -= kMoveGroundUnder_;
+		}
+		isMoveGround_ = true;
 	}
 
 	if (collision->GetType() == CollisionTypes::TypeEvent) {
@@ -474,11 +474,16 @@ void Player::OnCollision(CollisionSource* collision) {
 }
 
 bool Player::TypeCheckUp(const CollisionTypes& collisionType) {
+	//体力0+演出状態の時
+	if (hp_ == 0 || isPerformance_) {
+		return false;
+	}
+
 	if (collisionType == CollisionTypes::TypeEnemyBullet ||
 		collisionType == CollisionTypes::TypeBombExplotion ||
 		collisionType == CollisionTypes::TypeBoss ||
-		(collisionType == CollisionTypes::TypeStage && hp_ != 0 && !isPerformance_) || 
-		(collisionType == CollisionTypes::TypeMoveGround && hp_ != 0 && !isPerformance_) ||
+		collisionType == CollisionTypes::TypeStage || 
+		collisionType == CollisionTypes::TypeMoveGround ||
 		collisionType == CollisionTypes::TypeEvent) {
 		return true;
 	}
@@ -638,19 +643,6 @@ void Player::SpriteUpdate() {
 		UIManager::GetInstance().FrameSprite(&*sprite);
 		nowHp++;
 	}
-}
-
-const bool Player::IsMovePosition() {
-	if (isMoveGround_ && !Input::GetInstance().PushKey(DIK_D) && !Input::GetInstance().PushKey(DIK_A) && 
-		Input::GetInstance().LeftStickX() > -0.5f && Input::GetInstance().LeftStickX() < 0.5f &&
-		Input::GetInstance().LeftStickY() > -0.5f && Input::GetInstance().LeftStickY() < 0.5f) {
-		return false;
-	}
-
-	if (transform_.translate.x != prePosition_.x || transform_.translate.y != prePosition_.y) {
-		return true;
-	}
-	return false;
 }
 
 void Player::OnMoveGround() {

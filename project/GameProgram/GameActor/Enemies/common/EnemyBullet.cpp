@@ -18,6 +18,9 @@ void EnemyBullet::Initialize() {
 	//Transform更新処理
 	transform_ = wt_.UpdateTransform();
 
+	shadow_ = std::make_unique<Shadow>();
+	shadow_->Initialize();
+
 	//弾の当たり判定の大きさ
 	bulletAABB.min = -kBulletSize_ * kDivideByTwo_;
 	bulletAABB.max = kBulletSize_ * kDivideByTwo_;
@@ -46,6 +49,11 @@ void EnemyBullet::Update() {
 	object->Update(wt_);
 	wt_.UpdateMatrix(transform_);
 
+	//影の更新
+	shadow_->SetScale(transform_.scale / kTwice_);
+	shadow_->SetTranslate(transform_.translate);
+	shadow_->Update();
+
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate + -kBulletSize_ * kDivideByTwo_;
 	collisionAABB_.max = transform_.translate + kBulletSize_ * kDivideByTwo_;
@@ -55,6 +63,8 @@ void EnemyBullet::Update() {
 }
 
 void EnemyBullet::Draw() {
+	shadow_->Draw();//影の描画
+	//オブジェクト描画
 	object->Draw();
 }
 

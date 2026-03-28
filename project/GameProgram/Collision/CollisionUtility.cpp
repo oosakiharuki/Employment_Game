@@ -69,7 +69,10 @@ void CollisionUtility::BackPosition(CollisionOverlap& collisionOverlap) {
 		//真ん中から 右の場合 - / 左の場合 +
 		float push = (targetCenterX < areaCenterX) ? -collisionOverlap.overlap.x : collisionOverlap.overlap.x;
 
-		collisionOverlap.position.x += push;
+		//まだ壁判定がないなら
+		if (!collisionOverlap.isWall) {
+			collisionOverlap.position.x += push;
+		}
 		collisionOverlap.isWall = true;
 	}
 	else if (collisionOverlap.overlap.y < collisionOverlap.overlap.x) {
@@ -79,12 +82,15 @@ void CollisionUtility::BackPosition(CollisionOverlap& collisionOverlap) {
 		//真ん中から 下の場合 - / 上の場合 +
 		float push = (targetCenterY < areaCenterY) ? -collisionOverlap.overlap.y : collisionOverlap.overlap.y;
 
+		if (!collisionOverlap.isGround) {
+			collisionOverlap.position.y += SecondDecimalPoint(push);
+		}
 		//床 or 天井 (targetCenterYが上は床、areaCenterYが上は天井)
 		if (targetCenterY > areaCenterY) {
 			// 着地判定を立てる
 			collisionOverlap.isGround = true;
 		}
-		collisionOverlap.position.y += push;
+		
 	}
 	//z軸はいらない
 

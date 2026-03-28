@@ -15,4 +15,10 @@ namespace UseEveryOne {
 	const float kDivideByThree_ = 0.33f;
 	//元の大きさ
 	const Vector3 kDefaultScale_ = { 1,1,1 };
+
+	/// <summary>
+	/// 小数点第二までにする[例: 1.234 = 1.23]
+	/// </summary>
+	/// <param name="value"></param>
+	float SecondDecimalPoint(float value);
 }

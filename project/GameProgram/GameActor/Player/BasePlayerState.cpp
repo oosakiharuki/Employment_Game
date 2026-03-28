@@ -209,6 +209,12 @@ void PlayerCommand::CommandBrink() {
 	player_->GravityDown();
 }
 
+const bool PlayerCommand::IsMovePosition() {
+	if (isPushA_ || isPushD_  || jumpPower_ > 0.0f) {
+		return true;
+	}
+	return false;
+}
 
 
 void PlayerCommand::Gliding() {

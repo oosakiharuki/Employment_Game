@@ -97,14 +97,19 @@ void CameraControl::SetEndPoint(const Vector3& left, const Vector3& right){
 }
 
 void CameraControl::Move() {
-
-	if (playerPos_.x > prevPlayerPos_.x) {
-		cameraSegment_.diff.x = playerPos_.x + kInterpolationPointX_;
-	}
-	else if (playerPos_.x < prevPlayerPos_.x) {
-		cameraSegment_.diff.x = playerPos_.x - kInterpolationPointX_;
+	//プレイヤーの現在位置と前回位置がさほど変わらない場合はelse
+	if (Length(playerPos_,prevPlayerPos_).x >= kMilliMoveX_) {
+		if (playerPos_.x > prevPlayerPos_.x) {
+			//左に向かっているため右前に進ませる
+			cameraSegment_.diff.x = playerPos_.x + kInterpolationPointX_;
+		}
+		else if (playerPos_.x < prevPlayerPos_.x) {
+			//右に向かっているため左前に進ませる
+			cameraSegment_.diff.x = playerPos_.x - kInterpolationPointX_;
+		}
 	}
 	else {
+		//そのままプレイヤーの現在位置を渡す
 		cameraSegment_.diff.x = playerPos_.x;
 	}
 

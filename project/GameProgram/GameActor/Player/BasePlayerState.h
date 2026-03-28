@@ -51,6 +51,14 @@ public:
 	/// ブリンク
 	/// </summary>
 	void CommandBrink();
+
+	/// <summary>
+	/// プレイヤーが動いているか判定
+	/// </summary>
+	/// <returns></returns>
+	const bool IsMovePosition();
+
+
 	/// <summary>
 	///	ブリンク発動条件
 	/// </summary>

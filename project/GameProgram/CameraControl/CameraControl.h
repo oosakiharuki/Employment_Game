@@ -173,14 +173,15 @@ private:
 
 	//カメラズーム
 	Segment cameraSegment_ = {};
-	float interpolation = 0.0f;
+	float interpolation = 0.0f;//補間
 
 	const float kLittleFront_ = kInterpolationPointX_ + 1.0f;//プレイヤーの少し前方向
 	const float kMoveFrameStrong_ = 1.0f / 60.0f;//補間フレーム長(補間が長い)
 	const float kMoveFrameMedium_ = 1.0f / 20.0f;//補間フレーム中
 	const float kMoveFrameWeek_ = 1.0f / 10.0f;//補間フレーム短(補間が短い)
-
+	//三軸の補間フレーム
 	Vector3 moveFrames_ = { kMoveFrameStrong_,kMoveFrameStrong_ ,kMoveFrameStrong_ };
+	const float kMilliMoveX_ = 0.01f;//小さすぎる動き
 
 	float zoomTimer_ = 0.0f;
 	//ズーム時間最大値
@@ -197,8 +198,6 @@ private:
 	bool isCameraYFixed_ = false;
 	//カメラの変更
 	bool isChangeCamera_ = false;
-
-	Vector3 segmentExtreme = { 0.1f,0.1f,0.1f };//極限まで数字を近く
 
 	//ズームするときのプレイヤーと少し離れた位置
 	const Vector3 kPlayerAwayPos_ = { 0, 1, -15.0f };

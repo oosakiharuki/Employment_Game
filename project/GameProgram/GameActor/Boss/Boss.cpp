@@ -48,15 +48,22 @@ void Boss::Update() {
 
 	wt_.UpdateMatrix(transform_);
 	object_->Update(wt_);
+
+	//影更新
+	shadow_->SetScale(transform_.scale * kTwice_);//少し大きく(二倍)
+	ShadowUpdate();
 }
 
 void Boss::Draw() {
+	//オブジェクト描画
 	object_->Draw();
 
 	Object3dCommon::GetInstance().Command();
+	//弾丸の描画
 	for (auto& bullet : bullets_) {
 		bullet->Draw();
 	}
+	shadow_->Draw();//影の描画
 }
 
 void Boss::Active() {
@@ -126,9 +133,10 @@ void Boss::CommandMove() {
 		SetMovePoint(moveCenter_ - kEdge_);
 	}
 
-	LerpMove();
+	//補間移動(イーズインアウト)
+	EaseMove();
 
-	if (LerpGoal()) {
+	if (EaseGoal()) {
 		addCount_++;
 	}
 	else {
@@ -204,11 +212,12 @@ void Boss::CommandAroundMove() {
 	}
 
 	//目的地に着いたら
-	if (LerpGoal()) {
+	if (EaseGoal()) {
 		aroundMoveCount_++;    //カウント加算
 	}
 
-	LerpMove();
+	//補間移動(イーズインアウト)
+	EaseMove();
 
 	//全てのポイントに移動できたら
 	if (aroundMoveCount_ >= movePoints_.size()) {
@@ -225,9 +234,10 @@ void Boss::CommandFarMove() {
 
 	SetMovePoint(kFarPlace_);
 
-	LerpMove();
+	//補間移動(イーズインアウト)
+	EaseMove();
 
-	if (LerpGoal()) {
+	if (EaseGoal()) {
 		isFarMoveSuccess_ = true;
 	}
 }
@@ -260,8 +270,9 @@ void Boss::CommandFallPlayer() {
 		}
 		movePoint_.y = kGoUpPointY_;
 		SetMovePoint(movePoint_, moveFrame_);
-		LerpMove();
-		if (LerpGoal()) {
+		//補間移動(イーズインアウト)
+		EaseMove();
+		if (EaseGoal()) {
 			motionFinish_ = true;
 			fallTimer_ = 0.0f;
 		}
@@ -270,7 +281,8 @@ void Boss::CommandFallPlayer() {
 		movePoint_.y = kFallPointY_;
 		moveFrame_ = kFallTimeMax_;
 		SetMovePoint(movePoint_, moveFrame_);
-		LerpMove();
+		//補間移動(イーズインアウト)
+		EaseMove();
 	}
 }
 
@@ -327,13 +339,13 @@ void Boss::ImGuiUpdate() {
 
 }
 
-void Boss::LerpMove() {
+void Boss::EaseMove() {
 	moveTimer_ += kDeltaTime_;
 	moveTimer_ = std::clamp(moveTimer_, 0.0f, timerMax_);
-	transform_.translate = Lerp(move_.origin, move_.diff, moveTimer_ / timerMax_);
+	transform_.translate = EaseInOut(move_.diff, move_.origin, moveTimer_ / timerMax_);
 }
 
-bool Boss::LerpGoal() {
+bool Boss::EaseGoal() {
 	if (moveTimer_ == timerMax_) {
 		moveTimer_ = 0.0f;
 		transform_.translate = move_.diff;//現在地を目的地にする

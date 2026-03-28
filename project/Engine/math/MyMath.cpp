@@ -408,7 +408,7 @@ namespace MyMath {
 		else {
 			result.y = overY2;
 		}
-
+		
 		float overZ1 = aabb2.max.z - aabb1.min.z;
 		float overZ2 = aabb1.max.z - aabb2.min.z;
 
