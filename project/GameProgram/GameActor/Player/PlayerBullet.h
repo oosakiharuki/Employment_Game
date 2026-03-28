@@ -2,6 +2,7 @@
 #include "Object3d.h"
 #include "MyMath.h"
 #include "CollisionManager.h"
+#include "Shadow.h"
 
 /// <summary>
 /// プレイヤーの弾丸
@@ -82,4 +83,7 @@ private:
 	const Vector3 kBulletSize_ = { 1,1,1 };
 
 	AABB bulletAABB_;
+
+	//影
+	std::unique_ptr<Shadow> shadow_;
 };

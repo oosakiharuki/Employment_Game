@@ -16,6 +16,9 @@ void PlayerBullet::Initialize() {
 	//Transform更新処理
 	transform_ = wt_.UpdateTransform();
 
+	shadow_ = std::make_unique<Shadow>();
+	shadow_->Initialize();
+
 	//AABBの大きさ設定
 	bulletAABB_.min = -kBulletSize_ * kDivideByTwo_;
 	bulletAABB_.max = kBulletSize_ * kDivideByTwo_;
@@ -40,6 +43,11 @@ void PlayerBullet::Update() {
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
 
+	//影更新
+	shadow_->SetScale(transform_.scale * kDivideByTwo_);//少し小さく(0.5倍)
+	shadow_->SetTranslate(transform_.translate);
+	shadow_->Update();
+
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate + bulletAABB_.min;
 	collisionAABB_.max = transform_.translate + bulletAABB_.max;
@@ -48,6 +56,8 @@ void PlayerBullet::Update() {
 }
 
 void PlayerBullet::Draw() {
+	shadow_->Draw();//影の描画
+	//オブジェクト描画
 	object_->Draw();
 }
 

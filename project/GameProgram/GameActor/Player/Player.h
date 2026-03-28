@@ -265,7 +265,6 @@ private:
 	/// </summary>
 	void InitAudio();
 
-
 	/// <summary>
 	/// 無敵時間の経過処理
 	/// </summary>
@@ -296,12 +295,6 @@ private:
 	/// </summary>
 	void KnockBackUpdate();
 	
-	/// <summary>
-	/// プレイヤーが動いているか判定
-	/// </summary>
-	/// <returns></returns>
-	const bool IsMovePosition();
-
 	/// <summary>
 	/// 移動床に乗っている処理
 	/// </summary>
@@ -420,4 +413,5 @@ private:
 	Vector3 preMove_ = {0,0,0};
 	Vector3 value_;
 	bool isMoveGround_ = false;
+	const float kMoveGroundUnder_ = 0.5f;//離れないように少し下げる
 };

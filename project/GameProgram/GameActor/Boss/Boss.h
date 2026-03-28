@@ -135,14 +135,14 @@ private:
 	void FireBullet();
 
 	/// <summary>
-	/// 線形保管の移動
+	/// イージング移動
 	/// </summary>
-	void LerpMove();
+	void EaseMove();
 	/// <summary>
-	/// 線形保管の移動が完了したフラグ
+	/// イージング移動が完了したフラグ
 	/// </summary>
 	/// <returns>trueで成功(タイマーもリセット)</returns>
-	bool LerpGoal();
+	bool EaseGoal();
 	/// <summary>
 	/// imGui更新処理
 	/// </summary>

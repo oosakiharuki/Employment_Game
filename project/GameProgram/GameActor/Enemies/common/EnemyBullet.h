@@ -2,6 +2,7 @@
 #include "Object3d.h"
 #include "MyMath.h"
 #include "CollisionManager.h"
+#include "Shadow.h"
 
 class Player;
 
@@ -96,5 +97,8 @@ private:
 
 	//当たり所
 	Vector3 distance;
+
+	//影
+	std::unique_ptr<Shadow> shadow_;
 };
 
