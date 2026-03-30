@@ -6210,6 +6210,7 @@ enum class ParticleBorn {
 struct ParticleParameters {
 	std::string name;        //パーティクルの名前
 	std::string textureFile; //テクスチャファイル名
+	std::string objectName;
 	ModelData primitive; //パーティクルの形(プリミティブ)
 	uint32_t count;          //生成数
 	float frequency;         //頻度 / 生存時間
@@ -6276,6 +6277,12 @@ public:
 		emitter_.frequency = time;
 		emitter_.frequencyTime = time;
 	}
+	/// <summary>
+	/// getter_発生時間
+	/// </summary>
+	/// <returns>設定された発生時間</returns>
+	float GetFrequency() { return emitter_.frequency; }
+
 	/// <summary>
 	/// setter_カメラ
 	/// </summary>
@@ -6555,6 +6562,11 @@ File Path: project/Engine/3d/particle/ParticleManager.cpp
 
 #include "Camera.h"
 
+#include <json.hpp>
+#include <fstream>
+
+#include "ImGuiManager.h"
+
 using namespace MyMath;
 using namespace Primitive;
 
@@ -6638,11 +6650,15 @@ Microsoft::WRL::ComPtr<ID3D12Resource> ParticleManager::GetResource( const std::
 	return particleG.resource;
 }
 
-std::list<ParticleData> ParticleManager::GetParticle( const std::string& filePath) {
+Particle* ParticleManager::GetParticle(const std::string& filePath) {
 	assert(SrvManager::GetInstance().Max());
 
-	ParticleGroup& particleG = particleGroups[filePath];
-	return particleG.particles;
+	Particle* particleG = particles_[filePath].get();
+	return particleG;
+}
+
+ParticleParameters ParticleManager::GetParticleParameter(const std::string& filePath) {
+	return particleParameters_[filePath];
 }
 
 void ParticleManager::Update( const std::string& filePath, ParticleForGPU* wvpData) {
@@ -6787,11 +6803,20 @@ void ParticleManager::ResetParticle(const std::string& filePath) {
 	particleG.particles.clear();
 }
 
-std::unique_ptr<Particle> ParticleManager::InitParticle(const ParticleParameters& parameters) {
+std::unique_ptr<Particle> ParticleManager::InitParticle(const std::string& name) {
+	//パラメータに設定されてないものの場合
+	if (!particleParameters_.contains(name)) {
+		return nullptr;
+	}
+
 	//使用するパーティクルを選ぶ
-	std::unique_ptr<Particle>& particle = particles_[parameters.name];
+	std::unique_ptr<Particle>& particle = particles_[name];
 	//パーティクルを設定
 	particle = std::make_unique<Particle>();
+
+	//設定されたパラメータを読み込む
+	ParticleParameters& parameters = particleParameters_[name];
+
 	//初期化(名前,テクスチャファイル,モデルの形)
 	particle->Initialize(parameters.name, parameters.textureFile, parameters.primitive);
 	particle->SetParticleCount(parameters.count); //生成数を設定
@@ -6800,6 +6825,168 @@ std::unique_ptr<Particle> ParticleManager::InitParticle(const ParticleParameters
 
 	return std::move(particle);
 }
+
+void ParticleManager::InitializeParameter() {
+
+	//Json文字列から解凍したデータ
+	nlohmann::json deserialized;
+
+	//ファイルストリーム
+	std::ifstream file;
+
+	//読み取れない場合
+	file.open("resource/particle.json");
+
+	if (file.fail()) {
+		assert(0);
+	}
+
+	//解凍処理
+	file >> deserialized;
+
+	assert(deserialized.is_object());//オブジェクトがあるか
+	assert(deserialized.contains("name"));//名前があるか
+	assert(deserialized["name"].is_string());//stringであるか
+
+	//["name"]文字列として取得
+	std::string name = deserialized["name"].get<std::string>();
+
+	//正しいレベルデータファイルなのか
+	assert(name.compare("Particle") == 0);
+
+	for (nlohmann::json& object : deserialized["particles"]) {
+		assert(object.contains("particleName"));
+
+		//使用するパーティクルを選ぶ
+		ParticleParameters& particle = particleParameters_[object["particleName"]];
+		particle.name = object["particleName"];
+		particle.textureFile = object["textureFile"];
+
+		particle.objectName = object["objectType"];
+		particle.primitive = LoadObject(object["objectType"]);
+
+		nlohmann::json parameter = object["parameter"];
+
+		particle.count = parameter["count"]; //生成数を設定
+		particle.frequency = parameter["frequency"]; //頻度 / 生存時間を設定
+
+		Vector3 basicSize;
+		basicSize.x = parameter["basicSize"][0];
+		basicSize.y = parameter["basicSize"][1];
+		basicSize.z = parameter["basicSize"][2];
+
+		particle.basicSize = basicSize;//基本サイズを設定
+	}
+}
+
+ModelData ParticleManager::LoadObject(const std::string& primitiveName) {
+	ModelData result;
+	
+	if (primitiveName == "Box") {
+		result = Primitive::CreateBox();
+	}
+	else if (primitiveName == "Cone") {
+		result = Primitive::CreateCone();
+	}
+	else if (primitiveName == "Ring") {
+		result = Primitive::CreateRing();
+	}
+	else if (primitiveName == "Sphere") {
+		result = Primitive::CreateSphere();
+	}
+	else if (primitiveName == "Beam") {
+		result = Primitive::CreateBeam();
+	}
+	else if (primitiveName == "Plane") {
+		result = Primitive::CreatePlane();
+	}
+	else if (primitiveName == "Cylineder") {
+		result = Primitive::CreateCylinder();
+	}
+	return result;
+}
+
+void ParticleManager::ParameterImGui() {
+#ifdef USE_IMGUI
+
+	ImGui::Begin("ParticleParameter");
+	
+	ImGui::InputText("ParameterName", imGuiName.data(), size_t(50));
+	
+	ParticleParameters changeParameter;
+
+	for (auto& parameter : particleParameters_) {
+		//該当する名前が存在しているなら
+		if (imGuiName.c_str() == parameter.first) {
+			//設定されたパラメータを読み込む
+			int nowCount = parameter.second.count;
+			ImGui::InputInt("count", &nowCount);
+			ImGui::InputText("textureFile", parameter.second.textureFile.data(), size_t(50));
+			ImGui::InputFloat("frequency", &parameter.second.frequency);
+			ImGui::InputFloat("basicSizeX", &parameter.second.basicSize.x);
+			ImGui::InputFloat("basicSizeY", &parameter.second.basicSize.y);
+			ImGui::InputFloat("basicSizeZ", &parameter.second.basicSize.z);
+
+			parameter.second.count = nowCount;
+			changeParameter = parameter.second;//変更した値を挿入
+
+			break;
+		}
+	}
+		
+	if (ImGui::Button("Change")) {
+
+		nlohmann::json jsonFile;
+
+		jsonFile["name"] = "Particle";
+		
+		uint32_t i = 0;
+		for (auto& parameter : particleParameters_) {
+			//imGuiNameで選択したパラメータを変更した値を上書き保存
+			if (changeParameter.name == parameter.second.name) {
+				jsonFile["particles"][i]["particleName"] = changeParameter.name;
+				jsonFile["particles"][i]["textureFile"] = changeParameter.textureFile;
+				jsonFile["particles"][i]["objectType"] = changeParameter.objectName;
+				jsonFile["particles"][i]["parameter"]["count"] = changeParameter.count;
+
+				jsonFile["particles"][i]["parameter"]["frequency"] = DecimalPointCut(changeParameter.frequency);
+				jsonFile["particles"][i]["parameter"]["basicSize"][0] = DecimalPointCut(changeParameter.basicSize.x);
+				jsonFile["particles"][i]["parameter"]["basicSize"][1] = DecimalPointCut(changeParameter.basicSize.y);
+				jsonFile["particles"][i]["parameter"]["basicSize"][2] = DecimalPointCut(changeParameter.basicSize.z);
+			}
+			else {
+				jsonFile["particles"][i]["particleName"] = parameter.second.name;
+				jsonFile["particles"][i]["textureFile"] = parameter.second.textureFile;
+				jsonFile["particles"][i]["objectType"] = parameter.second.objectName;
+				jsonFile["particles"][i]["parameter"]["count"] = parameter.second.count;
+
+				jsonFile["particles"][i]["parameter"]["frequency"] = DecimalPointCut(parameter.second.frequency);
+				jsonFile["particles"][i]["parameter"]["basicSize"][0] = DecimalPointCut(parameter.second.basicSize.x);
+				jsonFile["particles"][i]["parameter"]["basicSize"][1] = DecimalPointCut(parameter.second.basicSize.y);
+				jsonFile["particles"][i]["parameter"]["basicSize"][2] = DecimalPointCut(parameter.second.basicSize.z);
+			}
+			i++;
+		}
+
+		std::ofstream file("resource/particle.json");
+
+		if (file.is_open()) {
+			file << jsonFile.dump(4);
+			file.close();
+		}
+	}
+
+	ImGui::End();
+
+#endif // USE_IMGUI
+
+}
+
+double ParticleManager::DecimalPointCut(float value) {
+	float answer = std::round(value * 1000.0f);
+	return answer / 1000.0f;
+}
+
 
 ============================================================
 File Path: project/Engine/3d/particle/ParticleManager.h
@@ -6858,13 +7045,26 @@ public:
 	/// <param name="filePath">パーティクルの名前</param>
 	/// <returns></returns>
 	Microsoft::WRL::ComPtr<ID3D12Resource> GetResource(const std::string& filePath);
+	
 	/// <summary>
 	/// getter_パーティクルデータ
 	/// </summary>
 	/// <param name="filePath">パーティクルの名前</param>
-	/// <returns></returns>
-	std::list<ParticleData> GetParticle(const std::string& filePath);
-	
+	/// <returns>選択したパーティクル</returns>
+	Particle* GetParticle(const std::string& filePath);
+
+	/// <summary>
+	/// getter_パーティクルパラメータ
+	/// </summary>
+	/// <param name="filePath">パーティクルの名前</param>
+	/// <returns>選択したパーティクルのパラメータ</returns>
+	ParticleParameters GetParticleParameter(const std::string& filePath);
+
+	/// <summary>
+	/// getter_パーティクルの数
+	/// </summary>
+	/// <param name="filePath">パーティクルの名前</param>
+	/// <returns>現在選択したパーティクルの総数</returns>
 	uint32_t& GetNum(const std::string& filePath);
 
 	/// <summary>
@@ -6886,19 +7086,32 @@ public:
 	/// </summary>
 	/// <param name="camera_">カメラ</param>
 	void SetCamera(Camera* camera_) { camera = camera_; }
-
+	/// <summary>
+	/// 数のリセット
+	/// </summary>
+	/// <param name="filePath">選択するパーティクル</param>
 	void ResetNum(const std::string& filePath);
 	/// <summary>
 	/// パーティクルを一度消す
 	/// </summary>
 	/// <param name="filePath">パーティクルグループ名を選ぶ</param>
 	void ResetParticle(const std::string& filePath);
+
+	/// <summary>
+	/// パーティクルパラメータJson読み込み
+	/// </summary>
+	void InitializeParameter();
 	
 	/// <summary>
 	/// パーティクル初期化処理テンプレート
 	/// </summary>
 	/// <param name="parameters">パーティクルのパラメータをまとめたもの</param>
-	std::unique_ptr<Particle> InitParticle(const ParticleParameters& parameters);
+	std::unique_ptr<Particle> InitParticle(const std::string& name);
+
+	/// <summary>
+	/// パラメータをいじくる
+	/// </summary>
+	void ParameterImGui();
 
 private:
 	//インスタンス
@@ -6931,19 +7144,55 @@ private:
 	//パーティクルコンテナ
 	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
 
+	std::unordered_map<std::string, ParticleParameters> particleParameters_;
+
 	Camera* camera = nullptr;
 	static const uint32_t kNumMaxInstance = 100;
 
+	//生存時間
+	float alpha = 0.0f;
 
+	//パラメータ名選択用
+	std::string imGuiName = "";
+
+	/// <summary>
+	/// パーティクルの動き
+	/// </summary>
+	/// <param name="particleData">パラメータデータ</param>
 	void VelocityMove(ParticleData& particleData);
-
+	/// <summary>
+	/// ワールド行列に変更
+	/// </summary>
+	/// <param name="particleData">パラメータデータ</param>
+	/// <returns>ワールドに変換した行列</returns>
 	Matrix4x4 CreateWorldMatrix(ParticleData& particleData);
-
+	/// <summary>
+	/// ビルボード行列
+	/// </summary>
+	/// <param name="scaleMatrix">大きさの行列</param>
+	/// <param name="rotateMatrix">回転行列</param>
+	/// <param name="translateMatrix">座標行列</param>
+	/// <returns>ビルボードに変換した行列</returns>
 	Matrix4x4 CreateBillBoardMatrix(const Matrix4x4& scaleMatrix, const Matrix4x4& rotateMatrix, const Matrix4x4& translateMatrix);
-
+	/// <summary>
+	/// パーティクルの生存タイマー
+	/// </summary>
+	/// <param name="particleData">パラメータデータ</param>
 	void Timer(ParticleData& particleData);
 
-	float alpha = 0.0f;
+	/// <summary>
+	/// プリミティブオブジェクト作成
+	/// </summary>
+	/// <param name="primitiveName">形の選択</param>
+	/// <returns>プリミティブオブジェクトのモデルデータ</returns>
+	ModelData LoadObject(const std::string& primitiveName);
+
+	/// <summary>
+	/// 小数点切り捨て
+	/// </summary>
+	/// <param name="value"></param>
+	/// <returns></returns>
+	double DecimalPointCut(float value);
 };
 
 ============================================================
@@ -10756,7 +11005,7 @@ void Framework::ObjectCommons() {
 	//パーティクル共有処理
 	ParticleCommon::GetInstance().Initialize();
 	//パーティクルマネージャ初期化
-	ParticleManager::GetInstance();
+	ParticleManager::GetInstance().InitializeParameter();
 
 	//ワイヤーフレーム処理
 	DebugWireframes::GetInstance().Initialize();
@@ -12380,7 +12629,7 @@ namespace MyMath {
 		else {
 			result.y = overY2;
 		}
-
+		
 		float overZ1 = aabb2.max.z - aabb1.min.z;
 		float overZ2 = aabb1.max.z - aabb2.min.z;
 
@@ -12483,6 +12732,31 @@ namespace MyMath {
 		result.z = EaseOut(startPoint.z, endPoint.z, t);
 		return result;
 	}
+
+
+	float EaseInOut(float startPoint, float endPoint, float t) {
+
+		float easeT = powf(1.0f - (t * t), 2.0f);
+
+		return (1.0f - easeT) * startPoint + easeT * endPoint;
+	}
+
+	Vector2 EaseInOut(const Vector2& startPoint, const Vector2& endPoint, float t) {
+		Vector2 result{};
+		result.x = EaseInOut(startPoint.x, endPoint.x, t);
+		result.y = EaseInOut(startPoint.y, endPoint.y, t);
+		return result;
+	}
+
+
+	Vector3 EaseInOut(const Vector3& startPoint, const Vector3& endPoint, float t) {
+		Vector3 result{};
+		result.x = EaseInOut(startPoint.x, endPoint.x, t);
+		result.y = EaseInOut(startPoint.y, endPoint.y, t);
+		result.z = EaseInOut(startPoint.z, endPoint.z, t);
+		return result;
+	}
+
 
 #pragma region Affine
 
@@ -13458,6 +13732,32 @@ namespace MyMath {
 	Vector3 EaseOut(const Vector3& startPoint, const Vector3& endPoint, float t);
 
 	/// <summary>
+	/// イーズインアウト_float
+	/// </summary>
+	/// <param name="startPoint">スタート位置</param>
+	/// <param name="endPoint">目的(移動させたい)位置</param>
+	/// <param name="t">補間(0~1)</param>
+	/// <returns></returns>
+	float EaseInOut(float startPoint, float endPoint, float t);
+	/// <summary>
+	/// イーズインアウト_Vector2
+	/// </summary>
+	/// <param name="startPoint">スタート位置</param>
+	/// <param name="endPoint">目的(移動させたい)位置</param>
+	/// <param name="t">補間(0~1)</param>
+	/// <returns></returns>
+	Vector2 EaseInOut(const Vector2& startPoint, const Vector2& endPoint, float t);
+	/// <summary>
+	/// イーズインアウト_Vector3
+	/// </summary>
+	/// <param name="startPoint">スタート位置</param>
+	/// <param name="endPoint">目的(移動させたい)位置</param>
+	/// <param name="t">補間(0~1)</param>
+	/// <returns></returns>
+	Vector3 EaseInOut(const Vector3& startPoint, const Vector3& endPoint, float t);
+
+
+	/// <summary>
 	/// 長さ
 	/// </summary>
 	/// <param name="start">現在位置</param>
@@ -13952,14 +14252,19 @@ void CameraControl::SetEndPoint(const Vector3& left, const Vector3& right){
 }
 
 void CameraControl::Move() {
-
-	if (playerPos_.x > prevPlayerPos_.x) {
-		cameraSegment_.diff.x = playerPos_.x + kInterpolationPointX_;
-	}
-	else if (playerPos_.x < prevPlayerPos_.x) {
-		cameraSegment_.diff.x = playerPos_.x - kInterpolationPointX_;
+	//プレイヤーの現在位置と前回位置がさほど変わらない場合はelse
+	if (Length(playerPos_,prevPlayerPos_).x >= kMilliMoveX_) {
+		if (playerPos_.x > prevPlayerPos_.x) {
+			//左に向かっているため右前に進ませる
+			cameraSegment_.diff.x = playerPos_.x + kInterpolationPointX_;
+		}
+		else if (playerPos_.x < prevPlayerPos_.x) {
+			//右に向かっているため左前に進ませる
+			cameraSegment_.diff.x = playerPos_.x - kInterpolationPointX_;
+		}
 	}
 	else {
+		//そのままプレイヤーの現在位置を渡す
 		cameraSegment_.diff.x = playerPos_.x;
 	}
 
@@ -14303,14 +14608,15 @@ private:
 
 	//カメラズーム
 	Segment cameraSegment_ = {};
-	float interpolation = 0.0f;
+	float interpolation = 0.0f;//補間
 
 	const float kLittleFront_ = kInterpolationPointX_ + 1.0f;//プレイヤーの少し前方向
 	const float kMoveFrameStrong_ = 1.0f / 60.0f;//補間フレーム長(補間が長い)
 	const float kMoveFrameMedium_ = 1.0f / 20.0f;//補間フレーム中
 	const float kMoveFrameWeek_ = 1.0f / 10.0f;//補間フレーム短(補間が短い)
-
+	//三軸の補間フレーム
 	Vector3 moveFrames_ = { kMoveFrameStrong_,kMoveFrameStrong_ ,kMoveFrameStrong_ };
+	const float kMilliMoveX_ = 0.01f;//小さすぎる動き
 
 	float zoomTimer_ = 0.0f;
 	//ズーム時間最大値
@@ -14327,8 +14633,6 @@ private:
 	bool isCameraYFixed_ = false;
 	//カメラの変更
 	bool isChangeCamera_ = false;
-
-	Vector3 segmentExtreme = { 0.1f,0.1f,0.1f };//極限まで数字を近く
 
 	//ズームするときのプレイヤーと少し離れた位置
 	const Vector3 kPlayerAwayPos_ = { 0, 1, -15.0f };
@@ -14530,6 +14834,7 @@ enum CollisionTypes {
 	TypeStageObject,
 	TypeShadow,
 	TypeStage,
+	TypeMoveGround,
 	TypeBoss, 
 	TypeBombExplotion,
 	TypeEvent,
@@ -14665,7 +14970,10 @@ void CollisionUtility::BackPosition(CollisionOverlap& collisionOverlap) {
 		//真ん中から 右の場合 - / 左の場合 +
 		float push = (targetCenterX < areaCenterX) ? -collisionOverlap.overlap.x : collisionOverlap.overlap.x;
 
-		collisionOverlap.position.x += push;
+		//まだ壁判定がないなら
+		if (!collisionOverlap.isWall) {
+			collisionOverlap.position.x += push;
+		}
 		collisionOverlap.isWall = true;
 	}
 	else if (collisionOverlap.overlap.y < collisionOverlap.overlap.x) {
@@ -14675,12 +14983,15 @@ void CollisionUtility::BackPosition(CollisionOverlap& collisionOverlap) {
 		//真ん中から 下の場合 - / 上の場合 +
 		float push = (targetCenterY < areaCenterY) ? -collisionOverlap.overlap.y : collisionOverlap.overlap.y;
 
+		if (!collisionOverlap.isGround) {
+			collisionOverlap.position.y += SecondDecimalPoint(push);
+		}
 		//床 or 天井 (targetCenterYが上は床、areaCenterYが上は天井)
 		if (targetCenterY > areaCenterY) {
 			// 着地判定を立てる
 			collisionOverlap.isGround = true;
 		}
-		collisionOverlap.position.y += push;
+		
 	}
 	//z軸はいらない
 
@@ -15433,15 +15744,22 @@ void Boss::Update() {
 
 	wt_.UpdateMatrix(transform_);
 	object_->Update(wt_);
+
+	//影更新
+	shadow_->SetScale(transform_.scale * kTwice_);//少し大きく(二倍)
+	ShadowUpdate();
 }
 
 void Boss::Draw() {
+	//オブジェクト描画
 	object_->Draw();
 
 	Object3dCommon::GetInstance().Command();
+	//弾丸の描画
 	for (auto& bullet : bullets_) {
 		bullet->Draw();
 	}
+	shadow_->Draw();//影の描画
 }
 
 void Boss::Active() {
@@ -15511,9 +15829,10 @@ void Boss::CommandMove() {
 		SetMovePoint(moveCenter_ - kEdge_);
 	}
 
-	LerpMove();
+	//補間移動(イーズインアウト)
+	EaseMove();
 
-	if (LerpGoal()) {
+	if (EaseGoal()) {
 		addCount_++;
 	}
 	else {
@@ -15589,11 +15908,12 @@ void Boss::CommandAroundMove() {
 	}
 
 	//目的地に着いたら
-	if (LerpGoal()) {
+	if (EaseGoal()) {
 		aroundMoveCount_++;    //カウント加算
 	}
 
-	LerpMove();
+	//補間移動(イーズインアウト)
+	EaseMove();
 
 	//全てのポイントに移動できたら
 	if (aroundMoveCount_ >= movePoints_.size()) {
@@ -15610,9 +15930,10 @@ void Boss::CommandFarMove() {
 
 	SetMovePoint(kFarPlace_);
 
-	LerpMove();
+	//補間移動(イーズインアウト)
+	EaseMove();
 
-	if (LerpGoal()) {
+	if (EaseGoal()) {
 		isFarMoveSuccess_ = true;
 	}
 }
@@ -15645,8 +15966,9 @@ void Boss::CommandFallPlayer() {
 		}
 		movePoint_.y = kGoUpPointY_;
 		SetMovePoint(movePoint_, moveFrame_);
-		LerpMove();
-		if (LerpGoal()) {
+		//補間移動(イーズインアウト)
+		EaseMove();
+		if (EaseGoal()) {
 			motionFinish_ = true;
 			fallTimer_ = 0.0f;
 		}
@@ -15655,7 +15977,8 @@ void Boss::CommandFallPlayer() {
 		movePoint_.y = kFallPointY_;
 		moveFrame_ = kFallTimeMax_;
 		SetMovePoint(movePoint_, moveFrame_);
-		LerpMove();
+		//補間移動(イーズインアウト)
+		EaseMove();
 	}
 }
 
@@ -15712,13 +16035,13 @@ void Boss::ImGuiUpdate() {
 
 }
 
-void Boss::LerpMove() {
+void Boss::EaseMove() {
 	moveTimer_ += kDeltaTime_;
 	moveTimer_ = std::clamp(moveTimer_, 0.0f, timerMax_);
-	transform_.translate = Lerp(move_.origin, move_.diff, moveTimer_ / timerMax_);
+	transform_.translate = EaseInOut(move_.diff, move_.origin, moveTimer_ / timerMax_);
 }
 
-bool Boss::LerpGoal() {
+bool Boss::EaseGoal() {
 	if (moveTimer_ == timerMax_) {
 		moveTimer_ = 0.0f;
 		transform_.translate = move_.diff;//現在地を目的地にする
@@ -15901,14 +16224,14 @@ private:
 	void FireBullet();
 
 	/// <summary>
-	/// 線形保管の移動
+	/// イージング移動
 	/// </summary>
-	void LerpMove();
+	void EaseMove();
 	/// <summary>
-	/// 線形保管の移動が完了したフラグ
+	/// イージング移動が完了したフラグ
 	/// </summary>
 	/// <returns>trueで成功(タイマーもリセット)</returns>
-	bool LerpGoal();
+	bool EaseGoal();
 	/// <summary>
 	/// imGui更新処理
 	/// </summary>
@@ -16182,8 +16505,8 @@ void Enemy_Bomb::Explosion() {
 	bombAABB_.max = transform_.translate + kExplosionRange_;
 
 	//パーティクルの設定
-	particles_[particleDamage_.name]->SetTranslate(transform_.translate);
-	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleDamage_]->SetTranslate(transform_.translate);
+	particles_[particleDamage_]->SetParticleBorn(ParticleBorn::MomentMode);
 
 	//当たり判定設定
 	CollisionManager::GetInstance().FrameCollision(bombAABB_, transform_.translate, CollisionTypes::TypeBombExplotion);
@@ -16371,7 +16694,7 @@ void Enemy_Soldier::Initialize() {
 	fireCommand_->SetRapidCountMax(kRapidCountMax_);
 
 	//攻撃(発泡)
-	particles_[fireCommand_->GetParticleFireName()] = ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireParameter());
+	particles_[fireCommand_->GetParticleFireName()] = ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireName());
 
 	speed_.x = kMoveX_;
 }
@@ -16654,15 +16977,19 @@ void Enemy_Turret::Initialize() {
 	//最大弾丸数
 	fireCommand_->SetRapidCountMax(kRapidCountMax_);
 
-	//視野範囲に合わせるためサイズを変更
-	particleLaserSize_.x = eyeReach_.x * kDivideByTwo_;
-	//パラメータに代入する
-	particleLaser_.basicSize = particleLaserSize_;
+	////視野範囲に合わせるためサイズを変更
+	//particleLaserSize_.x = eyeReach_.x * kDivideByTwo_;
+	////パラメータに代入する
+	//particleLaser_.basicSize = particleLaserSize_;
 
 	//レーザー(見える範囲)の初期化処理
-	particles_[particleLaser_.name] = ParticleManager::GetInstance().InitParticle(particleLaser_);
+	particles_[particleLaser_] = ParticleManager::GetInstance().InitParticle(particleLaser_);
+	particleLaserSize_ = particles_[particleLaser_]->GetScale();
+	particleLaserSize_.x = eyeReach_.x * kDivideByTwo_;
+
+	particles_[particleLaser_]->SetScale(particleLaserSize_);
 	//攻撃(発泡)
-	particles_[fireCommand_->GetParticleFireName()] = ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireParameter());
+	particles_[fireCommand_->GetParticleFireName()] = ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireName());
 	//ちょっと大きく
 	particles_[fireCommand_->GetParticleFireName()]->SetScale(kParticleFireSize_);
 }
@@ -16727,7 +17054,7 @@ void Enemy_Turret::Active() {
 
 void Enemy_Turret::Dead() {
 	//レーザーのパーティクル停止
-	particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::Stop);
+	particles_[particleLaser_]->SetParticleBorn(ParticleBorn::Stop);
 
 	//死んだリアクション
 	DeadReaction();
@@ -16788,8 +17115,8 @@ void Enemy_Turret::LaserPoint() {
 	//スケール以外の行列
 	Matrix4x4 matWorld = MakeAffineMatrix(kDefaultScale_, transform_.rotate, transform_.translate);
 	//レーザーサイズXはターレットの前に出すため
-	particles_[particleLaser_.name]->SetTranslate(transform_.translate + TransformNormal(Vector3{ 0,0,particleLaserSize_.x }, matWorld));
-	particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::TimerMode);
+	particles_[particleLaser_]->SetTranslate(transform_.translate + TransformNormal(Vector3{ 0,0,particleLaserSize_.x }, matWorld));
+	particles_[particleLaser_]->SetParticleBorn(ParticleBorn::TimerMode);
 }
 
 void Enemy_Turret::OnCollision(CollisionSource* collision) {
@@ -16884,9 +17211,7 @@ private:
 	Vector3 particleLaserSize_ = { 0.1f,0.1f,0.1f };
 
 	//見える範囲のパーティクルパラメータ
-	ParticleParameters particleLaser_ = {
-		"tullet_laser","resource/Sprite/3YvXH.dds",Primitive::CreateBeam(), 1, 0.001f, particleLaserSize_
-	};
+	const std::string& particleLaser_ = "tullet_laser";
 
 	const Vector3 kParticleFireSize_ = { 1.5f, 1.5f, 1.5f };
 
@@ -16948,7 +17273,7 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 
 	//パーティクル
 	//ダメージ
-	particles_[particleDamage_.name] = ParticleManager::GetInstance().InitParticle(particleDamage_);
+	particles_[particleDamage_] = ParticleManager::GetInstance().InitParticle(particleDamage_);
 
 	//マークのワールド座標
 	wtMark_.Initialize();	
@@ -17068,8 +17393,8 @@ void BaseEnemy::DrawParticle() {
 
 void BaseEnemy::IsDamage() {
 	//ダメージのパーティクルを出す
-	particles_[particleDamage_.name]->SetTranslate(transform_.translate); //座標を読み取る
-	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode); // 発生モード(一度だけ)の変更
+	particles_[particleDamage_]->SetTranslate(transform_.translate); //座標を読み取る
+	particles_[particleDamage_]->SetParticleBorn(ParticleBorn::MomentMode); // 発生モード(一度だけ)の変更
 	isDamageMotion_ = true;
 
 	//連続ヒット時、元に戻す
@@ -17339,10 +17664,7 @@ protected:
 
 	//パーティクル
 	//ダメージを食らったとき
-	ParticleParameters particleDamage_ = {
-		"enemy_damage", "resource/Sprite/circle.dds", Primitive::CreateRing(), 20, 0.6f, {1 ,1 ,1}
-	};
-
+	const std::string& particleDamage_ = "enemy_damage";
 
 	const float kMarkMaxTime_ = 1.0f;
 	float markTimer_ = 0.0f;
@@ -17477,6 +17799,9 @@ void EnemyBullet::Initialize() {
 	//Transform更新処理
 	transform_ = wt_.UpdateTransform();
 
+	shadow_ = std::make_unique<Shadow>();
+	shadow_->Initialize();
+
 	//弾の当たり判定の大きさ
 	bulletAABB.min = -kBulletSize_ * kDivideByTwo_;
 	bulletAABB.max = kBulletSize_ * kDivideByTwo_;
@@ -17505,6 +17830,11 @@ void EnemyBullet::Update() {
 	object->Update(wt_);
 	wt_.UpdateMatrix(transform_);
 
+	//影の更新
+	shadow_->SetScale(transform_.scale / kTwice_);
+	shadow_->SetTranslate(transform_.translate);
+	shadow_->Update();
+
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate + -kBulletSize_ * kDivideByTwo_;
 	collisionAABB_.max = transform_.translate + kBulletSize_ * kDivideByTwo_;
@@ -17514,6 +17844,8 @@ void EnemyBullet::Update() {
 }
 
 void EnemyBullet::Draw() {
+	shadow_->Draw();//影の描画
+	//オブジェクト描画
 	object->Draw();
 }
 
@@ -17552,6 +17884,7 @@ File Path: project/GameProgram/GameActor/Enemies/common/EnemyBullet.h
 #include "Object3d.h"
 #include "MyMath.h"
 #include "CollisionManager.h"
+#include "Shadow.h"
 
 class Player;
 
@@ -17646,6 +17979,9 @@ private:
 
 	//当たり所
 	Vector3 distance;
+
+	//影
+	std::unique_ptr<Shadow> shadow_;
 };
 
 
@@ -17830,12 +18166,7 @@ public:
 	/// getter_パーティクル攻撃の名前
 	/// </summary>
 	/// <returns>パーティクル攻撃の名前部分を渡す</returns>
-	const std::string& GetParticleFireName() { return particleFire_.name; }
-	/// <summary>
-	/// getter_パーティクル攻撃そのもの
-	/// </summary>
-	/// <returns>パーティクル攻撃を渡す</returns>
-	const ParticleParameters& GetParticleFireParameter() { return particleFire_; }
+	const std::string& GetParticleFireName() { return particleFire_; }
 
 private:
 	//弾丸リスト
@@ -17853,9 +18184,7 @@ private:
 	uint32_t rapidCountMax_ = 3;
 
 	//攻撃するとき
-	ParticleParameters particleFire_ = {
-		"enemy_fire", "resource/Sprite/cone.dds", Primitive::CreateCone(), 1, 0.1f, {1 ,1 ,1}
-	};
+	const std::string& particleFire_ = "enemy_fire";
 
 	bool isFire_ = true;
 };
@@ -18508,6 +18837,12 @@ void PlayerCommand::CommandBrink() {
 	player_->GravityDown();
 }
 
+const bool PlayerCommand::IsMovePosition() {
+	if (isPushA_ || isPushD_  || jumpPower_ > 0.0f) {
+		return true;
+	}
+	return false;
+}
 
 
 void PlayerCommand::Gliding() {
@@ -18664,6 +18999,14 @@ public:
 	/// ブリンク
 	/// </summary>
 	void CommandBrink();
+
+	/// <summary>
+	/// プレイヤーが動いているか判定
+	/// </summary>
+	/// <returns></returns>
+	const bool IsMovePosition();
+
+
 	/// <summary>
 	///	ブリンク発動条件
 	/// </summary>
@@ -18955,12 +19298,12 @@ void Player::InitMainBody() {
 
 
 void Player::InitParticles() {
-	particles_[particleWalk_.name] = ParticleManager::GetInstance().InitParticle(particleWalk_);
-	particles_[particleBrink_.name] = ParticleManager::GetInstance().InitParticle(particleBrink_);
-	particles_[particleFire_.name] = ParticleManager::GetInstance().InitParticle(particleFire_);
-	particles_[particleDamage_.name] = ParticleManager::GetInstance().InitParticle(particleDamage_);
-	particles_[particleParry_.name] = ParticleManager::GetInstance().InitParticle(particleParry_);
-	particles_[particleDead_.name] = ParticleManager::GetInstance().InitParticle(particleDead_);
+	particles_[particleWalk_] = ParticleManager::GetInstance().InitParticle(particleWalk_);
+	particles_[particleBrink_] = ParticleManager::GetInstance().InitParticle(particleBrink_);
+	particles_[particleFire_] = ParticleManager::GetInstance().InitParticle(particleFire_);
+	particles_[particleDamage_] = ParticleManager::GetInstance().InitParticle(particleDamage_);
+	particles_[particleParry_] = ParticleManager::GetInstance().InitParticle(particleParry_);
+	particles_[particleDead_] = ParticleManager::GetInstance().InitParticle(particleDead_);
 
 }
 
@@ -19031,6 +19374,9 @@ void Player::Update() {
 	//現在座標に前回座標を代入
 	prePosition_ = transform_.translate;
 
+	//移動床に乗った時のの処理
+	OnMoveGround();
+
 	//imGui更新処理
 	ImGuiUpdate();
 
@@ -19071,7 +19417,7 @@ void Player::AnimationUpdate() {
 	if (umbrella_->GetShieldMode()) {
 		motionName_ = "shield";
 	}//前回の座標と現在の座標が違う = 動いた場合 + 空中
-	else if (IsMovePosition() || !isGround_) {
+	else if (actionCommand_->IsMovePosition() || !isGround_) {
 		motionName_ = "move";
 	}
 	else {
@@ -19095,14 +19441,13 @@ void Player::AnimationUpdate() {
 
 void Player::SmockParticle() {
 	//移動しているとパーティクルを発生
-	if (isGround_ && IsMovePosition()) {
+	if (isGround_ && actionCommand_->IsMovePosition()) {
 		// 歩く煙パーティクル
-		particles_[particleWalk_.name]->SetParticleBorn(ParticleBorn::TimerMode);
-		particles_[particleWalk_.name]->SetTranslate(transform_.translate + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.GetMatWorld()));
-		particles_[particleWalk_.name]->SetScale({ 0.5f,0.5f,0.5f });
+		particles_[particleWalk_]->SetParticleBorn(ParticleBorn::TimerMode);
+		particles_[particleWalk_]->SetTranslate(transform_.translate + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.GetMatWorld()));
 	}
 	else {
-		particles_[particleWalk_.name]->SetParticleBorn(ParticleBorn::Stop);
+		particles_[particleWalk_]->SetParticleBorn(ParticleBorn::Stop);
 	}
 }
 
@@ -19128,9 +19473,10 @@ void Player::ImGuiUpdate() {
 }
 
 void Player::BehindUpdate() {
-	object_->Update(wt_);
 
 	wt_.UpdateMatrix(transform_);
+	object_->Update(wt_);
+
 	wtGun_.UpdateMatrix(transformGun_);
 	// - 傘の銃 -
 	//プレイヤーの手前に
@@ -19201,8 +19547,8 @@ void Player::Dead() {
 	//少しディレイを挟む(カメラのシェイクが終わったら)
 	if (deadTimer_ >= kHitStopTime_) {
 		//倒されたパーティクル配置+発動
-		particles_[particleDead_.name]->SetTranslate(transform_.translate);
-		particles_[particleDead_.name]->SetParticleBorn(ParticleBorn::TimerMode);
+		particles_[particleDead_]->SetTranslate(transform_.translate);
+		particles_[particleDead_]->SetParticleBorn(ParticleBorn::TimerMode);
 
 		DirectionTheCamera();//カメラのほうに向く
 		transform_.rotate.z += kPlayerDeadRotating_;//回転する
@@ -19215,7 +19561,7 @@ void Player::Dead() {
 		if (deadTimer_ >= kDeadTimeMax_) {
 			RespawnPlayer();
 			//パーティクル発動停止
-			particles_[particleDead_.name]->SetParticleBorn(ParticleBorn::Stop);
+			particles_[particleDead_]->SetParticleBorn(ParticleBorn::Stop);
 		}
 	}
 	else {
@@ -19323,10 +19669,30 @@ void Player::OnCollision(CollisionSource* collision) {
 		IsDamage(collision->GetCenter());
 	}
 	//演出中、死亡の時は当たらない
-	if (collision->GetType() == CollisionTypes::TypeStage
-		&& hp_ != 0 && !isPerformance_) {
+	if (collision->GetType() == CollisionTypes::TypeStage) {
 		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap,*this, *this,collision->GetAABB());
 	}
+
+	if (collision->GetType() == CollisionTypes::TypeMoveGround) {
+		move_ = collision->GetCenter();//現在の位置
+		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
+
+		//当たった初回
+		if (preMove_ == Vector3(0, 0, 0)) {
+			preMove_ = move_;//同じにすることで移動量をなしにする
+		}		
+
+		//移動量を計算
+		value_ = move_ - preMove_;
+
+		//乗っている場合
+		if (collisionOverlap.isGround && !Input::GetInstance().TriggerKey(DIK_SPACE)) {
+			//当たり判定で離れないように
+			value_.y -= kMoveGroundUnder_;
+		}
+		isMoveGround_ = true;
+	}
+
 	if (collision->GetType() == CollisionTypes::TypeEvent) {
 		//イベント範囲から出れないように
 		eventMin = collision->GetAABB().min + transform_.scale;
@@ -19336,10 +19702,16 @@ void Player::OnCollision(CollisionSource* collision) {
 }
 
 bool Player::TypeCheckUp(const CollisionTypes& collisionType) {
+	//体力0+演出状態の時
+	if (hp_ == 0 || isPerformance_) {
+		return false;
+	}
+
 	if (collisionType == CollisionTypes::TypeEnemyBullet ||
 		collisionType == CollisionTypes::TypeBombExplotion ||
 		collisionType == CollisionTypes::TypeBoss ||
-		(collisionType == CollisionTypes::TypeStage && hp_ != 0 && !isPerformance_) ||
+		collisionType == CollisionTypes::TypeStage || 
+		collisionType == CollisionTypes::TypeMoveGround ||
 		collisionType == CollisionTypes::TypeEvent) {
 		return true;
 	}
@@ -19357,8 +19729,8 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		//体力 -1
 		hp_--;
 		//ダメージのパーティクル発生
-		particles_[particleDamage_.name]->SetTranslate(transform_.translate + Normalize(hitPoint));
-		particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+		particles_[particleDamage_]->SetTranslate(transform_.translate + Normalize(hitPoint));
+		particles_[particleDamage_]->SetParticleBorn(ParticleBorn::MomentMode);
 		//ダメージのSE再生
 		Audio::GetInstance().SoundPlayWave(hitSound_, kVolume_);
 		infinityTimer_ = 0.0f;//無敵時間発動
@@ -19461,24 +19833,24 @@ void Player::ParrySuccess() {
 	//傘の座標を読み取る
 	Vector3 translate = umbrella_->GetTranslate();
 	translate += TransformNormal(kPlayerFront_, wtGun_.GetMatWorld());//出す場所をwtGun_の向きの前に
-	particles_[particleParry_.name]->SetTranslate(translate);
-	particles_[particleParry_.name]->SetRotate(umbrellaRange_);
-	particles_[particleParry_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleParry_]->SetTranslate(translate);
+	particles_[particleParry_]->SetRotate(umbrellaRange_);
+	particles_[particleParry_]->SetParticleBorn(ParticleBorn::MomentMode);
 }
 
 
 void  Player::ParticleFire(const Vector3& translate) {
 	//攻撃パーティクル発生
-	particles_[particleFire_.name]->SetTranslate(translate);
-	particles_[particleFire_.name]->SetRotate(umbrellaRange_);
-	particles_[particleFire_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleFire_]->SetTranslate(translate);
+	particles_[particleFire_]->SetRotate(umbrellaRange_);
+	particles_[particleFire_]->SetParticleBorn(ParticleBorn::MomentMode);
 }
 
 void  Player::ParticleBrink() {
 	Vector3 translate = GetTranslate() + TransformNormal(-kPlayerFront_, GetUmbrellaMatWorld());
-	particles_[particleBrink_.name]->SetTranslate(translate);
-	particles_[particleBrink_.name]->SetRotate(umbrellaRange_);
-	particles_[particleBrink_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleBrink_]->SetTranslate(translate);
+	particles_[particleBrink_]->SetRotate(umbrellaRange_);
+	particles_[particleBrink_]->SetParticleBorn(ParticleBorn::MomentMode);
 }
 
 void Player::GravityDown() {
@@ -19501,14 +19873,19 @@ void Player::SpriteUpdate() {
 	}
 }
 
-
-
-const bool Player::IsMovePosition() {
-	if (transform_.translate.x != prePosition_.x || transform_.translate.y != prePosition_.y) {
-		return true;
+void Player::OnMoveGround() {
+	if (isMoveGround_) {
+		transform_.translate += value_;//移動した分加算
+		preMove_ = move_;//現在の位置を前回位置として使う
 	}
-	return false;
+	else {
+		//リセット
+		move_ = { 0,0,0 };
+		preMove_ = move_;
+	}
+	isMoveGround_ = false;
 }
+
 
 void Player::ChangeStatePatternAction(std::unique_ptr<BasePlayerState> playerState) {
 	actionState_.reset();
@@ -19785,7 +20162,6 @@ private:
 	/// </summary>
 	void InitAudio();
 
-
 	/// <summary>
 	/// 無敵時間の経過処理
 	/// </summary>
@@ -19817,10 +20193,9 @@ private:
 	void KnockBackUpdate();
 	
 	/// <summary>
-	/// プレイヤーが動いているか判定
+	/// 移動床に乗っている処理
 	/// </summary>
-	/// <returns></returns>
-	const bool IsMovePosition();
+	void OnMoveGround();
 
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object_;
@@ -19873,29 +20248,17 @@ private:
 
 	//-パーティクル-
 	//歩く
-	ParticleParameters particleWalk_ = {
-		"player_walk", "resource/Sprite/white.dds", Primitive::CreateBox(), 5, 0.15f, {1,1,1}
-	};
+	const std::string& particleWalk_ = "player_walk";
 	//ブリンク
-	ParticleParameters particleBrink_ = {
-		"player_brink","resource/Sprite/cone.dds", Primitive::CreateCone(), 1, 0.3f, {2.0f,2.0f,2.0f}
-	}; 
+	const std::string& particleBrink_ = "player_brink";
 	//撃つ
-	ParticleParameters  particleFire_ = {
-		"player_fire","resource/Sprite/cone.dds", Primitive::CreateCone(), 1, 0.3f,{1,1,1}
-	};
+	const std::string& particleFire_ = "player_fire";
 	//ダメージを食らった
-	ParticleParameters particleDamage_ = {
-		"player_damage", "resource/Sprite/circle.dds", Primitive::CreateRing(), 20, 0.6f,{1,1,1}
-	};
+	const std::string& particleDamage_ = "player_damage";
 	//パリィ成功
-	ParticleParameters particleParry_ = {
-		"player_parry", "resource/Sprite/white.dds", Primitive::CreateCone(), 1, 0.5f,{2.0f,0.2f,2.0f}
-	};
+	const std::string& particleParry_ = "player_parry";
 	//倒された演出
-	ParticleParameters particleDead_ = {
-		"player_dead", "resource/Sprite/white.dds", Primitive::CreateSphere(), 3,0.1f,{0.5f, 0.5f, 0.5f}
-	};
+	const std::string& particleDead_ = "player_dead";
 
 	//前回座標の保存場所
 	Vector3 prePosition_;
@@ -19942,6 +20305,12 @@ private:
 
 	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
 
+	//移動床からもらう変数
+	Vector3 move_;
+	Vector3 preMove_ = {0,0,0};
+	Vector3 value_;
+	bool isMoveGround_ = false;
+	const float kMoveGroundUnder_ = 0.5f;//離れないように少し下げる
 };
 
 ============================================================
@@ -19964,6 +20333,9 @@ void PlayerBullet::Initialize() {
 	wt_.Initialize();
 	//Transform更新処理
 	transform_ = wt_.UpdateTransform();
+
+	shadow_ = std::make_unique<Shadow>();
+	shadow_->Initialize();
 
 	//AABBの大きさ設定
 	bulletAABB_.min = -kBulletSize_ * kDivideByTwo_;
@@ -19989,6 +20361,11 @@ void PlayerBullet::Update() {
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
 
+	//影更新
+	shadow_->SetScale(transform_.scale * kDivideByTwo_);//少し小さく(0.5倍)
+	shadow_->SetTranslate(transform_.translate);
+	shadow_->Update();
+
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate + bulletAABB_.min;
 	collisionAABB_.max = transform_.translate + bulletAABB_.max;
@@ -19997,6 +20374,8 @@ void PlayerBullet::Update() {
 }
 
 void PlayerBullet::Draw() {
+	shadow_->Draw();//影の描画
+	//オブジェクト描画
 	object_->Draw();
 }
 
@@ -20024,6 +20403,7 @@ File Path: project/GameProgram/GameActor/Player/PlayerBullet.h
 #include "Object3d.h"
 #include "MyMath.h"
 #include "CollisionManager.h"
+#include "Shadow.h"
 
 /// <summary>
 /// プレイヤーの弾丸
@@ -20104,6 +20484,9 @@ private:
 	const Vector3 kBulletSize_ = { 1,1,1 };
 
 	AABB bulletAABB_;
+
+	//影
+	std::unique_ptr<Shadow> shadow_;
 };
 
 ============================================================
@@ -21528,7 +21911,7 @@ void MyGame::Initialize() {
 	//ポーズ処理の初期化
 	PauseScreen::GetInstance().Initialize();
 	//最初のシーンの設定
-	SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
+	SceneManager::GetInstance().ChangeScene(std::make_unique<TitleScene>());
 	//シーンの更新処理(変更処理)
 	SceneManager::GetInstance().SceneUpdate();
 }
@@ -21563,6 +21946,8 @@ void MyGame::Update() {
 	PostEffectManager::GetInstance().Update();
 
 #ifdef  USE_IMGUI
+	ParticleManager::GetInstance().ParameterImGui();
+
 	ImGuiManager::GetInstance().End();
 #endif //  USE_IMGUI
 
@@ -21723,9 +22108,9 @@ void ClearScene::InitParticle() {
 	//パーティクル生成
 	for (uint32_t i = 0; i < kParticleMaxNum_; i++) {
 		//ファンファーレのパーティクル作成
-		sceneParticles_[particleFanfare_.name] = ParticleManager::GetInstance().InitParticle(particleFanfare_);
+		sceneParticles_[particleFanfare_] = ParticleManager::GetInstance().InitParticle(particleFanfare_);
 		//vectorに導入
-		particleFanfares_.push_back(std::move(sceneParticles_[particleFanfare_.name]));
+		particleFanfares_.push_back(std::move(sceneParticles_[particleFanfare_]));
 	}
 
 	//場所の設定
@@ -21873,9 +22258,8 @@ private:
 	//紙吹雪のパーティクルたち
 	const uint32_t kParticleMaxNum_ = 3;
 	
-	ParticleParameters particleFanfare_ = {
-		"clear_fanfare", "resource/Sprite/white.dds", Primitive::CreatePlane(),10,1.5f,{ 1,1,1 }
-	};
+	const std::string& particleFanfare_ = "clear_fanfare";
+
 	std::vector<std::unique_ptr<Particle>> particleFanfares_;
 
 	//紙吹雪パーティクルたちの座標をずらす
@@ -22808,7 +23192,7 @@ void TitleScene::Initialize() {
 	InitSprite();
 
 	//パーティクル初期化
-	sceneParticles_[particleBullet_.name] = ParticleManager::GetInstance().InitParticle(particleBullet_);
+	sceneParticles_[particleBullet_] = ParticleManager::GetInstance().InitParticle(particleBullet_);
 
 	FadeScreen::GetInstance().FadeStart(type_fadeOut);
 	PauseScreen::GetInstance().OffPause();//ポーズを強制解除
@@ -22996,9 +23380,9 @@ void TitleScene::Operation(){
 		Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && !isSelect_) {
 		isSelect_ = true;//選択した
 		//選択パーティクル
-		sceneParticles_[particleBullet_.name]->SetParticleBorn(ParticleBorn::MomentMode);
-		sceneParticles_[particleBullet_.name]->SetTranslate(transforms_["umbrella_Open"].translate);
-		sceneParticles_[particleBullet_.name]->SetRotate({ 0.0f,0.0f,kArrowRange_ });
+		sceneParticles_[particleBullet_]->SetParticleBorn(ParticleBorn::MomentMode);
+		sceneParticles_[particleBullet_]->SetTranslate(transforms_["umbrella_Open"].translate);
+		sceneParticles_[particleBullet_]->SetRotate({ 0.0f,0.0f,kArrowRange_ });
 	}
 }
 
@@ -23122,9 +23506,7 @@ private:
 	std::unique_ptr<Shadow> playerShadow_;//プレイヤー影
 	std::unique_ptr<Sprite> spriteMojiTitle_;//タイトル名
 
-	ParticleParameters particleBullet_ = {
-		"title_bullet", "resource/Sprite/cone.dds", Primitive::CreateCone(), 1, 0.5f, {1,1,1}
-	};
+	const std::string& particleBullet_ = "title_bullet";
 
 	//決定したら弾を発射
 	bool isSelect_ = false;
@@ -23428,11 +23810,9 @@ void EventTrigger::EventUpdate() {
 		particle->Update();
 	}
 	//敵が出終わった後ちょっとしてからリセットする
-	if (summonTimer_ <= -particleSummon_.frequency * kTwice_) {
+	if (summonTimer_ <= -ParticleManager::GetInstance().GetParticleParameter(particleSummon_).frequency * kTwice_) {
 		summon_particles_.clear();
 	}
-
-	EventData data = GetEventData();
 }
 
 void EventTrigger::Draw() {
@@ -23583,9 +23963,9 @@ void EventTrigger::LoadPopEnemy(std::istringstream& line_stream, std::string& wo
 	enemyPopDatas_.push_back(enemyPopData);
 
 	//召喚パーティクル
-	particles_[particleSummon_.name] = ParticleManager::GetInstance().InitParticle(particleSummon_);
-	particles_[particleSummon_.name]->SetTranslate(enemyPopData.position);
-	summon_particles_.push_back(std::move(particles_[particleSummon_.name]));
+	particles_[particleSummon_] = ParticleManager::GetInstance().InitParticle(particleSummon_);
+	particles_[particleSummon_]->SetTranslate(enemyPopData.position);
+	summon_particles_.push_back(std::move(particles_[particleSummon_]));
 }
 
 void EventTrigger::EnemyPop() {
@@ -23878,9 +24258,6 @@ private:
 	//敵を配置する変数
 	std::list<EnemyPopData> enemyPopDatas_;
 
-	//パーティクルサイズ
-	const float gSize = 0.5f;
-
 	//動ける範囲
 	const float kMoveX = 3.0f;
 
@@ -23891,10 +24268,7 @@ private:
 	//召喚するとき
 	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
 
-	ParticleParameters particleSummon_ = {
-		"enemies_summon", "resource/Sprite/white.dds", Primitive::CreateSphere(), 10,
-		kSummonMaxTime_ / 6.0f, { gSize,gSize,gSize }
-	};
+	const std::string& particleSummon_ = "enemies_summon";
 
 	/// <summary>
 	/// 敵の共通テンプレート処理
@@ -23927,7 +24301,7 @@ void MoveGround::Initialize() {
 	object_->Initialize();
 	object_->SetModelFile("moveGround.obj");
 
-	collisionType_ = TypeStage;//地面判定を付けるため
+	collisionType_ = TypeMoveGround;//地面判定を付けるため
 }
 
 void MoveGround::Update() {
@@ -23963,14 +24337,10 @@ void MoveGround::Move() {
 	//現在のポイントに移行
 	transform_.translate = nowPoint_;
 
-	//全体の長さを加算
-	Vector3 length = Length(movePoint_.origin, movePoint_.diff);
-	float addLength = (length.x + length.y + length.z) / moveMaxTime_;
-
-	timer_ += kDeltaTime_ / addLength;//時間を移動の長さ分割る
-	timer_ = std::clamp(timer_, 0.0f, 1.0f);
+	interpolation_ += kDeltaTime_ / kMoveFrame_;//時間経過(4秒間)
+	interpolation_ = std::clamp(interpolation_, 0.0f, 1.0f);
 	//現在ポイントの変更
-	nowPoint_ = Lerp(movePoint_.origin, movePoint_.diff, timer_);
+	nowPoint_ = EaseInOut(movePoint_.diff, movePoint_.origin, interpolation_);
 
 	//移動方法(始点終点を往復する)
 	//現在ポイントが終点に着いたとき
@@ -23978,13 +24348,13 @@ void MoveGround::Move() {
 		//終点から始点に移動
 		movePoint_.origin = endPoint_;
 		movePoint_.diff = startPoint_;
-		timer_ = 0.0f;//タイマーリセット
+		interpolation_ = 0.0f;//補間リセット
 	}//現在ポイントが始点に着いたとき
 	else if (nowPoint_ == startPoint_) {
 		//始点から終点に移動
 		movePoint_.origin = startPoint_;
 		movePoint_.diff = endPoint_;
-		timer_ = 0.0f;//タイマーリセット
+		interpolation_ = 0.0f;//補間リセット
 	}
 
 }
@@ -24043,8 +24413,8 @@ private:
 	Vector3 endPoint_ = { 0,0,0 };
 
 
-	float timer_ = 0.0f;
-	const float moveMaxTime_ = 5.0f;//遅くする
+	float interpolation_ = 0.0f;
+	const float kMoveFrame_ = 3.0f;
 };
 
 
@@ -26245,6 +26615,11 @@ File Path: project/GameProgram/System/UseEveryOne.cpp
 
 namespace UseEveryOne {
 
+	float SecondDecimalPoint(float value) {
+		const float kSecondDecimalPoint = 100.0f;
+		return std::floor(value * kSecondDecimalPoint) / kSecondDecimalPoint;
+	}
+
 }
 
 ============================================================
@@ -26267,6 +26642,12 @@ namespace UseEveryOne {
 	const float kDivideByThree_ = 0.33f;
 	//元の大きさ
 	const Vector3 kDefaultScale_ = { 1,1,1 };
+
+	/// <summary>
+	/// 小数点第二までにする[例: 1.234 = 1.23]
+	/// </summary>
+	/// <param name="value"></param>
+	float SecondDecimalPoint(float value);
 }
 
 
