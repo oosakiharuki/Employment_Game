@@ -79,6 +79,8 @@ void Umbrella::OnCollision(CollisionSource* collision) {
 		}
 		//通常防御の場合、プレイヤーがノックバック
 		player_->KnockBackUmbrella(kUmbrellaKnockBackPower_,kUmbrellaKnockBackTime_);
+		//強化ゲージポイント加算
+		player_->AddGaugePoint();
 	}
 }
 

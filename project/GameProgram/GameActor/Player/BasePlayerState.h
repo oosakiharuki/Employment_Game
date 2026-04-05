@@ -35,6 +35,13 @@ public:
 	/// 移動
 	/// </summary>
 	void CommandMove();
+
+
+	/// <summary>
+	/// プレイヤー、傘の向き更新
+	/// </summary>
+	void UpdateDirection();
+
 	/// <summary>
 	/// ジャンプ
 	/// </summary>
@@ -87,6 +94,11 @@ private:
 	/// 弾を発射する(ショットガン風)
 	/// </summary>
 	void ShootBullet();
+
+	/// <summary>
+	/// 弾を発射する(ショットガン風)強い
+	/// </summary>
+	void PowerShootBullet();
 
 	/// <summary>
 	/// 滑空処理

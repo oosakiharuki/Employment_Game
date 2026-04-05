@@ -214,6 +214,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\StageObjects\Guide.cpp" />
     <ClCompile Include="GameProgram\StageObjects\Gimmick\MoveGround.cpp" />
     <ClCompile Include="GameProgram\StageObjects\Gimmick\Needle.cpp" />
+    <ClCompile Include="GameProgram\GameActor\Player\ReinforceGauge.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameProgram\StageObjects\Gimmick\BrokenBox.h" />
@@ -320,6 +321,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\StageObjects\Guide.h" />
     <ClInclude Include="GameProgram\StageObjects\Gimmick\MoveGround.h" />
     <ClInclude Include="GameProgram\StageObjects\Gimmick\Needle.h" />
+    <ClInclude Include="GameProgram\GameActor\Player\ReinforceGauge.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

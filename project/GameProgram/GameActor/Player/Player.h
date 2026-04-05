@@ -10,6 +10,8 @@
 
 #include "BasePlayerState.h"
 
+#include "ReinforceGauge.h"
+
 /// <summary>
 /// プレイヤー
 /// </summary>
@@ -198,6 +200,15 @@ public:
 	/// リスポーン終了
 	/// </summary>
 	void RespawnEnd() { isRespawn_ = false; }
+
+	/// <summary>
+	/// ゲージポイント加算
+	/// </summary>
+	void AddGaugePoint() { reinforceGauge_->AddPoint(); }
+
+	bool UseGaugePoint();
+
+	void SubGaugePoint() { reinforceGauge_->UsePoint(); }
 
 private:
 	/// <summary>
@@ -414,4 +425,8 @@ private:
 	Vector3 value_;
 	bool isMoveGround_ = false;
 	const float kMoveGroundUnder_ = 0.5f;//離れないように少し下げる
+
+
+	std::unique_ptr<ReinforceGauge> reinforceGauge_ = nullptr;
+
 };

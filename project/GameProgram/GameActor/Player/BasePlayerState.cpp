@@ -84,16 +84,33 @@ void PlayerCommand::CommandMove() {
 		speed_ = kStandardSpeed_;
 	}
 
+	UpdateDirection();
+	
+	//標準ロック(移動しないで傘を動かすのみ)
+	if ((Input::GetInstance().PushKey(DIK_I) || Input::GetInstance().PushButton(XINPUT_GAMEPAD_Y)) && player_->GetIsGround()) {
+		return;
+	}
+
 	Vector3 translate = player_->GetTranslate();
 	Vector3 rotate = player_->GetRotate();
 	if (isPushA_) {
 		translate.x -= speed_;//左に移動
 		rotate.y = kDirectionLeft_;//左が正面に
-		UmbrellaRange(kLeftDis_);//傘を左に
 	}
 	else if (isPushD_) {
 		translate.x += speed_;//右に移動
 		rotate.y = kDirectionRight_;//右が正面に
+	}
+
+	player_->SetTranslate(translate);
+	player_->SetRotate(rotate);
+}
+
+void PlayerCommand::UpdateDirection() {
+	if (isPushA_) {
+		UmbrellaRange(kLeftDis_);//傘を左に
+	}
+	else if (isPushD_) {
 		UmbrellaRange(kRightDis_);//傘を右に
 	}
 	else if (isPushW_) {
@@ -102,10 +119,8 @@ void PlayerCommand::CommandMove() {
 	else if (isPushS_) {
 		UmbrellaRange(kDownDis_);//傘を下に
 	}
-
-	player_->SetTranslate(translate);
-	player_->SetRotate(rotate);
 }
+
 
 void PlayerCommand::CommandJump() {
 	if (player_->GetIsGround()) {
@@ -117,7 +132,14 @@ void PlayerCommand::CommandJump() {
 void PlayerCommand::CommandFire() {
 	//クールタイムは終了した時
 	if (fireCoolTimer_ == 0.0f) {
-		ShootBullet();
+
+		if (player_->UseGaugePoint()) {
+			PowerShootBullet();//強い発砲攻撃
+			player_->SubGaugePoint();//ゲージポイント減少
+		}
+		else {
+			ShootBullet();//発砲攻撃
+		}
 		fireCoolTimer_ = kFireCoolTimeMax_;
 	}
 }
@@ -152,6 +174,35 @@ void PlayerCommand::ShootBullet() {
 	player_->KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
 }
 
+void PlayerCommand::PowerShootBullet() {
+
+	//傘から出るため
+	Vector3 translate = player_->GetUmbrellaTranslate();
+
+	//真ん中を0にする値(3の場合、1,0,-1 | 5の場合、2,1,0,-1,-2)
+	float halfCount = float((kBulletCount_ - 1) * kDivideByTwo_);//二で割る
+
+
+	for (float i = -(halfCount); i <= halfCount; ++i) {
+		//弾が分散するように
+		Vector3 velocity = { 0.0f,i * kDispersionBetween_ * kDivideByTwo_ ,kBulletSpeed_ * kTwice_ };
+		//飛ばす向きをwtGun_に合わせる
+		velocity = TransformNormal(velocity, player_->GetUmbrellaMatWorld());
+
+		//弾丸を生み出す
+		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
+		bullet->Initialize();
+		bullet->SetTranslate(translate);//発泡初期位置
+		bullet->SetVelocity(velocity);//速さ
+		bullets_.push_back(std::move(bullet));
+	}
+
+	player_->ParticleFire(translate);
+
+
+	///撃った方向と反対方向にノックバック
+	player_->KnockBackUmbrella(kBulletKnockbackPower_ * kTwice_, kBulletSpeed_ * kTwice_);
+}
 
 void PlayerCommand::UmbrellaRange(float direction) {
 
@@ -199,6 +250,7 @@ void PlayerCommand::CommandBrink() {
 	//飛んだ瞬間後ろにパーティクルをだす
 	if (brinkTimer_ <= kDeltaTime_) {
 		player_->ParticleBrink();
+		player_->SubGaugePoint();//ゲージポイント減少
 	}
 	//地面についている場合、下向きのブリンクは発動しない
 	if (player_->GetIsGround() && (player_->GetUmbrellaRotate().x > 0.0f && player_->GetUmbrellaRotate().x < kLeftDis_)) {
@@ -233,7 +285,7 @@ void PlayerCommand::Gliding() {
 }
 
 bool PlayerCommand::BrinkFlag() {
-	if ((isPushA_ || isPushD_ || isPushW_ || isPushS_) && !isOneBrink_) {
+	if ((isPushA_ || isPushD_ || isPushW_ || isPushS_) && !isOneBrink_ && player_->UseGaugePoint()) {
 		return true;
 	}
 	return false;

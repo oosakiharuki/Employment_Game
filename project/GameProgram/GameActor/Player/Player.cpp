@@ -41,6 +41,9 @@ void Player::Initialize() {
 		SettingSpriteHp(i);
 	}
 
+	//強化ゲージ
+	reinforceGauge_ = std::make_unique<ReinforceGauge>();
+	reinforceGauge_->Initialize();
 
 	actionCommand_ = std::make_unique<PlayerCommand>();
 	actionCommand_->SetPlayer(this);
@@ -643,6 +646,20 @@ void Player::SpriteUpdate() {
 		UIManager::GetInstance().FrameSprite(&*sprite);
 		nowHp++;
 	}
+
+	//追加の操作
+#ifdef _DEBUG
+	//強化ゲージ
+	if (Input::GetInstance().TriggerKey(DIK_T)) {
+		reinforceGauge_->AddPoint();
+	}
+	
+	if (Input::GetInstance().TriggerKey(DIK_Y)) {
+		reinforceGauge_->UsePoint();
+	}
+#endif // _DEBUG
+	//強化ゲージの更新
+	reinforceGauge_->Update();
 }
 
 void Player::OnMoveGround() {
@@ -662,4 +679,8 @@ void Player::OnMoveGround() {
 void Player::ChangeStatePatternAction(std::unique_ptr<BasePlayerState> playerState) {
 	actionState_.reset();
 	actionState_ = std::move(playerState);
+}
+
+bool Player::UseGaugePoint() { 
+	return reinforceGauge_->UseGaugePoint();
 }
