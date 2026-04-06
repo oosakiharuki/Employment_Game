@@ -41,12 +41,16 @@ void Player::Initialize() {
 		SettingSpriteHp(i);
 	}
 
+	//強化ゲージ
+	reinforceGauge_ = std::make_unique<ReinforceGauge>();
+	reinforceGauge_->Initialize();
 
-	actionCommand_ = std::make_unique<PlayerCommand>();
+	actionCommand_ = std::make_unique<PlayerActions>();
 	actionCommand_->SetPlayer(this);
 
-	//ステートパターン
-	actionState_ = std::make_unique<PlayerNormalState>();
+	//コマンドパターン
+	playerActionsInputHandler_ = std::make_unique<PlayerActionsInputHandler >();
+	playerActionsInputHandler_->SetPlayerActions(&*actionCommand_);
 
 	//コリジョンタイプ
 	collisionType_ = CollisionTypes::TypePlayer;
@@ -108,11 +112,12 @@ void Player::InitAudio() {
 }
 
 void Player::ActionUpdate() {
-	actionState_->Update(*actionCommand_);
-	actionState_->CommandInput(*actionCommand_);
-
-	if (actionState_->GetIsInput()) {
-		ChangeStatePatternAction(actionState_->GetNextState());
+	//コマンドを受け取る
+	command_ = playerActionsInputHandler_->GetCommand();
+	//コマンドが入っているなら
+	if (command_) {
+		//コマンド出力
+		command_->Execute(&*actionCommand_);
 	}
 }
 
@@ -189,7 +194,7 @@ void Player::AnimationUpdate() {
 	if (umbrella_->GetShieldMode()) {
 		motionName_ = "shield";
 	}//前回の座標と現在の座標が違う = 動いた場合 + 空中
-	else if (actionCommand_->IsMovePosition() || !isGround_) {
+	else if (IsMovePosition() || !isGround_) {
 		motionName_ = "move";
 	}
 	else {
@@ -213,7 +218,7 @@ void Player::AnimationUpdate() {
 
 void Player::SmockParticle() {
 	//移動しているとパーティクルを発生
-	if (isGround_ && actionCommand_->IsMovePosition()) {
+	if (isGround_ && IsMovePosition()) {
 		// 歩く煙パーティクル
 		particles_[particleWalk_]->SetParticleBorn(ParticleBorn::TimerMode);
 		particles_[particleWalk_]->SetTranslate(transform_.translate + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.GetMatWorld()));
@@ -583,16 +588,7 @@ void Player::RespawnPlayer() {
 
 	transform_.translate = NextStageSave::GetInstance().GetNextStageSaveData().checkPoint;
 	transform_.translate.z = 0.0f;
-	//スタート演出の値設定
-	playerPoint_ = transform_.translate;
-	pointY_ = kStartPointY_;
 	isGround_ = false;
-	//ノーマルステートに戻す
-	ChangeStatePatternAction(std::make_unique<PlayerNormalState>());
-	
-	actionCommand_.reset();
-	actionCommand_ = std::make_unique<PlayerCommand>();
-	actionCommand_->SetPlayer(this);
 
 	transform_.rotate = { 0,180,0 };
 }
@@ -630,6 +626,13 @@ void Player::GravityDown() {
 	gravity_ = kFixedGravityPower_;
 }
 
+const bool Player::IsMovePosition() {
+	if (transform_.translate.x != prePosition_.x) {
+		return true;
+	}
+	return false;
+}
+
 void Player::SpriteUpdate() {
 	uint32_t nowHp = 0;
 	for (auto& sprite : hpSprites_) {
@@ -643,6 +646,20 @@ void Player::SpriteUpdate() {
 		UIManager::GetInstance().FrameSprite(&*sprite);
 		nowHp++;
 	}
+
+	//追加の操作
+#ifdef _DEBUG
+	//強化ゲージ
+	if (Input::GetInstance().TriggerKey(DIK_T)) {
+		reinforceGauge_->AddPoint();
+	}
+	
+	if (Input::GetInstance().TriggerKey(DIK_Y)) {
+		reinforceGauge_->UsePoint();
+	}
+#endif // _DEBUG
+	//強化ゲージの更新
+	reinforceGauge_->Update();
 }
 
 void Player::OnMoveGround() {
@@ -658,8 +675,6 @@ void Player::OnMoveGround() {
 	isMoveGround_ = false;
 }
 
-
-void Player::ChangeStatePatternAction(std::unique_ptr<BasePlayerState> playerState) {
-	actionState_.reset();
-	actionState_ = std::move(playerState);
+bool Player::UseGaugePoint() { 
+	return reinforceGauge_->UseGaugePoint();
 }

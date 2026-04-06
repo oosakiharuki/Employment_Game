@@ -8,7 +8,10 @@
 
 #include "UIManager.h"
 
-#include "BasePlayerState.h"
+#include "PlayerActions.h"
+#include "PlayerActionsInputHandler.h"
+
+#include "ReinforceGauge.h"
 
 /// <summary>
 /// プレイヤー
@@ -146,6 +149,12 @@ public:
 	void ParticleBrink();
 
 	/// <summary>
+	/// プレイヤーが動いているか判定
+	/// </summary>
+	/// <returns></returns>
+	const bool IsMovePosition();
+
+	/// <summary>
 	/// 重力をゆっくりにする(滑空)
 	/// </summary>
 	void GravityDown();
@@ -183,12 +192,6 @@ public:
 	}
 
 	/// <summary>
-	/// ステートパターン変更(アクション)
-	/// </summary>
-	/// <param name="enemyState">次のステートパターン</param>
-	void ChangeStatePatternAction(std::unique_ptr<BasePlayerState> state);
-
-	/// <summary>
 	/// リスポーンフラグ
 	/// </summary>
 	/// <returns>リスポーンフラグ</returns>
@@ -198,6 +201,20 @@ public:
 	/// リスポーン終了
 	/// </summary>
 	void RespawnEnd() { isRespawn_ = false; }
+
+	/// <summary>
+	/// ゲージポイント加算
+	/// </summary>
+	void AddGaugePoint() { reinforceGauge_->AddPoint(); }
+	/// <summary>
+	/// 強化行動の使用ポイントがあるか
+	/// </summary>
+	/// <returns>3ポイント以上で使用可能(true)</returns>
+	bool UseGaugePoint();
+	/// <summary>
+	/// 使ったポイント分をマイナスする
+	/// </summary>
+	void SubGaugePoint() { reinforceGauge_->UsePoint(); }
 
 private:
 	/// <summary>
@@ -389,22 +406,19 @@ private:
 
 	//ステートパターン
 	//プレイヤーの操作アクション用
-	std::unique_ptr<BasePlayerState> actionState_;
+	//std::unique_ptr<BasePlayerState> actionState_;
 	//リスポーンフラグ
 	bool isRespawn_ = false;
 
 	float appearanceAnimationTimer_ = 0.0f;
 	const float appearanceAnimationFinishTime_ = 2.5f;
 
-	//スタート演出(水たまりから飛び出る感じに)
-	Vector3 playerPoint_{};
-
-	const float kStartPointY_ = -10.0f;
-	float pointY_ = kStartPointY_;
-	//スタート時にプレイヤーを上げる変数
-	const float kPlayerUp_ = 0.1f;
-
-	std::unique_ptr<PlayerCommand> actionCommand_;
+	//アクションのクラス
+	std::unique_ptr<PlayerActions> actionCommand_;
+	//コマンドを出力するクラス
+	std::unique_ptr<PlayerActionsInputHandler> playerActionsInputHandler_;
+	//コマンド
+	std::unique_ptr<Command> command_;
 
 	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
 
@@ -414,4 +428,8 @@ private:
 	Vector3 value_;
 	bool isMoveGround_ = false;
 	const float kMoveGroundUnder_ = 0.5f;//離れないように少し下げる
+
+
+	std::unique_ptr<ReinforceGauge> reinforceGauge_ = nullptr;
+
 };

@@ -25,6 +25,17 @@ public:
 	/// <param name="prePosition">元の位置</param>
 	void FoundReaction(Vector3& value, bool& motion, const Vector3& power, float& timer, float maxTime, const Vector3& prePosition);
 
+
+	/// <summary>
+	/// リアクション_拡大縮小_2Dスプライト版
+	/// </summary>
+	/// <param name="value">変えたい値</param>
+	/// <param name="motionOn">モーションフラグ</param>
+	/// <param name="power">拡縮する強さ</param>
+	/// <param name="timer">時間</param>
+	/// <param name="maxTime">最大時間</param>
+	void ScaleReaction(Vector2& value,bool& motionOn, const Vector2& power, float& timer, float maxTime);
+
 private:
 
 	/// <summary>
@@ -44,5 +55,24 @@ private:
 	/// <param name="timer">タイマーを0に</param>
 	/// <param name="flag">オフにするフラグ</param>
 	void Finish(Vector3& value, const Vector3& prePosition, float& timer,bool& flag);
+
+
+	/// <summary>
+	/// 経過時間で足し引き_2Dスプライト版
+	/// </summary>
+	/// <param name="value">変えたい値</param>
+	/// <param name="power">強さ</param>
+	/// <param name="timer">時間</param>
+	/// <param name="maxTime">最大時間</param>
+	void ReturnHalfTime(Vector2& value, const Vector2& power, float& timer, float maxTime);
+
+	/// <summary>
+	/// 終了処理_2Dスプライト版
+	/// </summary>
+	/// <param name="value">変えたい値</param>
+	/// <param name="prePosition">戻す値</param>
+	/// <param name="timer">タイマーを0に</param>
+	/// <param name="flag">オフにするフラグ</param>
+	void Finish(Vector2& value, const Vector2& prePosition, float& timer, bool& flag);
 };
 
