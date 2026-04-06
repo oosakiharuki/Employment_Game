@@ -46,32 +46,33 @@ void PlayerCommand::JumpUpdate() {
 	player_->SetTranslate(translate);
 }
 
-void PlayerCommand::CommandMove() {
-	//ゲームパット操作の場合
-	if (Input::GetInstance().GetActiveGamePad()) {
-		//Lスティック
-		float padX = Input::GetInstance().LeftStickX();
-		float padY = Input::GetInstance().LeftStickY();
-		//左
-		(padX > kStickPower_) ? isPushD_ = true : isPushD_ = false;
-		//右
-		(padX < -kStickPower_) ? isPushA_ = true : isPushA_ = false;
-		//上
-		(padY > kStickPower_) ? isPushW_ = true : isPushW_ = false;
-		//下
-		(padY < -kStickPower_) ? isPushS_ = true : isPushS_ = false;
+void PlayerCommand::CommandMoveA() {
+	MovePlayer(-speed_,kDirectionLeft_);//左に移動、左向きに
+	UmbrellaRange(kLeftDis_);//傘を左に
+}
+
+void PlayerCommand::CommandMoveD() {
+	MovePlayer(speed_, kDirectionRight_);//右に移動、右向きに
+	UmbrellaRange(kRightDis_);//傘を右に
+}
+
+void PlayerCommand::CommandMoveW() {
+	UmbrellaRange(kUpDis_);//傘を上に
+}
+
+void PlayerCommand::CommandMoveS() {
+	UmbrellaRange(kDownDis_);//傘を下に
+}
+
+void PlayerCommand::SpeedParameter() {
+
+	//標準ロック(移動しないで傘を動かすのみ)
+	if ((Input::GetInstance().PushKey(DIK_I) || Input::GetInstance().PushButton(XINPUT_GAMEPAD_Y)) && player_->GetIsGround()) {
+		speed_ = 0.0f; 
+		prevDirectionWidth_ = 0.0f;
+		return;
 	}
-	else {
-		//キーボード操作
-		//左
-		(Input::GetInstance().PushKey(DIK_A)) ? isPushA_ = true : isPushA_ = false;
-		//右
-		(Input::GetInstance().PushKey(DIK_D)) ? isPushD_ = true : isPushD_ = false;
-		//上
-		(Input::GetInstance().PushKey(DIK_W)) ? isPushW_ = true : isPushW_ = false;
-		//下
-		(Input::GetInstance().PushKey(DIK_S)) ? isPushS_ = true : isPushS_ = false;
-	}
+
 	//シールド中足が遅くなる
 	//(滑空中は影響しない)
 	if (player_->GetUmbrellaShieldMode() && player_->GetIsGround()) {
@@ -84,41 +85,44 @@ void PlayerCommand::CommandMove() {
 		speed_ = kStandardSpeed_;
 	}
 
-	UpdateDirection();
-	
-	//標準ロック(移動しないで傘を動かすのみ)
-	if ((Input::GetInstance().PushKey(DIK_I) || Input::GetInstance().PushButton(XINPUT_GAMEPAD_Y)) && player_->GetIsGround()) {
-		return;
-	}
+	//記録リセット
+	prevDirectionWidth_ = 0.0f;
+}
 
+void PlayerCommand::MovePlayer(float speed, float playerDirection) {
 	Vector3 translate = player_->GetTranslate();
 	Vector3 rotate = player_->GetRotate();
-	if (isPushA_) {
-		translate.x -= speed_;//左に移動
-		rotate.y = kDirectionLeft_;//左が正面に
-	}
-	else if (isPushD_) {
-		translate.x += speed_;//右に移動
-		rotate.y = kDirectionRight_;//右が正面に
-	}
+
+	translate.x += speed;//左右どちらかに移動
+	rotate.y = playerDirection;////左右どちらか正面に
 
 	player_->SetTranslate(translate);
 	player_->SetRotate(rotate);
 }
 
-void PlayerCommand::UpdateDirection() {
-	if (isPushA_) {
-		UmbrellaRange(kLeftDis_);//傘を左に
+void PlayerCommand::UmbrellaRange(float direction) {
+	Vector3 rotate = player_->GetUmbrellaRotate();
+	//上下左右
+	rotate.x = direction;
+
+	//斜めの時
+	//左上と右下
+	if ((prevDirectionWidth_ == kLeftDis_ && direction == kUpDis_) || (prevDirectionWidth_ == kRightDis_ && direction == kDownDis_)) {
+		rotate.x -= kDiagonalValue_;
 	}
-	else if (isPushD_) {
-		UmbrellaRange(kRightDis_);//傘を右に
+	//左下と右上
+	else if ((prevDirectionWidth_ == kLeftDis_ && direction == kDownDis_) || (prevDirectionWidth_ == kRightDis_ && direction == kUpDis_)) {
+		rotate.x += kDiagonalValue_;
 	}
-	else if (isPushW_) {
-		UmbrellaRange(kUpDis_);//傘を上に
+
+	//360度を超えたらマイナスする
+	if (rotate.x > kMaxAngle) {
+		rotate.x -= kMaxAngle;
 	}
-	else if (isPushS_) {
-		UmbrellaRange(kDownDis_);//傘を下に
-	}
+	player_->SetUmbrellaRotate(rotate);
+
+	//横の向きを記録
+	prevDirectionWidth_ = direction;
 }
 
 
@@ -204,70 +208,44 @@ void PlayerCommand::PowerShootBullet() {
 	player_->KnockBackUmbrella(kBulletKnockbackPower_ * kTwice_, kBulletSpeed_ * kTwice_);
 }
 
-void PlayerCommand::UmbrellaRange(float direction) {
-
-	Vector3 rotate = player_->GetUmbrellaRotate();
-	//ブリンク中は角度を変更しない
-	//上下左右
-	rotate.x = direction;
-
-	//斜めの時
-	//左上と右下
-	if ((isPushA_ && isPushW_) || (isPushD_ && isPushS_)) {
-		rotate.x += kDiagonalValue_;
-	}
-	//左下と右上
-	else if ((isPushA_ && isPushS_) || (isPushD_ && isPushW_)) {
-		rotate.x -= kDiagonalValue_;
-	}
-
-	//360度を超えたらマイナスする
-	if (rotate.x > kMaxAngle) {
-		rotate.x -= kMaxAngle;
-	}
-
-	player_->SetUmbrellaRotate(rotate);
-}
-
 void PlayerCommand::CommandShield() {
 	//傘を開く
 	player_->OnUmbrellaShield();
 	Gliding();
 }
 
-void PlayerCommand::CommandBrink() {
+void PlayerCommand::CommandBrink() {		
+	//地面についている場合、下向きのブリンクは発動しない、ゲージも使用しない
+	if (player_->GetIsGround() && (player_->GetUmbrellaRotate().x > 0.0f && player_->GetUmbrellaRotate().x < kLeftDis_)) {
+		brinkTimer_ = 0.0f;
+		return;
+	}
+
 	//傘を開く
 	player_->OnUmbrellaShield();
 
-	brinkTimer_ += kDeltaTime_;
-	isOneBrink_ = true;//ブリンク一回目
-	Vector3 translate = player_->GetTranslate();
-
-	translate += EaseOut({ 0,0,0 }, TransformNormal({ 0,0,kBrinkPower_ }, player_->GetUmbrellaMatWorld()), brinkTimer_ / kBrinkTimeMax_);
-
-	player_->SetTranslate(translate);
-
 	//飛んだ瞬間後ろにパーティクルをだす
-	if (brinkTimer_ <= kDeltaTime_) {
+	if (brinkTimer_ == kBrinkTimeMax_) {
 		player_->ParticleBrink();
 		player_->SubGaugePoint();//ゲージポイント減少
 	}
-	//地面についている場合、下向きのブリンクは発動しない
-	if (player_->GetIsGround() && (player_->GetUmbrellaRotate().x > 0.0f && player_->GetUmbrellaRotate().x < kLeftDis_)) {
-		brinkTimer_ = kBrinkTimeMax_;
+	brinkTimer_ -= kDeltaTime_;
+	isOneBrink_ = true;//ブリンク一回目
+
+	Vector3 translate = player_->GetTranslate();//プレイヤー座標を持ってくる
+	//ブリンクの動き加算
+	// brinkTimerがkBrinkTimeMaxを減算していくため (Max - (Maxから減算していく値))
+	translate += EaseOut({ 0,0,0 }, TransformNormal({ 0,0,kBrinkPower_ }, player_->GetUmbrellaMatWorld()), (kBrinkTimeMax_ - brinkTimer_) / kBrinkTimeMax_);
+	player_->SetTranslate(translate);//プレイヤー座標更新
+
+	//時間が経過したら
+	if (brinkTimer_ <= 0.0f) {
+		OffShield();//シールド解除
 	}
 
-	jumpPower_ = 0.0f;
-	player_->GravityDown();
+	jumpPower_ = 0.0f;//ジャンプによるの加算はされない
+	player_->GravityDown();//重力加速度をなしに、
 }
-
-const bool PlayerCommand::IsMovePosition() {
-	if (isPushA_ || isPushD_  || jumpPower_ > 0.0f) {
-		return true;
-	}
-	return false;
-}
-
 
 void PlayerCommand::Gliding() {
 
@@ -285,15 +263,15 @@ void PlayerCommand::Gliding() {
 }
 
 bool PlayerCommand::BrinkFlag() {
-	if ((isPushA_ || isPushD_ || isPushW_ || isPushS_) && !isOneBrink_ && player_->UseGaugePoint()) {
+	if (!isOneBrink_ && player_->UseGaugePoint()) {
+		brinkTimer_ = kBrinkTimeMax_;//タイマーを
 		return true;
 	}
 	return false;
 }
 
 bool PlayerCommand::BrinkTimeMax() {
-	if (brinkTimer_ >= kBrinkTimeMax_) {
-		brinkTimer_ = 0.0f; //タイマーリセット
+	if (brinkTimer_ > 0.0f) {
 		return true;
 	}
 	return false;
@@ -301,68 +279,4 @@ bool PlayerCommand::BrinkTimeMax() {
 
 void PlayerCommand::OffShield() {
 	player_->OffUmbrellaShield();
-}
-
-
-void PlayerNormalState::Update(PlayerCommand& playerCommand) {
-	playerCommand.CommandMove();//移動
-}
-
-void PlayerNormalState::CommandInput(PlayerCommand& command) {
-	if (Input::GetInstance().TriggerKey(DIK_SPACE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) {
-		nextState_ = std::make_unique<PlayerJumpState>();
-	}
-	if (Input::GetInstance().TriggerKey(DIK_K) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_X) || Input::GetInstance().RightTrigger()) {
-		nextState_ = std::make_unique<PlayerFireState>();
-	}
-	if (Input::GetInstance().TriggerKey(DIK_L) || Input::GetInstance().LeftTrigger()) {
-		//ブリンクの条件を満たしているか
-		nextState_ = std::make_unique<PlayerShieldState>();
-	}
-	if (command.BrinkFlag() && (Input::GetInstance().TriggerKey(DIK_J) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_B))) {
-		nextState_ = std::make_unique<PlayerBrinkState>(); 
-	}
-}
-
-void PlayerJumpState::Update(PlayerCommand& playerCommand) {
-	playerCommand.CommandMove();//移動
-	playerCommand.CommandJump();//ジャンプ
-}
-
-void PlayerJumpState::CommandInput(PlayerCommand& command) {
-	//すぐにステートを変更
-	nextState_ = std::make_unique<PlayerNormalState>();
-}
-
-void PlayerFireState::Update(PlayerCommand& playerCommand) {
-	playerCommand.CommandMove();//移動
-	playerCommand.CommandFire();//発砲攻撃
-}
-void PlayerFireState::CommandInput(PlayerCommand& command) {
-	//すぐにステートを変更
-	nextState_ = std::make_unique<PlayerNormalState>();
-}
-
-void PlayerShieldState::Update(PlayerCommand& playerCommand) {
-	playerCommand.CommandMove();//移動
-	playerCommand.CommandShield();//傘で守る
-}
-
-void PlayerShieldState::CommandInput(PlayerCommand& command) {
-	//ボタンが離れたとき、ステートを変更(シールド、ブリンクで使用しているボタン)
-	if (!Input::GetInstance().PushKey(DIK_L) && !Input::GetInstance().PushKey(DIK_J) && !Input::GetInstance().PushButton(XINPUT_GAMEPAD_B) && !Input::GetInstance().LeftTriggerLongPress()) {
-		command.OffShield();//シールドフラグオフ
-		nextState_ = std::make_unique<PlayerNormalState>();
-	}
-}
-
-void PlayerBrinkState::Update(PlayerCommand& playerCommand) {
-	playerCommand.CommandBrink();//ブリンク(ここでは移動処理は行わない)
-}
-
-void PlayerBrinkState::CommandInput(PlayerCommand& command) {
-	//ブリンクが最大まで行ったとき、ステートを変更
-	if (command.BrinkTimeMax()) {
-		nextState_ = std::make_unique<PlayerShieldState>();
-	}
 }

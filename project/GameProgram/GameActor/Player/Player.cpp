@@ -48,8 +48,9 @@ void Player::Initialize() {
 	actionCommand_ = std::make_unique<PlayerCommand>();
 	actionCommand_->SetPlayer(this);
 
-	//ステートパターン
-	actionState_ = std::make_unique<PlayerNormalState>();
+	//コマンドパターン
+	playerActionCommand_ = std::make_unique<PlayerActionCommand>();
+	playerActionCommand_->SetPlayerCommand(&*actionCommand_);
 
 	//コリジョンタイプ
 	collisionType_ = CollisionTypes::TypePlayer;
@@ -111,11 +112,12 @@ void Player::InitAudio() {
 }
 
 void Player::ActionUpdate() {
-	actionState_->Update(*actionCommand_);
-	actionState_->CommandInput(*actionCommand_);
-
-	if (actionState_->GetIsInput()) {
-		ChangeStatePatternAction(actionState_->GetNextState());
+	//コマンドを受け取る
+	command_ = playerActionCommand_->GetCommand();
+	//コマンドが入っているなら
+	if (command_) {
+		//コマンド出力
+		command_->Execute(&*actionCommand_);
 	}
 }
 
@@ -192,7 +194,7 @@ void Player::AnimationUpdate() {
 	if (umbrella_->GetShieldMode()) {
 		motionName_ = "shield";
 	}//前回の座標と現在の座標が違う = 動いた場合 + 空中
-	else if (actionCommand_->IsMovePosition() || !isGround_) {
+	else if (IsMovePosition() || !isGround_) {
 		motionName_ = "move";
 	}
 	else {
@@ -216,7 +218,7 @@ void Player::AnimationUpdate() {
 
 void Player::SmockParticle() {
 	//移動しているとパーティクルを発生
-	if (isGround_ && actionCommand_->IsMovePosition()) {
+	if (isGround_ && IsMovePosition()) {
 		// 歩く煙パーティクル
 		particles_[particleWalk_]->SetParticleBorn(ParticleBorn::TimerMode);
 		particles_[particleWalk_]->SetTranslate(transform_.translate + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.GetMatWorld()));
@@ -590,12 +592,6 @@ void Player::RespawnPlayer() {
 	playerPoint_ = transform_.translate;
 	pointY_ = kStartPointY_;
 	isGround_ = false;
-	//ノーマルステートに戻す
-	ChangeStatePatternAction(std::make_unique<PlayerNormalState>());
-	
-	actionCommand_.reset();
-	actionCommand_ = std::make_unique<PlayerCommand>();
-	actionCommand_->SetPlayer(this);
 
 	transform_.rotate = { 0,180,0 };
 }
@@ -631,6 +627,13 @@ void  Player::ParticleBrink() {
 void Player::GravityDown() {
 	//重力を固定することでゆっくり落ちる
 	gravity_ = kFixedGravityPower_;
+}
+
+const bool Player::IsMovePosition() {
+	if (transform_.translate.x != prePosition_.x) {
+		return true;
+	}
+	return false;
 }
 
 void Player::SpriteUpdate() {
@@ -673,12 +676,6 @@ void Player::OnMoveGround() {
 		preMove_ = move_;
 	}
 	isMoveGround_ = false;
-}
-
-
-void Player::ChangeStatePatternAction(std::unique_ptr<BasePlayerState> playerState) {
-	actionState_.reset();
-	actionState_ = std::move(playerState);
 }
 
 bool Player::UseGaugePoint() { 

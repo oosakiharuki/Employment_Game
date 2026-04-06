@@ -540,6 +540,9 @@
     <ClCompile Include="GameProgram\GameActor\Player\ReinforceGauge.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Player\PlayerActionCommand.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -855,6 +858,9 @@
       <Filter>ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Player\ReinforceGauge.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Player\PlayerActionCommand.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

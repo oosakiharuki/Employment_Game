@@ -11,6 +11,7 @@
 #include "BasePlayerState.h"
 
 #include "ReinforceGauge.h"
+#include <PlayerActionCommand.h>
 
 /// <summary>
 /// プレイヤー
@@ -148,6 +149,12 @@ public:
 	void ParticleBrink();
 
 	/// <summary>
+	/// プレイヤーが動いているか判定
+	/// </summary>
+	/// <returns></returns>
+	const bool IsMovePosition();
+
+	/// <summary>
 	/// 重力をゆっくりにする(滑空)
 	/// </summary>
 	void GravityDown();
@@ -185,12 +192,6 @@ public:
 	}
 
 	/// <summary>
-	/// ステートパターン変更(アクション)
-	/// </summary>
-	/// <param name="enemyState">次のステートパターン</param>
-	void ChangeStatePatternAction(std::unique_ptr<BasePlayerState> state);
-
-	/// <summary>
 	/// リスポーンフラグ
 	/// </summary>
 	/// <returns>リスポーンフラグ</returns>
@@ -205,9 +206,14 @@ public:
 	/// ゲージポイント加算
 	/// </summary>
 	void AddGaugePoint() { reinforceGauge_->AddPoint(); }
-
+	/// <summary>
+	/// 強化行動の使用ポイントがあるか
+	/// </summary>
+	/// <returns>3ポイント以上で使用可能(true)</returns>
 	bool UseGaugePoint();
-
+	/// <summary>
+	/// 使ったポイント分をマイナスする
+	/// </summary>
 	void SubGaugePoint() { reinforceGauge_->UsePoint(); }
 
 private:
@@ -400,7 +406,7 @@ private:
 
 	//ステートパターン
 	//プレイヤーの操作アクション用
-	std::unique_ptr<BasePlayerState> actionState_;
+	//std::unique_ptr<BasePlayerState> actionState_;
 	//リスポーンフラグ
 	bool isRespawn_ = false;
 
@@ -416,6 +422,8 @@ private:
 	const float kPlayerUp_ = 0.1f;
 
 	std::unique_ptr<PlayerCommand> actionCommand_;
+	std::unique_ptr<PlayerActionCommand> playerActionCommand_;
+	std::unique_ptr<Command> command_;
 
 	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
 

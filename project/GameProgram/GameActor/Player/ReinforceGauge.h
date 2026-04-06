@@ -31,7 +31,7 @@ public:
 	/// ポイント加算
 	/// </summary>
 	void UsePoint() {
-		gaugePoint_ -= kUseGaugeCost_;//コスト分減算
+		if(UseGaugePoint()) gaugePoint_ -= kUseGaugeCost_;//コスト分減算
 	}
 
 	/// <summary>

@@ -32,15 +32,26 @@ public:
 	void JumpUpdate();
 
 	/// <summary>
-	/// 移動
+	/// 移動A
 	/// </summary>
-	void CommandMove();
-
+	void CommandMoveA();
+	/// <summary>
+	/// 移動D
+	/// </summary>
+	void CommandMoveD();
+	/// <summary>
+	/// 移動W
+	/// </summary>
+	void CommandMoveW();
+	/// <summary>
+	/// 移動S
+	/// </summary>
+	void CommandMoveS();
 
 	/// <summary>
-	/// プレイヤー、傘の向き更新
+	/// 移動速度の調整
 	/// </summary>
-	void UpdateDirection();
+	void SpeedParameter();
 
 	/// <summary>
 	/// ジャンプ
@@ -58,12 +69,6 @@ public:
 	/// ブリンク
 	/// </summary>
 	void CommandBrink();
-
-	/// <summary>
-	/// プレイヤーが動いているか判定
-	/// </summary>
-	/// <returns></returns>
-	const bool IsMovePosition();
 
 
 	/// <summary>
@@ -83,6 +88,8 @@ public:
 	void OffShield();
 
 private:
+
+	void MovePlayer(float speed,float playerDirection);
 
 	/// <summary>
 	/// 傘の8方向の回転
@@ -120,9 +127,6 @@ private:
 	//最大角度(360度)
 	const float kMaxAngle = 360.0f;
 
-	//input
-	const float kStickPower_ = 0.5f;//スティックの倒し具合
-
 	//プレイヤーの速さ
 	const float kStandardSpeed_ = 0.14f;//通常の速さ
 	float speed_ = kStandardSpeed_;
@@ -130,13 +134,8 @@ private:
 	//ジャンプフラグ
 	float jumpPower_ = 0.0f;//上がる高さ
 	const float kJumpPowerMax_ = 0.3f;//上がる高さ
-	
-	//ボタン
-	bool isPushA_ = false;
-	bool isPushD_ = false;
-	bool isPushW_ = false;
-	bool isPushS_ = false;
 
+	float prevDirectionWidth_ = 0.0f;//横の向き
 
 	/// 弾丸
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
@@ -161,127 +160,3 @@ private:
 	
 	Player* player_ = nullptr;
 };
-
-/// <summary>
-/// プレイヤー基盤ステート
-/// </summary>
-class BasePlayerState {
-public:
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	/// <param name="command">プレイヤーコマンドクラス</param>
-	virtual void Update(PlayerCommand& command) = 0;
-	/// <summary>
-	/// ステート変更処理
-	/// </summary>
-	/// <param name="player">プレイヤークラス</param>
-	virtual void CommandInput(PlayerCommand& command) = 0;
-
-	/// <summary>
-	/// ステートパターン変更フラグ
-	/// </summary>
-	/// <returns>次のステートの値が入っている場合</returns>
-	bool GetIsInput() { 
-		if (nextState_ != nullptr) {
-			return true;
-		}
-		return false;
-	}
-	/// <summary>
-	/// getter_次のステートパターン
-	/// </summary>
-	/// <returns></returns>
-	std::unique_ptr<BasePlayerState> GetNextState() { return std::move(nextState_); }
-
-protected:
-	//次に変更するステートの入れ物
-	std::unique_ptr<BasePlayerState> nextState_;
-};
-
-/// <summary>
-/// プレイヤー発砲攻撃状態ステート
-/// </summary>
-class PlayerNormalState : public BasePlayerState {
-public:
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	/// <param name="command">プレイヤーコマンドクラス</param>
-	void Update(PlayerCommand& playerCommond) override;
-	/// <summary>
-	/// ステート変更処理
-	/// </summary>
-	/// <param name="player">プレイヤークラス</param>
-	void CommandInput(PlayerCommand& command) override;
-};
-
-/// <summary>
-/// プレイヤー発砲攻撃状態ステート
-/// </summary>
-class PlayerJumpState : public BasePlayerState {
-public:
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	/// <param name="command">プレイヤーコマンドクラス</param>
-	void Update(PlayerCommand& playerCommond) override;
-	/// <summary>
-	/// ステート変更処理
-	/// </summary>
-	/// <param name="player">プレイヤークラス</param>
-	void CommandInput(PlayerCommand& command) override;
-};
-
-
-/// <summary>
-/// プレイヤー発砲攻撃状態ステート
-/// </summary>
-class PlayerFireState : public BasePlayerState {
-public:
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	/// <param name="command">プレイヤーコマンドクラス</param>
-	void Update(PlayerCommand& playerCommond) override;
-	/// <summary>
-	/// ステート変更処理
-	/// </summary>
-	/// <param name="player">プレイヤークラス</param>
-	void CommandInput(PlayerCommand& command) override;
-};
-
-/// <summary>
-/// プレイヤー防御状態ステート
-/// </summary>
-class PlayerShieldState : public BasePlayerState {
-public:
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	/// <param name="command">プレイヤーコマンドクラス</param>
-	void Update(PlayerCommand& playerCommond) override;
-	/// <summary>
-	/// ステート変更処理
-	/// </summary>
-	/// <param name="player">プレイヤークラス</param>
-	void CommandInput(PlayerCommand& command) override;
-};
-
-/// <summary>
-/// プレイヤーブリンク状態ステート
-/// </summary>
-class PlayerBrinkState : public BasePlayerState {
-public:
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	/// <param name="command">プレイヤーコマンドクラス</param>
-	void Update(PlayerCommand& playerCommond) override;
-	/// <summary>
-	/// ステート変更処理
-	/// </summary>
-	/// <param name="player">プレイヤークラス</param>
-	void CommandInput(PlayerCommand& command) override;
-};
-
