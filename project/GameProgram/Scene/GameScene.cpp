@@ -121,7 +121,7 @@ void GameScene::Draw() {
 	//モデル描画処理
 	GLTFCommon::GetInstance().Command();
 	backGround->Draw();
-
+	
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->Draw();
 	}

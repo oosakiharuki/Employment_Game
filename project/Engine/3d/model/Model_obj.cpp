@@ -58,7 +58,7 @@ void Model_obj::InitMaterialResource(ModelData modelData) {
 	//色の設定
 	materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	materialData_->enableLighting = false;
-	materialData_->uvTransform = MakeIdentity4x4();
+	materialData_->uvTransform = modelData.materialData.uvTransform;
 	materialData_->shininess = 70;
 
 	//vector
@@ -125,6 +125,26 @@ MaterialData Model_obj::LoadMaterialTemplateFile(const std::string& directoryPat
 		if (identifier == "map_Kd" && isSame) {
 			std::string textureFilename;
 			s >> textureFilename;
+
+			//テクスチャUVのトランスフォーム
+			//aiUVTransform uvTransform;
+			materialData.uvTransform = MakeIdentity4x4();//通常行列
+			//マッピング(位置)
+			if (textureFilename == "-o") {
+				//座標位置の変更
+				Vector3 uvTranslate;
+				s >> uvTranslate.x >> uvTranslate.y >> uvTranslate.z;
+				materialData.uvTransform = MakeTranslateMatrix(uvTranslate);//行列にして移行
+				s >> textureFilename;
+			}
+			//マッピング(サイズ)
+			if (textureFilename == "-s") {
+				//通常行列にスケールをかける
+				Vector3 uvScale;//大きさを設定
+				s >> uvScale.x >> uvScale.y >> uvScale.z;
+				materialData.uvTransform = materialData.uvTransform * MakeScaleMatrix(uvScale);//行列にしてかける
+				s >> textureFilename;
+			}
 
 			size_t pos1;
 			std::string extension;
