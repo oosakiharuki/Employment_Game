@@ -300,10 +300,10 @@
     <ClCompile Include="GameProgram\GameActor\Player\Player.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\PlayerBullet.cpp">
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\PlayerBullet.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\Umbrella.cpp">
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\primitive\Primitive.cpp">
@@ -357,7 +357,7 @@
     <ClCompile Include="Engine\base\Pipeline.cpp">
       <Filter>ソース ファイル\Engine\base</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\BasePlayerState.cpp">
+    <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActions.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Boss\Boss.cpp">
@@ -537,10 +537,10 @@
     <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\WarpGate.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\ReinforceGauge.cpp">
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\ReinforceGauge.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\PlayerActionCommand.cpp">
+    <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActionsInputHandler.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -629,10 +629,10 @@
     <ClInclude Include="GameProgram\GameActor\Player\Player.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\PlayerBullet.h">
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\PlayerBullet.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\Umbrella.h">
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\Scene\ClearScene.h">
@@ -680,7 +680,7 @@
     <ClInclude Include="Engine\base\Pipeline.h">
       <Filter>ヘッダー ファイル\Engine\base</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\BasePlayerState.h">
+    <ClInclude Include="GameProgram\GameActor\Player\Action\PlayerActions.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Boss\Boss.h">
@@ -857,10 +857,10 @@
     <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\WarpGate.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\ReinforceGauge.h">
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\ReinforceGauge.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\PlayerActionCommand.h">
+    <ClInclude Include="GameProgram\GameActor\Player\Action\PlayerActionsInputHandler.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

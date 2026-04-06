@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 
-class PlayerCommand;
+class PlayerActions;
 
 class Command {
 public:
@@ -9,7 +9,7 @@ public:
 	/// 出力処理
 	/// </summary>
 	/// <param name="player">プレイヤークラス</param>
-	virtual void Execute(PlayerCommand* player) = 0;
+	virtual void Execute(PlayerActions* player) = 0;
 };
 
 class MoveCommand : public Command{
@@ -18,7 +18,7 @@ public:
 	/// 出力処理
 	/// </summary>
 	/// <param name="player">プレイヤークラス</param>
-	void Execute(PlayerCommand* player) override;
+	void Execute(PlayerActions* player) override;
 private:
 	const float kStickPower_ = 0.5f;//スティックの倒し具合
 };
@@ -29,7 +29,7 @@ public:
 	/// 出力処理
 	/// </summary>
 	/// <param name="player">プレイヤークラス</param>
-	void Execute(PlayerCommand* player) override;
+	void Execute(PlayerActions* player) override;
 private:
 	std::unique_ptr<MoveCommand> moveCommand_;
 };
@@ -40,7 +40,7 @@ public:
 	/// 出力処理
 	/// </summary>
 	/// <param name="player">プレイヤークラス</param>
-	void Execute(PlayerCommand* player) override;
+	void Execute(PlayerActions* player) override;
 private:
 	std::unique_ptr<MoveCommand> moveCommand_;
 };
@@ -51,7 +51,7 @@ public:
 	/// 出力処理
 	/// </summary>
 	/// <param name="player">プレイヤークラス</param>
-	void Execute(PlayerCommand* player) override;
+	void Execute(PlayerActions* player) override;
 private:
 	std::unique_ptr<MoveCommand> moveCommand_;
 };
@@ -62,11 +62,11 @@ public:
 	/// 出力処理
 	/// </summary>
 	/// <param name="player">プレイヤークラス</param>
-	void Execute(PlayerCommand* player) override;
+	void Execute(PlayerActions* player) override;
 };
 
 
-class PlayerActionCommand {
+class PlayerActionsInputHandler {
 public:
 	/// <summary>
 	/// getter_コマンド
@@ -76,9 +76,9 @@ public:
 	/// <summary>
 	/// setter_プレイヤーコマンド
 	/// </summary>
-	/// <param name="playerCommand"></param>
-	void SetPlayerCommand(PlayerCommand* playerCommand) { playerCommand_ = playerCommand; }
+	/// <param name="PlayerActions"></param>
+	void SetPlayerActions(PlayerActions* playerActions) { playerActions_ = playerActions; }
 private:
 
-	PlayerCommand* playerCommand_ = nullptr;
+	PlayerActions* playerActions_ = nullptr;
 };

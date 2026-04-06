@@ -8,10 +8,10 @@
 
 #include "UIManager.h"
 
-#include "BasePlayerState.h"
+#include "PlayerActions.h"
+#include "PlayerActionsInputHandler.h"
 
 #include "ReinforceGauge.h"
-#include <PlayerActionCommand.h>
 
 /// <summary>
 /// プレイヤー
@@ -413,16 +413,11 @@ private:
 	float appearanceAnimationTimer_ = 0.0f;
 	const float appearanceAnimationFinishTime_ = 2.5f;
 
-	//スタート演出(水たまりから飛び出る感じに)
-	Vector3 playerPoint_{};
-
-	const float kStartPointY_ = -10.0f;
-	float pointY_ = kStartPointY_;
-	//スタート時にプレイヤーを上げる変数
-	const float kPlayerUp_ = 0.1f;
-
-	std::unique_ptr<PlayerCommand> actionCommand_;
-	std::unique_ptr<PlayerActionCommand> playerActionCommand_;
+	//アクションのクラス
+	std::unique_ptr<PlayerActions> actionCommand_;
+	//コマンドを出力するクラス
+	std::unique_ptr<PlayerActionsInputHandler> playerActionsInputHandler_;
+	//コマンド
 	std::unique_ptr<Command> command_;
 
 	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方

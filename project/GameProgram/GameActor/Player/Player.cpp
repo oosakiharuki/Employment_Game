@@ -45,12 +45,12 @@ void Player::Initialize() {
 	reinforceGauge_ = std::make_unique<ReinforceGauge>();
 	reinforceGauge_->Initialize();
 
-	actionCommand_ = std::make_unique<PlayerCommand>();
+	actionCommand_ = std::make_unique<PlayerActions>();
 	actionCommand_->SetPlayer(this);
 
 	//コマンドパターン
-	playerActionCommand_ = std::make_unique<PlayerActionCommand>();
-	playerActionCommand_->SetPlayerCommand(&*actionCommand_);
+	playerActionsInputHandler_ = std::make_unique<PlayerActionsInputHandler >();
+	playerActionsInputHandler_->SetPlayerActions(&*actionCommand_);
 
 	//コリジョンタイプ
 	collisionType_ = CollisionTypes::TypePlayer;
@@ -113,7 +113,7 @@ void Player::InitAudio() {
 
 void Player::ActionUpdate() {
 	//コマンドを受け取る
-	command_ = playerActionCommand_->GetCommand();
+	command_ = playerActionsInputHandler_->GetCommand();
 	//コマンドが入っているなら
 	if (command_) {
 		//コマンド出力
@@ -588,9 +588,6 @@ void Player::RespawnPlayer() {
 
 	transform_.translate = NextStageSave::GetInstance().GetNextStageSaveData().checkPoint;
 	transform_.translate.z = 0.0f;
-	//スタート演出の値設定
-	playerPoint_ = transform_.translate;
-	pointY_ = kStartPointY_;
 	isGround_ = false;
 
 	transform_.rotate = { 0,180,0 };

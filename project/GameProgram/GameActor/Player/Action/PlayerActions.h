@@ -6,9 +6,9 @@
 
 class Player;
 /// <summary>
-/// プレイヤーの行動コマンド
+/// プレイヤーの行動
 /// </summary>
-class PlayerCommand {
+class PlayerActions {
 public:
 	/// <summary>
 	/// setter_プレイヤー

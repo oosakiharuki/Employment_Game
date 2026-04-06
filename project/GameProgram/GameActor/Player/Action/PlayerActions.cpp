@@ -1,4 +1,4 @@
-#include "BasePlayerState.h"
+#include "PlayerActions.h"
 #include "Player.h"
 
 #include "UseEveryOne.h"
@@ -6,7 +6,7 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
-void PlayerCommand::BulletUpdate() {
+void PlayerActions::BulletUpdate() {
 	//消滅処理
 	bullets_.remove_if([](auto& bullet) {
 		if (bullet->IsDead()) {
@@ -25,13 +25,13 @@ void PlayerCommand::BulletUpdate() {
 	fireCoolTimer_ = std::clamp(fireCoolTimer_, 0.0f, kFireCoolTimeMax_);
 }
 
-void PlayerCommand::BulletDraw() {
+void PlayerActions::BulletDraw() {
 	for (auto& bullet : bullets_) {
 		bullet->Draw();
 	}
 }
 
-void PlayerCommand::JumpUpdate() {
+void PlayerActions::JumpUpdate() {
 	Vector3 translate = player_->GetTranslate();
 	//ジャンプによる変動
 	//地面にいるとき
@@ -46,25 +46,25 @@ void PlayerCommand::JumpUpdate() {
 	player_->SetTranslate(translate);
 }
 
-void PlayerCommand::CommandMoveA() {
+void PlayerActions::CommandMoveA() {
 	MovePlayer(-speed_,kDirectionLeft_);//左に移動、左向きに
 	UmbrellaRange(kLeftDis_);//傘を左に
 }
 
-void PlayerCommand::CommandMoveD() {
+void PlayerActions::CommandMoveD() {
 	MovePlayer(speed_, kDirectionRight_);//右に移動、右向きに
 	UmbrellaRange(kRightDis_);//傘を右に
 }
 
-void PlayerCommand::CommandMoveW() {
+void PlayerActions::CommandMoveW() {
 	UmbrellaRange(kUpDis_);//傘を上に
 }
 
-void PlayerCommand::CommandMoveS() {
+void PlayerActions::CommandMoveS() {
 	UmbrellaRange(kDownDis_);//傘を下に
 }
 
-void PlayerCommand::SpeedParameter() {
+void PlayerActions::SpeedParameter() {
 
 	//標準ロック(移動しないで傘を動かすのみ)
 	if ((Input::GetInstance().PushKey(DIK_I) || Input::GetInstance().PushButton(XINPUT_GAMEPAD_Y)) && player_->GetIsGround()) {
@@ -89,7 +89,7 @@ void PlayerCommand::SpeedParameter() {
 	prevDirectionWidth_ = 0.0f;
 }
 
-void PlayerCommand::MovePlayer(float speed, float playerDirection) {
+void PlayerActions::MovePlayer(float speed, float playerDirection) {
 	Vector3 translate = player_->GetTranslate();
 	Vector3 rotate = player_->GetRotate();
 
@@ -100,7 +100,7 @@ void PlayerCommand::MovePlayer(float speed, float playerDirection) {
 	player_->SetRotate(rotate);
 }
 
-void PlayerCommand::UmbrellaRange(float direction) {
+void PlayerActions::UmbrellaRange(float direction) {
 	Vector3 rotate = player_->GetUmbrellaRotate();
 	//上下左右
 	rotate.x = direction;
@@ -126,14 +126,14 @@ void PlayerCommand::UmbrellaRange(float direction) {
 }
 
 
-void PlayerCommand::CommandJump() {
+void PlayerActions::CommandJump() {
 	if (player_->GetIsGround()) {
 		jumpPower_ = kJumpPowerMax_;
 	}
 	player_->IsGround(false);
 }
 
-void PlayerCommand::CommandFire() {
+void PlayerActions::CommandFire() {
 	//クールタイムは終了した時
 	if (fireCoolTimer_ == 0.0f) {
 
@@ -149,7 +149,7 @@ void PlayerCommand::CommandFire() {
 }
 
 
-void PlayerCommand::ShootBullet() {
+void PlayerActions::ShootBullet() {
 
 	//傘から出るため
 	Vector3 translate = player_->GetUmbrellaTranslate();
@@ -178,7 +178,7 @@ void PlayerCommand::ShootBullet() {
 	player_->KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
 }
 
-void PlayerCommand::PowerShootBullet() {
+void PlayerActions::PowerShootBullet() {
 
 	//傘から出るため
 	Vector3 translate = player_->GetUmbrellaTranslate();
@@ -208,13 +208,13 @@ void PlayerCommand::PowerShootBullet() {
 	player_->KnockBackUmbrella(kBulletKnockbackPower_ * kTwice_, kBulletSpeed_ * kTwice_);
 }
 
-void PlayerCommand::CommandShield() {
+void PlayerActions::CommandShield() {
 	//傘を開く
 	player_->OnUmbrellaShield();
 	Gliding();
 }
 
-void PlayerCommand::CommandBrink() {		
+void PlayerActions::CommandBrink() {		
 	//地面についている場合、下向きのブリンクは発動しない、ゲージも使用しない
 	if (player_->GetIsGround() && (player_->GetUmbrellaRotate().x > 0.0f && player_->GetUmbrellaRotate().x < kLeftDis_)) {
 		brinkTimer_ = 0.0f;
@@ -247,7 +247,7 @@ void PlayerCommand::CommandBrink() {
 	player_->GravityDown();//重力加速度をなしに、
 }
 
-void PlayerCommand::Gliding() {
+void PlayerActions::Gliding() {
 
 	Vector3 rotate = player_->GetUmbrellaRotate();
 	// - 滑空 - 
@@ -262,7 +262,7 @@ void PlayerCommand::Gliding() {
 	}
 }
 
-bool PlayerCommand::BrinkFlag() {
+bool PlayerActions::BrinkFlag() {
 	if (!isOneBrink_ && player_->UseGaugePoint()) {
 		brinkTimer_ = kBrinkTimeMax_;//タイマーを
 		return true;
@@ -270,13 +270,13 @@ bool PlayerCommand::BrinkFlag() {
 	return false;
 }
 
-bool PlayerCommand::BrinkTimeMax() {
+bool PlayerActions::BrinkTimeMax() {
 	if (brinkTimer_ > 0.0f) {
 		return true;
 	}
 	return false;
 }
 
-void PlayerCommand::OffShield() {
+void PlayerActions::OffShield() {
 	player_->OffUmbrellaShield();
 }
