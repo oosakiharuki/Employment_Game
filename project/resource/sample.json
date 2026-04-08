@@ -1,0 +1,169 @@
+{
+    "name": "Particle",
+    "particles": [
+        {
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 0.6000000238418579,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.5,
+                        0.5,
+                        0.5
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Ring",
+            "parameter": {
+                "basicSize": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "count": 20,
+                "frequency": 0.6000000238418579
+            },
+            "particleName": "player_damage",
+            "textureFile": "resource/Sprite/circle.dds"
+        },
+        {
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 2.0,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        -0.5,
+                        -0.5,
+                        -0.5
+                    ],
+                    "translate": [
+                        -1.0,
+                        1.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Box",
+            "parameter": {
+                "basicSize": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "count": 5,
+                "frequency": 0.15000000596046448
+            },
+            "particleName": "player_walk",
+            "textureFile": "resource/Sprite/white.dds"
+        },
+        {
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 0.25,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Cone",
+            "parameter": {
+                "basicSize": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "count": 1,
+                "frequency": 1.0
+            },
+            "particleName": "player_fire",
+            "textureFile": "resource/Sprite/Cone.dds"
+        },
+        {
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 1.0,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Ring",
+            "parameter": {
+                "basicSize": [
+                    2.0,
+                    2.0,
+                    2.0
+                ],
+                "count": 3,
+                "frequency": 0.20000000298023224
+            },
+            "particleName": "player_brink",
+            "textureFile": "resource/Sprite/white.dds"
+        }
+    ]
+}

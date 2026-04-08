@@ -142,6 +142,7 @@ void Player::Update() {
 
 	//パーティクル
 	for (auto& p : particles_) {
+		if(p.second)
 		p.second->Update();
 	}
 
@@ -415,6 +416,7 @@ void Player::Draw() {
 void Player::DrawParticle() {
 	//パーティクル
 	for (auto& particle : particles_) {
+		if (particle.second)
 		particle.second->Draw();
 	}
 }
@@ -615,9 +617,8 @@ void  Player::ParticleFire(const Vector3& translate) {
 }
 
 void  Player::ParticleBrink() {
-	Vector3 translate = GetTranslate() + TransformNormal(-kPlayerFront_, GetUmbrellaMatWorld());
-	particles_[particleBrink_]->SetTranslate(translate);
-	particles_[particleBrink_]->SetRotate(umbrellaRange_);
+	particles_[particleBrink_]->SetTranslate(transform_.translate);
+	particles_[particleBrink_]->SetRotate(transformGun_.rotate);
 	particles_[particleBrink_]->SetParticleBorn(ParticleBorn::MomentMode);
 }
 
