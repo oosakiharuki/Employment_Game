@@ -13,6 +13,11 @@ struct ParticleForGPU {
 	Vector4 color;
 };
 
+struct RandomDist {
+	float distMin = 0.0f;
+	float distMax = 0.0f;
+};
+
 /// <summary>
 /// パーティクルのパラメータ
 /// </summary>
@@ -22,6 +27,18 @@ struct ParticleData {
 	Vector4 color;              //色
 	float lifeTime;             //生存時間
 	float currentTime;          //生存用タイマー
+	
+	RandomDist distTransformT;
+	RandomDist distTransformR;
+	RandomDist distTransformS;
+
+	RandomDist distVelocityT;
+	RandomDist distVelocityR;
+	RandomDist distVelocityS;
+
+	RandomDist distColor;
+	RandomDist distLifeTime;
+	RandomDist distCurrentTime;
 };
 
 /// <summary>
@@ -33,11 +50,8 @@ struct Emitter {
 	uint32_t count;     //発生数
 	float frequency;    //発生頻度
 	float frequencyTime;//頻度時刻
-	//
 	////発生後の動き
-	//ParticleUpdater particleUpdater;
 	ParticleData particleData;
-
 };
 
 /// <summary>

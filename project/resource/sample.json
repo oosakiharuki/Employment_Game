@@ -2,6 +2,48 @@
     "name": "Particle",
     "particles": [
         {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    0.0,
+                    0.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
             "emit": {
                 "color": [
                     1,
@@ -10,7 +52,7 @@
                     1
                 ],
                 "currentTime": 0.0,
-                "lifeTime": 0.6000000238418579,
+                "lifeTime": 0.25,
                 "velocity": {
                     "rotate": [
                         0.0,
@@ -18,9 +60,9 @@
                         0.0
                     ],
                     "scale": [
-                        0.5,
-                        0.5,
-                        0.5
+                        0.0,
+                        0.0,
+                        0.0
                     ],
                     "translate": [
                         0.0,
@@ -29,20 +71,62 @@
                     ]
                 }
             },
-            "objectType": "Ring",
+            "objectType": "Cone",
             "parameter": {
                 "basicSize": [
                     1.0,
                     1.0,
                     1.0
                 ],
-                "count": 20,
-                "frequency": 0.6000000238418579
+                "count": 1,
+                "frequency": 0.10000000149011612
             },
-            "particleName": "player_damage",
-            "textureFile": "resource/Sprite/circle.dds"
+            "particleName": "enemy_fire",
+            "textureFile": "resource/Sprite/cone.dds"
         },
         {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    -1.0,
+                    1.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        360.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        -0.5,
+                        0.5
+                    ]
+                }
+            },
             "emit": {
                 "color": [
                     1,
@@ -64,8 +148,8 @@
                         -0.5
                     ],
                     "translate": [
-                        -1.0,
-                        1.0,
+                        0.0,
+                        0.0,
                         0.0
                     ]
                 }
@@ -84,6 +168,131 @@
             "textureFile": "resource/Sprite/white.dds"
         },
         {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    0.0,
+                    0.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        360.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 0.6000000238418579,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        5.0,
+                        5.0,
+                        5.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Ring",
+            "parameter": {
+                "basicSize": [
+                    0.25,
+                    4.0,
+                    0.25
+                ],
+                "count": 10,
+                "frequency": 0.6000000238418579
+            },
+            "particleName": "player_damage",
+            "textureFile": "resource/Sprite/circle.dds"
+        },
+        {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    0.0,
+                    0.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
             "emit": {
                 "color": [
                     1,
@@ -125,6 +334,131 @@
             "textureFile": "resource/Sprite/Cone.dds"
         },
         {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    0.0,
+                    0.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 0.10000000149011612,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Beam",
+            "parameter": {
+                "basicSize": [
+                    0.10000000149011612,
+                    0.10000000149011612,
+                    0.10000000149011612
+                ],
+                "count": 1,
+                "frequency": 0.009999999776482582
+            },
+            "particleName": "tullet_laser",
+            "textureFile": "resource/Sprite/3YvXH.dds"
+        },
+        {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    0.0,
+                    0.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        -2.0,
+                        2.0
+                    ]
+                }
+            },
             "emit": {
                 "color": [
                     1,
@@ -141,9 +475,92 @@
                         0.0
                     ],
                     "scale": [
-                        2.0,
-                        2.0,
-                        2.0
+                        -0.20000000298023224,
+                        -0.20000000298023224,
+                        -0.20000000298023224
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Sphere",
+            "parameter": {
+                "basicSize": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "count": 3,
+                "frequency": 0.10000000149011612
+            },
+            "particleName": "player_dead",
+            "textureFile": "resource/Sprite/white.dds"
+        },
+        {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    0.0,
+                    0.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 0.5,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        10.0,
+                        10.0,
+                        10.0
                     ],
                     "translate": [
                         0.0,
@@ -155,14 +572,512 @@
             "objectType": "Ring",
             "parameter": {
                 "basicSize": [
-                    2.0,
-                    2.0,
-                    2.0
+                    0.5,
+                    0.5,
+                    0.5
                 ],
-                "count": 3,
-                "frequency": 0.20000000298023224
+                "count": 5,
+                "frequency": 0.05000000074505806
             },
             "particleName": "player_brink",
+            "textureFile": "resource/Sprite/gradationLine.dds"
+        },
+        {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    0.0,
+                    0.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        360.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 0.6000000238418579,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        5.0,
+                        5.0,
+                        5.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Ring",
+            "parameter": {
+                "basicSize": [
+                    0.25,
+                    4.0,
+                    0.25
+                ],
+                "count": 10,
+                "frequency": 0.6000000238418579
+            },
+            "particleName": "enemy_damage",
+            "textureFile": "resource/Sprite/circle.dds"
+        },
+        {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    0.0,
+                    0.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 0.5,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.5,
+                        0.5
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Cone",
+            "parameter": {
+                "basicSize": [
+                    2.0,
+                    0.20000000298023224,
+                    2.0
+                ],
+                "count": 1,
+                "frequency": 0.5
+            },
+            "particleName": "player_parry",
+            "textureFile": "resource/Sprite/white.dds"
+        },
+        {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    0.10000000149011612,
+                    0.4000000059604645
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        360.0
+                    ],
+                    "scale": [
+                        -0.25,
+                        -0.009999999776482582
+                    ],
+                    "translate": [
+                        -10.0,
+                        10.0
+                    ]
+                }
+            },
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 0.0,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Box",
+            "parameter": {
+                "basicSize": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "count": 3,
+                "frequency": 0.009999999776482582
+            },
+            "particleName": "enemies_summon",
+            "textureFile": "resource/Sprite/white.dds"
+        },
+        {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    0.0,
+                    0.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 0.5,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Cone",
+            "parameter": {
+                "basicSize": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "count": 1,
+                "frequency": 0.5
+            },
+            "particleName": "title_bullet",
+            "textureFile": "resource/Sprite/cone.dds"
+        },
+        {
+            "dist": {
+                "color": [
+                    0.0,
+                    1.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.20000000298023224
+                ],
+                "lifeTime": [
+                    0.0,
+                    1.5
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        360.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        -1.5,
+                        1.5
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        -1.5,
+                        1.5
+                    ]
+                }
+            },
+            "emit": {
+                "color": [
+                    0,
+                    0,
+                    0,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 1.5,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        5.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Plane",
+            "parameter": {
+                "basicSize": [
+                    0.25,
+                    0.25,
+                    0.25
+                ],
+                "count": 10,
+                "frequency": 1.5
+            },
+            "particleName": "clear_fanfare",
+            "textureFile": "resource/Sprite/white.dds"
+        },
+        {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    -1.0,
+                    0.5
+                ],
+                "lifeTime": [
+                    0.0,
+                    0.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        -3.0,
+                        3.0
+                    ]
+                }
+            },
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 1.0,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        -0.05000000074505806,
+                        -0.05000000074505806,
+                        -0.05000000074505806
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Box",
+            "parameter": {
+                "basicSize": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "count": 5,
+                "frequency": 1.0
+            },
+            "particleName": "player_jump",
             "textureFile": "resource/Sprite/white.dds"
         }
     ]

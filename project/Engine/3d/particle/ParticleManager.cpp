@@ -346,6 +346,36 @@ void ParticleManager::InitializeParameter() {
 		particleData.currentTime = emit["currentTime"];
 
 		particle.particleData = particleData;
+
+		nlohmann::json dist = object["dist"];
+		particle.particleData.distTransformT.distMin = dist["transform"]["translate"][0];
+		particle.particleData.distTransformT.distMax = dist["transform"]["translate"][1];
+
+		particle.particleData.distTransformR.distMin = dist["transform"]["rotate"][0];
+		particle.particleData.distTransformR.distMax = dist["transform"]["rotate"][1];
+
+		particle.particleData.distTransformS.distMin = dist["transform"]["scale"][0];
+		particle.particleData.distTransformS.distMax = dist["transform"]["scale"][1];
+
+
+		particle.particleData.distVelocityT.distMin = dist["velocity"]["translate"][0];
+		particle.particleData.distVelocityT.distMax = dist["velocity"]["translate"][1];
+
+		particle.particleData.distVelocityR.distMin = dist["velocity"]["rotate"][0];
+		particle.particleData.distVelocityR.distMax = dist["velocity"]["rotate"][1];
+
+		particle.particleData.distVelocityS.distMin = dist["velocity"]["scale"][0];
+		particle.particleData.distVelocityS.distMax = dist["velocity"]["scale"][1];
+
+
+		particle.particleData.distColor.distMin = dist["color"][0];
+		particle.particleData.distColor.distMax = dist["color"][1];
+
+		particle.particleData.distLifeTime.distMin = dist["lifeTime"][0];
+		particle.particleData.distLifeTime.distMax = dist["lifeTime"][1];
+
+		particle.particleData.distCurrentTime.distMin = dist["currentTime"][0];
+		particle.particleData.distCurrentTime.distMax = dist["currentTime"][1];
 	}
 }
 
@@ -441,6 +471,22 @@ void ParticleManager::ParameterImGui() {
 
 			ImGui::InputFloat("emit_currentTime", &parameter.second.particleData.currentTime);
 
+
+			ImGui::InputFloat2("DistTransllate", &parameter.second.particleData.distTransformT.distMin);
+			ImGui::InputFloat2("DistTransformT", &parameter.second.particleData.distTransformT.distMin);
+			ImGui::InputFloat2("DistTransformT", &parameter.second.particleData.distTransformT.distMin);
+
+			ImGui::InputFloat2("DistTransformR", &parameter.second.particleData.distTransformR.distMin);
+			ImGui::InputFloat2("DistTransformS", &parameter.second.particleData.distTransformS.distMin);
+			ImGui::InputFloat2("DistVelocityT", &parameter.second.particleData.distVelocityT.distMin);
+			ImGui::InputFloat2("DistVelocityR", &parameter.second.particleData.distVelocityR.distMin);
+			ImGui::InputFloat2("DistVelocityS", &parameter.second.particleData.distVelocityS.distMin);
+			ImGui::InputFloat2("DistColor", &parameter.second.particleData.distColor.distMin);
+			ImGui::InputFloat2("DistLifeTime", &parameter.second.particleData.distLifeTime.distMin);
+			ImGui::InputFloat2("DistCurrentTime", &parameter.second.particleData.distCurrentTime.distMin);
+
+
+
 			parameter.second.count = nowCount;
 			changeParameter = parameter.second;//変更した値を挿入
 
@@ -491,6 +537,32 @@ void ParticleManager::ParameterImGui() {
 				jsonFile["particles"][i]["emit"]["lifeTime"] = changeParameter.particleData.lifeTime;
 				jsonFile["particles"][i]["emit"]["currentTime"] = changeParameter.particleData.currentTime;
 
+
+				jsonFile["particles"][i]["dist"]["transform"]["translate"][0] = DecimalPointCut(changeParameter.particleData.distTransformT.distMin);
+				jsonFile["particles"][i]["dist"]["transform"]["translate"][1] = DecimalPointCut(changeParameter.particleData.distTransformT.distMax);
+				jsonFile["particles"][i]["dist"]["transform"]["rotate"][0] = DecimalPointCut(changeParameter.particleData.distTransformR.distMin);
+				jsonFile["particles"][i]["dist"]["transform"]["rotate"][1] = DecimalPointCut(changeParameter.particleData.distTransformR.distMax);
+				jsonFile["particles"][i]["dist"]["transform"]["scale"][0] = DecimalPointCut(changeParameter.particleData.distTransformS.distMin);
+				jsonFile["particles"][i]["dist"]["transform"]["scale"][1] = DecimalPointCut(changeParameter.particleData.distTransformS.distMax);
+
+				jsonFile["particles"][i]["dist"]["velocity"]["translate"][0] = DecimalPointCut(changeParameter.particleData.distVelocityT.distMin);
+				jsonFile["particles"][i]["dist"]["velocity"]["translate"][1] = DecimalPointCut(changeParameter.particleData.distVelocityT.distMax);
+				jsonFile["particles"][i]["dist"]["velocity"]["rotate"][0] = DecimalPointCut(changeParameter.particleData.distVelocityR.distMin);
+				jsonFile["particles"][i]["dist"]["velocity"]["rotate"][1] = DecimalPointCut(changeParameter.particleData.distVelocityR.distMax);
+				jsonFile["particles"][i]["dist"]["velocity"]["scale"][0] = DecimalPointCut(changeParameter.particleData.distVelocityS.distMin);
+				jsonFile["particles"][i]["dist"]["velocity"]["scale"][1] = DecimalPointCut(changeParameter.particleData.distVelocityS.distMax);
+
+
+				jsonFile["particles"][i]["dist"]["color"][0] = DecimalPointCut(changeParameter.particleData.distColor.distMin);
+				jsonFile["particles"][i]["dist"]["color"][1] = DecimalPointCut(changeParameter.particleData.distColor.distMax);
+
+				jsonFile["particles"][i]["dist"]["lifeTime"][0] = DecimalPointCut(changeParameter.particleData.distLifeTime.distMin);
+				jsonFile["particles"][i]["dist"]["lifeTime"][1] = DecimalPointCut(changeParameter.particleData.distLifeTime.distMax);
+
+				jsonFile["particles"][i]["dist"]["currentTime"][0] = DecimalPointCut(changeParameter.particleData.distCurrentTime.distMin);
+				jsonFile["particles"][i]["dist"]["currentTime"][1] = DecimalPointCut(changeParameter.particleData.distCurrentTime.distMax);
+
+
 			}
 			else {
 				jsonFile["particles"][i]["particleName"] = parameter.second.name;
@@ -525,6 +597,32 @@ void ParticleManager::ParameterImGui() {
 
 				jsonFile["particles"][i]["emit"]["lifeTime"] = parameter.second.particleData.lifeTime;
 				jsonFile["particles"][i]["emit"]["currentTime"] = parameter.second.particleData.currentTime;
+
+
+				jsonFile["particles"][i]["dist"]["transform"]["translate"][0] = DecimalPointCut(parameter.second.particleData.distTransformT.distMin);
+				jsonFile["particles"][i]["dist"]["transform"]["translate"][1] = DecimalPointCut(parameter.second.particleData.distTransformT.distMax);
+				jsonFile["particles"][i]["dist"]["transform"]["rotate"][0] = DecimalPointCut(parameter.second.particleData.distTransformR.distMin);
+				jsonFile["particles"][i]["dist"]["transform"]["rotate"][1] = DecimalPointCut(parameter.second.particleData.distTransformR.distMax);
+				jsonFile["particles"][i]["dist"]["transform"]["scale"][0] = DecimalPointCut(parameter.second.particleData.distTransformS.distMin);
+				jsonFile["particles"][i]["dist"]["transform"]["scale"][1] = DecimalPointCut(parameter.second.particleData.distTransformS.distMax);
+
+				jsonFile["particles"][i]["dist"]["velocity"]["translate"][0] = DecimalPointCut(parameter.second.particleData.distVelocityT.distMin);
+				jsonFile["particles"][i]["dist"]["velocity"]["translate"][1] = DecimalPointCut(parameter.second.particleData.distVelocityT.distMax);
+				jsonFile["particles"][i]["dist"]["velocity"]["rotate"][0] = DecimalPointCut(parameter.second.particleData.distVelocityR.distMin);
+				jsonFile["particles"][i]["dist"]["velocity"]["rotate"][1] = DecimalPointCut(parameter.second.particleData.distVelocityR.distMax);
+				jsonFile["particles"][i]["dist"]["velocity"]["scale"][0] = DecimalPointCut(parameter.second.particleData.distVelocityS.distMin);
+				jsonFile["particles"][i]["dist"]["velocity"]["scale"][1] = DecimalPointCut(parameter.second.particleData.distVelocityS.distMax);
+
+
+				jsonFile["particles"][i]["dist"]["color"][0] = DecimalPointCut(parameter.second.particleData.distColor.distMin);
+				jsonFile["particles"][i]["dist"]["color"][1] = DecimalPointCut(parameter.second.particleData.distColor.distMax);
+
+				jsonFile["particles"][i]["dist"]["lifeTime"][0] = DecimalPointCut(parameter.second.particleData.distLifeTime.distMin);
+				jsonFile["particles"][i]["dist"]["lifeTime"][1] = DecimalPointCut(parameter.second.particleData.distLifeTime.distMax);
+
+				jsonFile["particles"][i]["dist"]["currentTime"][0] = DecimalPointCut(parameter.second.particleData.distCurrentTime.distMin);
+				jsonFile["particles"][i]["dist"]["currentTime"][1] = DecimalPointCut(parameter.second.particleData.distCurrentTime.distMax);
+
 			}
 			i++;
 		}

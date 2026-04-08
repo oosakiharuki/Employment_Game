@@ -129,8 +129,9 @@ void PlayerActions::UmbrellaRange(float direction) {
 void PlayerActions::CommandJump() {
 	if (player_->GetIsGround()) {
 		jumpPower_ = kJumpPowerMax_;
+		player_->ParticleJump();//ジャンプのパーティクル
 	}
-	player_->IsGround(false);
+	player_->IsGround(false);	
 }
 
 void PlayerActions::CommandFire() {
@@ -218,17 +219,19 @@ void PlayerActions::CommandBrink() {
 	//地面についている場合、下向きのブリンクは発動しない、ゲージも使用しない
 	if (player_->GetIsGround() && (player_->GetUmbrellaRotate().x > 0.0f && player_->GetUmbrellaRotate().x < kLeftDis_)) {
 		brinkTimer_ = 0.0f;
+		player_->StopParticleBrink();
 		return;
 	}
 
 	//傘を開く
 	player_->OnUmbrellaShield();
 
-	//飛んだ瞬間後ろにパーティクルをだす
+	//飛んだ瞬間
 	if (brinkTimer_ == kBrinkTimeMax_) {
-		player_->ParticleBrink();
 		player_->SubGaugePoint();//ゲージポイント減少
 	}
+	player_->ParticleBrink();
+
 	brinkTimer_ -= kDeltaTime_;
 	isOneBrink_ = true;//ブリンク一回目
 
@@ -240,9 +243,11 @@ void PlayerActions::CommandBrink() {
 
 	//時間が経過したら
 	if (brinkTimer_ <= 0.0f) {
-		OffShield();//シールド解除
+		OffShield();//シールド解除	
 	}
-
+	if (brinkTimer_ <= kBrinkTimeMax_ * kDivideByTwo_) {
+		player_->StopParticleBrink();
+	}
 	jumpPower_ = 0.0f;//ジャンプによるの加算はされない
 	player_->GravityDown();//重力加速度をなしに、
 }

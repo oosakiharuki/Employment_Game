@@ -56,10 +56,6 @@ void EventTrigger::EventUpdate() {
 		(summonTimer_ > 0) ? particle->SetParticleBorn(ParticleBorn::TimerMode) : particle->SetParticleBorn(ParticleBorn::Stop);
 		particle->Update();
 	}
-	//敵が出終わった後ちょっとしてからリセットする
-	if (summonTimer_ <= -ParticleManager::GetInstance().GetParticleParameter(particleSummon_).frequency * kTwice_) {
-		summon_particles_.clear();
-	}
 }
 
 void EventTrigger::Draw() {
@@ -137,6 +133,8 @@ void EventTrigger::WaveEnemyCount() {
 		enemyBornCount_ = 0;
 		//Maxに戻す
 		summonTimer_ = kSummonMaxTime_;
+		//発生源をクリアする
+		summon_particles_.clear();
 	}
 }
 
