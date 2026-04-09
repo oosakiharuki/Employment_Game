@@ -119,12 +119,8 @@ void GameScene::PlayerAliveUpdate() {
 
 void GameScene::Draw() {
 	//モデル描画処理
-	GLTFCommon::GetInstance().Command();
+	GLTFCommon::GetInstance().Command();	
 	backGround->Draw();
-	
-	for (auto& eventTrigger : eventTriggers_) {
-		eventTrigger->Draw();
-	}
 
 	if (boss_) {
 		boss_->Draw();
@@ -151,6 +147,13 @@ void GameScene::Draw() {
 	startWarp_->Draw();
 	
 	player_->Draw();
+
+	//モデル描画処理
+	GLTFCommon::GetInstance().Command();
+	//敵ラッシュイベント描画
+	for (auto& eventTrigger : eventTriggers_) {
+		eventTrigger->Draw();
+	}
 
 	//パーティクル描画処理
 	ParticleCommon::GetInstance().Command();

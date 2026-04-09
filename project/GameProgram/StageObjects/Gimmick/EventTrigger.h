@@ -202,4 +202,6 @@ private:
 	/// <param name="enemyData">LevelEditorからもらった敵データ</param>
 	void EnemyMoveRoute(EnemyMoveCommand& enemy, EnemyPopData enemyData);
 
+	//半透明に
+	Vector4 color_ = { 1,1,1,0.9f };
 };

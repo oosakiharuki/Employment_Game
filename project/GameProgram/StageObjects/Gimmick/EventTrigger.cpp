@@ -49,6 +49,7 @@ void EventTrigger::EventUpdate() {
 	transform_.translate = eventData_.center;
 	transform_.scale = eventData_.size * kDivideByTwo_;
 	wt_.UpdateMatrix(transform_);
+	object_->SetColor(color_);//色を薄く
 	object_->Update(wt_);
 
 	for (auto& particle : summon_particles_) {

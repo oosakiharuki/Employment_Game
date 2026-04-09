@@ -430,31 +430,31 @@ void ParticleManager::ParameterImGui() {
 
 			ImGui::InputInt("count", &nowCount);
 
-			//ファイル名を変更したいとき
-			if (ImGui::Button("ChangeTextureFile")) {
-				parameter.second.textureFile = "";
-			}//ファイル名がないのならば
-			else if (parameter.second.textureFile == "") {
+			//ファイル名がないのならば
+			if (parameter.second.textureFile == "") {
 				ImGui::InputText("textureFile", textureFileName, IM_ARRAYSIZE(textureFileName));
 				if (ImGui::Button("テクスチャ変更決定")) {
 					parameter.second.textureFile = textureFileName;//入力したファイル名になる
 				}
 			}
-			else {
+			else {//ファイル名を変更したいとき
+				if (ImGui::Button("ChangeTextureFile")) {
+					parameter.second.textureFile = "";
+				}
 				ImGui::Text("%s", parameter.second.textureFile.c_str());//ファイル名
 			}
 			
-			//オブジェクトタイプを変更したいとき
-			if (ImGui::Button("ChangeObjectName")) {
-				parameter.second.objectName = "";
-			}//オブジェクトタイプがないのならば
-			else if (parameter.second.objectName == "") {
+			//オブジェクトタイプがないのならば
+			if (parameter.second.objectName == "") {
 				ImGui::InputText("objectName", objectName, IM_ARRAYSIZE(objectName));
 				if (ImGui::Button("オブジェクトタイプ変更決定")) {
 					parameter.second.objectName = objectName;//入力したオブジェクトタイプになる
 				}
 			}
-			else {
+			else {//オブジェクトタイプを変更したいとき
+				if (ImGui::Button("ChangeObjectName")) {
+					parameter.second.objectName = "";
+				}
 				ImGui::Text("%s", parameter.second.objectName.c_str());//オブジェクトタイプ
 			}
 
@@ -499,7 +499,7 @@ void ParticleManager::ParameterImGui() {
 		nlohmann::json jsonFile;
 
 		jsonFile["name"] = "Particle";
-		
+
 		uint32_t i = 0;
 		for (auto& parameter : particleParameters_) {
 			//imGuiNameで選択したパラメータを変更した値を上書き保存
