@@ -75,6 +75,7 @@ void Player::InitMainBody() {
 
 void Player::InitParticles() {
 	particles_[particleWalk_] = ParticleManager::GetInstance().InitParticle(particleWalk_);
+	particles_[particleJump_] = ParticleManager::GetInstance().InitParticle(particleJump_);
 	particles_[particleBrink_] = ParticleManager::GetInstance().InitParticle(particleBrink_);
 	particles_[particleFire_] = ParticleManager::GetInstance().InitParticle(particleFire_);
 	particles_[particleDamage_] = ParticleManager::GetInstance().InitParticle(particleDamage_);
@@ -142,6 +143,7 @@ void Player::Update() {
 
 	//パーティクル
 	for (auto& p : particles_) {
+		if(p.second)
 		p.second->Update();
 	}
 
@@ -221,7 +223,7 @@ void Player::SmockParticle() {
 	if (isGround_ && IsMovePosition()) {
 		// 歩く煙パーティクル
 		particles_[particleWalk_]->SetParticleBorn(ParticleBorn::TimerMode);
-		particles_[particleWalk_]->SetTranslate(transform_.translate + TransformNormal(Vector3{ 0.0f,-1.0f,-0.3f }, wt_.GetMatWorld()));
+		particles_[particleWalk_]->SetTranslate(transform_.translate + TransformNormal(kParticleWalkPoint_, wt_.GetMatWorld()));
 	}
 	else {
 		particles_[particleWalk_]->SetParticleBorn(ParticleBorn::Stop);
@@ -415,6 +417,7 @@ void Player::Draw() {
 void Player::DrawParticle() {
 	//パーティクル
 	for (auto& particle : particles_) {
+		if (particle.second)
 		particle.second->Draw();
 	}
 }
@@ -463,11 +466,11 @@ void Player::OnCollision(CollisionSource* collision) {
 		value_ = move_ - preMove_;
 
 		//乗っている場合
-		if (collisionOverlap.isGround && !Input::GetInstance().TriggerKey(DIK_SPACE)) {
+		if (collisionOverlap.isGround && !Input::GetInstance().TriggerKey(DIK_SPACE) && !Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) {
 			//当たり判定で離れないように
 			value_.y -= kMoveGroundUnder_;
+			isMoveGround_ = true;
 		}
-		isMoveGround_ = true;
 	}
 
 	if (collision->GetType() == CollisionTypes::TypeEvent) {
@@ -614,11 +617,21 @@ void  Player::ParticleFire(const Vector3& translate) {
 	particles_[particleFire_]->SetParticleBorn(ParticleBorn::MomentMode);
 }
 
+void  Player::ParticleJump() {
+	particles_[particleJump_]->SetTranslate(transform_.translate + TransformNormal(kParticleWalkPoint_, wt_.GetMatWorld()));
+	particles_[particleJump_]->SetParticleBorn(ParticleBorn::MomentMode);
+}
+
 void  Player::ParticleBrink() {
-	Vector3 translate = GetTranslate() + TransformNormal(-kPlayerFront_, GetUmbrellaMatWorld());
-	particles_[particleBrink_]->SetTranslate(translate);
-	particles_[particleBrink_]->SetRotate(umbrellaRange_);
-	particles_[particleBrink_]->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleBrink_]->SetTranslate(transform_.translate);
+	Vector3 rotate = transformGun_.rotate;
+	rotate += TransformNormal(kLookToCameraDirection_,wtGun_.GetMatWorld());
+	particles_[particleBrink_]->SetRotate(rotate);
+	particles_[particleBrink_]->SetParticleBorn(ParticleBorn::TimerMode);
+}
+
+void Player::StopParticleBrink() {
+	particles_[particleBrink_]->SetParticleBorn(ParticleBorn::Stop);
 }
 
 void Player::GravityDown() {
@@ -650,7 +663,7 @@ void Player::SpriteUpdate() {
 	//追加の操作
 #ifdef _DEBUG
 	//強化ゲージ
-	if (Input::GetInstance().TriggerKey(DIK_T)) {
+	if (Input::GetInstance().PushKey(DIK_T)) {
 		reinforceGauge_->AddPoint();
 	}
 	

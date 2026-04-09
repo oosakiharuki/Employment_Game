@@ -226,6 +226,43 @@ namespace MyMath {
 		return v;
 	}
 
+	Vector4 operator+(const Vector4& v1, const Vector4& v2) {
+		Vector4 result;
+		result.x = v1.x + v2.x;
+		result.y = v1.y + v2.y;
+		result.z = v1.z + v2.z;
+		result.s = v1.s + v2.s;
+		return result;
+	}
+
+	Vector4 operator-(const Vector4& v1, const Vector4& v2) {
+		Vector4 result;
+		result.x = v1.x - v2.x;
+		result.y = v1.y - v2.y;
+		result.z = v1.z - v2.z;
+		result.s = v1.s - v2.s;
+		return result;
+	}
+
+	Vector4 operator*(const Vector4& v1, const Vector4& v2) {
+		Vector4 result;
+		result.x = v1.x * v2.x;
+		result.y = v1.y * v2.y;
+		result.z = v1.z * v2.z;
+		result.s = v1.s * v2.s;
+		return result;
+	}
+
+	Vector4 operator/(const Vector4& v1, const Vector4& v2) {
+		Vector4 result;
+		result.x = v1.x / v2.x;
+		result.y = v1.y / v2.y;
+		result.z = v1.z / v2.z;
+		result.s = v1.s / v2.s;
+		return result;
+	}
+
+
 	bool operator==(const Vector3& v1, const Vector3& v2) {
 		if (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z) {
 			return true;

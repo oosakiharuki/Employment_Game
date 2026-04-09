@@ -49,16 +49,13 @@ void EventTrigger::EventUpdate() {
 	transform_.translate = eventData_.center;
 	transform_.scale = eventData_.size * kDivideByTwo_;
 	wt_.UpdateMatrix(transform_);
+	object_->SetColor(color_);//色を薄く
 	object_->Update(wt_);
 
 	for (auto& particle : summon_particles_) {
 		//敵が出るまで
 		(summonTimer_ > 0) ? particle->SetParticleBorn(ParticleBorn::TimerMode) : particle->SetParticleBorn(ParticleBorn::Stop);
 		particle->Update();
-	}
-	//敵が出終わった後ちょっとしてからリセットする
-	if (summonTimer_ <= -ParticleManager::GetInstance().GetParticleParameter(particleSummon_).frequency * kTwice_) {
-		summon_particles_.clear();
 	}
 }
 
@@ -137,6 +134,8 @@ void EventTrigger::WaveEnemyCount() {
 		enemyBornCount_ = 0;
 		//Maxに戻す
 		summonTimer_ = kSummonMaxTime_;
+		//発生源をクリアする
+		summon_particles_.clear();
 	}
 }
 

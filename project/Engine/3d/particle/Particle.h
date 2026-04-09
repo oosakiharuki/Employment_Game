@@ -12,34 +12,46 @@ struct ParticleForGPU {
 	Matrix4x4 World;
 	Vector4 color;
 };
-/// <summary>
-/// Transform移動/回転/スケールそれぞれの速度の構造体
-/// </summary>
-struct VelocityTransform {
-	Vector3 scale;
-	Vector3 rotate;
-	Vector3 translate;
+
+struct RandomDist {
+	float distMin = 0.0f;
+	float distMax = 0.0f;
 };
 
 /// <summary>
 /// パーティクルのパラメータ
 /// </summary>
 struct ParticleData {
-	Transform transform;
-	VelocityTransform velocityTransform;
-	Vector4 color;
-	float lifeTime;
-	float currentTime;
+	Transform transform;        //発生場所(ゲームの方から代入される)
+	Transform velocityTransform;//追加移動
+	Vector4 color;              //色
+	float lifeTime;             //生存時間
+	float currentTime;          //生存用タイマー
+	
+	RandomDist distTransformT;
+	RandomDist distTransformR;
+	RandomDist distTransformS;
+
+	RandomDist distVelocityT;
+	RandomDist distVelocityR;
+	RandomDist distVelocityS;
+
+	RandomDist distColor;
+	RandomDist distLifeTime;
+	RandomDist distCurrentTime;
 };
 
 /// <summary>
 /// エミッター
 /// </summary>
 struct Emitter {
-	Transform transform;
-	uint32_t count; //発生数
-	float frequency; //発生頻度
-	float frequencyTime; //頻度時刻
+	//発生用処理
+	Transform transform;//発生場所
+	uint32_t count;     //発生数
+	float frequency;    //発生頻度
+	float frequencyTime;//頻度時刻
+	////発生後の動き
+	ParticleData particleData;
 };
 
 /// <summary>
@@ -62,6 +74,8 @@ struct ParticleParameters {
 	uint32_t count;          //生成数
 	float frequency;         //頻度 / 生存時間
 	Vector3 basicSize;       //基本サイズ
+
+	ParticleData particleData;
 };
 
 /// <summary>
@@ -146,6 +160,8 @@ public:
 	/// </summary>
 	/// <param name="count">発生数を決める</param>
 	void SetParticleCount(uint32_t count) { emitter_.count = count; }
+
+	void SetParticleUpdater(ParticleData particleUpdater) { emitter_.particleData = particleUpdater; }
 
 private:
 

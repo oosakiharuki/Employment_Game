@@ -200,4 +200,10 @@ private:
 	/// <param name="value"></param>
 	/// <returns></returns>
 	double DecimalPointCut(float value);
+
+
+	//デバッグで変更する文字列
+	char objectName[1024 * 160] = "";
+	char textureFileName[1024 * 160] = "";
+
 };

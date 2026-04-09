@@ -81,4 +81,7 @@ public:
 private:
 
 	PlayerActions* playerActions_ = nullptr;
+
+	//入力中処理
+	bool isInput_ = false;
 };

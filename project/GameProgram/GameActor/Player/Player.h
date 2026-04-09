@@ -149,6 +149,16 @@ public:
 	void ParticleBrink();
 
 	/// <summary>
+	/// パーティクルジャンプ
+	/// </summary>
+	void ParticleJump();
+
+	/// <summary>
+	/// パーティクルブリンクを止める
+	/// </summary>
+	void StopParticleBrink();
+
+	/// <summary>
 	/// プレイヤーが動いているか判定
 	/// </summary>
 	/// <returns></returns>
@@ -369,8 +379,12 @@ private:
 	//-パーティクル-
 	//歩く
 	const std::string& particleWalk_ = "player_walk";
+	const Vector3 kParticleWalkPoint_ = { 0.0f,-1.0f,-0.3f };
+	//ジャンプ
+	const std::string& particleJump_ = "player_jump";
 	//ブリンク
 	const std::string& particleBrink_ = "player_brink";
+	const Vector3 kLookToCameraDirection_ = { 0.0f,15.0f,0.0f };//カメラから見やすくする
 	//撃つ
 	const std::string& particleFire_ = "player_fire";
 	//ダメージを食らった
@@ -404,9 +418,6 @@ private:
 	Vector3 eventMin{};
 	Vector3 eventMax{};
 
-	//ステートパターン
-	//プレイヤーの操作アクション用
-	//std::unique_ptr<BasePlayerState> actionState_;
 	//リスポーンフラグ
 	bool isRespawn_ = false;
 
@@ -427,7 +438,7 @@ private:
 	Vector3 preMove_ = {0,0,0};
 	Vector3 value_;
 	bool isMoveGround_ = false;
-	const float kMoveGroundUnder_ = 0.5f;//離れないように少し下げる
+	const float kMoveGroundUnder_ = 0.25f;//離れないように少し下げる
 
 
 	std::unique_ptr<ReinforceGauge> reinforceGauge_ = nullptr;

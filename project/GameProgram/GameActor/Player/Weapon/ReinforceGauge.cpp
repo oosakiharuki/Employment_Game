@@ -65,9 +65,13 @@ void ReinforceGauge::Update() {
 		UIManager::GetInstance().FrameSprite(&*gaugePointSprite);
 	}
 
+#ifdef USE_IMGUI
+
 	ImGui::Begin("gauge");
 	ImGui::Text("gaugePoint %f",float(gaugePoint_));
 	ImGui::End();
+
+#endif // USE_IMGUI
 
 }
 

@@ -236,6 +236,11 @@ namespace MyMath {
 	Vector3& operator*=(Vector3& v, float f);
 	Vector3& operator/=(Vector3& v, float f);
 
+	Vector4 operator+(const Vector4& v1, const Vector4& v2);
+	Vector4 operator-(const Vector4& v1, const Vector4& v2);
+	Vector4 operator*(const Vector4& v1, const Vector4& v2);
+	Vector4 operator/(const Vector4& v1, const Vector4& v2);
+
 	bool operator==(const Vector3& v1, const Vector3& v2);
 	bool operator!=(const Vector3& v1, const Vector3& v2);
 	bool operator<=(const Vector3& v1, const Vector3& v2);

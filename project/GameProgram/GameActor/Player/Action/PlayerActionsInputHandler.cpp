@@ -45,6 +45,16 @@ void BrinkCommand::Execute(PlayerActions* player) {
 	player->CommandBrink();
 }
 std::unique_ptr<Command> PlayerActionsInputHandler::GetCommand() {
+
+
+	if (Input::GetInstance().TriggerKey(DIK_F4)) {
+		isInput_ = !isInput_;
+	}
+
+	if (isInput_) {
+		return nullptr;
+	}
+
 	//ブリンク [Jキー、Bボタン + ブリンクの発動条件、発動中はタイマーが切れるまで]
 	if (((Input::GetInstance().TriggerKey(DIK_J) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_B)) && playerActions_->BrinkFlag()) || playerActions_->BrinkTimeMax()) {
 		return std::make_unique<BrinkCommand>();
