@@ -6,6 +6,7 @@
 #include "BrokenBox.h"
 #include "Needle.h"
 #include "MoveGround.h"
+#include "Energy.h"
 
 using namespace MyMath;
 
@@ -155,6 +156,11 @@ std::list<std::unique_ptr<IStageObject>> SpitOutLevelEditor::SpitOutStageObject(
 				stageObject->SetTravelRoute(stageObjectData.transform.translate,
 					stageObjectData.transform.translate + stageObjectData.leftPoint,
 					stageObjectData.transform.translate + stageObjectData.rightPoint);
+				stageObjects.push_back(std::move(stageObject));
+			}
+			else if (stageObjectData.ObjectName == "Energy") {
+				std::unique_ptr<Energy>stageObject = std::make_unique<Energy>();
+				SettingStageObject(*stageObject.get(), stageObjectData);
 				stageObjects.push_back(std::move(stageObject));
 			}
 		}

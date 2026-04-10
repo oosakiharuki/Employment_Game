@@ -479,6 +479,11 @@ void Player::OnCollision(CollisionSource* collision) {
 		eventMax = collision->GetAABB().max - transform_.scale;
 		isEvent_ = true;
 	}
+
+	//チャージポイントに触れるとゲージがマックスになる
+	if (collision->GetType() == CollisionTypes::TypeEnergy) {
+		reinforceGauge_->AddPoint();
+	}
 }
 
 bool Player::TypeCheckUp(const CollisionTypes& collisionType) {
@@ -492,7 +497,8 @@ bool Player::TypeCheckUp(const CollisionTypes& collisionType) {
 		collisionType == CollisionTypes::TypeBoss ||
 		collisionType == CollisionTypes::TypeStage || 
 		collisionType == CollisionTypes::TypeMoveGround ||
-		collisionType == CollisionTypes::TypeEvent) {
+		collisionType == CollisionTypes::TypeEvent || 
+		collisionType == CollisionTypes::TypeEnergy) {
 		return true;
 	}
 	return false;

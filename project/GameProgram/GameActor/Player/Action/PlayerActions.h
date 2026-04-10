@@ -108,6 +108,13 @@ private:
 	void PowerShootBullet();
 
 	/// <summary>
+	/// 弾の生成
+	/// </summary>
+	/// <param name="translate">傘から出るため</param>
+	/// <param name="velocity">弾丸速度</param>
+	void BornBullet(const Vector3& translate, const Vector3& velocity);
+
+	/// <summary>
 	/// 滑空処理
 	/// </summary>
 	void Gliding();
@@ -147,7 +154,14 @@ private:
 	const float kFireCoolTimeMax_ = 0.5f;//クールタイム最大時間
 	const uint32_t kBulletCount_ = 3;//一度に出る弾丸数
 	
+	//真ん中を0にする値(3の場合、1,0,-1 | 5の場合、2,1,0,-1,-2)
+	float halfCount = float((kBulletCount_ - 1) * 0.5f);//二で割る
+
 	const Vector3 kBulletKnockbackPower_ = { 0.0f,0.0f,0.1f };//撃った場合のノックバックパワー
+
+	const uint32_t kPowerBulletCount_ = 2;
+	bool isCount_ = false;//一回のみ
+
 
 	//傘の位置設定時に使う
 	const float kBrinkPower_ = 1.25f;

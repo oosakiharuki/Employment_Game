@@ -2,6 +2,146 @@
     "name": "scene",
     "objects": [
         {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "Energy",
+            "name": "StageObjectSpawn.002",
+            "transform": {
+                "translation": [
+                    -2.0,
+                    2.0,
+                    2.5
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    -1.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "Energy",
+            "name": "StageObjectSpawn.003",
+            "transform": {
+                "translation": [
+                    -15.0,
+                    2.0,
+                    16.5
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    -1.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "Energy",
+            "name": "StageObjectSpawn.004",
+            "transform": {
+                "translation": [
+                    15.5,
+                    2.0,
+                    54.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    -1.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "Energy",
+            "name": "StageObjectSpawn.005",
+            "transform": {
+                "translation": [
+                    15.5,
+                    2.0,
+                    94.30000305175781
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.5,
+                    1.5,
+                    1.5
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    -1.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
             "type": "LIGHT",
             "name": "Light",
             "transform": {
@@ -465,6 +605,28 @@
             }
         },
         {
+            "type": "GuideSpawn",
+            "name": "GuideSpawn",
+            "transform": {
+                "translation": [
+                    13.0,
+                    6.0,
+                    10.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    3.250000238418579,
+                    1.0,
+                    3.250000238418579
+                ]
+            },
+            "file_name": "GuideBrink"
+        },
+        {
             "type": "MESH",
             "name": "立方体.035",
             "transform": {
@@ -497,28 +659,6 @@
                     2.0
                 ]
             }
-        },
-        {
-            "type": "GuideSpawn",
-            "name": "GuideSpawn",
-            "transform": {
-                "translation": [
-                    13.0,
-                    6.0,
-                    10.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    3.250000238418579,
-                    1.0,
-                    3.250000238418579
-                ]
-            },
-            "file_name": "GuideBrink"
         },
         {
             "type": "MESH",

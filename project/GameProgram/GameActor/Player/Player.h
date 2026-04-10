@@ -440,7 +440,7 @@ private:
 	bool isMoveGround_ = false;
 	const float kMoveGroundUnder_ = 0.25f;//離れないように少し下げる
 
-
+	
 	std::unique_ptr<ReinforceGauge> reinforceGauge_ = nullptr;
 
 };

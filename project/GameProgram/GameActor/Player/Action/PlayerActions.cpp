@@ -137,7 +137,6 @@ void PlayerActions::CommandJump() {
 void PlayerActions::CommandFire() {
 	//クールタイムは終了した時
 	if (fireCoolTimer_ == 0.0f) {
-
 		if (player_->UseGaugePoint()) {
 			PowerShootBullet();//強い発砲攻撃
 			player_->SubGaugePoint();//ゲージポイント減少
@@ -151,62 +150,35 @@ void PlayerActions::CommandFire() {
 
 
 void PlayerActions::ShootBullet() {
-
-	//傘から出るため
-	Vector3 translate = player_->GetUmbrellaTranslate();
-
-	//真ん中を0にする値(3の場合、1,0,-1 | 5の場合、2,1,0,-1,-2)
-	float halfCount = float((kBulletCount_ - 1) * kDivideByTwo_);//二で割る
-
-	for (float i = -(halfCount); i <= halfCount; ++i) {
-		//弾が分散するように
-		Vector3 velocity = { 0.0f,i * kDispersionBetween_ ,kBulletSpeed_ };
-		//飛ばす向きをwtGun_に合わせる
-		velocity = TransformNormal(velocity, player_->GetUmbrellaMatWorld());
-
-		//弾丸を生み出す
-		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
-		bullet->Initialize();
-		bullet->SetTranslate(translate);//発泡初期位置
-		bullet->SetVelocity(velocity);//速さ
-		bullets_.push_back(std::move(bullet));
-	}
-
-	player_->ParticleFire(translate);
-
-
+	BornBullet(player_->GetUmbrellaTranslate(), { 0.0f,kDispersionBetween_ ,kBulletSpeed_ });
 	///撃った方向と反対方向にノックバック
 	player_->KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
 }
 
 void PlayerActions::PowerShootBullet() {
+	//弾が分散するように
+	BornBullet(player_->GetUmbrellaTranslate(), { 0.0f,kDispersionBetween_ * kDivideByTwo_ ,kBulletSpeed_ * kTwice_ });
+	///撃った方向と反対方向にノックバック
+	player_->KnockBackUmbrella(kBulletKnockbackPower_ * kTwice_, kBulletSpeed_ * kTwice_);
+}
 
-	//傘から出るため
-	Vector3 translate = player_->GetUmbrellaTranslate();
-
-	//真ん中を0にする値(3の場合、1,0,-1 | 5の場合、2,1,0,-1,-2)
-	float halfCount = float((kBulletCount_ - 1) * kDivideByTwo_);//二で割る
-
-
-	for (float i = -(halfCount); i <= halfCount; ++i) {
+void PlayerActions::BornBullet(const Vector3& translate, const Vector3& velocity) {
+	for (float i = -(halfCount); i <= halfCount; ++i) {	
+		Vector3 bulletVelocity = velocity;
 		//弾が分散するように
-		Vector3 velocity = { 0.0f,i * kDispersionBetween_ * kDivideByTwo_ ,kBulletSpeed_ * kTwice_ };
+		bulletVelocity.y *= i;
 		//飛ばす向きをwtGun_に合わせる
-		velocity = TransformNormal(velocity, player_->GetUmbrellaMatWorld());
+		bulletVelocity = TransformNormal(bulletVelocity, player_->GetUmbrellaMatWorld());
 
 		//弾丸を生み出す
 		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
 		bullet->Initialize();
 		bullet->SetTranslate(translate);//発泡初期位置
-		bullet->SetVelocity(velocity);//速さ
+		bullet->SetVelocity(bulletVelocity);//速さ
 		bullets_.push_back(std::move(bullet));
 	}
-
+	//パーティクル
 	player_->ParticleFire(translate);
-
-
-	///撃った方向と反対方向にノックバック
-	player_->KnockBackUmbrella(kBulletKnockbackPower_ * kTwice_, kBulletSpeed_ * kTwice_);
 }
 
 void PlayerActions::CommandShield() {

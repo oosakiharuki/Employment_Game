@@ -72,6 +72,9 @@ void Umbrella::OnCollision(CollisionSource* collision) {
 		scaleTimer_ = 0.0f;
 		transform_.scale = kDefaultScale_;
 
+		//強化ゲージポイント加算
+		player_->AddGaugePoint();
+
 		if (collisionType_ == CollisionTypes::TypeUmbrellaParry) {
 			parryTime_ = kParryTimeMax_;//連続で跳ね返せるように
 			player_->ParrySuccess();//パリィ成功処理
@@ -79,8 +82,6 @@ void Umbrella::OnCollision(CollisionSource* collision) {
 		}
 		//通常防御の場合、プレイヤーがノックバック
 		player_->KnockBackUmbrella(kUmbrellaKnockBackPower_,kUmbrellaKnockBackTime_);
-		//強化ゲージポイント加算
-		player_->AddGaugePoint();
 	}
 }
 
