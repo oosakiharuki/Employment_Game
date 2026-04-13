@@ -47,6 +47,8 @@
     └── └── └── ├── Particle.h
     └── └── └── ├── ParticleCommon.cpp
     └── └── └── ├── ParticleCommon.h
+    └── └── └── ├── ParticleEmitter.cpp
+    └── └── └── ├── ParticleEmitter.h
     └── └── └── ├── ParticleManager.cpp
     └── └── └── └── ParticleManager.h
     └── └── └── pipeline/
@@ -81,14 +83,16 @@
     └── └──     └── screen/
     └── └──         ├── Dissolve.cpp
     └── └──         ├── Dissolve.h
-    └── └──         ├── Grayscale.cpp
-    └── └──         ├── Grayscale.h
-    └── └──         ├── RadialBlur.cpp
-    └── └──         ├── RadialBlur.h
     └── └──         ├── Random.cpp
     └── └──         ├── Random.h
     └── └──         ├── Vignette.cpp
-    └── └──         └── Vignette.h
+    └── └──         ├── Vignette.h
+    └── └──         ├── blur/
+    └── └──         └── ├── RadialBlur.cpp
+    └── └──         └── └── RadialBlur.h
+    └── └──         └── color/
+    └── └──             ├── Grayscale.cpp
+    └── └──             └── Grayscale.h
     └── ├── audio/
     └── └── ├── Audio.cpp
     └── └── └── Audio.h
@@ -140,8 +144,13 @@
     └── └── ├── CollisionUtility.cpp
     └── └── └── CollisionUtility.h
     └── ├── GameActor/
-    └── └── ├── ActorState.cpp
-    └── └── ├── ActorState.h
+    └── └── ├── Actor/
+    └── └── └── ├── ActorState.cpp
+    └── └── └── ├── ActorState.h
+    └── └── └── ├── GameActor.cpp
+    └── └── └── ├── GameActor.h
+    └── └── └── ├── GravityActor.cpp
+    └── └── └── └── GravityActor.h
     └── └── ├── Boss/
     └── └── └── ├── BaseBossState.cpp
     └── └── └── ├── BaseBossState.h
@@ -165,10 +174,6 @@
     └── └── └──     ├── EnemyCommand.h
     └── └── └──     ├── EnemyEye.cpp
     └── └── └──     └── EnemyEye.h
-    └── └── ├── GameActor.cpp
-    └── └── ├── GameActor.h
-    └── └── ├── GravityActor.cpp
-    └── └── ├── GravityActor.h
     └── └── ├── Player/
     └── └── └── ├── Action/
     └── └── └── └── ├── PlayerActions.cpp
@@ -196,16 +201,17 @@
     └── ├── MyGame.cpp
     └── ├── MyGame.h
     └── ├── Scene/
-    └── └── ├── ClearScene.cpp
-    └── └── ├── ClearScene.h
-    └── └── ├── GameOverScene.cpp
-    └── └── ├── GameOverScene.h
     └── └── ├── GameScene.cpp
     └── └── ├── GameScene.h
     └── └── ├── SelectScene.cpp
     └── └── ├── SelectScene.h
     └── └── ├── TitleScene.cpp
-    └── └── └── TitleScene.h
+    └── └── ├── TitleScene.h
+    └── └── └── win_lose/
+    └── └──     ├── ClearScene.cpp
+    └── └──     ├── ClearScene.h
+    └── └──     ├── GameOverScene.cpp
+    └── └──     └── GameOverScene.h
     └── ├── StageObjects/
     └── └── ├── BackGroundObject.cpp
     └── └── ├── BackGroundObject.h
@@ -239,8 +245,6 @@
     └──     └── ├── LoadingModels.h
     └──     └── ├── NextStageSave.cpp
     └──     └── └── NextStageSave.h
-    └──     ├── ParticleEmitter.cpp
-    └──     ├── ParticleEmitter.h
     └──     ├── Pause/
     └──     └── ├── BasePauseState.cpp
     └──     └── ├── BasePauseState.h
@@ -420,7 +424,7 @@ File Path: project/CG2_00_01.vcxproj
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\PostEffect\creates\screen\blur;$(ProjectDir)Engine\PostEffect\creates\screen\color;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Actor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\Scene\win_lose;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -446,7 +450,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\PostEffect\creates\screen\blur;$(ProjectDir)Engine\PostEffect\creates\screen\color;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Actor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\Scene\win_lose;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -467,7 +471,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\Collision\CollisionUtility.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionSource.cpp" />
     <ClCompile Include="GameProgram\GameActor\Enemies\common\EnemyEye.cpp" />
-    <ClCompile Include="GameProgram\GameActor\ActorState.cpp" />
+    <ClCompile Include="GameProgram\GameActor\Actor\ActorState.cpp" />
     <ClCompile Include="GameProgram\GameActor\Enemies\common\EnemyCommand.cpp" />
     <ClCompile Include="GameProgram\System\Pause\BasePauseState.cpp" />
     <ClCompile Include="GameProgram\StageObjects\BackGroundObject.cpp" />
@@ -477,15 +481,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\model\BaseModel.cpp" />
     <ClCompile Include="Engine\3d\object\BaseObject.cpp" />
     <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActions.cpp" />
-    <ClCompile Include="GameProgram\GameActor\GameActor.cpp" />
+    <ClCompile Include="GameProgram\GameActor\Actor\GameActor.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionManager.cpp" />
     <ClCompile Include="Engine\3d\pipeline\SkinningCommon.cpp" />
     <ClCompile Include="GameProgram\CameraControl\CameraControl.cpp" />
     <ClCompile Include="GameProgram\System\Load\FadeScreen.cpp" />
-    <ClCompile Include="GameProgram\GameActor\GravityActor.cpp" />
+    <ClCompile Include="GameProgram\GameActor\Actor\GravityActor.cpp" />
     <ClCompile Include="GameProgram\System\Load\LoadingModels.cpp" />
-    <ClCompile Include="GameProgram\Scene\ClearScene.cpp" />
-    <ClCompile Include="GameProgram\Scene\GameOverScene.cpp" />
+    <ClCompile Include="GameProgram\Scene\win_lose\ClearScene.cpp" />
+    <ClCompile Include="GameProgram\Scene\win_lose\GameOverScene.cpp" />
     <ClCompile Include="GameProgram\Scene\SelectScene.cpp" />
     <ClCompile Include="GameProgram\GameActor\Shadow.cpp" />
     <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\CheckPoint.cpp" />
@@ -504,7 +508,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\object\Object_glTF.cpp" />
     <ClCompile Include="Engine\3d\particle\Particle.cpp" />
     <ClCompile Include="Engine\3d\particle\ParticleCommon.cpp" />
-    <ClCompile Include="GameProgram\System\ParticleEmitter.cpp" />
+    <ClCompile Include="Engine\3d\particle\ParticleEmitter.cpp" />
     <ClCompile Include="Engine\3d\particle\ParticleManager.cpp" />
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\DirectX\D3DResourceLeakChecker.cpp" />
@@ -516,11 +520,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\PostEffect\creates\outline\DepthBasedOutline.cpp" />
     <ClCompile Include="Engine\PostEffect\creates\screen\Dissolve.cpp" />
     <ClCompile Include="Engine\PostEffect\creates\filter\GaussianFilter.cpp" />
-    <ClCompile Include="Engine\PostEffect\creates\screen\Grayscale.cpp" />
+    <ClCompile Include="Engine\PostEffect\creates\screen\color\Grayscale.cpp" />
     <ClCompile Include="Engine\PostEffect\creates\outline\LuminanceBasedOutline.cpp" />
     <ClCompile Include="Engine\PostEffect\creates\Normal_Image.cpp" />
     <ClCompile Include="Engine\PostEffect\PostEffectManager.cpp" />
-    <ClCompile Include="Engine\PostEffect\creates\screen\RadialBlur.cpp" />
+    <ClCompile Include="Engine\PostEffect\creates\screen\blur\RadialBlur.cpp" />
     <ClCompile Include="Engine\PostEffect\creates\screen\Random.cpp" />
     <ClCompile Include="Engine\PostEffect\creates\screen\Vignette.cpp" />
     <ClCompile Include="Engine\scene\SceneManager.cpp" />
@@ -579,7 +583,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\Collision\CollisionUtility.h" />
     <ClInclude Include="GameProgram\Collision\CollisionSource.h" />
     <ClInclude Include="GameProgram\GameActor\Enemies\common\EnemyEye.h" />
-    <ClInclude Include="GameProgram\GameActor\ActorState.h" />
+    <ClInclude Include="GameProgram\GameActor\Actor\ActorState.h" />
     <ClInclude Include="GameProgram\GameActor\Enemies\common\EnemyCommand.h" />
     <ClInclude Include="GameProgram\System\Pause\BasePauseState.h" />
     <ClInclude Include="GameProgram\StageObjects\BackGroundObject.h" />
@@ -589,15 +593,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\model\BaseModel.h" />
     <ClInclude Include="Engine\3d\object\BaseObject.h" />
     <ClInclude Include="GameProgram\GameActor\Player\Action\PlayerActions.h" />
-    <ClInclude Include="GameProgram\GameActor\GameActor.h" />
+    <ClInclude Include="GameProgram\GameActor\Actor\GameActor.h" />
     <ClInclude Include="GameProgram\Collision\CollisionManager.h" />
     <ClInclude Include="Engine\3d\pipeline\SkinningCommon.h" />
     <ClInclude Include="GameProgram\CameraControl\CameraControl.h" />
     <ClInclude Include="GameProgram\System\Load\FadeScreen.h" />
-    <ClInclude Include="GameProgram\GameActor\GravityActor.h" />
+    <ClInclude Include="GameProgram\GameActor\Actor\GravityActor.h" />
     <ClInclude Include="GameProgram\System\Load\LoadingModels.h" />
-    <ClInclude Include="GameProgram\Scene\ClearScene.h" />
-    <ClInclude Include="GameProgram\Scene\GameOverScene.h" />
+    <ClInclude Include="GameProgram\Scene\win_lose\ClearScene.h" />
+    <ClInclude Include="GameProgram\Scene\win_lose\GameOverScene.h" />
     <ClInclude Include="GameProgram\Scene\SelectScene.h" />
     <ClInclude Include="GameProgram\GameActor\Shadow.h" />
     <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\CheckPoint.h" />
@@ -616,7 +620,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\object\Object_glTF.h" />
     <ClInclude Include="Engine\3d\particle\Particle.h" />
     <ClInclude Include="Engine\3d\particle\ParticleCommon.h" />
-    <ClInclude Include="GameProgram\System\ParticleEmitter.h" />
+    <ClInclude Include="Engine\3d\particle\ParticleEmitter.h" />
     <ClInclude Include="Engine\3d\particle\ParticleManager.h" />
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\DirectX\D3DResourceLeakChecker.h" />
@@ -628,11 +632,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\PostEffect\creates\outline\DepthBasedOutline.h" />
     <ClInclude Include="Engine\PostEffect\creates\screen\Dissolve.h" />
     <ClInclude Include="Engine\PostEffect\creates\filter\GaussianFilter.h" />
-    <ClInclude Include="Engine\PostEffect\creates\screen\Grayscale.h" />
+    <ClInclude Include="Engine\PostEffect\creates\screen\color\Grayscale.h" />
     <ClInclude Include="Engine\PostEffect\creates\outline\LuminanceBasedOutline.h" />
     <ClInclude Include="Engine\PostEffect\creates\Normal_Image.h" />
     <ClInclude Include="Engine\PostEffect\PostEffectManager.h" />
-    <ClInclude Include="Engine\PostEffect\creates\screen\RadialBlur.h" />
+    <ClInclude Include="Engine\PostEffect\creates\screen\blur\RadialBlur.h" />
     <ClInclude Include="Engine\PostEffect\creates\screen\Random.h" />
     <ClInclude Include="Engine\PostEffect\creates\screen\Vignette.h" />
     <ClInclude Include="Engine\scene\SceneManager.h" />
@@ -954,9 +958,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Enemies">
       <UniqueIdentifier>{e9507568-3eb6-4560-bccc-bf7c120300a3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Player">
-      <UniqueIdentifier>{53cdf185-41ea-4488-b3a6-a6812d9cabc0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Engine\3d\camera">
       <UniqueIdentifier>{ee8fdf40-e874-45bb-b98e-d4e3ef6e748f}</UniqueIdentifier>
     </Filter>
@@ -1062,6 +1063,45 @@ File Path: project/CG2_00_01.vcxproj.filters
     <Filter Include="ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere">
       <UniqueIdentifier>{48cc3fb3-40af-4815-b451-df07c3110e45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameProgram\GameActor\Player\Action">
+      <UniqueIdentifier>{2ee9a406-ec76-4e2a-905a-2e163fde88df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\GameActor\Player\Weapon">
+      <UniqueIdentifier>{6a71abf2-a1fa-45c6-81de-5c6799a4ffe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\Scene\win_lose">
+      <UniqueIdentifier>{7bd3f459-fd9b-4446-847d-6ef551037f85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\GameActor\Actor">
+      <UniqueIdentifier>{c4451ac9-ba1d-477e-aded-f7776cd13dac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Actor">
+      <UniqueIdentifier>{7601598e-fe2b-4db4-ab00-b4ecc6544914}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Player">
+      <UniqueIdentifier>{53cdf185-41ea-4488-b3a6-a6812d9cabc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Player\Weapon">
+      <UniqueIdentifier>{c2c16011-a017-4658-a0f2-fa4c771008c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Player\Action">
+      <UniqueIdentifier>{a152a97f-87be-4b4d-b969-9ab0ff80d63d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\Scene\win_lose">
+      <UniqueIdentifier>{c60c3db2-7e38-40d0-910e-8118930d614d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\PostEffect\creates\screen\blur">
+      <UniqueIdentifier>{ac08e4f1-07de-4a55-a28d-71013f9a50b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\PostEffect\creates\screen\color">
+      <UniqueIdentifier>{23bcb6be-b4f6-4e39-8b38-03925c158b92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\PostEffect\creates\screen\blur">
+      <UniqueIdentifier>{83890531-3386-4aad-83b1-b10ae1e4f972}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\PostEffect\creates\screen\color">
+      <UniqueIdentifier>{c40cfcea-c98d-497d-b5b4-ba932173ee50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\Sprite.cpp">
@@ -1127,23 +1167,11 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClCompile Include="GameProgram\GameActor\Player\Player.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\Weapon\PlayerBullet.cpp">
-      <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella.cpp">
-      <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\3d\primitive\Primitive.cpp">
       <Filter>ソース ファイル\Engine\3d\primitive</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Enemies\Enemy_Bomb.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\Scene\ClearScene.cpp">
-      <Filter>ソース ファイル\GameProgram\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\Scene\GameOverScene.cpp">
-      <Filter>ソース ファイル\GameProgram\Scene</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Scene\SelectScene.cpp">
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
@@ -1169,9 +1197,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClCompile Include="GameProgram\Collision\CollisionManager.cpp">
       <Filter>ソース ファイル\GameProgram\Collsion</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\System\ParticleEmitter.cpp">
-      <Filter>ソース ファイル\GameProgram\System</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\System\UseEveryOne.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
@@ -1183,9 +1208,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     </ClCompile>
     <ClCompile Include="Engine\base\Pipeline.cpp">
       <Filter>ソース ファイル\Engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActions.cpp">
-      <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Boss\Boss.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Boss</Filter>
@@ -1204,15 +1226,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\BackGroundObject.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\ActorState.cpp">
-      <Filter>ソース ファイル\GameProgram\GameActor</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\GravityActor.cpp">
-      <Filter>ソース ファイル\GameProgram\GameActor</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\GameActor.cpp">
-      <Filter>ソース ファイル\GameProgram\GameActor</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Shadow.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor</Filter>
@@ -1280,13 +1293,7 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClCompile Include="Engine\PostEffect\creates\screen\Vignette.cpp">
       <Filter>ソース ファイル\Engine\PostEffect\creates\screen</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PostEffect\creates\screen\RadialBlur.cpp">
-      <Filter>ソース ファイル\Engine\PostEffect\creates\screen</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\PostEffect\creates\screen\Random.cpp">
-      <Filter>ソース ファイル\Engine\PostEffect\creates\screen</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\PostEffect\creates\screen\Grayscale.cpp">
       <Filter>ソース ファイル\Engine\PostEffect\creates\screen</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PostEffect\creates\screen\Dissolve.cpp">
@@ -1364,14 +1371,47 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\WarpGate.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\Weapon\ReinforceGauge.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActions.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Action</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActionsInputHandler.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\PlayerBullet.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\ReinforceGauge.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\Energy.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\particle\ParticleEmitter.cpp">
+      <Filter>ソース ファイル\Engine\3d\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Scene\win_lose\GameOverScene.cpp">
+      <Filter>ソース ファイル\GameProgram\Scene\win_lose</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Scene\win_lose\ClearScene.cpp">
+      <Filter>ソース ファイル\GameProgram\Scene\win_lose</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Actor\ActorState.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Actor\GameActor.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Actor\GravityActor.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\creates\screen\blur\RadialBlur.cpp">
+      <Filter>ソース ファイル\Engine\PostEffect\creates\screen\blur</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\creates\screen\color\Grayscale.cpp">
+      <Filter>ソース ファイル\Engine\PostEffect\creates\screen\color</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1459,18 +1499,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClInclude Include="GameProgram\GameActor\Player\Player.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\Weapon\PlayerBullet.h">
-      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella.h">
-      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\Scene\ClearScene.h">
-      <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\Scene\GameOverScene.h">
-      <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\Scene\SelectScene.h">
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
     </ClInclude>
@@ -1495,9 +1523,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClInclude Include="GameProgram\Collision\CollisionManager.h">
       <Filter>ヘッダー ファイル\GameProgram\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\System\ParticleEmitter.h">
-      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\System\UseEveryOne.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
@@ -1509,9 +1534,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     </ClInclude>
     <ClInclude Include="Engine\base\Pipeline.h">
       <Filter>ヘッダー ファイル\Engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\Action\PlayerActions.h">
-      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Boss\Boss.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Boss</Filter>
@@ -1531,12 +1553,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClInclude Include="GameProgram\StageObjects\BackGroundObject.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\ActorState.h">
-      <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\GravityActor.h">
-      <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\Collision\CollisionSource.h">
       <Filter>ヘッダー ファイル\GameProgram\Collision</Filter>
     </ClInclude>
@@ -1544,9 +1560,6 @@ File Path: project/CG2_00_01.vcxproj.filters
       <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Shadow.h">
-      <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\GameActor.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\camera\Camera.h">
@@ -1607,12 +1620,6 @@ File Path: project/CG2_00_01.vcxproj.filters
       <Filter>ヘッダー ファイル\Engine\PostEffect\creates\filter</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\creates\screen\Dissolve.h">
-      <Filter>ヘッダー ファイル\Engine\PostEffect\creates\screen</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\PostEffect\creates\screen\Grayscale.h">
-      <Filter>ヘッダー ファイル\Engine\PostEffect\creates\screen</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\PostEffect\creates\screen\RadialBlur.h">
       <Filter>ヘッダー ファイル\Engine\PostEffect\creates\screen</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\creates\screen\Random.h">
@@ -1687,14 +1694,47 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\WarpGate.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\Weapon\ReinforceGauge.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\PlayerBullet.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Player\Action\PlayerActions.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Action</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Player\Action\PlayerActionsInputHandler.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\ReinforceGauge.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\Energy.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\particle\ParticleEmitter.h">
+      <Filter>ヘッダー ファイル\Engine\3d\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Actor\ActorState.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Actor\GameActor.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Actor\GravityActor.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Scene\win_lose\ClearScene.h">
+      <Filter>ヘッダー ファイル\GameProgram\Scene\win_lose</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Scene\win_lose\GameOverScene.h">
+      <Filter>ヘッダー ファイル\GameProgram\Scene\win_lose</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\creates\screen\blur\RadialBlur.h">
+      <Filter>ヘッダー ファイル\Engine\PostEffect\creates\screen\blur</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\creates\screen\color\Grayscale.h">
+      <Filter>ヘッダー ファイル\Engine\PostEffect\creates\screen\color</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -6621,6 +6661,121 @@ private:
 };
 
 ============================================================
+File Path: project/Engine/3d/particle/ParticleEmitter.cpp
+============================================================
+#include "ParticleEmitter.h"
+#include <numbers>
+
+using namespace MyMath;
+
+std::unique_ptr<ParticleEmitter> ParticleEmitter::sInstance_ = nullptr;
+
+ParticleEmitter& ParticleEmitter::GetInstance() {
+	if (sInstance_ == nullptr) {
+		sInstance_ = std::make_unique<ParticleEmitter>();
+	}
+	return *sInstance_;
+}
+
+void ParticleEmitter::Finalize() {
+	sInstance_.reset();
+}
+
+ParticleData ParticleEmitter::MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter) {
+	//random
+	std::uniform_real_distribution<float> distTransformT(emitter.particleData.distTransformT.distMin, emitter.particleData.distTransformT.distMax);
+	std::uniform_real_distribution<float> distTransformR(emitter.particleData.distTransformR.distMin, emitter.particleData.distTransformR.distMax);
+	std::uniform_real_distribution<float> distTransformS(emitter.particleData.distTransformS.distMin, emitter.particleData.distTransformS.distMax);
+
+	std::uniform_real_distribution<float> distVelocityT(emitter.particleData.distVelocityT.distMin, emitter.particleData.distVelocityT.distMax);
+	std::uniform_real_distribution<float> distVelocityR(emitter.particleData.distVelocityR.distMin, emitter.particleData.distVelocityR.distMax);
+	std::uniform_real_distribution<float> distVelocityS(emitter.particleData.distVelocityS.distMin, emitter.particleData.distVelocityS.distMax);
+
+	std::uniform_real_distribution<float> distColor(emitter.particleData.distColor.distMin, emitter.particleData.distColor.distMax);//色用
+	std::uniform_real_distribution<float> distLifeTime(emitter.particleData.distLifeTime.distMin, emitter.particleData.distLifeTime.distMax);//生存時間用
+	std::uniform_real_distribution<float> distCurrentTime(emitter.particleData.distCurrentTime.distMin, emitter.particleData.distCurrentTime.distMax);//生存時間用
+
+	ParticleData particle;
+
+	Vector3 translate = { distTransformT(randomEngine),distTransformT(randomEngine) ,distTransformT(randomEngine) };
+	Vector3 rotate = { distTransformR(randomEngine),distTransformR(randomEngine) ,distTransformR(randomEngine) };
+	Vector3 scale = { distTransformS(randomEngine),distTransformS(randomEngine) ,distTransformS(randomEngine) };
+
+	particle.transform.translate = emitter.transform.translate + translate;
+	particle.transform.scale = emitter.transform.scale + scale;
+	particle.transform.rotate = emitter.transform.rotate + rotate;
+
+	Vector3 velocityTranslate = { distVelocityT(randomEngine),distVelocityT(randomEngine) ,distVelocityT(randomEngine) };
+	Vector3 velocityRotate = { distVelocityR(randomEngine),distVelocityR(randomEngine) ,distVelocityR(randomEngine) };
+	Vector3 velocityScale = { distVelocityS(randomEngine),distVelocityS(randomEngine) ,distVelocityS(randomEngine) };
+
+	particle.velocityTransform.translate = emitter.particleData.velocityTransform.translate + velocityTranslate;
+	particle.velocityTransform.rotate = emitter.particleData.velocityTransform.rotate + velocityRotate;
+	particle.velocityTransform.scale = emitter.particleData.velocityTransform.scale + velocityScale;
+	
+	Vector4 color = { distColor(randomEngine),distColor(randomEngine) ,distColor(randomEngine),distColor(randomEngine) };
+	particle.color = emitter.particleData.color + color;
+
+	particle.lifeTime = emitter.particleData.lifeTime + distLifeTime(randomEngine);
+
+	particle.currentTime = emitter.particleData.currentTime + distCurrentTime(randomEngine);
+
+	return particle;
+}
+
+std::list<ParticleData> ParticleEmitter::MakeEmit(const std::string& particleName, const Emitter& emitter, std::mt19937& randomEngine) {
+	std::list<ParticleData> particles;
+
+	for (uint32_t count = 0; count < emitter.count; ++count) {
+		particles.push_back(MakeNewParticle(randomEngine, emitter));
+	}
+
+	return particles;
+}
+
+
+============================================================
+File Path: project/Engine/3d/particle/ParticleEmitter.h
+============================================================
+#pragma once
+#include "MyMath.h"
+#include "Particle.h"
+
+/// <summary>
+/// パーティクルの発生部分
+/// </summary>
+class ParticleEmitter{
+public:
+	/// <summary>
+	/// インスタンス生成
+	/// </summary>
+	/// <returns>インスタンス</returns>
+	static ParticleEmitter& GetInstance();
+
+	/// <summary>
+	/// 解放処理
+	/// </summary>
+	void Finalize();
+
+	/// <summary>
+	/// パーティクル生成
+	/// </summary>
+	/// <param name="particleName">パーティクルの名前</param>
+	/// <param name="emitter">使っているエミッター</param>
+	/// <param name="randomEngine">ランダムエンジン</param>
+	/// <returns></returns>
+	std::list<ParticleData> MakeEmit(const std::string& particleName, const Emitter& emitter, std::mt19937& randomEngine);
+
+private:
+	//インスタンス
+	static std::unique_ptr<ParticleEmitter> sInstance_;
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<ParticleEmitter>;
+	///パーティクル生成方法一覧
+	ParticleData MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter);//通常
+};
+
+============================================================
 File Path: project/Engine/3d/particle/ParticleManager.cpp
 ============================================================
 #include "ParticleManager.h"
@@ -9476,213 +9631,6 @@ private:
 };
 
 ============================================================
-File Path: project/Engine/PostEffect/creates/screen/Grayscale.cpp
-============================================================
-#include "Grayscale.h"
-#include <SrvManager.h>
-
-using namespace Logger;
-
-void Grayscale::Finalize() {}
-
-void Grayscale::RootSignature() {
-
-	PostEffectRootSignatureCommon();
-
-	//セピア調
-	CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 0);//[1] ps b0
-
-	IntroduceRootParameters();
-	IntroduceSamplers();
-}
-
-void Grayscale::CreatePixelShader() {
-	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Grayscale.PS.hlsl", L"ps_6_0");
-	assert(pixelShaderBlob != nullptr);
-}
-
-void Grayscale::Command() {
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, GrayscaleResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(3, 1, 0, 0);
-}
-
-void Grayscale::EffectInit() {
-	srvIndex_ = SrvManager::GetInstance().Allocate();
-	srvHandleCPU_ = SrvManager::GetInstance().GetCPUDescriptorHandle(srvIndex_);
-	srvHandleGPU_ = SrvManager::GetInstance().GetGPUDescriptorHandle(srvIndex_);
-
-	SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
-
-	GrayscaleResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(GrayFunction));
-	GrayscaleResource_->Map(0, nullptr, reinterpret_cast<void**>(&grayFunction_));
-
-	grayFunction_->isSepia = false;
-	grayFunction_->color = Vector3(1.0f, 74.0f / 107.0f, 43.0f / 107.0f);//セピア調
-}
-
-void Grayscale::EffectUpdate() {
-
-#ifdef USE_IMGUI
-	ImGui::Text("Grayscale");
-	ImGui::Checkbox("セピア調", &isSepiaMode_);
-#endif
-
-	//セピア調変更ボタン
-	if (Input::GetInstance().TriggerKey(DIK_RETURN)) {
-		isSepiaMode_ = !isSepiaMode_;
-	}
-	if (isSepiaMode_) {
-		grayFunction_->isSepia = true;
-	}
-	else {
-		grayFunction_->isSepia = false;
-	}
-}
-
-
-============================================================
-File Path: project/Engine/PostEffect/creates/screen/Grayscale.h
-============================================================
-#pragma once
-#include "BasePostEffect.h"
-#include <Vector3.h>
-
-/// <summary>
-/// ポストエフェクト_GrayScale(IPostEffectの派生クラス)
-/// </summary>
-class Grayscale : public BasePostEffect {
-public:
-	/// <summary>
-	/// 解放処理
-	/// </summary>
-	void Finalize() override;
-	/// <summary>
-	/// 処理コマンド(描画)
-	/// </summary>
-	void Command() override;
-private:
-	/// <summary>
-	/// ルートシグネチャ
-	/// </summary>
-	void RootSignature() override;
-
-	/// <summary>
-	/// PixelShaderを作成(ポストエフェクトはこれ以外は共通)
-	/// </summary>
-	void CreatePixelShader() override;
-
-	/// <summary>
-	/// ポストエフェクトの初期化処理
-	/// </summary>
-	void EffectInit() override;
-
-	/// <summary>
-	/// ポストエフェクトの更新処理
-	/// </summary>
-	void EffectUpdate() override;
-
-	Microsoft::WRL::ComPtr<ID3D12Resource> GrayscaleResource_;
-	
-	struct GrayFunction {
-		int32_t isSepia;
-		Vector3 color;
-	};
-
-	GrayFunction* grayFunction_;
-	bool isSepiaMode_ = false;
-};
-
-============================================================
-File Path: project/Engine/PostEffect/creates/screen/RadialBlur.cpp
-============================================================
-#include "RadialBlur.h"
-#include <SrvManager.h>
-
-using namespace Logger;
-
-void RadialBlur::Finalize() {}
-
-void RadialBlur::RootSignature() {
-	
-	PostEffectRootSignatureCommon();
-
-	IntroduceRootParameters();
-	IntroduceSamplers();
-}
-
-void RadialBlur::CreatePixelShader() {
-	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/RadialBlur.PS.hlsl", L"ps_6_0");
-	assert(pixelShaderBlob != nullptr);
-}
-
-void RadialBlur::Command() {
-
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
-	DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(3, 1, 0, 0);
-}
-
-void RadialBlur::EffectInit() {
-	srvIndex_ = SrvManager::GetInstance().Allocate();
-	srvHandleCPU_ = SrvManager::GetInstance().GetCPUDescriptorHandle(srvIndex_);
-	srvHandleGPU_ = SrvManager::GetInstance().GetGPUDescriptorHandle(srvIndex_);
-
-	SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
-}
-
-void RadialBlur::EffectUpdate() {
-	
-#ifdef USE_IMGUI
-	ImGui::Text("RadialBlur");
-#endif
-}
-
-
-============================================================
-File Path: project/Engine/PostEffect/creates/screen/RadialBlur.h
-============================================================
-#pragma once
-#include "BasePostEffect.h"
-/// <summary>
-/// ポストエフェクト_RadialBlur(IPostEffectの派生クラス)
-/// </summary>
-class  RadialBlur : public BasePostEffect {
-public:	
-	/// <summary>
-	/// 解放処理
-	/// </summary>
-	void Finalize() override;
-	/// <summary>
-	/// 処理コマンド(描画)
-	/// </summary>
-	void Command() override;
-private:
-	/// <summary>
-	/// ルートシグネチャ
-	/// </summary>
-	void RootSignature() override;
-
-	/// <summary>
-	/// PixelShaderを作成(ポストエフェクトはこれ以外は共通)
-	/// </summary>
-	void CreatePixelShader() override;
-
-	/// <summary>
-	/// ポストエフェクトの初期化処理
-	/// </summary>
-	void EffectInit() override;
-
-	/// <summary>
-	/// ポストエフェクトの更新処理
-	/// </summary>
-	void EffectUpdate() override;
-};
-
-============================================================
 File Path: project/Engine/PostEffect/creates/screen/Random.cpp
 ============================================================
 #include "Random.h"
@@ -9921,6 +9869,213 @@ private:
 	VignetteFunction* vignetteFunction_;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> vignetteResource_;
+};
+
+============================================================
+File Path: project/Engine/PostEffect/creates/screen/blur/RadialBlur.cpp
+============================================================
+#include "RadialBlur.h"
+#include <SrvManager.h>
+
+using namespace Logger;
+
+void RadialBlur::Finalize() {}
+
+void RadialBlur::RootSignature() {
+	
+	PostEffectRootSignatureCommon();
+
+	IntroduceRootParameters();
+	IntroduceSamplers();
+}
+
+void RadialBlur::CreatePixelShader() {
+	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/RadialBlur.PS.hlsl", L"ps_6_0");
+	assert(pixelShaderBlob != nullptr);
+}
+
+void RadialBlur::Command() {
+
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
+	DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(3, 1, 0, 0);
+}
+
+void RadialBlur::EffectInit() {
+	srvIndex_ = SrvManager::GetInstance().Allocate();
+	srvHandleCPU_ = SrvManager::GetInstance().GetCPUDescriptorHandle(srvIndex_);
+	srvHandleGPU_ = SrvManager::GetInstance().GetGPUDescriptorHandle(srvIndex_);
+
+	SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
+}
+
+void RadialBlur::EffectUpdate() {
+	
+#ifdef USE_IMGUI
+	ImGui::Text("RadialBlur");
+#endif
+}
+
+
+============================================================
+File Path: project/Engine/PostEffect/creates/screen/blur/RadialBlur.h
+============================================================
+#pragma once
+#include "BasePostEffect.h"
+/// <summary>
+/// ポストエフェクト_RadialBlur(IPostEffectの派生クラス)
+/// </summary>
+class  RadialBlur : public BasePostEffect {
+public:	
+	/// <summary>
+	/// 解放処理
+	/// </summary>
+	void Finalize() override;
+	/// <summary>
+	/// 処理コマンド(描画)
+	/// </summary>
+	void Command() override;
+private:
+	/// <summary>
+	/// ルートシグネチャ
+	/// </summary>
+	void RootSignature() override;
+
+	/// <summary>
+	/// PixelShaderを作成(ポストエフェクトはこれ以外は共通)
+	/// </summary>
+	void CreatePixelShader() override;
+
+	/// <summary>
+	/// ポストエフェクトの初期化処理
+	/// </summary>
+	void EffectInit() override;
+
+	/// <summary>
+	/// ポストエフェクトの更新処理
+	/// </summary>
+	void EffectUpdate() override;
+};
+
+============================================================
+File Path: project/Engine/PostEffect/creates/screen/color/Grayscale.cpp
+============================================================
+#include "Grayscale.h"
+#include <SrvManager.h>
+
+using namespace Logger;
+
+void Grayscale::Finalize() {}
+
+void Grayscale::RootSignature() {
+
+	PostEffectRootSignatureCommon();
+
+	//セピア調
+	CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 0);//[1] ps b0
+
+	IntroduceRootParameters();
+	IntroduceSamplers();
+}
+
+void Grayscale::CreatePixelShader() {
+	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Grayscale.PS.hlsl", L"ps_6_0");
+	assert(pixelShaderBlob != nullptr);
+}
+
+void Grayscale::Command() {
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
+	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, GrayscaleResource_->GetGPUVirtualAddress());
+	DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(3, 1, 0, 0);
+}
+
+void Grayscale::EffectInit() {
+	srvIndex_ = SrvManager::GetInstance().Allocate();
+	srvHandleCPU_ = SrvManager::GetInstance().GetCPUDescriptorHandle(srvIndex_);
+	srvHandleGPU_ = SrvManager::GetInstance().GetGPUDescriptorHandle(srvIndex_);
+
+	SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
+
+	GrayscaleResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(GrayFunction));
+	GrayscaleResource_->Map(0, nullptr, reinterpret_cast<void**>(&grayFunction_));
+
+	grayFunction_->isSepia = false;
+	grayFunction_->color = Vector3(1.0f, 74.0f / 107.0f, 43.0f / 107.0f);//セピア調
+}
+
+void Grayscale::EffectUpdate() {
+
+#ifdef USE_IMGUI
+	ImGui::Text("Grayscale");
+	ImGui::Checkbox("セピア調", &isSepiaMode_);
+#endif
+
+	//セピア調変更ボタン
+	if (Input::GetInstance().TriggerKey(DIK_RETURN)) {
+		isSepiaMode_ = !isSepiaMode_;
+	}
+	if (isSepiaMode_) {
+		grayFunction_->isSepia = true;
+	}
+	else {
+		grayFunction_->isSepia = false;
+	}
+}
+
+
+============================================================
+File Path: project/Engine/PostEffect/creates/screen/color/Grayscale.h
+============================================================
+#pragma once
+#include "BasePostEffect.h"
+#include <Vector3.h>
+
+/// <summary>
+/// ポストエフェクト_GrayScale(IPostEffectの派生クラス)
+/// </summary>
+class Grayscale : public BasePostEffect {
+public:
+	/// <summary>
+	/// 解放処理
+	/// </summary>
+	void Finalize() override;
+	/// <summary>
+	/// 処理コマンド(描画)
+	/// </summary>
+	void Command() override;
+private:
+	/// <summary>
+	/// ルートシグネチャ
+	/// </summary>
+	void RootSignature() override;
+
+	/// <summary>
+	/// PixelShaderを作成(ポストエフェクトはこれ以外は共通)
+	/// </summary>
+	void CreatePixelShader() override;
+
+	/// <summary>
+	/// ポストエフェクトの初期化処理
+	/// </summary>
+	void EffectInit() override;
+
+	/// <summary>
+	/// ポストエフェクトの更新処理
+	/// </summary>
+	void EffectUpdate() override;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> GrayscaleResource_;
+	
+	struct GrayFunction {
+		int32_t isSepia;
+		Vector3 color;
+	};
+
+	GrayFunction* grayFunction_;
+	bool isSepiaMode_ = false;
 };
 
 ============================================================
@@ -15559,7 +15714,7 @@ private:
 
 
 ============================================================
-File Path: project/GameProgram/GameActor/ActorState.cpp
+File Path: project/GameProgram/GameActor/Actor/ActorState.cpp
 ============================================================
 #include "ActorState.h"
 #include "GameActor.h"
@@ -15607,7 +15762,7 @@ void PerformanceState::ChangeState(GameActor& actor) {
 }
 
 ============================================================
-File Path: project/GameProgram/GameActor/ActorState.h
+File Path: project/GameProgram/GameActor/Actor/ActorState.h
 ============================================================
 #pragma once
 #include "MyMath.h"
@@ -15674,6 +15829,316 @@ public:
 	/// <param name="actor">ゲームアクタークラス</param>
 	void ChangeState(GameActor& actor) override;
 };
+
+
+============================================================
+File Path: project/GameProgram/GameActor/Actor/GameActor.cpp
+============================================================
+#include "GameActor.h"
+
+using namespace UseEveryOne;
+using namespace MyMath;
+
+void GameActor::Initialize() {
+	//行列の初期化
+	wt_.Initialize();
+	//Transform更新処理
+	transform_ = wt_.UpdateTransform();
+
+	//影の初期化
+	shadow_ = std::make_unique<Shadow>();
+	shadow_->Initialize();
+
+	//リアクションクラス
+	reaction_ = std::make_unique<Reaction>();
+
+	actorState_ = std::make_unique<PerformanceState>();
+}
+
+void GameActor::Update() {
+	//状態ステート(生存(active)、死亡(dead)、演出(performance))
+	actorState_->Update(*this);
+	actorState_->ChangeState(*this);
+}
+
+void GameActor::ShadowUpdate() {
+	shadow_->SetTranslate(transform_.translate);
+	shadow_->Update();
+}
+
+void GameActor::HP_Initialize(uint32_t max) {
+	maxHp_ = max;//最大値を設定
+	hp_ = maxHp_;//体力を設定
+}
+
+Vector3 GameActor::GetWorldPosition() {
+	Vector3 worldPos;
+
+	worldPos.x = wt_.GetMatWorld().m[3][0];
+	worldPos.y = wt_.GetMatWorld().m[3][1];
+	worldPos.z = wt_.GetMatWorld().m[3][2];
+
+	return worldPos;
+}
+
+void GameActor::ChangeStatePattern(std::unique_ptr<BaseActorState> actorState) {
+	actorState_.reset();
+	actorState_ = std::move(actorState);
+}
+
+============================================================
+File Path: project/GameProgram/GameActor/Actor/GameActor.h
+============================================================
+#pragma once
+#include "MyMath.h"
+#include "Object3d.h"
+#include "Particle.h"
+
+#include "GLTFCommon.h"
+#include "Object3dCommon.h"
+#include "Shadow.h"
+#include "Sprite.h"
+
+#include "UseEveryOne.h"
+
+#include "Reaction.h"
+#include "ActorState.h"
+
+#include "CollisionManager.h"
+
+/// <summary>
+/// プレイヤー、敵のような動く、攻撃すると
+/// ゲームで使う基盤クラス
+/// </summary>
+class GameActor : public CollisionSource
+{
+public:
+
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	virtual void Initialize();
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	virtual void Update();
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	virtual void Draw() = 0;
+
+	/// <summary>
+	/// 生存状態
+	/// </summary>
+	virtual void Active() = 0;
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
+	virtual void Dead() = 0;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
+	virtual void Performance() = 0;
+
+	/// <summary>
+	/// getter_座標位置
+	/// </summary>
+	/// <returns>現在の座標位置</returns>
+	Vector3 GetTranslate() const { return transform_.translate; }
+	/// <summary>
+	/// setter_座標位置
+	/// </summary>
+	/// <param name="translate">代入する座標位置</param>
+	void SetTranslate(const Vector3& translate) { transform_.translate = translate; }
+
+	/// <summary>
+	/// getter_ワールド座標系の位置
+	/// </summary>
+	/// <returns>平行移動成分を搭載したプレイヤー座標</returns>
+	Vector3 GetWorldPosition();
+
+	/// <summary>
+	/// getter_回転
+	/// </summary>
+	/// <returns>現在の回転</returns>
+	Vector3 GetRotate() const { return transform_.rotate; }
+	/// <summary>
+	/// setter_回転
+	/// </summary>
+	/// <param name="rotate">代入する各回転角度</param>
+	void SetRotate(const Vector3& rotate) { transform_.rotate = rotate; }
+
+	/// <summary>
+	/// getter_スケール
+	/// </summary>
+	/// <returns>現在の大きさ</returns>
+	Vector3 GetScale() const { return transform_.scale; }
+	/// <summary>
+	/// setter_スケール
+	/// </summary>
+	/// <param name="translate">代入する大きさ</param>
+	void SetScale(const Vector3& scale) { transform_.scale = scale; }
+
+	/// <summary>
+	/// setter_当たり判定の大きさ
+	/// </summary>
+	/// <param name="size">大きさ</param>
+	void SetColliderSize(const Vector3& size) { colliderSize_ = size; }
+
+	/// <summary>
+	/// アニメーションのみを動かす関数(演出で使う)
+	/// </summary>
+	/// <param name="result">trueならアニメーションのみ / falseなら操作可能</param>
+	void IsPerformanceFlag(bool result) { isPerformance_ = result; }
+
+	/// <summary>
+	/// 演出中であるか
+	/// </summary>
+	/// <returns>演出フラグ</returns>
+	bool GetPerformanceMode() { return isPerformance_; }
+
+	/// <summary>
+	/// 影のみの更新処理
+	/// </summary>
+	void ShadowUpdate();
+
+	/// <summary>
+	/// getter_体力
+	/// </summary>
+	/// <returns>現在の体力</returns>
+	uint32_t GetHp() { return hp_; }
+
+	/// <summary>
+	/// setter_体力
+	/// </summary>
+	/// <param name="preHp">代入する体力数</param>
+	void SetHp(uint32_t preHp) { hp_ = preHp; }
+
+	/// <summary>
+	/// 体力の設定
+	/// </summary>
+	/// <param name="max">最大体力</param>
+	void HP_Initialize(uint32_t max);
+
+	/// <summary>
+	/// ステートパターン変更(状態)
+	/// </summary>
+	/// <param name="actorState">次のステートパターン</param>
+	void ChangeStatePattern(std::unique_ptr<BaseActorState> actorState);
+
+protected:
+
+	WorldTransform wt_;
+	Transform transform_{};
+	//当たり判定
+	Vector3 colliderSize_;
+
+	//体力
+	uint32_t maxHp_;//最大値
+	uint32_t hp_;//現在の体力
+
+	//向き(左右)
+	const float kDirectionRight_ = 90.0f;
+	const float kDirectionLeft_ = -90.0f;
+
+	//最大角度(360度)
+	const float kMaxAngle = 360.0f;
+
+	//演出中フラグ
+	bool isPerformance_ = false;
+
+	///影
+	std::unique_ptr<Shadow> shadow_;
+
+	//ダメージのリアクション
+	bool isDamageMotion_ = false;
+
+	//ダメージリアクション
+	float scaleTimer_ = 0.0f;
+	//足して大きくする値
+	Vector3 damageScale_ = { 0.1f, 0.1f, 0.1f };
+	const float kDamageMaxTime_ = 0.3f;
+
+	//パーティクルのコンテナ
+	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
+
+	//リアクションクラス
+	std::unique_ptr<Reaction> reaction_;
+
+	//地面・壁で使う当たり判定
+	CollisionOverlap collisionOverlap;
+
+private:
+	std::unique_ptr<BaseActorState> actorState_;
+};
+
+============================================================
+File Path: project/GameProgram/GameActor/Actor/GravityActor.cpp
+============================================================
+#include "GravityActor.h"
+
+void GravityActor::IsGround(bool result) {
+	isGround_ = result;
+	//地面なら重力を0にする(沈まないようにする)
+	if (isGround_) {
+		gravity_ = 0;
+	}
+}
+
+void GravityActor::GravityUpdate(float& translateY) {
+	//重力
+	gravity_ -= kGravityPower_;
+	gravity_ = std::clamp(gravity_,kGravityMax_,0.0f);//上限設定
+
+	//地面についていない
+	if (!isGround_) {
+		translateY += gravity_;
+	}
+	else {
+		//重力パワーリセット
+		gravity_ = 0.0f;
+	}
+}
+
+============================================================
+File Path: project/GameProgram/GameActor/Actor/GravityActor.h
+============================================================
+#pragma once
+#include "MyMath.h"
+#include "GameActor.h"
+
+class GravityActor : public GameActor
+{
+public:
+	/// <summary>
+	/// 重力の更新処理
+	/// </summary>
+	/// <param name="translateY">y座標</param>
+	void GravityUpdate(float& translateY);
+
+	/// <summary>
+	/// 地面判定フラグ変更
+	/// </summary>
+	/// <param name="result">trueは地面 / falseは空中</param>
+	void IsGround(bool result);
+
+	/// <summary>
+	/// getter_地面判定
+	/// </summary>
+	/// <returns>現在の地面判定</returns>
+	bool GetIsGround() { return isGround_; }
+
+protected:
+
+	//地面判定
+	bool isGround_ = false;
+	//重力
+	float gravity_ = 0.0f;
+	const float kGravityPower_ = 0.01f;//重力の質量
+	const float kGravityMax_ = -1.0f;//最大重力
+
+};
+
 
 
 ============================================================
@@ -18666,316 +19131,6 @@ private:
 
 	Vector3 enemyPosition_{};
 	Vector3 playerPosition_{};
-};
-
-
-
-============================================================
-File Path: project/GameProgram/GameActor/GameActor.cpp
-============================================================
-#include "GameActor.h"
-
-using namespace UseEveryOne;
-using namespace MyMath;
-
-void GameActor::Initialize() {
-	//行列の初期化
-	wt_.Initialize();
-	//Transform更新処理
-	transform_ = wt_.UpdateTransform();
-
-	//影の初期化
-	shadow_ = std::make_unique<Shadow>();
-	shadow_->Initialize();
-
-	//リアクションクラス
-	reaction_ = std::make_unique<Reaction>();
-
-	actorState_ = std::make_unique<PerformanceState>();
-}
-
-void GameActor::Update() {
-	//状態ステート(生存(active)、死亡(dead)、演出(performance))
-	actorState_->Update(*this);
-	actorState_->ChangeState(*this);
-}
-
-void GameActor::ShadowUpdate() {
-	shadow_->SetTranslate(transform_.translate);
-	shadow_->Update();
-}
-
-void GameActor::HP_Initialize(uint32_t max) {
-	maxHp_ = max;//最大値を設定
-	hp_ = maxHp_;//体力を設定
-}
-
-Vector3 GameActor::GetWorldPosition() {
-	Vector3 worldPos;
-
-	worldPos.x = wt_.GetMatWorld().m[3][0];
-	worldPos.y = wt_.GetMatWorld().m[3][1];
-	worldPos.z = wt_.GetMatWorld().m[3][2];
-
-	return worldPos;
-}
-
-void GameActor::ChangeStatePattern(std::unique_ptr<BaseActorState> actorState) {
-	actorState_.reset();
-	actorState_ = std::move(actorState);
-}
-
-============================================================
-File Path: project/GameProgram/GameActor/GameActor.h
-============================================================
-#pragma once
-#include "MyMath.h"
-#include "Object3d.h"
-#include "Particle.h"
-
-#include "GLTFCommon.h"
-#include "Object3dCommon.h"
-#include "Shadow.h"
-#include "Sprite.h"
-
-#include "UseEveryOne.h"
-
-#include "Reaction.h"
-#include "ActorState.h"
-
-#include "CollisionManager.h"
-
-/// <summary>
-/// プレイヤー、敵のような動く、攻撃すると
-/// ゲームで使う基盤クラス
-/// </summary>
-class GameActor : public CollisionSource
-{
-public:
-
-	/// <summary>
-	/// 初期化処理
-	/// </summary>
-	virtual void Initialize();
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	virtual void Update();
-	/// <summary>
-	/// 描画処理
-	/// </summary>
-	virtual void Draw() = 0;
-
-	/// <summary>
-	/// 生存状態
-	/// </summary>
-	virtual void Active() = 0;
-	/// <summary>
-	/// 死亡状態
-	/// </summary>
-	virtual void Dead() = 0;
-	/// <summary>
-	/// 演出状態
-	/// </summary>
-	virtual void Performance() = 0;
-
-	/// <summary>
-	/// getter_座標位置
-	/// </summary>
-	/// <returns>現在の座標位置</returns>
-	Vector3 GetTranslate() const { return transform_.translate; }
-	/// <summary>
-	/// setter_座標位置
-	/// </summary>
-	/// <param name="translate">代入する座標位置</param>
-	void SetTranslate(const Vector3& translate) { transform_.translate = translate; }
-
-	/// <summary>
-	/// getter_ワールド座標系の位置
-	/// </summary>
-	/// <returns>平行移動成分を搭載したプレイヤー座標</returns>
-	Vector3 GetWorldPosition();
-
-	/// <summary>
-	/// getter_回転
-	/// </summary>
-	/// <returns>現在の回転</returns>
-	Vector3 GetRotate() const { return transform_.rotate; }
-	/// <summary>
-	/// setter_回転
-	/// </summary>
-	/// <param name="rotate">代入する各回転角度</param>
-	void SetRotate(const Vector3& rotate) { transform_.rotate = rotate; }
-
-	/// <summary>
-	/// getter_スケール
-	/// </summary>
-	/// <returns>現在の大きさ</returns>
-	Vector3 GetScale() const { return transform_.scale; }
-	/// <summary>
-	/// setter_スケール
-	/// </summary>
-	/// <param name="translate">代入する大きさ</param>
-	void SetScale(const Vector3& scale) { transform_.scale = scale; }
-
-	/// <summary>
-	/// setter_当たり判定の大きさ
-	/// </summary>
-	/// <param name="size">大きさ</param>
-	void SetColliderSize(const Vector3& size) { colliderSize_ = size; }
-
-	/// <summary>
-	/// アニメーションのみを動かす関数(演出で使う)
-	/// </summary>
-	/// <param name="result">trueならアニメーションのみ / falseなら操作可能</param>
-	void IsPerformanceFlag(bool result) { isPerformance_ = result; }
-
-	/// <summary>
-	/// 演出中であるか
-	/// </summary>
-	/// <returns>演出フラグ</returns>
-	bool GetPerformanceMode() { return isPerformance_; }
-
-	/// <summary>
-	/// 影のみの更新処理
-	/// </summary>
-	void ShadowUpdate();
-
-	/// <summary>
-	/// getter_体力
-	/// </summary>
-	/// <returns>現在の体力</returns>
-	uint32_t GetHp() { return hp_; }
-
-	/// <summary>
-	/// setter_体力
-	/// </summary>
-	/// <param name="preHp">代入する体力数</param>
-	void SetHp(uint32_t preHp) { hp_ = preHp; }
-
-	/// <summary>
-	/// 体力の設定
-	/// </summary>
-	/// <param name="max">最大体力</param>
-	void HP_Initialize(uint32_t max);
-
-	/// <summary>
-	/// ステートパターン変更(状態)
-	/// </summary>
-	/// <param name="actorState">次のステートパターン</param>
-	void ChangeStatePattern(std::unique_ptr<BaseActorState> actorState);
-
-protected:
-
-	WorldTransform wt_;
-	Transform transform_{};
-	//当たり判定
-	Vector3 colliderSize_;
-
-	//体力
-	uint32_t maxHp_;//最大値
-	uint32_t hp_;//現在の体力
-
-	//向き(左右)
-	const float kDirectionRight_ = 90.0f;
-	const float kDirectionLeft_ = -90.0f;
-
-	//最大角度(360度)
-	const float kMaxAngle = 360.0f;
-
-	//演出中フラグ
-	bool isPerformance_ = false;
-
-	///影
-	std::unique_ptr<Shadow> shadow_;
-
-	//ダメージのリアクション
-	bool isDamageMotion_ = false;
-
-	//ダメージリアクション
-	float scaleTimer_ = 0.0f;
-	//足して大きくする値
-	Vector3 damageScale_ = { 0.1f, 0.1f, 0.1f };
-	const float kDamageMaxTime_ = 0.3f;
-
-	//パーティクルのコンテナ
-	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
-
-	//リアクションクラス
-	std::unique_ptr<Reaction> reaction_;
-
-	//地面・壁で使う当たり判定
-	CollisionOverlap collisionOverlap;
-
-private:
-	std::unique_ptr<BaseActorState> actorState_;
-};
-
-============================================================
-File Path: project/GameProgram/GameActor/GravityActor.cpp
-============================================================
-#include "GravityActor.h"
-
-void GravityActor::IsGround(bool result) {
-	isGround_ = result;
-	//地面なら重力を0にする(沈まないようにする)
-	if (isGround_) {
-		gravity_ = 0;
-	}
-}
-
-void GravityActor::GravityUpdate(float& translateY) {
-	//重力
-	gravity_ -= kGravityPower_;
-	gravity_ = std::clamp(gravity_,kGravityMax_,0.0f);//上限設定
-
-	//地面についていない
-	if (!isGround_) {
-		translateY += gravity_;
-	}
-	else {
-		//重力パワーリセット
-		gravity_ = 0.0f;
-	}
-}
-
-============================================================
-File Path: project/GameProgram/GameActor/GravityActor.h
-============================================================
-#pragma once
-#include "MyMath.h"
-#include "GameActor.h"
-
-class GravityActor : public GameActor
-{
-public:
-	/// <summary>
-	/// 重力の更新処理
-	/// </summary>
-	/// <param name="translateY">y座標</param>
-	void GravityUpdate(float& translateY);
-
-	/// <summary>
-	/// 地面判定フラグ変更
-	/// </summary>
-	/// <param name="result">trueは地面 / falseは空中</param>
-	void IsGround(bool result);
-
-	/// <summary>
-	/// getter_地面判定
-	/// </summary>
-	/// <returns>現在の地面判定</returns>
-	bool GetIsGround() { return isGround_; }
-
-protected:
-
-	//地面判定
-	bool isGround_ = false;
-	//重力
-	float gravity_ = 0.0f;
-	const float kGravityPower_ = 0.01f;//重力の質量
-	const float kGravityMax_ = -1.0f;//最大重力
-
 };
 
 
@@ -22607,411 +22762,6 @@ private:
 };
 
 ============================================================
-File Path: project/GameProgram/Scene/ClearScene.cpp
-============================================================
-#include "ClearScene.h"
-#include "SceneManager.h"
-#include "SelectScene.h"
-#include "FadeScreen.h"
-
-using namespace MyMath;
-using namespace UseEveryOne;
-
-void ClearScene::Initialize() {
-
-	levelEditor_.LoadLevelEditor("resource/LevelEditor/clear_setting.json");
-	spitOut_.SetLevelEditor(&levelEditor_);
-
-	//スプライト初期化処理
-	InitSprite();
-	//カメラ初期化処理
-	InitCamera();
-	//オブジェクト初期化処理
-	InitObject();
-	//パーティクル初期化処理
-	InitParticle();
-	//フェードスタート
-	FadeScreen::GetInstance().FadeStart(type_fadeOut);
-}
-
-void ClearScene::InitSprite() {
-	//クリアロゴ作成
-	sprite_ = std::make_unique<Sprite>();
-	sprite_->Initialize("Moji_GameClear.png");
-	sprite_->SetPosition(kSpritePositionGameClear_);
-
-	//戻る
-	spriteSpace_ = std::make_unique<Sprite>();
-	spriteSpace_->Initialize("Moji_button.png");
-	spriteSpace_->SetPosition(kSpritePositionButton_);
-	spriteSpace_->SetSize(kSpriteSizeButton_);
-}
-
-void ClearScene::InitCamera() {
-	camera_ = std::make_unique<Camera>();
-	spitOut_.SpitOutCamera(cameraControl_);
-
-	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
-	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
-	ParticleCommon::GetInstance().SetDefaultCamera(camera_.get());
-	//ゴール、ワープフラグをリセット
-	CollisionUtility::GetInstance().ResetFrag();
-}
-
-void ClearScene::InitObject() {
-	visualActors = std::move(spitOut_.SpitOutVisualActor());
-
-	for (auto& visualActor : visualActors) {
-		transforms_[visualActor->GetObjectName()] = visualActor->GetTransform();
-		transforms_[visualActor->GetObjectName()].rotate.y = kPlayerFrontRange_;
-	}
-}
-
-void ClearScene::InitParticle() {
-	//パーティクル生成
-	for (uint32_t i = 0; i < kParticleMaxNum_; i++) {
-		//ファンファーレのパーティクル作成
-		sceneParticles_[particleFanfare_] = ParticleManager::GetInstance().InitParticle(particleFanfare_);
-		//vectorに導入
-		particleFanfares_.push_back(std::move(sceneParticles_[particleFanfare_]));
-	}
-
-	//場所の設定
-	for (auto& gParticle : particleFanfares_) {
-		gParticle->SetTranslate(fanfareTranslate_);
-		//左->中央->右の順に配置
-		fanfareTranslate_.x += kFanfareX_;
-	}
-}
-
-void ClearScene::Update() {
-	cameraControl_->Update(camera_.get());
-	//クリアロゴ更新
-	sprite_->Update();	
-	spriteSpace_->Update();
-
-	for (auto& visualActor : visualActors) {
-		visualActor->SetTransform(transforms_[visualActor->GetObjectName()]); 
-		visualActor->Update();
-	}
-	
-	for (auto& gParticle : particleFanfares_) {
-		gParticle->SetParticleBorn(ParticleBorn::TimerMode);
-		gParticle->Update();
-	}
-}
-
-void ClearScene::Draw() {
-
-	GLTFCommon::GetInstance().Command();
-	for (auto& visualActor : visualActors) {
-		visualActor->Draw();
-	}
-
-	ParticleCommon::GetInstance().Command();
-	for (auto& particle : particleFanfares_) {
-		particle->Draw();
-	}
-
-	SpriteCommon::GetInstance().Command();
-	//クリアロゴｗ描画
-	sprite_->Draw();
-	spriteSpace_->Draw();
-}
-
-void ClearScene::Finalize() {
-	ParticleManager::GetInstance().ResetParticle("clear_fanfare");
-}
-
-void ClearScene::SceneUpdate() {
-
-	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
-	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||
-		Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance().GetIsFading()) {
-		SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
-	}
-
-	//次のシーンに移動するとき
-	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
-		//フェードを挟む(FadeIn)
-		FadeScreen::GetInstance().FadeStart(type_fadeIn);
-	}
-}
-
-============================================================
-File Path: project/GameProgram/Scene/ClearScene.h
-============================================================
-#pragma once
-#include "Sprite.h"
-#include "Framework.h"
-#include "BaseScene.h"
-
-#include "LevelEditor.h"
-#include "SpitOutLevelEditor.h"
-#include "CameraControl.h"
-/// <summary>
-/// クリアシーン(BaseSceneの派生クラス)
-/// </summary>
-class ClearScene : public BaseScene{
-public:
-	/// <summary>
-	/// 初期化処理
-	/// </summary>
-	void Initialize() override;
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void Update() override;
-	/// <summary>
-	/// 描画処理
-	/// </summary>
-	void Draw() override;
-	/// <summary>
-	/// 解放処理
-	/// </summary>
-	void Finalize() override;
-	/// <summary>
-	/// シーン変更処理
-	/// </summary>
-	void SceneUpdate() override;
-private:
-	/// <summary>
-	/// スプライト初期化処理
-	/// </summary>
-	void InitSprite();
-	/// <summary>
-	/// カメラ初期化処理
-	/// </summary>
-	void InitCamera();
-	/// <summary>
-	/// オブジェクト初期化処理
-	/// </summary>
-	void InitObject();
-	/// <summary>
-	/// オブジェクト初期化処理
-	/// </summary>
-	void InitParticle();
-	
-	//カメラ
-	std::unique_ptr<Camera> camera_ = nullptr;
-	//カメラのコントロール
-	std::unique_ptr<CameraControl> cameraControl_;
-
-	//レベルエディタ(オブジェクトの配置を.jsonでできる)
-	LevelEditor levelEditor_;
-	SpitOutLevelEditor spitOut_;
-	//オブジェクト描画
-	std::vector<std::unique_ptr<VisualActor>> visualActors;
-	std::unordered_map<std::string, Transform> transforms_;//各々の変更用
-	//プレイヤーを前に向かす
-	const float kPlayerFrontRange_ = 180.0f;
-
-	//スプライト描画
-	std::unique_ptr<Sprite> sprite_;//ゲームクリアの文字
-	std::unique_ptr<Sprite> spriteSpace_;//Spaceでもどるの文字
-
-	//スプライト
-	const Vector2 kSpritePositionGameClear_ = { 100, 100 };//[ゲームクリア]文字の座標
-	const Vector2 kSpritePositionButton_ = { 800,10 };//[ボタンで戻る]文字の座標
-	const Vector2 kSpriteSizeButton_ = { 256,64 };//[ボタンで戻る]文字のサイズ
-
-	//パーティクル
-	std::unordered_map<std::string, std::unique_ptr<Particle>> sceneParticles_;
-
-	//紙吹雪のパーティクルたち
-	const uint32_t kParticleMaxNum_ = 3;
-	
-	const std::string& particleFanfare_ = "clear_fanfare";
-
-	std::vector<std::unique_ptr<Particle>> particleFanfares_;
-
-	//紙吹雪パーティクルたちの座標をずらす
-	const float kFanfareX_ = 3.0f;
-	//紙吹雪パーティクルの座標
-	Vector3 fanfareTranslate_ = { -kFanfareX_,2,0 };
-};
-
-============================================================
-File Path: project/GameProgram/Scene/GameOverScene.cpp
-============================================================
-#include "GameOverScene.h"
-#include "SceneManager.h"
-#include "SelectScene.h"
-#include "FadeScreen.h"
-#include "NextStageSave.h"
-
-void GameOverScene::Initialize() {
-
-	levelEditor_.LoadLevelEditor("resource/LevelEditor/gameOver_setting.json");
-	spitOut_.SetLevelEditor(&levelEditor_);
-
-	//スプライト初期化処理
-	InitSprite();
-	//カメラ初期化処理
-	InitCamera();
-	//オブジェクト初期化処理
-	InitObject();
-
-	//フェードスタート
-	FadeScreen::GetInstance().FadeStart(type_fadeOut);
-}
-
-void GameOverScene::InitSprite() {
-	//ゲームオーバーロゴ作成
-	sprite_ = std::make_unique<Sprite>();
-	sprite_->Initialize("Moji_GameOver.png");
-	sprite_->SetPosition(kSpritePositionGameOver_);
-
-	//戻る
-	spriteSpace_ = std::make_unique<Sprite>();
-	spriteSpace_->Initialize("Moji_button.png");
-	spriteSpace_->SetPosition(kSpritePositionButton_);
-	spriteSpace_->SetSize(kSpriteSizeButton_);
-}
-
-void GameOverScene::InitCamera() {
-	//カメラ設定
-	camera_ = std::make_unique<Camera>();
-	spitOut_.SpitOutCamera(cameraControl_);
-
-	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
-	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
-	//ゴール、ワープフラグをリセット
-	CollisionUtility::GetInstance().ResetFrag();
-}
-
-void GameOverScene::InitObject() {
-	visualActors = std::move(spitOut_.SpitOutVisualActor());
-
-	for (auto& visualActor : visualActors) {
-		transforms_[visualActor->GetObjectName()] = visualActor->GetTransform();
-		visualActor->LightOn();//ライト処理オン
-	}
-}
-
-
-void GameOverScene::Update() {
-	cameraControl_->Update(camera_.get());
-
-	sprite_->Update();
-	spriteSpace_->Update();
-
-	//オブジェクト更新処理
-	for (auto& visualActor : visualActors) {
-		transforms_[visualActor->GetObjectName()].rotate.y += kRotate_;
-		visualActor->SetTransform(transforms_[visualActor->GetObjectName()]);//座標更新
-		visualActor->Update();
-	}
-}
-
-void GameOverScene::Draw() {
-
-	GLTFCommon::GetInstance().Command();
-
-	//オブジェクト描画
-	for (auto& visualActor : visualActors) {
-		visualActor->Draw();
-	}
-
-	SpriteCommon::GetInstance().Command();
-
-	sprite_->Draw();
-	spriteSpace_->Draw();
-}
-
-void GameOverScene::Finalize() {}
-
-void GameOverScene::SceneUpdate() {
-
-	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
-	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||
-		Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance().GetIsFading()) {
-		SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
-		FadeScreen::GetInstance().SetMaskTexture("fade01.png");
-		FadeScreen::GetInstance().SetBackGround("fadeTexture.png");
-	}
-
-	//次のシーンに移動するとき
-	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
-		//フェードを挟む(FadeIn)
-		FadeScreen::GetInstance().FadeStart(type_fadeIn);
-	}
-}
-
-============================================================
-File Path: project/GameProgram/Scene/GameOverScene.h
-============================================================
-#pragma once
-#include "Framework.h"
-#include "BaseScene.h"
-
-#include "LevelEditor.h"
-#include "SpitOutLevelEditor.h"
-#include "CameraControl.h"
-/// <summary>
-/// ゲームオーバーシーン(BaseSceneの派生クラス)
-/// </summary>
-class GameOverScene : public BaseScene{
-public:
-	/// <summary>
-	/// 初期化処理
-	/// </summary>
-	void Initialize() override;
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void Update() override;
-	/// <summary>
-	/// 描画処理
-	/// </summary>
-	void Draw() override;
-	/// <summary>
-	/// 解放処理
-	/// </summary>
-	void Finalize() override;
-	/// <summary>
-	/// シーン変更処理
-	/// </summary>
-	void SceneUpdate() override;
-private:
-	/// <summary>
-	/// スプライト初期化処理
-	/// </summary>
-	void InitSprite();
-	/// <summary>
-	/// カメラ初期化処理
-	/// </summary>
-	void InitCamera();
-	/// <summary>
-	/// オブジェクト初期化処理
-	/// </summary>
-	void InitObject();
-
-	//カメラ
-	std::unique_ptr<Camera> camera_ = nullptr;
-	//カメラのコントロール
-	std::unique_ptr<CameraControl> cameraControl_;
-
-	//レベルエディタ(オブジェクトの配置を.jsonでできる)
-	LevelEditor levelEditor_;
-	SpitOutLevelEditor spitOut_;
-	//オブジェクト描画
-	std::vector<std::unique_ptr<VisualActor>> visualActors;
-	std::unordered_map<std::string, Transform> transforms_;//各々の変更用
-	//回る速度
-	const float kRotate_ = 0.5f;
-
-	//スプライト
-	std::unique_ptr<Sprite> sprite_;//ゲームオーバーの文字
-	std::unique_ptr<Sprite> spriteSpace_;//Spaceでもどるの文字
-
-	//スプライトの設定
-	const Vector2 kSpritePositionGameOver_ = { 100.0f,100.0f };//[ゲームオーバー]文字の座標
-	const Vector2 kSpritePositionButton_ = { 800.0f,10.0f };//[ボタンで戻る]文字の座標
-	const Vector2 kSpriteSizeButton_ = { 256.0f, 64.0f };//[ボタンで戻る]文字のサイズ
-};
-
-============================================================
 File Path: project/GameProgram/Scene/GameScene.cpp
 ============================================================
 #include "GameScene.h"
@@ -24124,6 +23874,411 @@ private:
 	LevelEditor levelEditor_;
 	SpitOutLevelEditor spitOut_;
 
+};
+
+============================================================
+File Path: project/GameProgram/Scene/win_lose/ClearScene.cpp
+============================================================
+#include "ClearScene.h"
+#include "SceneManager.h"
+#include "SelectScene.h"
+#include "FadeScreen.h"
+
+using namespace MyMath;
+using namespace UseEveryOne;
+
+void ClearScene::Initialize() {
+
+	levelEditor_.LoadLevelEditor("resource/LevelEditor/clear_setting.json");
+	spitOut_.SetLevelEditor(&levelEditor_);
+
+	//スプライト初期化処理
+	InitSprite();
+	//カメラ初期化処理
+	InitCamera();
+	//オブジェクト初期化処理
+	InitObject();
+	//パーティクル初期化処理
+	InitParticle();
+	//フェードスタート
+	FadeScreen::GetInstance().FadeStart(type_fadeOut);
+}
+
+void ClearScene::InitSprite() {
+	//クリアロゴ作成
+	sprite_ = std::make_unique<Sprite>();
+	sprite_->Initialize("Moji_GameClear.png");
+	sprite_->SetPosition(kSpritePositionGameClear_);
+
+	//戻る
+	spriteSpace_ = std::make_unique<Sprite>();
+	spriteSpace_->Initialize("Moji_button.png");
+	spriteSpace_->SetPosition(kSpritePositionButton_);
+	spriteSpace_->SetSize(kSpriteSizeButton_);
+}
+
+void ClearScene::InitCamera() {
+	camera_ = std::make_unique<Camera>();
+	spitOut_.SpitOutCamera(cameraControl_);
+
+	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
+	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
+	ParticleCommon::GetInstance().SetDefaultCamera(camera_.get());
+	//ゴール、ワープフラグをリセット
+	CollisionUtility::GetInstance().ResetFrag();
+}
+
+void ClearScene::InitObject() {
+	visualActors = std::move(spitOut_.SpitOutVisualActor());
+
+	for (auto& visualActor : visualActors) {
+		transforms_[visualActor->GetObjectName()] = visualActor->GetTransform();
+		transforms_[visualActor->GetObjectName()].rotate.y = kPlayerFrontRange_;
+	}
+}
+
+void ClearScene::InitParticle() {
+	//パーティクル生成
+	for (uint32_t i = 0; i < kParticleMaxNum_; i++) {
+		//ファンファーレのパーティクル作成
+		sceneParticles_[particleFanfare_] = ParticleManager::GetInstance().InitParticle(particleFanfare_);
+		//vectorに導入
+		particleFanfares_.push_back(std::move(sceneParticles_[particleFanfare_]));
+	}
+
+	//場所の設定
+	for (auto& gParticle : particleFanfares_) {
+		gParticle->SetTranslate(fanfareTranslate_);
+		//左->中央->右の順に配置
+		fanfareTranslate_.x += kFanfareX_;
+	}
+}
+
+void ClearScene::Update() {
+	cameraControl_->Update(camera_.get());
+	//クリアロゴ更新
+	sprite_->Update();	
+	spriteSpace_->Update();
+
+	for (auto& visualActor : visualActors) {
+		visualActor->SetTransform(transforms_[visualActor->GetObjectName()]); 
+		visualActor->Update();
+	}
+	
+	for (auto& gParticle : particleFanfares_) {
+		gParticle->SetParticleBorn(ParticleBorn::TimerMode);
+		gParticle->Update();
+	}
+}
+
+void ClearScene::Draw() {
+
+	GLTFCommon::GetInstance().Command();
+	for (auto& visualActor : visualActors) {
+		visualActor->Draw();
+	}
+
+	ParticleCommon::GetInstance().Command();
+	for (auto& particle : particleFanfares_) {
+		particle->Draw();
+	}
+
+	SpriteCommon::GetInstance().Command();
+	//クリアロゴｗ描画
+	sprite_->Draw();
+	spriteSpace_->Draw();
+}
+
+void ClearScene::Finalize() {
+	ParticleManager::GetInstance().ResetParticle("clear_fanfare");
+}
+
+void ClearScene::SceneUpdate() {
+
+	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
+	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||
+		Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance().GetIsFading()) {
+		SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
+	}
+
+	//次のシーンに移動するとき
+	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
+		//フェードを挟む(FadeIn)
+		FadeScreen::GetInstance().FadeStart(type_fadeIn);
+	}
+}
+
+============================================================
+File Path: project/GameProgram/Scene/win_lose/ClearScene.h
+============================================================
+#pragma once
+#include "Sprite.h"
+#include "Framework.h"
+#include "BaseScene.h"
+
+#include "LevelEditor.h"
+#include "SpitOutLevelEditor.h"
+#include "CameraControl.h"
+/// <summary>
+/// クリアシーン(BaseSceneの派生クラス)
+/// </summary>
+class ClearScene : public BaseScene{
+public:
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	void Draw() override;
+	/// <summary>
+	/// 解放処理
+	/// </summary>
+	void Finalize() override;
+	/// <summary>
+	/// シーン変更処理
+	/// </summary>
+	void SceneUpdate() override;
+private:
+	/// <summary>
+	/// スプライト初期化処理
+	/// </summary>
+	void InitSprite();
+	/// <summary>
+	/// カメラ初期化処理
+	/// </summary>
+	void InitCamera();
+	/// <summary>
+	/// オブジェクト初期化処理
+	/// </summary>
+	void InitObject();
+	/// <summary>
+	/// オブジェクト初期化処理
+	/// </summary>
+	void InitParticle();
+	
+	//カメラ
+	std::unique_ptr<Camera> camera_ = nullptr;
+	//カメラのコントロール
+	std::unique_ptr<CameraControl> cameraControl_;
+
+	//レベルエディタ(オブジェクトの配置を.jsonでできる)
+	LevelEditor levelEditor_;
+	SpitOutLevelEditor spitOut_;
+	//オブジェクト描画
+	std::vector<std::unique_ptr<VisualActor>> visualActors;
+	std::unordered_map<std::string, Transform> transforms_;//各々の変更用
+	//プレイヤーを前に向かす
+	const float kPlayerFrontRange_ = 180.0f;
+
+	//スプライト描画
+	std::unique_ptr<Sprite> sprite_;//ゲームクリアの文字
+	std::unique_ptr<Sprite> spriteSpace_;//Spaceでもどるの文字
+
+	//スプライト
+	const Vector2 kSpritePositionGameClear_ = { 100, 100 };//[ゲームクリア]文字の座標
+	const Vector2 kSpritePositionButton_ = { 800,10 };//[ボタンで戻る]文字の座標
+	const Vector2 kSpriteSizeButton_ = { 256,64 };//[ボタンで戻る]文字のサイズ
+
+	//パーティクル
+	std::unordered_map<std::string, std::unique_ptr<Particle>> sceneParticles_;
+
+	//紙吹雪のパーティクルたち
+	const uint32_t kParticleMaxNum_ = 3;
+	
+	const std::string& particleFanfare_ = "clear_fanfare";
+
+	std::vector<std::unique_ptr<Particle>> particleFanfares_;
+
+	//紙吹雪パーティクルたちの座標をずらす
+	const float kFanfareX_ = 3.0f;
+	//紙吹雪パーティクルの座標
+	Vector3 fanfareTranslate_ = { -kFanfareX_,2,0 };
+};
+
+============================================================
+File Path: project/GameProgram/Scene/win_lose/GameOverScene.cpp
+============================================================
+#include "GameOverScene.h"
+#include "SceneManager.h"
+#include "SelectScene.h"
+#include "FadeScreen.h"
+#include "NextStageSave.h"
+
+void GameOverScene::Initialize() {
+
+	levelEditor_.LoadLevelEditor("resource/LevelEditor/gameOver_setting.json");
+	spitOut_.SetLevelEditor(&levelEditor_);
+
+	//スプライト初期化処理
+	InitSprite();
+	//カメラ初期化処理
+	InitCamera();
+	//オブジェクト初期化処理
+	InitObject();
+
+	//フェードスタート
+	FadeScreen::GetInstance().FadeStart(type_fadeOut);
+}
+
+void GameOverScene::InitSprite() {
+	//ゲームオーバーロゴ作成
+	sprite_ = std::make_unique<Sprite>();
+	sprite_->Initialize("Moji_GameOver.png");
+	sprite_->SetPosition(kSpritePositionGameOver_);
+
+	//戻る
+	spriteSpace_ = std::make_unique<Sprite>();
+	spriteSpace_->Initialize("Moji_button.png");
+	spriteSpace_->SetPosition(kSpritePositionButton_);
+	spriteSpace_->SetSize(kSpriteSizeButton_);
+}
+
+void GameOverScene::InitCamera() {
+	//カメラ設定
+	camera_ = std::make_unique<Camera>();
+	spitOut_.SpitOutCamera(cameraControl_);
+
+	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
+	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
+	//ゴール、ワープフラグをリセット
+	CollisionUtility::GetInstance().ResetFrag();
+}
+
+void GameOverScene::InitObject() {
+	visualActors = std::move(spitOut_.SpitOutVisualActor());
+
+	for (auto& visualActor : visualActors) {
+		transforms_[visualActor->GetObjectName()] = visualActor->GetTransform();
+		visualActor->LightOn();//ライト処理オン
+	}
+}
+
+
+void GameOverScene::Update() {
+	cameraControl_->Update(camera_.get());
+
+	sprite_->Update();
+	spriteSpace_->Update();
+
+	//オブジェクト更新処理
+	for (auto& visualActor : visualActors) {
+		transforms_[visualActor->GetObjectName()].rotate.y += kRotate_;
+		visualActor->SetTransform(transforms_[visualActor->GetObjectName()]);//座標更新
+		visualActor->Update();
+	}
+}
+
+void GameOverScene::Draw() {
+
+	GLTFCommon::GetInstance().Command();
+
+	//オブジェクト描画
+	for (auto& visualActor : visualActors) {
+		visualActor->Draw();
+	}
+
+	SpriteCommon::GetInstance().Command();
+
+	sprite_->Draw();
+	spriteSpace_->Draw();
+}
+
+void GameOverScene::Finalize() {}
+
+void GameOverScene::SceneUpdate() {
+
+	//セレクトシーンに戻る(フェードの最中にボタンを押せなくする)
+	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||
+		Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && !FadeScreen::GetInstance().GetIsFading()) {
+		SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
+		FadeScreen::GetInstance().SetMaskTexture("fade01.png");
+		FadeScreen::GetInstance().SetBackGround("fadeTexture.png");
+	}
+
+	//次のシーンに移動するとき
+	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
+		//フェードを挟む(FadeIn)
+		FadeScreen::GetInstance().FadeStart(type_fadeIn);
+	}
+}
+
+============================================================
+File Path: project/GameProgram/Scene/win_lose/GameOverScene.h
+============================================================
+#pragma once
+#include "Framework.h"
+#include "BaseScene.h"
+
+#include "LevelEditor.h"
+#include "SpitOutLevelEditor.h"
+#include "CameraControl.h"
+/// <summary>
+/// ゲームオーバーシーン(BaseSceneの派生クラス)
+/// </summary>
+class GameOverScene : public BaseScene{
+public:
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	void Draw() override;
+	/// <summary>
+	/// 解放処理
+	/// </summary>
+	void Finalize() override;
+	/// <summary>
+	/// シーン変更処理
+	/// </summary>
+	void SceneUpdate() override;
+private:
+	/// <summary>
+	/// スプライト初期化処理
+	/// </summary>
+	void InitSprite();
+	/// <summary>
+	/// カメラ初期化処理
+	/// </summary>
+	void InitCamera();
+	/// <summary>
+	/// オブジェクト初期化処理
+	/// </summary>
+	void InitObject();
+
+	//カメラ
+	std::unique_ptr<Camera> camera_ = nullptr;
+	//カメラのコントロール
+	std::unique_ptr<CameraControl> cameraControl_;
+
+	//レベルエディタ(オブジェクトの配置を.jsonでできる)
+	LevelEditor levelEditor_;
+	SpitOutLevelEditor spitOut_;
+	//オブジェクト描画
+	std::vector<std::unique_ptr<VisualActor>> visualActors;
+	std::unordered_map<std::string, Transform> transforms_;//各々の変更用
+	//回る速度
+	const float kRotate_ = 0.5f;
+
+	//スプライト
+	std::unique_ptr<Sprite> sprite_;//ゲームオーバーの文字
+	std::unique_ptr<Sprite> spriteSpace_;//Spaceでもどるの文字
+
+	//スプライトの設定
+	const Vector2 kSpritePositionGameOver_ = { 100.0f,100.0f };//[ゲームオーバー]文字の座標
+	const Vector2 kSpritePositionButton_ = { 800.0f,10.0f };//[ボタンで戻る]文字の座標
+	const Vector2 kSpriteSizeButton_ = { 256.0f, 64.0f };//[ボタンで戻る]文字のサイズ
 };
 
 ============================================================
@@ -26334,121 +26489,6 @@ private:
 };
 
 
-
-============================================================
-File Path: project/GameProgram/System/ParticleEmitter.cpp
-============================================================
-#include "ParticleEmitter.h"
-#include <numbers>
-
-using namespace MyMath;
-
-std::unique_ptr<ParticleEmitter> ParticleEmitter::sInstance_ = nullptr;
-
-ParticleEmitter& ParticleEmitter::GetInstance() {
-	if (sInstance_ == nullptr) {
-		sInstance_ = std::make_unique<ParticleEmitter>();
-	}
-	return *sInstance_;
-}
-
-void ParticleEmitter::Finalize() {
-	sInstance_.reset();
-}
-
-ParticleData ParticleEmitter::MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter) {
-	//random
-	std::uniform_real_distribution<float> distTransformT(emitter.particleData.distTransformT.distMin, emitter.particleData.distTransformT.distMax);
-	std::uniform_real_distribution<float> distTransformR(emitter.particleData.distTransformR.distMin, emitter.particleData.distTransformR.distMax);
-	std::uniform_real_distribution<float> distTransformS(emitter.particleData.distTransformS.distMin, emitter.particleData.distTransformS.distMax);
-
-	std::uniform_real_distribution<float> distVelocityT(emitter.particleData.distVelocityT.distMin, emitter.particleData.distVelocityT.distMax);
-	std::uniform_real_distribution<float> distVelocityR(emitter.particleData.distVelocityR.distMin, emitter.particleData.distVelocityR.distMax);
-	std::uniform_real_distribution<float> distVelocityS(emitter.particleData.distVelocityS.distMin, emitter.particleData.distVelocityS.distMax);
-
-	std::uniform_real_distribution<float> distColor(emitter.particleData.distColor.distMin, emitter.particleData.distColor.distMax);//色用
-	std::uniform_real_distribution<float> distLifeTime(emitter.particleData.distLifeTime.distMin, emitter.particleData.distLifeTime.distMax);//生存時間用
-	std::uniform_real_distribution<float> distCurrentTime(emitter.particleData.distCurrentTime.distMin, emitter.particleData.distCurrentTime.distMax);//生存時間用
-
-	ParticleData particle;
-
-	Vector3 translate = { distTransformT(randomEngine),distTransformT(randomEngine) ,distTransformT(randomEngine) };
-	Vector3 rotate = { distTransformR(randomEngine),distTransformR(randomEngine) ,distTransformR(randomEngine) };
-	Vector3 scale = { distTransformS(randomEngine),distTransformS(randomEngine) ,distTransformS(randomEngine) };
-
-	particle.transform.translate = emitter.transform.translate + translate;
-	particle.transform.scale = emitter.transform.scale + scale;
-	particle.transform.rotate = emitter.transform.rotate + rotate;
-
-	Vector3 velocityTranslate = { distVelocityT(randomEngine),distVelocityT(randomEngine) ,distVelocityT(randomEngine) };
-	Vector3 velocityRotate = { distVelocityR(randomEngine),distVelocityR(randomEngine) ,distVelocityR(randomEngine) };
-	Vector3 velocityScale = { distVelocityS(randomEngine),distVelocityS(randomEngine) ,distVelocityS(randomEngine) };
-
-	particle.velocityTransform.translate = emitter.particleData.velocityTransform.translate + velocityTranslate;
-	particle.velocityTransform.rotate = emitter.particleData.velocityTransform.rotate + velocityRotate;
-	particle.velocityTransform.scale = emitter.particleData.velocityTransform.scale + velocityScale;
-	
-	Vector4 color = { distColor(randomEngine),distColor(randomEngine) ,distColor(randomEngine),distColor(randomEngine) };
-	particle.color = emitter.particleData.color + color;
-
-	particle.lifeTime = emitter.particleData.lifeTime + distLifeTime(randomEngine);
-
-	particle.currentTime = emitter.particleData.currentTime + distCurrentTime(randomEngine);
-
-	return particle;
-}
-
-std::list<ParticleData> ParticleEmitter::MakeEmit(const std::string& particleName, const Emitter& emitter, std::mt19937& randomEngine) {
-	std::list<ParticleData> particles;
-
-	for (uint32_t count = 0; count < emitter.count; ++count) {
-		particles.push_back(MakeNewParticle(randomEngine, emitter));
-	}
-
-	return particles;
-}
-
-
-============================================================
-File Path: project/GameProgram/System/ParticleEmitter.h
-============================================================
-#pragma once
-#include "MyMath.h"
-#include "Particle.h"
-
-/// <summary>
-/// パーティクルの発生部分
-/// </summary>
-class ParticleEmitter{
-public:
-	/// <summary>
-	/// インスタンス生成
-	/// </summary>
-	/// <returns>インスタンス</returns>
-	static ParticleEmitter& GetInstance();
-
-	/// <summary>
-	/// 解放処理
-	/// </summary>
-	void Finalize();
-
-	/// <summary>
-	/// パーティクル生成
-	/// </summary>
-	/// <param name="particleName">パーティクルの名前</param>
-	/// <param name="emitter">使っているエミッター</param>
-	/// <param name="randomEngine">ランダムエンジン</param>
-	/// <returns></returns>
-	std::list<ParticleData> MakeEmit(const std::string& particleName, const Emitter& emitter, std::mt19937& randomEngine);
-
-private:
-	//インスタンス
-	static std::unique_ptr<ParticleEmitter> sInstance_;
-	//default_deleteを設定(解放処理を行える)
-	friend struct std::default_delete<ParticleEmitter>;
-	///パーティクル生成方法一覧
-	ParticleData MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter);//通常
-};
 
 ============================================================
 File Path: project/GameProgram/System/Pause/BasePauseState.cpp
