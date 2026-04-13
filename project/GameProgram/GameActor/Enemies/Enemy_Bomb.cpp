@@ -206,21 +206,3 @@ void Enemy_Bomb::Explosion() {
 	//当たり判定設定
 	CollisionManager::GetInstance().FrameCollision(bombAABB_, transform_.translate, CollisionTypes::TypeBombExplotion);
 }
-
-void Enemy_Bomb::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::TypePlayerBullet) {
-		IsDamage();
-	}
-
-	if (collision->GetType() == CollisionTypes::TypeStage) {
-		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
-	}
-}
-
-bool Enemy_Bomb::TypeCheckUp(const CollisionTypes& collisionType) {
-	if (collisionType == CollisionTypes::TypePlayerBullet ||
-		collisionType == CollisionTypes::TypeStage) {
-		return true;
-	}
-	return false;
-}

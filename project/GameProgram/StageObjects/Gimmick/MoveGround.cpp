@@ -26,11 +26,28 @@ void MoveGround::Update() {
 	center_ = transform_.translate;
 
 	CollisionManager::GetInstance().FrameCollision(this);
+
+	CollisionUtility::GetInstance().ResetMoveValue();
 }
 
 void MoveGround::Draw() {
 	object_->Draw();
 }
+
+void MoveGround::OnCollision(CollisionSource* collision) {
+	if (collision->GetType() == CollisionTypes::TypePlayer || collision->GetType() == CollisionTypes::TypeEnemy) {
+		//移動量を配列に追加する(座標、移動量(現在位置と前回位置の減算))
+		CollisionUtility::GetInstance().AddMoveValue(nowPoint_,nowPoint_ - transform_.translate);
+	}
+}
+
+bool MoveGround::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypePlayer || collisionType == CollisionTypes::TypeEnemy) {
+		return true;
+	}
+	return false;
+}
+
 
 void MoveGround::SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, const Vector3& pointE) {
 	//現在の位置を設定

@@ -61,6 +61,9 @@ void BaseEnemy::Update() {
 		return;
 	}
 
+	//移動量を加算
+	CollisionUtility::GetInstance().OnMoveGround(transform_.translate);
+
 	//リアクション
 	reaction_->ScaleReaction(transform_.scale,isDamageMotion_, damageScale_, scaleTimer_, kDamageMaxTime_);
 
@@ -255,6 +258,26 @@ void BaseEnemy::HpSpriteUpdate() {
 	if (hpSpriteTimer_ < 0.0f) {
 		hpSpriteTimer_ = kMaxHpSpriteTimer_;
 	}
+}
+
+
+
+void BaseEnemy::OnCollision(CollisionSource* collision) {
+	if (collision->GetType() == CollisionTypes::TypePlayerBullet) {
+		IsDamage();
+	}
+
+	if (collision->GetType() == CollisionTypes::TypeStage || collision->GetType() == CollisionTypes::TypeMoveGround) {
+		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
+	}
+}
+
+bool BaseEnemy::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypePlayerBullet ||
+		collisionType == CollisionTypes::TypeStage || collisionType == CollisionTypes::TypeMoveGround) {
+		return true;
+	}
+	return false;
 }
 
 

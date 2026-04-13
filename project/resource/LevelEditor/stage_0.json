@@ -140,28 +140,6 @@
         },
         {
             "type": "GuideSpawn",
-            "name": "GuideSpawn",
-            "transform": {
-                "translation": [
-                    -192.0,
-                    14.0,
-                    11.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    6.0,
-                    6.0,
-                    6.0
-                ]
-            },
-            "file_name": "GuideMove"
-        },
-        {
-            "type": "GuideSpawn",
             "name": "GuideSpawn.001",
             "transform": {
                 "translation": [
@@ -692,28 +670,6 @@
             "file_name": "GuideShield"
         },
         {
-            "type": "GuideSpawn",
-            "name": "GuideSpawn.004",
-            "transform": {
-                "translation": [
-                    141.57382202148438,
-                    14.0,
-                    23.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    6.0,
-                    6.0,
-                    6.0
-                ]
-            },
-            "file_name": "GuideWarp"
-        },
-        {
             "type": "MESH",
             "name": "ICO球",
             "transform": {
@@ -745,7 +701,7 @@
                     25.0
                 ],
                 "camera": "EventCamera",
-                "csv": "event_01"
+                "csv": "event_00"
             }
         },
         {
@@ -1595,6 +1551,41 @@
                     4.784999847412109
                 ]
             },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "立方体.020",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "Soldier",
             "collider": {
                 "type": "BOX",
                 "center": [

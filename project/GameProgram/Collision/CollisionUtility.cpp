@@ -124,3 +124,34 @@ void CollisionUtility::ResetFrag() {
 	isWarp_ = false;
 	isGoal_ = false;
 }
+
+void CollisionUtility::AddMoveValue(const Vector3& translate, const Vector3& value) {
+	MoveGroundParameter parameter;
+	parameter.translate = translate;
+	parameter.value = value;
+
+	moveGroundParameter_.push_back(parameter);
+}
+
+
+void CollisionUtility::OnMoveGround(Vector3& translate) {
+	//ない場合はしない
+	if (moveGroundParameter_.empty()) {
+		return;
+	}
+
+	Vector3 result = { 0,0,0 };
+	Vector3 length = { kReferenceLittleDirection_,kReferenceLittleDirection_,kReferenceLittleDirection_ };
+	for (auto& parameter : moveGroundParameter_) {
+		//対象(プレイヤー、敵)の座標と移動床の座標の距離が短いとき
+		if (Length(translate, parameter.translate) < length) {
+			result = parameter.value;//一番近い移動床を対象にする
+			length = Length(translate, parameter.translate);
+		}
+	}
+	//変っていないなら
+	if (result == Vector3(0, 0, 0)) return;
+
+	//移動量を加算
+	translate += result;
+}

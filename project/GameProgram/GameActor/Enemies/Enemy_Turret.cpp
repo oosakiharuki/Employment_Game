@@ -166,21 +166,3 @@ void Enemy_Turret::LaserPoint() {
 	particles_[particleLaser_]->SetTranslate(transform_.translate + TransformNormal(Vector3{ 0,0,particleLaserSize_.x }, matWorld));
 	particles_[particleLaser_]->SetParticleBorn(ParticleBorn::TimerMode);
 }
-
-void Enemy_Turret::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::TypePlayerBullet) {
-		IsDamage();
-	}
-
-	if (collision->GetType() == CollisionTypes::TypeStage) {
-		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
-	}
-}
-
-bool Enemy_Turret::TypeCheckUp(const CollisionTypes& collisionType) {
-	if (collisionType == CollisionTypes::TypePlayerBullet ||
-		collisionType == CollisionTypes::TypeStage) {
-		return true;
-	}
-	return false;
-}

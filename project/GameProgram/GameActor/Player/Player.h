@@ -321,11 +321,6 @@ private:
 	/// ノックバックする更新処理
 	/// </summary>
 	void KnockBackUpdate();
-	
-	/// <summary>
-	/// 移動床に乗っている処理
-	/// </summary>
-	void OnMoveGround();
 
 	//オブジェクト
 	std::unique_ptr<Object_glTF> object_;
@@ -432,15 +427,7 @@ private:
 	std::unique_ptr<Command> command_;
 
 	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
-
-	//移動床からもらう変数
-	Vector3 move_;
-	Vector3 preMove_ = {0,0,0};
-	Vector3 value_;
-	bool isMoveGround_ = false;
-	const float kMoveGroundUnder_ = 0.25f;//離れないように少し下げる
-
-
+	
 	std::unique_ptr<ReinforceGauge> reinforceGauge_ = nullptr;
 
 };

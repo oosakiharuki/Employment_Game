@@ -62,6 +62,7 @@ void ReinforceGauge::Update() {
 		gaugePointSprite->SetSize(size);
 		
 		i++;
+		//エネルギーのUI
 		UIManager::GetInstance().FrameSprite(&*gaugePointSprite);
 	}
 

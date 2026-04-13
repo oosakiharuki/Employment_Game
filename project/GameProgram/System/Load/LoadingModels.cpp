@@ -35,6 +35,7 @@ void LoadingModels::LoadObj() {
 	ModelManager::GetInstance().LoadModel("warpGate", ".obj");
 	ModelManager::GetInstance().LoadModel("goal", ".obj");
 	ModelManager::GetInstance().LoadModel("moveGround", ".obj");
+	ModelManager::GetInstance().LoadModel("energy", ".obj");
 
 	ModelManager::GetInstance().LoadModel("shadow", ".obj");
 	ModelManager::GetInstance().LoadModel("player_found_mark", ".obj");

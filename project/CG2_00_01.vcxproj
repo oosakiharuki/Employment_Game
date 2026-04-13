@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\Energy.cpp" />
     <ClCompile Include="GameProgram\StageObjects\Gimmick\BrokenBox.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionUtility.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionSource.cpp" />
@@ -218,6 +219,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActionsInputHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\Energy.h" />
     <ClInclude Include="GameProgram\StageObjects\Gimmick\BrokenBox.h" />
     <ClInclude Include="GameProgram\Collision\CollisionUtility.h" />
     <ClInclude Include="GameProgram\Collision\CollisionSource.h" />
