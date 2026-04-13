@@ -151,15 +151,11 @@ void PlayerActions::CommandFire() {
 
 void PlayerActions::ShootBullet() {
 	BornBullet(player_->GetUmbrellaTranslate(), { 0.0f,kDispersionBetween_ ,kBulletSpeed_ });
-	///撃った方向と反対方向にノックバック
-	player_->KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
 }
 
 void PlayerActions::PowerShootBullet() {
-	//弾が分散するように
+	//弾丸速度が二倍、より遠くに飛ばせる
 	BornBullet(player_->GetUmbrellaTranslate(), { 0.0f,kDispersionBetween_ * kDivideByTwo_ ,kBulletSpeed_ * kTwice_ });
-	///撃った方向と反対方向にノックバック
-	player_->KnockBackUmbrella(kBulletKnockbackPower_ * kTwice_, kBulletSpeed_ * kTwice_);
 }
 
 void PlayerActions::BornBullet(const Vector3& translate, const Vector3& velocity) {
@@ -179,6 +175,8 @@ void PlayerActions::BornBullet(const Vector3& translate, const Vector3& velocity
 	}
 	//パーティクル
 	player_->ParticleFire(translate);
+	///撃った方向と反対方向にノックバック
+	player_->KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
 }
 
 void PlayerActions::CommandShield() {

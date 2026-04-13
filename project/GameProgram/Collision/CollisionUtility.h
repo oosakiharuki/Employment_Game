@@ -96,6 +96,19 @@ public:
 	/// <returns>現在のズームポイント</returns>
 	const Vector3& GetZoomPoint() { return zoomPoint_; }
 
+	/// <summary>
+	/// 移動量を加算
+	/// </summary>
+	void OnMoveGround(Vector3& translate);
+
+	/// <summary>
+	/// 動く足場の移動量を追加
+	/// </summary>
+	/// <param name="value">移動量を入れる</param>
+	void AddMoveValue(const Vector3& translate,const Vector3& value);
+
+	void ResetMoveValue() { moveGroundParameter_.clear(); }
+
 private:
 
 	//インスタンス
@@ -114,6 +127,19 @@ private:
 	//ズームポイント
 	Vector3 zoomPoint_{};
 
+	struct MoveGroundParameter {
+		Vector3 translate;
+		Vector3 value;
+	};
+
+	//移動量
+	std::list<MoveGroundParameter> moveGroundParameter_;
+	const float kReferenceLittleDirection_ = 10.0f;//基準となる短い長さ
+
+	/// <summary>
+	/// ズームするポイント
+	/// </summary>
+	/// <param name="point">指定する場所</param>
 	void SetZoomPoint(const Vector3& point);
 };
 

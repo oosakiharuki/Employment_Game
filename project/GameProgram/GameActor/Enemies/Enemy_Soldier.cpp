@@ -170,19 +170,3 @@ void Enemy_Soldier::FireBullet() {
 	fireCommand_->AddBullet(enemyPosition, velocity_);
 }
 
-void Enemy_Soldier::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::TypePlayerBullet) {
-		IsDamage();
-	}
-
-	if (collision->GetType() == CollisionTypes::TypeStage) {
-		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
-	}
-}
-bool Enemy_Soldier::TypeCheckUp(const CollisionTypes& collisionType) {
-	if (collisionType == CollisionTypes::TypePlayerBullet ||
-		collisionType == CollisionTypes::TypeStage) {
-		return true;
-	}
-	return false;
-}

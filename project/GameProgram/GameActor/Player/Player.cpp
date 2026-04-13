@@ -150,11 +150,11 @@ void Player::Update() {
 	//土煙のパーティクル
 	SmockParticle();
 
+	//移動量を加算
+	CollisionUtility::GetInstance().OnMoveGround(transform_.translate);
+
 	//現在座標に前回座標を代入
 	prePosition_ = transform_.translate;
-
-	//移動床に乗った時のの処理
-	OnMoveGround();
 
 	//imGui更新処理
 	ImGuiUpdate();
@@ -448,29 +448,9 @@ void Player::OnCollision(CollisionSource* collision) {
 		collision->GetType() == CollisionTypes::TypeBoss) {
 		IsDamage(collision->GetCenter());
 	}
-	//演出中、死亡の時は当たらない
-	if (collision->GetType() == CollisionTypes::TypeStage) {
+	
+	if (collision->GetType() == CollisionTypes::TypeStage || collision->GetType() == CollisionTypes::TypeMoveGround) {
 		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap,*this, *this,collision->GetAABB());
-	}
-
-	if (collision->GetType() == CollisionTypes::TypeMoveGround) {
-		move_ = collision->GetCenter();//現在の位置
-		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
-
-		//当たった初回
-		if (preMove_ == Vector3(0, 0, 0)) {
-			preMove_ = move_;//同じにすることで移動量をなしにする
-		}		
-
-		//移動量を計算
-		value_ = move_ - preMove_;
-
-		//乗っている場合
-		if (collisionOverlap.isGround && !Input::GetInstance().TriggerKey(DIK_SPACE) && !Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) {
-			//当たり判定で離れないように
-			value_.y -= kMoveGroundUnder_;
-			isMoveGround_ = true;
-		}
 	}
 
 	if (collision->GetType() == CollisionTypes::TypeEvent) {
@@ -487,7 +467,7 @@ void Player::OnCollision(CollisionSource* collision) {
 }
 
 bool Player::TypeCheckUp(const CollisionTypes& collisionType) {
-	//体力0+演出状態の時
+	//体力0(死亡)+演出状態の時は当たらない
 	if (hp_ == 0 || isPerformance_) {
 		return false;
 	}
@@ -679,19 +659,6 @@ void Player::SpriteUpdate() {
 #endif // _DEBUG
 	//強化ゲージの更新
 	reinforceGauge_->Update();
-}
-
-void Player::OnMoveGround() {
-	if (isMoveGround_) {
-		transform_.translate += value_;//移動した分加算
-		preMove_ = move_;//現在の位置を前回位置として使う
-	}
-	else {
-		//リセット
-		move_ = { 0,0,0 };
-		preMove_ = move_;
-	}
-	isMoveGround_ = false;
 }
 
 bool Player::UseGaugePoint() { 

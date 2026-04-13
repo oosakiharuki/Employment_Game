@@ -198,15 +198,15 @@
                 "velocity": {
                     "rotate": [
                         0.0,
-                        0.0
+                        20.0
                     ],
                     "scale": [
                         0.0,
                         0.0
                     ],
                     "translate": [
-                        0.0,
-                        0.0
+                        -20.0,
+                        20.0
                     ]
                 }
             },
@@ -218,7 +218,7 @@
                     1
                 ],
                 "currentTime": 0.0,
-                "lifeTime": 0.6000000238418579,
+                "lifeTime": 1.0,
                 "velocity": {
                     "rotate": [
                         0.0,
@@ -226,9 +226,9 @@
                         0.0
                     ],
                     "scale": [
-                        5.0,
-                        5.0,
-                        5.0
+                        -0.5,
+                        -0.5,
+                        -0.5
                     ],
                     "translate": [
                         0.0,
@@ -237,18 +237,18 @@
                     ]
                 }
             },
-            "objectType": "Ring",
+            "objectType": "Box",
             "parameter": {
                 "basicSize": [
-                    0.25,
-                    4.0,
-                    0.25
+                    0.5,
+                    0.5,
+                    0.5
                 ],
                 "count": 10,
-                "frequency": 0.6000000238418579
+                "frequency": 1.0
             },
             "particleName": "player_damage",
-            "textureFile": "resource/Sprite/circle.dds"
+            "textureFile": "resource/Sprite/white.dds"
         },
         {
             "dist": {
