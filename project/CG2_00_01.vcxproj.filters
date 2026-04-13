@@ -127,9 +127,6 @@
     <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Enemies">
       <UniqueIdentifier>{e9507568-3eb6-4560-bccc-bf7c120300a3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Player">
-      <UniqueIdentifier>{53cdf185-41ea-4488-b3a6-a6812d9cabc0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Engine\3d\camera">
       <UniqueIdentifier>{ee8fdf40-e874-45bb-b98e-d4e3ef6e748f}</UniqueIdentifier>
     </Filter>
@@ -235,6 +232,45 @@
     <Filter Include="ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere">
       <UniqueIdentifier>{48cc3fb3-40af-4815-b451-df07c3110e45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameProgram\GameActor\Player\Action">
+      <UniqueIdentifier>{2ee9a406-ec76-4e2a-905a-2e163fde88df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\GameActor\Player\Weapon">
+      <UniqueIdentifier>{6a71abf2-a1fa-45c6-81de-5c6799a4ffe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\Scene\win_lose">
+      <UniqueIdentifier>{7bd3f459-fd9b-4446-847d-6ef551037f85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\GameActor\Actor">
+      <UniqueIdentifier>{c4451ac9-ba1d-477e-aded-f7776cd13dac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Actor">
+      <UniqueIdentifier>{7601598e-fe2b-4db4-ab00-b4ecc6544914}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Player">
+      <UniqueIdentifier>{53cdf185-41ea-4488-b3a6-a6812d9cabc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Player\Weapon">
+      <UniqueIdentifier>{c2c16011-a017-4658-a0f2-fa4c771008c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Player\Action">
+      <UniqueIdentifier>{a152a97f-87be-4b4d-b969-9ab0ff80d63d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\Scene\win_lose">
+      <UniqueIdentifier>{c60c3db2-7e38-40d0-910e-8118930d614d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\PostEffect\creates\screen\blur">
+      <UniqueIdentifier>{ac08e4f1-07de-4a55-a28d-71013f9a50b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\PostEffect\creates\screen\color">
+      <UniqueIdentifier>{23bcb6be-b4f6-4e39-8b38-03925c158b92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\PostEffect\creates\screen\blur">
+      <UniqueIdentifier>{83890531-3386-4aad-83b1-b10ae1e4f972}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\PostEffect\creates\screen\color">
+      <UniqueIdentifier>{c40cfcea-c98d-497d-b5b4-ba932173ee50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\Sprite.cpp">
@@ -300,23 +336,11 @@
     <ClCompile Include="GameProgram\GameActor\Player\Player.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\Weapon\PlayerBullet.cpp">
-      <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella.cpp">
-      <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\3d\primitive\Primitive.cpp">
       <Filter>ソース ファイル\Engine\3d\primitive</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Enemies\Enemy_Bomb.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\Scene\ClearScene.cpp">
-      <Filter>ソース ファイル\GameProgram\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\Scene\GameOverScene.cpp">
-      <Filter>ソース ファイル\GameProgram\Scene</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Scene\SelectScene.cpp">
       <Filter>ソース ファイル\GameProgram\Scene</Filter>
@@ -342,9 +366,6 @@
     <ClCompile Include="GameProgram\Collision\CollisionManager.cpp">
       <Filter>ソース ファイル\GameProgram\Collsion</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\System\ParticleEmitter.cpp">
-      <Filter>ソース ファイル\GameProgram\System</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\System\UseEveryOne.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
@@ -356,9 +377,6 @@
     </ClCompile>
     <ClCompile Include="Engine\base\Pipeline.cpp">
       <Filter>ソース ファイル\Engine\base</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActions.cpp">
-      <Filter>ソース ファイル\GameProgram\GameActor\Player</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Boss\Boss.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Boss</Filter>
@@ -377,15 +395,6 @@
     </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\BackGroundObject.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\ActorState.cpp">
-      <Filter>ソース ファイル\GameProgram\GameActor</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\GravityActor.cpp">
-      <Filter>ソース ファイル\GameProgram\GameActor</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\GameActor.cpp">
-      <Filter>ソース ファイル\GameProgram\GameActor</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Shadow.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor</Filter>
@@ -453,13 +462,7 @@
     <ClCompile Include="Engine\PostEffect\creates\screen\Vignette.cpp">
       <Filter>ソース ファイル\Engine\PostEffect\creates\screen</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PostEffect\creates\screen\RadialBlur.cpp">
-      <Filter>ソース ファイル\Engine\PostEffect\creates\screen</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\PostEffect\creates\screen\Random.cpp">
-      <Filter>ソース ファイル\Engine\PostEffect\creates\screen</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\PostEffect\creates\screen\Grayscale.cpp">
       <Filter>ソース ファイル\Engine\PostEffect\creates\screen</Filter>
     </ClCompile>
     <ClCompile Include="Engine\PostEffect\creates\screen\Dissolve.cpp">
@@ -537,14 +540,47 @@
     <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\WarpGate.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\Weapon\ReinforceGauge.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActions.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Action</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActionsInputHandler.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\PlayerBullet.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\ReinforceGauge.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\Energy.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\3d\particle\ParticleEmitter.cpp">
+      <Filter>ソース ファイル\Engine\3d\particle</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Scene\win_lose\GameOverScene.cpp">
+      <Filter>ソース ファイル\GameProgram\Scene\win_lose</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\Scene\win_lose\ClearScene.cpp">
+      <Filter>ソース ファイル\GameProgram\Scene\win_lose</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Actor\ActorState.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Actor\GameActor.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Actor\GravityActor.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\creates\screen\blur\RadialBlur.cpp">
+      <Filter>ソース ファイル\Engine\PostEffect\creates\screen\blur</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\PostEffect\creates\screen\color\Grayscale.cpp">
+      <Filter>ソース ファイル\Engine\PostEffect\creates\screen\color</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -632,18 +668,6 @@
     <ClInclude Include="GameProgram\GameActor\Player\Player.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\Weapon\PlayerBullet.h">
-      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella.h">
-      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\Scene\ClearScene.h">
-      <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\Scene\GameOverScene.h">
-      <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\Scene\SelectScene.h">
       <Filter>ヘッダー ファイル\GameProgram\Scene</Filter>
     </ClInclude>
@@ -668,9 +692,6 @@
     <ClInclude Include="GameProgram\Collision\CollisionManager.h">
       <Filter>ヘッダー ファイル\GameProgram\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\System\ParticleEmitter.h">
-      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\System\UseEveryOne.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
@@ -682,9 +703,6 @@
     </ClInclude>
     <ClInclude Include="Engine\base\Pipeline.h">
       <Filter>ヘッダー ファイル\Engine\base</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\Action\PlayerActions.h">
-      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Boss\Boss.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Boss</Filter>
@@ -704,12 +722,6 @@
     <ClInclude Include="GameProgram\StageObjects\BackGroundObject.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\ActorState.h">
-      <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\GravityActor.h">
-      <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\Collision\CollisionSource.h">
       <Filter>ヘッダー ファイル\GameProgram\Collision</Filter>
     </ClInclude>
@@ -717,9 +729,6 @@
       <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Shadow.h">
-      <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\GameActor.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor</Filter>
     </ClInclude>
     <ClInclude Include="Engine\3d\camera\Camera.h">
@@ -780,12 +789,6 @@
       <Filter>ヘッダー ファイル\Engine\PostEffect\creates\filter</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\creates\screen\Dissolve.h">
-      <Filter>ヘッダー ファイル\Engine\PostEffect\creates\screen</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\PostEffect\creates\screen\Grayscale.h">
-      <Filter>ヘッダー ファイル\Engine\PostEffect\creates\screen</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\PostEffect\creates\screen\RadialBlur.h">
       <Filter>ヘッダー ファイル\Engine\PostEffect\creates\screen</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\creates\screen\Random.h">
@@ -860,14 +863,47 @@
     <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\WarpGate.h">
       <Filter>ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\Weapon\ReinforceGauge.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\PlayerBullet.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Player\Action\PlayerActions.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Action</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Player\Action\PlayerActionsInputHandler.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Action</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\ReinforceGauge.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\Energy.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\3d\particle\ParticleEmitter.h">
+      <Filter>ヘッダー ファイル\Engine\3d\particle</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Actor\ActorState.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Actor\GameActor.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Actor\GravityActor.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Scene\win_lose\ClearScene.h">
+      <Filter>ヘッダー ファイル\GameProgram\Scene\win_lose</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\Scene\win_lose\GameOverScene.h">
+      <Filter>ヘッダー ファイル\GameProgram\Scene\win_lose</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\creates\screen\blur\RadialBlur.h">
+      <Filter>ヘッダー ファイル\Engine\PostEffect\creates\screen\blur</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\PostEffect\creates\screen\color\Grayscale.h">
+      <Filter>ヘッダー ファイル\Engine\PostEffect\creates\screen\color</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
