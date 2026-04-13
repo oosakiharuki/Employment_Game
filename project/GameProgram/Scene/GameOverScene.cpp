@@ -40,6 +40,8 @@ void GameOverScene::InitCamera() {
 
 	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
 	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
+	//ゴール、ワープフラグをリセット
+	CollisionUtility::GetInstance().ResetFrag();
 }
 
 void GameOverScene::InitObject() {

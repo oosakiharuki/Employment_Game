@@ -43,6 +43,8 @@ void ClearScene::InitCamera() {
 	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
 	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
 	ParticleCommon::GetInstance().SetDefaultCamera(camera_.get());
+	//ゴール、ワープフラグをリセット
+	CollisionUtility::GetInstance().ResetFrag();
 }
 
 void ClearScene::InitObject() {
@@ -58,9 +60,9 @@ void ClearScene::InitParticle() {
 	//パーティクル生成
 	for (uint32_t i = 0; i < kParticleMaxNum_; i++) {
 		//ファンファーレのパーティクル作成
-		sceneParticles_[particleFanfare_.name] = ParticleManager::GetInstance().InitParticle(particleFanfare_);
+		sceneParticles_[particleFanfare_] = ParticleManager::GetInstance().InitParticle(particleFanfare_);
 		//vectorに導入
-		particleFanfares_.push_back(std::move(sceneParticles_[particleFanfare_.name]));
+		particleFanfares_.push_back(std::move(sceneParticles_[particleFanfare_]));
 	}
 
 	//場所の設定

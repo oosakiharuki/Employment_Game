@@ -10,7 +10,7 @@ public:
 	/// <summary>
 	/// インスタンス生成
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>インスタンス</returns>
 	static ParticleEmitter& GetInstance();
 
 	/// <summary>
@@ -34,9 +34,4 @@ private:
 	friend struct std::default_delete<ParticleEmitter>;
 	///パーティクル生成方法一覧
 	ParticleData MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter);//通常
-	ParticleData MakeNewParticleFixed(const Emitter& emitter);//固定
-	ParticleData MakeNewParticleSmaller(std::mt19937& randomEngine, const Emitter& emitter);//だんだん小さく消える
-	ParticleData MakeNewParticleSpike(std::mt19937& randomEngine, const Emitter& emitter);//トゲトゲしい
-	ParticleData MakeNewParticleExplosion(std::mt19937& randomEngine, const Emitter& emitter);//爆発っぽい
-	ParticleData MakeNewParticleFanfare(std::mt19937& randomEngine, const Emitter& emitter);//紙吹雪っぽい
 };

@@ -16,7 +16,10 @@ struct CameraInitData {
 /// </summary>
 class LevelEditor {
 public:
-
+	/// <summary>
+	/// レベルエディタをロードする
+	/// </summary>
+	/// <param name="jsonName">Blenderで生み出した.jsonファイル</param>
 	void LoadLevelEditor(const std::string& jsonName);
 
 	//LevelData型
@@ -50,6 +53,9 @@ public:
 			std::string fileName;
 			Transform transform;
 			Vector3 colliderSize;
+			//移動ルート
+			Vector3 leftPoint;
+			Vector3 rightPoint;
 		};
 
 		//イベントトリガーの生成場所
@@ -89,14 +95,23 @@ public:
 	/// <summary>
 	/// getter‗レベルエディタ
 	/// </summary>
-	/// <returns></returns>作成したレベルエディタ
+	/// <returns>作成したレベルエディタ</returns>
 	LevelData* GetLevelData() { return levelData_.get(); }
 
 private:
 
-	//Json文字列から解凍したデータ
-	nlohmann::json LoadJsonFile(const std::string& kFullpath);
+	//
 
+	/// <summary>
+	/// Json文字列から解凍したデータ
+	/// </summary>
+	/// <param name="kFullpath">.jsonファイル</param>
+	/// <returns>解凍に成功したjsonファイル</returns>
+	nlohmann::json LoadJsonFile(const std::string& kFullpath);
+	/// <summary>
+	/// ゲームオブジェクトの読み込み
+	/// </summary>
+	/// <param name="object">オブジェクト</param>
 	void LoadGameObjects(nlohmann::json& object);
 
 	/// <summary>
@@ -139,9 +154,13 @@ private:
 	/// <summary>
 	/// ボスの配置
 	/// </summary>
-	/// <param name="object">オブジェクトのデータ配置</param>
+	/// <param name="object">オブジェクトのデータ配列</param>
 	void LoadBoss(nlohmann::json& object);
 
+	/// <summary>
+	/// 操作ガイドの配置
+	/// </summary>
+	/// <param name="object">オブジェクトのデータ配列</param>
 	void LoadGuide(nlohmann::json& object);
 
 	/// <summary>

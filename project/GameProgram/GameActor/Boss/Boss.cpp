@@ -19,38 +19,51 @@ void Boss::Initialize() {
 
 	collisionType_ = CollisionTypes::TypeBoss;
 
-	hp_ = 60;
-	
-	moveCenter_ = { 0,13,0 };
-	//右位置設定
-	SetMovePoint(moveCenter_ + kEdge_);
+	hp_ = kMaxHp_;
+	maxHp_ = kMaxHp_;
+
+
+	hpSprite_ = std::make_unique<Sprite>();
+	hpSprite_->Initialize("bossHp.png");
+	hpSprite_->SetSize(kHpSpriteSize_);
+
+	underBarSprite_ = std::make_unique<Sprite>();
+	underBarSprite_->Initialize("bossHpBar.png");
+	underBarSprite_->SetSize(kHpSpriteSize_);
 }
 
 void Boss::Update() {
 
 	GameActor::Update();//ステートパターンが入っている
 
-	for (auto& bullet : bullets_) {
-		bullet->Update();
-	}
-
 	bullets_.remove_if([](auto& bullet) {
 		return bullet->IsDead();
 	});
 
+	for (auto& bullet : bullets_) {
+		bullet->Update();
+	}
+
 	ImGuiUpdate();
 
-	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
+	object_->Update(wt_);
+
+	//影更新
+	shadow_->SetScale(transform_.scale * kTwice_);//少し大きく(二倍)
+	ShadowUpdate();
 }
 
 void Boss::Draw() {
+	//オブジェクト描画
 	object_->Draw();
 
 	Object3dCommon::GetInstance().Command();
+	//弾丸の描画
 	for (auto& bullet : bullets_) {
 		bullet->Draw();
 	}
+	shadow_->Draw();//影の描画
 }
 
 void Boss::Active() {
@@ -63,13 +76,16 @@ void Boss::Active() {
 		motionFinish_ = false;//リセット
 	}
 
-	reaction_->ScaleReaction(transform_.scale, isDamageReaction_,damageReactionPower_,damageReactionTimer_,kDamageReactionTimeMax_);
+	reaction_->ScaleReaction(transform_.scale, isDamageReaction_, damageReactionPower_, damageReactionTimer_, kDamageReactionTimeMax_);
+	
+	//体力バースプライト更新
+	HpSpriteUpdate();
 
 	collisionAABB_.max = transform_.translate + colliderSize_;
 	collisionAABB_.min = transform_.translate - colliderSize_;
 	center_ = transform_.translate;
 	//当たり判定設定
-	CollisionManager::GetInstance().AddCollisions(this);
+	CollisionManager::GetInstance().FrameCollision(this);
 }
 
 void Boss::Dead() {
@@ -117,9 +133,10 @@ void Boss::CommandMove() {
 		SetMovePoint(moveCenter_ - kEdge_);
 	}
 
-	LerpMove();
+	//補間移動(イーズインアウト)
+	EaseMove();
 
-	if (LerpGoal()) {
+	if (EaseGoal()) {
 		addCount_++;
 	}
 	else {
@@ -179,7 +196,6 @@ void Boss::FireBullet() {
 	//弾丸を生み出す
 	std::unique_ptr<EnemyBullet> bullet = std::make_unique<EnemyBullet>();
 	bullet->Initialize();
-	bullet->SetPlayer(player_);//プレイヤーと当たりノックバックパラメータで使う
 	bullet->SetTranslate(enemyPosition);
 	bullet->SetVelocity(velocity);
 	bullets_.push_back(std::move(bullet));
@@ -196,11 +212,12 @@ void Boss::CommandAroundMove() {
 	}
 
 	//目的地に着いたら
-	if (LerpGoal()) {
+	if (EaseGoal()) {
 		aroundMoveCount_++;    //カウント加算
 	}
 
-	LerpMove();
+	//補間移動(イーズインアウト)
+	EaseMove();
 
 	//全てのポイントに移動できたら
 	if (aroundMoveCount_ >= movePoints_.size()) {
@@ -217,9 +234,10 @@ void Boss::CommandFarMove() {
 
 	SetMovePoint(kFarPlace_);
 
-	LerpMove();
+	//補間移動(イーズインアウト)
+	EaseMove();
 
-	if (LerpGoal()) {
+	if (EaseGoal()) {
 		isFarMoveSuccess_ = true;
 	}
 }
@@ -252,8 +270,9 @@ void Boss::CommandFallPlayer() {
 		}
 		movePoint_.y = kGoUpPointY_;
 		SetMovePoint(movePoint_, moveFrame_);
-		LerpMove();
-		if (LerpGoal()) {
+		//補間移動(イーズインアウト)
+		EaseMove();
+		if (EaseGoal()) {
 			motionFinish_ = true;
 			fallTimer_ = 0.0f;
 		}
@@ -262,7 +281,8 @@ void Boss::CommandFallPlayer() {
 		movePoint_.y = kFallPointY_;
 		moveFrame_ = kFallTimeMax_;
 		SetMovePoint(movePoint_, moveFrame_);
-		LerpMove();
+		//補間移動(イーズインアウト)
+		EaseMove();
 	}
 }
 
@@ -292,6 +312,13 @@ void Boss::ChangeStatePattern(std::unique_ptr<BaseBossState> state) {
 	bossState_ = std::move(state);
 }
 
+void Boss::BossCenter(const Vector3& center) {
+	//センターを設定
+	moveCenter_ = center;
+	//右位置をセグメント終点に設定
+	SetMovePoint(moveCenter_ + kEdge_);
+}
+
 void Boss::IsDamage() {
 	if (hp_ == 0) {
 		return;
@@ -312,13 +339,13 @@ void Boss::ImGuiUpdate() {
 
 }
 
-void Boss::LerpMove() {
+void Boss::EaseMove() {
 	moveTimer_ += kDeltaTime_;
 	moveTimer_ = std::clamp(moveTimer_, 0.0f, timerMax_);
-	transform_.translate = Lerp(move_.diff, move_.origin, moveTimer_ / timerMax_);
+	transform_.translate = EaseInOut(move_.diff, move_.origin, moveTimer_ / timerMax_);
 }
 
-bool Boss::LerpGoal() {
+bool Boss::EaseGoal() {
 	if (moveTimer_ == timerMax_) {
 		moveTimer_ = 0.0f;
 		transform_.translate = move_.diff;//現在地を目的地にする
@@ -334,4 +361,29 @@ void Boss::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypePlayerBullet) {
 		IsDamage();
 	}
+}
+
+bool Boss::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypePlayerBullet) {
+		return true;
+	}
+	return false;
+}	
+
+void Boss::HpSpriteUpdate(){
+	//ウィンドウズの画像範囲
+	Vector2 windows = { (float)WinApp::kClientWidth_,(float)WinApp::kClientHeight_ };
+	windows *= kSpriteWindowsPosition_;
+	//バーの設定
+	underBarSprite_->SetPosition(windows);
+
+	Vector2 hpPosition = { windows.x + kHpSpriteSize_.x * kSpriteRatio_ * kDivideByTwo_,windows.y };//バーに左右両方間をあける
+	float nowHp = (float)hp_ / (float)maxHp_;//現在体力と最大体力の比率
+	float barRatio = (1.0f - kSpriteRatio_);//少しだけ小さく(これもバーに左右両方間をあけるため)
+	//体力バーの設定
+	hpSprite_->SetPosition(hpPosition);
+	hpSprite_->SetSize({ (kHpSpriteSize_.x * nowHp) * barRatio, kHpSpriteSize_.y });
+	//フレーム読み込み
+	UIManager::GetInstance().FrameSprite(&*underBarSprite_);
+	UIManager::GetInstance().FrameSprite(&*hpSprite_);
 }

@@ -43,7 +43,7 @@ void Shadow::Update() {
 	collisionAABB_.max = actorPosition_ + Vector3{ kShadowWidth_, 0.0f, kShadowWidth_ };
 	center_ = transform_.translate;
 
-	CollisionManager::GetInstance().AddCollisions(this);
+	CollisionManager::GetInstance().FrameCollision(this);
 	minUnder_ = -kShadowMinY_;
 }
 
@@ -54,19 +54,13 @@ void Shadow::Draw() {
 
 void Shadow::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypeStage) {
-		CollisionManager::GetInstance().UnderCollision(minUnder_,actorPosition_,collision->GetAABB());
-
-		////プレイヤーと現段階短い距離
-		//float lengthMin = Length(actorPosition_.y, minUnder);
-
-		////プレイヤーとステージの上の長さ
-		//float length = Length(actorPosition_.y, newUnder);
-
-		////プレイヤーと足場の長さが一番短いところを影の場所とする
-		//if (length < lengthMin) {
-		//	//値が変更
-		//	minUnder = newUnder;
-		//}
-
+		CollisionUtility::GetInstance().UnderCollision(minUnder_,actorPosition_,collision->GetAABB());
 	}
+}
+
+bool Shadow::TypeCheckUp(const CollisionTypes& collisionType) {
+	if (collisionType == CollisionTypes::TypeStage) {
+		return true;
+	}
+	return false;
 }

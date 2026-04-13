@@ -7,11 +7,8 @@ using namespace MyMath;
 using namespace UseEveryOne;
 
 Enemy_Turret::~Enemy_Turret() {
-	for (auto& bullet : bullets_) {
-		bullet.reset();
-	}
+	fireCommand_->BulletReset();
 }
-
 
 void Enemy_Turret::Initialize() {
 	//敵の共通初期化処理
@@ -23,42 +20,49 @@ void Enemy_Turret::Initialize() {
 	//見える範囲初期化
 	eyeReach_ = kEyeReach_;
 
+	//
+	fireCommand_ = std::make_unique<EnemyFireCommand>();
 	//最大弾丸数
-	rapidCountMax_ = kRapidCountMax_;
+	fireCommand_->SetRapidCountMax(kRapidCountMax_);
 
-	//視野範囲に合わせるためサイズを変更
-	particleLaserSize_.x = eyeReach_.x * kDivideByTwo_;
-	//パラメータに代入する
-	particleLaser_.basicSize = particleLaserSize_;
+	////視野範囲に合わせるためサイズを変更
+	//particleLaserSize_.x = eyeReach_.x * kDivideByTwo_;
+	////パラメータに代入する
+	//particleLaser_.basicSize = particleLaserSize_;
 
 	//レーザー(見える範囲)の初期化処理
-	particles_[particleLaser_.name] = ParticleManager::GetInstance().InitParticle(particleLaser_);
+	particles_[particleLaser_] = ParticleManager::GetInstance().InitParticle(particleLaser_);
+	particleLaserSize_ = particles_[particleLaser_]->GetScale();
+	particleLaserSize_.x = eyeReach_.x * kDivideByTwo_;
+
+	particles_[particleLaser_]->SetScale(particleLaserSize_);
 	//攻撃(発泡)
-	particles_[particleFire_.name] = ParticleManager::GetInstance().InitParticle(particleFire_);
+	particles_[fireCommand_->GetParticleFireName()] = ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireName());
 	//ちょっと大きく
-	particles_[particleFire_.name]->SetScale(kParticleFireSize_);
+	particles_[fireCommand_->GetParticleFireName()]->SetScale(kParticleFireSize_);
 }
 
 void Enemy_Turret::SearchCommand() {
 	//レーザーポイント
 	LaserPoint();
-	isFire_ = true;
+	//オンにしておく
+	fireCommand_->FireStart();
 }
 
 void Enemy_Turret::AttackCommand(){
-	if (isFire_) {
+	if (fireCommand_->IsFire()) {
 		//見つけたリアクション
 		FoundReaction();
 
 		//発砲処理
-		Fire();
+		fireCommand_->Fire(*this);
 	}
 	
-	if (!isFire_ && !enemyEye_->IsFound()) {
+	if (!fireCommand_->IsFire() && !enemyEye_->IsFound()) {
 		attackSwitch_ = false;
 	}
 	else {
-		isFire_ = true;
+		fireCommand_->FireStart();
 	}
 
 	//レーザーポイント
@@ -88,22 +92,22 @@ void Enemy_Turret::Active() {
 	//重力
 	GravityUpdate(transform_.translate.y);
 	//弾丸の更新
-	BulletUpdate();
+	fireCommand_->BulletUpdate();
 
 	//コーンが上向きなので
-	particles_[particleFire_.name]->SetRotate({ 0,0,-transform_.rotate.y });
+	particles_[fireCommand_->GetParticleFireName()]->SetRotate({0,0,-transform_.rotate.y});
 
 	isGround_ = false;
 }
 
 void Enemy_Turret::Dead() {
 	//レーザーのパーティクル停止
-	particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::Stop);
+	particles_[particleLaser_]->SetParticleBorn(ParticleBorn::Stop);
 
 	//死んだリアクション
 	DeadReaction();
 	//弾丸の更新
-	BulletUpdate();
+	fireCommand_->BulletUpdate();
 }
 
 void Enemy_Turret::Performance() {}
@@ -131,10 +135,8 @@ void Enemy_Turret::Draw() {
 		object_->Draw();
 		shadow_->Draw();//影
 	}
-
-	for (auto& bullet : bullets_) {
-		bullet->Draw();//弾丸
-	}
+		
+	fireCommand_->BulletDraw();//弾丸
 }
 
 void Enemy_Turret::FireBullet() {
@@ -146,37 +148,21 @@ void Enemy_Turret::FireBullet() {
 
 	//パーティクルの場所変更
 	particlePosition_ = transform_.translate;
-	particles_[particleFire_.name]->SetTranslate(particlePosition_);
+	particles_[fireCommand_->GetParticleFireName()]->SetTranslate(particlePosition_);
 	
 	//飛ばす方向
 	Vector3 velocity = { 0.0f,0.0f,kBulletSpeed_ };
 	//ダメージリアクションで大きくなった時弾が速くなるためスケールはDefaultに
 	velocity = TransformNormal(velocity, MakeAffineMatrix(kDefaultScale_, transform_.rotate, transform_.translate));
 
-	std::unique_ptr<EnemyBullet> bullet = std::make_unique<EnemyBullet>();
-	bullet->Initialize();
-	bullet->SetPlayer(player_);
-	bullet->SetTranslate(translate);
-	bullet->SetVelocity(velocity);
-	bullets_.push_back(std::move(bullet));
-
-	particles_[particleFire_.name]->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
+	fireCommand_->AddBullet(particlePosition_, velocity);
+	particles_[fireCommand_->GetParticleFireName()]->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
 }
 
 void Enemy_Turret::LaserPoint() {
 	//スケール以外の行列
 	Matrix4x4 matWorld = MakeAffineMatrix(kDefaultScale_, transform_.rotate, transform_.translate);
 	//レーザーサイズXはターレットの前に出すため
-	particles_[particleLaser_.name]->SetTranslate(transform_.translate + TransformNormal(Vector3{ 0,0,particleLaserSize_.x }, matWorld));
-	particles_[particleLaser_.name]->SetParticleBorn(ParticleBorn::TimerMode);
-}
-
-void Enemy_Turret::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::TypePlayerBullet) {
-		IsDamage();
-	}
-
-	if (collision->GetType() == CollisionTypes::TypeStage) {
-		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
-	}
+	particles_[particleLaser_]->SetTranslate(transform_.translate + TransformNormal(Vector3{ 0,0,particleLaserSize_.x }, matWorld));
+	particles_[particleLaser_]->SetParticleBorn(ParticleBorn::TimerMode);
 }

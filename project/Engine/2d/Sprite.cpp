@@ -42,45 +42,8 @@ void Sprite::InitVertexResource() {
 }
 
 void Sprite::InitVertexData() {
-	float left = 0.0f - anchorPoint_.x;
-	float right = 1.0f - anchorPoint_.x;
-	float top = 0.0f - anchorPoint_.y;
-	float bottom = 1.0f - anchorPoint_.y;
-
-	//左右反転
-	if (isFlipX_) {
-		left = -left;
-		right = -right;
-	}
-
-	//上下反転
-	if (isFlipY_) {
-		top = -top;
-		bottom = -bottom;
-	}
-
 	AdjustTextureSize();
-	const DirectX::TexMetadata& kMetadata = TextureManager::GetInstance().GetMetaData(filePath_);
-	float tex_left = textureLeftTop_.x / kMetadata.width;
-	float tex_right = textureLeftTop_.x + textureSize_.x / kMetadata.width;
-	float tex_top = textureLeftTop_.y / kMetadata.height;
-	float tex_bottom = textureLeftTop_.y + textureSize_.y / kMetadata.height;
-
-	vertexData_[0].position = { left,bottom,0.0f,1.0f };//0
-	vertexData_[0].texcoord = { tex_left,tex_bottom };
-	vertexData_[0].normal = { 0.0f,0.0f,-1.0f };
-
-	vertexData_[1].position = { left,top,0.0f,1.0f };//1,3
-	vertexData_[1].texcoord = { tex_left,tex_top };
-	vertexData_[1].normal = { 0.0f,0.0f,-1.0f };
-
-	vertexData_[2].position = { right,bottom,0.0f,1.0f };//2,5
-	vertexData_[2].texcoord = { tex_right,tex_bottom };
-	vertexData_[2].normal = { 0.0f,0.0f,-1.0f };
-
-	vertexData_[3].position = { right,top,0.0f,1.0f };//4
-	vertexData_[3].texcoord = { tex_right,tex_top };
-	vertexData_[3].normal = { 0.0f,0.0f,-1.0f };
+	TextureSizeUpdate();
 }
 
 void Sprite::InitIndexData() {
@@ -136,19 +99,61 @@ void Sprite::AdjustTextureSize() {
 	size_ = textureSize_;
 }
 
+void Sprite::TextureSizeUpdate() {
+	float left = 0.0f - anchorPoint_.x;
+	float right = 1.0f - anchorPoint_.x;
+	float top = 0.0f - anchorPoint_.y;
+	float bottom = 1.0f - anchorPoint_.y;
+
+	//左右反転
+	if (isFlipX_) {
+		left = -left;
+		right = -right;
+	}
+
+	//上下反転
+	if (isFlipY_) {
+		top = -top;
+		bottom = -bottom;
+	}
+
+	float tex_left = textureLeftTop_.x / size_.x;
+	float tex_right = textureLeftTop_.x + size_.x / size_.x;
+	float tex_top = textureLeftTop_.y / size_.y;
+	float tex_bottom = textureLeftTop_.y + size_.y / size_.y;
+
+	vertexData_[0].position = { left,bottom,0.0f,1.0f };//0
+	vertexData_[0].texcoord = { tex_left,tex_bottom };
+	vertexData_[0].normal = { 0.0f,0.0f,-1.0f };
+
+	vertexData_[1].position = { left,top,0.0f,1.0f };//1,3
+	vertexData_[1].texcoord = { tex_left,tex_top };
+	vertexData_[1].normal = { 0.0f,0.0f,-1.0f };
+
+	vertexData_[2].position = { right,bottom,0.0f,1.0f };//2,5
+	vertexData_[2].texcoord = { tex_right,tex_bottom };
+	vertexData_[2].normal = { 0.0f,0.0f,-1.0f };
+
+	vertexData_[3].position = { right,top,0.0f,1.0f };//4
+	vertexData_[3].texcoord = { tex_right,tex_top };
+	vertexData_[3].normal = { 0.0f,0.0f,-1.0f };
+}
+
 
 void Sprite::Update() {
 
 	transform_.translate = { position_.x,position_.y,0.0f };
 	transform_.rotate = { 0.0f,0.0f,rotation_ };
 	transform_.scale = { size_.x,size_.y,1.0f };
+	
+	TextureSizeUpdate();
 
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);
 	Matrix4x4 viewMatrix = MakeIdentity4x4();
 	Matrix4x4 projectionMatrix = MakeOrthographicMatrix(0.0f, 0.0f, (float)WinApp::kClientWidth_, (float)WinApp::kClientHeight_, 0.0f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(viewMatrix, projectionMatrix));
 
-	transformationMatrixData_->WVP = worldViewProjectionMatrix;
+	transformationMatrixData_->WVP = worldViewProjectionMatrix;	
 	transformationMatrixData_->World = worldMatrix;
 }
 

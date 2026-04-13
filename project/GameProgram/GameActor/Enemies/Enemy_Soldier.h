@@ -5,8 +5,11 @@
 /// <summary>
 /// 傭兵の敵(BaseEnemyの派生クラス)
 /// </summary>
-class Enemy_Soldier : public BaseEnemy, public EnemyFireCommand,public EnemyMoveCommand, public GravityActor {
+class Enemy_Soldier : public BaseEnemy, public EnemyMoveCommand, public EnemyCanFireBullet {
 public:
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Enemy_Soldier() override;
 	/// <summary>
 	/// 初期化処理
@@ -22,17 +25,26 @@ public:
 	void Draw() override;
 
 private:
-
+	/// <summary>
+	/// 生存状態
+	/// </summary>
 	void Active() override;
-
+	/// <summary>
+	/// 捜索態勢
+	/// </summary>
 	void SearchCommand() override;
+	/// <summary>
+	/// 攻撃態勢
+	/// </summary>
 	void AttackCommand() override;
-
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
 	void Dead() override;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
 	void Performance() override;
-
-	void OnCollision(CollisionSource* collision) override;
-
 	/// <summary>
 	/// 移動
 	/// </summary>
@@ -59,4 +71,7 @@ private:
 
 	//最大弾丸数
 	const uint32_t kRapidCountMax_ = 3;
+
+	//発砲攻撃
+	std::unique_ptr<EnemyFireCommand> fireCommand_ = nullptr;
 };

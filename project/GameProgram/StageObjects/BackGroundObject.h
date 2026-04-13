@@ -1,8 +1,9 @@
 #pragma once
 #include "Object_glTF.h"
 
-
-
+/// <summary>
+/// 背景オブジェクト(skydome)
+/// </summary>
 class BackGroundObject
 {
 public:
@@ -25,6 +26,6 @@ private:
 	WorldTransform wt_;
 	Transform transform_{};
 
-	const float kSize_ = 1000.0f;
+	const float kSize_ = 1.0f;
 };
 

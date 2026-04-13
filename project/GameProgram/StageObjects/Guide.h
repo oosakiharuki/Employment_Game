@@ -1,7 +1,9 @@
 #pragma once
 #include <memory>
 #include "Object3d.h"
-
+/// <summary>
+/// 操作ガイド
+/// </summary>
 class Guide {
 public:
 	/// <summary>

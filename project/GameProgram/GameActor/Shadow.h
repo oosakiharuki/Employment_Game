@@ -31,11 +31,21 @@ public:
 	/// <summary>
 	/// setter_サイズ
 	/// </summary>
-	/// <param name="scale"></param>代入する大きさ
+	/// <param name="scale">代入する大きさ</param>
 	void SetScale(const Vector3& scale) { transform_.scale = scale; }
 
 private:
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
 	void OnCollision(CollisionSource* collision) override;
+	/// <summary>
+	/// 当たり判定をとるタイプかをチェック
+	/// </summary>
+	/// <param name="collisionType">相手の当たり判定タイプ</param>
+	/// <returns>該当するタイプがあるなら true</returns>
+	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
 	std::unique_ptr<Object3d> object_;
 	WorldTransform wt_;

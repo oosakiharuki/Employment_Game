@@ -13,10 +13,25 @@
 /// </summary>
 class TitleScene : public BaseScene {
 public:
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
 	void Initialize() override;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// 描画処理
+	/// </summary>
 	void Draw() override;
+	/// <summary>
+	/// 解放処理
+	/// </summary>
 	void Finalize() override;
+	/// <summary>
+	/// シーン変更処理
+	/// </summary>
 	void SceneUpdate() override;
 private:
 
@@ -69,9 +84,7 @@ private:
 	std::unique_ptr<Shadow> playerShadow_;//プレイヤー影
 	std::unique_ptr<Sprite> spriteMojiTitle_;//タイトル名
 
-	ParticleParameters particleBullet_ = {
-		"title_bullet", "resource/Sprite/cone.dds", Primitive::CreateCone(), 1, 0.5f, {1,1,1}
-	};
+	const std::string& particleBullet_ = "title_bullet";
 
 	//決定したら弾を発射
 	bool isSelect_ = false;

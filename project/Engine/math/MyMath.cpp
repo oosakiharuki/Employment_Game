@@ -226,6 +226,43 @@ namespace MyMath {
 		return v;
 	}
 
+	Vector4 operator+(const Vector4& v1, const Vector4& v2) {
+		Vector4 result;
+		result.x = v1.x + v2.x;
+		result.y = v1.y + v2.y;
+		result.z = v1.z + v2.z;
+		result.s = v1.s + v2.s;
+		return result;
+	}
+
+	Vector4 operator-(const Vector4& v1, const Vector4& v2) {
+		Vector4 result;
+		result.x = v1.x - v2.x;
+		result.y = v1.y - v2.y;
+		result.z = v1.z - v2.z;
+		result.s = v1.s - v2.s;
+		return result;
+	}
+
+	Vector4 operator*(const Vector4& v1, const Vector4& v2) {
+		Vector4 result;
+		result.x = v1.x * v2.x;
+		result.y = v1.y * v2.y;
+		result.z = v1.z * v2.z;
+		result.s = v1.s * v2.s;
+		return result;
+	}
+
+	Vector4 operator/(const Vector4& v1, const Vector4& v2) {
+		Vector4 result;
+		result.x = v1.x / v2.x;
+		result.y = v1.y / v2.y;
+		result.z = v1.z / v2.z;
+		result.s = v1.s / v2.s;
+		return result;
+	}
+
+
 	bool operator==(const Vector3& v1, const Vector3& v2) {
 		if (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z) {
 			return true;
@@ -408,7 +445,7 @@ namespace MyMath {
 		else {
 			result.y = overY2;
 		}
-
+		
 		float overZ1 = aabb2.max.z - aabb1.min.z;
 		float overZ2 = aabb1.max.z - aabb2.min.z;
 
@@ -511,6 +548,31 @@ namespace MyMath {
 		result.z = EaseOut(startPoint.z, endPoint.z, t);
 		return result;
 	}
+
+
+	float EaseInOut(float startPoint, float endPoint, float t) {
+
+		float easeT = powf(1.0f - (t * t), 2.0f);
+
+		return (1.0f - easeT) * startPoint + easeT * endPoint;
+	}
+
+	Vector2 EaseInOut(const Vector2& startPoint, const Vector2& endPoint, float t) {
+		Vector2 result{};
+		result.x = EaseInOut(startPoint.x, endPoint.x, t);
+		result.y = EaseInOut(startPoint.y, endPoint.y, t);
+		return result;
+	}
+
+
+	Vector3 EaseInOut(const Vector3& startPoint, const Vector3& endPoint, float t) {
+		Vector3 result{};
+		result.x = EaseInOut(startPoint.x, endPoint.x, t);
+		result.y = EaseInOut(startPoint.y, endPoint.y, t);
+		result.z = EaseInOut(startPoint.z, endPoint.z, t);
+		return result;
+	}
+
 
 #pragma region Affine
 
@@ -780,9 +842,9 @@ namespace MyMath {
 	}
 #pragma endregion
 
-	Matrix4x4 MakePerspectiveFovMatrix(float forY, float aspectRatio, float nearClip, float farClip) {
+	Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip) {
 		Matrix4x4 result;
-		float cot = 1 / tanf(forY / 2);
+		float cot = 1 / tanf(fovY / 2);
 
 		result.m[0][0] = (1 / aspectRatio) * cot;
 		result.m[1][1] = cot;
@@ -860,8 +922,7 @@ namespace MyMath {
 			//jointが動いていたら
 			if (keyframes.keyframes[index].time <= time && time <= keyframes.keyframes[nextIndex].time) {
 				float t = (time - keyframes.keyframes[index].time) / (keyframes.keyframes[nextIndex].time - keyframes.keyframes[index].time);
-
-				return Lerp(keyframes.keyframes[index].value, keyframes.keyframes[nextIndex].value, t);
+				return SLerp(keyframes.keyframes[index].value, keyframes.keyframes[nextIndex].value, t);
 			}
 		}
 
@@ -913,7 +974,7 @@ namespace MyMath {
 			size_t nextIndex = index + 1;
 			if (key1.keyframes[index].time <= time && time <= key1.keyframes[nextIndex].time) {
 				float t = (time - key1.keyframes[index].time) / (key1.keyframes[nextIndex].time - key1.keyframes[index].time);
-				animation1 = Lerp(key1.keyframes[index].value, key1.keyframes[nextIndex].value, t);
+				animation1 = SLerp(key1.keyframes[index].value, key1.keyframes[nextIndex].value, t);
 			}
 		}
 
@@ -922,7 +983,7 @@ namespace MyMath {
 			size_t nextIndex = index + 1;
 			if (key2.keyframes[index].time <= time && time <= key2.keyframes[nextIndex].time) {
 				float t = (time - key2.keyframes[index].time) / (key2.keyframes[nextIndex].time - key2.keyframes[index].time);
-				animation2 = Lerp(key2.keyframes[index].value, key2.keyframes[nextIndex].value, t);
+				animation2 = SLerp(key2.keyframes[index].value, key2.keyframes[nextIndex].value, t);
 			}
 		}
 
@@ -931,18 +992,9 @@ namespace MyMath {
 
 
 	Vector3 Lerp(const Vector3& p0, const Vector3& p1, float t) {
-		Vector3 pointA = p0 * t;
-		Vector3 pointB = p1 * (1.0f - t);
+		Vector3 pointA = p0 * (1.0f - t);
+		Vector3 pointB = p1 * t;
 		return pointA + pointB;
-	}
-
-	Quaternion Lerp(const Quaternion& p0, const Quaternion& p1, float t) {
-		Vector3 pointA = Vector3(p0.x, p0.y, p0.z) * t;
-		Vector3 pointB = Vector3(p1.x, p1.y, p1.z) * (1.0f - t);
-		Vector3 c = pointA + pointB;
-		//クオータニオンに変更
-		Quaternion result = { c.x,c.y,c.z,p0.w };
-		return result;
 	}
 
 	Quaternion operator-(const Quaternion& q) {

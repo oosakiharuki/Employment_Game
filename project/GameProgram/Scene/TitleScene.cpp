@@ -20,10 +20,10 @@ void TitleScene::Initialize() {
 	InitSprite();
 
 	//パーティクル初期化
-	sceneParticles_[particleBullet_.name] = ParticleManager::GetInstance().InitParticle(particleBullet_);
+	sceneParticles_[particleBullet_] = ParticleManager::GetInstance().InitParticle(particleBullet_);
 
 	FadeScreen::GetInstance().FadeStart(type_fadeOut);
-	PauseScreen::GetInstance().PauseFlag(false);//ポーズを強制解除
+	PauseScreen::GetInstance().OffPause();//ポーズを強制解除
 }
 
 void TitleScene::InitSprite() {
@@ -141,7 +141,7 @@ void TitleScene::UpdateBehind() {
 	shadowUnderAABB.min = { playerShadow_->GetCenter().x, 0,playerShadow_->GetCenter().z };
 	shadowUnderAABB.max = { playerShadow_->GetCenter().x + 1, kShadowPositionY_,playerShadow_->GetCenter().z + 1 };
 
-	CollisionManager::GetInstance().CreateCollision(shadowUnderAABB,playerShadow_->GetCenter(),CollisionTypes::TypeStage);
+	CollisionManager::GetInstance().FrameCollision(shadowUnderAABB,playerShadow_->GetCenter(),CollisionTypes::TypeStage);
 
 	CollisionManager::GetInstance().CollisionUpdate();
 }
@@ -208,9 +208,9 @@ void TitleScene::Operation(){
 		Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && !isSelect_) {
 		isSelect_ = true;//選択した
 		//選択パーティクル
-		sceneParticles_[particleBullet_.name]->SetParticleBorn(ParticleBorn::MomentMode);
-		sceneParticles_[particleBullet_.name]->SetTranslate(transforms_["umbrella_Open"].translate);
-		sceneParticles_[particleBullet_.name]->SetRotate({ 0.0f,0.0f,kArrowRange_ });
+		sceneParticles_[particleBullet_]->SetParticleBorn(ParticleBorn::MomentMode);
+		sceneParticles_[particleBullet_]->SetTranslate(transforms_["umbrella_Open"].translate);
+		sceneParticles_[particleBullet_]->SetRotate({ 0.0f,0.0f,kArrowRange_ });
 	}
 }
 

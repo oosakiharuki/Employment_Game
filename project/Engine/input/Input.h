@@ -130,17 +130,5 @@ private:
 
 	ComPtr<IDirectInputDevice8> mouseInput_;
 
-	DIMOUSESTATE2 mouseState_;
-	DIMOUSESTATE2 mousePreState_;
-
-	POINT p{};
-
-	int centerX = WinApp::kClientWidth_ / 2;
-	int centerY = WinApp::kClientHeight_ / 2;
-
-	float mouseX_ = WinApp::kClientWidth_ / 2;
-	float mouseY_ = WinApp::kClientHeight_ / 2;
-
 	bool isActiveGamePad_ = false;
-	bool mouseSensitivity_;
 };

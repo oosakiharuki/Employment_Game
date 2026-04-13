@@ -6,7 +6,7 @@
             "name": "Light",
             "transform": {
                 "translation": [
-                    4.076245307922363,
+                    -125.92375183105469,
                     1.0054539442062378,
                     5.903861999511719
                 ],
@@ -27,7 +27,7 @@
             "name": "MainCamera",
             "transform": {
                 "translation": [
-                    -73.0,
+                    -192.0,
                     -47.0,
                     12.0
                 ],
@@ -49,20 +49,21 @@
                     0.0
                 ],
                 "end": [
-                    215.0,
+                    331.0,
                     0.0,
                     13.0
                 ]
             }
         },
         {
-            "type": "MESH",
-            "name": "立方体",
+            "type": "StageObjectSpawn",
+            "StageObjectName": "WarpGate",
+            "name": "StageObjectSpawn.001",
             "transform": {
                 "translation": [
-                    -75.58303833007812,
-                    0.0,
-                    0.0
+                    142.0,
+                    1.0,
+                    14.0
                 ],
                 "rotation": [
                     0.0,
@@ -70,8 +71,44 @@
                     0.0
                 ],
                 "scaling": [
-                    21.000001907348633,
-                    20.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "stage_1",
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    -1.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "EnemySpawn",
+            "EnemyName": "Soldier",
+            "name": "EnemySpawn.001",
+            "transform": {
+                "translation": [
+                    -65.0,
+                    0.0,
+                    10.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
                     1.0
                 ]
             },
@@ -85,7 +122,794 @@
                 "size": [
                     2.0,
                     2.0,
-                    2.0
+                    3.0
+                ]
+            },
+            "travel_route": {
+                "start": [
+                    -2.0,
+                    0.0,
+                    0.0
+                ],
+                "end": [
+                    7.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        {
+            "type": "GuideSpawn",
+            "name": "GuideSpawn.001",
+            "transform": {
+                "translation": [
+                    -169.0,
+                    14.0,
+                    11.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    6.0,
+                    6.0,
+                    6.0
+                ]
+            },
+            "file_name": "GuideJump"
+        },
+        {
+            "type": "GuideSpawn",
+            "name": "GuideSpawn.002",
+            "transform": {
+                "translation": [
+                    -117.0,
+                    14.0,
+                    17.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    6.0,
+                    6.0,
+                    6.0
+                ]
+            },
+            "file_name": "GuideFire"
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "Checkpoint",
+            "name": "StageObjectSpawn",
+            "transform": {
+                "translation": [
+                    -142.10000610351562,
+                    2.0,
+                    6.400000095367432
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    6.0
+                ],
+                "size": [
+                    2.0,
+                    10.0,
+                    15.0
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "Checkpoint",
+            "name": "StageObjectSpawn.002",
+            "transform": {
+                "translation": [
+                    -36.0,
+                    2.0,
+                    9.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    -1.0,
+                    6.0
+                ],
+                "size": [
+                    2.0,
+                    10.0,
+                    15.0
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.005",
+            "transform": {
+                "translation": [
+                    -89.9000015258789,
+                    0.0,
+                    9.699999809265137
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.003",
+            "transform": {
+                "translation": [
+                    -87.5,
+                    0.0,
+                    9.699999809265137
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.004",
+            "transform": {
+                "translation": [
+                    -89.9000015258789,
+                    0.0,
+                    11.899999618530273
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.006",
+            "transform": {
+                "translation": [
+                    -87.5,
+                    0.0,
+                    11.899999618530273
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.007",
+            "transform": {
+                "translation": [
+                    -87.5,
+                    0.0,
+                    14.09999942779541
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.008",
+            "transform": {
+                "translation": [
+                    -89.9000015258789,
+                    0.0,
+                    14.09999942779541
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "EnemySpawn",
+            "EnemyName": "Turret",
+            "name": "EnemySpawn",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    10.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    3.0
+                ]
+            }
+        },
+        {
+            "type": "EnemySpawn",
+            "EnemyName": "Soldier",
+            "name": "EnemySpawn.002",
+            "transform": {
+                "translation": [
+                    -105.0,
+                    0.0,
+                    10.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    3.0
+                ]
+            },
+            "travel_route": {
+                "start": [
+                    -8.0,
+                    0.0,
+                    0.0
+                ],
+                "end": [
+                    7.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        {
+            "type": "EnemySpawn",
+            "EnemyName": "Turret",
+            "name": "EnemySpawn.003",
+            "transform": {
+                "translation": [
+                    39.0,
+                    0.0,
+                    10.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    3.0
+                ]
+            }
+        },
+        {
+            "type": "EnemySpawn",
+            "EnemyName": "Soldier",
+            "name": "EnemySpawn.004",
+            "transform": {
+                "translation": [
+                    16.590660095214844,
+                    0.0,
+                    10.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    3.0
+                ]
+            },
+            "travel_route": {
+                "start": [
+                    -6.0,
+                    0.0,
+                    0.0
+                ],
+                "end": [
+                    7.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        {
+            "type": "CAMERA",
+            "name": "EventCamera",
+            "transform": {
+                "translation": [
+                    99.46903228759766,
+                    -75.64151000976562,
+                    26.00446319580078
+                ],
+                "rotation": [
+                    84.99999237060547,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "type": "GuideSpawn",
+            "name": "GuideSpawn.003",
+            "transform": {
+                "translation": [
+                    -11.0,
+                    14.0,
+                    17.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    6.0,
+                    6.0,
+                    6.0
+                ]
+            },
+            "file_name": "GuideShield"
+        },
+        {
+            "type": "MESH",
+            "name": "ICO球",
+            "transform": {
+                "translation": [
+                    99.0,
+                    0.0,
+                    21.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "event_trigger": {
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    38.0,
+                    28.0,
+                    25.0
+                ],
+                "camera": "EventCamera",
+                "csv": "event_00"
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.009",
+            "transform": {
+                "translation": [
+                    -49.5,
+                    0.0,
+                    10.699999809265137
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.010",
+            "transform": {
+                "translation": [
+                    -69.5,
+                    0.0,
+                    9.699999809265137
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.011",
+            "transform": {
+                "translation": [
+                    -69.5,
+                    0.0,
+                    11.899999618530273
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "BreakBox",
+            "name": "StageObjectSpawn.012",
+            "transform": {
+                "translation": [
+                    29.07445526123047,
+                    -5.955493520559685e-08,
+                    11.134037017822266
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.200000047683716,
+                    2.200000047683716,
+                    2.200000047683716
+                ]
+            }
+        },
+        {
+            "type": "StageObjectSpawn",
+            "StageObjectName": "Checkpoint",
+            "name": "StageObjectSpawn.013",
+            "transform": {
+                "translation": [
+                    65.0,
+                    2.0,
+                    9.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    -1.0,
+                    6.0
+                ],
+                "size": [
+                    2.0,
+                    10.0,
+                    15.0
+                ]
+            }
+        },
+        {
+            "type": "PlayerSpawn",
+            "name": "PlayerSpawn",
+            "transform": {
+                "translation": [
+                    -193.20713806152344,
+                    0.0,
+                    3.700000047683716
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    3.0
                 ]
             }
         },
@@ -94,7 +918,7 @@
             "name": "立方体.001",
             "transform": {
                 "translation": [
-                    -29.0,
+                    -172.0,
                     0.0,
                     0.5692042112350464
                 ],
@@ -104,7 +928,7 @@
                     0.0
                 ],
                 "scaling": [
-                    25.479995727539062,
+                    38.219993591308594,
                     20.0,
                     1.600000023841858
                 ]
@@ -128,7 +952,7 @@
             "name": "立方体.002",
             "transform": {
                 "translation": [
-                    -38.97527313232422,
+                    -168.97528076171875,
                     0.0,
                     3.284602165222168
                 ],
@@ -139,42 +963,8 @@
                 ],
                 "scaling": [
                     3.9999992847442627,
-                    20.0,
+                    10.0,
                     1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
-        },
-        {
-            "type": "MESH",
-            "name": "立方体.004",
-            "transform": {
-                "translation": [
-                    -11.708721160888672,
-                    0.0,
-                    4.051156044006348
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    7.999998569488525,
-                    20.0,
-                    1.899999976158142
                 ]
             },
             "collider": {
@@ -196,7 +986,7 @@
             "name": "立方体.003",
             "transform": {
                 "translation": [
-                    -22.846208572387695,
+                    -152.84620666503906,
                     0.0,
                     3.0699827671051025
                 ],
@@ -227,10 +1017,44 @@
         },
         {
             "type": "MESH",
+            "name": "立方体.004",
+            "transform": {
+                "translation": [
+                    -141.70872497558594,
+                    0.0,
+                    4.051156044006348
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    7.999998569488525,
+                    20.0,
+                    1.899999976158142
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
             "name": "立方体.005",
             "transform": {
                 "translation": [
-                    40.01316833496094,
+                    -89.98683166503906,
                     0.0,
                     3.7891364097595215
                 ],
@@ -265,9 +1089,9 @@
             "name": "立方体.006",
             "transform": {
                 "translation": [
-                    11.688888549804688,
-                    0.0,
-                    9.0
+                    -88.71111297607422,
+                    7.0,
+                    18.0
                 ],
                 "rotation": [
                     0.0,
@@ -275,9 +1099,9 @@
                     0.0
                 ],
                 "scaling": [
-                    1.0,
-                    20.0,
-                    1.5950000286102295
+                    2.299999952316284,
+                    10.0,
+                    2.7115001678466797
                 ]
             },
             "collider": {
@@ -299,7 +1123,7 @@
             "name": "立方体.007",
             "transform": {
                 "translation": [
-                    26.688884735107422,
+                    -116.31111145019531,
                     0.0,
                     9.0
                 ],
@@ -310,7 +1134,7 @@
                 ],
                 "scaling": [
                     1.0,
-                    20.0,
+                    10.0,
                     1.5950000286102295
                 ]
             },
@@ -333,7 +1157,7 @@
             "name": "立方体.008",
             "transform": {
                 "translation": [
-                    98.73428344726562,
+                    -34.44871520996094,
                     0.0,
                     3.7891364097595215
                 ],
@@ -343,7 +1167,7 @@
                     0.0
                 ],
                 "scaling": [
-                    10.948607444763184,
+                    11.82449722290039,
                     20.0,
                     4.8004608154296875
                 ]
@@ -368,9 +1192,9 @@
             "name": "立方体.009",
             "transform": {
                 "translation": [
-                    51.68888854980469,
+                    -46.0111083984375,
                     0.0,
-                    9.0
+                    18.0
                 ],
                 "rotation": [
                     0.0,
@@ -379,76 +1203,8 @@
                 ],
                 "scaling": [
                     1.0,
-                    20.0,
-                    1.5950000286102295
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
-        },
-        {
-            "type": "MESH",
-            "name": "立方体.010",
-            "transform": {
-                "translation": [
-                    74.06838989257812,
-                    0.0,
-                    19.033992767333984
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    10.0,
-                    5.742000102996826
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
-        },
-        {
-            "type": "MESH",
-            "name": "立方体.011",
-            "transform": {
-                "translation": [
-                    137.6888885498047,
-                    0.0,
-                    9.510479927062988
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    20.0,
-                    1.0
+                    12.0,
+                    4.784999847412109
                 ]
             },
             "collider": {
@@ -470,7 +1226,7 @@
             "name": "立方体.012",
             "transform": {
                 "translation": [
-                    144.07684326171875,
+                    142.07684326171875,
                     0.0,
                     10.209270477294922
                 ],
@@ -504,7 +1260,7 @@
             "name": "立方体.013",
             "transform": {
                 "translation": [
-                    137.73428344726562,
+                    80.73428344726562,
                     0.0,
                     3.7891364097595215
                 ],
@@ -514,7 +1270,7 @@
                     0.0
                 ],
                 "scaling": [
-                    10.948607444763184,
+                    22.992076873779297,
                     20.0,
                     4.8004608154296875
                 ]
@@ -536,347 +1292,10 @@
         },
         {
             "type": "MESH",
-            "name": "立方体.014",
-            "transform": {
-                "translation": [
-                    97.06838989257812,
-                    0.0,
-                    10.033992767333984
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    10.0,
-                    5.742000102996826
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
-        },
-        {
-            "type": "MESH",
-            "name": "立方体.015",
-            "transform": {
-                "translation": [
-                    125.68888854980469,
-                    0.0,
-                    5.510479927062988
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    20.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
-        },
-        {
-            "type": "PlayerSpawn",
-            "name": "PlayerSpawn",
-            "transform": {
-                "translation": [
-                    -80.0,
-                    0.0,
-                    2.5490498542785645
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    89.99999237060547
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    3.0
-                ]
-            }
-        },
-        {
-            "type": "StageObjectSpawn",
-            "StageObjectName": "Checkpoint",
-            "name": "StageObjectSpawn",
-            "transform": {
-                "translation": [
-                    1.0,
-                    2.0,
-                    11.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    -2.0,
-                    3.0
-                ],
-                "size": [
-                    5.0,
-                    10.0,
-                    11.0
-                ]
-            }
-        },
-        {
-            "type": "StageObjectSpawn",
-            "StageObjectName": "WarpGate",
-            "name": "StageObjectSpawn.001",
-            "transform": {
-                "translation": [
-                    144.0,
-                    1.0,
-                    14.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": "stage_1",
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    -1.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
-        },
-        {
-            "type": "StageObjectSpawn",
-            "StageObjectName": "Checkpoint",
-            "name": "StageObjectSpawn.002",
-            "transform": {
-                "translation": [
-                    79.0,
-                    2.0,
-                    11.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    -2.0,
-                    3.0
-                ],
-                "size": [
-                    5.0,
-                    10.0,
-                    11.0
-                ]
-            }
-        },
-        {
-            "type": "EnemySpawn",
-            "EnemyName": "Turret",
-            "name": "EnemySpawn.002",
-            "transform": {
-                "translation": [
-                    74.0,
-                    0.0,
-                    10.0
-                ],
-                "rotation": [
-                    0.0,
-                    0.0,
-                    -89.99999237060547
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    3.0
-                ]
-            }
-        },
-        {
-            "type": "EnemySpawn",
-            "EnemyName": "Soldier",
-            "name": "EnemySpawn",
-            "transform": {
-                "translation": [
-                    19.0,
-                    0.0,
-                    10.0
-                ],
-                "rotation": [
-                    0.0,
-                    0.0,
-                    -89.99999237060547
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    3.0
-                ]
-            },
-            "travel_route": {
-                "start": [
-                    -5.0,
-                    0.0,
-                    0.0
-                ],
-                "end": [
-                    5.0,
-                    0.0,
-                    0.0
-                ]
-            }
-        },
-        {
-            "type": "EnemySpawn",
-            "EnemyName": "Soldier",
-            "name": "EnemySpawn.001",
-            "transform": {
-                "translation": [
-                    42.0,
-                    0.0,
-                    10.0
-                ],
-                "rotation": [
-                    0.0,
-                    0.0,
-                    -89.99999237060547
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    3.0
-                ]
-            },
-            "travel_route": {
-                "start": [
-                    -12.0,
-                    0.0,
-                    0.0
-                ],
-                "end": [
-                    7.0,
-                    0.0,
-                    0.0
-                ]
-            }
-        },
-        {
-            "type": "MESH",
             "name": "立方体.016",
             "transform": {
                 "translation": [
-                    -89.92585754394531,
+                    -203.9258575439453,
                     1.6979255676269531,
                     10.000775337219238
                 ],
@@ -906,13 +1325,13 @@
             }
         },
         {
-            "type": "GuideSpawn",
-            "name": "GuideSpawn",
+            "type": "MESH",
+            "name": "立方体.017",
             "transform": {
                 "translation": [
-                    -79.0,
-                    20.0,
-                    8.0
+                    -55.606842041015625,
+                    0.0,
+                    10.0
                 ],
                 "rotation": [
                     0.0,
@@ -920,21 +1339,33 @@
                     0.0
                 ],
                 "scaling": [
+                    1.600000023841858,
                     6.0,
-                    6.0,
-                    6.0
+                    1.5950000286102295
                 ]
             },
-            "file_name": "GuideMove"
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
         },
         {
-            "type": "GuideSpawn",
-            "name": "GuideSpawn.001",
+            "type": "MESH",
+            "name": "立方体.010",
             "transform": {
                 "translation": [
-                    -59.0,
-                    20.0,
-                    8.0
+                    -8.048715591430664,
+                    0.0,
+                    7.089136600494385
                 ],
                 "rotation": [
                     0.0,
@@ -942,21 +1373,34 @@
                     0.0
                 ],
                 "scaling": [
-                    6.0,
-                    6.0,
-                    6.0
+                    15.371847152709961,
+                    12.960000991821289,
+                    1.440138339996338
                 ]
             },
-            "file_name": "GuideJump"
+            "file_name": "Soldier",
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
         },
         {
-            "type": "GuideSpawn",
-            "name": "GuideSpawn.002",
+            "type": "MESH",
+            "name": "立方体.011",
             "transform": {
                 "translation": [
-                    3.0,
-                    20.0,
-                    16.0
+                    126.73428344726562,
+                    0.0,
+                    3.7891364097595215
                 ],
                 "rotation": [
                     0.0,
@@ -964,21 +1408,34 @@
                     0.0
                 ],
                 "scaling": [
-                    6.0,
-                    6.0,
-                    6.0
+                    22.992076873779297,
+                    20.0,
+                    4.8004608154296875
                 ]
             },
-            "file_name": "GuideFire"
+            "file_name": "Soldier",
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
         },
         {
-            "type": "GuideSpawn",
-            "name": "GuideSpawn.003",
+            "type": "MESH",
+            "name": "立方体.014",
             "transform": {
                 "translation": [
-                    19.0,
-                    20.0,
-                    16.0
+                    29.551284790039062,
+                    0.0,
+                    3.7891364097595215
                 ],
                 "rotation": [
                     0.0,
@@ -986,21 +1443,34 @@
                     0.0
                 ],
                 "scaling": [
-                    6.0,
-                    6.0,
-                    6.0
+                    22.46654510498047,
+                    20.0,
+                    4.8004608154296875
                 ]
             },
-            "file_name": "GuideShield"
+            "file_name": "Soldier",
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
         },
         {
-            "type": "GuideSpawn",
-            "name": "GuideSpawn.004",
+            "type": "MESH",
+            "name": "立方体.015",
             "transform": {
                 "translation": [
-                    86.0,
-                    20.0,
-                    16.0
+                    3.393157958984375,
+                    0.0,
+                    10.0
                 ],
                 "rotation": [
                     0.0,
@@ -1008,21 +1478,33 @@
                     0.0
                 ],
                 "scaling": [
+                    1.600000023841858,
                     6.0,
-                    6.0,
-                    6.0
+                    1.5950000286102295
                 ]
             },
-            "file_name": "GuideBrink"
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
         },
         {
-            "type": "GuideSpawn",
-            "name": "GuideSpawn.005",
+            "type": "MESH",
+            "name": "立方体.018",
             "transform": {
                 "translation": [
-                    118.0,
-                    20.0,
-                    14.0
+                    -53.0111083984375,
+                    0.0,
+                    11.36765193939209
                 ],
                 "rotation": [
                     0.0,
@@ -1030,21 +1512,33 @@
                     0.0
                 ],
                 "scaling": [
-                    6.0,
-                    6.0,
-                    6.0
+                    1.0,
+                    14.0,
+                    3.0624001026153564
                 ]
             },
-            "file_name": "GuideGliding"
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
         },
         {
-            "type": "GuideSpawn",
-            "name": "GuideSpawn.006",
+            "type": "MESH",
+            "name": "立方体.019",
             "transform": {
                 "translation": [
-                    144.0,
-                    20.0,
-                    22.0
+                    28.9888916015625,
+                    -5.955493520559685e-08,
+                    18.434038162231445
                 ],
                 "rotation": [
                     0.0,
@@ -1052,12 +1546,59 @@
                     0.0
                 ],
                 "scaling": [
-                    6.0,
-                    6.0,
-                    6.0
+                    2.5,
+                    2.5199999809265137,
+                    4.784999847412109
                 ]
             },
-            "file_name": "GuideWarp"
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "立方体.020",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "file_name": "Soldier",
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
         }
     ]
 }

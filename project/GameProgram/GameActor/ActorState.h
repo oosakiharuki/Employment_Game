@@ -4,38 +4,21 @@
 
 class GameActor;
 
-class ActorCommand {
-public:
-	virtual void Active() = 0;
-	virtual void Dead() = 0;
-	virtual void Performance() = 0;
-};
-
-
+/// <summary>
+/// ゲームアクター状態ステート(基盤クラス)
+/// </summary>
 class BaseActorState {
 public:
-	virtual void Update(ActorCommand& command) = 0;
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="actor">ゲームアクターのクラス</param>
+	virtual void Update(GameActor& actor) = 0;
+	/// <summary>
+	/// ステート変更処理
+	/// </summary>
+	/// <param name="actor">ゲームアクタークラス</param>
 	virtual void ChangeState(GameActor& actor) = 0;
-
-	/// <summary>
-	/// ステートパターン変更フラグ
-	/// </summary>
-	/// <returns>次のステートの値が入っている場合</returns>
-	bool GetIsInput() {
-		if (nextState_ != nullptr) {
-			return true;
-		}
-		return false;
-	}
-	/// <summary>
-	/// getter_次のステートパターン
-	/// </summary>
-	/// <returns></returns>
-	std::unique_ptr<BaseActorState> GetNextState() { return std::move(nextState_); }
-
-protected:
-	//次に変更するステートの入れ物
-	std::unique_ptr<BaseActorState> nextState_;
 };
 
 class ActiveState : public BaseActorState {
@@ -43,11 +26,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update(ActorCommand& actorCommand) override;
+	/// <param name="actor">ゲームアクターのコマンドクラス</param>
+	void Update(GameActor& actor) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="actor">使用しているゲームアクター</param>
+	/// <param name="actor">ゲームアクタークラス</param>
 	void ChangeState(GameActor& actor) override;
 };
 
@@ -56,11 +40,12 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update(ActorCommand& ActorCommand) override;
+	/// <param name="actor">ゲームアクターのコマンドクラス</param>
+	void Update(GameActor& actor) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="actor">使用しているゲームアクター</param>
+	/// <param name="actor">ゲームアクタークラス</param>
 	void ChangeState(GameActor& actor) override;
 };
 
@@ -70,10 +55,11 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update(ActorCommand& ActorCommand) override;
+	/// <param name="actor">ゲームアクターのコマンドクラス</param>
+	void Update(GameActor& actor) override;
 	/// <summary>
-	/// キーでステート変更
+	/// ステート変更処理
 	/// </summary>
-	/// <param name="actor">使用しているゲームアクター</param>
+	/// <param name="actor">ゲームアクタークラス</param>
 	void ChangeState(GameActor& actor) override;
 };

@@ -3,6 +3,10 @@
 #include "WarpGate.h"
 #include "CheckPoint.h"
 #include "Goal.h"
+#include "BrokenBox.h"
+#include "Needle.h"
+#include "MoveGround.h"
+#include "Energy.h"
 
 using namespace MyMath;
 
@@ -27,7 +31,7 @@ void SpitOutLevelEditor::SpitOutPlayer(std::unique_ptr<Player>& player) {
 		auto& playerData = levelEditor_->GetLevelData()->players[0];
 		player->SetTranslate(playerData.transform.translate);//座標
 		player->SetRotate(playerData.transform.rotate);//向き
-		player->SetUmbrellaRotate();//傘の向き
+		player->InitUmbrellaRotateY();//傘の向き
 		player->SetColliderSize(playerData.colliderSize);//当たり判定
 		NextStageSave::GetInstance().SetCheckPoint(playerData.transform.translate);//チェックポイント設定
 	}
@@ -101,7 +105,7 @@ void SpitOutLevelEditor::SpitOutStage(std::unique_ptr<Object3d>& stageObj, const
 			aabb.min = position - object.colliderSize;
 			aabb.max = position + object.colliderSize;
 
-			CollisionManager::GetInstance().CreateStageCollision(aabb,position,CollisionTypes::TypeStage);
+			CollisionManager::GetInstance().FixedCollision(aabb,position,CollisionTypes::TypeStage);
 		}
 	}
 }
@@ -133,13 +137,38 @@ std::list<std::unique_ptr<IStageObject>> SpitOutLevelEditor::SpitOutStageObject(
 				SettingStageObject(*stageObject.get(), stageObjectData);
 				stageObjects.push_back(std::move(stageObject));
 			}
+			else if (stageObjectData.ObjectName == "BreakBox") {
+				std::unique_ptr<BrokenBox>stageObject = std::make_unique<BrokenBox>();
+				SettingStageObject(*stageObject.get(), stageObjectData);
+				stageObjects.push_back(std::move(stageObject));
+			}
+			else if (stageObjectData.ObjectName == "Needle") {
+				std::unique_ptr<Needle>stageObject = std::make_unique<Needle>();
+				SettingStageObject(*stageObject.get(), stageObjectData);
+				stageObject->SetTravelRoute(stageObjectData.transform.translate,
+					stageObjectData.transform.translate + stageObjectData.leftPoint,
+					stageObjectData.transform.translate + stageObjectData.rightPoint);
+				stageObjects.push_back(std::move(stageObject));
+			}
+			else if (stageObjectData.ObjectName == "MoveGround") {
+				std::unique_ptr<MoveGround>stageObject = std::make_unique<MoveGround>();
+				SettingStageObject(*stageObject.get(), stageObjectData);
+				stageObject->SetTravelRoute(stageObjectData.transform.translate,
+					stageObjectData.transform.translate + stageObjectData.leftPoint,
+					stageObjectData.transform.translate + stageObjectData.rightPoint);
+				stageObjects.push_back(std::move(stageObject));
+			}
+			else if (stageObjectData.ObjectName == "Energy") {
+				std::unique_ptr<Energy>stageObject = std::make_unique<Energy>();
+				SettingStageObject(*stageObject.get(), stageObjectData);
+				stageObjects.push_back(std::move(stageObject));
+			}
 		}
 	}
 	return stageObjects;
 }
 
 void SpitOutLevelEditor::SettingStageObject(IStageObject& stageObject, LevelEditor::LevelData::StageObjectData data) {
-	stageObject.SetObjectName(data.ObjectName);//オブジェクトの名前保存
 	stageObject.Initialize();//初期化
 	stageObject.SetPosition(data.transform.translate);//座標位置
 	stageObject.SetScale(data.transform.scale);
@@ -176,17 +205,17 @@ std::list<std::unique_ptr<EventTrigger>> SpitOutLevelEditor::SpitOutEventTrigger
 }
 
 void SpitOutLevelEditor::SpitOutBoss(std::unique_ptr<Boss>& boss) {
-
+	//bossがいない場合はスキップ
 	if (!levelEditor_->GetLevelData()->bosses.empty()) {
 		boss = std::make_unique<Boss>();
 		boss->Initialize();
-
+		//データを渡す
 		auto& bossData = levelEditor_->GetLevelData()->bosses[0];
 		boss->SetTranslate(bossData.transform.translate);
 		boss->SetRotate(bossData.transform.rotate);
 		boss->SetColliderSize(bossData.colliderSize);
-
-		boss->SetBossCenter(bossData.transform.translate);
+		//真ん中を設定(横移動で使用)
+		boss->BossCenter(bossData.transform.translate);
 	}
 }
 

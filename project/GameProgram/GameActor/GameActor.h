@@ -19,7 +19,7 @@
 /// プレイヤー、敵のような動く、攻撃すると
 /// ゲームで使う基盤クラス
 /// </summary>
-class GameActor : public ActorCommand, public CollisionSource
+class GameActor : public CollisionSource
 {
 public:
 
@@ -35,6 +35,19 @@ public:
 	/// 描画処理
 	/// </summary>
 	virtual void Draw() = 0;
+
+	/// <summary>
+	/// 生存状態
+	/// </summary>
+	virtual void Active() = 0;
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
+	virtual void Dead() = 0;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
+	virtual void Performance() = 0;
 
 	/// <summary>
 	/// getter_座標位置
@@ -90,7 +103,7 @@ public:
 	/// <summary>
 	/// 演出中であるか
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>演出フラグ</returns>
 	bool GetPerformanceMode() { return isPerformance_; }
 
 	/// <summary>
@@ -101,13 +114,13 @@ public:
 	/// <summary>
 	/// getter_体力
 	/// </summary>
-	/// <returns></returns>現在の体力
+	/// <returns>現在の体力</returns>
 	uint32_t GetHp() { return hp_; }
 
 	/// <summary>
 	/// setter_体力
 	/// </summary>
-	/// <param name="preHp"></param>代入する体力数
+	/// <param name="preHp">代入する体力数</param>
 	void SetHp(uint32_t preHp) { hp_ = preHp; }
 
 	/// <summary>

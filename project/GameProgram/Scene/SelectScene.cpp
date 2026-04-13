@@ -26,17 +26,17 @@ void SelectScene::Initialize() {
 	//ポーズ画面
 	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnTitle.png", std::make_unique<TitleScene>());
 
-	CollisionManager::GetInstance().ResetFrag();
-	PauseScreen::GetInstance().PauseFlag(false);//ポーズを強制解除
+	//ゴール、ワープフラグをリセット
+	CollisionUtility::GetInstance().ResetFrag();
+	PauseScreen::GetInstance().OffPause();//ポーズを強制解除
 }
 
 void SelectScene::Update() {
-	if (PauseScreen::GetInstance().IsPause()) {
+	//ボタンを押して、ポーズ中であるか。プレイヤー演出,死亡状態でないとき
+	if ((Input::GetInstance().TriggerKey(DIK_ESCAPE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START) || PauseScreen::GetInstance().IsPause()) &&
+		(!player_->GetPerformanceMode() && player_->GetHp() != 0)) {
 		PauseScreen::GetInstance().Update();
 		return;
-	}
-	if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
-		PauseScreen::GetInstance().PauseFlag(true);
 	}
 
 	//ステージオブジェクト更新
@@ -45,7 +45,7 @@ void SelectScene::Update() {
 	}
 	
 	//カメラコントロールの更新
-	cameraControl_->Update(&*camera_);
+	cameraControl_->Update(&*camera_, player_.get());
 
 	//プレイヤー更新
 	player_->Update();
@@ -55,9 +55,6 @@ void SelectScene::Update() {
 
 	//当たり判定
 	CollisionManager::GetInstance().CollisionUpdate();
-
-	//ガイド更新処理
-	UIManager::GetInstance().Update();
 
 	//背景更新
 	backGround->Update();
@@ -89,6 +86,7 @@ void SelectScene::Draw() {
 	GLTFCommon::GetInstance().Command();
 	//背景描画
 	backGround->Draw();
+
 	//プレイヤー描画
 	player_->Draw();
 
@@ -150,7 +148,7 @@ void SelectScene::SpitOutGameObject() {
 
 void SelectScene::SceneUpdate() {
 	//ワープする+カメラズームが完了
-	if (CollisionManager::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
+	if (CollisionUtility::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
 		SceneManager::GetInstance().ChangeScene(std::make_unique<GameScene>());
 	}
 

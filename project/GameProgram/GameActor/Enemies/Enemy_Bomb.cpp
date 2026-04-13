@@ -200,19 +200,9 @@ void Enemy_Bomb::Explosion() {
 	bombAABB_.max = transform_.translate + kExplosionRange_;
 
 	//パーティクルの設定
-	particles_[particleDamage_.name]->SetTranslate(transform_.translate);
-	particles_[particleDamage_.name]->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleDamage_]->SetTranslate(transform_.translate);
+	particles_[particleDamage_]->SetParticleBorn(ParticleBorn::MomentMode);
 
 	//当たり判定設定
-	CollisionManager::GetInstance().CreateCollision(bombAABB_, transform_.translate, CollisionTypes::TypeBombExplotion);
-}
-
-void Enemy_Bomb::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::TypePlayerBullet) {
-		IsDamage();
-	}
-
-	if (collision->GetType() == CollisionTypes::TypeStage) {
-		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
-	}
+	CollisionManager::GetInstance().FrameCollision(bombAABB_, transform_.translate, CollisionTypes::TypeBombExplotion);
 }

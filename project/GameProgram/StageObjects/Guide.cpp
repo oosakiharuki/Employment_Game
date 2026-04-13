@@ -14,8 +14,11 @@ void Guide::Initialize(const Transform& transform, const std::string& textureFil
 }
 
 void Guide::Update() {
-
-	if (Input::GetInstance().GetJoystickState()) {
+	//最初が[G]でない ステージ番号に使える
+	if (textureFileName_.c_str()[0] != 'G') {
+		textureFilePath_ = textureFileName_;
+	}
+	else if (Input::GetInstance().GetJoystickState()) {
 		textureFilePath_ = textureFileName_ + "GamePad";
 	}
 	else {

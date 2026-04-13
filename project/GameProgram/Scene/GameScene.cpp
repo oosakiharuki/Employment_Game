@@ -32,55 +32,46 @@ void GameScene::Initialize() {
 
 	//ポーズ画面
 	PauseScreen::GetInstance().BeforeChangeScene("pauseReturnSelect.png",std::make_unique<SelectScene>());
-
-	CollisionManager::GetInstance().ResetFrag();
+	//ゴール、ワープフラグをリセット
+	CollisionUtility::GetInstance().ResetFrag();
 }
 
 void GameScene::Update() {
-	if (PauseScreen::GetInstance().IsPause()) {
-		PauseScreen::GetInstance().Update(); 
+	//ボタンを押して、ポーズ中であるか。プレイヤー演出,死亡状態でないとき
+	if ((Input::GetInstance().TriggerKey(DIK_ESCAPE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START) || PauseScreen::GetInstance().IsPause()) &&
+		(!player_->GetPerformanceMode() && player_->GetHp() != 0)) {
+		PauseScreen::GetInstance().Update();
 		return;
 	}
-	if (Input::GetInstance().TriggerKey(DIK_ESCAPE)) {
-		PauseScreen::GetInstance().PauseFlag(true);
-	}
-
-	//演出用のワープゲート出口
-	startWarp_->Update();
-
-	//カメラコントロール
-	cameraControl_->SetPlayerPosition(player_->GetTranslate());
-	//プレイヤーが倒されたらシェイク
-	(player_->GetHp() == 0) ? cameraControl_->ShakeMode(true) : cameraControl_->ResetShakeTime();
-	//更新処理
-	cameraControl_->Update(&*camera_.get());
-
-	//プレイヤー更新処理
-	player_->Update();
 
 	//死んでしまった、復活(リスポーン)する時
 	Respawn();
 
+	//更新処理
+	cameraControl_->Update(&*camera_.get(),player_.get());
+
+	//プレイヤー更新処理
+	player_->Update();
+
+	//演出用のワープゲート出口
+	startWarp_->Update(player_.get());
+
 	//プレイヤーが死んでしまったら通らない(停止)
 	PlayerAliveUpdate();
 
-	if (!player_->GetPerformanceMode()) {
-		startWarp_->Vanish();//出てきた後消えるようにする	
+	//ステージオブジェクトの更新
+	for (auto& stageObject : stageObjects_) {
+		stageObject->Update();
 	}
 
 	//使用する当たり判定
 	CollisionManager::GetInstance().CollisionUpdate();
 	//背景更新処理
 	backGround->Update();
-
+	//操作ガイド更新処理
 	for (auto& guide : guides_) {
 		guide->Update();
 	}
-
-	//プレイヤーが移動したら変更
-	UIManager::GetInstance().SetPlayerTranslate(player_->GetTranslate());
-	//スプライト更新処理
-	UIManager::GetInstance().Update();
 
 #ifdef  USE_IMGUI
 
@@ -94,27 +85,23 @@ void GameScene::Update() {
 }
 
 void GameScene::PlayerAliveUpdate() {
+	//プレイヤー演出中、死亡した状態は敵は動かさない
 	if (player_->GetHp() == 0 || player_->GetPerformanceMode()) return;
 
 	//ステージの更新処理
 	stageObj_->Update();
-
-	//敵の更新
-	for (auto& enemy : enemies_) {
-		enemy->SetPlayer(player_.get());
-		enemy->Update();
-	}
-
-	//ステージオブジェクトの更新
-	for (auto& stageObject : stageObjects_) {
-		stageObject->Update();
-	}
 
 	//イベントトリガーの更新
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->Update(*cameraControl_, levelEditor_, std::move(enemies_));
 		enemies_ = eventTrigger->GetPopEnemy();//moveで渡したのを返してもらう(eventTriggerで増える)
 	}
+	//敵の更新
+	for (auto& enemy : enemies_) {
+		enemy->SetPlayer(player_.get());
+		enemy->Update();
+	}
+
 
 	//イベントで全て倒したら削除
 	eventTriggers_.remove_if([](auto& event) {
@@ -132,12 +119,8 @@ void GameScene::PlayerAliveUpdate() {
 
 void GameScene::Draw() {
 	//モデル描画処理
-	GLTFCommon::GetInstance().Command();
+	GLTFCommon::GetInstance().Command();	
 	backGround->Draw();
-
-	for (auto& eventTrigger : eventTriggers_) {
-		eventTrigger->Draw();
-	}
 
 	if (boss_) {
 		boss_->Draw();
@@ -165,6 +148,13 @@ void GameScene::Draw() {
 	
 	player_->Draw();
 
+	//モデル描画処理
+	GLTFCommon::GetInstance().Command();
+	//敵ラッシュイベント描画
+	for (auto& eventTrigger : eventTriggers_) {
+		eventTrigger->Draw();
+	}
+
 	//パーティクル描画処理
 	ParticleCommon::GetInstance().Command();
 
@@ -190,6 +180,10 @@ void GameScene::Finalize() {
 
 
 void GameScene::LevelEditorObjectSetting(const std::string& levelEditor_file) {
+
+	if (levelEditor_file != "") {
+		NextStageSave::GetInstance().SetNextStageFile(levelEditor_file);
+	}
 
 	//- プレイヤー配置 -
 	player_ = std::make_unique<Player>();
@@ -237,15 +231,13 @@ void GameScene::SpitOutGameObject() {
 	//イベントトリガーの配置
 	eventTriggers_ = std::move(spitOut_.SpitOutEventTrigger());
 	
-	//チュートリアル用の操作方法スプライト
-	if (stageFileName_ == "stage_0") {
-		guides_ = std::move(spitOut_.SpitOutGuide());
-	}
+	//操作方法
+	guides_ = std::move(spitOut_.SpitOutGuide());
 
 	//ボスの配置
 	spitOut_.SpitOutBoss(boss_);
 	if (boss_) {
-		cameraControl_->CameraYFixed(true);
+		cameraControl_->CameraYFixed();//ボスの時カメラのy座標を動かさない
 		boss_->SetPlayer(player_.get());
 		boss_->Update();
 	}
@@ -258,7 +250,7 @@ void GameScene::WaterWarpExit() {
 
 	startWarp_->SetRotation({ kStartWarpGateRange_ ,0.0f,0.0f });//下向きにして水たまりに
 	startWarp_->WarpExit(player_->GetTranslate());
-
+	
 	player_->IsPerformanceFlag(true);
 }
 
@@ -278,13 +270,25 @@ void GameScene::Respawn() {
 	}
 
 	//リセット
-	boss_.reset();
-	//ボスの配置
-	spitOut_.SpitOutBoss(boss_);
+	if (boss_) {
+		boss_.reset();
+		//ボスの配置
+		spitOut_.SpitOutBoss(boss_);
+		boss_->SetPlayer(player_.get());
+		boss_->Update();
+	}
 
-	player_->RespawnEnd();
+	//ステージオブジェクトのリセット
+	stageObjects_.clear();
+	stageObjects_ = std::move(spitOut_.SpitOutStageObject());
 
 	cameraControl_->CameraSettingCheckPoint(levelEditor_.GetLevelData()->cameraInit["MainCamera"]);
+
+	startWarp_.reset();
+	WaterWarpExit();	
+	
+	//リスポーンが終了
+	player_->RespawnEnd();
 }
 
 void GameScene::SceneUpdate() {
@@ -298,11 +302,11 @@ void GameScene::SceneUpdate() {
 #endif // USE_IMGUI
 	
 	//ゴールした+カメラズームが完了
-	if (CollisionManager::GetInstance().IsGoal() && cameraControl_->ZoomEnd()) {
+	if (CollisionUtility::GetInstance().IsGoal() && cameraControl_->ZoomEnd()) {
 		SceneManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());//クリアシーンに移動
 	}
 	//ワープする+カメラズームが完了
-	else if (CollisionManager::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
+	else if (CollisionUtility::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
 		//次のステージに進む時Hpなどパラメータがリセットされないようにする
 		NextStageSave::GetInstance().SetPlayerHp(player_->GetHp()); //現在のプレイヤー体力を保存
 		NextStageSave::GetInstance().SetPlayerRemain(player_->GetRemain()); //現在のプレイヤー残機を保存

@@ -30,6 +30,7 @@
 struct MaterialData {
 	std::string textureFilePath;
 	uint32_t textureIndex;
+	Matrix4x4 uvTransform;
 	Vector4 materialColor;
 };
 
@@ -235,6 +236,11 @@ namespace MyMath {
 	Vector3& operator*=(Vector3& v, float f);
 	Vector3& operator/=(Vector3& v, float f);
 
+	Vector4 operator+(const Vector4& v1, const Vector4& v2);
+	Vector4 operator-(const Vector4& v1, const Vector4& v2);
+	Vector4 operator*(const Vector4& v1, const Vector4& v2);
+	Vector4 operator/(const Vector4& v1, const Vector4& v2);
+
 	bool operator==(const Vector3& v1, const Vector3& v2);
 	bool operator!=(const Vector3& v1, const Vector3& v2);
 	bool operator<=(const Vector3& v1, const Vector3& v2);
@@ -413,6 +419,32 @@ namespace MyMath {
 	Vector3 EaseOut(const Vector3& startPoint, const Vector3& endPoint, float t);
 
 	/// <summary>
+	/// イーズインアウト_float
+	/// </summary>
+	/// <param name="startPoint">スタート位置</param>
+	/// <param name="endPoint">目的(移動させたい)位置</param>
+	/// <param name="t">補間(0~1)</param>
+	/// <returns></returns>
+	float EaseInOut(float startPoint, float endPoint, float t);
+	/// <summary>
+	/// イーズインアウト_Vector2
+	/// </summary>
+	/// <param name="startPoint">スタート位置</param>
+	/// <param name="endPoint">目的(移動させたい)位置</param>
+	/// <param name="t">補間(0~1)</param>
+	/// <returns></returns>
+	Vector2 EaseInOut(const Vector2& startPoint, const Vector2& endPoint, float t);
+	/// <summary>
+	/// イーズインアウト_Vector3
+	/// </summary>
+	/// <param name="startPoint">スタート位置</param>
+	/// <param name="endPoint">目的(移動させたい)位置</param>
+	/// <param name="t">補間(0~1)</param>
+	/// <returns></returns>
+	Vector3 EaseInOut(const Vector3& startPoint, const Vector3& endPoint, float t);
+
+
+	/// <summary>
 	/// 長さ
 	/// </summary>
 	/// <param name="start">現在位置</param>
@@ -487,7 +519,7 @@ namespace MyMath {
 	Matrix4x4 Inverse(const Matrix4x4& m);
 #pragma endregion
 
-	Matrix4x4 MakePerspectiveFovMatrix(float forY, float aspectRatio, float nearClip, float farClip);
+	Matrix4x4 MakePerspectiveFovMatrix(float fovY, float aspectRatio, float nearClip, float farClip);
 
 	Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farClip);
 
@@ -501,19 +533,11 @@ namespace MyMath {
 	/// <summary>
 	/// 補間
 	/// </summary>
-	/// <param name="p0">ポイント1</param>
-	/// <param name="p1">ポイント2</param>
+	/// <param name="p0">ポイント1(始点)</param>
+	/// <param name="p1">ポイント2(終点)</param>
 	/// <param name="t">補間単位</param>
 	/// <returns>保管した座標</returns>
 	Vector3 Lerp(const Vector3& p0, const Vector3& p1, float t);
-	/// <summary>
-	/// 補間_クオータニオン版
-	/// </summary>
-	/// <param name="p0">ポイント1</param>
-	/// <param name="p1">ポイント2</param>
-	/// <param name="t">補間単位</param>
-	/// <returns>保管した座標</returns>
-	Quaternion Lerp(const Quaternion& p0, const Quaternion& p1, float t);
 
 	Quaternion operator-(const Quaternion& q);
 	Quaternion operator*(float f, const Quaternion& q);

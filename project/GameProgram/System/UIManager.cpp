@@ -10,49 +10,31 @@ UIManager& UIManager::GetInstance() {
 }
 
 void UIManager::Finalize() {
-	sprites_.clear();
 	sInstance_.reset();
 }
 
-void UIManager::CreateSprite(const SpriteData& spriteData) {
-	std::unique_ptr<Sprite>& iterator = sprites_[spriteData.name];
-
-	InitSprite(iterator, spriteData);
+void UIManager::FrameSprite(Sprite* sprite) {
+	frameSprites_.push_back(sprite);
 }
-
-void UIManager::InitSprite(std::unique_ptr<Sprite>& sprite, const SpriteData& spriteData) {
-	sprite = std::make_unique<Sprite>();
-	sprite->Initialize(spriteData.texturePath + ".png");//初期化
-	sprite->SetSize(spriteData.size);          //サイズ設定
-	sprite->SetPosition(spriteData.position); //座標設定
+void UIManager::FixedSprite(Sprite* sprite) {
+	fixedSprites_.push_back(sprite);
 }
-
 void UIManager::Update() {
-	for (auto& sprite : sprites_) {
-		sprite.second->Update();
+	//フレーム更新と一度読み取りを合わせる
+	for (auto& sprite : fixedSprites_) {
+		frameSprites_.push_back(sprite);
 	}
-
-	for (auto& guide : spriteGuides_) {
-		guide.second->Update();
+	//更新処理
+	for (auto& sprite : frameSprites_) {
+		sprite->Update();
 	}
 }
 
 void UIManager::Draw() {
-	for (auto& sprite : sprites_) {
-		sprite.second->Draw();
+	//描画処理
+	for (auto& sprite : frameSprites_) {
+		sprite->Draw();
 	}
-}
-
-void UIManager::SetSpriteTexture(const std::string name, const std::string& texturePath) {
-	std::unique_ptr<Sprite>& iterator = sprites_[name];
-
-	if (iterator->GetTextureFile() != texturePath + ".png") {
-		iterator->SetTextureFile(texturePath + ".png");
-	}
-}
-
-std::string UIManager::GetSpriteTexture(const std::string name) {
-	std::unique_ptr<Sprite>& iterator = sprites_[name];
-
-	return iterator->GetTextureFile();
+	//役目を終えたためリセット
+	frameSprites_.clear();
 }

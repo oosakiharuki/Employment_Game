@@ -5,9 +5,11 @@
 /// <summary>
 /// ターレットの敵(BaseEnemyの派生クラス)
 /// </summary>
-class Enemy_Turret : public BaseEnemy, public EnemyFireCommand, public GravityActor {
+class Enemy_Turret : public BaseEnemy , public EnemyCanFireBullet {
 public:
-
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Enemy_Turret() override;
 	/// <summary>
 	/// 初期化処理
@@ -23,16 +25,26 @@ public:
 	void Draw() override;
 
 private:
-
+	/// <summary>
+	/// 生存状態
+	/// </summary>
 	void Active() override;
-
+	/// <summary>
+	/// 捜索態勢
+	/// </summary>
 	void SearchCommand() override;
+	/// <summary>
+	/// 攻撃態勢
+	/// </summary>
 	void AttackCommand() override;
-
+	/// <summary>
+	/// 死亡状態
+	/// </summary>
 	void Dead() override;
+	/// <summary>
+	/// 演出状態
+	/// </summary>
 	void Performance() override;
-
-	void OnCollision(CollisionSource* collision) override;
 
 	/// <summary>
 	/// 弾丸発射処理
@@ -45,9 +57,7 @@ private:
 	Vector3 particleLaserSize_ = { 0.1f,0.1f,0.1f };
 
 	//見える範囲のパーティクルパラメータ
-	ParticleParameters particleLaser_ = {
-		"tullet_laser","resource/Sprite/3YvXH.dds",Primitive::CreateBeam(), 1, 0.001f, particleLaserSize_
-	};
+	const std::string& particleLaser_ = "tullet_laser";
 
 	const Vector3 kParticleFireSize_ = { 1.5f, 1.5f, 1.5f };
 
@@ -68,5 +78,8 @@ private:
 
 	//弾丸速度
 	const float kBulletSpeed_ = 0.5f;
+
+	//発砲攻撃
+	std::unique_ptr<EnemyFireCommand> fireCommand_ = nullptr;
 };
 

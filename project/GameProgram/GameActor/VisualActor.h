@@ -8,8 +8,13 @@
 /// </summary>
 class VisualActor {
 public:
-
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	VisualActor();
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~VisualActor();
 	/// <summary>
 	/// 初期化処理
@@ -27,12 +32,12 @@ public:
 	/// <summary>
 	/// setter_トランスフォーム
 	/// </summary>
-	/// <param name="transform"></param>
+	/// <param name="transform">トランスフォームを設定</param>
 	void SetTransform(const Transform& transform) { transform_ = transform; }
 	/// <summary>
 	/// getter_トランスフォーム
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在のトランスフォーム</returns>
 	const Transform& GetTransform() { return transform_; }
 	/// <summary>
 	/// setter_座標位置

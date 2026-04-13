@@ -9,9 +9,7 @@ using namespace MyMath;
 using namespace UseEveryOne;
 
 Enemy_Soldier::~Enemy_Soldier() {
-	for (auto& bullet : bullets_) {
-		bullet.reset();
-	}
+	fireCommand_->BulletReset();
 }
 
 void Enemy_Soldier::Initialize() {
@@ -24,11 +22,12 @@ void Enemy_Soldier::Initialize() {
 	//見える範囲初期化
 	eyeReach_ = kEyeReach_;
 
+	fireCommand_ = std::make_unique<EnemyFireCommand>();
 	//最大弾丸数
-	rapidCountMax_ = kRapidCountMax_;
+	fireCommand_->SetRapidCountMax(kRapidCountMax_);
 
 	//攻撃(発泡)
-	particles_[particleFire_.name] = ParticleManager::GetInstance().InitParticle(particleFire_);
+	particles_[fireCommand_->GetParticleFireName()] = ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireName());
 
 	speed_.x = kMoveX_;
 }
@@ -75,7 +74,7 @@ void Enemy_Soldier::Active() {
 	//捜索範囲更新
 	SearchRange();
 	//弾丸の更新
-	BulletUpdate();
+	fireCommand_->BulletUpdate();
 
 	isGround_ = false;
 }
@@ -83,38 +82,38 @@ void Enemy_Soldier::Active() {
 void Enemy_Soldier::SearchCommand() {
 	//移動する
 	Move();
-	isFire_ = true;
+	fireCommand_->FireStart();
 }
 
 void Enemy_Soldier::AttackCommand() {
 	
-	if (isFire_) {
+	if (fireCommand_->IsFire()) {
 		//見つけたリアクション
 		FoundReaction();
 
 		//発砲処理
-		Fire();
+		fireCommand_->Fire(*this);
 	}
 
-	if (!isFire_ && !enemyEye_->IsFound()) {
+	if (!fireCommand_->IsFire() && !enemyEye_->IsFound()) {
 		attackSwitch_ = false;
 	}
 	else {
-		isFire_ = true;
+		fireCommand_->FireStart();
 	}
 
 	//マークの更新
 	MarkUpdate();
 
 	//コーンが上向きなので
-	particles_[particleFire_.name]->SetRotate({ 0.0f,0.0f,-transform_.rotate.y });
+	particles_[fireCommand_->GetParticleFireName()]->SetRotate({ 0.0f,0.0f,-transform_.rotate.y });
 }
 
 void Enemy_Soldier::Dead() {
 	//死んだリアクション
 	DeadReaction();
 	//弾丸の更新
-	BulletUpdate();
+	fireCommand_->BulletUpdate();
 }
 
 void Enemy_Soldier::Performance() {}
@@ -141,9 +140,7 @@ void Enemy_Soldier::Draw() {
 		object_->Draw();
 		shadow_->Draw();
 	}
-	for (auto& bullet : bullets_) {
-		bullet->Draw();
-	}
+	fireCommand_->BulletDraw();
 }
 
 void Enemy_Soldier::FireBullet() {
@@ -152,7 +149,7 @@ void Enemy_Soldier::FireBullet() {
 	enemyPosition = { wt_.GetMatWorld().m[3][0],wt_.GetMatWorld().m[3][1],wt_.GetMatWorld().m[3][2]};
 
 	//プレイヤーの方向に向かう(最初に打つ弾にそって進む)
-	if (rapidCount_ == 0) {
+	if (fireCommand_->GetRapidCount() == 0) {
 
 		const float kSpeed = 0.4f;
 		//プレイヤーの座標
@@ -166,25 +163,10 @@ void Enemy_Soldier::FireBullet() {
 		normal *= kSpeed;
 		velocity_ = normal;
 	}
-	particles_[particleFire_.name]->SetTranslate(enemyPosition);
+	particles_[fireCommand_->GetParticleFireName()]->SetTranslate(enemyPosition);
+	particles_[fireCommand_->GetParticleFireName()]->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
 
 	//弾丸を生み出す
-	std::unique_ptr<EnemyBullet> bullet = std::make_unique<EnemyBullet>();
-	bullet->Initialize();
-	bullet->SetPlayer(player_);//プレイヤーと当たりノックバックパラメータで使う
-	bullet->SetTranslate(enemyPosition);
-	bullet->SetVelocity(velocity_);
-	bullets_.push_back(std::move(bullet));
-
-	particles_[particleFire_.name]->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
+	fireCommand_->AddBullet(enemyPosition, velocity_);
 }
 
-void Enemy_Soldier::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::TypePlayerBullet) {
-		IsDamage();
-	}
-
-	if (collision->GetType() == CollisionTypes::TypeStage) {
-		CollisionManager::GetInstance().GameActorAndStageCollision(collisionOverlap, *this, *this, collision->GetAABB());
-	}
-}

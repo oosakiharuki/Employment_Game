@@ -15,7 +15,7 @@ void MyGame::Initialize() {
 	//ポーズ処理の初期化
 	PauseScreen::GetInstance().Initialize();
 	//最初のシーンの設定
-	SceneManager::GetInstance().ChangeScene(std::make_unique<TitleScene>());
+	SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
 	//シーンの更新処理(変更処理)
 	SceneManager::GetInstance().SceneUpdate();
 }
@@ -44,11 +44,14 @@ void MyGame::Update() {
 
 	//フェード更新
 	FadeScreen::GetInstance().Update();
-	
+	//スプライト更新処理
+	UIManager::GetInstance().Update();
 	//ポストエフェクト更新/変更
 	PostEffectManager::GetInstance().Update();
 
 #ifdef  USE_IMGUI
+	ParticleManager::GetInstance().ParameterImGui();
+
 	ImGuiManager::GetInstance().End();
 #endif //  USE_IMGUI
 
