@@ -66,7 +66,7 @@ private:
 	std::unique_ptr<Boss> boss_;
 
 	//BGM
-	SoundData BGMData_;
+	std::unique_ptr<SoundData> BGMData_;
 	float volume_ = 0.07f;//音量調節機能
 
 	/// <summary>
@@ -89,7 +89,7 @@ private:
 	std::string stageFileName_;
 
 	//BGM
-	SoundData soundData_;
+	std::unique_ptr<SoundData> soundData_;
 
 	//スタート時のワープゲート(水たまりから飛び出る感じに)
 	std::unique_ptr<WarpGate> startWarp_;

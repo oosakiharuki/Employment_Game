@@ -26,6 +26,9 @@ void Umbrella::Initialize() {
 	reaction_ = std::make_unique<Reaction>();
 
 	collisionType_ = CollisionTypes::TypeUmbrella;
+
+	//傘を開く
+	umbrellaOpenSound_ = Audio::GetInstance().LoadWave("resource/Sound/umbrellaOpen.mp3");
 }
 
 void Umbrella::Update() {
@@ -96,6 +99,7 @@ void Umbrella::ShieldMode() {
 	//既に開いている場合はスキップ
 	if (!isShield_) {		
 		isParry_ = true;
+		Audio::GetInstance().SoundPlayWave(*umbrellaOpenSound_, kVolume_ * kTwice_);
 	}
 	isShield_ = true;
 
@@ -107,6 +111,11 @@ void Umbrella::ShieldMode() {
 	CollisionManager::GetInstance().FrameCollision(this);
 
 	object_->ChangeAnimation("umbrella_Open.gltf");//開いた傘
+}
+
+void Umbrella::OffShield() {
+	isShield_ = false;
+	Audio::GetInstance().StopWave(*umbrellaOpenSound_);
 }
 
 void Umbrella::ParryUpdate() {

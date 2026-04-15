@@ -15,7 +15,7 @@ void MyGame::Initialize() {
 	//ポーズ処理の初期化
 	PauseScreen::GetInstance().Initialize();
 	//最初のシーンの設定
-	SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
+	SceneManager::GetInstance().ChangeScene(std::make_unique<GameScene>());
 	//シーンの更新処理(変更処理)
 	SceneManager::GetInstance().SceneUpdate();
 }
@@ -93,6 +93,7 @@ void MyGame::Draw() {
 
 void MyGame::Finalize() {
 	FadeScreen::GetInstance().Finalize();
+	Audio::GetInstance().Finalize();
 	SceneManager::GetInstance().Finalize();
 	NextStageSave::GetInstance().Finalize();
 	CollisionManager::GetInstance().Finalize();

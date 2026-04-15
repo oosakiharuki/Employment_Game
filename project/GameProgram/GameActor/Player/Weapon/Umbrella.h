@@ -5,6 +5,8 @@
 #include "Reaction.h"
 #include "CollisionManager.h"
 
+#include "Audio.h"
+
 class Player;
 
 /// <summary>
@@ -77,7 +79,7 @@ public:
 	/// <summary>
 	/// シールド解除
 	/// </summary>
-	void OffShield() { isShield_ = false; }
+	void OffShield();
 	/// <summary>
 	/// シールドモードのフラグ確認
 	/// </summary>
@@ -143,6 +145,9 @@ private:
 	//傘のノックバックの値
 	const Vector3 kUmbrellaKnockBackPower_ = { 0.0f,0.0f,0.3f };
 	const float kUmbrellaKnockBackTime_ = 0.0f;
+
+	std::unique_ptr<SoundData> umbrellaOpenSound_;//傘を開く
+	const float kVolume_ = 0.3f;//ボリューム
 
 	Player* player_ = nullptr;
 };

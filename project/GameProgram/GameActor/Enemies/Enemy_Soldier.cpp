@@ -25,6 +25,7 @@ void Enemy_Soldier::Initialize() {
 	fireCommand_ = std::make_unique<EnemyFireCommand>();
 	//最大弾丸数
 	fireCommand_->SetRapidCountMax(kRapidCountMax_);
+	fireCommand_->InitAudio();
 
 	//攻撃(発泡)
 	particles_[fireCommand_->GetParticleFireName()] = ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireName());

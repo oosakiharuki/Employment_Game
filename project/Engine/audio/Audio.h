@@ -7,6 +7,9 @@
 //ComPtr
 #include <wrl.h>
 #include <cassert>
+
+#include <vector>
+
 /// <summary>
 /// チャンク
 /// </summary>
@@ -32,10 +35,8 @@ struct FormatChunk {
 struct SoundData {
 	//波形フォーマット
 	WAVEFORMATEX wfex;
-	//バッファ先頭
-	BYTE* pBuffer;
-	//サイズ
-	unsigned int buyfferSize;
+	//バッファ
+	std::vector<BYTE> buffer;
 	//ソースボイス
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
 };
@@ -62,7 +63,7 @@ public:
 	/// </summary>
 	/// <param name="filename">waveファイル名</param>
 	/// <returns>ロードされたサウンドデータ</returns>
-	SoundData LoadWave(const char* filename);
+	std::unique_ptr<SoundData> LoadWave(const char* filename);
 
 	/// <summary>
 	/// 音声を再生
@@ -71,6 +72,14 @@ public:
 	/// <param name="volume">音量</param>
 	/// <param name="isLoop">ループするか</param>
 	void SoundPlayWave(const SoundData& soundData, float volume, bool isLoop = false);
+
+	/// <summary>
+	/// 音声はすでに鳴っているか
+	/// </summary>
+	/// <param name="soundData"></param>
+	/// <returns></returns>
+	bool IsPlayingSound(const SoundData& soundData);
+
 	/// <summary>
 	/// 音声を停止
 	/// </summary>
@@ -89,11 +98,10 @@ private:
 	friend struct std::default_delete<Audio>;
 
 	/// <summary>
-	/// サウンドを読み取る
+	/// 音声ファイルを読み取る
 	/// </summary>
-	/// <param name="filename">ファイルパス</param>
-	/// <returns>出来上がったデータ</returns>
-	SoundData SoundLoadWave(const char* filename);//string?
+	/// <param name="fileName">音声ファイル名</param>
+	std::unique_ptr<SoundData> SoundLoadFile(const std::string& fileName);
 
 	/// <summary>
 	/// 音声データの解放 delete
@@ -101,7 +109,7 @@ private:
 	/// <param name="soundData">サウンドデータ</param>
 	void SoundUnload(SoundData* soundData);
 
-	SoundData soundData_;
+	std::unique_ptr<SoundData> soundData_;
 
 	//audio
 	Microsoft::WRL::ComPtr<IXAudio2> xAudio2_;

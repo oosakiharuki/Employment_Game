@@ -6,6 +6,14 @@
 using namespace MyMath;
 using namespace UseEveryOne;
 
+void PlayerActions::InitAudio() {
+	//発砲攻撃
+	fireSound_ = Audio::GetInstance().LoadWave("resource/Sound/fire.mp3");
+	//ジャンプ
+	jumpSound_ = Audio::GetInstance().LoadWave("resource/Sound/jump.mp3");
+}
+
+
 void PlayerActions::BulletUpdate() {
 	//消滅処理
 	bullets_.remove_if([](auto& bullet) {
@@ -130,6 +138,7 @@ void PlayerActions::CommandJump() {
 	if (player_->GetIsGround()) {
 		jumpPower_ = kJumpPowerMax_;
 		player_->ParticleJump();//ジャンプのパーティクル
+		Audio::GetInstance().SoundPlayWave(*jumpSound_, kVolume_);
 	}
 	player_->IsGround(false);	
 }
@@ -144,7 +153,10 @@ void PlayerActions::CommandFire() {
 		else {
 			ShootBullet();//発砲攻撃
 		}
-		fireCoolTimer_ = kFireCoolTimeMax_;
+		fireCoolTimer_ = kFireCoolTimeMax_;	
+		
+		Audio::GetInstance().StopWave(*fireSound_);
+		Audio::GetInstance().SoundPlayWave(*fireSound_, kVolume_);
 	}
 }
 
