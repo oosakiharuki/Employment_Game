@@ -166,8 +166,10 @@ void PlayerActions::ShootBullet() {
 }
 
 void PlayerActions::PowerShootBullet() {
+	isPowerBullet_ = true;
 	//弾丸速度が二倍、より遠くに飛ばせる
 	BornBullet(player_->GetUmbrellaTranslate(), { 0.0f,kDispersionBetween_ * kDivideByTwo_ ,kBulletSpeed_ * kTwice_ });
+	isPowerBullet_ = false;
 }
 
 void PlayerActions::BornBullet(const Vector3& translate, const Vector3& velocity) {
@@ -183,6 +185,7 @@ void PlayerActions::BornBullet(const Vector3& translate, const Vector3& velocity
 		bullet->Initialize();
 		bullet->SetTranslate(translate);//発泡初期位置
 		bullet->SetVelocity(bulletVelocity);//速さ
+		if(isPowerBullet_) bullet->StrongPower();//強さ
 		bullets_.push_back(std::move(bullet));
 	}
 	//パーティクル

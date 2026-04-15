@@ -30,6 +30,9 @@ void Boss::Initialize() {
 	underBarSprite_ = std::make_unique<Sprite>();
 	underBarSprite_->Initialize("bossHpBar.png");
 	underBarSprite_->SetSize(kHpSpriteSize_);
+
+	fireSound_ = Audio::GetInstance().LoadWave("resource/Sound/fire.mp3");
+	fireBeforeSound_ = Audio::GetInstance().LoadWave("resource/Sound/enemyBeforeFire.mp3");
 }
 
 void Boss::Update() {
@@ -159,9 +162,16 @@ void Boss::CommandFire(float kFrame, float bulletSpeed, uint32_t bulletMax) {
 	//速さを代入
 	bulletSpeed_ = bulletSpeed;
 
+	//撃ち始めSE(時間が半分くらいの時)
+	if (rapidFireTime_ == kRapidFireTimeMax_ * kDivideByTwo_) {
+		Audio::GetInstance().StopWave(*fireSound_);//音ズレが起きないよう
+		Audio::GetInstance().SoundPlayWave(*fireSound_, kVolume_);//発砲SE
+	}
+
 	//連射で時間を開ける
 	rapidFireTime_ += kDeltaTime_ / kFrame;
 	if (rapidFireTime_ >= kRapidFireTimeMax_) {
+
 		FireBullet();//敵の発泡攻撃
 		rapidCount_++;//カウント
 		rapidFireTime_ = 0;//もう一度
@@ -205,15 +215,15 @@ void Boss::CommandAroundMove() {
 	//空っぽか値なしか
 	if (movePoints_.empty() || movePoints_.size() == 0) {
 		//移動を設定
-		movePoints_.push_back({ Vector3(30, 4, 0),2.0f });
-		movePoints_.push_back({ Vector3(-30, 4, 0), 3.0f });
-		movePoints_.push_back({ Vector3(-20, 13, 0), 2.0f });
-		movePoints_.push_back({ Vector3(20, 13, 0), 3.0f });
+		movePoints_.push_back({ Vector3(kAroundRightX_ ,kAroundUnder_, 0),kStandardMoveSpeed_ * kDivideByTwo_ });
+		movePoints_.push_back({ Vector3(kAroundLeftX_, kAroundUnder_, 0), kStandardMoveSpeed_ });
+		movePoints_.push_back({ Vector3(kAroundLeftX_, kGoUpPointY_, 0), kStandardMoveSpeed_ * kDivideByTwo_ });
+		movePoints_.push_back({ Vector3(kAroundRightX_, kGoUpPointY_, 0), kStandardMoveSpeed_ });
 	}
 
 	//目的地に着いたら
 	if (EaseGoal()) {
-		aroundMoveCount_++;    //カウント加算
+		aroundMoveCount_++;//カウント加算
 	}
 
 	//補間移動(イーズインアウト)
@@ -287,6 +297,11 @@ void Boss::CommandFallPlayer() {
 }
 
 void Boss::CommandBeforeActionMotion() {
+	
+	//SEはすでに鳴っているか
+	if (!Audio::GetInstance().IsPlayingSound(*fireBeforeSound_)) {
+		Audio::GetInstance().SoundPlayWave(*fireBeforeSound_, kVolume_);
+	}
 
 	if (transform_.rotate.z >= kRotateOneLap_) {
 		//モーション終了
@@ -304,6 +319,7 @@ void Boss::CommandBeforeActionMotion() {
 
 	motionFinish_ = true;
 	moveCoolTimer_ = 0.0f;
+	Audio::GetInstance().StopWave(*fireBeforeSound_);//予備音声を止める
 }
 
 

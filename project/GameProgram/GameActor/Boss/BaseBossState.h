@@ -196,9 +196,9 @@ private:
 	//秒数
 	const float kTimerFrame_ = 2.0f;
 	//弾丸の速さ
-	const float kBulletSpeed_ = 0.2f;
+	const float kBulletSpeed_ = 0.3f;	
 	//最大弾丸数
-	const uint32_t kRapidCountMax_ = 5;
+	const uint32_t kRapidCountMax_ = 6;
 };
 
 /// <summary>

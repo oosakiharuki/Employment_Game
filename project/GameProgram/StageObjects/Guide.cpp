@@ -14,8 +14,8 @@ void Guide::Initialize(const Transform& transform, const std::string& textureFil
 }
 
 void Guide::Update() {
-	//最初が[G]でない ステージ番号に使える
-	if (textureFileName_.c_str()[0] != 'G') {
+	//最初が[Guide]で始まらない コントローラー、キーボードで変更するやつでないとき
+	if (textureFileName_.substr(0,5) != "Guide") {
 		textureFilePath_ = textureFileName_;
 	}
 	else if (Input::GetInstance().GetJoystickState()) {

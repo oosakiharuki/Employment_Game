@@ -169,7 +169,7 @@ private:
 	//弾丸
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
 	//ボスの最大体力
-	const uint32_t kMaxHp_ = 60;
+	const uint32_t kMaxHp_ = 90;
 
 	//プレイヤークラス(追尾用)
 	Player* player_ = nullptr;
@@ -194,6 +194,22 @@ private:
 
 	//真ん中座標、左右移動に使う
 	Vector3 moveCenter_{};
+
+
+	//低空移動のパラメータ
+	const float kAroundRightX_ = 20.0f;//右端
+	const float kAroundLeftX_ = -20.0f;//左端
+	
+	//どのくらい下がるか
+	const float kAroundUnder_ = 1.0f;
+	//標準スピード
+	const float kStandardMoveSpeed_ = 3.0f;
+
+
+	std::unique_ptr<SoundData> fireSound_;
+	std::unique_ptr<SoundData> fireBeforeSound_;
+	const float kVolume_ = 0.25f;
+
 
 	//コマンドの行動を終えたフラグ(次のコマンドへ移動の合図となる)
 	bool motionFinish_ = false; 
