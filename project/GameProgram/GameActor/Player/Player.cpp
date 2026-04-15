@@ -47,6 +47,7 @@ void Player::Initialize() {
 
 	actionCommand_ = std::make_unique<PlayerActions>();
 	actionCommand_->SetPlayer(this);
+	actionCommand_->InitAudio();
 
 	//コマンドパターン
 	playerActionsInputHandler_ = std::make_unique<PlayerActionsInputHandler >();
@@ -107,9 +108,9 @@ void Player::SettingSpriteHp(uint32_t num) {
 
 void Player::InitAudio() {
 	//ダメージ
-	hitSound_ = Audio::GetInstance().LoadWave("resource/Sound/damage.wav");
+	hitSound_ = Audio::GetInstance().LoadWave("resource/Sound/damage.mp3");
 	//パリィ
-	parrySound_ = Audio::GetInstance().LoadWave("resource/Sound/bane.wav");
+	parrySound_ = Audio::GetInstance().LoadWave("resource/Sound/bane.mp3");
 }
 
 void Player::ActionUpdate() {
@@ -498,7 +499,7 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		particles_[particleDamage_]->SetTranslate(transform_.translate + Normalize(hitPoint));
 		particles_[particleDamage_]->SetParticleBorn(ParticleBorn::MomentMode);
 		//ダメージのSE再生
-		Audio::GetInstance().SoundPlayWave(hitSound_, kVolume_);
+		Audio::GetInstance().SoundPlayWave(*hitSound_, kVolume_);
 		infinityTimer_ = 0.0f;//無敵時間発動
 		//ノックバック(時間の三分の一ぶんまで)
 
@@ -527,7 +528,7 @@ void Player::IsFall() {
 	//一発K.O
 	hp_ = 0;
 	//ダメージSE再生
-	Audio::GetInstance().SoundPlayWave(hitSound_, kVolume_);
+	Audio::GetInstance().SoundPlayWave(*hitSound_, kVolume_);
 }
 
 void Player::KnockBackPlayer(const Vector3& Power, float TimerMax) {
@@ -585,8 +586,8 @@ void Player::RespawnPlayer() {
 //パリィ成功
 void Player::ParrySuccess() {
 	//SE
-	Audio::GetInstance().StopWave(parrySound_);//パリィが続くとき一度止めてから再生させるようにする
-	Audio::GetInstance().SoundPlayWave(parrySound_, kVolume_);//SE再生:パリィ
+	Audio::GetInstance().StopWave(*parrySound_);//パリィが続くとき一度止めてから再生させるようにする
+	Audio::GetInstance().SoundPlayWave(*parrySound_, kVolume_);//SE再生:パリィ
 	//傘の座標を読み取る
 	Vector3 translate = umbrella_->GetTranslate();
 	translate += TransformNormal(kPlayerFront_, wtGun_.GetMatWorld());//出す場所をwtGun_の向きの前に

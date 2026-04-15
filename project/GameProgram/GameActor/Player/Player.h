@@ -367,9 +367,9 @@ private:
 	const float kDeadLittleUp_ = 0.4f;
 
 	//サウンド
-	SoundData hitSound_;//ダメージを食らった
-	SoundData parrySound_;//パリィに成功
-	const float kVolume_ = 0.07f;//ボリューム
+	std::unique_ptr<SoundData> hitSound_;//ダメージを食らった
+	std::unique_ptr<SoundData> parrySound_;//パリィに成功
+	const float kVolume_ = 0.3f;//ボリューム
 
 	//-パーティクル-
 	//歩く

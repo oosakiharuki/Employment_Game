@@ -63,6 +63,11 @@ class EnemyFireCommand {
 public:
 
 	/// <summary>
+	/// SE_初期化処理
+	/// </summary>
+	void InitAudio();
+
+	/// <summary>
 	/// 弾丸更新処理
 	/// </summary>
 	void BulletUpdate();
@@ -130,4 +135,9 @@ private:
 	const std::string& particleFire_ = "enemy_fire";
 
 	bool isFire_ = true;
+
+	std::unique_ptr<SoundData> fireSound_;
+	std::unique_ptr<SoundData> fireBeforeSound_;
+	const float kVolume_ = 0.3f;
+
 };

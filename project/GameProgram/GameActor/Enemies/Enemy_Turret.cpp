@@ -24,16 +24,12 @@ void Enemy_Turret::Initialize() {
 	fireCommand_ = std::make_unique<EnemyFireCommand>();
 	//最大弾丸数
 	fireCommand_->SetRapidCountMax(kRapidCountMax_);
-
-	////視野範囲に合わせるためサイズを変更
-	//particleLaserSize_.x = eyeReach_.x * kDivideByTwo_;
-	////パラメータに代入する
-	//particleLaser_.basicSize = particleLaserSize_;
+	fireCommand_->InitAudio();
 
 	//レーザー(見える範囲)の初期化処理
 	particles_[particleLaser_] = ParticleManager::GetInstance().InitParticle(particleLaser_);
 	particleLaserSize_ = particles_[particleLaser_]->GetScale();
-	particleLaserSize_.x = eyeReach_.x * kDivideByTwo_;
+	particleLaserSize_.x = eyeReach_.x * kDivideByTwo_;//視野範囲に合わせるためサイズを変更
 
 	particles_[particleLaser_]->SetScale(particleLaserSize_);
 	//攻撃(発泡)

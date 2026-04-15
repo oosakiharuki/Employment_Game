@@ -4,6 +4,8 @@
 #include <memory>
 #include <list>
 
+#include "Audio.h"
+
 class Player;
 /// <summary>
 /// プレイヤーの行動
@@ -15,6 +17,8 @@ public:
 	/// </summary>
 	/// <param name="player">プレイヤークラス</param>
 	void SetPlayer(Player* player) { player_ = player; }
+
+	void InitAudio();
 
 	/// <summary>
 	/// 弾丸の更新処理
@@ -172,5 +176,11 @@ private:
 	float brinkTimer_ = 0.0f;
 	const float kBrinkTimeMax_ = 0.5f;//最大値
 	
+
+	//サウンド
+	std::unique_ptr<SoundData> fireSound_;//発砲攻撃
+	std::unique_ptr<SoundData> jumpSound_;//ジャンプ
+	const float kVolume_ = 0.3f;//ボリューム
+
 	Player* player_ = nullptr;
 };
