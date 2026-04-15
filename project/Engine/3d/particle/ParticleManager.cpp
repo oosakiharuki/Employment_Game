@@ -280,7 +280,7 @@ void ParticleManager::InitializeParameter() {
 	std::ifstream file;
 
 	//読み取れない場合
-	file.open("resource/sample.json");
+	file.open("resource/particle.json");
 
 	if (file.fail()) {
 		assert(0);
@@ -627,7 +627,7 @@ void ParticleManager::ParameterImGui() {
 			i++;
 		}
 
-		std::ofstream file("resource/sample.json");
+		std::ofstream file("resource/particle.json");
 
 		if (file.is_open()) {
 			file << jsonFile.dump(4);

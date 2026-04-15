@@ -152,6 +152,7 @@ void CollisionUtility::OnMoveGround(Vector3& translate) {
 	//変っていないなら
 	if (result == Vector3(0, 0, 0)) return;
 
-	//移動量を加算
-	translate += result;
+	//移動量を加算(z軸はのぞく)
+	translate.x += result.x;
+	translate.y += result.y;
 }

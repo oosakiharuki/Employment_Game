@@ -65,7 +65,7 @@ void PlayerBullet::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypeStage ||
 		collision->GetType() == CollisionTypes::TypeEnemy ||
 		collision->GetType() == CollisionTypes::TypeBoss) {
-		isDead_ = true;
+		BulletDamage();
 	}
 }
 
@@ -76,4 +76,12 @@ bool PlayerBullet::TypeCheckUp(const CollisionTypes& collisionType) {
 		return true;
 	}
 	return false;
+}
+
+void PlayerBullet::BulletDamage() {
+	bulletPower_--;//耐久値が減る
+	//耐久値が0の時
+	if (bulletPower_ <= 0) {
+		isDead_ = true;//消滅
+	}
 }

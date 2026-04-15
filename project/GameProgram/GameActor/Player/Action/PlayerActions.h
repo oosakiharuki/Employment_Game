@@ -163,8 +163,7 @@ private:
 
 	const Vector3 kBulletKnockbackPower_ = { 0.0f,0.0f,0.1f };//撃った場合のノックバックパワー
 
-	const uint32_t kPowerBulletCount_ = 2;
-	bool isCount_ = false;//一回のみ
+	bool isPowerBullet_ = false;//一回のみ
 
 
 	//傘の位置設定時に使う

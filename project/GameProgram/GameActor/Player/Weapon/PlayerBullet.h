@@ -43,6 +43,12 @@ public:
 	/// </summary>
 	/// <param name="velocity">代入する弾丸速度</param>
 	void SetVelocity(const Vector3& velocity) { velocity_ = velocity; }
+
+	/// <summary>
+	/// 強化弾に変化(耐久値が増加し、ダメージが増える)
+	/// </summary>
+	void StrongPower() { bulletPower_ = kBulletStrongPower; }
+
 	/// <summary>
 	/// 弾がなくなるフラグ
 	/// </summary>
@@ -67,6 +73,8 @@ private:
 	/// <returns>該当するタイプがあるなら true</returns>
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
+	void BulletDamage();
+
 	//オブジェクト
 	std::unique_ptr<Object3d> object_ = nullptr;
 	WorldTransform wt_;
@@ -83,6 +91,9 @@ private:
 	const Vector3 kBulletSize_ = { 1,1,1 };
 
 	AABB bulletAABB_;
+
+	uint32_t bulletPower_ = 1;
+	const uint32_t kBulletStrongPower = 2;
 
 	//影
 	std::unique_ptr<Shadow> shadow_;
