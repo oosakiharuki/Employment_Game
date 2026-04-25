@@ -107,6 +107,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseUmbrella.cpp" />
+    <ClCompile Include="FoldingUmbrella.cpp" />
     <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\Energy.cpp" />
     <ClCompile Include="GameProgram\StageObjects\Gimmick\BrokenBox.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionUtility.cpp" />
@@ -121,7 +123,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\GameActor\Enemies\common\BaseEnemyState.cpp" />
     <ClCompile Include="Engine\3d\model\BaseModel.cpp" />
     <ClCompile Include="Engine\3d\object\BaseObject.cpp" />
-    <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActions.cpp" />
     <ClCompile Include="GameProgram\GameActor\Actor\GameActor.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionManager.cpp" />
     <ClCompile Include="Engine\3d\pipeline\SkinningCommon.cpp" />
@@ -219,6 +220,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActionsInputHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseUmbrella.h" />
+    <ClInclude Include="FoldingUmbrella.h" />
     <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\Energy.h" />
     <ClInclude Include="GameProgram\StageObjects\Gimmick\BrokenBox.h" />
     <ClInclude Include="GameProgram\Collision\CollisionUtility.h" />
@@ -233,7 +236,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\GameActor\Enemies\common\BaseEnemyState.h" />
     <ClInclude Include="Engine\3d\model\BaseModel.h" />
     <ClInclude Include="Engine\3d\object\BaseObject.h" />
-    <ClInclude Include="GameProgram\GameActor\Player\Action\PlayerActions.h" />
     <ClInclude Include="GameProgram\GameActor\Actor\GameActor.h" />
     <ClInclude Include="GameProgram\Collision\CollisionManager.h" />
     <ClInclude Include="Engine\3d\pipeline\SkinningCommon.h" />

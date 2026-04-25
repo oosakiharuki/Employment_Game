@@ -540,9 +540,6 @@
     <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\WarpGate.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActions.cpp">
-      <Filter>ソース ファイル\GameProgram\GameActor\Player\Action</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActionsInputHandler.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Player\Action</Filter>
     </ClCompile>
@@ -581,6 +578,12 @@
     </ClCompile>
     <ClCompile Include="Engine\PostEffect\creates\screen\color\Grayscale.cpp">
       <Filter>ソース ファイル\Engine\PostEffect\creates\screen\color</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseUmbrella.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="FoldingUmbrella.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -869,9 +872,6 @@
     <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\Action\PlayerActions.h">
-      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Action</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Player\Action\PlayerActionsInputHandler.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Action</Filter>
     </ClInclude>
@@ -904,6 +904,12 @@
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\creates\screen\color\Grayscale.h">
       <Filter>ヘッダー ファイル\Engine\PostEffect\creates\screen\color</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseUmbrella.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="FoldingUmbrella.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

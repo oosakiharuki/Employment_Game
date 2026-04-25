@@ -10,125 +10,85 @@ using namespace UseEveryOne;
 Umbrella::~Umbrella() {}
 
 void Umbrella::Initialize() {
-	
-	wt_.Initialize();
-	//Transform更新処理
-	transform_ = wt_.UpdateTransform();
+	BaseUmbrella::Initialize();
 
-	object_ = std::make_unique<Object_glTF>();
-	object_->Initialize();
+	//モデル設定
 	object_->SetModelFile("umbrella_Close.gltf");
 
 	//AABBの大きさ
 	umbrellaAABB_.min = -kAABBSize_ * kDivideByTwo_;
 	umbrellaAABB_.max = kAABBSize_ * kDivideByTwo_;
-
-	reaction_ = std::make_unique<Reaction>();
-
-	collisionType_ = CollisionTypes::TypeUmbrella;
-
-	//傘を開く
-	umbrellaOpenSound_ = Audio::GetInstance().LoadWave("resource/Sound/umbrellaOpen.mp3");
 }
 
 void Umbrella::Update() {
-
-#ifdef USE_IMGUI
-
-	ImGui::Begin("um");
-
-	ImGui::InputFloat3("worldTransform.translate", &transform_.translate.x);
-	ImGui::SliderFloat3("worldTransform.translateSlider", &transform_.translate.x, -30.0f, 30.0f);
-
-	ImGui::InputFloat3("Rotate", &transform_.rotate.x);
-	ImGui::SliderFloat("RotateX", &transform_.rotate.x, -360.0f, 360.0f);
-	ImGui::SliderFloat("RotateY", &transform_.rotate.y, -360.0f, 360.0f);
-	ImGui::SliderFloat("RotateZ", &transform_.rotate.z, -360.0f, 360.0f);
-
-	ImGui::End();
-
-#endif // USE_IMGUI
-	//傘に弾丸が触れた時
-	reaction_->ScaleReaction(transform_.scale, isHit_, kScalePower_, scaleTimer_, kReactionMaxTime_);
+	BaseUmbrella::Update();
 
 	//防御状態の場合
 	if (!isShield_) {
 		object_->ChangeAnimation("umbrella_Close.gltf");//閉じた傘
 	}
-
-	//パリィ更新処理
-	ParryUpdate();
+	else {
+		object_->ChangeAnimation("umbrella_Open.gltf");//閉じた傘
+	}
 
 	//更新
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
 }
 
-void Umbrella::Draw() {
-	//描画
-	object_->Draw();
-}
+void Umbrella::BornBullet() {
 
-void Umbrella::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::TypeEnemyBullet && isShield_) {
-		isHit_ = true;
-		scaleTimer_ = 0.0f;
-		transform_.scale = kDefaultScale_;
+	Vector3 translate = player_->GetUmbrellaTranslate();
 
-		//強化ゲージポイント加算
-		player_->AddGaugePoint();
+	for (float i = -(halfCount); i <= halfCount; ++i) {
+		Vector3 bulletVelocity = { 0.0f, kDispersionBetween_, kBulletSpeed_ };
+		//弾が分散するように
+		bulletVelocity.y *= i;
+		//飛ばす向きをwtGun_に合わせる
+		bulletVelocity = TransformNormal(bulletVelocity, player_->GetUmbrellaMatWorld());
 
-		if (collisionType_ == CollisionTypes::TypeUmbrellaParry) {
-			parryTime_ = kParryTimeMax_;//連続で跳ね返せるように
-			player_->ParrySuccess();//パリィ成功処理
-			return;
-		}
-		//通常防御の場合、プレイヤーがノックバック
-		player_->KnockBackUmbrella(kUmbrellaKnockBackPower_,kUmbrellaKnockBackTime_);
+		//弾丸を生み出す
+		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
+		bullet->Initialize();
+		bullet->SetTranslate(translate);//発泡初期位置
+		bullet->SetVelocity(bulletVelocity);//速さ
+		bullets_.push_back(std::move(bullet));
 	}
+	//パーティクル
+	player_->ParticleFire(translate);
+	///撃った方向と反対方向にノックバック
+	player_->KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
+
+	isFireFinish_ = true;
 }
 
-bool Umbrella::TypeCheckUp(const CollisionTypes& collisionType) {
-	if (collisionType == CollisionTypes::TypeEnemyBullet && isShield_) {
-		return true;
+void Umbrella::BornPowerBullet() {
+
+	Vector3 translate = player_->GetUmbrellaTranslate();
+
+	for (float i = -(halfCount); i <= halfCount; ++i) {
+		Vector3 bulletVelocity = { 0.0f, kDispersionBetween_ * kDivideByTwo_, kBulletSpeed_ * kTwice_ };
+		//弾が分散するように
+		bulletVelocity.y *= i;
+		//飛ばす向きをwtGun_に合わせる
+		bulletVelocity = TransformNormal(bulletVelocity, player_->GetUmbrellaMatWorld());
+
+		//弾丸を生み出す
+		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
+		bullet->Initialize();
+		bullet->SetTranslate(translate);//発泡初期位置
+		bullet->SetVelocity(bulletVelocity);//速さ
+		
+		bullet->StrongPower();//強さ
+		
+		bullets_.push_back(std::move(bullet));
 	}
-	return false;
+	//パーティクル
+	player_->ParticleFire(translate);
+	///撃った方向と反対方向にノックバック
+	player_->KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
+
+	isFireFinish_ = true;
 }
 
-void Umbrella::ShieldMode() {
-	//既に開いている場合はスキップ
-	if (!isShield_) {		
-		isParry_ = true;
-		Audio::GetInstance().SoundPlayWave(*umbrellaOpenSound_, kVolume_ * kTwice_);
-	}
-	isShield_ = true;
 
-	//当たり判定設定
-	collisionAABB_.min = transform_.translate + umbrellaAABB_.min;
-	collisionAABB_.max = transform_.translate + umbrellaAABB_.max;
-	center_ = transform_.translate;
-
-	CollisionManager::GetInstance().FrameCollision(this);
-
-	object_->ChangeAnimation("umbrella_Open.gltf");//開いた傘
-}
-
-void Umbrella::OffShield() {
-	isShield_ = false;
-	Audio::GetInstance().StopWave(*umbrellaOpenSound_);
-}
-
-void Umbrella::ParryUpdate() {
-	if (!isParry_) {
-		parryTime_ = kParryTimeMax_;
-		collisionType_ = CollisionTypes::TypeUmbrella;
-		return;
-	}
-
-	collisionType_ = CollisionTypes::TypeUmbrellaParry;
-	parryTime_ -= kDeltaTime_;
-
-	if(parryTime_ <= 0.0f) {
-		isParry_ = false;
-	}
-}

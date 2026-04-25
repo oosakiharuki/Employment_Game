@@ -53,13 +53,14 @@ void Shadow::Draw() {
 }
 
 void Shadow::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::TypeStage) {
+	if (collision->GetType() == CollisionTypes::TypeStage || 
+		collision->GetType() == CollisionTypes::TypeMoveGround) {
 		CollisionUtility::GetInstance().UnderCollision(minUnder_,actorPosition_,collision->GetAABB());
 	}
 }
 
 bool Shadow::TypeCheckUp(const CollisionTypes& collisionType) {
-	if (collisionType == CollisionTypes::TypeStage) {
+	if (collisionType == CollisionTypes::TypeStage || collisionType == CollisionTypes::TypeMoveGround) {
 		return true;
 	}
 	return false;
