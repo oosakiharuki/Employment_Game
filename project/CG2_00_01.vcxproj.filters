@@ -271,6 +271,12 @@
     <Filter Include="ヘッダー ファイル\Engine\PostEffect\creates\screen\color">
       <UniqueIdentifier>{c40cfcea-c98d-497d-b5b4-ba932173ee50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameProgram\GameActor\Player\Weapon\Umbrella">
+      <UniqueIdentifier>{14e6c872-f7f0-409e-8111-512e7a9b0461}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Player\Weapon\Umbrella">
+      <UniqueIdentifier>{61c423b1-51a0-4bc8-8443-5ecdf500f27f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\Sprite.cpp">
@@ -549,9 +555,6 @@
     <ClCompile Include="GameProgram\GameActor\Player\Weapon\ReinforceGauge.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella.cpp">
-      <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon</Filter>
-    </ClCompile>
     <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\Energy.cpp">
       <Filter>ソース ファイル\GameProgram\StageObjects\PlayerInterfere</Filter>
     </ClCompile>
@@ -579,11 +582,14 @@
     <ClCompile Include="Engine\PostEffect\creates\screen\color\Grayscale.cpp">
       <Filter>ソース ファイル\Engine\PostEffect\creates\screen\color</Filter>
     </ClCompile>
-    <ClCompile Include="BaseUmbrella.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\BaseUmbrella.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
     </ClCompile>
-    <ClCompile Include="FoldingUmbrella.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\FoldingUmbrella.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\Umbrella.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -869,9 +875,6 @@
     <ClInclude Include="GameProgram\GameActor\Player\Weapon\PlayerBullet.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella.h">
-      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon</Filter>
-    </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Player\Action\PlayerActionsInputHandler.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Action</Filter>
     </ClInclude>
@@ -905,11 +908,14 @@
     <ClInclude Include="Engine\PostEffect\creates\screen\color\Grayscale.h">
       <Filter>ヘッダー ファイル\Engine\PostEffect\creates\screen\color</Filter>
     </ClInclude>
-    <ClInclude Include="BaseUmbrella.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\BaseUmbrella.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
     </ClInclude>
-    <ClInclude Include="FoldingUmbrella.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\FoldingUmbrella.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\Umbrella.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

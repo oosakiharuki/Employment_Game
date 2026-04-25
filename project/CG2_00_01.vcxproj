@@ -65,7 +65,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\PostEffect\creates\screen\blur;$(ProjectDir)Engine\PostEffect\creates\screen\color;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Actor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\Scene\win_lose;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\PostEffect\creates\screen\blur;$(ProjectDir)Engine\PostEffect\creates\screen\color;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Actor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Player\Weapon\Umbrella;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\Scene\win_lose;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -91,7 +91,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\PostEffect\creates\screen\blur;$(ProjectDir)Engine\PostEffect\creates\screen\color;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Actor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\Scene\win_lose;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\PostEffect\creates\screen\blur;$(ProjectDir)Engine\PostEffect\creates\screen\color;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Actor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Player\Weapon\Umbrella;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\Scene\win_lose;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -107,8 +107,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseUmbrella.cpp" />
-    <ClCompile Include="FoldingUmbrella.cpp" />
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\BaseUmbrella.cpp" />
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\FoldingUmbrella.cpp" />
     <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\Energy.cpp" />
     <ClCompile Include="GameProgram\StageObjects\Gimmick\BrokenBox.cpp" />
     <ClCompile Include="GameProgram\Collision\CollisionUtility.cpp" />
@@ -200,7 +200,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\3d\primitive\SphereModel.cpp" />
     <ClCompile Include="GameProgram\GameActor\Player\Weapon\PlayerBullet.cpp" />
     <ClCompile Include="GameProgram\GameActor\Enemies\common\BaseEnemy.cpp" />
-    <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella.cpp" />
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\Umbrella.cpp" />
     <ClCompile Include="GameProgram\StageObjects\Gimmick\EventTrigger.cpp" />
     <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\Goal.cpp" />
     <ClCompile Include="GameProgram\StageObjects\IStageObject.cpp" />
@@ -220,8 +220,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActionsInputHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseUmbrella.h" />
-    <ClInclude Include="FoldingUmbrella.h" />
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\BaseUmbrella.h" />
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\FoldingUmbrella.h" />
     <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\Energy.h" />
     <ClInclude Include="GameProgram\StageObjects\Gimmick\BrokenBox.h" />
     <ClInclude Include="GameProgram\Collision\CollisionUtility.h" />
@@ -310,7 +310,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\3d\primitive\SphereModel.h" />
     <ClInclude Include="GameProgram\GameActor\Player\Weapon\PlayerBullet.h" />
     <ClInclude Include="GameProgram\GameActor\Enemies\common\BaseEnemy.h" />
-    <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella.h" />
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\Umbrella.h" />
     <ClInclude Include="GameProgram\StageObjects\Gimmick\EventTrigger.h" />
     <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\Goal.h" />
     <ClInclude Include="GameProgram\StageObjects\IStageObject.h" />
