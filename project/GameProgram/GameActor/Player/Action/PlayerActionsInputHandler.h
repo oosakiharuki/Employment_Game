@@ -4,6 +4,10 @@
 
 #include "Audio.h"
 
+#include "BaseUmbrella.h"
+#include "Umbrella.h"
+#include "FoldingUmbrella.h"
+
 class Player;
 
 class BaseCommand {
@@ -150,6 +154,32 @@ public:
 	/// 出力処理
 	/// </summary>
 	void Execute() override;
+private:
+	/// <summary>
+	/// 切り替え右方向
+	/// </summary>
+	void RightSwitching();
+	/// <summary>
+	/// 切り替え左方向
+	/// </summary>
+	void LeftSwitching();
+
+	int weaponNum_ = 0;
+	int prevWeaponNum_ = 0;
+
+	enum Weapon {
+		shotgun,
+		sniper,
+		Max
+	};
+
+	const int kWeaponMax_ = Weapon::Max - 1;
+
+	std::unordered_map<int, std::function<std::unique_ptr<BaseUmbrella>()>> weaponUmbrella_ = {
+		{ Weapon::shotgun, [](){ return std::make_unique<Umbrella>(); } },
+		{ Weapon::sniper, [](){ return std::make_unique<FoldingUmbrella>(); } }
+	};
+
 };
 
 class PlayerActionsInputHandler {
@@ -162,4 +192,22 @@ public:
 private:
 	//入力中処理
 	bool isInput_ = false;
+
+
+	/// <summary>
+	/// 切り替え右方向
+	/// </summary>
+	void RightSwitching();
+	/// <summary>
+	/// 切り替え左方向
+	/// </summary>
+	void LeftSwitching();
+
+	int weaponNum_ = 0;
+	int prevWeaponNum_ = 0;
+
+	enum Weapon {
+		shotgun,
+		sniper
+	};
 };

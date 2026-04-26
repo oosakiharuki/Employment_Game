@@ -126,7 +126,23 @@ void Player::Update() {
 	GameActor::Update();
 
 	//弾丸更新処理
-	umbrella_->BulletUpdate();
+	//消滅処理
+	bullets_.remove_if([](auto& bullet) {
+		if (bullet->IsDead()) {
+			bullet.reset();
+			return true;
+		}
+		return false;
+		});
+	//弾丸
+	for (auto& bullet : bullets_) {
+		bullet->Update();
+	}
+
+	//発砲のクールタイム
+	fireCoolTimer_ -= kDeltaTime_;
+	fireCoolTimer_ = std::clamp(fireCoolTimer_, 0.0f, kFireCoolTimeMax_);
+	
 
 	//無敵時間
 	InfinityTimeUpdate();
@@ -401,6 +417,27 @@ void Player::KnockBackUpdate() {
 		}
 	}
 }
+
+void Player::WeaponChangeUmbrella(std::unique_ptr<BaseUmbrella> nextUmbrella, uint32_t num) {
+	//同じなら変更なし
+	if (weaponNum_ == num) {
+		return;
+	}
+	//傘の再設定
+	umbrella_.reset();
+	umbrella_ = std::move(nextUmbrella);//傘のクラス
+	umbrella_->Initialize();//初期化
+	umbrella_->SetPlayer(this);//プレイヤークラスを設定
+
+	//番号を変更
+	weaponNum_ = num;
+}
+
+void Player::AddBullet(std::unique_ptr<PlayerBullet> bullet) {
+	bullets_.push_back(std::move(bullet));
+}
+
+
 #pragma endregion
 
 void Player::Draw() {
@@ -418,7 +455,9 @@ void Player::Draw() {
 	Object3dCommon::GetInstance().Command();
 
 	//弾丸
-	umbrella_->BulletDraw();
+	for (auto& bullet : bullets_) {
+		bullet->Draw();
+	}
 }
 
 void Player::DrawParticle() {
@@ -449,7 +488,15 @@ void Player::OffUmbrellaShield() {
 }
 
 void Player::FireBulletUmbrella() {
-	umbrella_->Fire();
+	// クールタイムは終了した時
+	if (fireCoolTimer_ == 0.0f) {
+		isFiring_ = true;
+		umbrella_->Fire();
+	}
+
+	if (!isFiring_ && fireCoolTimer_ == 0.0f) {
+		fireCoolTimer_ = kFireCoolTimeMax_;
+	}
 }
 
 void Player::OnCollision(CollisionSource* collision) {

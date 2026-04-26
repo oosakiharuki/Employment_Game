@@ -258,6 +258,24 @@ public:
 	/// </summary>
 	void SubGaugePoint() { reinforceGauge_->UsePoint(); }
 
+	/// <summary>
+	/// 傘の変更
+	/// </summary>
+	/// <param name="nextUmbrella">変更したい傘クラス</param>
+	void WeaponChangeUmbrella(std::unique_ptr<BaseUmbrella> nextUmbrella, uint32_t num);
+
+	void AddBullet(std::unique_ptr<PlayerBullet> bullet);
+
+	bool IsFiring() { return isFiring_; }
+
+	void FireFinish() { isFiring_ = false; }
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <returns></returns>
+	int GetWeaponNum() { return weaponNum_; }
+
 private:
 	/// ---状態遷移---
 	/// <summary>
@@ -354,23 +372,7 @@ private:
 	/// ノックバックする更新処理
 	/// </summary>
 	void KnockBackUpdate();
-	/// <summary>
-	/// 移動
-	/// </summary>
-	/// <param name="speed">移動速度</param>
-	/// <param name="playerDirection">プレイヤーの現在の向き</param>
-	void MovePlayer(float speed, float playerDirection);
 
-	/// <summary>
-	/// 傘の8方向の回転
-	/// </summary>
-	/// <param name="direction">回転角度</param>
-	void UmbrellaRange(float direction);
-
-	/// <summary>
-	/// 滑空処理
-	/// </summary>
-	void Gliding();
 
 	// --- オブジェクト ---
 	
@@ -380,7 +382,10 @@ private:
 	std::unique_ptr<BaseUmbrella> umbrella_ = nullptr;
 	WorldTransform wtGun_;//傘のワールド座標系
 	Transform transformGun_{};
-	
+
+	/// 弾丸
+	std::list<std::unique_ptr<PlayerBullet>> bullets_;
+
 	// --------------------
 
 	// --- 方向系統 ---
@@ -518,6 +523,14 @@ private:
 	const float kBrinkTimeMax_ = 0.5f;//最大値
 	//傘の位置設定時に使う
 	const float kBrinkPower_ = 1.25f;
+
+	//
+	int weaponNum_ = 0;
+
+	bool isFiring_ = false;
+
+	float fireCoolTimer_ = 0.0f;//クールタイマー
+	const float kFireCoolTimeMax_ = 0.5f;//クールタイム最大時間
 
 	// -------------------------
 };

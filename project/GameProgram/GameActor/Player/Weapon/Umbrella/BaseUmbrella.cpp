@@ -85,15 +85,10 @@ bool BaseUmbrella::TypeCheckUp(const CollisionTypes& collisionType) {
 }
 
 void BaseUmbrella::Fire() {
-	//クールタイムは終了した時
-	if (fireCoolTimer_ != 0.0f) {
-		return;
-	}
 
 	if (player_->UseGaugePoint()) {
 		//弾丸速度が二倍、より遠くに飛ばせる
 		BornPowerBullet();
-		player_->SubGaugePoint();//ゲージポイント減少
 	}
 	else {
 		BornBullet();//発砲攻撃
@@ -102,36 +97,6 @@ void BaseUmbrella::Fire() {
 	Audio::GetInstance().StopWave(*fireSound_);
 	Audio::GetInstance().SoundPlayWave(*fireSound_, kVolume_);
 
-	if (isFireFinish_) {
-		fireCoolTimer_ = kFireCoolTimeMax_;
-		isFireFinish_ = false;
-	}
-}
-
-
-void BaseUmbrella::BulletUpdate() {
-	//消滅処理
-	bullets_.remove_if([](auto& bullet) {
-		if (bullet->IsDead()) {
-			bullet.reset();
-			return true;
-		}
-		return false;
-		});
-	//弾丸
-	for (auto& bullet : bullets_) {
-		bullet->Update();
-	}
-
-	//発砲のクールタイム
-	fireCoolTimer_ -= kDeltaTime_;
-	fireCoolTimer_ = std::clamp(fireCoolTimer_, 0.0f, kFireCoolTimeMax_);
-}
-
-void BaseUmbrella::BulletDraw() {
-	for (auto& bullet : bullets_) {
-		bullet->Draw();
-	}
 }
 
 void BaseUmbrella::OffShield() {

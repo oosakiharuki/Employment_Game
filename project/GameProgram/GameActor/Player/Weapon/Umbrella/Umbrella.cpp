@@ -49,17 +49,17 @@ void Umbrella::BornBullet() {
 
 		//弾丸を生み出す
 		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
-		bullet->Initialize();
+		bullet->Initialize();//初期化
 		bullet->SetTranslate(translate);//発泡初期位置
 		bullet->SetVelocity(bulletVelocity);//速さ
-		bullets_.push_back(std::move(bullet));
+		player_->AddBullet(std::move(bullet));
 	}
 	//パーティクル
 	player_->ParticleFire(translate);
 	///撃った方向と反対方向にノックバック
 	player_->KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
 
-	isFireFinish_ = true;
+	player_->FireFinish();
 }
 
 void Umbrella::BornPowerBullet() {
@@ -75,20 +75,22 @@ void Umbrella::BornPowerBullet() {
 
 		//弾丸を生み出す
 		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
-		bullet->Initialize();
+		bullet->Initialize();//初期化
 		bullet->SetTranslate(translate);//発泡初期位置
 		bullet->SetVelocity(bulletVelocity);//速さ
 		
 		bullet->StrongPower();//強さ
 		
-		bullets_.push_back(std::move(bullet));
+		player_->AddBullet(std::move(bullet));
 	}
 	//パーティクル
 	player_->ParticleFire(translate);
 	///撃った方向と反対方向にノックバック
 	player_->KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
+	player_->SubGaugePoint();//ゲージポイント減少
 
-	isFireFinish_ = true;
+	player_->FireFinish();
+
 }
 
 

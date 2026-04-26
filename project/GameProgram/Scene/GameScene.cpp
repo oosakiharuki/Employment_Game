@@ -12,7 +12,7 @@ using namespace MyMath;
 
 void GameScene::Initialize() {
 	//ゲームオブジェクト配置
-	LevelEditorObjectSetting("stage_1");
+	LevelEditorObjectSetting();
 	
 	//BGM、SEの設定
 	BGMData_ = Audio::GetInstance().LoadWave("resource/sound/title.mp3");

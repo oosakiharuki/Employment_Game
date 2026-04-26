@@ -27,8 +27,9 @@ private:
 	const Vector3 kAABBSize_ = { 1,2,1 };
 
 	uint32_t rapidCount_ = 0;
-	const uint32_t kMaxRapidCount_ = 30;
+	const uint32_t kMaxRapidCount_ = 3;
 
-
+	const float kRapidTimeMax_ = 0.1f;
+	float rapidTimer_ = kRapidTimeMax_;
 };
 

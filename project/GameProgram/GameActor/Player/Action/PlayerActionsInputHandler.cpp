@@ -1,6 +1,7 @@
 #include "PlayerActionsInputHandler.h"
 #include "Player.h"
 #include <Input.h>
+#include "FoldingUmbrella.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -147,7 +148,6 @@ void BrinkCommand::Execute() {
 	if (player_->GetIsGround() && (player_->GetUmbrellaRotate().x > 0.0f && player_->GetUmbrellaRotate().x < kLeftDis_)) {
 		brinkTimer = 0.0f;
 		player_->StopParticleBrink();
-		return;
 	}
 
 	//傘を開く
@@ -182,7 +182,35 @@ void BrinkCommand::Execute() {
 }
 
 void WeaponChangeCommand::Execute() {
-	
+	//銃の番号
+	weaponNum_ = player_->GetWeaponNum();
+
+	if (Input::GetInstance().TriggerKey(DIK_U)) {
+		RightSwitching();//;
+	}
+	if (Input::GetInstance().TriggerKey(DIK_O)) {
+		LeftSwitching();//;
+	}
+
+	if (weaponNum_ != player_->GetWeaponNum()) {
+		auto u = weaponUmbrella_.find(weaponNum_);
+		player_->WeaponChangeUmbrella(std::move(u->second()), weaponNum_);
+		prevWeaponNum_ = weaponNum_;
+	}
+}
+
+void WeaponChangeCommand::RightSwitching() {
+	weaponNum_++;
+	if (weaponNum_ > kWeaponMax_) {
+		weaponNum_ = 0;
+	}
+}
+
+void WeaponChangeCommand::LeftSwitching() {
+	weaponNum_--;
+	if (weaponNum_ < 0) {
+		weaponNum_ = kWeaponMax_;
+	}
 }
 
 
@@ -200,6 +228,12 @@ void PlayerActionsInputHandler::GetCommand(Player* player, std::vector<std::uniq
 
 #endif // USE_IMGUI
 
+	if (player->IsFiring()) {
+		commands.push_back(std::make_unique<FireCommand>());
+		//移動
+		commands.push_back(std::make_unique<MoveCommand>());
+		return;
+	}
 
 	//ブリンク [Jキー、Bボタン + ブリンクの発動条件、発動中はタイマーが切れるまで]
 	if (((Input::GetInstance().TriggerKey(DIK_J) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_B)) && player->BrinkFlag()) || player->BrinkTimeMax()) {
@@ -231,5 +265,6 @@ void PlayerActionsInputHandler::GetCommand(Player* player, std::vector<std::uniq
 		commands.push_back(std::make_unique<FireCommand>());
 	}
 
+	commands.push_back(std::make_unique<WeaponChangeCommand>());
 }
 

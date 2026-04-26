@@ -76,11 +76,6 @@ public:
 	void Fire();
 
 
-	void BulletUpdate();
-
-	void BulletDraw();
-
-
 	/// <summary>
 	/// シールド解除
 	/// </summary>
@@ -97,15 +92,15 @@ public:
 	void ResetScaleTimer() { scaleTimer_ = 0.0f; }
 protected:
 
-
-
-
+	/// <summary>
+	/// 通常弾の生成方
+	/// </summary>
 	virtual void BornBullet() = 0;
 
-
+	/// <summary>
+	/// 強化弾の生成方
+	/// </summary>
 	virtual void BornPowerBullet() = 0;
-
-
 
 	//オブジェクト設定
 	std::unique_ptr<Object_glTF> object_;
@@ -140,24 +135,7 @@ protected:
 	std::unique_ptr<SoundData> umbrellaOpenSound_;//傘を開く
 	const float kVolume_ = 0.3f;//ボリューム
 
-
-
-
 	Player* player_ = nullptr;
-
-
-
-
-
-	/// 弾丸
-	std::list<std::unique_ptr<PlayerBullet>> bullets_;
-
-
-	bool isFireFinish_ = false;
-
-
-
-
 private:	
 
 	/// <summary>
@@ -181,9 +159,6 @@ private:
 	/// パリィ成功 = 連続弾も跳ね返す
 	/// </summary>
 	void ParrySuccess();
-
-	float fireCoolTimer_ = 0.0f;//クールタイマー
-	const float kFireCoolTimeMax_ = 0.5f;//クールタイム最大時間
 
 	std::unique_ptr<SoundData> fireSound_;//発砲攻撃
 	std::unique_ptr<SoundData> parrySound_;//パリィに成功
