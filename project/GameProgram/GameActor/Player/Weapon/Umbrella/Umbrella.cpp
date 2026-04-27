@@ -36,7 +36,7 @@ void Umbrella::Update() {
 	wt_.UpdateMatrix(transform_);
 }
 
-void Umbrella::BornBullet() {
+void Umbrella::Fire() {
 
 	Vector3 translate = player_->GetUmbrellaTranslate();
 
@@ -48,11 +48,7 @@ void Umbrella::BornBullet() {
 		bulletVelocity = TransformNormal(bulletVelocity, player_->GetUmbrellaMatWorld());
 
 		//弾丸を生み出す
-		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
-		bullet->Initialize();//初期化
-		bullet->SetTranslate(translate);//発泡初期位置
-		bullet->SetVelocity(bulletVelocity);//速さ
-		player_->AddBullet(std::move(bullet));
+		BornBullet(translate, bulletVelocity, kBulletPower_);
 	}
 	//パーティクル
 	player_->ParticleFire(translate);
@@ -62,7 +58,7 @@ void Umbrella::BornBullet() {
 	player_->FireFinish();
 }
 
-void Umbrella::BornPowerBullet() {
+void Umbrella::PowerFire() {
 
 	Vector3 translate = player_->GetUmbrellaTranslate();
 
@@ -72,16 +68,8 @@ void Umbrella::BornPowerBullet() {
 		bulletVelocity.y *= i;
 		//飛ばす向きをwtGun_に合わせる
 		bulletVelocity = TransformNormal(bulletVelocity, player_->GetUmbrellaMatWorld());
-
 		//弾丸を生み出す
-		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
-		bullet->Initialize();//初期化
-		bullet->SetTranslate(translate);//発泡初期位置
-		bullet->SetVelocity(bulletVelocity);//速さ
-		
-		bullet->StrongPower();//強さ
-		
-		player_->AddBullet(std::move(bullet));
+		BornBullet(translate, bulletVelocity, kBulletPower_ * uint32_t(kTwice_));
 	}
 	//パーティクル
 	player_->ParticleFire(translate);

@@ -66,7 +66,7 @@ private:
 	std::unique_ptr<Boss> boss_;
 
 	//BGM
-	std::unique_ptr<SoundData> BGMData_;
+	const std::string kBGMSoundName_ = "resource/sound/title.mp3";
 	float volume_ = 0.07f;//音量調節機能
 
 	/// <summary>
@@ -87,9 +87,6 @@ private:
 
 	//ステージの.jsonファイル名
 	std::string stageFileName_;
-
-	//BGM
-	std::unique_ptr<SoundData> soundData_;
 
 	//スタート時のワープゲート(水たまりから飛び出る感じに)
 	std::unique_ptr<WarpGate> startWarp_;

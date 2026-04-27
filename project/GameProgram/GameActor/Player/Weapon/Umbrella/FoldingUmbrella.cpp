@@ -31,76 +31,60 @@ void FoldingUmbrella::Update() {
 	wt_.UpdateMatrix(transform_);
 }
 
-void FoldingUmbrella::BornBullet() {
+void FoldingUmbrella::Fire() {
 
 	if(rapidTimer_ == kRapidTimeMax_){
 		Vector3 translate = player_->GetTranslate();
-
-		const float kBulletSpeed_ = 0.5f;//弾丸の前方向の速さ
-
-		Vector3 bulletVelocity = { 0.0f, 0.0f, kBulletSpeed_ * kTwice_ };
+		Vector3 bulletVelocity = { 0.0f, 0.0f, kBulletSpeed_ };
 
 		//飛ばす向きをwtGun_に合わせる
 		bulletVelocity = TransformNormal(bulletVelocity, player_->GetUmbrellaMatWorld());
 
 		//弾丸を生み出す
-		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
-		bullet->Initialize();//初期化
-		bullet->SetTranslate(translate);//発泡初期位置
-		bullet->SetVelocity(bulletVelocity);//速さ
-		player_->AddBullet(std::move(bullet));
+		BornBullet(translate, bulletVelocity, kBulletPower_);
 
 		//パーティクル
 		player_->ParticleFire(translate);
 	}
+	
+	rapidTimer_ -= kDeltaTime_;
+	if (rapidTimer_ <= 0.0f) {
+		rapidCount_++;
+		rapidTimer_ = kRapidTimeMax_;
+	}
 
-	if (rapidCount_ >= kMaxRapidCount_) {
+	if (rapidCount_ == kMaxRapidCount_) {
 		player_->FireFinish();
 		rapidCount_ = 0;
 	}
-	else {
-		rapidTimer_ -= kDeltaTime_;
-		if (rapidTimer_ <= 0.0f) {
-			rapidCount_++;
-			rapidTimer_ = kRapidTimeMax_;
-		}
-	}
 }
 
-void FoldingUmbrella::BornPowerBullet() {
+void FoldingUmbrella::PowerFire() {
 
 	if (rapidTimer_ == kRapidTimeMax_) {
-
 		Vector3 translate = player_->GetTranslate();
-
-		const float kBulletSpeed_ = 0.5f;//弾丸の前方向の速さ
-
-		Vector3 bulletVelocity = { 0.0f, 0.0f, kBulletSpeed_ * kTwice_ };
+		Vector3 bulletVelocity = { 0.0f, 0.0f, kBulletSpeed_ * kBulletPowerUpSpeed_ };
 
 		//飛ばす向きをwtGun_に合わせる
 		bulletVelocity = TransformNormal(bulletVelocity, player_->GetUmbrellaMatWorld());
 
 		//弾丸を生み出す
-		std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
-		bullet->Initialize();//初期化
-		bullet->SetTranslate(translate);//発泡初期位置
-		bullet->SetVelocity(bulletVelocity);//速さ
-		player_->AddBullet(std::move(bullet));
+		BornBullet(translate, bulletVelocity, kBulletPower_);
 
 		//パーティクル
 		player_->ParticleFire(translate);
 	}
+		
+	rapidTimer_ -= kDeltaTime_ * kTwice_;
+	if (rapidTimer_ <= 0.0f) {
+		rapidCount_++;
+		rapidTimer_ = kRapidTimeMax_;
+	}
 
+	//弾丸の2倍増加
 	if (rapidCount_ >= kMaxRapidCount_ * uint32_t(kTwice_)) {
 		player_->FireFinish();
 		player_->SubGaugePoint();//ゲージポイント減少
 		rapidCount_ = 0;
-	}
-	else {
-		rapidTimer_ -= kDeltaTime_ * kTwice_;
-		if (rapidTimer_ <= 0.0f) {
-			rapidCount_++;
-			rapidTimer_ = kRapidTimeMax_;
-		}
 	}
 }

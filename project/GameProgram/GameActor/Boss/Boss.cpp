@@ -31,8 +31,8 @@ void Boss::Initialize() {
 	underBarSprite_->Initialize("bossHpBar.png");
 	underBarSprite_->SetSize(kHpSpriteSize_);
 
-	fireSound_ = Audio::GetInstance().LoadWave("resource/Sound/fire.mp3");
-	fireBeforeSound_ = Audio::GetInstance().LoadWave("resource/Sound/enemyBeforeFire.mp3");
+	Audio::GetInstance().LoadWave(kFireSoundName_);
+	Audio::GetInstance().LoadWave(kFireBeforeSoundName_);
 }
 
 void Boss::Update() {
@@ -164,8 +164,8 @@ void Boss::CommandFire(float kFrame, float bulletSpeed, uint32_t bulletMax) {
 
 	//撃ち始めSE(時間が半分くらいの時)
 	if (rapidFireTime_ == kRapidFireTimeMax_ * kDivideByTwo_) {
-		Audio::GetInstance().StopWave(*fireSound_);//音ズレが起きないよう
-		Audio::GetInstance().SoundPlayWave(*fireSound_, kVolume_);//発砲SE
+		Audio::GetInstance().StopWave(kFireSoundName_);//音ズレが起きないよう
+		Audio::GetInstance().SoundPlayWave(kFireSoundName_, kVolume_);//発砲SE
 	}
 
 	//連射で時間を開ける
@@ -299,8 +299,8 @@ void Boss::CommandFallPlayer() {
 void Boss::CommandBeforeActionMotion() {
 	
 	//SEはすでに鳴っているか
-	if (!Audio::GetInstance().IsPlayingSound(*fireBeforeSound_)) {
-		Audio::GetInstance().SoundPlayWave(*fireBeforeSound_, kVolume_);
+	if (!Audio::GetInstance().IsPlayingSound(kFireBeforeSoundName_)) {
+		Audio::GetInstance().SoundPlayWave(kFireBeforeSoundName_, kVolume_);
 	}
 
 	if (transform_.rotate.z >= kRotateOneLap_) {
@@ -319,7 +319,7 @@ void Boss::CommandBeforeActionMotion() {
 
 	motionFinish_ = true;
 	moveCoolTimer_ = 0.0f;
-	Audio::GetInstance().StopWave(*fireBeforeSound_);//予備音声を止める
+	Audio::GetInstance().StopWave(kFireBeforeSoundName_);//予備音声を止める
 }
 
 

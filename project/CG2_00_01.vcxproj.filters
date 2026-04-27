@@ -591,6 +591,9 @@
     <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\Umbrella.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
     </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\LongUmbrella.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\2d\Sprite.h">
@@ -916,6 +919,9 @@
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\Umbrella.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\LongUmbrella.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

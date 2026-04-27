@@ -3,6 +3,8 @@
 #include "UseEveryOne.h"
 #include "ImGuiManager.h"
 
+#include "ParticleManager.h"
+
 using namespace MyMath;
 using namespace UseEveryOne;
 
@@ -21,12 +23,14 @@ void BaseUmbrella::Initialize() {
 	//当たりタイプ
 	collisionType_ = CollisionTypes::TypeUmbrella;
 
+	particles_[kParticleParry_] = ParticleManager::GetInstance().InitParticle(kParticleParry_);
+
 	//傘を開くSE
-	umbrellaOpenSound_ = Audio::GetInstance().LoadWave("resource/Sound/umbrellaOpen.mp3");
+	Audio::GetInstance().LoadWave(kUmbrellaOpenSoundName_);
 	//発砲攻撃
-	fireSound_ = Audio::GetInstance().LoadWave("resource/Sound/fire.mp3");
+	Audio::GetInstance().LoadWave(kFireSoundName_);
 	//パリィ
-	parrySound_ = Audio::GetInstance().LoadWave("resource/Sound/bane.mp3");
+	Audio::GetInstance().LoadWave(kParrySoundName_);
 }
 
 void BaseUmbrella::Update() {
@@ -49,12 +53,24 @@ void BaseUmbrella::Update() {
 	//傘に弾丸が触れた時
 	reaction_->ScaleReaction(transform_.scale, isHit_, kScalePower_, scaleTimer_, kReactionMaxTime_);
 
+	for (auto& particle : particles_) {
+		particle.second->Update();
+	}
+
 	//パリィ更新処理
 	ParryUpdate();
 }
 
 void BaseUmbrella::Draw() {
 	object_->Draw();
+
+	ParticleCommon::GetInstance().Command();
+
+	for (auto& particle : particles_) {
+		particle.second->Draw();
+	}
+
+	GLTFCommon::GetInstance().Command();
 }
 
 
@@ -84,31 +100,42 @@ bool BaseUmbrella::TypeCheckUp(const CollisionTypes& collisionType) {
 	return false;
 }
 
-void BaseUmbrella::Fire() {
+void BaseUmbrella::FireCommand() {
 
 	if (player_->UseGaugePoint()) {
 		//弾丸速度が二倍、より遠くに飛ばせる
-		BornPowerBullet();
+		PowerFire();
 	}
 	else {
-		BornBullet();//発砲攻撃
+		Fire();//発砲攻撃
 	}
 
-	Audio::GetInstance().StopWave(*fireSound_);
-	Audio::GetInstance().SoundPlayWave(*fireSound_, kVolume_);
+	Audio::GetInstance().StopWave(kFireSoundName_);
+	Audio::GetInstance().SoundPlayWave(kFireSoundName_, kVolume_);
 
 }
 
+void BaseUmbrella::BornBullet(const Vector3& translate, const Vector3& velocity, uint32_t bulletPower) {
+	//弾丸を生み出す
+	std::unique_ptr<PlayerBullet> bullet = std::make_unique<PlayerBullet>();
+	bullet->Initialize();//初期化
+	bullet->SetTranslate(translate);//発泡初期位置
+	bullet->SetVelocity(velocity);//速さ	
+	bullet->SetStrongPower(bulletPower);//弾丸の攻撃力を導入
+	player_->AddBullet(std::move(bullet));
+}
+
+
 void BaseUmbrella::OffShield() {
 	isShield_ = false;
-	Audio::GetInstance().StopWave(*umbrellaOpenSound_);
+	Audio::GetInstance().StopWave(kUmbrellaOpenSoundName_);
 }
 
 void BaseUmbrella::ShieldMode() {
 	//既に開いている場合はスキップ
 	if (!isShield_) {
 		isParry_ = true;
-		Audio::GetInstance().SoundPlayWave(*umbrellaOpenSound_, kVolume_ * kTwice_);
+		Audio::GetInstance().SoundPlayWave(kUmbrellaOpenSoundName_, kVolume_ * kTwice_);
 	}
 	isShield_ = true;
 
@@ -138,12 +165,11 @@ void BaseUmbrella::ParryUpdate() {
 //パリィ成功
 void BaseUmbrella::ParrySuccess() {
 	//SE
-	Audio::GetInstance().StopWave(*parrySound_);//パリィが続くとき一度止めてから再生させるようにする
-	Audio::GetInstance().SoundPlayWave(*parrySound_, kVolume_);//SE再生:パリィ
-	////傘の座標を読み取る
-	//Vector3 translate = GetTranslate();
-	//translate += TransformNormal(GetTranslate(), wt_.GetMatWorld());//出す場所をwtGun_の向きの前に
-	//particles_[particleParry_]->SetTranslate(translate);
-	//particles_[particleParry_]->SetRotate(transform_.rotate);
-	//particles_[particleParry_]->SetParticleBorn(ParticleBorn::MomentMode);
+	Audio::GetInstance().StopWave(kParrySoundName_);//パリィが続くとき一度止めてから再生させるようにする
+	Audio::GetInstance().SoundPlayWave(kParrySoundName_, kVolume_);//SE再生:パリィ
+	//パリィエフェクトを出す座標
+	Vector3 translate = TransformNormal(kParryParticleFrontPoint_, wt_.GetMatWorld());
+	particles_[kParticleParry_]->SetTranslate(transform_.translate + translate);//生成場所を設定
+	particles_[kParticleParry_]->SetRotate(transform_.rotate + kParryParticleRotate_);//回転を設定(パリィ向きの調整)
+	particles_[kParticleParry_]->SetParticleBorn(ParticleBorn::MomentMode);//一瞬だけ出すモード
 }

@@ -15,11 +15,10 @@ void GameScene::Initialize() {
 	LevelEditorObjectSetting();
 	
 	//BGM、SEの設定
-	BGMData_ = Audio::GetInstance().LoadWave("resource/sound/title.mp3");
-	soundData_ = Audio::GetInstance().LoadWave("resource/sound/bane.mp3");
+	Audio::GetInstance().LoadWave(kBGMSoundName_);
 
 	//BGM再生(リピート)
-	Audio::GetInstance().SoundPlayWave(*BGMData_, volume_, true);
+	Audio::GetInstance().SoundPlayWave(kBGMSoundName_, volume_, true);
 
 	//スタート演出
 	WaterWarpExit();
@@ -81,7 +80,7 @@ void GameScene::Update() {
 
 #endif //  USE_IMGUI
 
-	Audio::GetInstance().ControlVolume(*BGMData_, volume_);
+	Audio::GetInstance().ControlVolume(kBGMSoundName_, volume_);
 }
 
 void GameScene::PlayerAliveUpdate() {
@@ -330,7 +329,7 @@ void GameScene::SceneUpdate() {
 	//次のシーンに移動するとき
 	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//BGM停止
-		Audio::GetInstance().StopWave(*BGMData_);
+		Audio::GetInstance().StopWave(kBGMSoundName_);
 		//フェードを挟む(FadeIn)
 		FadeScreen::GetInstance().FadeStart(type_fadeIn);
 	}

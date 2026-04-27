@@ -163,6 +163,12 @@ public:
 
 	void SetParticleUpdater(ParticleData particleUpdater) { emitter_.particleData = particleUpdater; }
 
+	/// <summary>
+	/// setter_色(あとから設定)
+	/// </summary>
+	/// <param name="color">RGBAの配色</param>
+	void SetColor(const Vector4& color) { emitter_.particleData.color = color; }
+
 private:
 
 	std::string fileName_;

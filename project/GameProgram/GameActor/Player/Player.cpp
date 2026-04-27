@@ -104,9 +104,9 @@ void Player::SettingSpriteHp(uint32_t num) {
 
 void Player::InitAudio() {
 	//ダメージ
-	hitSound_ = Audio::GetInstance().LoadWave("resource/Sound/damage.mp3");
+	Audio::GetInstance().LoadWave(kHitSoundName_);
 	//ジャンプ
-	jumpSound_ = Audio::GetInstance().LoadWave("resource/Sound/jump.mp3");
+	Audio::GetInstance().LoadWave(kJumpSoundName_);
 }
 
 void Player::ActionUpdate() {
@@ -491,7 +491,7 @@ void Player::FireBulletUmbrella() {
 	// クールタイムは終了した時
 	if (fireCoolTimer_ == 0.0f) {
 		isFiring_ = true;
-		umbrella_->Fire();
+		umbrella_->FireCommand();
 	}
 
 	if (!isFiring_ && fireCoolTimer_ == 0.0f) {
@@ -555,7 +555,7 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		particles_[particleDamage_]->SetTranslate(transform_.translate + Normalize(hitPoint));
 		particles_[particleDamage_]->SetParticleBorn(ParticleBorn::MomentMode);
 		//ダメージのSE再生
-		Audio::GetInstance().SoundPlayWave(*hitSound_, kVolume_);
+		Audio::GetInstance().SoundPlayWave(kHitSoundName_, kVolume_);
 		infinityTimer_ = 0.0f;//無敵時間発動
 		//ノックバック(時間の三分の一ぶんまで)
 
@@ -584,7 +584,7 @@ void Player::IsFall() {
 	//一発K.O
 	hp_ = 0;
 	//ダメージSE再生
-	Audio::GetInstance().SoundPlayWave(*hitSound_, kVolume_);
+	Audio::GetInstance().SoundPlayWave(kHitSoundName_, kVolume_);
 }
 
 void Player::KnockBackPlayer(const Vector3& Power, float TimerMax) {
@@ -650,8 +650,8 @@ void  Player::ParticleJump() {
 	particles_[particleJump_]->SetTranslate(transform_.translate + TransformNormal(kParticleWalkPoint_, wt_.GetMatWorld()));
 	particles_[particleJump_]->SetParticleBorn(ParticleBorn::MomentMode);
 	//SE
-	Audio::GetInstance().StopWave(*jumpSound_);
-	Audio::GetInstance().SoundPlayWave(*jumpSound_, kVolume_);
+	Audio::GetInstance().StopWave(kJumpSoundName_);
+	Audio::GetInstance().SoundPlayWave(kJumpSoundName_, kVolume_);
 }
 
 void  Player::ParticleBrink() {

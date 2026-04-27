@@ -6,6 +6,9 @@
 #include "Object_glTF.h"
 #include "PlayerBullet.h"
 
+#include "Particle.h"
+#include <memory>
+
 class Player;
 
 class BaseUmbrella : public CollisionSource {
@@ -73,7 +76,7 @@ public:
 	void ShieldMode();
 
 
-	void Fire();
+	void FireCommand();
 
 
 	/// <summary>
@@ -95,12 +98,20 @@ protected:
 	/// <summary>
 	/// 通常弾の生成方
 	/// </summary>
-	virtual void BornBullet() = 0;
+	virtual void Fire() = 0;
 
 	/// <summary>
 	/// 強化弾の生成方
 	/// </summary>
-	virtual void BornPowerBullet() = 0;
+	virtual void PowerFire() = 0;
+
+	/// <summary>
+	/// 弾丸の生成
+	/// </summary>
+	/// <param name="translate">発生場所</param>
+	/// <param name="velocity">方向</param>
+	/// <param name="bulletPower">弾丸の攻撃力</param>
+	void BornBullet(const Vector3& translate, const Vector3& velocity, uint32_t bulletPower);
 
 	//オブジェクト設定
 	std::unique_ptr<Object_glTF> object_;
@@ -132,10 +143,16 @@ protected:
 	const Vector3 kUmbrellaKnockBackPower_ = { 0.0f,0.0f,0.3f };
 	const float kUmbrellaKnockBackTime_ = 0.0f;
 
-	std::unique_ptr<SoundData> umbrellaOpenSound_;//傘を開く
+	
 	const float kVolume_ = 0.3f;//ボリューム
 
 	Player* player_ = nullptr;
+
+	//パーティクルのコンテナ
+	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
+
+	const std::string& kParticleParry_ = "player_parry";
+
 private:	
 
 	/// <summary>
@@ -160,7 +177,12 @@ private:
 	/// </summary>
 	void ParrySuccess();
 
-	std::unique_ptr<SoundData> fireSound_;//発砲攻撃
-	std::unique_ptr<SoundData> parrySound_;//パリィに成功
+	const std::string kUmbrellaOpenSoundName_ = "resource/Sound/umbrellaOpen.mp3";//傘を開く
+	const std::string kFireSoundName_ = "resource/Sound/fire.mp3";//発砲攻撃
+	const std::string kParrySoundName_ = "resource/Sound/bane.mp3";//パリィに成功
+
+	//傘より少し前に出す
+	const Vector3 kParryParticleFrontPoint_ { 0.0f,0.0f,2.0f };
+	const Vector3 kParryParticleRotate_ = { 90.0f,0.0f,0.0f };
 };
 

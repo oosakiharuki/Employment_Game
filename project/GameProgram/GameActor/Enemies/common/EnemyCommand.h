@@ -136,8 +136,9 @@ private:
 
 	bool isFire_ = true;
 
-	std::unique_ptr<SoundData> fireSound_;
-	std::unique_ptr<SoundData> fireBeforeSound_;
-	const float kVolume_ = 0.3f;
+	//サウンドデータの名前
+	const std::string kFireSoundName_ = "resource/Sound/enemyFire.mp3";
+	const std::string kFireBeforeSoundName_ = "resource/Sound/enemyBeforeFire.mp3";
 
+	const float kVolume_ = 0.3f;
 };

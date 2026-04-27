@@ -264,16 +264,27 @@ public:
 	/// <param name="nextUmbrella">変更したい傘クラス</param>
 	void WeaponChangeUmbrella(std::unique_ptr<BaseUmbrella> nextUmbrella, uint32_t num);
 
+	/// <summary>
+	/// 弾丸を追加
+	/// </summary>
+	/// <param name="bullet">弾丸クラス</param>
 	void AddBullet(std::unique_ptr<PlayerBullet> bullet);
 
+	/// <summary>
+	/// 発砲しているフラグ
+	/// </summary>
+	/// <returns>しているならtrue</returns>
 	bool IsFiring() { return isFiring_; }
 
+	/// <summary>
+	/// 発砲を終了させる
+	/// </summary>
 	void FireFinish() { isFiring_ = false; }
 
 	/// <summary>
-	/// 
+	/// getter_傘の番号
 	/// </summary>
-	/// <returns></returns>
+	/// <returns>現在の傘(武器)の対応の番号</returns>
 	int GetWeaponNum() { return weaponNum_; }
 
 private:
@@ -441,8 +452,8 @@ private:
 	  
 	// --- サウンド ---
 
-	std::unique_ptr<SoundData> hitSound_;//ダメージを食らった
-	std::unique_ptr<SoundData> jumpSound_;//ジャンプ
+	const std::string kHitSoundName_ = "resource/Sound/damage.mp3";//ダメージを食らった
+	const std::string kJumpSoundName_ = "resource/Sound/jump.mp3";//ジャンプ
 	const float kVolume_ = 0.3f;//ボリューム
 
 	// -----------------

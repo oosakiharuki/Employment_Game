@@ -7,6 +7,7 @@
 #include "BaseUmbrella.h"
 #include "Umbrella.h"
 #include "FoldingUmbrella.h"
+#include "LongUmbrella.h"
 
 class Player;
 
@@ -170,6 +171,7 @@ private:
 	enum Weapon {
 		shotgun,
 		sniper,
+		LongSniper,
 		Max
 	};
 
@@ -177,7 +179,8 @@ private:
 
 	std::unordered_map<int, std::function<std::unique_ptr<BaseUmbrella>()>> weaponUmbrella_ = {
 		{ Weapon::shotgun, [](){ return std::make_unique<Umbrella>(); } },
-		{ Weapon::sniper, [](){ return std::make_unique<FoldingUmbrella>(); } }
+		{ Weapon::sniper, [](){ return std::make_unique<FoldingUmbrella>(); } },
+		{ Weapon::LongSniper, []() {return std::make_unique<LongUmbrella>(); } }
 	};
 
 };
