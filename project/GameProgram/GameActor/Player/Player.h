@@ -1,5 +1,6 @@
 #pragma once
 #include "Object_glTF.h"
+#include "BaseUmbrella.h"
 #include "Umbrella.h"
 #include "Audio.h"
 #include "Input.h"
@@ -8,7 +9,6 @@
 
 #include "UIManager.h"
 
-#include "PlayerActions.h"
 #include "PlayerActionsInputHandler.h"
 
 #include "ReinforceGauge.h"
@@ -99,6 +99,11 @@ public:
 	void OffUmbrellaShield();
 
 	/// <summary>
+	/// 発砲
+	/// </summary>
+	void FireBulletUmbrella();
+
+	/// <summary>
 	/// ダメージを食らった
 	/// </summary>
 	/// <param name="hitPoint">当たった場所</param>
@@ -133,15 +138,22 @@ public:
 	void RespawnPlayer();
 
 	/// <summary>
-	/// パリィ成功 = 連続弾も跳ね返す
-	/// </summary>
-	void ParrySuccess();
-
-	/// <summary>
 	/// パーティクル攻撃発動時
 	/// </summary>
 	/// <param name="translate"></param>
 	void ParticleFire(const Vector3& translate);
+
+
+	/// <summary>
+	/// パーティクルジャンプ
+	/// </summary>
+	void ParticleJump();
+
+	/// <summary>
+	/// setter_ジャンプ強度
+	/// </summary>
+	/// <param name="power"></param>
+	void SetJumpPower(float power) { jumpPower_ = power; }
 
 	/// <summary>
 	/// パーティクルブリンク発動時
@@ -149,9 +161,29 @@ public:
 	void ParticleBrink();
 
 	/// <summary>
-	/// パーティクルジャンプ
+	/// setter_ブリンク時間
 	/// </summary>
-	void ParticleJump();
+	/// <param name="brinkTime">時間を設定する</param>
+	void SetBrinkTimer(float brinkTime) { brinkTimer_ = brinkTime; }
+	/// <summary>
+	/// getter_ブリンク時間
+	/// </summary>
+	/// <returns>現在のブリンク時間</returns>
+	float GetBrinkTimer() { return brinkTimer_; }
+	/// <summary>
+	/// ブリンクの発動条件
+	/// </summary>
+	/// <returns>ブリンクをまだしていない+1ゲージたまっている状態なら true</returns>
+	bool BrinkFlag();
+	/// <summary>
+	/// ブリンクの時間
+	/// </summary>
+	/// <returns></returns>
+	bool BrinkTimeMax();
+	/// <summary>
+	/// ブリンクが発動したフラグ
+	/// </summary>
+	void IsOneBrink() { isOneBrink_ = true; }
 
 	/// <summary>
 	/// パーティクルブリンクを止める
@@ -226,7 +258,37 @@ public:
 	/// </summary>
 	void SubGaugePoint() { reinforceGauge_->UsePoint(); }
 
+	/// <summary>
+	/// 傘の変更
+	/// </summary>
+	/// <param name="nextUmbrella">変更したい傘クラス</param>
+	void WeaponChangeUmbrella(std::unique_ptr<BaseUmbrella> nextUmbrella, uint32_t num);
+
+	/// <summary>
+	/// 弾丸を追加
+	/// </summary>
+	/// <param name="bullet">弾丸クラス</param>
+	void AddBullet(std::unique_ptr<PlayerBullet> bullet);
+
+	/// <summary>
+	/// 発砲しているフラグ
+	/// </summary>
+	/// <returns>しているならtrue</returns>
+	bool IsFiring() { return isFiring_; }
+
+	/// <summary>
+	/// 発砲を終了させる
+	/// </summary>
+	void FireFinish() { isFiring_ = false; }
+
+	/// <summary>
+	/// getter_傘の番号
+	/// </summary>
+	/// <returns>現在の傘(武器)の対応の番号</returns>
+	int GetWeaponNum() { return weaponNum_; }
+
 private:
+	/// ---状態遷移---
 	/// <summary>
 	/// 生存状態
 	/// </summary>
@@ -241,18 +303,6 @@ private:
 	void Performance() override;
 
 	/// <summary>
-	/// 当たり判定コマンド
-	/// </summary>
-	/// <param name="collision">相手側の当たり判定ソース</param>
-	void OnCollision(CollisionSource* collision) override;
-	/// <summary>
-	/// 当たり判定をとるタイプかをチェック
-	/// </summary>
-	/// <param name="collisionType">相手の当たり判定タイプ</param>
-	/// <returns>該当するタイプがあるなら true</returns>
-	bool TypeCheckUp(const CollisionTypes& collisionType) override;
-
-	/// <summary>
 	/// 生存時の処理()
 	/// </summary>
 	void LifeUpdate();
@@ -263,9 +313,16 @@ private:
 	void ActionUpdate();
 
 	/// <summary>
-	/// スプライトの変化
+	/// 当たり判定コマンド
 	/// </summary>
-	void SpriteUpdate();
+	/// <param name="collision">相手側の当たり判定ソース</param>
+	void OnCollision(CollisionSource* collision) override;
+	/// <summary>
+	/// 当たり判定をとるタイプかをチェック
+	/// </summary>
+	/// <param name="collisionType">相手の当たり判定タイプ</param>
+	/// <returns>該当するタイプがあるなら true</returns>
+	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
 	/// <summary>
 	/// オブジェクトの初期化処理
@@ -281,6 +338,11 @@ private:
 	/// パーティクルの設定まとめ
 	/// </summary>
 	void InitParticles();
+
+	/// <summary>
+	/// スプライトの変化
+	/// </summary>
+	void SpriteUpdate();
 
 	/// <summary>
 	/// 体力のUI
@@ -322,11 +384,23 @@ private:
 	/// </summary>
 	void KnockBackUpdate();
 
-	//オブジェクト
+
+	// --- オブジェクト ---
+	
+	//プレイヤー本体
 	std::unique_ptr<Object_glTF> object_;
+	//傘の銃
+	std::unique_ptr<BaseUmbrella> umbrella_ = nullptr;
+	WorldTransform wtGun_;//傘のワールド座標系
+	Transform transformGun_{};
 
-	const float kFixedGravityPower_ = -0.05f;//滑空時重力値を固定
+	/// 弾丸
+	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 
+	// --------------------
+
+	// --- 方向系統 ---
+	
 	//ゴール時前を向くように
 	const Vector3 kPlayerFrontAngle_ = { 0.0f,180.0f,0.0f };
 
@@ -335,46 +409,60 @@ private:
 	//パーティクル用傘の方向
 	Vector3 umbrellaRange_ = { 0.0f,0.0f,0.0f };
 
-	//傘銃
-	std::unique_ptr<Umbrella> umbrella_ = nullptr;
-	WorldTransform wtGun_;//傘のワールド座標系
-	Transform transformGun_{};
+	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
+	
+	// -----------------
 
 
-	/// ノックバック
+	// --- ノックバック ---
+
 	bool isKnockback_ = false;
 	Vector3 backPower_ = { 0,0,0 };
 	float knockBackTimer_ = 0.0f;
 	float knockBackTimeMax_ = 0.0f;//最大ノックバック時間
 
+	// --------------------
 
-	//落ちる限界
-	const float kFallEndY_ = -10.0f;
+	// --- ダメージ、生存関係 ---
 
 	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
 	//残機(remain)
 	uint32_t remain_;
+	//落ちる限界
+	const float kFallEndY_ = -10.0f;
 
 	//ダメージを食らった後の無敵時間
 	float infinityTimer_ = 0.0f;
 	const float kInfinityTimeMax_ = 1.0f;//最大無敵時間
 
-	//倒された
+	//リスポーンフラグ
+	bool isRespawn_ = false;
+
+	// ---------------------------
+
+	//　--- やられ演出 ---
+	
 	float deadTimer_ = 0.0f;
 	const float kHitStopTime_ = 1.0f;//ヒットストップ
 	const float kDeadTimeMax_ = 3.0f;//死んだ演出用時間
 	const float kPlayerDeadRotating_ = 10.0f;//10度ずつ回る
-	const float kDeadLittleUp_ = 0.4f;
+	const float kDeadLittleUp_ = 0.4f;//少しだけ宙に浮かす
+	 
+	//--------------------
+	  
+	// --- サウンド ---
 
-	//サウンド
-	std::unique_ptr<SoundData> hitSound_;//ダメージを食らった
-	std::unique_ptr<SoundData> parrySound_;//パリィに成功
+	const std::string kHitSoundName_ = "resource/Sound/damage.mp3";//ダメージを食らった
+	const std::string kJumpSoundName_ = "resource/Sound/jump.mp3";//ジャンプ
 	const float kVolume_ = 0.3f;//ボリューム
 
-	//-パーティクル-
+	// -----------------
+
+	// --- パーティクル ---
 	//歩く
 	const std::string& particleWalk_ = "player_walk";
 	const Vector3 kParticleWalkPoint_ = { 0.0f,-1.0f,-0.3f };
+	Vector3 prePosition_;//前回座標の保存場所
 	//ジャンプ
 	const std::string& particleJump_ = "player_jump";
 	//ブリンク
@@ -389,45 +477,71 @@ private:
 	//倒された演出
 	const std::string& particleDead_ = "player_dead";
 
-	//前回座標の保存場所
-	Vector3 prePosition_;
+	// ---------------------
 
-	//オブジェクトたち
+	// --- アニメーション ---
+
 	std::unordered_map<std::string, std::string> objectMotions_;
-
-	//オブジェクト / アニメーション
 	std::string motionName_ = "standby";    //現在のアニメーション
 	std::string preMotionName_ = "standby"; //前回のアニメーション
-
-	//UI
-	const Vector2 kTextureSizeHp_ = { 64,64 };//スプライトサイズ
-	const Vector2 kInitializePointHp_ = { 20.0f,45.0f };//スプライトの初期位置
-	const float kDistanceYHp_ = 10.0f;//スプライトのY軸幅
-
-	std::vector<std::unique_ptr<Sprite>> hpSprites_;
-
-
-	bool isEvent_ = false;
-
-	Vector3 kMoveMax_ = { 1000.0f,1000.0f,1000.0f };//最大移動
-	Vector3 eventMin{};
-	Vector3 eventMax{};
-
-	//リスポーンフラグ
-	bool isRespawn_ = false;
 
 	float appearanceAnimationTimer_ = 0.0f;
 	const float appearanceAnimationFinishTime_ = 2.5f;
 
-	//アクションのクラス
-	std::unique_ptr<PlayerActions> actionCommand_;
+	// ----------------------
+	
+	// --- UI ---
+	
+	const Vector2 kTextureSizeHp_ = { 64,64 };//スプライトサイズ
+	const Vector2 kInitializePointHp_ = { 20.0f,45.0f };//スプライトの初期位置
+	const float kDistanceYHp_ = 10.0f;//スプライトのY軸幅
+	std::vector<std::unique_ptr<Sprite>> hpSprites_;
+
+	// -----------
+
+	// ---イベントが発動した時---
+	
+	bool isEvent_ = false;
+	Vector3 kMoveMax_ = { 1000.0f,1000.0f,1000.0f };//最大移動
+	Vector3 eventMin{};
+	Vector3 eventMax{};
+
+	// --------------------------
+
+	// --- 操作コマンド ---
+
 	//コマンドを出力するクラス
 	std::unique_ptr<PlayerActionsInputHandler> playerActionsInputHandler_;
 	//コマンド
-	std::unique_ptr<Command> command_;
-
-	const Vector3 kPlayerFront_ = { 0,0,1.5f };//プレイヤーの前方
-	
+	std::vector<std::unique_ptr<BaseCommand>> command_;
+	//強化ゲージ
 	std::unique_ptr<ReinforceGauge> reinforceGauge_ = nullptr;
 
+	//--移動--
+	//プレイヤーの速さ
+	const float kStandardSpeed_ = 0.14f;//通常の速さ
+	float speed_ = kStandardSpeed_;
+
+	//--ジャンプ--
+	float jumpPower_ = 0.0f;//上がる高さ
+	float prevDirectionWidth_ = 0.0f;//横の向き
+	const float kFixedGravityPower_ = -0.05f;//滑空時重力値を固定
+
+	//--ブリンク--
+	bool isOneBrink_ = false;//一回のみ
+	//ブリンク時間
+	float brinkTimer_ = 0.0f;
+	const float kBrinkTimeMax_ = 0.5f;//最大値
+	//傘の位置設定時に使う
+	const float kBrinkPower_ = 1.25f;
+
+	//
+	int weaponNum_ = 0;
+
+	bool isFiring_ = false;
+
+	float fireCoolTimer_ = 0.0f;//クールタイマー
+	const float kFireCoolTimeMax_ = 0.5f;//クールタイム最大時間
+
+	// -------------------------
 };

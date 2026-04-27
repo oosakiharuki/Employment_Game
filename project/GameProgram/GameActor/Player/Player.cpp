@@ -9,6 +9,7 @@
 
 #include "ParticleManager.h"
 #include <NextStageSave.h>
+#include "FoldingUmbrella.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -45,13 +46,8 @@ void Player::Initialize() {
 	reinforceGauge_ = std::make_unique<ReinforceGauge>();
 	reinforceGauge_->Initialize();
 
-	actionCommand_ = std::make_unique<PlayerActions>();
-	actionCommand_->SetPlayer(this);
-	actionCommand_->InitAudio();
-
 	//コマンドパターン
-	playerActionsInputHandler_ = std::make_unique<PlayerActionsInputHandler >();
-	playerActionsInputHandler_->SetPlayerActions(&*actionCommand_);
+	playerActionsInputHandler_ = std::make_unique<PlayerActionsInputHandler>();
 
 	//コリジョンタイプ
 	collisionType_ = CollisionTypes::TypePlayer;
@@ -108,19 +104,21 @@ void Player::SettingSpriteHp(uint32_t num) {
 
 void Player::InitAudio() {
 	//ダメージ
-	hitSound_ = Audio::GetInstance().LoadWave("resource/Sound/damage.mp3");
-	//パリィ
-	parrySound_ = Audio::GetInstance().LoadWave("resource/Sound/bane.mp3");
+	Audio::GetInstance().LoadWave(kHitSoundName_);
+	//ジャンプ
+	Audio::GetInstance().LoadWave(kJumpSoundName_);
 }
 
 void Player::ActionUpdate() {
 	//コマンドを受け取る
-	command_ = playerActionsInputHandler_->GetCommand();
+	playerActionsInputHandler_->GetCommand(this,command_);
 	//コマンドが入っているなら
-	if (command_) {
+	for (auto& command : command_) {
+		command->SetPlayer(this);
 		//コマンド出力
-		command_->Execute(&*actionCommand_);
+		command->Execute();
 	}
+	command_.clear();
 }
 
 
@@ -128,7 +126,23 @@ void Player::Update() {
 	GameActor::Update();
 
 	//弾丸更新処理
-	actionCommand_->BulletUpdate();
+	//消滅処理
+	bullets_.remove_if([](auto& bullet) {
+		if (bullet->IsDead()) {
+			bullet.reset();
+			return true;
+		}
+		return false;
+		});
+	//弾丸
+	for (auto& bullet : bullets_) {
+		bullet->Update();
+	}
+
+	//発砲のクールタイム
+	fireCoolTimer_ -= kDeltaTime_;
+	fireCoolTimer_ = std::clamp(fireCoolTimer_, 0.0f, kFireCoolTimeMax_);
+	
 
 	//無敵時間
 	InfinityTimeUpdate();
@@ -280,8 +294,14 @@ void Player::LifeUpdate() {
 	KnockBackUpdate();
 
 	//ジャンプによる変動
-	actionCommand_->JumpUpdate();
-
+	//地面にいるとき
+	if (GetIsGround()) {
+		jumpPower_ = 0.0f;//ジャンプ可能
+		isOneBrink_ = false;//ブリンク可能
+	}
+	else {
+		transform_.translate.y += jumpPower_;
+	}
 
 	//重力
 	GravityUpdate(transform_.translate.y);
@@ -366,10 +386,12 @@ void Player::Performance() {
 		if (appearanceAnimationTimer_ >= appearanceAnimationFinishTime_) {
 			IsPerformanceFlag(false);//演出モードを終了し操作できるように
 			appearanceAnimationTimer_ = 0.0f;
-			isGround_ = true;
-			actionCommand_->CommandJump();	
-			//ジャンプによる変動
-			actionCommand_->JumpUpdate();
+
+			//疑似ジャンプ演出
+			jumpPower_ = 0.3f;
+			IsGround(false);
+			transform_.translate.y += jumpPower_;
+			ParticleJump();
 		}
 
 	}	
@@ -395,6 +417,27 @@ void Player::KnockBackUpdate() {
 		}
 	}
 }
+
+void Player::WeaponChangeUmbrella(std::unique_ptr<BaseUmbrella> nextUmbrella, uint32_t num) {
+	//同じなら変更なし
+	if (weaponNum_ == num) {
+		return;
+	}
+	//傘の再設定
+	umbrella_.reset();
+	umbrella_ = std::move(nextUmbrella);//傘のクラス
+	umbrella_->Initialize();//初期化
+	umbrella_->SetPlayer(this);//プレイヤークラスを設定
+
+	//番号を変更
+	weaponNum_ = num;
+}
+
+void Player::AddBullet(std::unique_ptr<PlayerBullet> bullet) {
+	bullets_.push_back(std::move(bullet));
+}
+
+
 #pragma endregion
 
 void Player::Draw() {
@@ -412,7 +455,9 @@ void Player::Draw() {
 	Object3dCommon::GetInstance().Command();
 
 	//弾丸
-	actionCommand_->BulletDraw();
+	for (auto& bullet : bullets_) {
+		bullet->Draw();
+	}
 }
 
 void Player::DrawParticle() {
@@ -442,6 +487,17 @@ void Player::OffUmbrellaShield() {
 	umbrella_->OffShield();
 }
 
+void Player::FireBulletUmbrella() {
+	// クールタイムは終了した時
+	if (fireCoolTimer_ == 0.0f) {
+		isFiring_ = true;
+		umbrella_->FireCommand();
+	}
+
+	if (!isFiring_ && fireCoolTimer_ == 0.0f) {
+		fireCoolTimer_ = kFireCoolTimeMax_;
+	}
+}
 
 void Player::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypeEnemyBullet || 
@@ -499,7 +555,7 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		particles_[particleDamage_]->SetTranslate(transform_.translate + Normalize(hitPoint));
 		particles_[particleDamage_]->SetParticleBorn(ParticleBorn::MomentMode);
 		//ダメージのSE再生
-		Audio::GetInstance().SoundPlayWave(*hitSound_, kVolume_);
+		Audio::GetInstance().SoundPlayWave(kHitSoundName_, kVolume_);
 		infinityTimer_ = 0.0f;//無敵時間発動
 		//ノックバック(時間の三分の一ぶんまで)
 
@@ -528,7 +584,7 @@ void Player::IsFall() {
 	//一発K.O
 	hp_ = 0;
 	//ダメージSE再生
-	Audio::GetInstance().SoundPlayWave(*hitSound_, kVolume_);
+	Audio::GetInstance().SoundPlayWave(kHitSoundName_, kVolume_);
 }
 
 void Player::KnockBackPlayer(const Vector3& Power, float TimerMax) {
@@ -583,20 +639,6 @@ void Player::RespawnPlayer() {
 	transform_.rotate = { 0,180,0 };
 }
 
-//パリィ成功
-void Player::ParrySuccess() {
-	//SE
-	Audio::GetInstance().StopWave(*parrySound_);//パリィが続くとき一度止めてから再生させるようにする
-	Audio::GetInstance().SoundPlayWave(*parrySound_, kVolume_);//SE再生:パリィ
-	//傘の座標を読み取る
-	Vector3 translate = umbrella_->GetTranslate();
-	translate += TransformNormal(kPlayerFront_, wtGun_.GetMatWorld());//出す場所をwtGun_の向きの前に
-	particles_[particleParry_]->SetTranslate(translate);
-	particles_[particleParry_]->SetRotate(umbrellaRange_);
-	particles_[particleParry_]->SetParticleBorn(ParticleBorn::MomentMode);
-}
-
-
 void  Player::ParticleFire(const Vector3& translate) {
 	//攻撃パーティクル発生
 	particles_[particleFire_]->SetTranslate(translate);
@@ -607,6 +649,9 @@ void  Player::ParticleFire(const Vector3& translate) {
 void  Player::ParticleJump() {
 	particles_[particleJump_]->SetTranslate(transform_.translate + TransformNormal(kParticleWalkPoint_, wt_.GetMatWorld()));
 	particles_[particleJump_]->SetParticleBorn(ParticleBorn::MomentMode);
+	//SE
+	Audio::GetInstance().StopWave(kJumpSoundName_);
+	Audio::GetInstance().SoundPlayWave(kJumpSoundName_, kVolume_);
 }
 
 void  Player::ParticleBrink() {
@@ -615,6 +660,21 @@ void  Player::ParticleBrink() {
 	rotate += TransformNormal(kLookToCameraDirection_,wtGun_.GetMatWorld());
 	particles_[particleBrink_]->SetRotate(rotate);
 	particles_[particleBrink_]->SetParticleBorn(ParticleBorn::TimerMode);
+}
+
+bool Player::BrinkFlag() {
+	if (!isOneBrink_ && UseGaugePoint()) {
+		brinkTimer_ = kBrinkTimeMax_;//タイマーを
+		return true;
+	}
+	return false;
+}
+
+bool Player::BrinkTimeMax() {
+	if (brinkTimer_ > 0.0f) {
+		return true;
+	}
+	return false;
 }
 
 void Player::StopParticleBrink() {

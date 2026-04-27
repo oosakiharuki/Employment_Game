@@ -9,6 +9,7 @@
 #include <cassert>
 
 #include <vector>
+#include <unordered_map>
 
 /// <summary>
 /// チャンク
@@ -63,53 +64,54 @@ public:
 	/// </summary>
 	/// <param name="filename">waveファイル名</param>
 	/// <returns>ロードされたサウンドデータ</returns>
-	std::unique_ptr<SoundData> LoadWave(const char* filename);
+	void LoadWave(const std::string& filename);
 
 	/// <summary>
 	/// 音声を再生
 	/// </summary>
-	/// <param name="soundData">流したい音声データ</param>
+	/// <param name="soundData">流したい音声データの名前</param>
 	/// <param name="volume">音量</param>
 	/// <param name="isLoop">ループするか</param>
-	void SoundPlayWave(const SoundData& soundData, float volume, bool isLoop = false);
+	void SoundPlayWave(const std::string& soundDataName, float volume, bool isLoop = false);
 
 	/// <summary>
 	/// 音声はすでに鳴っているか
 	/// </summary>
-	/// <param name="soundData"></param>
+	/// <param name="soundDataName"></param>
 	/// <returns></returns>
-	bool IsPlayingSound(const SoundData& soundData);
+	bool IsPlayingSound(const std::string& soundDataName);
 
 	/// <summary>
 	/// 音声を停止
 	/// </summary>
-	/// <param name="soundData">止めたい音声データ</param>
-	void StopWave(const SoundData& soundData);
+	/// <param name="soundDataName">止めたい音声データ</param>
+	void StopWave(const std::string& soundDataName);
 	/// <summary>
 	/// 音声のボリューム
 	/// </summary>
-	/// <param name="soundData">変えたい音声データ</param>
+	/// <param name="soundDataName">変えたい音声データ</param>
 	/// <param name="volume">音量</param>
-	void ControlVolume(const SoundData& soundData, float volume);
+	void ControlVolume(const std::string& soundDataName, float volume);
 private:
-	//インスタンス
-	static std::unique_ptr<Audio> sInstance_;
-	//default_deleteを設定(解放処理を行える)
-	friend struct std::default_delete<Audio>;
 
 	/// <summary>
 	/// 音声ファイルを読み取る
 	/// </summary>
 	/// <param name="fileName">音声ファイル名</param>
-	std::unique_ptr<SoundData> SoundLoadFile(const std::string& fileName);
+	SoundData SoundLoadFile(const std::string& fileName);
 
 	/// <summary>
 	/// 音声データの解放 delete
 	/// </summary>
 	/// <param name="soundData">サウンドデータ</param>
-	void SoundUnload(SoundData* soundData);
+	void SoundUnload();
 
-	std::unique_ptr<SoundData> soundData_;
+	//インスタンス
+	static std::unique_ptr<Audio> sInstance_;
+	//default_deleteを設定(解放処理を行える)
+	friend struct std::default_delete<Audio>;
+
+	std::unordered_map<std::string, SoundData> soundDates_;
 
 	//audio
 	Microsoft::WRL::ComPtr<IXAudio2> xAudio2_;

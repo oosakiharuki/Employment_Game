@@ -45,9 +45,9 @@ public:
 	void SetVelocity(const Vector3& velocity) { velocity_ = velocity; }
 
 	/// <summary>
-	/// 強化弾に変化(耐久値が増加し、ダメージが増える)
+	/// setter_強化弾に変化(耐久値が増加し、ダメージが増える)
 	/// </summary>
-	void StrongPower() { bulletPower_ = kBulletStrongPower; }
+	void SetStrongPower(uint32_t bulletPower) { bulletPower_ = bulletPower; }
 
 	/// <summary>
 	/// 弾がなくなるフラグ
@@ -93,7 +93,6 @@ private:
 	AABB bulletAABB_;
 
 	uint32_t bulletPower_ = 1;
-	const uint32_t kBulletStrongPower = 2;
 
 	//影
 	std::unique_ptr<Shadow> shadow_;

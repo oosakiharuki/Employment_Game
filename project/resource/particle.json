@@ -18,7 +18,7 @@
                 "transform": {
                     "rotate": [
                         0.0,
-                        360.0
+                        0.0
                     ],
                     "scale": [
                         0.0,
@@ -32,15 +32,15 @@
                 "velocity": {
                     "rotate": [
                         0.0,
-                        20.0
+                        10.0
                     ],
                     "scale": [
                         0.0,
                         0.0
                     ],
                     "translate": [
-                        -20.0,
-                        20.0
+                        0.0,
+                        0.0
                     ]
                 }
             },
@@ -52,7 +52,7 @@
                     1
                 ],
                 "currentTime": 0.0,
-                "lifeTime": 1.0,
+                "lifeTime": 0.5,
                 "velocity": {
                     "rotate": [
                         0.0,
@@ -60,9 +60,9 @@
                         0.0
                     ],
                     "scale": [
-                        -0.5,
-                        -0.5,
-                        -0.5
+                        0.0,
+                        0.0,
+                        0.0
                     ],
                     "translate": [
                         0.0,
@@ -71,18 +71,101 @@
                     ]
                 }
             },
-            "objectType": "Box",
+            "objectType": "Ring",
             "parameter": {
                 "basicSize": [
-                    0.5,
-                    0.5,
-                    0.5
+                    0.0,
+                    0.0,
+                    0.0
                 ],
-                "count": 10,
-                "frequency": 1.0
+                "count": 1,
+                "frequency": 0.05000000074505806
             },
-            "particleName": "player_damage",
-            "textureFile": "resource/Sprite/white.dds"
+            "particleName": "longUmbrella_charge",
+            "textureFile": "resource/Sprite/gradationLine.dds"
+        },
+        {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    0.0,
+                    0.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 0.25,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Cone",
+            "parameter": {
+                "basicSize": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "count": 1,
+                "frequency": 0.10000000149011612
+            },
+            "particleName": "enemy_fire",
+            "textureFile": "resource/Sprite/cone.dds"
         },
         {
             "dist": {
@@ -184,7 +267,7 @@
                 "transform": {
                     "rotate": [
                         0.0,
-                        0.0
+                        360.0
                     ],
                     "scale": [
                         0.0,
@@ -198,15 +281,15 @@
                 "velocity": {
                     "rotate": [
                         0.0,
-                        0.0
+                        20.0
                     ],
                     "scale": [
                         0.0,
                         0.0
                     ],
                     "translate": [
-                        0.0,
-                        0.0
+                        -20.0,
+                        20.0
                     ]
                 }
             },
@@ -218,7 +301,7 @@
                     1
                 ],
                 "currentTime": 0.0,
-                "lifeTime": 0.25,
+                "lifeTime": 1.0,
                 "velocity": {
                     "rotate": [
                         0.0,
@@ -226,9 +309,9 @@
                         0.0
                     ],
                     "scale": [
-                        0.0,
-                        0.0,
-                        0.0
+                        -0.5,
+                        -0.5,
+                        -0.5
                     ],
                     "translate": [
                         0.0,
@@ -237,18 +320,18 @@
                     ]
                 }
             },
-            "objectType": "Cone",
+            "objectType": "Box",
             "parameter": {
                 "basicSize": [
-                    1.0,
-                    1.0,
-                    1.0
+                    0.5,
+                    0.5,
+                    0.5
                 ],
-                "count": 1,
-                "frequency": 0.10000000149011612
+                "count": 10,
+                "frequency": 1.0
             },
-            "particleName": "enemy_fire",
-            "textureFile": "resource/Sprite/cone.dds"
+            "particleName": "player_damage",
+            "textureFile": "resource/Sprite/white.dds"
         },
         {
             "dist": {
@@ -332,89 +415,6 @@
             },
             "particleName": "player_fire",
             "textureFile": "resource/Sprite/Cone.dds"
-        },
-        {
-            "dist": {
-                "color": [
-                    0.0,
-                    0.0
-                ],
-                "currentTime": [
-                    0.0,
-                    0.0
-                ],
-                "lifeTime": [
-                    0.0,
-                    0.0
-                ],
-                "transform": {
-                    "rotate": [
-                        0.0,
-                        0.0
-                    ],
-                    "scale": [
-                        0.0,
-                        0.0
-                    ],
-                    "translate": [
-                        0.0,
-                        0.0
-                    ]
-                },
-                "velocity": {
-                    "rotate": [
-                        0.0,
-                        0.0
-                    ],
-                    "scale": [
-                        0.0,
-                        0.0
-                    ],
-                    "translate": [
-                        0.0,
-                        0.0
-                    ]
-                }
-            },
-            "emit": {
-                "color": [
-                    1,
-                    1,
-                    1,
-                    1
-                ],
-                "currentTime": 0.0,
-                "lifeTime": 0.5,
-                "velocity": {
-                    "rotate": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "scale": [
-                        10.0,
-                        10.0,
-                        10.0
-                    ],
-                    "translate": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ]
-                }
-            },
-            "objectType": "Ring",
-            "parameter": {
-                "basicSize": [
-                    0.5,
-                    0.5,
-                    0.5
-                ],
-                "count": 5,
-                "frequency": 0.05000000074505806
-            },
-            "particleName": "player_brink",
-            "textureFile": "resource/Sprite/gradationLine.dds"
         },
         {
             "dist": {
@@ -599,6 +599,89 @@
                 "transform": {
                     "rotate": [
                         0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 0.5,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        10.0,
+                        10.0,
+                        10.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Ring",
+            "parameter": {
+                "basicSize": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "count": 5,
+                "frequency": 0.05000000074505806
+            },
+            "particleName": "player_brink",
+            "textureFile": "resource/Sprite/gradationLine.dds"
+        },
+        {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    0.0,
+                    0.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
                         360.0
                     ],
                     "scale": [
@@ -724,9 +807,9 @@
                         0.0
                     ],
                     "scale": [
-                        0.0,
                         0.5,
-                        0.5
+                        0.5,
+                        0.0
                     ],
                     "translate": [
                         0.0,
@@ -746,7 +829,7 @@
                 "frequency": 0.5
             },
             "particleName": "player_parry",
-            "textureFile": "resource/Sprite/white.dds"
+            "textureFile": "resource/Sprite/cone.dds"
         },
         {
             "dist": {

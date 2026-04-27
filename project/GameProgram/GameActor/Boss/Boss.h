@@ -206,8 +206,9 @@ private:
 	const float kStandardMoveSpeed_ = 3.0f;
 
 
-	std::unique_ptr<SoundData> fireSound_;
-	std::unique_ptr<SoundData> fireBeforeSound_;
+	const std::string kFireSoundName_ = "resource/Sound/fire.mp3";
+	const std::string kFireBeforeSoundName_ = "resource/Sound/enemyBeforeFire.mp3";
+
 	const float kVolume_ = 0.25f;
 
 

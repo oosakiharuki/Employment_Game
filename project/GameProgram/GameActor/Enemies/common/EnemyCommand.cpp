@@ -5,8 +5,8 @@ using namespace MyMath;
 using namespace UseEveryOne;
 
 void EnemyFireCommand::InitAudio() {
-	fireSound_ = Audio::GetInstance().LoadWave("resource/Sound/enemyFire.mp3");
-	fireBeforeSound_ = Audio::GetInstance().LoadWave("resource/Sound/enemyBeforeFire.mp3");
+	Audio::GetInstance().LoadWave(kFireSoundName_);
+	Audio::GetInstance().LoadWave(kFireBeforeSoundName_);
 }
 
 
@@ -43,9 +43,9 @@ void EnemyFireCommand::Fire(EnemyCanFireBullet& enemyCanFireBullet) {
 
 	if (coolTime_ >= kCoolTimeMax_) {
 		if (rapidFireTime_ == 0.0f && rapidCount_ == 0) {
-			Audio::GetInstance().StopWave(*fireBeforeSound_);
-			Audio::GetInstance().StopWave(*fireSound_);//音ズレが起きないよう
-			Audio::GetInstance().SoundPlayWave(*fireSound_, kVolume_);
+			Audio::GetInstance().StopWave(kFireBeforeSoundName_);
+			Audio::GetInstance().StopWave(kFireSoundName_);//音ズレが起きないよう
+			Audio::GetInstance().SoundPlayWave(kFireSoundName_, kVolume_);
 		}
 
 		//連射で時間を開ける
@@ -65,8 +65,8 @@ void EnemyFireCommand::Fire(EnemyCanFireBullet& enemyCanFireBullet) {
 	}
 	else if (coolTime_ >= kCoolTimeMax_ * kDivideByTwo_ && coolTime_ < kCoolTimeMax_) {
 		//SEはすでに鳴っているか
-		if (!Audio::GetInstance().IsPlayingSound(*fireBeforeSound_)) {
-			Audio::GetInstance().SoundPlayWave(*fireBeforeSound_, kVolume_);
+		if (!Audio::GetInstance().IsPlayingSound(kFireBeforeSoundName_)) {
+			Audio::GetInstance().SoundPlayWave(kFireBeforeSoundName_, kVolume_);
 		}
 	}
 }

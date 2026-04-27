@@ -1,41 +1,41 @@
 #pragma once
-#include "Object_glTF.h"
 #include "MyMath.h"
-
 #include "Reaction.h"
 #include "CollisionManager.h"
-
 #include "Audio.h"
+#include "Object_glTF.h"
+#include "PlayerBullet.h"
+
+#include "Particle.h"
+#include <memory>
 
 class Player;
 
-/// <summary>
-/// 傘(発泡、守が使える)
-/// </summary>
-class Umbrella : public CollisionSource {
+class BaseUmbrella : public CollisionSource {
 public:
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~Umbrella();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize();
+	virtual void Initialize();
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
+	virtual void Update();
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	void Draw();
+		/// <summary>
+	/// setter_プレイヤー
+	/// </summary>
+	/// <param name="player">プレイヤークラス</param>
+	void SetPlayer(Player* player) { player_ = player; }
 
 	/// <summary>
 	/// getter_座標位置
 	/// </summary>
 	/// <returns>現在の座標位置</returns>
-	const Vector3& GetTranslate()  { return transform_.translate; }
+	const Vector3& GetTranslate() { return transform_.translate; }
 	/// <summary>
 	/// setter_座標位置
 	/// </summary>
@@ -63,18 +63,21 @@ public:
 	/// </summary>
 	/// <param name="translate">代入する大きさ</param>
 	void SetScale(const Vector3& scale) { transform_.scale = scale; }
-	
+
 	/// <summary>
 	/// setter_当たり判定AABB
 	/// </summary>
 	/// <param name="aabb">AABB</param>
 	void SetAABB(const AABB& aabb) { umbrellaAABB_ = aabb; }
-
 	/// <summary>
 	/// シールドモード
 	/// </summary>
 	/// <param name="isShield">trueはシールドモードに変更</param>
 	void ShieldMode();
+
+
+	void FireCommand();
+
 
 	/// <summary>
 	/// シールド解除
@@ -90,29 +93,25 @@ public:
 	/// 連続ヒットの場合タイマーをリセット
 	/// </summary>
 	void ResetScaleTimer() { scaleTimer_ = 0.0f; }
-	/// <summary>
-	/// setter_プレイヤー
-	/// </summary>
-	/// <param name="player">プレイヤークラス</param>
-	void SetPlayer(Player* player) { player_ = player; }
-
-private:
-	/// <summary>
-	/// 当たり判定コマンド
-	/// </summary>
-	/// <param name="collision">相手側の当たり判定ソース</param>
-	void OnCollision(CollisionSource* collision) override;
-	/// <summary>
-	/// 当たり判定をとるタイプかをチェック
-	/// </summary>
-	/// <param name="collisionType">相手の当たり判定タイプ</param>
-	/// <returns>該当するタイプがあるなら true</returns>
-	bool TypeCheckUp(const CollisionTypes& collisionType) override;
+protected:
 
 	/// <summary>
-	/// パリィの更新処理
+	/// 通常弾の生成方
 	/// </summary>
-	void ParryUpdate();
+	virtual void Fire() = 0;
+
+	/// <summary>
+	/// 強化弾の生成方
+	/// </summary>
+	virtual void PowerFire() = 0;
+
+	/// <summary>
+	/// 弾丸の生成
+	/// </summary>
+	/// <param name="translate">発生場所</param>
+	/// <param name="velocity">方向</param>
+	/// <param name="bulletPower">弾丸の攻撃力</param>
+	void BornBullet(const Vector3& translate, const Vector3& velocity, uint32_t bulletPower);
 
 	//オブジェクト設定
 	std::unique_ptr<Object_glTF> object_;
@@ -121,8 +120,6 @@ private:
 
 	//AABB
 	AABB umbrellaAABB_;
-	//AABBのサイズ
-	const Vector3 kAABBSize_ = { 1,2,1 };
 
 	std::unique_ptr<Reaction> reaction_;
 
@@ -146,9 +143,46 @@ private:
 	const Vector3 kUmbrellaKnockBackPower_ = { 0.0f,0.0f,0.3f };
 	const float kUmbrellaKnockBackTime_ = 0.0f;
 
-	std::unique_ptr<SoundData> umbrellaOpenSound_;//傘を開く
+	
 	const float kVolume_ = 0.3f;//ボリューム
 
 	Player* player_ = nullptr;
+
+	//パーティクルのコンテナ
+	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
+
+	const std::string& kParticleParry_ = "player_parry";
+
+private:	
+
+	/// <summary>
+	/// 当たり判定コマンド
+	/// </summary>
+	/// <param name="collision">相手側の当たり判定ソース</param>
+	void OnCollision(CollisionSource* collision) override;
+	/// <summary>
+	/// 当たり判定をとるタイプかをチェック
+	/// </summary>
+	/// <param name="collisionType">相手の当たり判定タイプ</param>
+	/// <returns>該当するタイプがあるなら true</returns>
+	bool TypeCheckUp(const CollisionTypes& collisionType) override;
+
+	/// <summary>
+	/// パリィの更新処理
+	/// </summary>
+	void ParryUpdate();
+
+	/// <summary>
+	/// パリィ成功 = 連続弾も跳ね返す
+	/// </summary>
+	void ParrySuccess();
+
+	const std::string kUmbrellaOpenSoundName_ = "resource/Sound/umbrellaOpen.mp3";//傘を開く
+	const std::string kFireSoundName_ = "resource/Sound/fire.mp3";//発砲攻撃
+	const std::string kParrySoundName_ = "resource/Sound/bane.mp3";//パリィに成功
+
+	//傘より少し前に出す
+	const Vector3 kParryParticleFrontPoint_ { 0.0f,0.0f,2.0f };
+	const Vector3 kParryParticleRotate_ = { 90.0f,0.0f,0.0f };
 };
 

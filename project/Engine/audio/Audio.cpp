@@ -26,7 +26,7 @@ Audio& Audio::GetInstance() {
 
 void Audio::Finalize() {
 	xAudio2_.Reset();
-	//SoundUnload(&*soundData_);
+	SoundUnload();
 
 	// Windows Media Foundation 終了
 	result_ = MFShutdown();
@@ -44,12 +44,18 @@ void Audio::Initialize() {
 	assert(SUCCEEDED(result_));
 }
 
-std::unique_ptr<SoundData> Audio::LoadWave(const char* filename) {
-	soundData_ = SoundLoadFile(filename);
-	return std::move(soundData_);
+void Audio::LoadWave(const std::string& filename) {
+	//すでにある場合読み取らない
+	if (soundDates_.contains(filename)) {
+		return;
+	}
+
+
+	SoundData& soundData = soundDates_[filename];
+	soundData = SoundLoadFile(filename);
 }
 
-std::unique_ptr<SoundData> Audio::SoundLoadFile(const std::string& fileName) {
+SoundData Audio::SoundLoadFile(const std::string& fileName) {
 	std::wstring filePathW = ConvertString(fileName);
 
 	Microsoft::WRL::ComPtr<IMFSourceReader> pReader;
@@ -73,10 +79,10 @@ std::unique_ptr<SoundData> Audio::SoundLoadFile(const std::string& fileName) {
 	MFCreateWaveFormatExFromMFMediaType(pOutType.Get(), &waveFormat, nullptr);
 	
 	//コンテナに格納する音声データ
-	std::unique_ptr<SoundData> soundData = std::make_unique<SoundData>();
-	soundData->wfex = *waveFormat;
+	SoundData soundData = {};
+	soundData.wfex = *waveFormat;
 	
-	result_ = xAudio2_.Get()->CreateSourceVoice(&soundData->pSourceVoice, &soundData->wfex);
+	result_ = xAudio2_.Get()->CreateSourceVoice(&soundData.pSourceVoice, &soundData.wfex);
 	assert(SUCCEEDED(result_));
 
 	//生成したWaveフォーマット解放
@@ -103,7 +109,7 @@ std::unique_ptr<SoundData> Audio::SoundLoadFile(const std::string& fileName) {
 			// バッファ読み込み用にロック
 			pBuffer->Lock(&pData, &maxLength, &currentLength);
 			// バッファの最後尾にデータを追加
-			soundData->buffer.insert(soundData->buffer.end(), pData, pData + currentLength);
+			soundData.buffer.insert(soundData.buffer.end(), pData, pData + currentLength);
 			pBuffer->Unlock();//ロック解除
 		}
 	}
@@ -111,7 +117,9 @@ std::unique_ptr<SoundData> Audio::SoundLoadFile(const std::string& fileName) {
 	return soundData;
 }
 
-void Audio::SoundPlayWave(const SoundData& soundData, float volume, bool isLoop) {
+void Audio::SoundPlayWave(const std::string& soundDataName, float volume, bool isLoop) {
+
+	SoundData& soundData = soundDates_[soundDataName];
 
 	XAUDIO2_VOICE_STATE state;
 	soundData.pSourceVoice->GetState(&state);
@@ -135,7 +143,9 @@ void Audio::SoundPlayWave(const SoundData& soundData, float volume, bool isLoop)
 
 }
 
-bool Audio::IsPlayingSound(const SoundData& soundData) {
+bool Audio::IsPlayingSound(const std::string& soundDataName) {
+	SoundData& soundData = soundDates_[soundDataName];
+	
 	XAUDIO2_VOICE_STATE state;
 	soundData.pSourceVoice->GetState(&state);
 
@@ -148,17 +158,22 @@ bool Audio::IsPlayingSound(const SoundData& soundData) {
 }
 
 
-void Audio::SoundUnload(SoundData* soundData) {
-	soundData->buffer.clear();
-	soundData->wfex = {};
+void Audio::SoundUnload() {
+	for (auto& soundData : soundDates_) {
+		soundData.second.buffer.clear();
+		soundData.second.wfex = {};
+	}
 }
 
-void Audio::StopWave(const SoundData& soundData) {
+void Audio::StopWave(const std::string& soundDataName) {
+	SoundData& soundData = soundDates_[soundDataName];
+
 	result_ = soundData.pSourceVoice->Stop(); //音源を止める
 	result_ = soundData.pSourceVoice->FlushSourceBuffers(); //音源のリセット
 }
 
-void Audio::ControlVolume(const SoundData& soundData, float volume) {
+void Audio::ControlVolume(const std::string& soundDataName, float volume) {
+	SoundData& soundData = soundDates_[soundDataName];
 	//音量調節
 	result_ = soundData.pSourceVoice->SetVolume(volume);
 }
