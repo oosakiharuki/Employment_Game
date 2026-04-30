@@ -57,6 +57,12 @@ void LoadingModels::LoadGltf() {
 	ModelManager::GetInstance().LoadModel("umbrella_Close", ".gltf");
 	ModelManager::GetInstance().LoadModel("umbrella_Open", ".gltf");
 
+	ModelManager::GetInstance().LoadModel("longUmbrella_Close", ".gltf");
+	ModelManager::GetInstance().LoadModel("longUmbrella_Open", ".gltf");	
+	
+	ModelManager::GetInstance().LoadModel("foldingUmbrella_Close", ".gltf");
+	ModelManager::GetInstance().LoadModel("foldingUmbrella_Open", ".gltf");
+
 	ModelManager::GetInstance().LoadModel("Select_Start", ".gltf");
 	ModelManager::GetInstance().LoadModel("Select_End", ".gltf");
 

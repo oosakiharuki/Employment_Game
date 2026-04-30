@@ -11,7 +11,7 @@ void LongUmbrella::Initialize() {
 	BaseUmbrella::Initialize();
 
 	//モデル設定
-	object_->SetModelFile("umbrella_Close.gltf");
+	object_->SetModelFile("longUmbrella_Close.gltf");
 
 	//AABBの大きさ
 	umbrellaAABB_.min = -kAABBSize_ * kDivideByTwo_;
@@ -29,10 +29,10 @@ void LongUmbrella::Update() {
 
 	//防御状態の場合
 	if (!isShield_) {
-		object_->ChangeAnimation("umbrella_Close.gltf");//閉じた傘
+		object_->ChangeAnimation("longUmbrella_Close.gltf");//閉じた傘
 	}
 	else {
-		object_->ChangeAnimation("umbrella_Open.gltf");//閉じた傘
+		object_->ChangeAnimation("longUmbrella_Open.gltf");//閉じた傘
 	}
 
 	//更新
@@ -53,7 +53,7 @@ void LongUmbrella::Fire() {
 	}
 
 	//チャージする時間に達したら
-	if (chargeTimer_ >= kChargeMaxTime_ && !Input::GetInstance().PushKey(DIK_K)) {
+	if (chargeTimer_ >= kChargeMaxTime_ && (!Input::GetInstance().PushKey(DIK_K) && !Input::GetInstance().PushButton(XINPUT_GAMEPAD_X) && !Input::GetInstance().RightTriggerLongPress())) {
 		Vector3 translate = player_->GetTranslate();
 		Vector3 bulletVelocity = { 0.0f, 0.0f, kBulletSpeed_ };
 
@@ -74,7 +74,7 @@ void LongUmbrella::Fire() {
 		particles_[kChargeParticle_]->SetColor({ 1.0f,1.0f,1.0f,1.0f });//白色
 
 	}
-	else if (!Input::GetInstance().PushKey(DIK_K)) {
+	else if (!Input::GetInstance().PushKey(DIK_K) && !Input::GetInstance().PushButton(XINPUT_GAMEPAD_X) && !Input::GetInstance().RightTriggerLongPress()) {
 		//失敗
 		player_->FireFinish();//発砲終了
 		chargeTimer_ = 0.0f;
@@ -102,7 +102,7 @@ void LongUmbrella::PowerFire() {
 	}
 
 	//チャージする時間に達したら
-	if (chargeTimer_ >= kChargeMaxTime_ && !Input::GetInstance().PushKey(DIK_K)) {
+	if (chargeTimer_ >= kChargeMaxTime_ && (!Input::GetInstance().PushKey(DIK_K) && !Input::GetInstance().PushButton(XINPUT_GAMEPAD_X) && !Input::GetInstance().RightTriggerLongPress())) {
 
 		Vector3 translate = player_->GetTranslate();
 		Vector3 bulletVelocity = { 0.0f, 0.0f, kBulletSpeed_ };
@@ -124,7 +124,7 @@ void LongUmbrella::PowerFire() {
 		particles_[kChargeParticle_]->SetParticleBorn(ParticleBorn::Stop);
 		particles_[kChargeParticle_]->SetColor({ 1.0f,1.0f,1.0f,1.0f });//白色
 	}
-	else if (!Input::GetInstance().PushKey(DIK_K)) {
+	else if (!Input::GetInstance().PushKey(DIK_K) && !Input::GetInstance().PushButton(XINPUT_GAMEPAD_X) && !Input::GetInstance().RightTriggerLongPress()) {
 		player_->FireFinish();//発砲終了
 		chargeTimer_ = 0.0f;
 		particles_[kChargeParticle_]->SetParticleBorn(ParticleBorn::Stop);
