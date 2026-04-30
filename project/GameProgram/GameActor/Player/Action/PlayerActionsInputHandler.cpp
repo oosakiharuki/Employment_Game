@@ -185,10 +185,10 @@ void WeaponChangeCommand::Execute() {
 	//銃の番号
 	weaponNum_ = player_->GetWeaponNum();
 
-	if (Input::GetInstance().TriggerKey(DIK_U)) {
+	if (Input::GetInstance().TriggerKey(DIK_U) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_LEFT_SHOULDER)) {
 		RightSwitching();//;
 	}
-	if (Input::GetInstance().TriggerKey(DIK_O)) {
+	if (Input::GetInstance().TriggerKey(DIK_O) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
 		LeftSwitching();//;
 	}
 

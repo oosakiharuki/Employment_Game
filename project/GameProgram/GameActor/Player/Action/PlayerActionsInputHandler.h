@@ -178,9 +178,9 @@ private:
 	const int kWeaponMax_ = Weapon::Max - 1;
 
 	std::unordered_map<int, std::function<std::unique_ptr<BaseUmbrella>()>> weaponUmbrella_ = {
-		{ Weapon::shotgun, [](){ return std::make_unique<Umbrella>(); } },
-		{ Weapon::sniper, [](){ return std::make_unique<FoldingUmbrella>(); } },
-		{ Weapon::LongSniper, []() {return std::make_unique<LongUmbrella>(); } }
+		{ Weapon::shotgun, [](){ return std::make_unique<Umbrella>(); } },       //通常(ショットガン)
+		{ Weapon::sniper, [](){ return std::make_unique<FoldingUmbrella>(); } }, //折り畳み(ライフル)
+		{ Weapon::LongSniper, []() {return std::make_unique<LongUmbrella>(); } } //長傘(チャージガン)
 	};
 
 };

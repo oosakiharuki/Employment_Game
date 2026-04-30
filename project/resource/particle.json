@@ -18,6 +18,172 @@
                 "transform": {
                     "rotate": [
                         0.0,
+                        360.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        20.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        -20.0,
+                        20.0
+                    ]
+                }
+            },
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 1.0,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        -0.5,
+                        -0.5,
+                        -0.5
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Box",
+            "parameter": {
+                "basicSize": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "count": 10,
+                "frequency": 1.0
+            },
+            "particleName": "player_damage",
+            "textureFile": "resource/Sprite/white.dds"
+        },
+        {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    -1.0,
+                    1.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        360.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        -0.5,
+                        0.5
+                    ]
+                }
+            },
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 2.0,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        -0.5,
+                        -0.5,
+                        -0.5
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Box",
+            "parameter": {
+                "basicSize": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "count": 5,
+                "frequency": 0.15000000596046448
+            },
+            "particleName": "player_walk",
+            "textureFile": "resource/Sprite/white.dds"
+        },
+        {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    0.0,
+                    0.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
                         0.0
                     ],
                     "scale": [
@@ -178,172 +344,6 @@
                     0.0
                 ],
                 "lifeTime": [
-                    -1.0,
-                    1.0
-                ],
-                "transform": {
-                    "rotate": [
-                        0.0,
-                        360.0
-                    ],
-                    "scale": [
-                        0.0,
-                        0.0
-                    ],
-                    "translate": [
-                        0.0,
-                        0.0
-                    ]
-                },
-                "velocity": {
-                    "rotate": [
-                        0.0,
-                        0.0
-                    ],
-                    "scale": [
-                        0.0,
-                        0.0
-                    ],
-                    "translate": [
-                        -0.5,
-                        0.5
-                    ]
-                }
-            },
-            "emit": {
-                "color": [
-                    1,
-                    1,
-                    1,
-                    1
-                ],
-                "currentTime": 0.0,
-                "lifeTime": 2.0,
-                "velocity": {
-                    "rotate": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "scale": [
-                        -0.5,
-                        -0.5,
-                        -0.5
-                    ],
-                    "translate": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ]
-                }
-            },
-            "objectType": "Box",
-            "parameter": {
-                "basicSize": [
-                    0.5,
-                    0.5,
-                    0.5
-                ],
-                "count": 5,
-                "frequency": 0.15000000596046448
-            },
-            "particleName": "player_walk",
-            "textureFile": "resource/Sprite/white.dds"
-        },
-        {
-            "dist": {
-                "color": [
-                    0.0,
-                    0.0
-                ],
-                "currentTime": [
-                    0.0,
-                    0.0
-                ],
-                "lifeTime": [
-                    0.0,
-                    0.0
-                ],
-                "transform": {
-                    "rotate": [
-                        0.0,
-                        360.0
-                    ],
-                    "scale": [
-                        0.0,
-                        0.0
-                    ],
-                    "translate": [
-                        0.0,
-                        0.0
-                    ]
-                },
-                "velocity": {
-                    "rotate": [
-                        0.0,
-                        20.0
-                    ],
-                    "scale": [
-                        0.0,
-                        0.0
-                    ],
-                    "translate": [
-                        -20.0,
-                        20.0
-                    ]
-                }
-            },
-            "emit": {
-                "color": [
-                    1,
-                    1,
-                    1,
-                    1
-                ],
-                "currentTime": 0.0,
-                "lifeTime": 1.0,
-                "velocity": {
-                    "rotate": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "scale": [
-                        -0.5,
-                        -0.5,
-                        -0.5
-                    ],
-                    "translate": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ]
-                }
-            },
-            "objectType": "Box",
-            "parameter": {
-                "basicSize": [
-                    0.5,
-                    0.5,
-                    0.5
-                ],
-                "count": 10,
-                "frequency": 1.0
-            },
-            "particleName": "player_damage",
-            "textureFile": "resource/Sprite/white.dds"
-        },
-        {
-            "dist": {
-                "color": [
-                    0.0,
-                    0.0
-                ],
-                "currentTime": [
-                    0.0,
-                    0.0
-                ],
-                "lifeTime": [
                     0.0,
                     0.0
                 ],
@@ -415,6 +415,89 @@
             },
             "particleName": "player_fire",
             "textureFile": "resource/Sprite/Cone.dds"
+        },
+        {
+            "dist": {
+                "color": [
+                    0.0,
+                    0.0
+                ],
+                "currentTime": [
+                    0.0,
+                    0.0
+                ],
+                "lifeTime": [
+                    0.0,
+                    0.0
+                ],
+                "transform": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                },
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        0.0,
+                        0.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "emit": {
+                "color": [
+                    1,
+                    1,
+                    1,
+                    1
+                ],
+                "currentTime": 0.0,
+                "lifeTime": 0.5,
+                "velocity": {
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        10.0,
+                        10.0,
+                        10.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            "objectType": "Ring",
+            "parameter": {
+                "basicSize": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "count": 5,
+                "frequency": 0.05000000074505806
+            },
+            "particleName": "player_brink",
+            "textureFile": "resource/Sprite/gradationLine.dds"
         },
         {
             "dist": {
@@ -581,89 +664,6 @@
             },
             "particleName": "player_dead",
             "textureFile": "resource/Sprite/white.dds"
-        },
-        {
-            "dist": {
-                "color": [
-                    0.0,
-                    0.0
-                ],
-                "currentTime": [
-                    0.0,
-                    0.0
-                ],
-                "lifeTime": [
-                    0.0,
-                    0.0
-                ],
-                "transform": {
-                    "rotate": [
-                        0.0,
-                        0.0
-                    ],
-                    "scale": [
-                        0.0,
-                        0.0
-                    ],
-                    "translate": [
-                        0.0,
-                        0.0
-                    ]
-                },
-                "velocity": {
-                    "rotate": [
-                        0.0,
-                        0.0
-                    ],
-                    "scale": [
-                        0.0,
-                        0.0
-                    ],
-                    "translate": [
-                        0.0,
-                        0.0
-                    ]
-                }
-            },
-            "emit": {
-                "color": [
-                    1,
-                    1,
-                    1,
-                    1
-                ],
-                "currentTime": 0.0,
-                "lifeTime": 0.5,
-                "velocity": {
-                    "rotate": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "scale": [
-                        10.0,
-                        10.0,
-                        10.0
-                    ],
-                    "translate": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ]
-                }
-            },
-            "objectType": "Ring",
-            "parameter": {
-                "basicSize": [
-                    0.5,
-                    0.5,
-                    0.5
-                ],
-                "count": 5,
-                "frequency": 0.05000000074505806
-            },
-            "particleName": "player_brink",
-            "textureFile": "resource/Sprite/gradationLine.dds"
         },
         {
             "dist": {
@@ -1000,7 +1000,7 @@
         {
             "dist": {
                 "color": [
-                    0.0,
+                    0.5,
                     1.0
                 ],
                 "currentTime": [

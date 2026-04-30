@@ -8,7 +8,7 @@ void FoldingUmbrella::Initialize() {
 	BaseUmbrella::Initialize();
 
 	//モデル設定
-	object_->SetModelFile("umbrella_Close.gltf");
+	object_->SetModelFile("foldingUmbrella_Close.gltf");
 
 	//AABBの大きさ
 	umbrellaAABB_.min = -kAABBSize_ * kDivideByTwo_;
@@ -20,10 +20,10 @@ void FoldingUmbrella::Update() {
 
 	//防御状態の場合
 	if (!isShield_) {
-		object_->ChangeAnimation("umbrella_Close.gltf");//閉じた傘
+		object_->ChangeAnimation("foldingUmbrella_Close.gltf");//閉じた傘
 	}
 	else {
-		object_->ChangeAnimation("umbrella_Open.gltf");//閉じた傘
+		object_->ChangeAnimation("foldingUmbrella_Open.gltf");//閉じた傘
 	}
 
 	//更新
