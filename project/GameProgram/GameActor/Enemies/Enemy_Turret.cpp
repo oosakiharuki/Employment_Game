@@ -86,7 +86,7 @@ void Enemy_Turret::Active() {
 	SearchRange();
 
 	//重力
-	GravityUpdate(transform_.translate.y);
+	GravityUpdate(transform_.translate.y, true);
 	//弾丸の更新
 	fireCommand_->BulletUpdate();
 

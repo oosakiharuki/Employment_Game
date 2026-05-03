@@ -219,6 +219,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\GameActor\Player\Weapon\ReinforceGauge.cpp" />
     <ClCompile Include="GameProgram\GameActor\Player\Action\PlayerActionsInputHandler.cpp" />
     <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\LongUmbrella.cpp" />
+    <ClCompile Include="TimeScale.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\BaseUmbrella.h" />
@@ -330,6 +331,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\GameActor\Player\Weapon\ReinforceGauge.h" />
     <ClInclude Include="GameProgram\GameActor\Player\Action\PlayerActionsInputHandler.h" />
     <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\LongUmbrella.h" />
+    <ClInclude Include="TimeScale.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

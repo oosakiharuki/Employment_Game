@@ -58,11 +58,6 @@ void GameScene::Update() {
 	//プレイヤーが死んでしまったら通らない(停止)
 	PlayerAliveUpdate();
 
-	//ステージオブジェクトの更新
-	for (auto& stageObject : stageObjects_) {
-		stageObject->Update();
-	}
-
 	//使用する当たり判定
 	CollisionManager::GetInstance().CollisionUpdate();
 	//背景更新処理
@@ -99,6 +94,11 @@ void GameScene::PlayerAliveUpdate() {
 	for (auto& enemy : enemies_) {
 		enemy->SetPlayer(player_.get());
 		enemy->Update();
+	}
+
+	//ステージオブジェクトの更新
+	for (auto& stageObject : stageObjects_) {
+		stageObject->Update();
 	}
 
 

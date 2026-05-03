@@ -6,6 +6,8 @@
 #include "BaseEnemyState.h"
 #include "EnemyEye.h"
 
+#include "TimeScale.h"
+
 /// <summary>
 /// 敵の基盤クラス
 /// </summary>

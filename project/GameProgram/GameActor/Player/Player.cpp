@@ -500,9 +500,9 @@ void Player::FireBulletUmbrella() {
 }
 
 void Player::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::TypeEnemyBullet || 
+	if ((collision->GetType() == CollisionTypes::TypeEnemyBullet || 
 		collision->GetType() == CollisionTypes::TypeBombExplotion || 
-		collision->GetType() == CollisionTypes::TypeBoss) {
+		collision->GetType() == CollisionTypes::TypeBoss) && infinityTimer_ >= kInfinityTimeMax_) {
 		IsDamage(collision->GetCenter());
 	}
 	
@@ -556,7 +556,7 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		particles_[particleDamage_]->SetParticleBorn(ParticleBorn::MomentMode);
 		//ダメージのSE再生
 		Audio::GetInstance().SoundPlayWave(kHitSoundName_, kVolume_);
-		infinityTimer_ = 0.0f;//無敵時間発動
+		InfinityTime();
 		//ノックバック(時間の三分の一ぶんまで)
 
 		Vector3 power = Length(transform_.translate,hitPoint);

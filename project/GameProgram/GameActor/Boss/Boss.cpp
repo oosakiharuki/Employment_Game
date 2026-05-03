@@ -1,6 +1,8 @@
 #include "Boss.h"
 #include "ImGuiManager.h"
 
+#include "TimeScale.h"
+
 using namespace MyMath;
 using namespace UseEveryOne;
 
@@ -50,6 +52,7 @@ void Boss::Update() {
 	ImGuiUpdate();
 
 	wt_.UpdateMatrix(transform_);
+	object_->SetAnimationTime(TimeScale::GetInstance().GetTimeScale());
 	object_->Update(wt_);
 
 	//影更新
@@ -93,7 +96,7 @@ void Boss::Active() {
 
 void Boss::Dead() {
 
-	if (deadTimer_ < kDeltaTime_) {
+	if (deadTimer_ < TimeScale::GetInstance().GetTimeScale()) {
 		deadPosition_ = transform_.translate;
 		deadScale_ = transform_.scale;
 	}
@@ -109,7 +112,7 @@ void Boss::Dead() {
 	transform_.translate.x = std::clamp(transform_.translate.x, deadPosition_.x - kShakePower, deadPosition_.x + kShakePower);
 	transform_.translate.y = std::clamp(transform_.translate.y, deadPosition_.y - kShakePower, deadPosition_.y + kShakePower);
 
-	deadTimer_ += kDeltaTime_;
+	deadTimer_ += TimeScale::GetInstance().GetTimeScale();
 
 	transform_.scale = deadScale_ - deadTimer_ / kDeadTimeMax_;
 
@@ -169,7 +172,7 @@ void Boss::CommandFire(float kFrame, float bulletSpeed, uint32_t bulletMax) {
 	}
 
 	//連射で時間を開ける
-	rapidFireTime_ += kDeltaTime_ / kFrame;
+	rapidFireTime_ += TimeScale::GetInstance().GetTimeScale() / kFrame;
 	if (rapidFireTime_ >= kRapidFireTimeMax_) {
 
 		FireBullet();//敵の発泡攻撃
@@ -191,11 +194,13 @@ void Boss::FireBullet() {
 
 	//弾丸速度
 	Vector3 velocity;
-
-	//プレイヤーの座標
-	Vector3 playerPosition = player_->GetWorldPosition();
+	//一度だけ
+	if (rapidCount_ == 0 || transform_.translate.z >= 10.0f) {
+		//プレイヤーの座標
+		targetPosition_ = player_->GetWorldPosition();
+	}
 	//敵とプレイヤーの距離
-	Vector3 distance = playerPosition - enemyPosition;
+	Vector3 distance = targetPosition_ - enemyPosition;
 	//
 	Vector3 normal = Normalize(distance);
 
@@ -257,7 +262,7 @@ void Boss::CommandFarTackle() {
 		SetMovePoint(player_->GetTranslate());
 	}
 
-	transform_.translate  += GoDestination(move_) * (kDeltaTime_ / kTwice_);//[GoDestination / 120.0f]
+	transform_.translate  += GoDestination(move_) * (TimeScale::GetInstance().GetTimeScale() / kTwice_);//[GoDestination / 120.0f]
 
 	if (transform_.translate.z <= kNearEnd) {
 		motionFinish_ = true;
@@ -265,7 +270,7 @@ void Boss::CommandFarTackle() {
 }
 
 void Boss::CommandFallPlayer() {
-	fallTimer_ += kDeltaTime_;
+	fallTimer_ += TimeScale::GetInstance().GetTimeScale();
 
 	if (fallTimer_ < kPrepareFallTimeMax_) {
 		movePoint_ = player_->GetTranslate();
@@ -274,7 +279,7 @@ void Boss::CommandFallPlayer() {
 		SetOrigin(movePoint_);
 	}
 	else if (fallTimer_ >= kGoUpTime_) {
-		if (fallTimer_ < kGoUpTime_ + kDeltaTime_) {
+		if (fallTimer_ < kGoUpTime_ + TimeScale::GetInstance().GetTimeScale()) {
 			SetOrigin(transform_.translate);
 			moveTimer_ = 0.0f;
 		}
@@ -308,12 +313,12 @@ void Boss::CommandBeforeActionMotion() {
 		transform_.rotate.z = 0.0f;
 	}
 	else if(moveCoolTimer_ == 0.0f){
-		transform_.rotate.z += kRotationX_;
+		transform_.rotate.z += kRotationX_ * TimeScale::GetInstance().GetTimeScaleFacto();
 		return;
 	}
 
 	if (moveCoolTimer_ < kMoveCoolTimeMax_) {
-		moveCoolTimer_ += kDeltaTime_;
+		moveCoolTimer_ += TimeScale::GetInstance().GetTimeScale();
 		return;
 	}
 
@@ -356,7 +361,7 @@ void Boss::ImGuiUpdate() {
 }
 
 void Boss::EaseMove() {
-	moveTimer_ += kDeltaTime_;
+	moveTimer_ += TimeScale::GetInstance().GetTimeScale();
 	moveTimer_ = std::clamp(moveTimer_, 0.0f, timerMax_);
 	transform_.translate = EaseInOut(move_.diff, move_.origin, moveTimer_ / timerMax_);
 }

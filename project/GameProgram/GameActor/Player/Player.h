@@ -287,6 +287,11 @@ public:
 	/// <returns>現在の傘(武器)の対応の番号</returns>
 	int GetWeaponNum() { return weaponNum_; }
 
+	/// <summary>
+	/// 無敵時間の発動
+	/// </summary>
+	void InfinityTime() { infinityTimer_ = 0.0f; }
+
 private:
 	/// ---状態遷移---
 	/// <summary>

@@ -1,6 +1,7 @@
 #include "MyGame.h"
 #include "LoadingModels.h"
 #include "UIManager.h"
+#include "TimeScale.h"
 
 void MyGame::Initialize() {
 	//フレームワークの初期化
@@ -41,6 +42,9 @@ void MyGame::Update() {
 	if (SceneManager::GetInstance().SetGameEnd()) {
 		Framework::SetIsEndRequest(SceneManager::GetInstance().SetGameEnd());
 	}
+
+	//時間尺度の更新処理
+	TimeScale::GetInstance().Update();
 
 	//フェード更新
 	FadeScreen::GetInstance().Update();

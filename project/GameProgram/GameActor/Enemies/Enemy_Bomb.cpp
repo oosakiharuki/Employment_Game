@@ -24,8 +24,8 @@ void Enemy_Bomb::Initialize() {
 }
 
 void Enemy_Bomb::Move() {
-	move_ += speed_;//移動ポイント
-	transform_.translate += speed_;
+	move_ += speed_ * TimeScale::GetInstance().GetTimeScaleFacto();//移動ポイント
+	transform_.translate += speed_ * TimeScale::GetInstance().GetTimeScaleFacto();;
 
 	//敵が右向き
 	if (move_.x <= routePointLeft_.x) {
@@ -58,7 +58,7 @@ void Enemy_Bomb::Active() {
 	StatePatternUpdate();
 
 	//重力
-	GravityUpdate(transform_.translate.y);
+	GravityUpdate(transform_.translate.y, true);
 	//捜索範囲更新
 	SearchRange();
 
@@ -69,12 +69,12 @@ void Enemy_Bomb::Dead() {
 	if (deadTimer_ >= kDeadTimeMax_) {
 		isDeleteEnemy_ = true;
 	}
-	else if (deadTimer_ < kDeltaTime_) {
+	else if (deadTimer_ < TimeScale::GetInstance().GetTimeScale()) {
 		//強制爆発
 		Explosion();
 	}
 
-	deadTimer_ += kDeltaTime_;
+	deadTimer_ += TimeScale::GetInstance().GetTimeScale();
 }
 
 void Enemy_Bomb::Performance() {}
@@ -97,7 +97,7 @@ void Enemy_Bomb::AttackCommand() {
 	//追尾モードオン
 	isHomingStart_ = true;
 	//!マーク表示時間
-	markTimer_ += kDeltaTime_;
+	markTimer_ += TimeScale::GetInstance().GetTimeScale();
 
 	//ボムとプレイヤーの距離
 	DirectionPlayer();
@@ -132,10 +132,10 @@ void Enemy_Bomb::Draw() {
 
 void Enemy_Bomb::TimeLimit() {
 	//爆弾タイマー
-	bombTimer_ += kDeltaTime_;
+	bombTimer_ += TimeScale::GetInstance().GetTimeScale();
 
 	//プレイヤーに追淳
-	transform_.translate += distance_ * Vector3{ kSpeed_,0.0f,0.0f };
+	transform_.translate += distance_ * Vector3{ kSpeed_,0.0f,0.0f } * TimeScale::GetInstance().GetTimeScaleFacto();
 
 	//向きを合わせる
 	if (distance_.x < 0) {
@@ -164,16 +164,16 @@ void Enemy_Bomb::RedBlinking() {
 	//RGBの緑、青の変更(赤色にするため除外)
 	if (colorTimer_ >= colorTimeMax_ / 2) {
 		//色を足して元の色に
-		color_.y += kColorChangePower_;//緑
-		color_.z += kColorChangePower_;//青
+		color_.y += kColorChangePower_ * TimeScale::GetInstance().GetTimeScaleFacto();//緑
+		color_.z += kColorChangePower_ * TimeScale::GetInstance().GetTimeScaleFacto();//青
 	}
 	else {
 		//色を引いて赤に近づかせる
-		color_.y -= kColorChangePower_;//緑
-		color_.z -= kColorChangePower_;//青
+		color_.y -= kColorChangePower_ * TimeScale::GetInstance().GetTimeScaleFacto();//緑
+		color_.z -= kColorChangePower_ * TimeScale::GetInstance().GetTimeScaleFacto();//青
 	}
 	//時間経過
-	colorTimer_ += kDeltaTime_;
+	colorTimer_ += TimeScale::GetInstance().GetTimeScale();
 	//一定の時間を超えたらリセット
 	if (colorTimer_ >= colorTimeMax_) {
 		colorTimer_ = 0.0f;

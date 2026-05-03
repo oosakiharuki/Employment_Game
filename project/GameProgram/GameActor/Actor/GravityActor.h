@@ -9,7 +9,8 @@ public:
 	/// 重力の更新処理
 	/// </summary>
 	/// <param name="translateY">y座標</param>
-	void GravityUpdate(float& translateY);
+	/// <param name="isSlowTime">スローをかける場合trueにする</param>
+	void GravityUpdate(float& translateY, bool isSlowTime = false);
 
 	/// <summary>
 	/// 地面判定フラグ変更

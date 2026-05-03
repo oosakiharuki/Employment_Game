@@ -147,6 +147,9 @@ private:
 
 	const float kBrinkTimeMax_ = 0.5f;//最大値
 
+	//ジャスト回避時間
+	const float kJustAvoidTime_ = kBrinkTimeMax_ / 2.0f;
+
 };
 
 class WeaponChangeCommand : public BaseCommand {

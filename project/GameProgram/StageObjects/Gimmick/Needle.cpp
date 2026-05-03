@@ -3,6 +3,7 @@
 #include "Object3dCommon.h"
 #include "GLTFCommon.h"
 
+#include "TimeScale.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -70,7 +71,7 @@ void Needle::Move() {
 	Vector3 length = Length(movePoint_.origin, movePoint_.diff);
 	float addLength = (length.x + length.y + length.z) / moveMaxTime_;
 
-	timer_ += kDeltaTime_ / addLength;//時間を移動の長さ分割る
+	timer_ += TimeScale::GetInstance().GetTimeScale() / addLength;//時間を移動の長さ分割る
 	timer_ = std::clamp(timer_, 0.0f, 1.0f);
 	//現在ポイントの変更
 	nowPoint_ = Lerp(movePoint_.origin, movePoint_.diff, timer_);

@@ -2,6 +2,8 @@
 #include "ImGuiManager.h"
 #include "ParticleManager.h"
 
+#include "TimeScale.h"
+
 using namespace MyMath;
 using namespace UseEveryOne;
 
@@ -111,10 +113,10 @@ void BaseEnemy::MarkUpdate() {
 
 	//!,?のマーク表示時間の間
 	if (attackSwitch_) {
-		markTimer_ += kDeltaTime_;
+		markTimer_ += TimeScale::GetInstance().GetTimeScale();
 	}
 	else {
-		markTimer_ -= kDeltaTime_;
+		markTimer_ -= TimeScale::GetInstance().GetTimeScale();
 	}
 	markTimer_ = std::clamp(markTimer_, 0.0f, kMarkMaxTime_);//0 ～ kMarkMaxTime
 
@@ -210,7 +212,7 @@ void BaseEnemy::FoundReaction() {
 }
 
 void BaseEnemy::DeadReaction() {
-	transform_.rotate -= TransformNormal(Vector3{ kDeadRotation_,0,0 }, wt_.GetMatWorld());
+	transform_.rotate -= TransformNormal(Vector3{ kDeadRotation_,0,0 }, wt_.GetMatWorld()) * TimeScale::GetInstance().GetTimeScaleFacto();
 
 	//リアクションフラグ
 	bool isReaction = true;

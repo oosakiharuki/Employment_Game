@@ -72,6 +72,12 @@ public:
 	/// <param name="filePath">変更するファイルパス</param>
 	void ChangeAnimation(const std::string& filePath);
 
+	/// <summary>
+	/// setter_アニメーション時間尺度
+	/// </summary>
+	/// <param name="time">アニメーションの時間尺度設定</param>
+	void SetAnimationTime(float time) { animationTimeScale_ = time; }
+
 private:
 
 	/// <summary>
@@ -157,5 +163,5 @@ private:
 
 	Matrix4x4 WorldViewProjectionMatrix;
 
-	const float kDeltaTime_ = 1.0f / 60.0f;
+	float animationTimeScale_ = 1.0f / 60.0f;
 };

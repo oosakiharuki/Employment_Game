@@ -1,6 +1,8 @@
 #include "EnemyCommand.h"
 #include "UseEveryOne.h"
 
+#include "TimeScale.h"
+
 using namespace MyMath;
 using namespace UseEveryOne;
 
@@ -38,7 +40,7 @@ void EnemyFireCommand::BulletReset() {
 void EnemyFireCommand::Fire(EnemyCanFireBullet& enemyCanFireBullet) {
 
 	//クールタイム
-	coolTime_ += kDeltaTime_;
+	coolTime_ += TimeScale::GetInstance().GetTimeScale();
 
 
 	if (coolTime_ >= kCoolTimeMax_) {
@@ -49,7 +51,7 @@ void EnemyFireCommand::Fire(EnemyCanFireBullet& enemyCanFireBullet) {
 		}
 
 		//連射で時間を開ける
-		rapidFireTime_ += kDeltaTime_;
+		rapidFireTime_ += TimeScale::GetInstance().GetTimeScale();
 		if (rapidFireTime_ >= kRapidFireTimeMax_) {
 			enemyCanFireBullet.FireBullet();//敵の発泡攻撃
 			rapidCount_++;//カウント

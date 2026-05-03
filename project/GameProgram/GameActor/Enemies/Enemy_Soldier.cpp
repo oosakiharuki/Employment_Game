@@ -34,8 +34,8 @@ void Enemy_Soldier::Initialize() {
 }
 
 void Enemy_Soldier::Move() {
-	move_ += speed_;//移動ポイント
-	transform_.translate += speed_;
+	move_ += speed_ * TimeScale::GetInstance().GetTimeScaleFacto();//移動ポイント
+	transform_.translate += speed_ * TimeScale::GetInstance().GetTimeScaleFacto();
 
 	//方向転換
 	//敵が右向き
@@ -69,7 +69,7 @@ void Enemy_Soldier::Active() {
 	StatePatternUpdate();
 
 	//重力
-	GravityUpdate(transform_.translate.y);
+	GravityUpdate(transform_.translate.y, true);
 	
 	PlayerTarget();
 	//捜索範囲更新

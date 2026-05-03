@@ -1,6 +1,8 @@
 #include "Reaction.h"
 #include "UseEveryOne.h"
 
+#include "TimeScale.h"
+
 using namespace MyMath;
 using namespace UseEveryOne;
 
@@ -15,7 +17,7 @@ void Reaction::ScaleReaction(Vector3& value, bool& motionOn, const Vector3& powe
 	}
 
 	//時間がが進む
-	timer += kDeltaTime_;
+	timer += TimeScale::GetInstance().GetTimeScale();
 }
 
 void Reaction::FoundReaction(Vector3& value, bool& motion, const Vector3& power, float& timer, float maxTime, const Vector3& prePosition) {
@@ -29,18 +31,18 @@ void Reaction::FoundReaction(Vector3& value, bool& motion, const Vector3& power,
 		Finish(value, prePosition, timer, motion);
 	}
 
-	timer += kDeltaTime_;
+	timer += TimeScale::GetInstance().GetTimeScale();
 }
 
 void Reaction::ReturnHalfTime(Vector3& value, const Vector3& power, float& timer, float maxTime) {
 	//時間が半分になったら
 	if (timer >= maxTime * kDivideByTwo_) {
 		//値を引く
-		value -= power;
+		value -= power * TimeScale::GetInstance().GetTimeScaleFacto();
 	}
 	else {
 		//値を足す
-		value += power;
+		value += power * TimeScale::GetInstance().GetTimeScaleFacto();
 	}
 }
 
@@ -73,11 +75,11 @@ void Reaction::ReturnHalfTime(Vector2& value, const Vector2& power, float& timer
 	//時間が半分になったら
 	if (timer >= maxTime * kDivideByTwo_) {
 		//値を引く
-		value -= power;
+		value -= power * TimeScale::GetInstance().GetTimeScaleFacto();
 	}
 	else {
 		//値を足す
-		value += power;
+		value += power * TimeScale::GetInstance().GetTimeScaleFacto();
 	}
 }
 

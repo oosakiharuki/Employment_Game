@@ -195,6 +195,7 @@ private:
 	//真ん中座標、左右移動に使う
 	Vector3 moveCenter_{};
 
+	Vector3 targetPosition_;
 
 	//低空移動のパラメータ
 	const float kAroundRightX_ = 20.0f;//右端

@@ -4,6 +4,7 @@
 
 #include "GLTFCommon.h"
 #include "Object3dCommon.h"
+#include <TimeScale.h>
 
 using namespace UseEveryOne;
 using namespace MyMath;
@@ -22,12 +23,13 @@ void BrokenBox::Update() {
 	if (isBroken_) {
 		//壊れたアニメーションに変更
 		objectBox_->ChangeAnimation("BrokenBox.gltf");
+		objectBox_->SetAnimationTime(TimeScale::GetInstance().GetTimeScale());
 		
 		if (timer >= kAnimationTimeMax_) {
 			isFinish_ = true;
 		}
 		else {
-			timer += kDeltaTime_;
+			timer += TimeScale::GetInstance().GetTimeScale();
 		}
 	}
 

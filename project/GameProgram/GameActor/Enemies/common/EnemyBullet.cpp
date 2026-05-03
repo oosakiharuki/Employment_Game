@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "UseEveryOne.h"
 
+#include "TimeScale.h"
+
 using namespace MyMath;
 using namespace UseEveryOne;
 
@@ -31,15 +33,15 @@ void EnemyBullet::Initialize() {
 void EnemyBullet::Update() {
 	if (!isParry) {
 		//velocity向きに等速直線運動
-		transform_.translate += velocity_;
+		transform_.translate += velocity_ * TimeScale::GetInstance().GetTimeScaleFacto();
 	}
 	else {
 		///パリィされた時
-		transform_.translate -= velocity_;
+		transform_.translate -= velocity_ * TimeScale::GetInstance().GetTimeScaleFacto();
 	}
 
 
-	deathTimer += kDeltaTime_;
+	deathTimer += TimeScale::GetInstance().GetTimeScale();
 
 	//時間がたったら消える
 	if (deathTimer >= kEndTime) {
