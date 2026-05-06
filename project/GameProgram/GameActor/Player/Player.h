@@ -389,6 +389,11 @@ private:
 	/// </summary>
 	void KnockBackUpdate();
 
+	/// <summary>
+	/// 敵の攻撃に当たった時(回避かダメージか)
+	/// </summary>
+	/// <param name="collision">当たっているコリジョンリソースクラス</param>
+	void EnemyCollision(CollisionSource* collision);
 
 	// --- オブジェクト ---
 	

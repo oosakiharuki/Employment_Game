@@ -64,6 +64,7 @@ void PlayerBullet::Draw() {
 void PlayerBullet::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypeStage ||
 		collision->GetType() == CollisionTypes::TypeEnemy ||
+		collision->GetType() == CollisionTypes::TypeEnemyDamageBody ||
 		collision->GetType() == CollisionTypes::TypeBoss) {
 		BulletDamage();
 	}
@@ -72,6 +73,7 @@ void PlayerBullet::OnCollision(CollisionSource* collision) {
 bool PlayerBullet::TypeCheckUp(const CollisionTypes& collisionType) {
 	if (collisionType == CollisionTypes::TypeStage ||
 		collisionType == CollisionTypes::TypeEnemy ||
+		collisionType == CollisionTypes::TypeEnemyDamageBody ||
 		collisionType == CollisionTypes::TypeBoss) {
 		return true;
 	}

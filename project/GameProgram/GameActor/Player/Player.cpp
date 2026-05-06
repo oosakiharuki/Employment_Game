@@ -10,6 +10,7 @@
 #include "ParticleManager.h"
 #include <NextStageSave.h>
 #include "FoldingUmbrella.h"
+#include <TimeScale.h>
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -355,7 +356,7 @@ void Player::Dead() {
 		//少し浮く
 		transform_.translate.y += kDeadLittleUp_;
 		//重力
-		GravityUpdate(transform_.translate.y);
+		GravityUpdate(transform_.translate.y,true);
 
 		isGround_ = false;
 		if (deadTimer_ >= kDeadTimeMax_) {
@@ -499,13 +500,14 @@ void Player::FireBulletUmbrella() {
 	}
 }
 
-void Player::OnCollision(CollisionSource* collision) {
-	if ((collision->GetType() == CollisionTypes::TypeEnemyBullet || 
-		collision->GetType() == CollisionTypes::TypeBombExplotion || 
+void Player::OnCollision(CollisionSource* collision) {		
+	if ((collision->GetType() == CollisionTypes::TypeEnemyBullet ||
+		collision->GetType() == CollisionTypes::TypeBombExplotion ||
+		collision->GetType() == CollisionTypes::TypeEnemyDamageBody ||
 		collision->GetType() == CollisionTypes::TypeBoss) && infinityTimer_ >= kInfinityTimeMax_) {
-		IsDamage(collision->GetCenter());
+		EnemyCollision(collision);
 	}
-	
+
 	if (collision->GetType() == CollisionTypes::TypeStage || collision->GetType() == CollisionTypes::TypeMoveGround) {
 		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap,*this, *this,collision->GetAABB());
 	}
@@ -530,6 +532,7 @@ bool Player::TypeCheckUp(const CollisionTypes& collisionType) {
 	}
 
 	if (collisionType == CollisionTypes::TypeEnemyBullet ||
+		collisionType == CollisionTypes::TypeEnemyDamageBody ||
 		collisionType == CollisionTypes::TypeBombExplotion ||
 		collisionType == CollisionTypes::TypeBoss ||
 		collisionType == CollisionTypes::TypeStage || 
@@ -541,6 +544,21 @@ bool Player::TypeCheckUp(const CollisionTypes& collisionType) {
 	return false;
 }
 
+void Player::EnemyCollision(CollisionSource* collision) {
+	//ブリンク時間半分たつ前 + 時間がスロー状態でないとき
+	if (brinkTimer_ >= kBrinkTimeMax_ * kDivideByTwo_ && TimeScale::GetInstance().GetTimeScaleFacto() == 1.0f) {
+		TimeScale::GetInstance().SetTimeScale(1.0f / 600.0f);
+		InfinityTime();//無敵時間が入る
+		//ポイントを6プラス(ゲージ2個分)
+		for (int i = 0; i < 6; i++) {
+			reinforceGauge_->AddPoint();
+		}
+	}
+	else {
+		//ダメージ
+		IsDamage(collision->GetCenter());
+	}
+}
 
 void Player::IsDamage(const Vector3& hitPoint) {
 	//無敵時間をすぎたとき

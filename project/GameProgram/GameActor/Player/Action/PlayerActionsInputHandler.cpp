@@ -144,9 +144,6 @@ void ShieldCommand::Gliding() {
 void BrinkCommand::Execute() {
 	//ブリンク処理
 	float brinkTimer = player_->GetBrinkTimer();
-	
-	TimeScale::GetInstance().SetTimeScale(1.0f / 600.0f);
-	player_->InfinityTime();//無敵時間が入る
 
 	//地面についている場合、下向きのブリンクは発動しない、ゲージも使用しない
 	if (player_->GetIsGround() && (player_->GetUmbrellaRotate().x > 0.0f && player_->GetUmbrellaRotate().x < kLeftDis_)) {
@@ -155,7 +152,7 @@ void BrinkCommand::Execute() {
 	}
 
 	//傘を開く
-	player_->OnUmbrellaShield();
+	//player_->OnUmbrellaShield();
 
 	//飛んだ瞬間
 	if (brinkTimer == kBrinkTimeMax_) {

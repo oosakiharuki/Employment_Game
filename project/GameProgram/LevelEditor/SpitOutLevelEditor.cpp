@@ -7,6 +7,7 @@
 #include "Needle.h"
 #include "MoveGround.h"
 #include "Energy.h"
+#include <Enemy_Rusher.h>
 
 using namespace MyMath;
 
@@ -59,6 +60,13 @@ std::vector<std::unique_ptr<BaseEnemy>> SpitOutLevelEditor::SpitOutEnemies() {
 				//vectorに代入
 				enemies.push_back(std::move(enemy));
 			}
+			else if (enemyData.EnemyName == "Rusher") {
+				//自爆特攻(ボム)
+				std::unique_ptr<Enemy_Rusher> enemy = std::make_unique<Enemy_Rusher>();
+				EnemyTemplate(*enemy, enemyData);
+				//vectorに代入
+				enemies.push_back(std::move(enemy));
+			}
 			else {
 				//兵隊(ソルジャー)
 				std::unique_ptr<Enemy_Soldier> enemy = std::make_unique<Enemy_Soldier>();
@@ -84,6 +92,7 @@ void SpitOutLevelEditor::EnemyTemplate(BaseEnemy& enemy, LevelEditor::LevelData:
 void SpitOutLevelEditor::EnemyMoveRoute(EnemyMoveCommand& enemy, LevelEditor::LevelData::EnemySpawnData enemyData) {
 	enemy.SetRouteLeftPoint(enemyData.leftPoint);//移動ポイント1
 	enemy.SetRouteRightPoint(enemyData.rightPoint);//移動ポイント2 (leftPoint < rightPoint)
+	enemy.DirectionMove();
 }
 
 

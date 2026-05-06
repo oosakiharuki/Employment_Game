@@ -15,7 +15,7 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 	//アクターの共通初期化処理
 	GameActor::Initialize();
 
-	object_ = std::make_unique<Object3d>();
+	object_ = std::make_unique<Object_glTF>();
 	object_->Initialize();
 	object_->SetModelFile(objectName);
 

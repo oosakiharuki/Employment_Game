@@ -2,21 +2,22 @@
 #include "MyMath.h"
 
 enum CollisionTypes {
-	TypePlayer,
-	TypePlayerBullet,
-	TypeUmbrella,
-	TypeUmbrellaParry,
-	TypeEnemy,
-	TypeEnemyEye,
-	TypeEnemyBullet,
-	TypeStageObject,
-	TypeShadow,
-	TypeStage,
-	TypeMoveGround,
-	TypeEnergy,
-	TypeBoss, 
-	TypeBombExplotion,
-	TypeEvent,
+	TypePlayer,          //プレイヤー
+	TypePlayerBullet,    //プレイヤーの弾丸
+	TypeUmbrella,        //傘
+	TypeUmbrellaParry,   //パリィ状態の傘
+	TypeEnemy,           //敵
+	TypeEnemyEye,        //敵の視野
+	TypeEnemyDamageBody, //体にダメージがある敵
+	TypeEnemyBullet,     //敵の弾丸
+	TypeStageObject,     //ステージオブジェクト
+	TypeShadow,          //影
+	TypeStage,           //ステージ全体
+	TypeMoveGround,      //動く床
+	TypeEnergy,          //エナジー
+	TypeBoss,            //ボス
+	TypeBombExplotion,   //爆弾の爆風
+	TypeEvent,           //強制イベント
 };
 
 /// <summary>

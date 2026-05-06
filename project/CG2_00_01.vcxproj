@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Enemy_Rusher.cpp" />
     <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\BaseUmbrella.cpp" />
     <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\FoldingUmbrella.cpp" />
     <ClCompile Include="GameProgram\StageObjects\PlayerInterfere\Energy.cpp" />
@@ -222,6 +223,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="TimeScale.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enemy_Rusher.h" />
     <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\BaseUmbrella.h" />
     <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\FoldingUmbrella.h" />
     <ClInclude Include="GameProgram\StageObjects\PlayerInterfere\Energy.h" />

@@ -9,7 +9,7 @@ Enemy_Bomb::~Enemy_Bomb() {}
 
 void Enemy_Bomb::Initialize() {
 	//敵の共通初期化処理
-	Enemy_InitializeCommon("enemy_bomb.obj");
+	Enemy_InitializeCommon("bomb.gltf");
 
 	//体力の初期化
 	HP_Initialize(kHp_);
@@ -124,7 +124,7 @@ void Enemy_Bomb::UpdateImGui() {
 
 void Enemy_Bomb::Draw() {
 	//死んだら移さない
-	if (hp_ != 0) {
+	if (hp_ != 0 && !isPerformance_) {
 		object_->Draw();
 		shadow_->Draw();
 	}

@@ -9,9 +9,9 @@ Shadow::~Shadow() {}
 
 void Shadow::Initialize() {
 
-	object_ = std::make_unique<Object3d>();
+	object_ = std::make_unique<Object_glTF>();
 	object_->Initialize();
-	object_->SetModelFile("shadow.obj");
+	object_->SetModelFile("shadow.gltf");
 	//色を黒に
 	object_->SetColor(kColor_);
 
@@ -48,7 +48,7 @@ void Shadow::Update() {
 }
 
 void Shadow::Draw() {
-	Object3dCommon::GetInstance().Command();
+	GLTFCommon::GetInstance().Command();
 	object_->Draw();
 }
 

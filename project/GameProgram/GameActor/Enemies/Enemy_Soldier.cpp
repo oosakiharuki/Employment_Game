@@ -14,7 +14,7 @@ Enemy_Soldier::~Enemy_Soldier() {
 
 void Enemy_Soldier::Initialize() {
 	//敵の共通初期化処理
-	BaseEnemy::Enemy_InitializeCommon("enemy.obj");
+	BaseEnemy::Enemy_InitializeCommon("soldier.gltf");
 
 	//体力の初期化
 	GameActor::HP_Initialize(kHp_);
@@ -137,7 +137,7 @@ void Enemy_Soldier::UpdateImGui() {
 }
 
 void Enemy_Soldier::Draw() {
-	if (!isDeleteEnemy_) {
+	if (!isDeleteEnemy_ && !isPerformance_) {
 		object_->Draw();
 		shadow_->Draw();
 	}

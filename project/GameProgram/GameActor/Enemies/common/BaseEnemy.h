@@ -133,7 +133,7 @@ protected:
 	void StatePatternUpdate();
 
 	//オブジェクト
-	std::unique_ptr<Object3d> object_;
+	std::unique_ptr<Object_glTF> object_;
 
 	//プレイヤークラス
 	Player* player_ = nullptr;

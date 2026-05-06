@@ -80,7 +80,7 @@ void GameScene::Update() {
 
 void GameScene::PlayerAliveUpdate() {
 	//プレイヤー演出中、死亡した状態は敵は動かさない
-	if (player_->GetHp() == 0 || player_->GetPerformanceMode()) return;
+	//if (player_->GetHp() == 0 || player_->GetPerformanceMode()) return;
 
 	//ステージの更新処理
 	stageObj_->Update();
@@ -125,6 +125,10 @@ void GameScene::Draw() {
 		boss_->Draw();
 	}
 
+	for (auto& enemy : enemies_) {
+		enemy->Draw();
+	}
+
 	//モデル描画処理
 	Object3dCommon::GetInstance().Command();
 
@@ -133,9 +137,8 @@ void GameScene::Draw() {
 	for (auto& guide : guides_) {
 		guide->Draw();
 	}
-
+	
 	for (auto& enemy : enemies_) {
-		enemy->Draw();
 		enemy->DrawCommon();
 	}
 

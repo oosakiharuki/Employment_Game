@@ -12,7 +12,7 @@ Enemy_Turret::~Enemy_Turret() {
 
 void Enemy_Turret::Initialize() {
 	//敵の共通初期化処理
-	Enemy_InitializeCommon("cannon.obj");
+	Enemy_InitializeCommon("turret.gltf");
 
 	//体力の初期化
 	HP_Initialize(kHp_);
@@ -127,7 +127,7 @@ void Enemy_Turret::UpdateImGui() {
 
 void Enemy_Turret::Draw() {
 
-	if (!isDeleteEnemy_) {
+	if (!isDeleteEnemy_ && !isPerformance_) {
 		object_->Draw();
 		shadow_->Draw();//影
 	}
