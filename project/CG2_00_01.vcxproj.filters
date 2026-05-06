@@ -591,14 +591,14 @@
     <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\Umbrella.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
     </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Enemies\Enemy_Rusher.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
+    </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\LongUmbrella.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
     </ClCompile>
-    <ClCompile Include="TimeScale.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy_Rusher.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="GameProgram\System\TimeScale.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -927,13 +927,13 @@
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\LongUmbrella.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
     </ClInclude>
-    <ClInclude Include="TimeScale.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\GameActor\Enemies\Enemy_Rusher.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Enemies</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy_Rusher.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="GameProgram\System\TimeScale.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
