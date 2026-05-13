@@ -28,7 +28,7 @@ private:
 	void PowerFire() override;
 
 	//AABBのサイズ
-	const Vector3 kAABBSize_ = { 1,2,1 };
+	const Vector3 kAABBSize_ = { 2,2,2 };
 
 	float chargeTimer_ = 0.0f;
 	const float kChargeMaxTime_ = 1.0f;

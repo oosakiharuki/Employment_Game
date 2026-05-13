@@ -75,8 +75,11 @@ void EnemyBullet::OnCollision(CollisionSource* collision) {
 		collision->GetType() == CollisionTypes::TypeUmbrella ||
 		(collision->GetType() == CollisionTypes::TypeEnemy && collisionType_ == CollisionTypes::TypePlayerBullet) || 
 		(collision->GetType() == CollisionTypes::TypeBoss && collisionType_ == CollisionTypes::TypePlayerBullet)) {
-		//消滅フラグ
-		isDead_ = true;
+		//スローがかかっていないなら
+		if (TimeScale::GetInstance().GetTimeScale() == kDeltaTime_) {
+			//消滅フラグ
+			isDead_ = true;
+		}
 	}
 
 	if (collision->GetType() == CollisionTypes::TypeUmbrellaParry) {

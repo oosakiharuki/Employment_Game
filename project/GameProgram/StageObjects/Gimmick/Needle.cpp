@@ -93,7 +93,7 @@ void Needle::Move() {
 }
 
 void Needle::AnimationRotate() {
-	animationTimer_ += kAnimationTimeSpeed_;
+	animationTimer_ += kAnimationTimeSpeed_ * TimeScale::GetInstance().GetTimeScaleFacto();
 	transform_.rotate.z = animationTimer_;
 }
 

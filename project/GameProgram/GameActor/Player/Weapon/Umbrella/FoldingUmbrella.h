@@ -24,7 +24,7 @@ private:
 	void PowerFire() override;
 
 	//AABBのサイズ
-	const Vector3 kAABBSize_ = { 1,2,1 };
+	const Vector3 kAABBSize_ = { 2,2,2 };
 
 	uint32_t rapidCount_ = 0;
 	const uint32_t kMaxRapidCount_ = 3;

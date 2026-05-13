@@ -34,6 +34,7 @@ void PlayerBullet::Update() {
 	//徐々に減速する
 	Vector3 velocity = EaseOut({0,0,0}, velocity_, deathTimer_ / kEndTime_);
 	transform_.translate += velocity;
+	transform_.scale = EaseIn(kDefaultScale_ * 1.5f ,{ 0,0,0 },  deathTimer_ / kEndTime_);
 
 	//時間がたったら消える
 	if (deathTimer_ >= kEndTime_) {

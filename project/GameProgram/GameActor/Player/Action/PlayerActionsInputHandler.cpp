@@ -151,9 +151,6 @@ void BrinkCommand::Execute() {
 		player_->StopParticleBrink();
 	}
 
-	//傘を開く
-	//player_->OnUmbrellaShield();
-
 	//飛んだ瞬間
 	if (brinkTimer == kBrinkTimeMax_) {
 		player_->SubGaugePoint();//ゲージポイント減少
@@ -162,13 +159,13 @@ void BrinkCommand::Execute() {
 	//ブリンクのパーティクルを出す
 	player_->ParticleBrink();
 
-	brinkTimer -= kDeltaTime_;
+	brinkTimer -= TimeScale::GetInstance().GetTimeScale();
 	player_->IsOneBrink();//ブリンク一回目
 
 	Vector3 translate = player_->GetTranslate();//プレイヤー座標を持ってくる
 	//ブリンクの動き加算
 	// brinkTimerがkBrinkTimeMaxを減算していくため (Max - (Maxから減算していく値))
-	translate += EaseOut({ 0,0,0 }, TransformNormal({ 0,0,kBrinkPower_ }, player_->GetUmbrellaMatWorld()), (kBrinkTimeMax_ - brinkTimer) / kBrinkTimeMax_);
+	translate += EaseOut({ 0,0,0 }, TransformNormal({ 0,0,kBrinkPower_ }, player_->GetUmbrellaMatWorld()), (kBrinkTimeMax_ - brinkTimer) / kBrinkTimeMax_) * TimeScale::GetInstance().GetTimeScaleFacto();
 	player_->SetTranslate(translate);//プレイヤー座標更新
 
 	//時間が経過したら
@@ -264,7 +261,7 @@ void PlayerActionsInputHandler::GetCommand(Player* player, std::vector<std::uniq
 	}
 	
 	//発砲攻撃[Kキー、Xボタン、Rトリガー]
-	if (Input::GetInstance().TriggerKey(DIK_K) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_X) || Input::GetInstance().RightTrigger()) {
+	if (Input::GetInstance().PushKey(DIK_K) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_X) || Input::GetInstance().RightTrigger()) {
 		commands.push_back(std::make_unique<FireCommand>());
 	}
 

@@ -196,9 +196,27 @@ void Player::Update() {
 void Player::InfinityTimeUpdate() {
 	if (infinityTimer_ >= kInfinityTimeMax_) {
 		infinityTimer_ = kInfinityTimeMax_;//Maxになったら無敵時間終了
+		TimeScale::GetInstance().SetTimeScale(kDeltaTime_);
+		object_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+		return;
+	}
+	else if (BrinkTimeMax()) {
+		infinityTimer_ += TimeScale::GetInstance().GetTimeScale();//時間が経過する
 	}
 	else {
 		infinityTimer_ += kDeltaTime_;//時間が経過する
+	}
+
+	//
+	if (std::fmod(infinityTimer_, kBlinkingTime_) >= kBlinkingTime_ - kDeltaTime_) {
+		isChangeColor_ = !isChangeColor_;
+	}
+
+	if(isChangeColor_) {
+		object_->SetColor({0.5f,0.5f,0.5f,1.0f});
+	}
+	else {
+		object_->SetColor(kDefaultColor_);
 	}
 }
 
@@ -547,7 +565,7 @@ bool Player::TypeCheckUp(const CollisionTypes& collisionType) {
 void Player::EnemyCollision(CollisionSource* collision) {
 	//ブリンク時間半分たつ前 + 時間がスロー状態でないとき
 	if (brinkTimer_ >= kBrinkTimeMax_ * kDivideByTwo_ && TimeScale::GetInstance().GetTimeScaleFacto() == 1.0f) {
-		TimeScale::GetInstance().SetTimeScale(1.0f / 600.0f);
+		TimeScale::GetInstance().SetTimeScale(1.0f / 180.0f);
 		InfinityTime();//無敵時間が入る
 		//ポイントを6プラス(ゲージ2個分)
 		for (int i = 0; i < 6; i++) {
@@ -701,7 +719,7 @@ void Player::StopParticleBrink() {
 
 void Player::GravityDown() {
 	//重力を固定することでゆっくり落ちる
-	gravity_ = kFixedGravityPower_;
+	gravity_ = kFixedGravityPower_ * TimeScale::GetInstance().GetTimeScaleFacto();
 }
 
 const bool Player::IsMovePosition() {

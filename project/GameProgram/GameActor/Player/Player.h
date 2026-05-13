@@ -442,11 +442,15 @@ private:
 	const float kFallEndY_ = -10.0f;
 
 	//ダメージを食らった後の無敵時間
-	float infinityTimer_ = 0.0f;
-	const float kInfinityTimeMax_ = 1.0f;//最大無敵時間
+	const float kInfinityTimeMax_ = 2.0f;//最大無敵時間
+	float infinityTimer_ = kInfinityTimeMax_;
 
 	//リスポーンフラグ
 	bool isRespawn_ = false;
+
+	//無敵中の点滅
+	bool isChangeColor_ = false;//色変更
+	const float kBlinkingTime_ = 0.25f;//刻む秒数
 
 	// ---------------------------
 
