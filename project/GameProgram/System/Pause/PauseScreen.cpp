@@ -15,22 +15,22 @@ PauseScreen& PauseScreen::GetInstance() {
 }
 
 void PauseScreen::Initialize() {
-	backScreen_ = std::make_unique<Sprite>();
+	backScreen_ = std::make_unique<EngineLayer::Sprite>();
 	backScreen_->Initialize("pauseScreen.png");
 
-	selectPoint_ = std::make_unique<Sprite>();
+	selectPoint_ = std::make_unique<EngineLayer::Sprite>();
 	selectPoint_->Initialize("pauseSelect.png");
 
-	spriteGuide_ = std::make_unique<Sprite>();
+	spriteGuide_ = std::make_unique<EngineLayer::Sprite>();
 	spriteGuide_->Initialize("guideList.png");
 
-	spriteSelectGuide_ = std::make_unique<Sprite>();
+	spriteSelectGuide_ = std::make_unique<EngineLayer::Sprite>();
 	spriteSelectGuide_->Initialize("pauseGuide.png");
 
-	spriteSelectReturn_ = std::make_unique<Sprite>();
+	spriteSelectReturn_ = std::make_unique<EngineLayer::Sprite>();
 	spriteSelectReturn_->Initialize("pauseReturnGame.png");
 
-	spriteSelectSceneChange_ = std::make_unique<Sprite>();
+	spriteSelectSceneChange_ = std::make_unique<EngineLayer::Sprite>();
 
 	ResetPauseSprite();
 
@@ -49,12 +49,12 @@ void PauseScreen::ResetPauseSprite() {
 
 }
 
-void PauseScreen::BeforeChangeScene(const std::string& textureName, std::unique_ptr<BaseScene> changeScene) {
+void PauseScreen::BeforeChangeScene(const std::string& textureName, std::unique_ptr<EngineLayer::BaseScene> changeScene) {
 	if (spriteSelectSceneChange_ != nullptr) {
 		spriteSelectSceneChange_.reset();
 	}
 	
-	spriteSelectSceneChange_ = std::make_unique<Sprite>();
+	spriteSelectSceneChange_ = std::make_unique<EngineLayer::Sprite>();
 	spriteSelectSceneChange_->Initialize(textureName);
 
 	ResetPauseSprite();
@@ -111,7 +111,7 @@ void PauseScreen::MoveSprite() {
 
 void PauseScreen::UpdateGuide() {
 	//コントローラーが接続されているなら
-	if (Input::GetInstance().GetJoystickState()) {
+	if (EngineLayer::Input::GetInstance().GetJoystickState()) {
 		spriteGuide_->SetTextureFile("guideList2.png");
 	}
 	else {
@@ -123,7 +123,7 @@ void PauseScreen::UpdateGuide() {
 
 void PauseScreen::SelectMode() {
 	//選択方法
-	if (Input::GetInstance().GetActiveGamePad()) {
+	if (EngineLayer::Input::GetInstance().GetActiveGamePad()) {
 		SelectGamePad();//ゲームパッド
 	}
 	else {
@@ -141,39 +141,39 @@ void PauseScreen::SelectMode() {
 		select_ = kSelectSceneChangeEndPosition_;
 	}
 
-	if ((Input::GetInstance().TriggerKey(DIK_SPACE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && interpolation_ >= 1.0f) {
+	if ((EngineLayer::Input::GetInstance().TriggerKey(DIK_SPACE) || EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && interpolation_ >= 1.0f) {
 		isSelect_ = true;
 	}
 
-	if ((Input::GetInstance().TriggerKey(DIK_ESCAPE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START)) && interpolation_ >= 1.0f) {
+	if ((EngineLayer::Input::GetInstance().TriggerKey(DIK_ESCAPE) || EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START)) && interpolation_ >= 1.0f) {
 		select_ = kSelectReturnEndPosition_;
 		isSelect_ = true;
 	}
 }
 
 void PauseScreen::SelectGamePad() {
-	if (Input::GetInstance().LeftStickY() >= -0.5f && Input::GetInstance().LeftStickY() <= 0.5f) {
+	if (EngineLayer::Input::GetInstance().LeftStickY() >= -0.5f && EngineLayer::Input::GetInstance().LeftStickY() <= 0.5f) {
 		isMoveStick_ = false;//傾きを直した
 	}
 	//一度傾けを戻さないと進まない
 	if (isMoveStick_) return;
 
 	//上に傾けた場合
-	if (Input::GetInstance().LeftStickY() > 0.5f && selectNumber > 0) {
+	if (EngineLayer::Input::GetInstance().LeftStickY() > 0.5f && selectNumber > 0) {
 		selectNumber--;
 		isMoveStick_ = true;
 	}//下に傾けた場合
-	else if (Input::GetInstance().LeftStickY() < -0.5f && selectNumber < 2) {
+	else if (EngineLayer::Input::GetInstance().LeftStickY() < -0.5f && selectNumber < 2) {
 		selectNumber++;
 		isMoveStick_ = true;
 	}
 }
 
 void PauseScreen::SelectKeyBoard() {
-	if (Input::GetInstance().TriggerKey(DIK_W) && selectNumber > 0) {
+	if (EngineLayer::Input::GetInstance().TriggerKey(DIK_W) && selectNumber > 0) {
 		selectNumber--;
 	}
-	else if (Input::GetInstance().TriggerKey(DIK_S) && selectNumber < 2) {
+	else if (EngineLayer::Input::GetInstance().TriggerKey(DIK_S) && selectNumber < 2) {
 		selectNumber++;
 	}
 }

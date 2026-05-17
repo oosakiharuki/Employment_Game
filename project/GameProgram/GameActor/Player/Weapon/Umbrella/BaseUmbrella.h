@@ -11,6 +11,9 @@
 
 class Player;
 
+/// <summary>
+/// 傘銃の基盤クラス
+/// </summary>
 class BaseUmbrella : public CollisionSource {
 public:
 	/// <summary>
@@ -114,9 +117,9 @@ protected:
 	void BornBullet(const Vector3& translate, const Vector3& velocity, uint32_t bulletPower);
 
 	//オブジェクト設定
-	std::unique_ptr<Object_glTF> object_;
+	std::unique_ptr<EngineLayer::Object_glTF> object_;
 	Transform transform_;
-	WorldTransform wt_;
+	EngineLayer::WorldTransform wt_;
 
 	//AABB
 	AABB umbrellaAABB_;
@@ -149,7 +152,7 @@ protected:
 	Player* player_ = nullptr;
 
 	//パーティクルのコンテナ
-	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
+	std::unordered_map<std::string, std::unique_ptr<EngineLayer::Particle>> particles_;
 
 	const std::string& kParticleParry_ = "player_parry";
 

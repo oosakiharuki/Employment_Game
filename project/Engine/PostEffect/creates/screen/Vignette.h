@@ -1,49 +1,54 @@
 #pragma once
 #include "BasePostEffect.h"
 /// <summary>
-/// ポストエフェクト_Vignette(IPostEffectの派生クラス)
+/// エンジン層
 /// </summary>
-class Vignette : public BasePostEffect {
-public:
+namespace EngineLayer {
 	/// <summary>
-	/// 解放処理
+	/// ポストエフェクト_Vignette(IPostEffectの派生クラス)
 	/// </summary>
-	void Finalize() override;
-	/// <summary>
-	/// 処理コマンド(描画)
-	/// </summary>
-	void Command() override;
-private:
-	/// <summary>
-	/// ルートシグネチャ
-	/// </summary>
-	void RootSignature() override;
+	class Vignette : public BasePostEffect {
+	public:
+		/// <summary>
+		/// 解放処理
+		/// </summary>
+		void Finalize() override;
+		/// <summary>
+		/// 処理コマンド(描画)
+		/// </summary>
+		void Command() override;
+	private:
+		/// <summary>
+		/// ルートシグネチャ
+		/// </summary>
+		void RootSignature() override;
 
-	/// <summary>
-	/// PixelShaderを作成(ポストエフェクトはこれ以外は共通)
-	/// </summary>
-	void CreatePixelShader() override;
+		/// <summary>
+		/// PixelShaderを作成(ポストエフェクトはこれ以外は共通)
+		/// </summary>
+		void CreatePixelShader() override;
 
-	/// <summary>
-	/// ポストエフェクトの初期化処理
-	/// </summary>
-	void EffectInit() override;
+		/// <summary>
+		/// ポストエフェクトの初期化処理
+		/// </summary>
+		void EffectInit() override;
 
-	/// <summary>
-	/// ポストエフェクトの更新処理
-	/// </summary>
-	void EffectUpdate() override;
+		/// <summary>
+		/// ポストエフェクトの更新処理
+		/// </summary>
+		void EffectUpdate() override;
 
-	uint32_t srvIndex_;
-	D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU_;
-	D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU_;
+		uint32_t srvIndex_;
+		D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU_;
+		D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU_;
 
-	struct VignetteFunction {
-		float luminance;
-		float darkness;
+		struct VignetteFunction {
+			float luminance;
+			float darkness;
+		};
+
+		VignetteFunction* vignetteFunction_;
+
+		Microsoft::WRL::ComPtr<ID3D12Resource> vignetteResource_;
 	};
-
-	VignetteFunction* vignetteFunction_;
-
-	Microsoft::WRL::ComPtr<ID3D12Resource> vignetteResource_;
-};
+}

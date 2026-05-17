@@ -1,3 +1,9 @@
+/// ------------------------------------
+///
+/// 強制バトルイベント
+/// 範囲に入ったら敵と強制的に戦わせる
+/// 
+/// ------------------------------------
 #include "EventTrigger.h"
 #include "UseEveryOne.h"
 #include "ParticleManager.h"
@@ -10,7 +16,7 @@ void EventTrigger::Initialize() {
 	//Transform更新処理
 	transform_ = wt_.UpdateTransform();
 
-	object_ = std::make_unique<Object_glTF>();
+	object_ = std::make_unique<EngineLayer::Object_glTF>();
 	object_->Initialize();
 	object_->SetModelFile("EventGate.gltf");
 
@@ -54,7 +60,7 @@ void EventTrigger::EventUpdate() {
 
 	for (auto& particle : summon_particles_) {
 		//敵が出るまで
-		(summonTimer_ > 0) ? particle->SetParticleBorn(ParticleBorn::TimerMode) : particle->SetParticleBorn(ParticleBorn::Stop);
+		(summonTimer_ > 0) ? particle->SetParticleBorn(EngineLayer::ParticleBorn::TimerMode) : particle->SetParticleBorn(EngineLayer::ParticleBorn::Stop);
 		particle->Update();
 	}
 }
@@ -209,7 +215,7 @@ void EventTrigger::LoadPopEnemy(std::istringstream& line_stream, std::string& wo
 	enemyPopDatas_.push_back(enemyPopData);
 
 	//召喚パーティクル
-	particles_[particleSummon_] = ParticleManager::GetInstance().InitParticle(particleSummon_);
+	particles_[particleSummon_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleSummon_);
 	particles_[particleSummon_]->SetTranslate(enemyPopData.position);
 	summon_particles_.push_back(std::move(particles_[particleSummon_]));
 }

@@ -3,67 +3,72 @@
 #include "Pipeline.h" 
 
 /// <summary>
-/// スプライトの共有部分
+/// エンジン層
 /// </summary>
-class SpriteCommon : public Pipeline{
-public:
+namespace EngineLayer {
 	/// <summary>
-	/// インスタンス生成
+	/// スプライトの共有部分
 	/// </summary>
-	/// <returns>インスタンス</returns>
-	static SpriteCommon& GetInstance();
-	/// <summary>
-	/// 解放処理
-	/// </summary>
-	void Finalize();
-	/// <summary>
-	/// 初期化処理
-	/// </summary>
-	void Initialize() override;
+	class SpriteCommon : public Pipeline {
+	public:
+		/// <summary>
+		/// インスタンス生成
+		/// </summary>
+		/// <returns>インスタンス</returns>
+		static SpriteCommon& GetInstance();
+		/// <summary>
+		/// 解放処理
+		/// </summary>
+		void Finalize();
+		/// <summary>
+		/// 初期化処理
+		/// </summary>
+		void Initialize() override;
 
-	/// <summary>
-	/// 描画コマンド
-	/// </summary>
-	void Command();
+		/// <summary>
+		/// 描画コマンド
+		/// </summary>
+		void Command();
 
-private:
-	/// <summary>
-	/// ルートシグネチャ
-	/// </summary>
-	void RootSignature() override;
+	private:
+		/// <summary>
+		/// ルートシグネチャ
+		/// </summary>
+		void RootSignature() override;
 
-	/// <summary>
-	/// InputLayoutを作成
-	/// </summary>
-	void CreateInputLayout() override;
+		/// <summary>
+		/// InputLayoutを作成
+		/// </summary>
+		void CreateInputLayout() override;
 
-	/// <summary>
-	/// Blendを作成
-	/// </summary>
-	void CreateBlend() override;
+		/// <summary>
+		/// Blendを作成
+		/// </summary>
+		void CreateBlend() override;
 
-	/// <summary>
-	/// Rasterizerを作成
-	/// </summary>
-	void CreateRasterizer() override;
+		/// <summary>
+		/// Rasterizerを作成
+		/// </summary>
+		void CreateRasterizer() override;
 
-	/// <summary>
-	/// VertexShaderを作成
-	/// </summary>
-	void CreateVertexShader() override;
+		/// <summary>
+		/// VertexShaderを作成
+		/// </summary>
+		void CreateVertexShader() override;
 
-	/// <summary>
-	/// PixelShaderを作成
-	/// </summary>
-	void CreatePixelShader() override;
+		/// <summary>
+		/// PixelShaderを作成
+		/// </summary>
+		void CreatePixelShader() override;
 
-	/// <summary>
-	/// DepthStencilの作成
-	/// </summary>
-	void CreateDepthStencil() override;
+		/// <summary>
+		/// DepthStencilの作成
+		/// </summary>
+		void CreateDepthStencil() override;
 
-	//インスタンス
-	static std::unique_ptr<SpriteCommon> sInstance_;
-	//default_deleteを設定(解放処理を行える)
-	friend struct std::default_delete<SpriteCommon>;
-};
+		//インスタンス
+		static std::unique_ptr<SpriteCommon> sInstance_;
+		//default_deleteを設定(解放処理を行える)
+		friend struct std::default_delete<SpriteCommon>;
+	};
+}

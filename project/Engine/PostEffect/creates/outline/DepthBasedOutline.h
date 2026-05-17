@@ -2,59 +2,64 @@
 #include "BasePostEffect.h"
 #include "MyMath.h"
 /// <summary>
-/// ポストエフェクト_DepthBasedOutline(IPostEffectの派生クラス)
+/// エンジン層
 /// </summary>
-class DepthBasedOutline : public BasePostEffect {
-public:
+namespace EngineLayer {
 	/// <summary>
-	/// 解放処理
+	/// ポストエフェクト_DepthBasedOutline(IPostEffectの派生クラス)
 	/// </summary>
-	void Finalize() override;
-	/// <summary>
-	/// 処理コマンド(描画)
-	/// </summary>
-	void Command() override;
-private:
-	/// <summary>
-	/// ルートシグネチャ
-	/// </summary>
-	void RootSignature() override;
+	class DepthBasedOutline : public BasePostEffect {
+	public:
+		/// <summary>
+		/// 解放処理
+		/// </summary>
+		void Finalize() override;
+		/// <summary>
+		/// 処理コマンド(描画)
+		/// </summary>
+		void Command() override;
+	private:
+		/// <summary>
+		/// ルートシグネチャ
+		/// </summary>
+		void RootSignature() override;
 
-	/// <summary>
-	/// Blendを作成
-	/// </summary>
-	void CreateBlend() override;
+		/// <summary>
+		/// Blendを作成
+		/// </summary>
+		void CreateBlend() override;
 
-	/// <summary>
-	/// Rasterizerを作成
-	/// </summary>
-	void CreateRasterizer() override;
+		/// <summary>
+		/// Rasterizerを作成
+		/// </summary>
+		void CreateRasterizer() override;
 
-	/// <summary>
-	/// PixelShaderを作成
-	/// </summary>
-	void CreatePixelShader() override;
+		/// <summary>
+		/// PixelShaderを作成
+		/// </summary>
+		void CreatePixelShader() override;
 
-	/// <summary>
-	/// ポストエフェクトの初期化処理
-	/// </summary>
-	void EffectInit() override;
+		/// <summary>
+		/// ポストエフェクトの初期化処理
+		/// </summary>
+		void EffectInit() override;
 
-	/// <summary>
-	/// ポストエフェクトの更新処理
-	/// </summary>
-	void EffectUpdate() override;
+		/// <summary>
+		/// ポストエフェクトの更新処理
+		/// </summary>
+		void EffectUpdate() override;
 
 
-	//RootSignature
-	D3D12_DESCRIPTOR_RANGE descriptorRangeOutline_[1] = {};
+		//RootSignature
+		D3D12_DESCRIPTOR_RANGE descriptorRangeOutline_[1] = {};
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
+		Microsoft::WRL::ComPtr<ID3D12Resource> materialResource_;
 
-	struct DepthOutlineFunction {
-		float projectionInverse;
+		struct DepthOutlineFunction {
+			float projectionInverse;
+		};
+
+		DepthOutlineFunction* depthOutlineFunction_ = nullptr;
+
 	};
-	
-	DepthOutlineFunction* depthOutlineFunction_ = nullptr;
-
-};
+}

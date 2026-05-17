@@ -12,7 +12,7 @@
 /// <summary>
 /// 自作ゲーム
 /// </summary>
-class MyGame : public Framework{
+class MyGame : public EngineLayer::Framework{
 public:
 	/// <summary>
 	/// 初期化処理

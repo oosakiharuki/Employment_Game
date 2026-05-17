@@ -1,3 +1,9 @@
+/// ------------------------------------
+///
+/// ワープゲート
+/// プレイヤーが次のステージに移動する
+/// 
+/// ------------------------------------
 #include "WarpGate.h"
 #include "UseEveryOne.h"
 #include "CollisionManager.h"
@@ -12,7 +18,7 @@ WarpGate::~WarpGate() {}
 
 void WarpGate::Initialize() {
 	wt_.Initialize();
-	object_ = std::make_unique<Object3d>();
+	object_ = std::make_unique<EngineLayer::Object3d>();
 	object_->Initialize();
 	object_->SetModelFile("warpGate.obj");
 	//Transform更新処理
@@ -107,7 +113,7 @@ void WarpGate::TouchWarpGate() {
 void WarpGate::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypePlayer && !warpExitMode_) {
 		scaleFlag_ = true;
-		if (Input::GetInstance().TriggerKey(DIK_E) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_Y)) {
+		if (EngineLayer::Input::GetInstance().TriggerKey(DIK_E) || EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_Y)) {
 			CollisionUtility::GetInstance().SuccessWarp(center_);
 			NextStageSave::GetInstance().SetNextStageFile(fileName_);//次のステージの名前を導入
 		}

@@ -12,7 +12,7 @@
 /// <summary>
 /// セレクト(ステージ選択)シーン(BaseSceneの派生クラス)
 /// </summary>
-class SelectScene : public BaseScene{
+class SelectScene : public EngineLayer::BaseScene{
 public:
 	/// <summary>
 	/// 初期化処理
@@ -37,7 +37,7 @@ public:
 private:
 
 	//カメラ
-	std::unique_ptr<Camera> camera_ = nullptr;
+	std::unique_ptr<EngineLayer::Camera> camera_ = nullptr;
 	Vector3 cameraRotate_ = { 0.0f,0.0f,0.0f };//回転
 	Vector3 cameraTranslate_ = { 0.0f,0.0f,0.0f };///座標
 	//カメラ移動範囲
@@ -56,7 +56,7 @@ private:
 	std::list<std::unique_ptr<IStageObject>> stageObjects_;
 
 	//ステージ全体のオブジェクト
-	std::unique_ptr<Object3d> stageObj_;
+	std::unique_ptr<EngineLayer::Object3d> stageObj_;
 	//ステージ全体の当たり判定AABB
 	std::vector<AABB> stagesAABB_;
 

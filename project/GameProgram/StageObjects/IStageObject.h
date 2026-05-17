@@ -73,8 +73,8 @@ public:
 
 protected:
 
-	std::unique_ptr<Object3d> object_ = nullptr;
-	WorldTransform wt_;
+	std::unique_ptr<EngineLayer::Object3d> object_ = nullptr;
+	EngineLayer::WorldTransform wt_;
 	Transform transform_{};
 
 	Vector3 colliderSize_;

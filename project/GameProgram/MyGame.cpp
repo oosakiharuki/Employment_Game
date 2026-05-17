@@ -16,15 +16,15 @@ void MyGame::Initialize() {
 	//ポーズ処理の初期化
 	PauseScreen::GetInstance().Initialize();
 	//最初のシーンの設定
-	SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
+	EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
 	//シーンの更新処理(変更処理)
-	SceneManager::GetInstance().SceneUpdate();
+	EngineLayer::SceneManager::GetInstance().SceneUpdate();
 }
 
 void MyGame::Update() {
 
 #ifdef  USE_IMGUI
-	ImGuiManager::GetInstance().Begin();
+	EngineLayer::ImGuiManager::GetInstance().Begin();
 #endif //  USE_IMGUI
 
 	//フレームワークの更新
@@ -33,14 +33,14 @@ void MyGame::Update() {
 	//フェード中は変更しない
 	if (!FadeScreen::GetInstance().GetIsFading()) {
 		//シーンの更新処理(変更処理)
-		SceneManager::GetInstance().SceneUpdate();
+		EngineLayer::SceneManager::GetInstance().SceneUpdate();
 	}
 
-	SceneManager::GetInstance().Update();
+	EngineLayer::SceneManager::GetInstance().Update();
 
 	//タイトル画面で終了を選択した時するとき
-	if (SceneManager::GetInstance().SetGameEnd()) {
-		Framework::SetIsEndRequest(SceneManager::GetInstance().SetGameEnd());
+	if (EngineLayer::SceneManager::GetInstance().SetGameEnd()) {
+		Framework::SetIsEndRequest(EngineLayer::SceneManager::GetInstance().SetGameEnd());
 	}
 
 	//時間尺度の更新処理
@@ -51,29 +51,29 @@ void MyGame::Update() {
 	//スプライト更新処理
 	UIManager::GetInstance().Update();
 	//ポストエフェクト更新/変更
-	PostEffectManager::GetInstance().Update();
+	EngineLayer::PostEffectManager::GetInstance().Update();
 
 #ifdef  USE_IMGUI
-	ParticleManager::GetInstance().ParameterImGui();
+	EngineLayer::ParticleManager::GetInstance().ParameterImGui();
 
-	ImGuiManager::GetInstance().End();
+	EngineLayer::ImGuiManager::GetInstance().End();
 #endif //  USE_IMGUI
 
 }
 
 void MyGame::Draw() {
 	//描画開始
-	DirectXCommon::GetInstance().RenderTexturePreDraw();// 対 renderTexture
+	EngineLayer::DirectXCommon::GetInstance().RenderTexturePreDraw();// 対 renderTexture
 	
 	//ゲームシーン描画
-	SceneManager::GetInstance().Draw();
+	EngineLayer::SceneManager::GetInstance().Draw();
 	
-	DirectXCommon::GetInstance().RenderTexturePostDraw();
+	EngineLayer::DirectXCommon::GetInstance().RenderTexturePostDraw();
 
 	//描画開始
-	DirectXCommon::GetInstance().PreDraw();// 対 swapChain
+	EngineLayer::DirectXCommon::GetInstance().PreDraw();// 対 swapChain
 
-	SpriteCommon::GetInstance().Command();
+	EngineLayer::SpriteCommon::GetInstance().Command();
 	//説明ガイド
 	UIManager::GetInstance().Draw();
 
@@ -86,27 +86,27 @@ void MyGame::Draw() {
 
 #ifdef  USE_IMGUI
 	//ImGui描画処理
-	ImGuiManager::GetInstance().Draw();
+	EngineLayer::ImGuiManager::GetInstance().Draw();
 #endif //  USE_IMGUI
 
 	//描画終了
-	DirectXCommon::GetInstance().PostDraw();
+	EngineLayer::DirectXCommon::GetInstance().PostDraw();
 
 }
 
 
 void MyGame::Finalize() {
 	FadeScreen::GetInstance().Finalize();
-	Audio::GetInstance().Finalize();
-	SceneManager::GetInstance().Finalize();
+	EngineLayer::Audio::GetInstance().Finalize();
+	EngineLayer::SceneManager::GetInstance().Finalize();
 	NextStageSave::GetInstance().Finalize();
 	CollisionManager::GetInstance().Finalize();
 	UIManager::GetInstance().Finalize();
-	ParticleEmitter::GetInstance().Finalize();
+	EngineLayer::ParticleEmitter::GetInstance().Finalize();
 	PauseScreen::GetInstance().Finalize();
 
 #ifdef  USE_IMGUI
-	ImGuiManager::GetInstance().Finalize();
+	EngineLayer::ImGuiManager::GetInstance().Finalize();
 #endif //  USE_IMGUI
 
 	Framework::Finalize();

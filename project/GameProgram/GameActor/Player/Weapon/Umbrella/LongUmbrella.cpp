@@ -1,3 +1,8 @@
+/// ----------------------
+///
+/// チャージして放つ傘銃
+/// 
+/// ----------------------
 #include "LongUmbrella.h"
 #include "UseEveryOne.h"
 #include "Player.h"
@@ -17,9 +22,9 @@ void LongUmbrella::Initialize() {
 	umbrellaAABB_.min = -kAABBSize_ * kDivideByTwo_;
 	umbrellaAABB_.max = kAABBSize_ * kDivideByTwo_;
 
-	Audio::GetInstance().LoadWave(kChargeSoundName_);
+	EngineLayer::Audio::GetInstance().LoadWave(kChargeSoundName_);
 
-	particles_[kChargeParticle_] = ParticleManager::GetInstance().InitParticle(kChargeParticle_);
+	particles_[kChargeParticle_] = EngineLayer::ParticleManager::GetInstance().InitParticle(kChargeParticle_);
 
 }
 
@@ -46,14 +51,14 @@ void LongUmbrella::Fire() {
 	chargeTimer_ = std::clamp(chargeTimer_, 0.0f, kChargeMaxTime_ + kDeltaTime_);
 
 	if (chargeTimer_ >= kChargeMaxTime_ && chargeTimer_ < kChargeMaxTime_ + kDeltaTime_) {
-		Audio::GetInstance().StopWave(kChargeSoundName_);
-		Audio::GetInstance().SoundPlayWave(kChargeSoundName_, 0.3f);
+		EngineLayer::Audio::GetInstance().StopWave(kChargeSoundName_);
+		EngineLayer::Audio::GetInstance().SoundPlayWave(kChargeSoundName_, 0.3f);
 
 		particles_[kChargeParticle_]->SetColor({ 1.0f,1.0f,0.0f,1.0f });//黄色
 	}
 
 	//チャージする時間に達したら
-	if (chargeTimer_ >= kChargeMaxTime_ && (!Input::GetInstance().PushKey(DIK_K) && !Input::GetInstance().PushButton(XINPUT_GAMEPAD_X) && !Input::GetInstance().RightTriggerLongPress())) {
+	if (chargeTimer_ >= kChargeMaxTime_ && (!EngineLayer::Input::GetInstance().PushKey(DIK_K) && !EngineLayer::Input::GetInstance().PushButton(XINPUT_GAMEPAD_X) && !EngineLayer::Input::GetInstance().RightTriggerLongPress())) {
 		Vector3 translate = player_->GetTranslate();
 		Vector3 bulletVelocity = { 0.0f, 0.0f, kBulletSpeed_ };
 
@@ -70,21 +75,21 @@ void LongUmbrella::Fire() {
 
 		player_->FireFinish();//発砲終了
 		chargeTimer_ = 0.0f;
-		particles_[kChargeParticle_]->SetParticleBorn(ParticleBorn::Stop);
+		particles_[kChargeParticle_]->SetParticleBorn(EngineLayer::ParticleBorn::Stop);
 		particles_[kChargeParticle_]->SetColor({ 1.0f,1.0f,1.0f,1.0f });//白色
 
 	}
-	else if (!Input::GetInstance().PushKey(DIK_K) && !Input::GetInstance().PushButton(XINPUT_GAMEPAD_X) && !Input::GetInstance().RightTriggerLongPress()) {
+	else if (!EngineLayer::Input::GetInstance().PushKey(DIK_K) && !EngineLayer::Input::GetInstance().PushButton(XINPUT_GAMEPAD_X) && !EngineLayer::Input::GetInstance().RightTriggerLongPress()) {
 		//失敗
 		player_->FireFinish();//発砲終了
 		chargeTimer_ = 0.0f;
-		particles_[kChargeParticle_]->SetParticleBorn(ParticleBorn::Stop);
+		particles_[kChargeParticle_]->SetParticleBorn(EngineLayer::ParticleBorn::Stop);
 	}
 	else {
 		//チャージパーティクル発動
 		particles_[kChargeParticle_]->SetTranslate(transform_.translate);
 		particles_[kChargeParticle_]->SetScale(Vector3{ chargeTimer_,chargeTimer_,chargeTimer_ });
-		particles_[kChargeParticle_]->SetParticleBorn(ParticleBorn::TimerMode);
+		particles_[kChargeParticle_]->SetParticleBorn(EngineLayer::ParticleBorn::TimerMode);
 	}
 }
 
@@ -95,14 +100,14 @@ void LongUmbrella::PowerFire() {
 
 	//チャージ時間の半減
 	if (chargeTimer_ >= kChargeMaxTime_ && chargeTimer_ < kChargeMaxTime_ + kDeltaTime_ * 3.0f) {
-		Audio::GetInstance().StopWave(kChargeSoundName_);
-		Audio::GetInstance().SoundPlayWave(kChargeSoundName_, 0.3f);
+		EngineLayer::Audio::GetInstance().StopWave(kChargeSoundName_);
+		EngineLayer::Audio::GetInstance().SoundPlayWave(kChargeSoundName_, 0.3f);
 		
 		particles_[kChargeParticle_]->SetColor({ 1.0f,1.0f,0.0f,1.0f });//黄色
 	}
 
 	//チャージする時間に達したら
-	if (chargeTimer_ >= kChargeMaxTime_ && (!Input::GetInstance().PushKey(DIK_K) && !Input::GetInstance().PushButton(XINPUT_GAMEPAD_X) && !Input::GetInstance().RightTriggerLongPress())) {
+	if (chargeTimer_ >= kChargeMaxTime_ && (!EngineLayer::Input::GetInstance().PushKey(DIK_K) && !EngineLayer::Input::GetInstance().PushButton(XINPUT_GAMEPAD_X) && !EngineLayer::Input::GetInstance().RightTriggerLongPress())) {
 
 		Vector3 translate = player_->GetTranslate();
 		Vector3 bulletVelocity = { 0.0f, 0.0f, kBulletSpeed_ };
@@ -121,18 +126,18 @@ void LongUmbrella::PowerFire() {
 		player_->FireFinish();//発砲終了
 		player_->SubGaugePoint();//ゲージポイント減少
 		chargeTimer_ = 0.0f;
-		particles_[kChargeParticle_]->SetParticleBorn(ParticleBorn::Stop);
+		particles_[kChargeParticle_]->SetParticleBorn(EngineLayer::ParticleBorn::Stop);
 		particles_[kChargeParticle_]->SetColor({ 1.0f,1.0f,1.0f,1.0f });//白色
 	}
-	else if (!Input::GetInstance().PushKey(DIK_K) && !Input::GetInstance().PushButton(XINPUT_GAMEPAD_X) && !Input::GetInstance().RightTriggerLongPress()) {
+	else if (!EngineLayer::Input::GetInstance().PushKey(DIK_K) && !EngineLayer::Input::GetInstance().PushButton(XINPUT_GAMEPAD_X) && !EngineLayer::Input::GetInstance().RightTriggerLongPress()) {
 		player_->FireFinish();//発砲終了
 		chargeTimer_ = 0.0f;
-		particles_[kChargeParticle_]->SetParticleBorn(ParticleBorn::Stop);
+		particles_[kChargeParticle_]->SetParticleBorn(EngineLayer::ParticleBorn::Stop);
 	}
 	else {
 		//チャージパーティクル発動
 		particles_[kChargeParticle_]->SetTranslate(transform_.translate);
 		particles_[kChargeParticle_]->SetScale(Vector3{ chargeTimer_,chargeTimer_,chargeTimer_ } * kTwice_);
-		particles_[kChargeParticle_]->SetParticleBorn(ParticleBorn::TimerMode);
+		particles_[kChargeParticle_]->SetParticleBorn(EngineLayer::ParticleBorn::TimerMode);
 	}
 }

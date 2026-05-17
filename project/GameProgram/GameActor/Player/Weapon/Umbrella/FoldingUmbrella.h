@@ -1,6 +1,9 @@
 #pragma once
 #include "BaseUmbrella.h"
 
+/// <summary>
+/// 折り畳み傘・ライフル
+/// </summary>
 class FoldingUmbrella : public BaseUmbrella {
 public:
 	/// <summary>

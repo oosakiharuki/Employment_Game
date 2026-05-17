@@ -6,7 +6,7 @@ VisualActor::VisualActor(){}
 VisualActor::~VisualActor() {}
 
 void VisualActor::Initialize(const std::string objectName) {
-	baseObject_ = std::make_unique<Object_glTF>();
+	baseObject_ = std::make_unique<EngineLayer::Object_glTF>();
 	baseObject_->Initialize();
 	baseObject_->SetModelFile(objectName  + ".gltf");
 	objectName_ = objectName;//オブジェクト名を設定しておく

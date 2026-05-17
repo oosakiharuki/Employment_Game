@@ -1,42 +1,53 @@
+/// ----------------
+///
+/// ラジアンブラー
+/// 放射線ぼかし
+/// 
+/// ----------------
 #include "RadialBlur.h"
 #include <SrvManager.h>
 
 using namespace Logger;
 
-void RadialBlur::Finalize() {}
+/// <summary>
+/// エンジン層
+/// </summary>
+namespace EngineLayer {
+	void RadialBlur::Finalize() {}
 
-void RadialBlur::RootSignature() {
-	
-	PostEffectRootSignatureCommon();
+	void RadialBlur::RootSignature() {
 
-	IntroduceRootParameters();
-	IntroduceSamplers();
-}
+		PostEffectRootSignatureCommon();
 
-void RadialBlur::CreatePixelShader() {
-	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/RadialBlur.PS.hlsl", L"ps_6_0");
-	assert(pixelShaderBlob != nullptr);
-}
+		IntroduceRootParameters();
+		IntroduceSamplers();
+	}
 
-void RadialBlur::Command() {
+	void RadialBlur::CreatePixelShader() {
+		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/RadialBlur.PS.hlsl", L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+	}
 
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
-	DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(3, 1, 0, 0);
-}
+	void RadialBlur::Command() {
 
-void RadialBlur::EffectInit() {
-	srvIndex_ = SrvManager::GetInstance().Allocate();
-	srvHandleCPU_ = SrvManager::GetInstance().GetCPUDescriptorHandle(srvIndex_);
-	srvHandleGPU_ = SrvManager::GetInstance().GetGPUDescriptorHandle(srvIndex_);
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+		DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
+		DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(3, 1, 0, 0);
+	}
 
-	SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
-}
+	void RadialBlur::EffectInit() {
+		srvIndex_ = SrvManager::GetInstance().Allocate();
+		srvHandleCPU_ = SrvManager::GetInstance().GetCPUDescriptorHandle(srvIndex_);
+		srvHandleGPU_ = SrvManager::GetInstance().GetGPUDescriptorHandle(srvIndex_);
 
-void RadialBlur::EffectUpdate() {
-	
+		SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
+	}
+
+	void RadialBlur::EffectUpdate() {
+
 #ifdef USE_IMGUI
-	ImGui::Text("RadialBlur");
+		ImGui::Text("RadialBlur");
 #endif
+	}
 }

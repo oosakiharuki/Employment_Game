@@ -12,7 +12,7 @@ EnemyBullet::~EnemyBullet() {}
 
 void EnemyBullet::Initialize() {
 	//弾丸のモデル
-	object = std::make_unique<Object3d>();
+	object = std::make_unique<EngineLayer::Object3d>();
 	object->Initialize();
 	object->SetModelFile("PlayerBullet.obj");
 

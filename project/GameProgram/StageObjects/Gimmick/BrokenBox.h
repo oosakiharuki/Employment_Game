@@ -37,7 +37,7 @@ private:
 	/// <returns>該当するタイプがあるなら true</returns>
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
-	std::unique_ptr<Object_glTF> objectBox_ = nullptr;
+	std::unique_ptr<EngineLayer::Object_glTF> objectBox_ = nullptr;
 
 	//壊したフラグ
 	bool isBroken_ = false;

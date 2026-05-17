@@ -15,10 +15,10 @@ void GameScene::Initialize() {
 	LevelEditorObjectSetting();
 	
 	//BGM、SEの設定
-	Audio::GetInstance().LoadWave(kBGMSoundName_);
+	EngineLayer::Audio::GetInstance().LoadWave(kBGMSoundName_);
 
 	//BGM再生(リピート)
-	Audio::GetInstance().SoundPlayWave(kBGMSoundName_, volume_, true);
+	EngineLayer::Audio::GetInstance().SoundPlayWave(kBGMSoundName_, volume_, true);
 
 	//スタート演出
 	WaterWarpExit();
@@ -37,7 +37,7 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 	//ボタンを押して、ポーズ中であるか。プレイヤー演出,死亡状態でないとき
-	if ((Input::GetInstance().TriggerKey(DIK_ESCAPE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START) || PauseScreen::GetInstance().IsPause()) &&
+	if ((EngineLayer::Input::GetInstance().TriggerKey(DIK_ESCAPE) || EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START) || PauseScreen::GetInstance().IsPause()) &&
 		(!player_->GetPerformanceMode() && player_->GetHp() != 0)) {
 		PauseScreen::GetInstance().Update();
 		return;
@@ -75,7 +75,7 @@ void GameScene::Update() {
 
 #endif //  USE_IMGUI
 
-	Audio::GetInstance().ControlVolume(kBGMSoundName_, volume_);
+	EngineLayer::Audio::GetInstance().ControlVolume(kBGMSoundName_, volume_);
 }
 
 void GameScene::PlayerAliveUpdate() {
@@ -118,7 +118,7 @@ void GameScene::PlayerAliveUpdate() {
 
 void GameScene::Draw() {
 	//モデル描画処理
-	GLTFCommon::GetInstance().Command();	
+	EngineLayer::GLTFCommon::GetInstance().Command();
 	backGround->Draw();
 
 	if (boss_) {
@@ -130,7 +130,7 @@ void GameScene::Draw() {
 	}
 
 	//モデル描画処理
-	Object3dCommon::GetInstance().Command();
+	EngineLayer::Object3dCommon::GetInstance().Command();
 
 	stageObj_->Draw();
 
@@ -151,14 +151,14 @@ void GameScene::Draw() {
 	player_->Draw();
 
 	//モデル描画処理
-	GLTFCommon::GetInstance().Command();
+	EngineLayer::GLTFCommon::GetInstance().Command();
 	//敵ラッシュイベント描画
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->Draw();
 	}
 
 	//パーティクル描画処理
-	ParticleCommon::GetInstance().Command();
+	EngineLayer::ParticleCommon::GetInstance().Command();
 
 	//敵のパーティクル描画
 	for (auto& enemy : enemies_) {
@@ -172,7 +172,7 @@ void GameScene::Draw() {
 	}
 
 	//スプライト描画処理(UI用)
-	SpriteCommon::GetInstance().Command();
+	EngineLayer::SpriteCommon::GetInstance().Command();
 
 }
 
@@ -201,18 +201,18 @@ void GameScene::SpitOutGameObject() {
 	spitOut_.SetLevelEditor(&levelEditor_);
 
 	//- カメラ配置 -
-	camera_ = std::make_unique<Camera>();
+	camera_ = std::make_unique<EngineLayer::Camera>();
 	//カメラコントロール設定
 	spitOut_.SpitOutCamera(cameraControl_);
 	//プレイヤーから使用するカメラに移動
 	spitOut_.CameraStartPointPlayer(cameraControl_);
 
 	//各デフォルトカメラの設定
-	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
-	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
-	ParticleCommon::GetInstance().SetDefaultCamera(camera_.get());
-	DebugWireframes::GetInstance().SetDefaultCamera(camera_.get());
-	CubeMap::GetInstance().SetDefaultCamera(camera_.get());
+	EngineLayer::Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
+	EngineLayer::GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
+	EngineLayer::ParticleCommon::GetInstance().SetDefaultCamera(camera_.get());
+	EngineLayer::DebugWireframes::GetInstance().SetDefaultCamera(camera_.get());
+	EngineLayer::CubeMap::GetInstance().SetDefaultCamera(camera_.get());
 
 	//プレイヤーの体力を上書き
 	player_->Initialize();//初期設定
@@ -295,44 +295,44 @@ void GameScene::Respawn() {
 
 void GameScene::SceneUpdate() {
 #ifdef USE_IMGUI
-	if (Input::GetInstance().TriggerKey(DIK_F2)) {
-		SceneManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());//クリアシーンに移動
+	if (EngineLayer::Input::GetInstance().TriggerKey(DIK_F2)) {
+		EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());//クリアシーンに移動
 	}
-	if (Input::GetInstance().TriggerKey(DIK_F3)) {
-		SceneManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());//ゲームオーバーシーンに移動
+	if (EngineLayer::Input::GetInstance().TriggerKey(DIK_F3)) {
+		EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());//ゲームオーバーシーンに移動
 	}
 #endif // USE_IMGUI
 	
 	//ゴールした+カメラズームが完了
 	if (CollisionUtility::GetInstance().IsGoal() && cameraControl_->ZoomEnd()) {
-		SceneManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());//クリアシーンに移動
+		EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());//クリアシーンに移動
 	}
 	//ワープする+カメラズームが完了
 	else if (CollisionUtility::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
 		//次のステージに進む時Hpなどパラメータがリセットされないようにする
 		NextStageSave::GetInstance().SetPlayerHp(player_->GetHp()); //現在のプレイヤー体力を保存
 		NextStageSave::GetInstance().SetPlayerRemain(player_->GetRemain()); //現在のプレイヤー残機を保存
-		SceneManager::GetInstance().ChangeScene(std::make_unique<GameScene>());//次のステージに移動(ゲームシーンであることは変わらない)
+		EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<GameScene>());//次のステージに移動(ゲームシーンであることは変わらない)
 	}
 	else if (player_->GetRemain() == 0) {
 		//残機が0の場合ゲームオーバー
 		FadeScreen::GetInstance().SetMaskTexture("fade02.png");//フェードのマスク変更
 		FadeScreen::GetInstance().SetBackGround("black.png");  //フェードのテクスチャ変更
 
-		SceneManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());//ゲームオーバーシーンに移動
+		EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<GameOverScene>());//ゲームオーバーシーンに移動
 	}
 
 	if (boss_) {
 		//ボスを倒したら
 		if (boss_->IsDeadMotionFinish()) {
-			SceneManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());//クリアシーンに移動
+			EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<ClearScene>());//クリアシーンに移動
 		}
 	}
 	
 	//次のシーンに移動するとき
-	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
+	if (EngineLayer::SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//BGM停止
-		Audio::GetInstance().StopWave(kBGMSoundName_);
+		EngineLayer::Audio::GetInstance().StopWave(kBGMSoundName_);
 		//フェードを挟む(FadeIn)
 		FadeScreen::GetInstance().FadeStart(type_fadeIn);
 	}

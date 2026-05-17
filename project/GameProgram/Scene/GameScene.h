@@ -10,7 +10,7 @@
 /// <summary>
 /// ゲームシーン(BaseSceneの派生クラス)
 /// </summary>
-class GameScene : public BaseScene {
+class GameScene : public EngineLayer::BaseScene {
 public:
 	/// <summary>
 	/// 初期化処理
@@ -35,7 +35,7 @@ public:
 private:
 
 	//カメラ
-	std::unique_ptr<Camera> camera_ = nullptr;
+	std::unique_ptr<EngineLayer::Camera> camera_ = nullptr;
 	Vector3 cameraRotate_ = { 0.0f,0.0f,0.0f };//回転
 	Vector3 cameraTranslate_ = { 0.0f,0.0f,0.0f };///座標
 	//カメラ移動範囲
@@ -57,7 +57,7 @@ private:
 	std::list<std::unique_ptr<IStageObject>> stageObjects_;
 
 	//ステージ全体のオブジェクト
-	std::unique_ptr<Object3d> stageObj_;
+	std::unique_ptr<EngineLayer::Object3d> stageObj_;
 
 	//イベントトリガー
 	std::list<std::unique_ptr<EventTrigger>> eventTriggers_;
@@ -76,7 +76,7 @@ private:
 	void LevelEditorObjectSetting(const std::string& levelEditor_file = "");
 
 	//パーティクルコンテナ
-	std::unordered_map<std::string, std::unique_ptr<Particle>> sceneParticles_;
+	std::unordered_map<std::string, std::unique_ptr<EngineLayer::Particle>> sceneParticles_;
 
 	//説明ガイドの初期座標と大きさ
 	const Vector2 kSpriteSize_ = { 200,100 };

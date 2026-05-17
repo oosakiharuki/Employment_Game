@@ -12,7 +12,7 @@ void SelectScene::Initialize() {
 	LevelEditorObjectSetting("stage_select");
 
 	//ステージの全体層
-	stageObj_ = std::make_unique<Object3d>();
+	stageObj_ = std::make_unique<EngineLayer::Object3d>();
 	stageObj_->Initialize();
 	stageObj_->SetModelFile("stage_select.obj");
 
@@ -33,7 +33,7 @@ void SelectScene::Initialize() {
 
 void SelectScene::Update() {
 	//ボタンを押して、ポーズ中であるか。プレイヤー演出,死亡状態でないとき
-	if ((Input::GetInstance().TriggerKey(DIK_ESCAPE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START) || PauseScreen::GetInstance().IsPause()) &&
+	if ((EngineLayer::Input::GetInstance().TriggerKey(DIK_ESCAPE) || EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START) || PauseScreen::GetInstance().IsPause()) &&
 		(!player_->GetPerformanceMode() && player_->GetHp() != 0)) {
 		PauseScreen::GetInstance().Update();
 		return;
@@ -67,9 +67,9 @@ void SelectScene::Update() {
 
 void SelectScene::Draw() {
 
-	CubeMap::GetInstance().Command();
+	EngineLayer::CubeMap::GetInstance().Command();
 
-	Object3dCommon::GetInstance().Command();
+	EngineLayer::Object3dCommon::GetInstance().Command();
 
 	//ステージ描画
 	stageObj_->Draw();
@@ -83,7 +83,7 @@ void SelectScene::Draw() {
 		stageObject->Draw();
 	}
 
-	GLTFCommon::GetInstance().Command();
+	EngineLayer::GLTFCommon::GetInstance().Command();
 	//背景描画
 	backGround->Draw();
 
@@ -91,11 +91,11 @@ void SelectScene::Draw() {
 	player_->Draw();
 
 	//パーティクル描画処理
-	ParticleCommon::GetInstance().Command();
+	EngineLayer::ParticleCommon::GetInstance().Command();
 	//プレイヤーパーティクル描画
 	player_->DrawParticle();
 
-	SpriteCommon::GetInstance().Command();
+	EngineLayer::SpriteCommon::GetInstance().Command();
 }
 
 void SelectScene::Finalize() {
@@ -122,15 +122,15 @@ void SelectScene::SpitOutGameObject() {
 	spitOut_.SetLevelEditor(&levelEditor_);
 
 	//- カメラ配置 -
-	camera_ = std::make_unique<Camera>();
+	camera_ = std::make_unique<EngineLayer::Camera>();
 	spitOut_.SpitOutCamera(cameraControl_);
 
 	//各デフォルトカメラの設定
-	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
-	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
-	ParticleCommon::GetInstance().SetDefaultCamera(camera_.get());
-	DebugWireframes::GetInstance().SetDefaultCamera(camera_.get());
-	CubeMap::GetInstance().SetDefaultCamera(camera_.get());
+	EngineLayer::Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
+	EngineLayer::GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
+	EngineLayer::ParticleCommon::GetInstance().SetDefaultCamera(camera_.get());
+	EngineLayer::DebugWireframes::GetInstance().SetDefaultCamera(camera_.get());
+	EngineLayer::CubeMap::GetInstance().SetDefaultCamera(camera_.get());
 
 	//プレイヤーの体力を上書き
 	player_->Initialize();//初期設定
@@ -149,11 +149,11 @@ void SelectScene::SpitOutGameObject() {
 void SelectScene::SceneUpdate() {
 	//ワープする+カメラズームが完了
 	if (CollisionUtility::GetInstance().IsWarp() && cameraControl_->ZoomEnd()) {
-		SceneManager::GetInstance().ChangeScene(std::make_unique<GameScene>());
+		EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<GameScene>());
 	}
 
 	//次のシーンに移動するとき
-	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
+	if (EngineLayer::SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//フェードを挟む(FadeIn)
 		FadeScreen::GetInstance().FadeStart(type_fadeIn);
 	}

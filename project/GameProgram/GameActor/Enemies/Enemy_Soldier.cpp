@@ -28,7 +28,7 @@ void Enemy_Soldier::Initialize() {
 	fireCommand_->InitAudio();
 
 	//攻撃(発泡)
-	particles_[fireCommand_->GetParticleFireName()] = ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireName());
+	particles_[fireCommand_->GetParticleFireName()] = EngineLayer::ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireName());
 
 	speed_.x = kMoveX_;
 }
@@ -165,7 +165,7 @@ void Enemy_Soldier::FireBullet() {
 		velocity_ = normal;
 	}
 	particles_[fireCommand_->GetParticleFireName()]->SetTranslate(enemyPosition);
-	particles_[fireCommand_->GetParticleFireName()]->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
+	particles_[fireCommand_->GetParticleFireName()]->SetParticleBorn(EngineLayer::ParticleBorn::MomentMode);//パーティクルが出てくる
 
 	//弾丸を生み出す
 	fireCommand_->AddBullet(enemyPosition, velocity_);

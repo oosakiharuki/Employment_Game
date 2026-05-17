@@ -1,3 +1,8 @@
+/// --------------------------
+///
+/// プレイヤーの行動パターン
+/// 
+/// --------------------------
 #include "PlayerActionsInputHandler.h"
 #include "Player.h"
 #include <Input.h>
@@ -12,14 +17,14 @@ void MoveCommand::Execute() {
 	SpeedParameter();
 
 	//Lスティック
-	float padX = Input::GetInstance().LeftStickX();
-	float padY = Input::GetInstance().LeftStickY();
+	float padX = EngineLayer::Input::GetInstance().LeftStickX();
+	float padY = EngineLayer::Input::GetInstance().LeftStickY();
 	//左右
-	if (padX > kStickPower_ || Input::GetInstance().PushKey(DIK_D)) { CommandMoveD(); }
-	else if (padX < -kStickPower_ || Input::GetInstance().PushKey(DIK_A)) { CommandMoveA(); }
+	if (padX > kStickPower_ || EngineLayer::Input::GetInstance().PushKey(DIK_D)) { CommandMoveD(); }
+	else if (padX < -kStickPower_ || EngineLayer::Input::GetInstance().PushKey(DIK_A)) { CommandMoveA(); }
 	//上下
-	if (padY > kStickPower_ || Input::GetInstance().PushKey(DIK_W)) { CommandMoveW(); }
-	else if (padY < -kStickPower_ || Input::GetInstance().PushKey(DIK_S)) { CommandMoveS(); }
+	if (padY > kStickPower_ || EngineLayer::Input::GetInstance().PushKey(DIK_W)) { CommandMoveW(); }
+	else if (padY < -kStickPower_ || EngineLayer::Input::GetInstance().PushKey(DIK_S)) { CommandMoveS(); }
 }
 
 
@@ -44,7 +49,7 @@ void MoveCommand::CommandMoveS() {
 void MoveCommand::SpeedParameter() {
 
 	//標準ロック(移動しないで傘を動かすのみ)
-	if ((Input::GetInstance().PushKey(DIK_I) || Input::GetInstance().PushButton(XINPUT_GAMEPAD_Y)) && player_->GetIsGround()) {
+	if ((EngineLayer::Input::GetInstance().PushKey(DIK_I) || EngineLayer::Input::GetInstance().PushButton(XINPUT_GAMEPAD_Y)) && player_->GetIsGround()) {
 		speed_ = 0.0f;
 		prevDirectionWidth_ = 0.0f;
 		return;
@@ -185,10 +190,10 @@ void WeaponChangeCommand::Execute() {
 	//銃の番号
 	weaponNum_ = player_->GetWeaponNum();
 
-	if (Input::GetInstance().TriggerKey(DIK_U) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_LEFT_SHOULDER)) {
+	if (EngineLayer::Input::GetInstance().TriggerKey(DIK_U) || EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_LEFT_SHOULDER)) {
 		RightSwitching();//;
 	}
-	if (Input::GetInstance().TriggerKey(DIK_O) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+	if (EngineLayer::Input::GetInstance().TriggerKey(DIK_O) || EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
 		LeftSwitching();//;
 	}
 
@@ -218,7 +223,7 @@ void PlayerActionsInputHandler::GetCommand(Player* player, std::vector<std::uniq
 
 #ifdef USE_IMGUI
 
-	if (Input::GetInstance().TriggerKey(DIK_F4)) {
+	if (EngineLayer::Input::GetInstance().TriggerKey(DIK_F4)) {
 		isInput_ = !isInput_;
 	}
 
@@ -236,7 +241,7 @@ void PlayerActionsInputHandler::GetCommand(Player* player, std::vector<std::uniq
 	}
 
 	//ブリンク [Jキー、Bボタン + ブリンクの発動条件、発動中はタイマーが切れるまで]
-	if (((Input::GetInstance().TriggerKey(DIK_J) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_B)) && player->BrinkFlag()) || player->BrinkTimeMax()) {
+	if (((EngineLayer::Input::GetInstance().TriggerKey(DIK_J) || EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_B)) && player->BrinkFlag()) || player->BrinkTimeMax()) {
 		commands.push_back(std::make_unique<BrinkCommand>());
 		return;
 	}	
@@ -245,8 +250,8 @@ void PlayerActionsInputHandler::GetCommand(Player* player, std::vector<std::uniq
 	commands.push_back(std::make_unique<MoveCommand>());
 
 	//傘シールド / 滑空[L/Jキー、Lトリガー、Bボタンを長押し] (ブリンク発動後でも作動できるようにボタンを統一)
-	if (Input::GetInstance().PushKey(DIK_L) || Input::GetInstance().LeftTriggerLongPress() || 
-		Input::GetInstance().PushKey(DIK_J) || Input::GetInstance().PushButton(XINPUT_GAMEPAD_B)) {
+	if (EngineLayer::Input::GetInstance().PushKey(DIK_L) || EngineLayer::Input::GetInstance().LeftTriggerLongPress() ||
+		EngineLayer::Input::GetInstance().PushKey(DIK_J) || EngineLayer::Input::GetInstance().PushButton(XINPUT_GAMEPAD_B)) {
 		commands.push_back(std::make_unique<ShieldCommand>());
 		return;
 	}
@@ -256,12 +261,12 @@ void PlayerActionsInputHandler::GetCommand(Player* player, std::vector<std::uniq
 	}
 
 	//ジャンプ[spaceキー、Aボタン]
-	if (Input::GetInstance().TriggerKey(DIK_SPACE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) {
+	if (EngineLayer::Input::GetInstance().TriggerKey(DIK_SPACE) || EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) {
 		commands.push_back(std::make_unique<JumpCommand>());
 	}
 	
 	//発砲攻撃[Kキー、Xボタン、Rトリガー]
-	if (Input::GetInstance().PushKey(DIK_K) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_X) || Input::GetInstance().RightTrigger()) {
+	if (EngineLayer::Input::GetInstance().PushKey(DIK_K) || EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_X) || EngineLayer::Input::GetInstance().RightTrigger()) {
 		commands.push_back(std::make_unique<FireCommand>());
 	}
 

@@ -1,3 +1,9 @@
+/// ----------------------------------
+///
+/// 壊れる箱
+/// プレイヤーの弾丸が当たれば壊れる
+/// 
+/// ----------------------------------
 #include "BrokenBox.h"
 #include "UseEveryOne.h"
 #include "MyMath.h"
@@ -10,7 +16,7 @@ using namespace UseEveryOne;
 using namespace MyMath;
 
 void BrokenBox::Initialize() {
-	objectBox_ = std::make_unique<Object_glTF>();
+	objectBox_ = std::make_unique<EngineLayer::Object_glTF>();
 	objectBox_->Initialize();
 	objectBox_->SetModelFile("Box.gltf");
 
@@ -49,11 +55,11 @@ void BrokenBox::Update() {
 void BrokenBox::Draw() {
 	if (isFinish_) return;
 	
-	GLTFCommon::GetInstance().Command();
+	EngineLayer::GLTFCommon::GetInstance().Command();
 
 	objectBox_->Draw();
 	
-	Object3dCommon::GetInstance().Command();
+	EngineLayer::Object3dCommon::GetInstance().Command();
 
 }
 

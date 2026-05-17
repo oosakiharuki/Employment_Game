@@ -1,3 +1,8 @@
+/// ---------------------
+///
+/// チェックポイント
+/// 
+/// ---------------------
 #include "CheckPoint.h"
 #include "CollisionManager.h"
 #include "NextStageSave.h"
@@ -14,7 +19,7 @@ void CheckPoint::Initialize() {
 	//Transform更新処理
 	transform_ = wt_.UpdateTransform();
 
-	object_ = std::make_unique<Object3d>();
+	object_ = std::make_unique<EngineLayer::Object3d>();
 	object_->Initialize();
 	object_->SetModelFile("checkpoint.obj");
 

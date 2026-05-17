@@ -19,7 +19,7 @@ public:
 	/// </summary>
 	/// <param name="camera">現在のカメラ</param>
 	/// <param name="player">プレイヤー情報</param>
-	void Update(Camera* camera,Player* player = nullptr);
+	void Update(EngineLayer::Camera* camera,Player* player = nullptr);
 
 	/// <summary>
 	/// setter_座標位置

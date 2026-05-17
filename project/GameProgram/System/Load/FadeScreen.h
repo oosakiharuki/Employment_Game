@@ -77,7 +77,7 @@ private:
 	friend struct std::default_delete<FadeScreen>;
 
 	//使用するスプライト
-	std::unique_ptr<Sprite> sprite_;
+	std::unique_ptr<EngineLayer::Sprite> sprite_;
 
 	//フェード中フラグ
 	bool isFading_ = true;
@@ -93,7 +93,7 @@ private:
 
 
 	//使用するポストエフェクト
-	std::unique_ptr<Dissolve> dissolve_;
+	std::unique_ptr<EngineLayer::Dissolve> dissolve_;
 	std::string dissolveTexture_;
 
 };

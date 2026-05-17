@@ -2,6 +2,9 @@
 #include "MyMath.h"
 #include "GameActor.h"
 
+/// <summary>
+/// 重力のあるゲームアクター
+/// </summary>
 class GravityActor : public GameActor
 {
 public:

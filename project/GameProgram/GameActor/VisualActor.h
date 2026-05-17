@@ -65,10 +65,10 @@ public:
 	void LightOn();
 
 private:
-	WorldTransform wt_;
+	EngineLayer::WorldTransform wt_;
 	Transform transform_;
 
-	std::unique_ptr<Object_glTF> baseObject_;
+	std::unique_ptr<EngineLayer::Object_glTF> baseObject_;
 
 	std::string objectName_;
 };

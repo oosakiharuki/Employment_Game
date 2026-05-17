@@ -52,7 +52,7 @@ private:
 	/// <returns>該当するタイプがあるなら true</returns>
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
-	std::unique_ptr<Object_glTF> objectNeedle_ = nullptr;
+	std::unique_ptr<EngineLayer::Object_glTF> objectNeedle_ = nullptr;
 
 	Vector3 nowPoint_ = { 0,0,0 };
 	Segment movePoint_{};

@@ -11,7 +11,7 @@
 /// <summary>
 /// タイトルシーン(BaseSceneの派生クラス)
 /// </summary>
-class TitleScene : public BaseScene {
+class TitleScene : public EngineLayer::BaseScene {
 public:
 	/// <summary>
 	/// 初期化処理
@@ -73,16 +73,16 @@ private:
 	}
 
 	//カメラ
-	std::unique_ptr<Camera> camera_ = nullptr;
+	std::unique_ptr<EngineLayer::Camera> camera_ = nullptr;
 
 	//パーティクルコンテナ
-	std::unordered_map<std::string, std::unique_ptr<Particle>> sceneParticles_;
+	std::unordered_map<std::string, std::unique_ptr<EngineLayer::Particle>> sceneParticles_;
 
 	std::vector<std::unique_ptr<VisualActor>> visualActors;
 	std::unordered_map<std::string ,Transform> transforms_;//各々の変更用
 
 	std::unique_ptr<Shadow> playerShadow_;//プレイヤー影
-	std::unique_ptr<Sprite> spriteMojiTitle_;//タイトル名
+	std::unique_ptr<EngineLayer::Sprite> spriteMojiTitle_;//タイトル名
 
 	const std::string& particleBullet_ = "title_bullet";
 

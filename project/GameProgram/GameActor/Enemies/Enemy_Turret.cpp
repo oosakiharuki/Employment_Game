@@ -27,13 +27,13 @@ void Enemy_Turret::Initialize() {
 	fireCommand_->InitAudio();
 
 	//レーザー(見える範囲)の初期化処理
-	particles_[particleLaser_] = ParticleManager::GetInstance().InitParticle(particleLaser_);
+	particles_[particleLaser_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleLaser_);
 	particleLaserSize_ = particles_[particleLaser_]->GetScale();
 	particleLaserSize_.x = eyeReach_.x * kDivideByTwo_;//視野範囲に合わせるためサイズを変更
 
 	particles_[particleLaser_]->SetScale(particleLaserSize_);
 	//攻撃(発泡)
-	particles_[fireCommand_->GetParticleFireName()] = ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireName());
+	particles_[fireCommand_->GetParticleFireName()] = EngineLayer::ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireName());
 	//ちょっと大きく
 	particles_[fireCommand_->GetParticleFireName()]->SetScale(kParticleFireSize_);
 }
@@ -98,7 +98,7 @@ void Enemy_Turret::Active() {
 
 void Enemy_Turret::Dead() {
 	//レーザーのパーティクル停止
-	particles_[particleLaser_]->SetParticleBorn(ParticleBorn::Stop);
+	particles_[particleLaser_]->SetParticleBorn(EngineLayer::ParticleBorn::Stop);
 
 	//死んだリアクション
 	DeadReaction();
@@ -152,7 +152,7 @@ void Enemy_Turret::FireBullet() {
 	velocity = TransformNormal(velocity, MakeAffineMatrix(kDefaultScale_, transform_.rotate, transform_.translate));
 
 	fireCommand_->AddBullet(particlePosition_, velocity);
-	particles_[fireCommand_->GetParticleFireName()]->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
+	particles_[fireCommand_->GetParticleFireName()]->SetParticleBorn(EngineLayer::ParticleBorn::MomentMode);//パーティクルが出てくる
 }
 
 void Enemy_Turret::LaserPoint() {
@@ -160,5 +160,5 @@ void Enemy_Turret::LaserPoint() {
 	Matrix4x4 matWorld = MakeAffineMatrix(kDefaultScale_, transform_.rotate, transform_.translate);
 	//レーザーサイズXはターレットの前に出すため
 	particles_[particleLaser_]->SetTranslate(transform_.translate + TransformNormal(Vector3{ 0,0,particleLaserSize_.x }, matWorld));
-	particles_[particleLaser_]->SetParticleBorn(ParticleBorn::TimerMode);
+	particles_[particleLaser_]->SetParticleBorn(EngineLayer::ParticleBorn::TimerMode);
 }

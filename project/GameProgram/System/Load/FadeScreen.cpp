@@ -17,12 +17,12 @@ FadeScreen& FadeScreen::GetInstance() {
 
 void FadeScreen::Initialize() {
 	//フェードのテクスチャ
-	sprite_ = std::make_unique<Sprite>();
+	sprite_ = std::make_unique<EngineLayer::Sprite>();
 	sprite_->Initialize("fadeTexture.png");
-	sprite_->SetSize({ WinApp::kClientWidth_,WinApp::kClientHeight_ });
+	sprite_->SetSize({ EngineLayer::WinApp::kClientWidth_,EngineLayer::WinApp::kClientHeight_ });
 
 	//解け具合
-	dissolve_ = std::make_unique<Dissolve>();
+	dissolve_ = std::make_unique<EngineLayer::Dissolve>();
 	dissolve_->Initialize();
 	
 	//マウスのテクスチャ

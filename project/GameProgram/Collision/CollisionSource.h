@@ -1,6 +1,9 @@
 #pragma once
 #include "MyMath.h"
 
+/// <summary>
+/// enum - 当たり判定のタイプ
+/// </summary>
 enum CollisionTypes {
 	TypePlayer,          //プレイヤー
 	TypePlayerBullet,    //プレイヤーの弾丸
@@ -21,7 +24,7 @@ enum CollisionTypes {
 };
 
 /// <summary>
-/// 当たり判定の設計
+/// 当たり判定の衝突の反応
 /// </summary>
 class CollisionSource {
 public:

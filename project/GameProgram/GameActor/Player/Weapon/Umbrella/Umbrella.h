@@ -3,7 +3,7 @@
 #include "BaseUmbrella.h"
 
 /// <summary>
-/// 傘(発泡、守が使える)
+/// 通常傘・ショットガン
 /// </summary>
 class Umbrella : public BaseUmbrella {
 public:

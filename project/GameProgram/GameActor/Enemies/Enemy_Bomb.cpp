@@ -201,7 +201,7 @@ void Enemy_Bomb::Explosion() {
 
 	//パーティクルの設定
 	particles_[particleDamage_]->SetTranslate(transform_.translate);
-	particles_[particleDamage_]->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleDamage_]->SetParticleBorn(EngineLayer::ParticleBorn::MomentMode);
 
 	//当たり判定設定
 	CollisionManager::GetInstance().FrameCollision(bombAABB_, transform_.translate, CollisionTypes::TypeBombExplotion);

@@ -1,11 +1,17 @@
 #pragma once
+
 /// <summary>
-/// DirectXで解放
+/// エンジン層
 /// </summary>
-class D3DResourceLeakChecker {
-public:
-	///<summary>
-	///デストラクタ
-	///</summary>
-	~D3DResourceLeakChecker();
-};
+namespace EngineLayer {
+	/// <summary>
+	/// DirectXで解放
+	/// </summary>
+	class D3DResourceLeakChecker {
+	public:
+		///<summary>
+		///デストラクタ
+		///</summary>
+		~D3DResourceLeakChecker();
+	};
+}

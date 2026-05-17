@@ -1,3 +1,8 @@
+/// ------------------------
+///
+/// 三方向に弾丸を放つ傘銃
+/// 
+/// ------------------------
 #include "Umbrella.h"
 #include "ImGuiManager.h"
 #include "UseEveryOne.h"

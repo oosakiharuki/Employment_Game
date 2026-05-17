@@ -1,15 +1,19 @@
+/// ------------------
+///
+/// トゲボール
+/// 当たるとダメージ
+/// 
+/// ------------------
 #include "Needle.h"
-
 #include "Object3dCommon.h"
 #include "GLTFCommon.h"
-
 #include "TimeScale.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
 
 void Needle::Initialize() {
-	objectNeedle_ = std::make_unique<Object_glTF>();
+	objectNeedle_ = std::make_unique<EngineLayer::Object_glTF>();
 	objectNeedle_->Initialize();
 	objectNeedle_->SetModelFile("needle.gltf");
 
@@ -43,11 +47,11 @@ void Needle::Update() {
 }
 
 void Needle::Draw() {
-	GLTFCommon::GetInstance().Command();
+	EngineLayer::GLTFCommon::GetInstance().Command();
 
 	objectNeedle_->Draw();
 	
-	Object3dCommon::GetInstance().Command();
+	EngineLayer::Object3dCommon::GetInstance().Command();
 
 	shadow_->Draw();
 }

@@ -1,69 +1,79 @@
+/// ------------------------
+///
+/// 正方形型のオブジェクト
+/// 
+/// ------------------------
 #include "BoxModel.h"
 #include <TextureManager.h>
 
 using namespace MyMath;
 using namespace Primitive;
 
-void BoxModel::Initialize(const std::string& textureFile) {
+/// <summary>
+/// エンジン層
+/// </summary>
+namespace EngineLayer {
+	void BoxModel::Initialize(const std::string& textureFile) {
 
-	modelData_ = CreateBox();
-	modelData_.materialData.textureFilePath = textureFile;
+		modelData_ = CreateBox();
+		modelData_.materialData.textureFilePath = textureFile;
 
-	vertexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+		vertexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 
-	vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
-	vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
-	vertexBufferView_.StrideInBytes = sizeof(VertexData);
+		vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+		vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
+		vertexBufferView_.StrideInBytes = sizeof(VertexData);
 
-	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
-	std::memcpy(vertexData_, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
+		vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&vertexData_));
+		std::memcpy(vertexData_, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 
-	//Model用マテリアル
-	//マテリアル用のリソース
-	materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
-	//書き込むためのアドレス
-	materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
-	//色の設定
-	materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	materialData_->enableLighting = false;
-	materialData_->uvTransform = MakeIdentity4x4();
-	materialData_->shininess = 70;
+		//Model用マテリアル
+		//マテリアル用のリソース
+		materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
+		//書き込むためのアドレス
+		materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
+		//色の設定
+		materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		materialData_->enableLighting = false;
+		materialData_->uvTransform = MakeIdentity4x4();
+		materialData_->shininess = 70;
 
-	//テクスチャ読み込み
-	TextureManager::GetInstance().LoadTexture(modelData_.materialData.textureFilePath);
-	modelData_.materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(modelData_.materialData.textureFilePath);
+		//テクスチャ読み込み
+		TextureManager::GetInstance().LoadTexture(modelData_.materialData.textureFilePath);
+		modelData_.materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(modelData_.materialData.textureFilePath);
 
-	camera_ = cubeMap_->GetDefaultCamera();
-	wvpResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
-	wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
+		camera_ = cubeMap_->GetDefaultCamera();
+		wvpResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
+		wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 
-	wvpData_->World = MakeIdentity4x4();
-	wvpData_->WVP = MakeIdentity4x4();
-}
-
-void BoxModel::Update(const Matrix4x4& matWorld) {
-
-	Matrix4x4 WorldViewProjectionMatrix;
-	if (camera_) {
-		Matrix4x4 projectionMatrix = camera_->GetViewProjectionMatrix();
-		WorldViewProjectionMatrix = matWorld * projectionMatrix;
-	}
-	else {
-		WorldViewProjectionMatrix = matWorld;
+		wvpData_->World = MakeIdentity4x4();
+		wvpData_->WVP = MakeIdentity4x4();
 	}
 
-	wvpData_->World = matWorld;
-	//wvpData->World = worldMatrix;
-	wvpData_->WVP = WorldViewProjectionMatrix;
+	void BoxModel::Update(const Matrix4x4& matWorld) {
 
-	materialData_->color = color_;
+		Matrix4x4 WorldViewProjectionMatrix;
+		if (camera_) {
+			Matrix4x4 projectionMatrix = camera_->GetViewProjectionMatrix();
+			WorldViewProjectionMatrix = matWorld * projectionMatrix;
+		}
+		else {
+			WorldViewProjectionMatrix = matWorld;
+		}
 
-}
+		wvpData_->World = matWorld;
+		//wvpData->World = worldMatrix;
+		wvpData_->WVP = WorldViewProjectionMatrix;
 
-void BoxModel::Draw() {
-	DirectXCommon::GetInstance().GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance().GetSrvHandleGPU(modelData_.materialData.textureFilePath));
-	DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+		materialData_->color = color_;
+
+	}
+
+	void BoxModel::Draw() {
+		DirectXCommon::GetInstance().GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_);
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResource_->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(1, wvpResource_->GetGPUVirtualAddress());
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance().GetSrvHandleGPU(modelData_.materialData.textureFilePath));
+		DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+	}
 }

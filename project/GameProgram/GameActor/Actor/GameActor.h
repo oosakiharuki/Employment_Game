@@ -137,7 +137,7 @@ public:
 
 protected:
 
-	WorldTransform wt_;
+	EngineLayer::WorldTransform wt_;
 	Transform transform_{};
 	//当たり判定
 	Vector3 colliderSize_;
@@ -169,7 +169,7 @@ protected:
 	const float kDamageMaxTime_ = 0.3f;
 
 	//パーティクルのコンテナ
-	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
+	std::unordered_map<std::string, std::unique_ptr<EngineLayer::Particle>> particles_;
 
 	//リアクションクラス
 	std::unique_ptr<Reaction> reaction_;

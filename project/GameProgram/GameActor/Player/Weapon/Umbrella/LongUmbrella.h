@@ -2,7 +2,7 @@
 #include "BaseUmbrella.h"
 
 /// <summary>
-/// 長傘・スナイパーライフル
+/// 長傘・チャージガン
 /// </summary>
 class LongUmbrella : public BaseUmbrella {
 public:

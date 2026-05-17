@@ -3,200 +3,205 @@
 #include <assimp/scene.h>
 
 /// <summary>
-/// 構造体_スケルトンデータ
+/// エンジン層
 /// </summary>
-struct Skeleton {
-	int32_t root;//RootJointのIndex
-	std::map <std::string, int32_t>jointMap;//コンテナ
-	std::vector<Joint> joints;//所属ジョイント
-};
-
-/// <summary>
-/// 構造体_スケルトンで使用
-/// </summary>
-struct WellForGPU {
-	Matrix4x4 skeletonSpaceMatrix; //位置用
-	Matrix4x4 skeletonSpaceInverseTransposeMatrix; //法線用
-};
-
-//std::spanは「配列の上限がない」みたいなやつ（決めることもできる）
-
-/// <summary>
-/// 構造体_スキニング
-/// </summary>
-struct SkinCluster {
-	std::vector<Matrix4x4> inverseBindPoseMatrices;
-	Microsoft::WRL::ComPtr<ID3D12Resource> influenceResource;
-	D3D12_VERTEX_BUFFER_VIEW influenceBufferView;
-	std::span<VertexInfluence> mappedInfluence;
-	Microsoft::WRL::ComPtr<ID3D12Resource> paletteResource;
-	std::span<WellForGPU> mappedPalette;
-	std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> paletteSrvHandle;
-};
-
-/// <summary>
-/// .gltf版のモデル(派生クラス)
-/// </summary>
-class Model_glTF : public BaseModel{
-public:
+namespace EngineLayer {
 	/// <summary>
-	/// 初期化処理
+	/// 構造体_スケルトンデータ
 	/// </summary>
-	/// <param name="directoryPath">リソースファイルパス</param>
-	/// <param name="fileName">オブジェクト名</param>
-	void Initialize(const std::string& directoryPath,const std::string& fileName) override;
-	
-	/// <summary>
-	/// アニメーション
-	/// </summary>
-	/// <param name="isAnimation">アニメーションを入れるか</param>
-	/// <param name="isSkinning">スキニングであるか</param>
-	void InitAnimation(const std::string& directoryPath, const std::string& fileName, bool isAnimation, bool isSkinning);
+	struct Skeleton {
+		int32_t root;//RootJointのIndex
+		std::map <std::string, int32_t>jointMap;//コンテナ
+		std::vector<Joint> joints;//所属ジョイント
+	};
 
 	/// <summary>
-	/// 描画処理
+	/// 構造体_スケルトンで使用
 	/// </summary>
-	void Draw() override;
+	struct WellForGPU {
+		Matrix4x4 skeletonSpaceMatrix; //位置用
+		Matrix4x4 skeletonSpaceInverseTransposeMatrix; //法線用
+	};
+
+	//std::spanは「配列の上限がない」みたいなやつ（決めることもできる）
 
 	/// <summary>
-	/// setter_環境マップの設定
+	/// 構造体_スキニング
 	/// </summary>
-	/// <param name="mapFile">環境マップ</param>
-	void SetEnvironment(const std::string& mapFile);
+	struct SkinCluster {
+		std::vector<Matrix4x4> inverseBindPoseMatrices;
+		Microsoft::WRL::ComPtr<ID3D12Resource> influenceResource;
+		D3D12_VERTEX_BUFFER_VIEW influenceBufferView;
+		std::span<VertexInfluence> mappedInfluence;
+		Microsoft::WRL::ComPtr<ID3D12Resource> paletteResource;
+		std::span<WellForGPU> mappedPalette;
+		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> paletteSrvHandle;
+	};
 
 	/// <summary>
-	/// getter_モデルデータ
+	/// .gltf版のモデル(派生クラス)
 	/// </summary>
-	/// <returns>現在使用しているモデルのデータ</returns>
-	ModelDataMulti GetModelData() { return modelData_; }
+	class Model_glTF : public BaseModel {
+	public:
+		/// <summary>
+		/// 初期化処理
+		/// </summary>
+		/// <param name="directoryPath">リソースファイルパス</param>
+		/// <param name="fileName">オブジェクト名</param>
+		void Initialize(const std::string& directoryPath, const std::string& fileName) override;
 
-	/// <summary>
-	/// getter_アニメーションデータ
-	/// </summary>
-	/// <returns>現在使用しているアニメーションのデータ</returns>
-	std::vector<Animation> GetAnimationData() { return animation_; }
+		/// <summary>
+		/// アニメーション
+		/// </summary>
+		/// <param name="isAnimation">アニメーションを入れるか</param>
+		/// <param name="isSkinning">スキニングであるか</param>
+		void InitAnimation(const std::string& directoryPath, const std::string& fileName, bool isAnimation, bool isSkinning);
 
-	/// <summary>
-	/// getter_スケルトンデータ
-	/// </summary>
-	/// <returns>現在使用しているアニメーションのスケルトンデータ</returns>
-	std::vector<Skeleton> GetSkeleton() { return skeletons_; }
-	/// <summary>
-	/// getter_スキニングデータ
-	/// </summary>
-	/// <returns>現在使用しているアニメーションのスキニングデータ</returns>	
-	std::vector<SkinCluster> GetSkinCluster() { return skinClusters_; }
-	/// <summary>
-	/// スキニングの作成
-	/// </summary>
-	/// <param name="skeleton">現在のアニメーションのスケルトンデータ</param>
-	/// <param name="modelData">モデルデータ</param>
-	/// <returns>完成したスキニングデータ</returns>
-	SkinCluster CreateSkinCluster(const Skeleton& skeleton, const ModelDataMulti& modelData);
-	/// <summary>
-	/// getter_マテリアルデータ
-	/// </summary>
-	/// <returns>現在のモデルのマテリアルデータ</returns>
-	Material* GetMaterial() { return materialData_; }
-	/// <summary>
-	/// スキニングを使用しているか
-	/// </summary>
-	/// <returns>true している / false していない</returns>
-	bool IsSkinning() const { return isSkinning_; }
-	/// <summary>
-	/// アニメーションを使用しているか
-	/// </summary>
-	/// <returns>true している / false していない</returns>
-	bool IsAnimation() const { return isAnimation_; }
+		/// <summary>
+		/// 描画処理
+		/// </summary>
+		void Draw() override;
 
-	/// <summary>
-	/// マルチメッシュで使う用のカウントをリセット
-	/// </summary>
-	void ResetMeshCount() { multiMeshCount_ = 0; }
+		/// <summary>
+		/// setter_環境マップの設定
+		/// </summary>
+		/// <param name="mapFile">環境マップ</param>
+		void SetEnvironment(const std::string& mapFile);
 
-private:
+		/// <summary>
+		/// getter_モデルデータ
+		/// </summary>
+		/// <returns>現在使用しているモデルのデータ</returns>
+		ModelDataMulti GetModelData() { return modelData_; }
 
-	/// <summary>
-	/// VertexResource作成(初期化)
-	/// </summary>
-	/// <param name="modelData">モデルデータ</param>
-	void InitVertexResource(ModelData modelData) override;
+		/// <summary>
+		/// getter_アニメーションデータ
+		/// </summary>
+		/// <returns>現在使用しているアニメーションのデータ</returns>
+		std::vector<Animation> GetAnimationData() { return animation_; }
 
-	/// <summary>
-	/// MaterialResource作成(初期化)
-	/// </summary>
-	/// <param name="modelData">モデルデータ</param>
-	void InitMaterialResource(ModelData modelData) override;
+		/// <summary>
+		/// getter_スケルトンデータ
+		/// </summary>
+		/// <returns>現在使用しているアニメーションのスケルトンデータ</returns>
+		std::vector<Skeleton> GetSkeleton() { return skeletons_; }
+		/// <summary>
+		/// getter_スキニングデータ
+		/// </summary>
+		/// <returns>現在使用しているアニメーションのスキニングデータ</returns>	
+		std::vector<SkinCluster> GetSkinCluster() { return skinClusters_; }
+		/// <summary>
+		/// スキニングの作成
+		/// </summary>
+		/// <param name="skeleton">現在のアニメーションのスケルトンデータ</param>
+		/// <param name="modelData">モデルデータ</param>
+		/// <returns>完成したスキニングデータ</returns>
+		SkinCluster CreateSkinCluster(const Skeleton& skeleton, const ModelDataMulti& modelData);
+		/// <summary>
+		/// getter_マテリアルデータ
+		/// </summary>
+		/// <returns>現在のモデルのマテリアルデータ</returns>
+		Material* GetMaterial() { return materialData_; }
+		/// <summary>
+		/// スキニングを使用しているか
+		/// </summary>
+		/// <returns>true している / false していない</returns>
+		bool IsSkinning() const { return isSkinning_; }
+		/// <summary>
+		/// アニメーションを使用しているか
+		/// </summary>
+		/// <returns>true している / false していない</returns>
+		bool IsAnimation() const { return isAnimation_; }
 
-	/// <summary>
-	/// MaterialResource作成(初期化)
-	/// </summary>
-	/// <param name="modelData">モデルデータ</param>
-	void InitIndexResource(ModelData modelData) override;
+		/// <summary>
+		/// マルチメッシュで使う用のカウントをリセット
+		/// </summary>
+		void ResetMeshCount() { multiMeshCount_ = 0; }
 
-	/// <summary>
-	/// ノードを読み込む
-	/// </summary>
-	/// <param name="node">ノード</param>
-	/// <returns>アニメーションのノードを作成</returns>
-	static Node ReadNode(aiNode* node);
+	private:
 
-	/// <summary>
-	/// モデルを読み込む
-	/// </summary>
-	/// <param name="directoryPath">リソースファイル(resource)</param>
-	/// <param name="filename">使用するテクスチャ名</param>
-	/// <returns>完成したモデルデータ</returns>
-	static ModelDataMulti LoadModelFile(const std::string& directoryPath, const std::string& filename);
+		/// <summary>
+		/// VertexResource作成(初期化)
+		/// </summary>
+		/// <param name="modelData">モデルデータ</param>
+		void InitVertexResource(ModelData modelData) override;
 
-	/// <summary>
-	/// アニメーションを読み込む
-	/// </summary>
-	/// <param name="directoryPath">リソースファイル(resource)</param>
-	/// <param name="filename">使用するテクスチャ名</param>
-	/// <param name="Number">アニメーションの数(マルチメッシュ用)</param>
-	/// <returns>完成したアニメーション</returns>
-	static std::vector<Animation> LoadAnimationFile(const std::string& directoryPath, const std::string& filename, uint32_t Number);
+		/// <summary>
+		/// MaterialResource作成(初期化)
+		/// </summary>
+		/// <param name="modelData">モデルデータ</param>
+		void InitMaterialResource(ModelData modelData) override;
+
+		/// <summary>
+		/// MaterialResource作成(初期化)
+		/// </summary>
+		/// <param name="modelData">モデルデータ</param>
+		void InitIndexResource(ModelData modelData) override;
+
+		/// <summary>
+		/// ノードを読み込む
+		/// </summary>
+		/// <param name="node">ノード</param>
+		/// <returns>アニメーションのノードを作成</returns>
+		static Node ReadNode(aiNode* node);
+
+		/// <summary>
+		/// モデルを読み込む
+		/// </summary>
+		/// <param name="directoryPath">リソースファイル(resource)</param>
+		/// <param name="filename">使用するテクスチャ名</param>
+		/// <returns>完成したモデルデータ</returns>
+		static ModelDataMulti LoadModelFile(const std::string& directoryPath, const std::string& filename);
+
+		/// <summary>
+		/// アニメーションを読み込む
+		/// </summary>
+		/// <param name="directoryPath">リソースファイル(resource)</param>
+		/// <param name="filename">使用するテクスチャ名</param>
+		/// <param name="Number">アニメーションの数(マルチメッシュ用)</param>
+		/// <returns>完成したアニメーション</returns>
+		static std::vector<Animation> LoadAnimationFile(const std::string& directoryPath, const std::string& filename, uint32_t Number);
 
 
-	/// <summary>
-	/// スケルトンを生成
-	/// </summary>
-	/// <param name="rootNode">ノード</param>
-	/// <returns>作成したスケルトン</returns>
-	Skeleton CreateSkelton(const Node& rootNode);
+		/// <summary>
+		/// スケルトンを生成
+		/// </summary>
+		/// <param name="rootNode">ノード</param>
+		/// <returns>作成したスケルトン</returns>
+		Skeleton CreateSkelton(const Node& rootNode);
 
-	/// <summary>
-	/// ジョイント(関節部分)を生成
-	/// </summary>
-	/// <param name="node">ノード</param>
-	/// <param name="parent">親子関係</param>
-	/// <param name="joints">ジョイント</param>
-	/// <returns>生成したジョイント</returns>
-	int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
+		/// <summary>
+		/// ジョイント(関節部分)を生成
+		/// </summary>
+		/// <param name="node">ノード</param>
+		/// <param name="parent">親子関係</param>
+		/// <param name="joints">ジョイント</param>
+		/// <returns>生成したジョイント</returns>
+		int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
 
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource_; //index
+		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource_; //index
 
-	uint32_t* mappedIndex_ = nullptr;
+		uint32_t* mappedIndex_ = nullptr;
 
-	std::vector<D3D12_INDEX_BUFFER_VIEW> indexBufferView_; //index
+		std::vector<D3D12_INDEX_BUFFER_VIEW> indexBufferView_; //index
 
-	ModelDataMulti InitialData_;
-	
-	//アニメーション
-	std::vector<Animation> animation_;
-	//スケルトン
-	std::vector<Skeleton> skeletons_;
-	//スキニング
-	std::vector<SkinCluster> skinClusters_;
-	//VertexBufferView二つ(通常アニメーション用、スキニングアニメーション用)
-	D3D12_VERTEX_BUFFER_VIEW vbvs_[2];
-	//環境マップのファイルパス
-	std::string EnvironmentFile_;
+		ModelDataMulti InitialData_;
 
-	bool isAnimation_ = false;//アニメーション使用フラグ
-	bool isSkinning_ = false;//スキニング使用フラグ
+		//アニメーション
+		std::vector<Animation> animation_;
+		//スケルトン
+		std::vector<Skeleton> skeletons_;
+		//スキニング
+		std::vector<SkinCluster> skinClusters_;
+		//VertexBufferView二つ(通常アニメーション用、スキニングアニメーション用)
+		D3D12_VERTEX_BUFFER_VIEW vbvs_[2];
+		//環境マップのファイルパス
+		std::string EnvironmentFile_;
 
-	uint32_t multiMeshCount_ = 0;//メッシュの数をカウントする
+		bool isAnimation_ = false;//アニメーション使用フラグ
+		bool isSkinning_ = false;//スキニング使用フラグ
 
-};
+		uint32_t multiMeshCount_ = 0;//メッシュの数をカウントする
+
+	};
+}

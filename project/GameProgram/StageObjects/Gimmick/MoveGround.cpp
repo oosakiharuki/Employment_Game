@@ -1,3 +1,8 @@
+/// --------------------
+///
+/// 動く足場
+/// 
+/// --------------------
 #include "MoveGround.h"
 #include "TimeScale.h"
 
@@ -8,7 +13,7 @@ MoveGround::~MoveGround() {}
 
 void MoveGround::Initialize() {
 	wt_.Initialize();
-	object_ = std::make_unique<Object3d>();
+	object_ = std::make_unique<EngineLayer::Object3d>();
 	object_->Initialize();
 	object_->SetModelFile("moveGround.obj");
 

@@ -1,3 +1,9 @@
+/// --------------------------
+///
+/// カメラを操作する
+/// (プレイヤー追尾、ズーム)
+/// 
+/// --------------------------
 #include "CameraControl.h"
 #include <sstream>
 #include <random>
@@ -14,7 +20,7 @@ void CameraControl::Initialize() {
 	transform_ = { kDefaultScale_, {0,0,0}, {0,0,0} };
 }
 
-void CameraControl::Update(Camera* camera, Player* player) {
+void CameraControl::Update(EngineLayer::Camera* camera, Player* player) {
 	//プレイヤー関連処理
 	if (player) {
 		//カメラコントロール
@@ -71,7 +77,7 @@ void CameraControl::Update(Camera* camera, Player* player) {
 void CameraControl::ImGuiUpdate() {	
 #ifdef  USE_IMGUI
 	//imGuiでなくボタンで変更するように
-	if (Input::GetInstance().TriggerKey(DIK_P)) {
+	if (EngineLayer::Input::GetInstance().TriggerKey(DIK_P)) {
 		isFreeMode_ = !isFreeMode_;
 	}
 
@@ -152,27 +158,27 @@ void CameraControl::ChangeInterpolation() {
 
 void CameraControl::DebugMove() {
 	//上に移動
-	if (Input::GetInstance().PushKey(DIK_UP)) {
+	if (EngineLayer::Input::GetInstance().PushKey(DIK_UP)) {
 		transform_.translate.y += movePower_;
 	}
 	//下に移動
-	if (Input::GetInstance().PushKey(DIK_DOWN)) {
+	if (EngineLayer::Input::GetInstance().PushKey(DIK_DOWN)) {
 		transform_.translate.y -= movePower_;
 	}
 	//左に移動
-	if (Input::GetInstance().PushKey(DIK_LEFT)) {
+	if (EngineLayer::Input::GetInstance().PushKey(DIK_LEFT)) {
 		transform_.translate.x -= movePower_;
 	}
 	//右に移動
-	if (Input::GetInstance().PushKey(DIK_RIGHT)) {
+	if (EngineLayer::Input::GetInstance().PushKey(DIK_RIGHT)) {
 		transform_.translate.x += movePower_;
 	}
 	//後ろに移動
-	if (Input::GetInstance().PushKey(DIK_Y)) {
+	if (EngineLayer::Input::GetInstance().PushKey(DIK_Y)) {
 		transform_.translate.z -= movePower_;
 	}
 	//前に移動
-	if (Input::GetInstance().PushKey(DIK_U)) {
+	if (EngineLayer::Input::GetInstance().PushKey(DIK_U)) {
 		transform_.translate.z += movePower_;
 	}
 }

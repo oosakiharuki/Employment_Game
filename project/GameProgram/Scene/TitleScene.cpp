@@ -20,7 +20,7 @@ void TitleScene::Initialize() {
 	InitSprite();
 
 	//パーティクル初期化
-	sceneParticles_[particleBullet_] = ParticleManager::GetInstance().InitParticle(particleBullet_);
+	sceneParticles_[particleBullet_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleBullet_);
 
 	FadeScreen::GetInstance().FadeStart(type_fadeOut);
 	PauseScreen::GetInstance().OffPause();//ポーズを強制解除
@@ -28,18 +28,18 @@ void TitleScene::Initialize() {
 
 void TitleScene::InitSprite() {
 	//タイトル名スプライトの初期化
-	spriteMojiTitle_ = std::make_unique<Sprite>();
+	spriteMojiTitle_ = std::make_unique<EngineLayer::Sprite>();
 	spriteMojiTitle_->Initialize("Moji_Title.png");
 	spriteMojiTitle_->SetPosition(titlePos_);
 }
 
 void TitleScene::InitCamera() {
-	camera_ = std::make_unique<Camera>();
+	camera_ = std::make_unique<EngineLayer::Camera>();
 	spitOut_.SpitOutCamera(cameraControl_);
 
-	Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
-	GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
-	ParticleCommon::GetInstance().SetDefaultCamera(camera_.get());
+	EngineLayer::Object3dCommon::GetInstance().SetDefaultCamera(camera_.get());
+	EngineLayer::GLTFCommon::GetInstance().SetDefaultCamera(camera_.get());
+	EngineLayer::ParticleCommon::GetInstance().SetDefaultCamera(camera_.get());
 }
 
 void TitleScene::ObjectLoading() {
@@ -148,21 +148,21 @@ void TitleScene::UpdateBehind() {
 
 void TitleScene::Draw() {
 
-	Object3dCommon::GetInstance().Command();
+	EngineLayer::Object3dCommon::GetInstance().Command();
 
 	playerShadow_->Draw();
 
-	GLTFCommon::GetInstance().Command();
+	EngineLayer::GLTFCommon::GetInstance().Command();
 
 	for (auto& visualActor : visualActors) {
 		visualActor->Draw();
 	}
 
-	SpriteCommon::GetInstance().Command();
+	EngineLayer::SpriteCommon::GetInstance().Command();
 
 	spriteMojiTitle_->Draw();
 
-	ParticleCommon::GetInstance().Command();
+	EngineLayer::ParticleCommon::GetInstance().Command();
 
 	for (auto& particle : sceneParticles_) {
 		particle.second->Draw();
@@ -173,7 +173,7 @@ void TitleScene::Finalize() {}
 
 void TitleScene::SceneUpdate() {
 	//次のシーンに移動するとき
-	if (SceneManager::GetInstance().NextSceneChangeFlag()) {
+	if (EngineLayer::SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//フェードを挟む(FadeIn)
 		FadeScreen::GetInstance().FadeStart(type_fadeIn);
 	}
@@ -182,18 +182,18 @@ void TitleScene::SceneUpdate() {
 void TitleScene::Operation(){
 	//キーボード操作
 
-	if (Input::GetInstance().TriggerKey(DIK_W) && !isSelect_) {
+	if (EngineLayer::Input::GetInstance().TriggerKey(DIK_W) && !isSelect_) {
 		ArrowSelectStart();//ゲームスタート
 	}
-	else if (Input::GetInstance().TriggerKey(DIK_S) && !isSelect_) {
+	else if (EngineLayer::Input::GetInstance().TriggerKey(DIK_S) && !isSelect_) {
 		ArrowSelectEnd();//ゲーム終了
 	}
 
 
 	//ゲームパット操作
-	if (Input::GetInstance().GetActiveGamePad() && !isSelect_) {
+	if (EngineLayer::Input::GetInstance().GetActiveGamePad() && !isSelect_) {
 		//スティックの傾き度(LスティックYのみ)
-		float padY = Input::GetInstance().LeftStickY();
+		float padY = EngineLayer::Input::GetInstance().LeftStickY();
 		//上に傾いた
 		if (padY > kStickPower_) {
 			ArrowSelectStart();//ゲームスタート
@@ -204,11 +204,11 @@ void TitleScene::Operation(){
 	}
 
 	//spaceもしくはAボタンを押したら決定
-	if ((Input::GetInstance().TriggerKey(DIK_SPACE) ||
-		Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && !isSelect_) {
+	if ((EngineLayer::Input::GetInstance().TriggerKey(DIK_SPACE) ||
+		EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) && !isSelect_) {
 		isSelect_ = true;//選択した
 		//選択パーティクル
-		sceneParticles_[particleBullet_]->SetParticleBorn(ParticleBorn::MomentMode);
+		sceneParticles_[particleBullet_]->SetParticleBorn(EngineLayer::ParticleBorn::MomentMode);
 		sceneParticles_[particleBullet_]->SetTranslate(transforms_["umbrella_Open"].translate);
 		sceneParticles_[particleBullet_]->SetRotate({ 0.0f,0.0f,kArrowRange_ });
 	}
@@ -234,7 +234,7 @@ void TitleScene::MoveTitleLogo() {
 		if (bulletTimer_ >= kBulletTimeMax_) {
 			if (transforms_["umbrella_Open"].translate.y == transforms_["Select_Start"].translate.y) {
 				//セレクトシーンに移動
-				SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
+				EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
 			}
 			else if (transforms_["umbrella_Open"].translate.y == transforms_["Select_End"].translate.y) {
 				//ゲーム終了

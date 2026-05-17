@@ -96,11 +96,11 @@ void SpitOutLevelEditor::EnemyMoveRoute(EnemyMoveCommand& enemy, LevelEditor::Le
 }
 
 
-void SpitOutLevelEditor::SpitOutStage(std::unique_ptr<Object3d>& stageObj, const std::string& stageFileName) {
+void SpitOutLevelEditor::SpitOutStage(std::unique_ptr<EngineLayer::Object3d>& stageObj, const std::string& stageFileName) {
 	//- ステージ全体の当たり判定設定 -
 	// 
 	//ステージ自体の見た目
-	stageObj = std::make_unique<Object3d>();
+	stageObj = std::make_unique<EngineLayer::Object3d>();
 	stageObj->Initialize();
 	stageObj->SetModelFile(stageFileName + ".obj");
 

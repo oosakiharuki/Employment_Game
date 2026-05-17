@@ -1,3 +1,9 @@
+/// -----------------------
+///
+/// エネルギーチャージ
+/// 触れるとゲージが増える
+/// 
+/// -----------------------
 #include "Energy.h"
 #include "MyMath.h"
 
@@ -5,7 +11,7 @@ using namespace MyMath;
 
 void Energy::Initialize() {
 	//モデル作成
-	object_ = std::make_unique<Object3d>();
+	object_ = std::make_unique<EngineLayer::Object3d>();
 	object_->Initialize();
 	object_->SetModelFile("energy.obj");
 

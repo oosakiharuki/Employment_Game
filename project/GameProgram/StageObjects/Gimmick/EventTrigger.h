@@ -144,8 +144,8 @@ private:
 	/// <param name="word">内容</param>
 	void LoadPopEnemy(std::istringstream& line_stream ,std::string& word);
 
-	std::unique_ptr<Object_glTF> object_;
-	WorldTransform wt_;
+	std::unique_ptr<EngineLayer::Object_glTF> object_;
+	EngineLayer::WorldTransform wt_;
 	Transform transform_{};
 
 	//読み取ったcsv
@@ -169,7 +169,7 @@ private:
 	EventData eventData_;
 
 	//パーティクル
-	std::list<std::unique_ptr<Particle>> summon_particles_;
+	std::list<std::unique_ptr<EngineLayer::Particle>> summon_particles_;
 	//召喚タイマー
 	const float kSummonMaxTime_ = 1.25f;
 	float summonTimer_ = kSummonMaxTime_;
@@ -185,7 +185,7 @@ private:
 	const float kDirectionLeft_ = -90.0f;
 
 	//召喚するとき
-	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
+	std::unordered_map<std::string, std::unique_ptr<EngineLayer::Particle>> particles_;
 
 	const std::string& particleSummon_ = "enemies_summon";
 

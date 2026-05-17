@@ -48,7 +48,7 @@ public:
 	/// getter_ワールド座標系
 	/// </summary>
 	/// <returns></returns>プレイヤー本体のワールド座標系
-	const WorldTransform& GetWorldTransform() { return wt_; }
+	const EngineLayer::WorldTransform& GetWorldTransform() { return wt_; }
 	
 	/// <summary>
 	/// getter_ワールド座標系の位置
@@ -398,10 +398,10 @@ private:
 	// --- オブジェクト ---
 	
 	//プレイヤー本体
-	std::unique_ptr<Object_glTF> object_;
+	std::unique_ptr<EngineLayer::Object_glTF> object_;
 	//傘の銃
 	std::unique_ptr<BaseUmbrella> umbrella_ = nullptr;
-	WorldTransform wtGun_;//傘のワールド座標系
+	EngineLayer::WorldTransform wtGun_;//傘のワールド座標系
 	Transform transformGun_{};
 
 	/// 弾丸
@@ -509,7 +509,7 @@ private:
 	const Vector2 kTextureSizeHp_ = { 64,64 };//スプライトサイズ
 	const Vector2 kInitializePointHp_ = { 20.0f,45.0f };//スプライトの初期位置
 	const float kDistanceYHp_ = 10.0f;//スプライトのY軸幅
-	std::vector<std::unique_ptr<Sprite>> hpSprites_;
+	std::vector<std::unique_ptr<EngineLayer::Sprite>> hpSprites_;
 
 	// -----------
 

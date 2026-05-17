@@ -9,7 +9,7 @@ using namespace UseEveryOne;
 void Boss::Initialize() {
 	GameActor::Initialize();
 
-	object_ = std::make_unique<Object_glTF>();
+	object_ = std::make_unique<EngineLayer::Object_glTF>();
 	object_->Initialize();
 	object_->SetModelFile("Boss.gltf");
 
@@ -25,16 +25,16 @@ void Boss::Initialize() {
 	maxHp_ = kMaxHp_;
 
 
-	hpSprite_ = std::make_unique<Sprite>();
+	hpSprite_ = std::make_unique<EngineLayer::Sprite>();
 	hpSprite_->Initialize("bossHp.png");
 	hpSprite_->SetSize(kHpSpriteSize_);
 
-	underBarSprite_ = std::make_unique<Sprite>();
+	underBarSprite_ = std::make_unique<EngineLayer::Sprite>();
 	underBarSprite_->Initialize("bossHpBar.png");
 	underBarSprite_->SetSize(kHpSpriteSize_);
 
-	Audio::GetInstance().LoadWave(kFireSoundName_);
-	Audio::GetInstance().LoadWave(kFireBeforeSoundName_);
+	EngineLayer::Audio::GetInstance().LoadWave(kFireSoundName_);
+	EngineLayer::Audio::GetInstance().LoadWave(kFireBeforeSoundName_);
 }
 
 void Boss::Update() {
@@ -64,7 +64,7 @@ void Boss::Draw() {
 	//オブジェクト描画
 	object_->Draw();
 
-	Object3dCommon::GetInstance().Command();
+	EngineLayer::Object3dCommon::GetInstance().Command();
 	//弾丸の描画
 	for (auto& bullet : bullets_) {
 		bullet->Draw();
@@ -167,8 +167,8 @@ void Boss::CommandFire(float kFrame, float bulletSpeed, uint32_t bulletMax) {
 
 	//撃ち始めSE(時間が半分くらいの時)
 	if (rapidFireTime_ == kRapidFireTimeMax_ * kDivideByTwo_) {
-		Audio::GetInstance().StopWave(kFireSoundName_);//音ズレが起きないよう
-		Audio::GetInstance().SoundPlayWave(kFireSoundName_, kVolume_);//発砲SE
+		EngineLayer::Audio::GetInstance().StopWave(kFireSoundName_);//音ズレが起きないよう
+		EngineLayer::Audio::GetInstance().SoundPlayWave(kFireSoundName_, kVolume_);//発砲SE
 	}
 
 	//連射で時間を開ける
@@ -304,8 +304,8 @@ void Boss::CommandFallPlayer() {
 void Boss::CommandBeforeActionMotion() {
 	
 	//SEはすでに鳴っているか
-	if (!Audio::GetInstance().IsPlayingSound(kFireBeforeSoundName_)) {
-		Audio::GetInstance().SoundPlayWave(kFireBeforeSoundName_, kVolume_);
+	if (!EngineLayer::Audio::GetInstance().IsPlayingSound(kFireBeforeSoundName_)) {
+		EngineLayer::Audio::GetInstance().SoundPlayWave(kFireBeforeSoundName_, kVolume_);
 	}
 
 	if (transform_.rotate.z >= kRotateOneLap_) {
@@ -324,7 +324,7 @@ void Boss::CommandBeforeActionMotion() {
 
 	motionFinish_ = true;
 	moveCoolTimer_ = 0.0f;
-	Audio::GetInstance().StopWave(kFireBeforeSoundName_);//予備音声を止める
+	EngineLayer::Audio::GetInstance().StopWave(kFireBeforeSoundName_);//予備音声を止める
 }
 
 
@@ -393,7 +393,7 @@ bool Boss::TypeCheckUp(const CollisionTypes& collisionType) {
 
 void Boss::HpSpriteUpdate(){
 	//ウィンドウズの画像範囲
-	Vector2 windows = { (float)WinApp::kClientWidth_,(float)WinApp::kClientHeight_ };
+	Vector2 windows = { (float)EngineLayer::WinApp::kClientWidth_,(float)EngineLayer::WinApp::kClientHeight_ };
 	windows *= kSpriteWindowsPosition_;
 	//バーの設定
 	underBarSprite_->SetPosition(windows);

@@ -8,7 +8,7 @@
 /// <summary>
 /// ゲームオーバーシーン(BaseSceneの派生クラス)
 /// </summary>
-class GameOverScene : public BaseScene{
+class GameOverScene : public EngineLayer::BaseScene{
 public:
 	/// <summary>
 	/// 初期化処理
@@ -45,7 +45,7 @@ private:
 	void InitObject();
 
 	//カメラ
-	std::unique_ptr<Camera> camera_ = nullptr;
+	std::unique_ptr<EngineLayer::Camera> camera_ = nullptr;
 	//カメラのコントロール
 	std::unique_ptr<CameraControl> cameraControl_;
 
@@ -59,8 +59,8 @@ private:
 	const float kRotate_ = 0.5f;
 
 	//スプライト
-	std::unique_ptr<Sprite> sprite_;//ゲームオーバーの文字
-	std::unique_ptr<Sprite> spriteSpace_;//Spaceでもどるの文字
+	std::unique_ptr<EngineLayer::Sprite> sprite_;//ゲームオーバーの文字
+	std::unique_ptr<EngineLayer::Sprite> spriteSpace_;//Spaceでもどるの文字
 
 	//スプライトの設定
 	const Vector2 kSpritePositionGameOver_ = { 100.0f,100.0f };//[ゲームオーバー]文字の座標
