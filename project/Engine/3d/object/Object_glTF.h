@@ -108,7 +108,7 @@ namespace EngineLayer {
 		/// <param name="skeleton"></param>
 		/// <param name="animation"></param>
 		/// <param name="animationTime"></param>
-		void ApplyAnimation(Skeleton& skeleton, const Animation& animation, float animationTime);
+		void ApplyAnimation(Skeleton& skeleton, const MyMath::Animation& animation, float animationTime);
 		/// <summary>
 		/// joint読み込みのアニメーション操作
 		/// </summary>
@@ -116,7 +116,7 @@ namespace EngineLayer {
 		/// <param name="animation"></param>
 		/// <param name="nextAnimation"></param>
 		/// <param name="animationTime"></param>
-		void Interpolation(Skeleton& skeleton, const Animation& animation, const Animation& nextAnimation, float animationTime);
+		void Interpolation(Skeleton& skeleton, const MyMath::Animation& animation, const MyMath::Animation& nextAnimation, float animationTime);
 		/// <summary>
 		/// スケルトン処理
 		/// </summary>
@@ -140,10 +140,10 @@ namespace EngineLayer {
 
 		Model_glTF* model_ = nullptr;
 
-		ModelDataMulti modelData_;
+		MyMath::ModelDataMulti modelData_;
 
 
-		std::vector<Animation> animations_;
+		std::vector<MyMath::Animation> animations_;
 		///アニメーションタイマー
 		float animationTime_ = 0.0f;
 		/// 補間タイマー
@@ -161,7 +161,7 @@ namespace EngineLayer {
 		bool isChange_ = false;
 
 		//変更前のアニメーション
-		std::vector<Animation> preAnimations_;
+		std::vector<MyMath::Animation> preAnimations_;
 
 		std::vector<Matrix4x4> localMatrices_;
 

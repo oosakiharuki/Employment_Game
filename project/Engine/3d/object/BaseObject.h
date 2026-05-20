@@ -5,9 +5,11 @@
 //ComPtr
 #include <wrl.h>
 #include "d3d12.h"
+#include <numbers>
 
 #include "Camera.h"
 #include "WorldTransform.h"
+
 /// <summary>
 /// エンジン層
 /// </summary>

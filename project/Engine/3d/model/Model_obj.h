@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseModel.h"
 #include <string>
+#include "AnimationMath.h"
 
 /// <summary>
 /// エンジン層
@@ -64,8 +65,8 @@ namespace EngineLayer {
 		/// <param name="filename">テクスチャファイルパス</param>
 		/// <param name="objName">オブジェクト拡張子</param>
 		/// <returns>完成したモデルデータ(マルチマテリアル付き)</returns>
-		static ModelDataMulti LoadObjFile(const std::string& directoryPath, const std::string& filename, const std::string& objName);
+		static MyMath::ModelDataMulti LoadObjFile(const std::string& directoryPath, const std::string& filename, const std::string& objName);
 
-		ModelDataMulti InitialData_;
+		MyMath::ModelDataMulti InitialData_;
 	};
 }

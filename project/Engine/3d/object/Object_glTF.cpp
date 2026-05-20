@@ -171,6 +171,7 @@ namespace EngineLayer {
 			}
 			else if (model_->IsAnimation()) {
 				//フレームアニメーションの場合
+				if (localMatrices_.empty()) return;
 				wvpDatas_[i]->WVP = localMatrices_[i] * WorldViewProjectionMatrix;
 			}
 			else {

@@ -12,7 +12,7 @@ namespace EngineLayer {
 	struct Skeleton {
 		int32_t root;//RootJointのIndex
 		std::map <std::string, int32_t>jointMap;//コンテナ
-		std::vector<Joint> joints;//所属ジョイント
+		std::vector<MyMath::Joint> joints;//所属ジョイント
 	};
 
 	/// <summary>
@@ -32,7 +32,7 @@ namespace EngineLayer {
 		std::vector<Matrix4x4> inverseBindPoseMatrices;
 		Microsoft::WRL::ComPtr<ID3D12Resource> influenceResource;
 		D3D12_VERTEX_BUFFER_VIEW influenceBufferView;
-		std::span<VertexInfluence> mappedInfluence;
+		std::span<MyMath::VertexInfluence> mappedInfluence;
 		Microsoft::WRL::ComPtr<ID3D12Resource> paletteResource;
 		std::span<WellForGPU> mappedPalette;
 		std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE> paletteSrvHandle;
@@ -72,13 +72,13 @@ namespace EngineLayer {
 		/// getter_モデルデータ
 		/// </summary>
 		/// <returns>現在使用しているモデルのデータ</returns>
-		ModelDataMulti GetModelData() { return modelData_; }
+		MyMath::ModelDataMulti GetModelData() { return modelData_; }
 
 		/// <summary>
 		/// getter_アニメーションデータ
 		/// </summary>
 		/// <returns>現在使用しているアニメーションのデータ</returns>
-		std::vector<Animation> GetAnimationData() { return animation_; }
+		std::vector<MyMath::Animation> GetAnimationData() { return animation_; }
 
 		/// <summary>
 		/// getter_スケルトンデータ
@@ -96,7 +96,7 @@ namespace EngineLayer {
 		/// <param name="skeleton">現在のアニメーションのスケルトンデータ</param>
 		/// <param name="modelData">モデルデータ</param>
 		/// <returns>完成したスキニングデータ</returns>
-		SkinCluster CreateSkinCluster(const Skeleton& skeleton, const ModelDataMulti& modelData);
+		SkinCluster CreateSkinCluster(const Skeleton& skeleton, const MyMath::ModelDataMulti& modelData);
 		/// <summary>
 		/// getter_マテリアルデータ
 		/// </summary>
@@ -143,7 +143,7 @@ namespace EngineLayer {
 		/// </summary>
 		/// <param name="node">ノード</param>
 		/// <returns>アニメーションのノードを作成</returns>
-		static Node ReadNode(aiNode* node);
+		static MyMath::Node ReadNode(aiNode* node);
 
 		/// <summary>
 		/// モデルを読み込む
@@ -151,7 +151,7 @@ namespace EngineLayer {
 		/// <param name="directoryPath">リソースファイル(resource)</param>
 		/// <param name="filename">使用するテクスチャ名</param>
 		/// <returns>完成したモデルデータ</returns>
-		static ModelDataMulti LoadModelFile(const std::string& directoryPath, const std::string& filename);
+		static MyMath::ModelDataMulti LoadModelFile(const std::string& directoryPath, const std::string& filename);
 
 		/// <summary>
 		/// アニメーションを読み込む
@@ -160,7 +160,7 @@ namespace EngineLayer {
 		/// <param name="filename">使用するテクスチャ名</param>
 		/// <param name="Number">アニメーションの数(マルチメッシュ用)</param>
 		/// <returns>完成したアニメーション</returns>
-		static std::vector<Animation> LoadAnimationFile(const std::string& directoryPath, const std::string& filename, uint32_t Number);
+		static std::vector<MyMath::Animation> LoadAnimationFile(const std::string& directoryPath, const std::string& filename, uint32_t Number);
 
 
 		/// <summary>
@@ -168,7 +168,7 @@ namespace EngineLayer {
 		/// </summary>
 		/// <param name="rootNode">ノード</param>
 		/// <returns>作成したスケルトン</returns>
-		Skeleton CreateSkelton(const Node& rootNode);
+		Skeleton CreateSkelton(const MyMath::Node& rootNode);
 
 		/// <summary>
 		/// ジョイント(関節部分)を生成
@@ -177,7 +177,7 @@ namespace EngineLayer {
 		/// <param name="parent">親子関係</param>
 		/// <param name="joints">ジョイント</param>
 		/// <returns>生成したジョイント</returns>
-		int32_t CreateJoint(const Node& node, const std::optional<int32_t>& parent, std::vector<Joint>& joints);
+		int32_t CreateJoint(const MyMath::Node& node, const std::optional<int32_t>& parent, std::vector<MyMath::Joint>& joints);
 
 		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource_; //index
 
@@ -185,10 +185,10 @@ namespace EngineLayer {
 
 		std::vector<D3D12_INDEX_BUFFER_VIEW> indexBufferView_; //index
 
-		ModelDataMulti InitialData_;
+		MyMath::ModelDataMulti InitialData_;
 
 		//アニメーション
-		std::vector<Animation> animation_;
+		std::vector<MyMath::Animation> animation_;
 		//スケルトン
 		std::vector<Skeleton> skeletons_;
 		//スキニング

@@ -68,6 +68,6 @@ namespace EngineLayer {
 		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> materialResources_;
 		Material* materialData_ = nullptr;
 
-		ModelDataMulti modelData_;
+		MyMath::ModelDataMulti modelData_;
 	};
 }

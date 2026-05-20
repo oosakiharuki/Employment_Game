@@ -80,7 +80,7 @@ void GameScene::Update() {
 
 void GameScene::PlayerAliveUpdate() {
 	//プレイヤー演出中、死亡した状態は敵は動かさない
-	//if (player_->GetHp() == 0 || player_->GetPerformanceMode()) return;
+	if (player_->GetHp() == 0 || player_->GetPerformanceMode()) return;
 
 	//ステージの更新処理
 	stageObj_->Update();

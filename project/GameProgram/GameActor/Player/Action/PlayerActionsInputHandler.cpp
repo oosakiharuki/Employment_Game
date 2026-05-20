@@ -266,7 +266,7 @@ void PlayerActionsInputHandler::GetCommand(Player* player, std::vector<std::uniq
 	}
 	
 	//発砲攻撃[Kキー、Xボタン、Rトリガー]
-	if (EngineLayer::Input::GetInstance().PushKey(DIK_K) || EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_X) || EngineLayer::Input::GetInstance().RightTrigger()) {
+	if (EngineLayer::Input::GetInstance().TriggerKey(DIK_K) || EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_X) || EngineLayer::Input::GetInstance().RightTrigger()) {
 		commands.push_back(std::make_unique<FireCommand>());
 	}
 

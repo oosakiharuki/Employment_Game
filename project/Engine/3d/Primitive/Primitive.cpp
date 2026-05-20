@@ -4,6 +4,9 @@
 /// 
 /// --------------------------------
 #include "Primitive.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <numbers>
 
 using namespace MyMath;
 

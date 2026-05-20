@@ -807,8 +807,8 @@
                         0.0
                     ],
                     "scale": [
-                        0.5,
-                        0.5,
+                        0.0,
+                        0.0,
                         0.0
                     ],
                     "translate": [
@@ -829,7 +829,7 @@
                 "frequency": 0.5
             },
             "particleName": "player_parry",
-            "textureFile": "resource/Sprite/cone.dds"
+            "textureFile": "resource/Sprite/white.dds"
         },
         {
             "dist": {
