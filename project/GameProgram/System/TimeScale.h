@@ -18,7 +18,9 @@ public:
 	/// </summary>
 	void Finalize();
 
-
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update();
 
 	/// <summary>
@@ -31,13 +33,22 @@ public:
 	/// getter_時間尺度の割合(時間尺度率)
 	/// </summary>
 	/// <returns>現在の時間尺度 / 時間尺度の基準値 (例: [1/60] / [1/60] = 1 , [1/300] / [1/60] = 1/5 )</returns>
-	float GetTimeScaleFacto() { return timeScale_ / kDefaultValue_; }
+	float GetTimeScaleFacto() { 
+
+		if (timeScale_ == 0.0f) {
+			return timeScale_;
+		}
+		return timeScale_ / kDefaultValue_;
+	}
 
 	/// <summary>
 	/// setter_時間尺度
 	/// </summary>
 	/// <param name="time">時間尺度の設定</param>
-	void SetTimeScale(float time) { timeScale_ = time; }
+	void SetTimeScale(float time, float returnTimeMax) { 
+		timeScale_ = time;
+		TimeMax_ = returnTimeMax;
+	}
 
 private:
 	//インスタンス
@@ -50,9 +61,13 @@ private:
 	float timeScale_ = kDefaultValue_; //時間尺度(タイマースケール)
 
 	//スロー状態
-	float slowTime_ = 0.0f;
-	const float kSlowTimeMax_ = 2.0f;	
+	//float slowTime_ = 0.0f;
+	//const float kSlowTimeMax_ = 2.0f;	
 	
+	//元の時間に戻す時間
+	float returnTimer_ = 0.0f;
+	float TimeMax_ = 0.0f;
+
 	/// <summary>
 	/// 時間尺度を基準値にリセット
 	/// </summary>

@@ -40,17 +40,7 @@ private:
 	/// </summary>
 	void AnimationRotate();
 
-	/// <summary>
-	/// 当たり判定コマンド
-	/// </summary>
-	/// <param name="collision">相手側の当たり判定ソース</param>
-	void OnCollision(CollisionSource* collision) override;
-	/// <summary>
-	/// 当たり判定をとるタイプかをチェック
-	/// </summary>
-	/// <param name="collisionType">相手の当たり判定タイプ</param>
-	/// <returns>該当するタイプがあるなら true</returns>
-	bool TypeCheckUp(const CollisionTypes& collisionType) override;
+	//当たり判定後の反応はない
 
 	std::unique_ptr<EngineLayer::Object_glTF> objectNeedle_ = nullptr;
 

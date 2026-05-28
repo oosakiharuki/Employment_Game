@@ -552,7 +552,7 @@
                 "translation": [
                     53.0,
                     0.0,
-                    15.699999809265137
+                    16.700000762939453
                 ],
                 "rotation": [
                     0.0,
@@ -635,41 +635,6 @@
                 ]
             },
             "file_name": "GuideBrink"
-        },
-        {
-            "type": "EnemySpawn",
-            "EnemyName": "Rusher",
-            "name": "EnemySpawn.003",
-            "transform": {
-                "translation": [
-                    53.0,
-                    0.0,
-                    16.700000762939453
-                ],
-                "rotation": [
-                    0.0,
-                    0.0,
-                    -89.99999237060547
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    1.0
-                ]
-            }
         },
         {
             "type": "StageObjectSpawn",

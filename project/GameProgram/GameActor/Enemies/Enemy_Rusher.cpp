@@ -20,6 +20,8 @@ void Enemy_Rusher::Initialize() {
 	//体自体にダメージがある敵
 	collisionType_ = CollisionTypes::TypeEnemyDamageBody;
 
+	transform_.scale = enemySize_;
+
 }
 
 void Enemy_Rusher::UpdateImGui() {
@@ -95,7 +97,7 @@ void Enemy_Rusher::Charge() {
 
 
 	transform_.translate -= TransformNormal(kRushSpeed_ / kStepBackSpeed_, wt_.GetMatWorld()) * TimeScale::GetInstance().GetTimeScaleFacto() ;
-	transform_.scale.z = 1.0f - (kScaleBack_ * chargeTimer_);
+	transform_.scale.z = enemySize_.z - (kScaleBack_ * chargeTimer_);
 }
 
 void Enemy_Rusher::RushStreet() {
@@ -114,7 +116,7 @@ void Enemy_Rusher::RushStreet() {
 	object_->SetAnimationTime(TimeScale::GetInstance().GetTimeScale() * 20.0f * chargeTimer_);
 	
 
-	transform_.scale = kDefaultScale_;
+	transform_.scale = enemySize_;
 }
 
 void Enemy_Rusher::ReturnPosition() {

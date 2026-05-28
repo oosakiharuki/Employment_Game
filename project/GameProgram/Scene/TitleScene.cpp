@@ -12,11 +12,13 @@ void TitleScene::Initialize() {
 	levelEditor_.LoadLevelEditor("resource/LevelEditor/title_setting.json");
 	spitOut_.SetLevelEditor(&levelEditor_);
 
+	//カメラ初期
 	InitCamera();
 
 	//オブジェクトを読み込む
 	ObjectLoading();
 
+	//スプライト初期
 	InitSprite();
 
 	//パーティクル初期化
@@ -55,7 +57,6 @@ void TitleScene::ObjectLoading() {
 	playerShadow_ = std::make_unique<Shadow>();
 	playerShadow_->Initialize();
 	Vector3 shadowPos = transforms_["player_standby"].translate;//影位置
-	//shadowPos.y = kShadowPositionY_;//影位置Y
 	playerShadow_->SetTranslate(shadowPos);
 }
 
@@ -89,10 +90,14 @@ void TitleScene::Update() {
 		transforms_["umbrella_Open"].translate.y -= kGravity_;
 	}
 
+	//タイトルロゴが降ってくる
 	MoveTitleLogo();
 
 	//タイトルが出てくるまで選択部分は通さない
 	if (titleFallingTimer_ < kTitleFallingTimeMax_) {
+		//演出スキップ
+		PerformanceSkip();
+
 		UpdateBehind();
 		return;
 	}
@@ -241,5 +246,16 @@ void TitleScene::MoveTitleLogo() {
 				isGameEnd_ = true;
 			}
 		}
+	}
+}
+
+void TitleScene::PerformanceSkip() {
+	if (EngineLayer::Input::GetInstance().TriggerKey(DIK_SPACE) ||
+		EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_A)) {
+		cameraRotateX_ = 0.0f;
+		//座標を
+		transforms_["umbrella_Open"].translate.y = kLandingPointY_ + 2.0f;
+		//座標を地面に
+		transforms_["player_standby"].translate.y = kLandingPointY_;
 	}
 }

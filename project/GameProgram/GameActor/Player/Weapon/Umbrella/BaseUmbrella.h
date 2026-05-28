@@ -182,10 +182,14 @@ private:
 
 	const std::string kUmbrellaOpenSoundName_ = "resource/Sound/umbrellaOpen.mp3";//傘を開く
 	const std::string kFireSoundName_ = "resource/Sound/fire.mp3";//発砲攻撃
-	const std::string kParrySoundName_ = "resource/Sound/bane.mp3";//パリィに成功
+	const std::string kParrySuccessSoundName_ = "resource/Sound/parry.mp3";//パリィに成功
+	const std::string kParrySoundName_ = "resource/Sound/bane.mp3";//パリィで跳ね返す
 
 	//傘より少し前に出す
 	const Vector3 kParryParticleFrontPoint_ { 0.0f,0.0f,2.0f };
 	const Vector3 kParryParticleRotate_ = { 90.0f,0.0f,0.0f };
+
+
+	bool parryStart_ = true;
 };
 

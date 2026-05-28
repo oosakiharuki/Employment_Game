@@ -34,5 +34,6 @@ private:
 	//最大値
 	const uint32_t kMaxCharge_ = 12;
 
+	const std::string kCharge_ = "charge_Energy";
 };
 

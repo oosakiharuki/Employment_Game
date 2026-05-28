@@ -435,7 +435,7 @@ private:
 
 	// --- ダメージ、生存関係 ---
 
-	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
+	const uint32_t kPlayerMaxHp_ = 4;//設定する体力
 	//残機(remain)
 	uint32_t remain_;
 	//落ちる限界
@@ -548,6 +548,9 @@ private:
 	const float kBrinkTimeMax_ = 0.5f;//最大値
 	//傘の位置設定時に使う
 	const float kBrinkPower_ = 1.25f;
+
+	//スローがかかる時間
+	const float kSlowTime_ = 2.0f;
 
 	//
 	int weaponNum_ = 0;

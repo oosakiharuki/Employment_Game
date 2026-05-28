@@ -52,6 +52,9 @@ private:
 	/// </summary>
 	void UpdateBehind();
 
+	/// <summary>
+	// タイトルロゴが降ってくる 
+	/// </summary>
 	void MoveTitleLogo();
 
 	/// <summary>
@@ -71,6 +74,11 @@ private:
 	void ArrowSelectEnd() {
 		transforms_["umbrella_Open"].translate.y = transforms_["Select_End"].translate.y;//ゲーム終了
 	}
+
+	/// <summary>
+	/// 演出スキップ
+	/// </summary>
+	void PerformanceSkip();
 
 	//カメラ
 	std::unique_ptr<EngineLayer::Camera> camera_ = nullptr;

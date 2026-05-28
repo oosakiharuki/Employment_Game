@@ -170,6 +170,9 @@ void GameScene::Draw() {
 	for (auto& eventTrigger : eventTriggers_) {
 		eventTrigger->DrawParticle();
 	}
+	for (auto& stageObject : stageObjects_) {
+		stageObject->ParticleDraw();
+	}
 
 	//スプライト描画処理(UI用)
 	EngineLayer::SpriteCommon::GetInstance().Command();

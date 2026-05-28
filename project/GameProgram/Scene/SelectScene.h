@@ -36,6 +36,16 @@ public:
 	void SceneUpdate() override;
 private:
 
+	/// <summary>
+	/// レベルエディタで配置処理
+	/// </summary>
+	/// <param name="levelEditor_file">指定したい場合は名前を入れることも可能</param>
+	void LevelEditorObjectSetting(const std::string& levelEditor_file = "");
+	/// <summary>
+	/// ゲームオブジェクトの配置処理をまとめた
+	/// </summary>
+	void SpitOutGameObject();
+
 	//カメラ
 	std::unique_ptr<EngineLayer::Camera> camera_ = nullptr;
 	Vector3 cameraRotate_ = { 0.0f,0.0f,0.0f };//回転
@@ -52,6 +62,10 @@ private:
 
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
+
+	const uint32_t kResetHp_ = 4;    //元の体力
+	const uint32_t kResetRemain_ = 3;//元の残機
+
 	//ステージオブジェクトたち
 	std::list<std::unique_ptr<IStageObject>> stageObjects_;
 
@@ -62,16 +76,6 @@ private:
 
 	//ステージの.jsonファイル名
 	std::string stageFileName_;
-
-	/// <summary>
-	/// レベルエディタで配置処理
-	/// </summary>
-	/// <param name="levelEditor_file">指定したい場合は名前を入れることも可能</param>
-	void LevelEditorObjectSetting(const std::string& levelEditor_file = "");
-	/// <summary>
-	/// ゲームオブジェクトの配置処理をまとめた
-	/// </summary>
-	void SpitOutGameObject();
 
 	//説明ガイドの初期座標と大きさ
 	const Vector2 kSpriteSize_ = { 128,64 };

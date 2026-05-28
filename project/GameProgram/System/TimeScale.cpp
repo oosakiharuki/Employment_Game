@@ -12,13 +12,16 @@ TimeScale& TimeScale::GetInstance() {
 
 void TimeScale::Update() {
 
+	//時間がデフォルトでないとき
 	if (timeScale_ != kDefaultValue_) {
-		slowTime_ += kDefaultValue_;
+		//時間を加算
+		returnTimer_ += kDefaultValue_;
 	}
 
-	if (slowTime_ >= kSlowTimeMax_) {
-		ResetTimeScale();
-		slowTime_ = 0.0f;
+	//元に戻す値まで来たら
+	if (returnTimer_ >= TimeMax_) {
+		ResetTimeScale();//デフォルトに戻す
+		returnTimer_ = 0.0f;
 	}
 
 

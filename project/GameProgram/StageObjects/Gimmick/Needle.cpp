@@ -23,7 +23,7 @@ void Needle::Initialize() {
 	wt_.Initialize();
 	transform_ = wt_.UpdateTransform();
 
-	collisionType_ = CollisionTypes::TypeEnemyBullet;//ダメージ
+	collisionType_ = CollisionTypes::TypeEnemyDamageBody;//ダメージ
 }
 
 void Needle::Update() {
@@ -68,6 +68,9 @@ void Needle::SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, cons
 }
 
 void Needle::Move() {
+	//動かない場合
+	if (startPoint_ == endPoint_) return;
+
 	//現在のポイントに移行
 	transform_.translate = nowPoint_;
 
@@ -99,14 +102,5 @@ void Needle::Move() {
 void Needle::AnimationRotate() {
 	animationTimer_ += kAnimationTimeSpeed_ * TimeScale::GetInstance().GetTimeScaleFacto();
 	transform_.rotate.z = animationTimer_;
-}
-
-
-void Needle::OnCollision(CollisionSource* collisionSource) {
-	//無敵だからないかも
-}
-
-bool Needle::TypeCheckUp(const CollisionTypes& collisionType) {
-	return false;
 }
 

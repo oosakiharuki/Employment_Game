@@ -110,8 +110,8 @@ void SelectScene::LevelEditorObjectSetting(const std::string& levelEditor_file) 
 
 	stageFileName_ = levelEditor_file;//ステージの全体層(.obj)
 
-	NextStageSave::GetInstance().SetPlayerHp(3); //現在のプレイヤー体力を保存
-	NextStageSave::GetInstance().SetPlayerRemain(3); //現在のプレイヤー残機を保存
+	NextStageSave::GetInstance().SetPlayerHp(kResetHp_); //現在のプレイヤー体力を保存
+	NextStageSave::GetInstance().SetPlayerRemain(kResetRemain_); //現在のプレイヤー残機を保存
 
 	SpitOutGameObject();
 }

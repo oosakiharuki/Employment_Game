@@ -1,8 +1,9 @@
 #pragma once
 #include "Object3d.h"
 #include "MyMath.h"
-#include <LevelEditor.h>
+#include "LevelEditor.h"
 #include "CollisionManager.h"
+#include "Particle.h"
 
 /// <summary>
 /// ステージオブジェクト(ギミック)の基盤クラス
@@ -29,6 +30,8 @@ public:
 	/// 描画処理
 	/// </summary>
 	virtual void Draw() = 0;
+
+	void ParticleDraw();
 
 	/// <summary>
 	/// getter_座標位置
@@ -78,4 +81,7 @@ protected:
 	Transform transform_{};
 
 	Vector3 colliderSize_;
+
+	//パーティクルのコンテナ
+	std::unordered_map<std::string, std::unique_ptr<EngineLayer::Particle>> particles_;
 };

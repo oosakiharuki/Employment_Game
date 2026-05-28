@@ -39,7 +39,7 @@ void Player::Initialize() {
 
 	//パーティクル初期化
 	InitParticles();
-
+	
 	//MaxHp初期設定
 	maxHp_ = kPlayerMaxHp_;
 
@@ -82,9 +82,7 @@ void Player::InitParticles() {
 	particles_[particleBrink_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleBrink_);
 	particles_[particleFire_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleFire_);
 	particles_[particleDamage_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleDamage_);
-	particles_[particleParry_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleParry_);
 	particles_[particleDead_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleDead_);
-
 }
 
 void Player::InitUmbrella() {
@@ -129,6 +127,8 @@ void Player::ActionUpdate() {
 
 
 void Player::Update() {
+
+	//ステートパターン
 	GameActor::Update();
 
 	//弾丸更新処理
@@ -201,7 +201,6 @@ void Player::Update() {
 void Player::InfinityTimeUpdate() {
 	if (infinityTimer_ >= kInfinityTimeMax_) {
 		infinityTimer_ = kInfinityTimeMax_;//Maxになったら無敵時間終了
-		TimeScale::GetInstance().SetTimeScale(kDeltaTime_);
 		object_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 		return;
 	}
@@ -570,7 +569,7 @@ bool Player::TypeCheckUp(const CollisionTypes& collisionType) {
 void Player::EnemyCollision(CollisionSource* collision) {
 	//ブリンク時間半分たつ前 + 時間がスロー状態でないとき
 	if (brinkTimer_ >= kBrinkTimeMax_ * kDivideByTwo_ && TimeScale::GetInstance().GetTimeScaleFacto() == 1.0f) {
-		TimeScale::GetInstance().SetTimeScale(1.0f / 180.0f);
+		TimeScale::GetInstance().SetTimeScale(1.0f / 180.0f, kSlowTime_);//スローをかける
 		InfinityTime();//無敵時間が入る
 		//ポイントを6プラス(ゲージ2個分)
 		for (int i = 0; i < 6; i++) {

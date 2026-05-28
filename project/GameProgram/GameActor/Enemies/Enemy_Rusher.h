@@ -67,14 +67,16 @@ private:
 	//予備動作(チャージ)
 	float chargeTimer_ = 0.0f;
 	const float kChargeTimeMax_ = 1.0f;
-	const float kStepBackSpeed_ = 10.0f;//後ろに下げる予備動作、この数値分を割る
+	const float kStepBackSpeed_ = 5.0f;//後ろに下げる予備動作、この数値分を割る
 	const float kScaleBack_ = 0.25f;
 
 	const Vector3  kRushSpeed_ = { 0.0f,0.0f,0.25f };//突進の速さ
 	
-	const uint32_t kHp_ = 12;
+	const uint32_t kHp_ = 6;
 	const Vector3 kEyeReach_ = { 15.0f,0.5f,0.5f };
 
+	//突撃敵サイズ
+	Vector3 enemySize_ = { 2,2,2 };
 
 	//定位置から衝突した壁までの長さ
 	Vector3 lengthMax_;

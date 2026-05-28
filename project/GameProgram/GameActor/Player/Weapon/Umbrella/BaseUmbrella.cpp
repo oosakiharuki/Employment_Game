@@ -10,6 +10,8 @@
 
 #include "ParticleManager.h"
 
+#include "TimeScale.h"
+
 using namespace MyMath;
 using namespace UseEveryOne;
 
@@ -34,6 +36,8 @@ void BaseUmbrella::Initialize() {
 	EngineLayer::Audio::GetInstance().LoadWave(kUmbrellaOpenSoundName_);
 	//発砲攻撃
 	EngineLayer::Audio::GetInstance().LoadWave(kFireSoundName_);
+	//パリィ成功
+	EngineLayer::Audio::GetInstance().LoadWave(kParrySuccessSoundName_);
 	//パリィ
 	EngineLayer::Audio::GetInstance().LoadWave(kParrySoundName_);
 }
@@ -88,8 +92,18 @@ void BaseUmbrella::OnCollision(CollisionSource* collision) {
 		//強化ゲージポイント加算
 		player_->AddGaugePoint();
 
+		//パリィ中であるなら
 		if (collisionType_ == CollisionTypes::TypeUmbrellaParry) {
-			parryTime_ = kParryTimeMax_;//連続で跳ね返せるように
+
+			//パリィ成功で最初のみ発動
+			if (parryStart_) {
+				//ヒットストップ演出
+				TimeScale::GetInstance().SetTimeScale(0.0f, 0.25f);
+				EngineLayer::Audio::GetInstance().SoundPlayWave(kParrySuccessSoundName_,0.3f);
+			}
+			parryStart_ = false;
+
+			parryTime_ = kParryTimeMax_;//連続で跳ね返せるように、パリィ時間延長
 			ParrySuccess();//パリィ成功処理
 			return;
 		}
@@ -134,6 +148,7 @@ void BaseUmbrella::BornBullet(const Vector3& translate, const Vector3& velocity,
 void BaseUmbrella::OffShield() {
 	isShield_ = false;
 	EngineLayer::Audio::GetInstance().StopWave(kUmbrellaOpenSoundName_);
+	parryStart_ = true;
 }
 
 void BaseUmbrella::ShieldMode() {

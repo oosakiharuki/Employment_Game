@@ -44,6 +44,8 @@ void WarpGate::Update() {
 		collisionAABB_.max = transform_.translate;
 	}
 	else {
+		transform_.rotate.z += rotateWarp_;
+
 		//当たり判定設定(通常)
 		collisionAABB_.min = transform_.translate - colliderSize_;
 		collisionAABB_.max = transform_.translate + colliderSize_;
@@ -101,7 +103,16 @@ void WarpGate::TouchWarpGate() {
 	//ワープ出口モードの時はしない
 	if (warpExitMode_) return;
 	//触れたら拡大、離れたら縮小
-	(scaleFlag_) ? scaleTimer_ += kDeltaTime_ * 2.0f : scaleTimer_ -= kDeltaTime_ * 2.0f;
+
+	if (scaleFlag_) {
+		scaleTimer_ += kDeltaTime_ * 2.0f;
+		rotateWarp_ = kDefaultRotateWarp_ * kTwice_ * kTwice_;
+	}
+	else {
+		scaleTimer_ -= kDeltaTime_ * 2.0f;
+		rotateWarp_ = kDefaultRotateWarp_;
+	}
+
 	transform_.scale = EaseOut(kDefaultScale_ * 1.5f, kDefaultScale_, scaleTimer_);
 	
 	scaleTimer_ = std::clamp(scaleTimer_, 0.0f, 1.0f);
