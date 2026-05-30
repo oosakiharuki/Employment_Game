@@ -1071,5 +1071,6 @@
     <FxCompile Include="resource\shaders\Wireframe.PS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="resource\shaders\Shadow.PS.hlsl" />
   </ItemGroup>
 </Project>

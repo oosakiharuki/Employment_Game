@@ -6,7 +6,7 @@
             "name": "MainCamera",
             "transform": {
                 "translation": [
-                    -143.0,
+                    -112.0,
                     -53.0,
                     12.0
                 ],
@@ -28,7 +28,7 @@
                     -2.0
                 ],
                 "end": [
-                    321.0,
+                    235.0,
                     0.0,
                     17.0
                 ]
@@ -547,41 +547,6 @@
         {
             "type": "EnemySpawn",
             "EnemyName": "Rusher",
-            "name": "EnemySpawn.002",
-            "transform": {
-                "translation": [
-                    53.0,
-                    0.0,
-                    16.700000762939453
-                ],
-                "rotation": [
-                    0.0,
-                    0.0,
-                    -89.99999237060547
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    1.0
-                ]
-            }
-        },
-        {
-            "type": "EnemySpawn",
-            "EnemyName": "Rusher",
             "name": "EnemySpawn.006",
             "transform": {
                 "translation": [
@@ -595,9 +560,9 @@
                     -90.00000762939453
                 ],
                 "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
+                    3.0,
+                    3.0,
+                    3.0
                 ]
             },
             "collider": {
@@ -635,6 +600,41 @@
                 ]
             },
             "file_name": "GuideBrink"
+        },
+        {
+            "type": "EnemySpawn",
+            "EnemyName": "Rusher",
+            "name": "EnemySpawn.003",
+            "transform": {
+                "translation": [
+                    53.0,
+                    0.0,
+                    16.700000762939453
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    -89.99999237060547
+                ],
+                "scaling": [
+                    3.0,
+                    3.0,
+                    3.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    1.0
+                ]
+            }
         },
         {
             "type": "StageObjectSpawn",
@@ -893,7 +893,7 @@
                     0.0
                 ],
                 "scaling": [
-                    14.414400100708008,
+                    11.531519889831543,
                     3.999999761581421,
                     1.9999998807907104
                 ]
@@ -1364,7 +1364,75 @@
         },
         {
             "type": "MESH",
-            "name": "立方体.029",
+            "name": "立方体.007",
+            "transform": {
+                "translation": [
+                    -100.0,
+                    0.0,
+                    6.5
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    2.239999532699585,
+                    10.0,
+                    10.5600004196167
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "立方体.008",
+            "transform": {
+                "translation": [
+                    -77.0,
+                    0.0,
+                    6.5
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    0.0
+                ],
+                "scaling": [
+                    2.239999532699585,
+                    10.0,
+                    10.5600004196167
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "立方体.009",
             "transform": {
                 "translation": [
                     0.0,
@@ -1380,6 +1448,19 @@
                     1.0,
                     1.0,
                     1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
                 ]
             }
         }

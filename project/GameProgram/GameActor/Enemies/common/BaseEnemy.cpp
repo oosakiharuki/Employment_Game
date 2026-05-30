@@ -265,7 +265,7 @@ void BaseEnemy::HpSpriteUpdate() {
 
 
 void BaseEnemy::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::TypePlayerBullet) {
+	if (collision->GetType() == CollisionTypes::TypePlayerBullet && TimeScale::GetInstance().GetTimeScale() != 0) {
 		IsDamage();
 	}
 

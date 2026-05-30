@@ -485,9 +485,6 @@ namespace EngineLayer {
 
 
 				ImGui::InputFloat2("DistTransllate", &parameter.second.particleData.distTransformT.distMin);
-				ImGui::InputFloat2("DistTransformT", &parameter.second.particleData.distTransformT.distMin);
-				ImGui::InputFloat2("DistTransformT", &parameter.second.particleData.distTransformT.distMin);
-
 				ImGui::InputFloat2("DistTransformR", &parameter.second.particleData.distTransformR.distMin);
 				ImGui::InputFloat2("DistTransformS", &parameter.second.particleData.distTransformS.distMin);
 				ImGui::InputFloat2("DistVelocityT", &parameter.second.particleData.distVelocityT.distMin);

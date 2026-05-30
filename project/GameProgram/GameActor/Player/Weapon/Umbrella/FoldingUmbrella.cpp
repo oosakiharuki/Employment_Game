@@ -51,7 +51,9 @@ void FoldingUmbrella::Fire() {
 		//パーティクル
 		player_->ParticleFire(translate);
 	}
-	
+	///撃った方向と反対方向にノックバック
+	player_->KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
+
 	rapidTimer_ -= kDeltaTime_;
 	if (rapidTimer_ <= 0.0f) {
 		rapidCount_++;
@@ -79,7 +81,9 @@ void FoldingUmbrella::PowerFire() {
 		//パーティクル
 		player_->ParticleFire(translate);
 	}
-		
+	///撃った方向と反対方向にノックバック
+	player_->KnockBackUmbrella(kBulletKnockbackPower_, kBulletSpeed_);
+
 	rapidTimer_ -= kDeltaTime_ * kTwice_;
 	if (rapidTimer_ <= 0.0f) {
 		rapidCount_++;

@@ -85,6 +85,7 @@ void EnemyBullet::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypeUmbrellaParry) {
 		collisionType_ = CollisionTypes::TypePlayerBullet;//パリィ (コリジョンタイプをプレイヤー弾に変更)
 		isParry = true;//跳ね返るフラグ
+		deathTimer = 0.0f;//時間リセット(生存時間延長)
 	}
 }
 

@@ -44,8 +44,6 @@ void WarpGate::Update() {
 		collisionAABB_.max = transform_.translate;
 	}
 	else {
-		transform_.rotate.z += rotateWarp_;
-
 		//当たり判定設定(通常)
 		collisionAABB_.min = transform_.translate - colliderSize_;
 		collisionAABB_.max = transform_.translate + colliderSize_;

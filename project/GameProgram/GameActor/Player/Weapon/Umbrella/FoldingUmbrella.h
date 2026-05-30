@@ -37,6 +37,8 @@ private:
 
 	const uint32_t kBulletPower_ = 1;//弾丸の攻撃力
 
+	const Vector3 kBulletKnockbackPower_ = { 0.0f,0.0f,0.1f };//撃った場合のノックバックパワー
+
 	const float kBulletSpeed_ = 0.75f;//弾丸の前方向の速さ
 	const float kBulletPowerUpSpeed_ = 1.5f;
 };
