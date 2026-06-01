@@ -1,44 +1,55 @@
+/// ------------------------------
+///
+/// ルミナンスベースアウトライン
+/// 色による区切り線を作る
+/// 
+/// ------------------------------
 #include "LuminanceBasedOutline.h"
 #include <SrvManager.h>
 
 using namespace Logger;
 
-void LuminanceBasedOutline::Finalize() {}
+/// <summary>
+/// エンジン層
+/// </summary>
+namespace EngineLayer {
+	void LuminanceBasedOutline::Finalize() {}
 
-void LuminanceBasedOutline::RootSignature() {
+	void LuminanceBasedOutline::RootSignature() {
 
-	PostEffectRootSignatureCommon();
+		PostEffectRootSignatureCommon();
 
-	IntroduceRootParameters();
-	IntroduceSamplers();
-}
+		IntroduceRootParameters();
+		IntroduceSamplers();
+	}
 
-void LuminanceBasedOutline::CreatePixelShader() {
-	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/LuminanceBasedOutline.PS.hlsl", L"ps_6_0");
-	assert(pixelShaderBlob != nullptr);
-}
+	void LuminanceBasedOutline::CreatePixelShader() {
+		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/LuminanceBasedOutline.PS.hlsl", L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+	}
 
-void LuminanceBasedOutline::Command() {
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
-	DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(3, 1, 0, 0);
-}
+	void LuminanceBasedOutline::Command() {
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+		DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
+		DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(3, 1, 0, 0);
+	}
 
-void LuminanceBasedOutline::EffectInit() {
-	srvIndex_ = SrvManager::GetInstance().Allocate();
-	srvHandleCPU_ = SrvManager::GetInstance().GetCPUDescriptorHandle(srvIndex_);
-	srvHandleGPU_ = SrvManager::GetInstance().GetGPUDescriptorHandle(srvIndex_);
+	void LuminanceBasedOutline::EffectInit() {
+		srvIndex_ = SrvManager::GetInstance().Allocate();
+		srvHandleCPU_ = SrvManager::GetInstance().GetCPUDescriptorHandle(srvIndex_);
+		srvHandleGPU_ = SrvManager::GetInstance().GetGPUDescriptorHandle(srvIndex_);
 
 
-	SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
+		SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
-}
+	}
 
-void LuminanceBasedOutline::EffectUpdate() {
+	void LuminanceBasedOutline::EffectUpdate() {
 
 #ifdef USE_IMGUI
-	ImGui::Text("LuminanceBasedOutline");
+		ImGui::Text("LuminanceBasedOutline");
 #endif
 
+	}
 }

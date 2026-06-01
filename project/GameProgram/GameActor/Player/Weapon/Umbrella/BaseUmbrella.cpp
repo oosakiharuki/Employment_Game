@@ -1,9 +1,16 @@
+/// ------------------
+///
+/// 傘銃の基盤クラス
+/// 
+/// ------------------
 #include "BaseUmbrella.h"
 #include "Player.h"
 #include "UseEveryOne.h"
 #include "ImGuiManager.h"
 
 #include "ParticleManager.h"
+
+#include "TimeScale.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -15,7 +22,7 @@ void BaseUmbrella::Initialize() {
 	transform_ = wt_.UpdateTransform();
 
 	//オブジェクト初期化(モデル設定以外)
-	object_ = std::make_unique<Object_glTF>();
+	object_ = std::make_unique<EngineLayer::Object_glTF>();
 	object_->Initialize();
 
 	//リアクション
@@ -23,14 +30,16 @@ void BaseUmbrella::Initialize() {
 	//当たりタイプ
 	collisionType_ = CollisionTypes::TypeUmbrella;
 
-	particles_[kParticleParry_] = ParticleManager::GetInstance().InitParticle(kParticleParry_);
+	particles_[kParticleParry_] = EngineLayer::ParticleManager::GetInstance().InitParticle(kParticleParry_);
 
 	//傘を開くSE
-	Audio::GetInstance().LoadWave(kUmbrellaOpenSoundName_);
+	EngineLayer::Audio::GetInstance().LoadWave(kUmbrellaOpenSoundName_);
 	//発砲攻撃
-	Audio::GetInstance().LoadWave(kFireSoundName_);
+	EngineLayer::Audio::GetInstance().LoadWave(kFireSoundName_);
+	//パリィ成功
+	EngineLayer::Audio::GetInstance().LoadWave(kParrySuccessSoundName_);
 	//パリィ
-	Audio::GetInstance().LoadWave(kParrySoundName_);
+	EngineLayer::Audio::GetInstance().LoadWave(kParrySoundName_);
 }
 
 void BaseUmbrella::Update() {
@@ -64,13 +73,13 @@ void BaseUmbrella::Update() {
 void BaseUmbrella::Draw() {
 	object_->Draw();
 
-	ParticleCommon::GetInstance().Command();
+	EngineLayer::ParticleCommon::GetInstance().Command();
 
 	for (auto& particle : particles_) {
 		particle.second->Draw();
 	}
 
-	GLTFCommon::GetInstance().Command();
+	EngineLayer::GLTFCommon::GetInstance().Command();
 }
 
 
@@ -83,8 +92,18 @@ void BaseUmbrella::OnCollision(CollisionSource* collision) {
 		//強化ゲージポイント加算
 		player_->AddGaugePoint();
 
+		//パリィ中であるなら
 		if (collisionType_ == CollisionTypes::TypeUmbrellaParry) {
-			parryTime_ = kParryTimeMax_;//連続で跳ね返せるように
+
+			//パリィ成功で最初のみ発動
+			if (parryStart_) {
+				//ヒットストップ演出
+				TimeScale::GetInstance().SetTimeScale(0.0f, 0.25f);
+				EngineLayer::Audio::GetInstance().SoundPlayWave(kParrySuccessSoundName_,0.3f);
+			}
+			parryStart_ = false;
+
+			parryTime_ = kParryTimeMax_;//連続で跳ね返せるように、パリィ時間延長
 			ParrySuccess();//パリィ成功処理
 			return;
 		}
@@ -110,8 +129,8 @@ void BaseUmbrella::FireCommand() {
 		Fire();//発砲攻撃
 	}
 
-	Audio::GetInstance().StopWave(kFireSoundName_);
-	Audio::GetInstance().SoundPlayWave(kFireSoundName_, kVolume_);
+	EngineLayer::Audio::GetInstance().StopWave(kFireSoundName_);
+	EngineLayer::Audio::GetInstance().SoundPlayWave(kFireSoundName_, kVolume_);
 
 }
 
@@ -128,14 +147,15 @@ void BaseUmbrella::BornBullet(const Vector3& translate, const Vector3& velocity,
 
 void BaseUmbrella::OffShield() {
 	isShield_ = false;
-	Audio::GetInstance().StopWave(kUmbrellaOpenSoundName_);
+	EngineLayer::Audio::GetInstance().StopWave(kUmbrellaOpenSoundName_);
+	parryStart_ = true;
 }
 
 void BaseUmbrella::ShieldMode() {
 	//既に開いている場合はスキップ
 	if (!isShield_) {
 		isParry_ = true;
-		Audio::GetInstance().SoundPlayWave(kUmbrellaOpenSoundName_, kVolume_ * kTwice_);
+		EngineLayer::Audio::GetInstance().SoundPlayWave(kUmbrellaOpenSoundName_, kVolume_ * kTwice_);
 	}
 	isShield_ = true;
 
@@ -165,11 +185,11 @@ void BaseUmbrella::ParryUpdate() {
 //パリィ成功
 void BaseUmbrella::ParrySuccess() {
 	//SE
-	Audio::GetInstance().StopWave(kParrySoundName_);//パリィが続くとき一度止めてから再生させるようにする
-	Audio::GetInstance().SoundPlayWave(kParrySoundName_, kVolume_);//SE再生:パリィ
+	EngineLayer::Audio::GetInstance().StopWave(kParrySoundName_);//パリィが続くとき一度止めてから再生させるようにする
+	EngineLayer::Audio::GetInstance().SoundPlayWave(kParrySoundName_, kVolume_);//SE再生:パリィ
 	//パリィエフェクトを出す座標
 	Vector3 translate = TransformNormal(kParryParticleFrontPoint_, wt_.GetMatWorld());
 	particles_[kParticleParry_]->SetTranslate(transform_.translate + translate);//生成場所を設定
 	particles_[kParticleParry_]->SetRotate(transform_.rotate + kParryParticleRotate_);//回転を設定(パリィ向きの調整)
-	particles_[kParticleParry_]->SetParticleBorn(ParticleBorn::MomentMode);//一瞬だけ出すモード
+	particles_[kParticleParry_]->SetParticleBorn(EngineLayer::ParticleBorn::MomentMode);//一瞬だけ出すモード
 }

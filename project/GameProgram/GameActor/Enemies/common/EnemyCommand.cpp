@@ -1,12 +1,14 @@
 #include "EnemyCommand.h"
 #include "UseEveryOne.h"
 
+#include "TimeScale.h"
+
 using namespace MyMath;
 using namespace UseEveryOne;
 
 void EnemyFireCommand::InitAudio() {
-	Audio::GetInstance().LoadWave(kFireSoundName_);
-	Audio::GetInstance().LoadWave(kFireBeforeSoundName_);
+	EngineLayer::Audio::GetInstance().LoadWave(kFireSoundName_);//発砲SE
+	EngineLayer::Audio::GetInstance().LoadWave(kFireBeforeSoundName_);//予備動作SE
 }
 
 
@@ -38,18 +40,18 @@ void EnemyFireCommand::BulletReset() {
 void EnemyFireCommand::Fire(EnemyCanFireBullet& enemyCanFireBullet) {
 
 	//クールタイム
-	coolTime_ += kDeltaTime_;
+	coolTime_ += TimeScale::GetInstance().GetTimeScale();
 
 
 	if (coolTime_ >= kCoolTimeMax_) {
 		if (rapidFireTime_ == 0.0f && rapidCount_ == 0) {
-			Audio::GetInstance().StopWave(kFireBeforeSoundName_);
-			Audio::GetInstance().StopWave(kFireSoundName_);//音ズレが起きないよう
-			Audio::GetInstance().SoundPlayWave(kFireSoundName_, kVolume_);
+			EngineLayer::Audio::GetInstance().StopWave(kFireBeforeSoundName_);
+			EngineLayer::Audio::GetInstance().StopWave(kFireSoundName_);//音ズレが起きないよう
+			EngineLayer::Audio::GetInstance().SoundPlayWave(kFireSoundName_, kVolume_);
 		}
 
 		//連射で時間を開ける
-		rapidFireTime_ += kDeltaTime_;
+		rapidFireTime_ += TimeScale::GetInstance().GetTimeScale();
 		if (rapidFireTime_ >= kRapidFireTimeMax_) {
 			enemyCanFireBullet.FireBullet();//敵の発泡攻撃
 			rapidCount_++;//カウント
@@ -65,8 +67,8 @@ void EnemyFireCommand::Fire(EnemyCanFireBullet& enemyCanFireBullet) {
 	}
 	else if (coolTime_ >= kCoolTimeMax_ * kDivideByTwo_ && coolTime_ < kCoolTimeMax_) {
 		//SEはすでに鳴っているか
-		if (!Audio::GetInstance().IsPlayingSound(kFireBeforeSoundName_)) {
-			Audio::GetInstance().SoundPlayWave(kFireBeforeSoundName_, kVolume_);
+		if (!EngineLayer::Audio::GetInstance().IsPlayingSound(kFireBeforeSoundName_)) {
+			EngineLayer::Audio::GetInstance().SoundPlayWave(kFireBeforeSoundName_, kVolume_);
 		}
 	}
 }

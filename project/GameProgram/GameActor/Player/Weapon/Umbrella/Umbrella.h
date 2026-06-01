@@ -3,7 +3,7 @@
 #include "BaseUmbrella.h"
 
 /// <summary>
-/// 傘(発泡、守が使える)
+/// 通常傘・ショットガン
 /// </summary>
 class Umbrella : public BaseUmbrella {
 public:
@@ -31,7 +31,7 @@ private:
 	void PowerFire() override;
 
 	//AABBのサイズ
-	const Vector3 kAABBSize_ = { 1,2,1 };
+	const Vector3 kAABBSize_ = { 2,2,2 };
 
 	const float kDispersionBetween_ = 0.1f;//分散する間
 	const float kBulletSpeed_ = 0.5f;//弾丸の前方向の速さ

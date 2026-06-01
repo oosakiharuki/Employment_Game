@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "UseEveryOne.h"
 
+#include "TimeScale.h"
+
 using namespace MyMath;
 using namespace UseEveryOne;
 
@@ -10,7 +12,7 @@ EnemyBullet::~EnemyBullet() {}
 
 void EnemyBullet::Initialize() {
 	//弾丸のモデル
-	object = std::make_unique<Object3d>();
+	object = std::make_unique<EngineLayer::Object3d>();
 	object->Initialize();
 	object->SetModelFile("PlayerBullet.obj");
 
@@ -31,15 +33,15 @@ void EnemyBullet::Initialize() {
 void EnemyBullet::Update() {
 	if (!isParry) {
 		//velocity向きに等速直線運動
-		transform_.translate += velocity_;
+		transform_.translate += velocity_ * TimeScale::GetInstance().GetTimeScaleFacto();
 	}
 	else {
 		///パリィされた時
-		transform_.translate -= velocity_;
+		transform_.translate -= velocity_ * TimeScale::GetInstance().GetTimeScaleFacto();
 	}
 
 
-	deathTimer += kDeltaTime_;
+	deathTimer += TimeScale::GetInstance().GetTimeScale();
 
 	//時間がたったら消える
 	if (deathTimer >= kEndTime) {
@@ -73,13 +75,17 @@ void EnemyBullet::OnCollision(CollisionSource* collision) {
 		collision->GetType() == CollisionTypes::TypeUmbrella ||
 		(collision->GetType() == CollisionTypes::TypeEnemy && collisionType_ == CollisionTypes::TypePlayerBullet) || 
 		(collision->GetType() == CollisionTypes::TypeBoss && collisionType_ == CollisionTypes::TypePlayerBullet)) {
-		//消滅フラグ
-		isDead_ = true;
+		//スローがかかっていないなら
+		if (TimeScale::GetInstance().GetTimeScale() == kDeltaTime_) {
+			//消滅フラグ
+			isDead_ = true;
+		}
 	}
 
 	if (collision->GetType() == CollisionTypes::TypeUmbrellaParry) {
 		collisionType_ = CollisionTypes::TypePlayerBullet;//パリィ (コリジョンタイプをプレイヤー弾に変更)
 		isParry = true;//跳ね返るフラグ
+		deathTimer = 0.0f;//時間リセット(生存時間延長)
 	}
 }
 

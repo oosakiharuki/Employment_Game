@@ -1,3 +1,9 @@
+/// ------------------------------------
+///
+/// ワープゲート
+/// プレイヤーが次のステージに移動する
+/// 
+/// ------------------------------------
 #include "WarpGate.h"
 #include "UseEveryOne.h"
 #include "CollisionManager.h"
@@ -12,7 +18,7 @@ WarpGate::~WarpGate() {}
 
 void WarpGate::Initialize() {
 	wt_.Initialize();
-	object_ = std::make_unique<Object3d>();
+	object_ = std::make_unique<EngineLayer::Object3d>();
 	object_->Initialize();
 	object_->SetModelFile("warpGate.obj");
 	//Transform更新処理
@@ -95,7 +101,16 @@ void WarpGate::TouchWarpGate() {
 	//ワープ出口モードの時はしない
 	if (warpExitMode_) return;
 	//触れたら拡大、離れたら縮小
-	(scaleFlag_) ? scaleTimer_ += kDeltaTime_ * 2.0f : scaleTimer_ -= kDeltaTime_ * 2.0f;
+
+	if (scaleFlag_) {
+		scaleTimer_ += kDeltaTime_ * 2.0f;
+		rotateWarp_ = kDefaultRotateWarp_ * kTwice_ * kTwice_;
+	}
+	else {
+		scaleTimer_ -= kDeltaTime_ * 2.0f;
+		rotateWarp_ = kDefaultRotateWarp_;
+	}
+
 	transform_.scale = EaseOut(kDefaultScale_ * 1.5f, kDefaultScale_, scaleTimer_);
 	
 	scaleTimer_ = std::clamp(scaleTimer_, 0.0f, 1.0f);
@@ -107,7 +122,7 @@ void WarpGate::TouchWarpGate() {
 void WarpGate::OnCollision(CollisionSource* collision) {
 	if (collision->GetType() == CollisionTypes::TypePlayer && !warpExitMode_) {
 		scaleFlag_ = true;
-		if (Input::GetInstance().TriggerKey(DIK_E) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_Y)) {
+		if (EngineLayer::Input::GetInstance().TriggerKey(DIK_E) || EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_Y)) {
 			CollisionUtility::GetInstance().SuccessWarp(center_);
 			NextStageSave::GetInstance().SetNextStageFile(fileName_);//次のステージの名前を導入
 		}

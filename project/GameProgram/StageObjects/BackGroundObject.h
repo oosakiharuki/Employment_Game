@@ -2,7 +2,7 @@
 #include "Object_glTF.h"
 
 /// <summary>
-/// 背景オブジェクト(skydome)
+/// 背景オブジェクト
 /// </summary>
 class BackGroundObject
 {
@@ -22,8 +22,8 @@ public:
 
 private:
 
-	std::unique_ptr<Object_glTF> object_ = nullptr;
-	WorldTransform wt_;
+	std::unique_ptr<EngineLayer::Object_glTF> object_ = nullptr;
+	EngineLayer::WorldTransform wt_;
 	Transform transform_{};
 
 	const float kSize_ = 1.0f;

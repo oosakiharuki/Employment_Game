@@ -2,6 +2,217 @@
     "name": "scene",
     "objects": [
         {
+            "type": "EnemySpawn",
+            "EnemyName": "Soldier",
+            "name": "EnemySpawn.001",
+            "transform": {
+                "translation": [
+                    -2.0,
+                    0.0,
+                    52.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    -90.00000762939453
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    3.0
+                ]
+            },
+            "travel_route": {
+                "start": [
+                    -4.0,
+                    0.0,
+                    0.0
+                ],
+                "end": [
+                    2.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        {
+            "type": "EnemySpawn",
+            "EnemyName": "Turret",
+            "name": "EnemySpawn.002",
+            "transform": {
+                "translation": [
+                    -21.0,
+                    0.0,
+                    3.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    3.0
+                ]
+            }
+        },
+        {
+            "type": "EnemySpawn",
+            "EnemyName": "Bomb",
+            "name": "EnemySpawn.003",
+            "transform": {
+                "translation": [
+                    8.0,
+                    0.0,
+                    3.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            },
+            "travel_route": {
+                "start": [
+                    -3.0,
+                    0.0,
+                    0.0
+                ],
+                "end": [
+                    21.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        {
+            "type": "EnemySpawn",
+            "EnemyName": "Turret",
+            "name": "EnemySpawn.004",
+            "transform": {
+                "translation": [
+                    -29.0,
+                    0.0,
+                    37.20000076293945
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    3.0
+                ]
+            }
+        },
+        {
+            "type": "EnemySpawn",
+            "EnemyName": "Soldier",
+            "name": "EnemySpawn.005",
+            "transform": {
+                "translation": [
+                    9.0,
+                    0.0,
+                    37.0
+                ],
+                "rotation": [
+                    0.0,
+                    -0.0,
+                    89.99999237060547
+                ],
+                "scaling": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "collider": {
+                "type": "BOX",
+                "center": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    3.0
+                ]
+            },
+            "travel_route": {
+                "start": [
+                    -4.0,
+                    0.0,
+                    0.0
+                ],
+                "end": [
+                    2.0,
+                    0.0,
+                    0.0
+                ]
+            }
+        },
+        {
             "type": "PlayerSpawn",
             "name": "PlayerSpawn",
             "transform": {
@@ -229,9 +440,9 @@
             "name": "StageObjectSpawn.006",
             "transform": {
                 "translation": [
-                    16.0,
+                    21.0,
                     0.0,
-                    4.0
+                    3.0
                 ],
                 "rotation": [
                     0.0,
@@ -278,7 +489,7 @@
                 "translation": [
                     2.0,
                     0.0,
-                    4.0
+                    3.0
                 ],
                 "rotation": [
                     0.0,
@@ -354,12 +565,12 @@
             "travel_route": {
                 "start": [
                     0.0,
-                    -10.0,
+                    -8.0,
                     0.0
                 ],
                 "end": [
                     0.0,
-                    10.0,
+                    8.0,
                     0.0
                 ]
             }
@@ -372,7 +583,7 @@
                 "translation": [
                     2.0,
                     0.0,
-                    12.0
+                    11.0
                 ],
                 "rotation": [
                     0.0,
@@ -419,7 +630,7 @@
                 "translation": [
                     2.0,
                     0.0,
-                    8.0
+                    7.0
                 ],
                 "rotation": [
                     0.0,
@@ -698,7 +909,7 @@
             "name": "StageObjectSpawn.015",
             "transform": {
                 "translation": [
-                    -25.0,
+                    -27.0,
                     1.0,
                     3.0
                 ],
@@ -736,7 +947,7 @@
                 "translation": [
                     -29.68443489074707,
                     0.0,
-                    34.5
+                    32.70000076293945
                 ],
                 "rotation": [
                     0.0,
@@ -837,9 +1048,9 @@
             "name": "StageObjectSpawn.019",
             "transform": {
                 "translation": [
-                    -29.0,
+                    -28.0,
                     0.0,
-                    18.0
+                    17.299999237060547
                 ],
                 "rotation": [
                     0.0,

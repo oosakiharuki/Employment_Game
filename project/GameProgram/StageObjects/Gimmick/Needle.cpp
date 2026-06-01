@@ -1,14 +1,19 @@
+/// ------------------
+///
+/// トゲボール
+/// 当たるとダメージ
+/// 
+/// ------------------
 #include "Needle.h"
-
 #include "Object3dCommon.h"
 #include "GLTFCommon.h"
-
+#include "TimeScale.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
 
 void Needle::Initialize() {
-	objectNeedle_ = std::make_unique<Object_glTF>();
+	objectNeedle_ = std::make_unique<EngineLayer::Object_glTF>();
 	objectNeedle_->Initialize();
 	objectNeedle_->SetModelFile("needle.gltf");
 
@@ -18,7 +23,7 @@ void Needle::Initialize() {
 	wt_.Initialize();
 	transform_ = wt_.UpdateTransform();
 
-	collisionType_ = CollisionTypes::TypeEnemyBullet;//ダメージ
+	collisionType_ = CollisionTypes::TypeEnemyDamageBody;//ダメージ
 }
 
 void Needle::Update() {
@@ -42,11 +47,11 @@ void Needle::Update() {
 }
 
 void Needle::Draw() {
-	GLTFCommon::GetInstance().Command();
+	EngineLayer::GLTFCommon::GetInstance().Command();
 
 	objectNeedle_->Draw();
 	
-	Object3dCommon::GetInstance().Command();
+	EngineLayer::Object3dCommon::GetInstance().Command();
 
 	shadow_->Draw();
 }
@@ -63,6 +68,9 @@ void Needle::SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, cons
 }
 
 void Needle::Move() {
+	//動かない場合
+	if (startPoint_ == endPoint_) return;
+
 	//現在のポイントに移行
 	transform_.translate = nowPoint_;
 
@@ -70,7 +78,7 @@ void Needle::Move() {
 	Vector3 length = Length(movePoint_.origin, movePoint_.diff);
 	float addLength = (length.x + length.y + length.z) / moveMaxTime_;
 
-	timer_ += kDeltaTime_ / addLength;//時間を移動の長さ分割る
+	timer_ += TimeScale::GetInstance().GetTimeScale() / addLength;//時間を移動の長さ分割る
 	timer_ = std::clamp(timer_, 0.0f, 1.0f);
 	//現在ポイントの変更
 	nowPoint_ = Lerp(movePoint_.origin, movePoint_.diff, timer_);
@@ -92,16 +100,7 @@ void Needle::Move() {
 }
 
 void Needle::AnimationRotate() {
-	animationTimer_ += kAnimationTimeSpeed_;
+	animationTimer_ += kAnimationTimeSpeed_ * TimeScale::GetInstance().GetTimeScaleFacto();
 	transform_.rotate.z = animationTimer_;
-}
-
-
-void Needle::OnCollision(CollisionSource* collisionSource) {
-	//無敵だからないかも
-}
-
-bool Needle::TypeCheckUp(const CollisionTypes& collisionType) {
-	return false;
 }
 

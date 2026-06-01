@@ -1,4 +1,14 @@
+/// ----------------------------------
+///
+/// 重力があるゲーム
+/// 
+/// ----------------------------------
 #include "GravityActor.h"
+
+#include "UseEveryOne.h"
+#include "TimeScale.h"
+
+using namespace UseEveryOne;
 
 void GravityActor::IsGround(bool result) {
 	isGround_ = result;
@@ -8,9 +18,17 @@ void GravityActor::IsGround(bool result) {
 	}
 }
 
-void GravityActor::GravityUpdate(float& translateY) {
-	//重力
-	gravity_ -= kGravityPower_;
+void GravityActor::GravityUpdate(float& translateY, bool isSlowTime) {
+
+	//スローをかける
+	if (isSlowTime) {
+		//重力
+		gravity_ -= kGravityPower_ * TimeScale::GetInstance().GetTimeScaleFacto();
+	}
+	else{
+		//重力
+		gravity_ -= kGravityPower_;
+	}
 	gravity_ = std::clamp(gravity_,kGravityMax_,0.0f);//上限設定
 
 	//地面についていない

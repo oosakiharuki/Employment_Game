@@ -41,8 +41,8 @@ public:
 	bool UseGaugePoint() { return gaugePoint_ >= kUseGaugeCost_; }
 
 private:
-	std::unique_ptr<Sprite> gaugeSprite_ = nullptr;//ゲージそのもの
-	std::vector<std::unique_ptr<Sprite>> gaugePointSprites_;//ポイントを表すスプライトたち
+	std::unique_ptr<EngineLayer::Sprite> gaugeSprite_ = nullptr;//ゲージそのもの
+	std::vector<std::unique_ptr<EngineLayer::Sprite>> gaugePointSprites_;//ポイントを表すスプライトたち
 	const uint32_t kGaugePointSpriteNum_ = 4;//最大4つ
 
 	uint32_t gaugePoint_ = 0;//ポイント

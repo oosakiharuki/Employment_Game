@@ -165,7 +165,7 @@ private:
 	/// </summary>
 	void HpSpriteUpdate();
 
-	std::unique_ptr<Object_glTF> object_;
+	std::unique_ptr<EngineLayer::Object_glTF> object_;
 	//弾丸
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
 	//ボスの最大体力
@@ -195,6 +195,7 @@ private:
 	//真ん中座標、左右移動に使う
 	Vector3 moveCenter_{};
 
+	Vector3 targetPosition_;
 
 	//低空移動のパラメータ
 	const float kAroundRightX_ = 20.0f;//右端
@@ -217,8 +218,8 @@ private:
 
 
 	//体力スプライト
-	std::unique_ptr<Sprite> hpSprite_;
-	std::unique_ptr<Sprite> underBarSprite_;
+	std::unique_ptr<EngineLayer::Sprite> hpSprite_;
+	std::unique_ptr<EngineLayer::Sprite> underBarSprite_;
 
 	//パラメータ
 	const Vector2 kSpriteWindowsPosition_ = { 0.7f,0.85f };

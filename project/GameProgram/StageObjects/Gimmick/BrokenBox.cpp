@@ -1,15 +1,22 @@
+/// ----------------------------------
+///
+/// 壊れる箱
+/// プレイヤーの弾丸が当たれば壊れる
+/// 
+/// ----------------------------------
 #include "BrokenBox.h"
 #include "UseEveryOne.h"
 #include "MyMath.h"
 
 #include "GLTFCommon.h"
 #include "Object3dCommon.h"
+#include <TimeScale.h>
 
 using namespace UseEveryOne;
 using namespace MyMath;
 
 void BrokenBox::Initialize() {
-	objectBox_ = std::make_unique<Object_glTF>();
+	objectBox_ = std::make_unique<EngineLayer::Object_glTF>();
 	objectBox_->Initialize();
 	objectBox_->SetModelFile("Box.gltf");
 
@@ -22,12 +29,13 @@ void BrokenBox::Update() {
 	if (isBroken_) {
 		//壊れたアニメーションに変更
 		objectBox_->ChangeAnimation("BrokenBox.gltf");
+		objectBox_->SetAnimationTime(TimeScale::GetInstance().GetTimeScale());
 		
 		if (timer >= kAnimationTimeMax_) {
 			isFinish_ = true;
 		}
 		else {
-			timer += kDeltaTime_;
+			timer += TimeScale::GetInstance().GetTimeScale();
 		}
 	}
 
@@ -47,11 +55,11 @@ void BrokenBox::Update() {
 void BrokenBox::Draw() {
 	if (isFinish_) return;
 	
-	GLTFCommon::GetInstance().Command();
+	EngineLayer::GLTFCommon::GetInstance().Command();
 
 	objectBox_->Draw();
 	
-	Object3dCommon::GetInstance().Command();
+	EngineLayer::Object3dCommon::GetInstance().Command();
 
 }
 

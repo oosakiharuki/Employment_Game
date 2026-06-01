@@ -20,12 +20,12 @@ public:
 	/// フレーム更新型スプライトを作成
 	/// </summary>
 	/// <param name="sprite">スプライトを読み込む</param>
-	void FrameSprite(Sprite* sprite);
+	void FrameSprite(EngineLayer::Sprite* sprite);
 	/// <summary>
 	/// 一度だけ読み取る型スプライトを作成
 	/// </summary>
 	/// <param name="sprite">スプライトを読み込む</param>
-	void FixedSprite(Sprite* sprite);
+	void FixedSprite(EngineLayer::Sprite* sprite);
 
 	/// <summary>
 	/// 更新処理
@@ -48,8 +48,8 @@ private:
 	//default_deleteを設定(解放処理を行える)
 	friend struct std::default_delete<UIManager>;
 	//フレーム更新スプライトたち
-	std::vector<Sprite*> frameSprites_;
+	std::vector<EngineLayer::Sprite*> frameSprites_;
 	//一度読み取りの保存されるスプライトたち
-	std::vector<Sprite*> fixedSprites_;
+	std::vector<EngineLayer::Sprite*> fixedSprites_;
 };
 

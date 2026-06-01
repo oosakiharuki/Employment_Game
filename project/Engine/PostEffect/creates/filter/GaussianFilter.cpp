@@ -1,45 +1,55 @@
+/// -------------------------------------------
+///
+/// ガウシアンフィルター
+/// カメラレンズ風ぼやけ(boxFilterより滑らか)
+/// 
+/// -------------------------------------------
 #include "GaussianFilter.h"
 #include <SrvManager.h>
 
 using namespace Logger;
+/// <summary>
+/// エンジン層
+/// </summary>
+namespace EngineLayer {
+	void GaussianFilter::Finalize() {}
 
-void GaussianFilter::Finalize() {}
+	void GaussianFilter::RootSignature() {
 
-void GaussianFilter::RootSignature() {
-	
-	PostEffectRootSignatureCommon();
+		PostEffectRootSignatureCommon();
 
-	//導入する
-	IntroduceRootParameters();
-	IntroduceSamplers();
-}
+		//導入する
+		IntroduceRootParameters();
+		IntroduceSamplers();
+	}
 
-void GaussianFilter::CreatePixelShader() {
-	pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/GaussianFilter.PS.hlsl", L"ps_6_0");
-	assert(pixelShaderBlob != nullptr);
-}
+	void GaussianFilter::CreatePixelShader() {
+		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/GaussianFilter.PS.hlsl", L"ps_6_0");
+		assert(pixelShaderBlob != nullptr);
+	}
 
-void GaussianFilter::Command() {
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
-	DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
-	DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(3, 1, 0, 0);
-}
+	void GaussianFilter::Command() {
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootSignature(rootSignature_.Get());
+		DirectXCommon::GetInstance().GetCommandList()->SetPipelineState(graphicsPipelineState_.Get());
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(0, srvHandleGPU_);
+		DirectXCommon::GetInstance().GetCommandList()->DrawInstanced(3, 1, 0, 0);
+	}
 
 
-void GaussianFilter::EffectInit() {
-	srvIndex_ = SrvManager::GetInstance().Allocate();
-	srvHandleCPU_ = SrvManager::GetInstance().GetCPUDescriptorHandle(srvIndex_);
-	srvHandleGPU_ = SrvManager::GetInstance().GetGPUDescriptorHandle(srvIndex_);
+	void GaussianFilter::EffectInit() {
+		srvIndex_ = SrvManager::GetInstance().Allocate();
+		srvHandleCPU_ = SrvManager::GetInstance().GetCPUDescriptorHandle(srvIndex_);
+		srvHandleGPU_ = SrvManager::GetInstance().GetGPUDescriptorHandle(srvIndex_);
 
-	SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
-}
+		SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
+	}
 
-void GaussianFilter::EffectUpdate() {
+	void GaussianFilter::EffectUpdate() {
 
 #ifdef USE_IMGUI
-	ImGui::Text("GaussianFilter");
-	ImGui::Text("9x9");
+		ImGui::Text("GaussianFilter");
+		ImGui::Text("9x9");
 #endif
 
+	}
 }

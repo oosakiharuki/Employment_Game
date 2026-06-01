@@ -3,6 +3,12 @@
 		"generator":"Khronos glTF Blender I/O v4.4.56",
 		"version":"2.0"
 	},
+	"extensionsUsed":[
+		"KHR_texture_transform"
+	],
+	"extensionsRequired":[
+		"KHR_texture_transform"
+	],
 	"scene":0,
 	"scenes":[
 		{
@@ -20,27 +26,44 @@
 		},
 		{
 			"mesh":1,
-			"name":"cube"
+			"name":"cube.003",
+			"rotation":[
+				0,
+				0.7071066498756409,
+				0,
+				0.70710688829422
+			],
+			"scale":[
+				0.5999999642372131,
+				1,
+				1.3999998569488525
+			],
+			"translation":[
+				0,
+				0,
+				5
+			]
 		}
 	],
 	"materials":[
 		{
 			"doubleSided":true,
-			"name":"Material.001",
+			"name":"ground",
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
+					"extensions":{
+						"KHR_texture_transform":{
+							"offset":[
+								0,
+								-14
+							],
+							"scale":[
+								20,
+								15
+							]
+						}
+					},
 					"index":0
-				},
-				"metallicFactor":0,
-				"roughnessFactor":0.5
-			}
-		},
-		{
-			"doubleSided":true,
-			"name":"Material.002",
-			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"index":1
 				},
 				"metallicFactor":0,
 				"roughnessFactor":0.5
@@ -72,16 +95,12 @@
 						"TEXCOORD_0":6
 					},
 					"indices":3,
-					"material":1
+					"material":0
 				}
 			]
 		}
 	],
 	"textures":[
-		{
-			"sampler":0,
-			"source":0
-		},
 		{
 			"sampler":0,
 			"source":0

@@ -1,7 +1,12 @@
+/// ----------------------
+///
+/// ゲーム背景
+/// 
+/// ----------------------
 #include "BackGroundObject.h"
 
 void BackGroundObject::Initialize() {
-	object_ = std::make_unique<Object_glTF>();
+	object_ = std::make_unique<EngineLayer::Object_glTF>();
 	object_->Initialize();
 	object_->SetModelFile("backGroundObject.gltf");
 

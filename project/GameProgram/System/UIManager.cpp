@@ -13,10 +13,10 @@ void UIManager::Finalize() {
 	sInstance_.reset();
 }
 
-void UIManager::FrameSprite(Sprite* sprite) {
+void UIManager::FrameSprite(EngineLayer::Sprite* sprite) {
 	frameSprites_.push_back(sprite);
 }
-void UIManager::FixedSprite(Sprite* sprite) {
+void UIManager::FixedSprite(EngineLayer::Sprite* sprite) {
 	fixedSprites_.push_back(sprite);
 }
 void UIManager::Update() {

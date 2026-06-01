@@ -12,7 +12,7 @@ void PauseMove::Draw(PauseScreen& pauseScreen) {
 
 void PauseSelectGuide::Update(PauseScreen& pauseScreen) {
 	pauseScreen.UpdateGuide();
-	if (Input::GetInstance().TriggerKey(DIK_ESCAPE) || Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START)) {
+	if (EngineLayer::Input::GetInstance().TriggerKey(DIK_ESCAPE) || EngineLayer::Input::GetInstance().TriggerButton(XINPUT_GAMEPAD_START)) {
 		pauseScreen.ChangePauseState(std::make_unique<PauseMove>());//ポーズ選択画面に戻る
 	}
 }
@@ -21,7 +21,7 @@ void PauseSelectGuide::Draw(PauseScreen& pauseScreen) {
 }
 
 void PauseSelectSceneChange::Update(PauseScreen& pauseScreen) {
-	SceneManager::GetInstance().ChangeScene(pauseScreen.GetNextScene());
+	EngineLayer::SceneManager::GetInstance().ChangeScene(pauseScreen.GetNextScene());
 	pauseScreen.ChangePauseState(std::make_unique<PauseMove>());
 }
 void PauseSelectSceneChange::Draw(PauseScreen& pauseScreen) {}

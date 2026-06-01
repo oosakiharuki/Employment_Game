@@ -9,9 +9,9 @@ Shadow::~Shadow() {}
 
 void Shadow::Initialize() {
 
-	object_ = std::make_unique<Object3d>();
+	object_ = std::make_unique<EngineLayer::Object_glTF>();
 	object_->Initialize();
-	object_->SetModelFile("shadow.obj");
+	object_->SetModelFile("shadow.gltf");
 	//色を黒に
 	object_->SetColor(kColor_);
 
@@ -48,8 +48,8 @@ void Shadow::Update() {
 }
 
 void Shadow::Draw() {
-	Object3dCommon::GetInstance().Command();
-	object_->Draw();
+	//EngineLayer::GLTFCommon::GetInstance().Command();
+	//object_->Draw();
 }
 
 void Shadow::OnCollision(CollisionSource* collision) {

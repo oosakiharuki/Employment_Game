@@ -1,3 +1,8 @@
+/// ------------
+///
+/// プレイヤー
+/// 
+/// ------------
 #include "Player.h"
 #include "Input.h"
 #include "ImGuiManager.h"
@@ -10,6 +15,10 @@
 #include "ParticleManager.h"
 #include <NextStageSave.h>
 #include "FoldingUmbrella.h"
+#include <TimeScale.h>
+
+
+#include "ShadowManager.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -33,7 +42,7 @@ void Player::Initialize() {
 
 	//パーティクル初期化
 	InitParticles();
-
+	
 	//MaxHp初期設定
 	maxHp_ = kPlayerMaxHp_;
 
@@ -54,6 +63,49 @@ void Player::Initialize() {
 
 	eventMin = -kMoveMax_;
 	eventMax = kMoveMax_;
+
+
+	//ライト初期値
+	const float kIntensity_ = 1.0f;
+	const float kPointLightDecay_ = 1.0f;
+	//スポットライト初期値
+	const Vector3 kSpotLightPosition_ = { 0.0f,10.25f,0.0f };
+	const float kSpotLightDistance_ = 70.0f;
+	const Vector3 kSpotLightDirection_ = { 0.0f,1.0f,0.0f };
+	const float kSpotLightDecay_ = 2.0f;
+	const float kCosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
+	const float kCosFalloffStart = std::cos(std::numbers::pi_v<float> / 4.0f);
+
+
+
+	//設定
+	light = std::make_unique<SpotLight>();
+	light->color = kDefaultColor_;
+	light->position = kSpotLightPosition_;
+	light->distance = kSpotLightDistance_;
+	light->direction = Normalize(kSpotLightDirection_);
+	light->intensity = kIntensity_;
+	light->decay = kPointLightDecay_;
+	light->cosAngle = kCosAngle;
+	light->cosFalloffStart = kCosFalloffStart;
+
+	light->isEnable = false;
+
+
+
+
+	////ディレクショナルライト初期値
+	//const Vector3 kDirectionalLightDirection_ = { 0.0f,-1.0f,0.0f };
+
+	////設定
+	//light2 = std::make_unique<DirectionalLight>();
+	//light2->color = kDefaultColor_;
+	//light2->intensity = kIntensity_;
+	//light2->isEnable = true;
+
+	//EngineLayer::ShadowManager::GetInstance().AddDirectionalLight(&*light2);
+
+
 }
 
 void Player::InitMainBody() {
@@ -64,21 +116,19 @@ void Player::InitMainBody() {
 	objectMotions_["appearance"] = "player_appearance.gltf";
 
 	//プレイヤー初期化/オブジェクト読み込み
-	object_ = std::make_unique<Object_glTF>();
+	object_ = std::make_unique<EngineLayer::Object_glTF>();
 	object_->Initialize();
 	object_->SetModelFile(objectMotions_[motionName_]);
 }
 
 
 void Player::InitParticles() {
-	particles_[particleWalk_] = ParticleManager::GetInstance().InitParticle(particleWalk_);
-	particles_[particleJump_] = ParticleManager::GetInstance().InitParticle(particleJump_);
-	particles_[particleBrink_] = ParticleManager::GetInstance().InitParticle(particleBrink_);
-	particles_[particleFire_] = ParticleManager::GetInstance().InitParticle(particleFire_);
-	particles_[particleDamage_] = ParticleManager::GetInstance().InitParticle(particleDamage_);
-	particles_[particleParry_] = ParticleManager::GetInstance().InitParticle(particleParry_);
-	particles_[particleDead_] = ParticleManager::GetInstance().InitParticle(particleDead_);
-
+	particles_[particleWalk_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleWalk_);
+	particles_[particleJump_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleJump_);
+	particles_[particleBrink_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleBrink_);
+	particles_[particleFire_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleFire_);
+	particles_[particleDamage_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleDamage_);
+	particles_[particleDead_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleDead_);
 }
 
 void Player::InitUmbrella() {
@@ -94,7 +144,7 @@ void Player::InitUmbrella() {
 }
 
 void Player::SettingSpriteHp(uint32_t num) {
-	std::unique_ptr<Sprite> sprite = std::make_unique<Sprite>();
+	std::unique_ptr<EngineLayer::Sprite> sprite = std::make_unique<EngineLayer::Sprite>();
 	sprite->Initialize("Hp.png");
 	sprite->SetPosition({ kInitializePointHp_.x + kTextureSizeHp_.x * num , kInitializePointHp_.y - num * kDistanceYHp_ });
 	sprite->SetSize(kTextureSizeHp_);
@@ -104,9 +154,9 @@ void Player::SettingSpriteHp(uint32_t num) {
 
 void Player::InitAudio() {
 	//ダメージ
-	Audio::GetInstance().LoadWave(kHitSoundName_);
+	EngineLayer::Audio::GetInstance().LoadWave(kHitSoundName_);
 	//ジャンプ
-	Audio::GetInstance().LoadWave(kJumpSoundName_);
+	EngineLayer::Audio::GetInstance().LoadWave(kJumpSoundName_);
 }
 
 void Player::ActionUpdate() {
@@ -123,6 +173,8 @@ void Player::ActionUpdate() {
 
 
 void Player::Update() {
+
+	//ステートパターン
 	GameActor::Update();
 
 	//弾丸更新処理
@@ -195,9 +247,26 @@ void Player::Update() {
 void Player::InfinityTimeUpdate() {
 	if (infinityTimer_ >= kInfinityTimeMax_) {
 		infinityTimer_ = kInfinityTimeMax_;//Maxになったら無敵時間終了
+		object_->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+		return;
+	}
+	else if (BrinkTimeMax()) {
+		infinityTimer_ += TimeScale::GetInstance().GetTimeScale();//時間が経過する
 	}
 	else {
 		infinityTimer_ += kDeltaTime_;//時間が経過する
+	}
+
+	//
+	if (std::fmod(infinityTimer_, kBlinkingTime_) >= kBlinkingTime_ - kDeltaTime_) {
+		isChangeColor_ = !isChangeColor_;
+	}
+
+	if(isChangeColor_) {
+		object_->SetColor({0.5f,0.5f,0.5f,1.0f});
+	}
+	else {
+		object_->SetColor(kDefaultColor_);
 	}
 }
 
@@ -237,11 +306,11 @@ void Player::SmockParticle() {
 	//移動しているとパーティクルを発生
 	if (isGround_ && IsMovePosition()) {
 		// 歩く煙パーティクル
-		particles_[particleWalk_]->SetParticleBorn(ParticleBorn::TimerMode);
+		particles_[particleWalk_]->SetParticleBorn(EngineLayer::ParticleBorn::TimerMode);
 		particles_[particleWalk_]->SetTranslate(transform_.translate + TransformNormal(kParticleWalkPoint_, wt_.GetMatWorld()));
 	}
 	else {
-		particles_[particleWalk_]->SetParticleBorn(ParticleBorn::Stop);
+		particles_[particleWalk_]->SetParticleBorn(EngineLayer::ParticleBorn::Stop);
 	}
 }
 
@@ -312,6 +381,9 @@ void Player::LifeUpdate() {
 	if (CollisionUtility::GetInstance().IsGoal() || CollisionUtility::GetInstance().IsWarp()) {
 		isPerformance_ = true;
 	}
+
+
+	object_->ShadowPosition(transform_.translate);
 }
 
 
@@ -348,20 +420,20 @@ void Player::Dead() {
 	if (deadTimer_ >= kHitStopTime_) {
 		//倒されたパーティクル配置+発動
 		particles_[particleDead_]->SetTranslate(transform_.translate);
-		particles_[particleDead_]->SetParticleBorn(ParticleBorn::TimerMode);
+		particles_[particleDead_]->SetParticleBorn(EngineLayer::ParticleBorn::TimerMode);
 
 		DirectionTheCamera();//カメラのほうに向く
 		transform_.rotate.z += kPlayerDeadRotating_;//回転する
 		//少し浮く
 		transform_.translate.y += kDeadLittleUp_;
 		//重力
-		GravityUpdate(transform_.translate.y);
+		GravityUpdate(transform_.translate.y,true);
 
 		isGround_ = false;
 		if (deadTimer_ >= kDeadTimeMax_) {
 			RespawnPlayer();
 			//パーティクル発動停止
-			particles_[particleDead_]->SetParticleBorn(ParticleBorn::Stop);
+			particles_[particleDead_]->SetParticleBorn(EngineLayer::ParticleBorn::Stop);
 		}
 	}
 	else {
@@ -441,7 +513,7 @@ void Player::AddBullet(std::unique_ptr<PlayerBullet> bullet) {
 #pragma endregion
 
 void Player::Draw() {
-	GLTFCommon::GetInstance().Command();
+	EngineLayer::GLTFCommon::GetInstance().Command();
 	//プレイヤー本体
 	object_->Draw();
 
@@ -452,7 +524,7 @@ void Player::Draw() {
 		shadow_->Draw();
 	}
 	
-	Object3dCommon::GetInstance().Command();
+	EngineLayer::Object3dCommon::GetInstance().Command();
 
 	//弾丸
 	for (auto& bullet : bullets_) {
@@ -499,13 +571,14 @@ void Player::FireBulletUmbrella() {
 	}
 }
 
-void Player::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::TypeEnemyBullet || 
-		collision->GetType() == CollisionTypes::TypeBombExplotion || 
-		collision->GetType() == CollisionTypes::TypeBoss) {
-		IsDamage(collision->GetCenter());
+void Player::OnCollision(CollisionSource* collision) {		
+	if ((collision->GetType() == CollisionTypes::TypeEnemyBullet ||
+		collision->GetType() == CollisionTypes::TypeBombExplotion ||
+		collision->GetType() == CollisionTypes::TypeEnemyDamageBody ||
+		collision->GetType() == CollisionTypes::TypeBoss) && infinityTimer_ >= kInfinityTimeMax_) {
+		EnemyCollision(collision);
 	}
-	
+
 	if (collision->GetType() == CollisionTypes::TypeStage || collision->GetType() == CollisionTypes::TypeMoveGround) {
 		CollisionUtility::GetInstance().GameActorAndStageCollision(collisionOverlap,*this, *this,collision->GetAABB());
 	}
@@ -530,6 +603,7 @@ bool Player::TypeCheckUp(const CollisionTypes& collisionType) {
 	}
 
 	if (collisionType == CollisionTypes::TypeEnemyBullet ||
+		collisionType == CollisionTypes::TypeEnemyDamageBody ||
 		collisionType == CollisionTypes::TypeBombExplotion ||
 		collisionType == CollisionTypes::TypeBoss ||
 		collisionType == CollisionTypes::TypeStage || 
@@ -541,6 +615,21 @@ bool Player::TypeCheckUp(const CollisionTypes& collisionType) {
 	return false;
 }
 
+void Player::EnemyCollision(CollisionSource* collision) {
+	//ブリンク時間半分たつ前 + 時間がスロー状態でないとき
+	if (brinkTimer_ >= kBrinkTimeMax_ * kDivideByTwo_ && TimeScale::GetInstance().GetTimeScaleFacto() == 1.0f) {
+		TimeScale::GetInstance().SetTimeScale(1.0f / 180.0f, kSlowTime_);//スローをかける
+		InfinityTime();//無敵時間が入る
+		//ポイントを6プラス(ゲージ2個分)
+		for (int i = 0; i < 6; i++) {
+			reinforceGauge_->AddPoint();
+		}
+	}
+	else {
+		//ダメージ
+		IsDamage(collision->GetCenter());
+	}
+}
 
 void Player::IsDamage(const Vector3& hitPoint) {
 	//無敵時間をすぎたとき
@@ -553,10 +642,10 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		hp_--;
 		//ダメージのパーティクル発生
 		particles_[particleDamage_]->SetTranslate(transform_.translate + Normalize(hitPoint));
-		particles_[particleDamage_]->SetParticleBorn(ParticleBorn::MomentMode);
+		particles_[particleDamage_]->SetParticleBorn(EngineLayer::ParticleBorn::MomentMode);
 		//ダメージのSE再生
-		Audio::GetInstance().SoundPlayWave(kHitSoundName_, kVolume_);
-		infinityTimer_ = 0.0f;//無敵時間発動
+		EngineLayer::Audio::GetInstance().SoundPlayWave(kHitSoundName_, kVolume_);
+		InfinityTime();
 		//ノックバック(時間の三分の一ぶんまで)
 
 		Vector3 power = Length(transform_.translate,hitPoint);
@@ -584,7 +673,7 @@ void Player::IsFall() {
 	//一発K.O
 	hp_ = 0;
 	//ダメージSE再生
-	Audio::GetInstance().SoundPlayWave(kHitSoundName_, kVolume_);
+	EngineLayer::Audio::GetInstance().SoundPlayWave(kHitSoundName_, kVolume_);
 }
 
 void Player::KnockBackPlayer(const Vector3& Power, float TimerMax) {
@@ -643,15 +732,15 @@ void  Player::ParticleFire(const Vector3& translate) {
 	//攻撃パーティクル発生
 	particles_[particleFire_]->SetTranslate(translate);
 	particles_[particleFire_]->SetRotate(umbrellaRange_);
-	particles_[particleFire_]->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleFire_]->SetParticleBorn(EngineLayer::ParticleBorn::MomentMode);
 }
 
 void  Player::ParticleJump() {
 	particles_[particleJump_]->SetTranslate(transform_.translate + TransformNormal(kParticleWalkPoint_, wt_.GetMatWorld()));
-	particles_[particleJump_]->SetParticleBorn(ParticleBorn::MomentMode);
+	particles_[particleJump_]->SetParticleBorn(EngineLayer::ParticleBorn::MomentMode);
 	//SE
-	Audio::GetInstance().StopWave(kJumpSoundName_);
-	Audio::GetInstance().SoundPlayWave(kJumpSoundName_, kVolume_);
+	EngineLayer::Audio::GetInstance().StopWave(kJumpSoundName_);
+	EngineLayer::Audio::GetInstance().SoundPlayWave(kJumpSoundName_, kVolume_);
 }
 
 void  Player::ParticleBrink() {
@@ -659,7 +748,7 @@ void  Player::ParticleBrink() {
 	Vector3 rotate = transformGun_.rotate;
 	rotate += TransformNormal(kLookToCameraDirection_,wtGun_.GetMatWorld());
 	particles_[particleBrink_]->SetRotate(rotate);
-	particles_[particleBrink_]->SetParticleBorn(ParticleBorn::TimerMode);
+	particles_[particleBrink_]->SetParticleBorn(EngineLayer::ParticleBorn::TimerMode);
 }
 
 bool Player::BrinkFlag() {
@@ -678,12 +767,12 @@ bool Player::BrinkTimeMax() {
 }
 
 void Player::StopParticleBrink() {
-	particles_[particleBrink_]->SetParticleBorn(ParticleBorn::Stop);
+	particles_[particleBrink_]->SetParticleBorn(EngineLayer::ParticleBorn::Stop);
 }
 
 void Player::GravityDown() {
 	//重力を固定することでゆっくり落ちる
-	gravity_ = kFixedGravityPower_;
+	gravity_ = kFixedGravityPower_ * TimeScale::GetInstance().GetTimeScaleFacto();
 }
 
 const bool Player::IsMovePosition() {
@@ -710,11 +799,11 @@ void Player::SpriteUpdate() {
 	//追加の操作
 #ifdef _DEBUG
 	//強化ゲージ
-	if (Input::GetInstance().PushKey(DIK_T)) {
+	if (EngineLayer::Input::GetInstance().PushKey(DIK_T)) {
 		reinforceGauge_->AddPoint();
 	}
 	
-	if (Input::GetInstance().TriggerKey(DIK_Y)) {
+	if (EngineLayer::Input::GetInstance().TriggerKey(DIK_Y)) {
 		reinforceGauge_->UsePoint();
 	}
 #endif // _DEBUG

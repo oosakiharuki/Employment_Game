@@ -14,7 +14,7 @@ Enemy_Soldier::~Enemy_Soldier() {
 
 void Enemy_Soldier::Initialize() {
 	//敵の共通初期化処理
-	BaseEnemy::Enemy_InitializeCommon("enemy.obj");
+	BaseEnemy::Enemy_InitializeCommon("soldier.gltf");
 
 	//体力の初期化
 	GameActor::HP_Initialize(kHp_);
@@ -28,14 +28,14 @@ void Enemy_Soldier::Initialize() {
 	fireCommand_->InitAudio();
 
 	//攻撃(発泡)
-	particles_[fireCommand_->GetParticleFireName()] = ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireName());
+	particles_[fireCommand_->GetParticleFireName()] = EngineLayer::ParticleManager::GetInstance().InitParticle(fireCommand_->GetParticleFireName());
 
 	speed_.x = kMoveX_;
 }
 
 void Enemy_Soldier::Move() {
-	move_ += speed_;//移動ポイント
-	transform_.translate += speed_;
+	move_ += speed_ * TimeScale::GetInstance().GetTimeScaleFacto();//移動ポイント
+	transform_.translate += speed_ * TimeScale::GetInstance().GetTimeScaleFacto();
 
 	//方向転換
 	//敵が右向き
@@ -69,7 +69,7 @@ void Enemy_Soldier::Active() {
 	StatePatternUpdate();
 
 	//重力
-	GravityUpdate(transform_.translate.y);
+	GravityUpdate(transform_.translate.y, true);
 	
 	PlayerTarget();
 	//捜索範囲更新
@@ -137,7 +137,7 @@ void Enemy_Soldier::UpdateImGui() {
 }
 
 void Enemy_Soldier::Draw() {
-	if (!isDeleteEnemy_) {
+	if (!isDeleteEnemy_ && !isPerformance_) {
 		object_->Draw();
 		shadow_->Draw();
 	}
@@ -165,7 +165,7 @@ void Enemy_Soldier::FireBullet() {
 		velocity_ = normal;
 	}
 	particles_[fireCommand_->GetParticleFireName()]->SetTranslate(enemyPosition);
-	particles_[fireCommand_->GetParticleFireName()]->SetParticleBorn(ParticleBorn::MomentMode);//パーティクルが出てくる
+	particles_[fireCommand_->GetParticleFireName()]->SetParticleBorn(EngineLayer::ParticleBorn::MomentMode);//パーティクルが出てくる
 
 	//弾丸を生み出す
 	fireCommand_->AddBullet(enemyPosition, velocity_);

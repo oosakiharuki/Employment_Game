@@ -1,3 +1,8 @@
+/// -------------------
+///
+/// ゲージの管理/描画
+/// 
+/// -------------------
 #include "ReinforceGauge.h"
 #include "UIManager.h"
 
@@ -7,12 +12,12 @@ using namespace MyMath;
 
 void ReinforceGauge::Initialize() {
 	
-	gaugeSprite_ = std::make_unique<Sprite>();
+	gaugeSprite_ = std::make_unique<EngineLayer::Sprite>();
 	gaugeSprite_->Initialize("ReinforceGauge.png");
 	gaugeSprite_->SetPosition(GaugePosition_);
 
 	for (int i = 0; i < int(kGaugePointSpriteNum_); i++) {
-		std::unique_ptr<Sprite> gaugePointSprite = std::make_unique<Sprite>();
+		std::unique_ptr<EngineLayer::Sprite> gaugePointSprite = std::make_unique<EngineLayer::Sprite>();
 		gaugePointSprite->Initialize("ReinforcePoint.png");
 		gaugePointSprites_.push_back(std::move(gaugePointSprite));
 	}

@@ -1,4 +1,10 @@
+/// --------------------
+///
+/// 動く足場
+/// 
+/// --------------------
 #include "MoveGround.h"
+#include "TimeScale.h"
 
 using namespace UseEveryOne;
 using namespace MyMath;
@@ -7,7 +13,7 @@ MoveGround::~MoveGround() {}
 
 void MoveGround::Initialize() {
 	wt_.Initialize();
-	object_ = std::make_unique<Object3d>();
+	object_ = std::make_unique<EngineLayer::Object3d>();
 	object_->Initialize();
 	object_->SetModelFile("moveGround.obj");
 
@@ -64,7 +70,7 @@ void MoveGround::Move() {
 	//現在のポイントに移行
 	transform_.translate = nowPoint_;
 
-	interpolation_ += kDeltaTime_ / kMoveFrame_;//時間経過(4秒間)
+	interpolation_ += TimeScale::GetInstance().GetTimeScale() / kMoveFrame_;//時間経過(4秒間)
 	interpolation_ = std::clamp(interpolation_, 0.0f, 1.0f);
 	//現在ポイントの変更
 	nowPoint_ = EaseInOut(movePoint_.diff, movePoint_.origin, interpolation_);

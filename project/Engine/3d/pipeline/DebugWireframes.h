@@ -4,76 +4,85 @@
 
 class Camera;
 /// <summary>
-/// ワイヤーフレーム調の共有処理
+/// エンジン層
 /// </summary>
-class DebugWireframes : public Pipeline {
-public:
+namespace EngineLayer {
 	/// <summary>
-	/// インスタンス生成
+	/// ワイヤーフレーム調の共有処理
 	/// </summary>
-	/// <returns></returns>
-	static DebugWireframes& GetInstance();
-	/// <summary>
-	/// 解放処理
-	/// </summary>
-	void Finalize();
-	/// <summary>
-	/// 初期化処理
-	/// </summary>
-	/// <param name="dxCommon"></param>
-	void Initialize();
-	/// <summary>
-	/// 描画コマンド
-	/// </summary>
-	void Command();
-	/// <summary>
-	/// setter_デフォルトカメラ
-	/// </summary>
-	/// <param name="camera"></param>
-	void SetDefaultCamera(Camera* camera) { defaultCamera_ = camera; }
-	Camera* GetDefaultCamera() const { return defaultCamera_; }
-private:
-	/// <summary>
-	/// ルートシグネチャ
-	/// </summary>
-	void RootSignature() override;
+	class DebugWireframes : public Pipeline {
+	public:
+		/// <summary>
+		/// インスタンス生成
+		/// </summary>
+		/// <returns></returns>
+		static DebugWireframes& GetInstance();
+		/// <summary>
+		/// 解放処理
+		/// </summary>
+		void Finalize();
+		/// <summary>
+		/// 初期化処理
+		/// </summary>
+		/// <param name="dxCommon"></param>
+		void Initialize();
+		/// <summary>
+		/// 描画コマンド
+		/// </summary>
+		void Command();
+		/// <summary>
+		/// setter_デフォルトカメラ
+		/// </summary>
+		/// <param name="camera"></param>
+		void SetDefaultCamera(Camera* camera) { defaultCamera_ = camera; }
+		/// <summary>
+		/// getter_デフォルトカメラ
+		/// </summary>
+		/// <param name="camera">カメラを設定</param>
+		Camera* GetDefaultCamera() const { return defaultCamera_; }
+	private:
+		/// <summary>
+		/// ルートシグネチャ
+		/// </summary>
+		void RootSignature() override;
 
-	/// <summary>
-/// InputLayoutを作成
-/// </summary>
-	void CreateInputLayout() override;
-
-	/// <summary>
-	/// Blendを作成
+		/// <summary>
+	/// InputLayoutを作成
 	/// </summary>
-	void CreateBlend() override;
+		void CreateInputLayout() override;
 
-	/// <summary>
-	/// Rasterizerを作成
-	/// </summary>
-	void CreateRasterizer() override;
+		/// <summary>
+		/// Blendを作成
+		/// </summary>
+		void CreateBlend() override;
 
-	/// <summary>
-	/// VertexShaderを作成
-	/// </summary>
-	void CreateVertexShader() override;
+		/// <summary>
+		/// Rasterizerを作成
+		/// </summary>
+		void CreateRasterizer() override;
 
-	/// <summary>
-	/// PixelShaderを作成
-	/// </summary>
-	void CreatePixelShader() override;
+		/// <summary>
+		/// VertexShaderを作成
+		/// </summary>
+		void CreateVertexShader() override;
 
-	/// <summary>
-	/// DepthStencilの作成
-	/// </summary>
-	void CreateDepthStencil() override;
+		/// <summary>
+		/// PixelShaderを作成
+		/// </summary>
+		void CreatePixelShader() override;
 
-	Camera* defaultCamera_ = nullptr;
-	//インスタンス
-	static std::unique_ptr<DebugWireframes> sInstance_;
-	//default_deleteを設定(解放処理を行える)
-	friend struct std::default_delete<DebugWireframes>;
+		/// <summary>
+		/// DepthStencilの作成
+		/// </summary>
+		void CreateDepthStencil() override;
 
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[4] = {};
+		Camera* defaultCamera_ = nullptr;
+		//インスタンス
+		static std::unique_ptr<DebugWireframes> sInstance_;
+		//default_deleteを設定(解放処理を行える)
+		friend struct std::default_delete<DebugWireframes>;
 
-};
+		D3D12_INPUT_ELEMENT_DESC inputElementDescs[4] = {};
+
+	};
+}

@@ -9,7 +9,7 @@
 /// <summary>
 /// クリアシーン(BaseSceneの派生クラス)
 /// </summary>
-class ClearScene : public BaseScene{
+class ClearScene : public EngineLayer::BaseScene{
 public:
 	/// <summary>
 	/// 初期化処理
@@ -50,7 +50,7 @@ private:
 	void InitParticle();
 	
 	//カメラ
-	std::unique_ptr<Camera> camera_ = nullptr;
+	std::unique_ptr<EngineLayer::Camera> camera_ = nullptr;
 	//カメラのコントロール
 	std::unique_ptr<CameraControl> cameraControl_;
 
@@ -64,8 +64,8 @@ private:
 	const float kPlayerFrontRange_ = 180.0f;
 
 	//スプライト描画
-	std::unique_ptr<Sprite> sprite_;//ゲームクリアの文字
-	std::unique_ptr<Sprite> spriteSpace_;//Spaceでもどるの文字
+	std::unique_ptr<EngineLayer::Sprite> sprite_;//ゲームクリアの文字
+	std::unique_ptr<EngineLayer::Sprite> spriteSpace_;//Spaceでもどるの文字
 
 	//スプライト
 	const Vector2 kSpritePositionGameClear_ = { 100, 100 };//[ゲームクリア]文字の座標
@@ -73,14 +73,14 @@ private:
 	const Vector2 kSpriteSizeButton_ = { 256,64 };//[ボタンで戻る]文字のサイズ
 
 	//パーティクル
-	std::unordered_map<std::string, std::unique_ptr<Particle>> sceneParticles_;
+	std::unordered_map<std::string, std::unique_ptr<EngineLayer::Particle>> sceneParticles_;
 
 	//紙吹雪のパーティクルたち
 	const uint32_t kParticleMaxNum_ = 3;
 	
 	const std::string& particleFanfare_ = "clear_fanfare";
 
-	std::vector<std::unique_ptr<Particle>> particleFanfares_;
+	std::vector<std::unique_ptr<EngineLayer::Particle>> particleFanfares_;
 
 	//紙吹雪パーティクルたちの座標をずらす
 	const float kFanfareX_ = 3.0f;

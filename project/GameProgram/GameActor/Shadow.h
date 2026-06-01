@@ -1,5 +1,4 @@
 #pragma once
-#include "Object3d.h"
 #include "Object_glTF.h"
 #include "MyMath.h"
 #include "CollisionManager.h"
@@ -47,8 +46,8 @@ private:
 	/// <returns>該当するタイプがあるなら true</returns>
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
-	std::unique_ptr<Object3d> object_;
-	WorldTransform wt_;
+	std::unique_ptr<EngineLayer::Object_glTF> object_;
+	EngineLayer::WorldTransform wt_;
 	Transform transform_{};
 
 	//プレイヤーの真下最大値

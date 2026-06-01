@@ -3,63 +3,68 @@
 #include "BaseScene.h"
 
 /// <summary>
-/// シーンマネージャ
+/// エンジン層
 /// </summary>
-class SceneManager {
-public:
+namespace EngineLayer {
 	/// <summary>
-	/// インスタンス生成
+	/// シーンマネージャ
 	/// </summary>
-	/// <returns></returns>
-	static SceneManager& GetInstance();
+	class SceneManager {
+	public:
+		/// <summary>
+		/// インスタンス生成
+		/// </summary>
+		/// <returns></returns>
+		static SceneManager& GetInstance();
 
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	SceneManager();
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~SceneManager();
+		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		SceneManager();
+		/// <summary>
+		/// デストラクタ
+		/// </summary>
+		~SceneManager();
 
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void SceneUpdate();
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-	void Update();
-	/// <summary>
-	/// 描画処理
-	/// </summary>
-	void Draw();
-	/// <summary>
-	/// 削除処理
-	/// </summary>
-	void Finalize();
+		/// <summary>
+		/// 更新処理
+		/// </summary>
+		void SceneUpdate();
+		/// <summary>
+		/// 更新処理
+		/// </summary>
+		void Update();
+		/// <summary>
+		/// 描画処理
+		/// </summary>
+		void Draw();
+		/// <summary>
+		/// 削除処理
+		/// </summary>
+		void Finalize();
 
-	/// <summary>
-	/// ゲーム終了時の処理
-	/// </summary>
-	/// <returns></returns>trueで終了
-	bool SetGameEnd() { return scene_->GetIsGameEnd(); }
+		/// <summary>
+		/// ゲーム終了時の処理
+		/// </summary>
+		/// <returns></returns>trueで終了
+		bool SetGameEnd() { return scene_->GetIsGameEnd(); }
 
-	/// <summary>
-	/// 次のシーンに移りますよのフラグ
-	/// </summary>
-	bool NextSceneChangeFlag();
+		/// <summary>
+		/// 次のシーンに移りますよのフラグ
+		/// </summary>
+		bool NextSceneChangeFlag();
 
-	/// <summary>
-	/// シーン入れ替え
-	/// </summary>
-	void ChangeScene(const std::unique_ptr<BaseScene> nextScene);
-private:
-	//インスタンス
-	static std::unique_ptr<SceneManager> sInstance_;
-	//default_deleteを設定(解放処理を行える)
-	friend struct std::default_delete<SceneManager>;
+		/// <summary>
+		/// シーン入れ替え
+		/// </summary>
+		void ChangeScene(const std::unique_ptr<BaseScene> nextScene);
+	private:
+		//インスタンス
+		static std::unique_ptr<SceneManager> sInstance_;
+		//default_deleteを設定(解放処理を行える)
+		friend struct std::default_delete<SceneManager>;
 
-	std::unique_ptr<BaseScene> scene_ = nullptr;//現在シーン
-	std::unique_ptr<BaseScene> nextScene_ = nullptr;//次のシーン
-};
+		std::unique_ptr<BaseScene> scene_ = nullptr;//現在シーン
+		std::unique_ptr<BaseScene> nextScene_ = nullptr;//次のシーン
+	};
+}

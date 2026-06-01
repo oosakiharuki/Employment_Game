@@ -1,3 +1,8 @@
+/// -------------------------
+///
+/// ゴール クリア判定
+/// 
+/// -------------------------
 #include "Goal.h"
 #include "CollisionManager.h"
 #include "Input.h"
@@ -11,7 +16,7 @@ void Goal::Initialize(){
 	//Transform更新処理
 	transform_ = wt_.UpdateTransform();
 
-	object_ = std::make_unique<Object3d>();
+	object_ = std::make_unique<EngineLayer::Object3d>();
 	object_->Initialize();
 	object_->SetModelFile("goal.obj");
 

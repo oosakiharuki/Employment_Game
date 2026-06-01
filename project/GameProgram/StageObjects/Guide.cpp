@@ -1,8 +1,13 @@
+/// -------------------------------
+///
+/// 操作ガイド / できることを表示
+/// 
+/// -------------------------------
 #include "Guide.h"
 #include "Input.h"
 
 void Guide::Initialize(const Transform& transform, const std::string& textureFileName) {
-	object_ = std::make_unique<Object3d>();
+	object_ = std::make_unique<EngineLayer::Object3d>();
 	object_->Initialize();
 	object_->SetModelFile("Guide.obj");
 
@@ -18,7 +23,8 @@ void Guide::Update() {
 	if (textureFileName_.substr(0,5) != "Guide") {
 		textureFilePath_ = textureFileName_;
 	}
-	else if (Input::GetInstance().GetJoystickState()) {
+	//操作がゲームパッドかキーボードか
+	else if (EngineLayer::Input::GetInstance().GetJoystickState()) {
 		textureFilePath_ = textureFileName_ + "GamePad";
 	}
 	else {

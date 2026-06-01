@@ -48,7 +48,7 @@ public:
 	/// getter_ワールド座標系
 	/// </summary>
 	/// <returns></returns>プレイヤー本体のワールド座標系
-	const WorldTransform& GetWorldTransform() { return wt_; }
+	const EngineLayer::WorldTransform& GetWorldTransform() { return wt_; }
 	
 	/// <summary>
 	/// getter_ワールド座標系の位置
@@ -287,6 +287,11 @@ public:
 	/// <returns>現在の傘(武器)の対応の番号</returns>
 	int GetWeaponNum() { return weaponNum_; }
 
+	/// <summary>
+	/// 無敵時間の発動
+	/// </summary>
+	void InfinityTime() { infinityTimer_ = 0.0f; }
+
 private:
 	/// ---状態遷移---
 	/// <summary>
@@ -384,14 +389,19 @@ private:
 	/// </summary>
 	void KnockBackUpdate();
 
+	/// <summary>
+	/// 敵の攻撃に当たった時(回避かダメージか)
+	/// </summary>
+	/// <param name="collision">当たっているコリジョンリソースクラス</param>
+	void EnemyCollision(CollisionSource* collision);
 
 	// --- オブジェクト ---
 	
 	//プレイヤー本体
-	std::unique_ptr<Object_glTF> object_;
+	std::unique_ptr<EngineLayer::Object_glTF> object_;
 	//傘の銃
 	std::unique_ptr<BaseUmbrella> umbrella_ = nullptr;
-	WorldTransform wtGun_;//傘のワールド座標系
+	EngineLayer::WorldTransform wtGun_;//傘のワールド座標系
 	Transform transformGun_{};
 
 	/// 弾丸
@@ -425,18 +435,22 @@ private:
 
 	// --- ダメージ、生存関係 ---
 
-	const uint32_t kPlayerMaxHp_ = 3;//設定する体力
+	const uint32_t kPlayerMaxHp_ = 4;//設定する体力
 	//残機(remain)
 	uint32_t remain_;
 	//落ちる限界
 	const float kFallEndY_ = -10.0f;
 
 	//ダメージを食らった後の無敵時間
-	float infinityTimer_ = 0.0f;
-	const float kInfinityTimeMax_ = 1.0f;//最大無敵時間
+	const float kInfinityTimeMax_ = 2.0f;//最大無敵時間
+	float infinityTimer_ = kInfinityTimeMax_;
 
 	//リスポーンフラグ
 	bool isRespawn_ = false;
+
+	//無敵中の点滅
+	bool isChangeColor_ = false;//色変更
+	const float kBlinkingTime_ = 0.25f;//刻む秒数
 
 	// ---------------------------
 
@@ -495,7 +509,7 @@ private:
 	const Vector2 kTextureSizeHp_ = { 64,64 };//スプライトサイズ
 	const Vector2 kInitializePointHp_ = { 20.0f,45.0f };//スプライトの初期位置
 	const float kDistanceYHp_ = 10.0f;//スプライトのY軸幅
-	std::vector<std::unique_ptr<Sprite>> hpSprites_;
+	std::vector<std::unique_ptr<EngineLayer::Sprite>> hpSprites_;
 
 	// -----------
 
@@ -535,6 +549,9 @@ private:
 	//傘の位置設定時に使う
 	const float kBrinkPower_ = 1.25f;
 
+	//スローがかかる時間
+	const float kSlowTime_ = 2.0f;
+
 	//
 	int weaponNum_ = 0;
 
@@ -542,6 +559,8 @@ private:
 
 	float fireCoolTimer_ = 0.0f;//クールタイマー
 	const float kFireCoolTimeMax_ = 0.5f;//クールタイム最大時間
+	std::unique_ptr<SpotLight> light;
+	std::unique_ptr<DirectionalLight> light2;
 
 	// -------------------------
 };

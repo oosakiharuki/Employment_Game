@@ -2,6 +2,8 @@
 #include "ImGuiManager.h"
 #include "ParticleManager.h"
 
+#include "TimeScale.h"
+
 using namespace MyMath;
 using namespace UseEveryOne;
 
@@ -13,23 +15,23 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 	//アクターの共通初期化処理
 	GameActor::Initialize();
 
-	object_ = std::make_unique<Object3d>();
+	object_ = std::make_unique<EngineLayer::Object_glTF>();
 	object_->Initialize();
 	object_->SetModelFile(objectName);
 
 	//見つけたときの「!」マーク
-	objectFound_ = std::make_unique<Object3d>();
+	objectFound_ = std::make_unique<EngineLayer::Object3d>();
 	objectFound_->Initialize();
 	objectFound_->SetModelFile("player_found_mark.obj");
 
 	//見失ったときのの「?」マーク
-	objectNoFound_ = std::make_unique<Object3d>();
+	objectNoFound_ = std::make_unique<EngineLayer::Object3d>();
 	objectNoFound_->Initialize();
 	objectNoFound_->SetModelFile("player_lost_mark.obj");
 
 	//パーティクル
 	//ダメージ
-	particles_[particleDamage_] = ParticleManager::GetInstance().InitParticle(particleDamage_);
+	particles_[particleDamage_] = EngineLayer::ParticleManager::GetInstance().InitParticle(particleDamage_);
 
 	//マークのワールド座標
 	wtMark_.Initialize();	
@@ -42,11 +44,11 @@ void BaseEnemy::Enemy_InitializeCommon(const std::string& objectName) {
 
 
 
-	hpSprite_ = std::make_unique<Sprite>();
+	hpSprite_ = std::make_unique<EngineLayer::Sprite>();
 	hpSprite_->Initialize("enemyHp.png");
 	hpSprite_->SetSize(kHpSpriteSize_);
 
-	underBarSprite_ = std::make_unique<Sprite>();
+	underBarSprite_ = std::make_unique<EngineLayer::Sprite>();
 	underBarSprite_->Initialize("hpBar.png");
 	underBarSprite_->SetSize(kHpSpriteSize_);
 }
@@ -69,6 +71,9 @@ void BaseEnemy::Update() {
 
 	//体力バースプライト更新
 	HpSpriteUpdate();
+
+	object_->ShadowPosition(transform_.translate);
+
 
 #ifdef USE_IMGUI
 	
@@ -111,10 +116,10 @@ void BaseEnemy::MarkUpdate() {
 
 	//!,?のマーク表示時間の間
 	if (attackSwitch_) {
-		markTimer_ += kDeltaTime_;
+		markTimer_ += TimeScale::GetInstance().GetTimeScale();
 	}
 	else {
-		markTimer_ -= kDeltaTime_;
+		markTimer_ -= TimeScale::GetInstance().GetTimeScale();
 	}
 	markTimer_ = std::clamp(markTimer_, 0.0f, kMarkMaxTime_);//0 ～ kMarkMaxTime
 
@@ -153,7 +158,7 @@ void BaseEnemy::DrawParticle() {
 void BaseEnemy::IsDamage() {
 	//ダメージのパーティクルを出す
 	particles_[particleDamage_]->SetTranslate(transform_.translate); //座標を読み取る
-	particles_[particleDamage_]->SetParticleBorn(ParticleBorn::MomentMode); // 発生モード(一度だけ)の変更
+	particles_[particleDamage_]->SetParticleBorn(EngineLayer::ParticleBorn::MomentMode); // 発生モード(一度だけ)の変更
 	isDamageMotion_ = true;
 
 	//連続ヒット時、元に戻す
@@ -210,7 +215,7 @@ void BaseEnemy::FoundReaction() {
 }
 
 void BaseEnemy::DeadReaction() {
-	transform_.rotate -= TransformNormal(Vector3{ kDeadRotation_,0,0 }, wt_.GetMatWorld());
+	transform_.rotate -= TransformNormal(Vector3{ kDeadRotation_,0,0 }, wt_.GetMatWorld()) * TimeScale::GetInstance().GetTimeScaleFacto();
 
 	//リアクションフラグ
 	bool isReaction = true;
@@ -237,7 +242,7 @@ void BaseEnemy::HpSpriteUpdate() {
 	//ダメージを食らったら、タイマーがリセットされてないなら
 	if (isDamageMotion_ || hpSpriteTimer_ < kMaxHpSpriteTimer_) {
 		//ウィンドウズの画像範囲
-		Vector2 windows = { (float)WinApp::kClientWidth_,(float)WinApp::kClientHeight_ };
+		Vector2 windows = { (float)EngineLayer::WinApp::kClientWidth_,(float)EngineLayer::WinApp::kClientHeight_ };
 		windows *= kSpriteWindowsPosition_;
 		//バーの設定
 		underBarSprite_->SetPosition(windows);
@@ -263,7 +268,7 @@ void BaseEnemy::HpSpriteUpdate() {
 
 
 void BaseEnemy::OnCollision(CollisionSource* collision) {
-	if (collision->GetType() == CollisionTypes::TypePlayerBullet) {
+	if (collision->GetType() == CollisionTypes::TypePlayerBullet && TimeScale::GetInstance().GetTimeScale() != 0) {
 		IsDamage();
 	}
 

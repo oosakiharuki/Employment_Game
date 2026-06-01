@@ -6,6 +6,8 @@
 #include "BaseEnemyState.h"
 #include "EnemyEye.h"
 
+#include "TimeScale.h"
+
 /// <summary>
 /// 敵の基盤クラス
 /// </summary>
@@ -131,7 +133,7 @@ protected:
 	void StatePatternUpdate();
 
 	//オブジェクト
-	std::unique_ptr<Object3d> object_;
+	std::unique_ptr<EngineLayer::Object_glTF> object_;
 
 	//プレイヤークラス
 	Player* player_ = nullptr;
@@ -166,10 +168,10 @@ private:
 	//ステートパターン
 	std::unique_ptr<BaseEnemyState> enemyState_ = std::make_unique<EnemySearchState>();//ここでも初期化できる
 
-	std::unique_ptr<Object3d> objectFound_;
-	std::unique_ptr<Object3d> objectNoFound_;
+	std::unique_ptr<EngineLayer::Object3d> objectFound_;
+	std::unique_ptr<EngineLayer::Object3d> objectNoFound_;
 
-	WorldTransform wtMark_;
+	EngineLayer::WorldTransform wtMark_;
 	Transform transformMark_{};
 
 	const float kMarkPositionY_ = 2.0f;
@@ -177,8 +179,8 @@ private:
 	const float kFoundMotionMaxTime_ = kMarkMaxTime_ / 5.0f;
 
 	//体力スプライト
-	std::unique_ptr<Sprite> hpSprite_;
-	std::unique_ptr<Sprite> underBarSprite_;
+	std::unique_ptr<EngineLayer::Sprite> hpSprite_;
+	std::unique_ptr<EngineLayer::Sprite> underBarSprite_;
 	//パラメータ
 	const Vector2 kSpriteWindowsPosition_ = { 0.7f,0.85f };
 	const Vector2 kHpSpriteSize_ = { 256,64 };

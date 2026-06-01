@@ -11,6 +11,9 @@
 
 class Player;
 
+/// <summary>
+/// 傘銃の基盤クラス
+/// </summary>
 class BaseUmbrella : public CollisionSource {
 public:
 	/// <summary>
@@ -114,9 +117,9 @@ protected:
 	void BornBullet(const Vector3& translate, const Vector3& velocity, uint32_t bulletPower);
 
 	//オブジェクト設定
-	std::unique_ptr<Object_glTF> object_;
+	std::unique_ptr<EngineLayer::Object_glTF> object_;
 	Transform transform_;
-	WorldTransform wt_;
+	EngineLayer::WorldTransform wt_;
 
 	//AABB
 	AABB umbrellaAABB_;
@@ -149,7 +152,7 @@ protected:
 	Player* player_ = nullptr;
 
 	//パーティクルのコンテナ
-	std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
+	std::unordered_map<std::string, std::unique_ptr<EngineLayer::Particle>> particles_;
 
 	const std::string& kParticleParry_ = "player_parry";
 
@@ -179,10 +182,14 @@ private:
 
 	const std::string kUmbrellaOpenSoundName_ = "resource/Sound/umbrellaOpen.mp3";//傘を開く
 	const std::string kFireSoundName_ = "resource/Sound/fire.mp3";//発砲攻撃
-	const std::string kParrySoundName_ = "resource/Sound/bane.mp3";//パリィに成功
+	const std::string kParrySuccessSoundName_ = "resource/Sound/parry.mp3";//パリィに成功
+	const std::string kParrySoundName_ = "resource/Sound/bane.mp3";//パリィで跳ね返す
 
 	//傘より少し前に出す
 	const Vector3 kParryParticleFrontPoint_ { 0.0f,0.0f,2.0f };
 	const Vector3 kParryParticleRotate_ = { 90.0f,0.0f,0.0f };
+
+
+	bool parryStart_ = true;
 };
 

@@ -77,8 +77,8 @@ private:
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
 	//
-	std::unique_ptr<Object3d> object = nullptr;
-	WorldTransform wt_;
+	std::unique_ptr<EngineLayer::Object3d> object = nullptr;
+	EngineLayer::WorldTransform wt_;
 	Transform transform_{};
 	//弾丸速度
 	Vector3 velocity_;

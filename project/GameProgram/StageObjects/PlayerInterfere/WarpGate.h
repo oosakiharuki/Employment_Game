@@ -86,5 +86,9 @@ private:
 	Vector3 position_;
 
 	const float kLittleUp_ = 0.01f;
+
+	//ワープの動き(回転)
+	const float kDefaultRotateWarp_ = 1.0f; //一定値
+	float rotateWarp_ = kDefaultRotateWarp_;//回転する値
 };
 

@@ -21,6 +21,9 @@ public:
 	virtual void ChangeState(GameActor& actor) = 0;
 };
 
+/// <summary>
+/// 生存状態ステート
+/// </summary>
 class ActiveState : public BaseActorState {
 public:
 	/// <summary>
@@ -35,6 +38,9 @@ public:
 	void ChangeState(GameActor& actor) override;
 };
 
+/// <summary>
+/// 死亡状態ステート
+/// </summary>
 class DeadState : public BaseActorState {
 public:
 	/// <summary>
@@ -49,7 +55,9 @@ public:
 	void ChangeState(GameActor& actor) override;
 };
 
-
+/// <summary>
+/// 演出状態ステート
+/// </summary>
 class PerformanceState : public BaseActorState {
 public:
 	/// <summary>

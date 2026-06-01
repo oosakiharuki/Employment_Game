@@ -591,7 +591,34 @@
     <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\Umbrella.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
     </ClCompile>
+    <ClCompile Include="GameProgram\GameActor\Enemies\Enemy_Rusher.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Enemies</Filter>
+    </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Player\Weapon\Umbrella\LongUmbrella.cpp">
+      <Filter>ソース ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProgram\System\TimeScale.cpp">
+      <Filter>ソース ファイル\GameProgram\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\math\ease\Easing.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\math\matrix\MatrixMath.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\math\collision\CollisionMath.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\math\modelData\AnimationMath.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\math\lerp\Lerp.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\math\modelData\LengthMath.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -647,22 +674,22 @@
     <ClInclude Include="Engine\input\Input.h">
       <Filter>ヘッダー ファイル\Engine\input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\Matrix4x4.h">
+    <ClInclude Include="Engine\math\matrix\Matrix4x4.h">
       <Filter>ヘッダー ファイル\Engine\math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\math\MyMath.h">
       <Filter>ヘッダー ファイル\Engine\math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\Transform.h">
+    <ClInclude Include="Engine\math\vector\Transform.h">
       <Filter>ヘッダー ファイル\Engine\math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\Vector2.h">
+    <ClInclude Include="Engine\math\vector\Vector2.h">
       <Filter>ヘッダー ファイル\Engine\math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\Vector3.h">
+    <ClInclude Include="Engine\math\vector\Vector3.h">
       <Filter>ヘッダー ファイル\Engine\math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\Vector4.h">
+    <ClInclude Include="Engine\math\vector\Vector4.h">
       <Filter>ヘッダー ファイル\Engine\math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\PostEffectManager.h">
@@ -921,6 +948,48 @@
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\LongUmbrella.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Player\Weapon\Umbrella</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\GameActor\Enemies\Enemy_Rusher.h">
+      <Filter>ヘッダー ファイル\GameProgram\GameActor\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProgram\System\TimeScale.h">
+      <Filter>ヘッダー ファイル\GameProgram\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\ease\Easing.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\matrix\MatrixMath.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\collision\CollisionMath.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\collision\AABB.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\modelData\AnimationMath.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\vector\Quaternion.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\lerp\Lerp.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\modelData\Lighting.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\modelData\ModelData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\modelData\LengthMath.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\vector\Segment.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1008,5 +1077,6 @@
     <FxCompile Include="resource\shaders\Wireframe.PS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="resource\shaders\Shadow.PS.hlsl" />
   </ItemGroup>
 </Project>

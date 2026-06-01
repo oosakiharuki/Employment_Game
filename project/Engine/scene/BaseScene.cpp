@@ -1,3 +1,13 @@
+/// --------------------
+///
+/// シーンの基盤クラス
+/// 
+/// --------------------
 #include "BaseScene.h"
 
-BaseScene::~BaseScene(){}
+/// <summary>
+/// エンジン層
+/// </summary>
+namespace EngineLayer {
+	BaseScene::~BaseScene() {}
+}

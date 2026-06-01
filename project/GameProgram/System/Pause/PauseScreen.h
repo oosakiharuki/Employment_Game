@@ -54,7 +54,7 @@ public:
 	/// </summary>
 	/// <param name="textureName">テクスチャ名</param>
 	/// <param name="changeScene">移動するシーン名</param>
-	void BeforeChangeScene(const std::string& textureName, std::unique_ptr<BaseScene> changeScene);
+	void BeforeChangeScene(const std::string& textureName, std::unique_ptr<EngineLayer::BaseScene> changeScene);
 
 	/// <summary>
 	/// 動く選択UI
@@ -80,7 +80,7 @@ public:
 	/// getter_次のシーン
 	/// </summary>
 	/// <returns>あらかじめ指定したシーン名</returns>
-	std::unique_ptr<BaseScene> GetNextScene() { return std::move(nextScene_); }
+	std::unique_ptr<EngineLayer::BaseScene> GetNextScene() { return std::move(nextScene_); }
 	
 	/// <summary>
 	/// ポーズステート(状態遷移)
@@ -111,12 +111,12 @@ private:
 	void SelectKeyBoard();
 
 	//スプライトたち
-	std::unique_ptr<Sprite> backScreen_ = nullptr;
-	std::unique_ptr<Sprite> selectPoint_ = nullptr;
-	std::unique_ptr<Sprite> spriteSelectSceneChange_ = nullptr;
-	std::unique_ptr<Sprite> spriteSelectGuide_ = nullptr;
-	std::unique_ptr<Sprite> spriteSelectReturn_ = nullptr;
-	std::unique_ptr<Sprite> spriteGuide_ = nullptr;
+	std::unique_ptr<EngineLayer::Sprite> backScreen_ = nullptr;
+	std::unique_ptr<EngineLayer::Sprite> selectPoint_ = nullptr;
+	std::unique_ptr<EngineLayer::Sprite> spriteSelectSceneChange_ = nullptr;
+	std::unique_ptr<EngineLayer::Sprite> spriteSelectGuide_ = nullptr;
+	std::unique_ptr<EngineLayer::Sprite> spriteSelectReturn_ = nullptr;
+	std::unique_ptr<EngineLayer::Sprite> spriteGuide_ = nullptr;
 
 	//プレイヤーの選択枠座標
 	Vector2 select_;
@@ -146,5 +146,5 @@ private:
 	//ポーズ選択後のステートパターン
 	std::unique_ptr<BasePauseState> pauseState_ = nullptr;
 	//シーンを変更する時に使うBaseScene
-	std::unique_ptr<BaseScene> nextScene_;
+	std::unique_ptr<EngineLayer::BaseScene> nextScene_;
 };
