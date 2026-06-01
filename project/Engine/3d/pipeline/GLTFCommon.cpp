@@ -42,10 +42,11 @@ namespace EngineLayer {
 		CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 2);//[4] ps b2
 		CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 3);//[5] ps b3
 		CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 4);//[6] ps b4
+		CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 5);//[7] ps b5
 
 		//IBL t1
-		CreateTABLE(D3D12_SHADER_VISIBILITY_PIXEL, descriptorRangeIBL_);//[7] ps t1
-		rootParameters_[7].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeIBL_);
+		CreateTABLE(D3D12_SHADER_VISIBILITY_PIXEL, descriptorRangeIBL_);//[8] ps t1
+		rootParameters_[8].DescriptorTable.NumDescriptorRanges = _countof(descriptorRangeIBL_);
 
 		//2でまとめる
 		DefaultSampler(0);//s1

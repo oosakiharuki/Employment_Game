@@ -559,6 +559,8 @@ private:
 
 	float fireCoolTimer_ = 0.0f;//クールタイマー
 	const float kFireCoolTimeMax_ = 0.5f;//クールタイム最大時間
+	std::unique_ptr<SpotLight> light;
+	std::unique_ptr<DirectionalLight> light2;
 
 	// -------------------------
 };

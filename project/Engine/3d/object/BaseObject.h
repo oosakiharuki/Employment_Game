@@ -10,6 +10,8 @@
 #include "Camera.h"
 #include "WorldTransform.h"
 
+#include "ShadowManager.h"
+
 /// <summary>
 /// エンジン層
 /// </summary>
@@ -58,6 +60,14 @@ namespace EngineLayer {
 		/// </summary>
 		/// <param name="color">設定する色</param>
 		virtual void SetColor(const Vector4& color) = 0;
+
+		void InitializeShadow();
+
+		/// <summary>
+		/// 影の位置設定
+		/// </summary>
+		/// <param name="position">位置を設定</param>
+		void ShadowPosition(const Vector3& position);
 
 	protected:
 
@@ -122,7 +132,7 @@ namespace EngineLayer {
 
 		//ライト初期値
 		const Vector4 kDefaultColor_ = { 1,1,1,1 };
-		const float kIntensity_ = 1.0f;
+		const float kIntensity_ = 5.0f;
 		//ディレクショナルライト初期値
 		const Vector3 kDirectionalLightDirection_ = { 0.0f,-1.0f,0.0f };
 		//ポイントライト初期値
@@ -130,11 +140,14 @@ namespace EngineLayer {
 		const float kPointLightRadius_ = 5.0f;
 		const float kPointLightDecay_ = 1.0f;
 		//スポットライト初期値
-		const Vector3 kSpotLightPosition_ = { 2.0f,1.25f,0.0f };
-		const float kSpotLightDistance_ = 70.0f;
-		const Vector3 kSpotLightDirection_ = { -1.0f,-1.0f,0.0f };
+		const Vector3 kSpotLightPosition_ = { 0.0f,1.25f,0.0f };
+		const float kSpotLightDistance_ = 7.0f;
+		const Vector3 kSpotLightDirection_ = { 0.0f,-1.0f,0.0f };
 		const float kSpotLightDecay_ = 2.0f;
 		const float kCosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
 		const float kCosFalloffStart = std::cos(std::numbers::pi_v<float> / 4.0f);
+
+		ShadowData* shadowData_ = nullptr;
+		Microsoft::WRL::ComPtr<ID3D12Resource> shadowResource_;
 	};
 }

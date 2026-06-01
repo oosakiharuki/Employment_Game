@@ -16,6 +16,8 @@
 #include "ImGuiManager.h"
 #include <Object3dCommon.h>
 
+#include "ShadowManager.h"
+
 using namespace MyMath;
 
 /// <summary>
@@ -38,7 +40,7 @@ namespace EngineLayer {
 		InitCamera();
 
 		//ライト初期化処理まとめ
-		InitLight();
+		InitLight();		
 	}
 
 	void Object_glTF::Update(WorldTransform& worldTransform) {
@@ -57,7 +59,7 @@ namespace EngineLayer {
 			}
 		}
 
-		directionalLightData_->direction = Normalize(directionalLightData_->direction);
+		//directionalLightData_->direction = Normalize(directionalLightData_->direction);
 	}
 
 	void Object_glTF::Update() {

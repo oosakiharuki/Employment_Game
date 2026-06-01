@@ -72,6 +72,9 @@ void BaseEnemy::Update() {
 	//体力バースプライト更新
 	HpSpriteUpdate();
 
+	object_->ShadowPosition(transform_.translate);
+
+
 #ifdef USE_IMGUI
 	
 	//ImGui 更新

@@ -48,8 +48,8 @@ void Shadow::Update() {
 }
 
 void Shadow::Draw() {
-	EngineLayer::GLTFCommon::GetInstance().Command();
-	object_->Draw();
+	//EngineLayer::GLTFCommon::GetInstance().Command();
+	//object_->Draw();
 }
 
 void Shadow::OnCollision(CollisionSource* collision) {

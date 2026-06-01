@@ -2,6 +2,7 @@
 #include "LoadingModels.h"
 #include "UIManager.h"
 #include "TimeScale.h"
+#include <ShadowManager.h>
 
 void MyGame::Initialize() {
 	//フレームワークの初期化
@@ -16,7 +17,7 @@ void MyGame::Initialize() {
 	//ポーズ処理の初期化
 	PauseScreen::GetInstance().Initialize();
 	//最初のシーンの設定
-	EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<TitleScene>());
+	EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
 	//シーンの更新処理(変更処理)
 	EngineLayer::SceneManager::GetInstance().SceneUpdate();
 }
@@ -92,6 +93,8 @@ void MyGame::Draw() {
 	//描画終了
 	EngineLayer::DirectXCommon::GetInstance().PostDraw();
 
+	EngineLayer::ShadowManager::GetInstance().Reset();
+
 }
 
 
@@ -104,6 +107,8 @@ void MyGame::Finalize() {
 	UIManager::GetInstance().Finalize();
 	EngineLayer::ParticleEmitter::GetInstance().Finalize();
 	PauseScreen::GetInstance().Finalize();
+
+	EngineLayer::ShadowManager::GetInstance().Finalize();
 
 #ifdef  USE_IMGUI
 	EngineLayer::ImGuiManager::GetInstance().Finalize();

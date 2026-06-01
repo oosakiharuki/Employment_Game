@@ -9,6 +9,7 @@ struct DirectionalLight {
 	Vector4 color;
 	Vector3 direction;
 	float intensity;
+	int32_t isEnable;
 };
 
 /// <summary>
@@ -21,6 +22,7 @@ struct PointLight {
 	float radius;
 	float decay;
 	float padding[2];
+	int32_t isEnable;
 };
 
 /// <summary>
@@ -36,4 +38,5 @@ struct SpotLight {
 	float cosAngle;
 	float cosFalloffStart;
 	float padding[2];
+	int32_t isEnable;
 };

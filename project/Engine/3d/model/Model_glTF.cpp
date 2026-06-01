@@ -93,7 +93,7 @@ namespace EngineLayer {
 		else {
 			materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 		}
-		materialData_->enableLighting = false;
+		materialData_->enableLighting = true;
 		materialData_->uvTransform = modelData.materialData.uvTransform;
 
 		materialData_->shininess = 70;
@@ -134,7 +134,7 @@ namespace EngineLayer {
 		if (isSkinning_) {
 			vbvs_[1] = skinClusters_[multiMeshCount_].influenceBufferView;
 			DirectXCommon::GetInstance().GetCommandList()->IASetVertexBuffers(0, 2, vbvs_);
-			DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(8, skinClusters_[multiMeshCount_].paletteSrvHandle.second);//Skinning.VS t0
+			DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(9, skinClusters_[multiMeshCount_].paletteSrvHandle.second);//Skinning.VS t0
 		}
 		else {
 			DirectXCommon::GetInstance().GetCommandList()->IASetVertexBuffers(0, 1, vbvs_);
@@ -142,7 +142,7 @@ namespace EngineLayer {
 		DirectXCommon::GetInstance().GetCommandList()->IASetIndexBuffer(&indexBufferView_[multiMeshCount_]);
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(0, materialResources_[multiMeshCount_]->GetGPUVirtualAddress()); //rootParameterの配列の0番目 [0]
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(2, TextureManager::GetInstance().GetSrvHandleGPU(modelData_.Data[multiMeshCount_].materialData.textureFilePath));
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(7, TextureManager::GetInstance().GetSrvHandleGPU(EnvironmentFile_));
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootDescriptorTable(8, TextureManager::GetInstance().GetSrvHandleGPU(EnvironmentFile_));
 		DirectXCommon::GetInstance().GetCommandList()->DrawIndexedInstanced(UINT(modelData_.Data[multiMeshCount_].indices.size()), 1, 0, 0, 0);
 		multiMeshCount_++;
 

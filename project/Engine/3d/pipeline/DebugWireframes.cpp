@@ -42,6 +42,7 @@ namespace EngineLayer {
 		CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 2);//[4] ps b2
 		CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 3);//[5] ps b3
 		CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 4);//[6] ps b4
+		CreateCBV(D3D12_SHADER_VISIBILITY_PIXEL, 5);//[7] ps b5
 
 		//2でまとめる
 		DefaultSampler(0);//s1
