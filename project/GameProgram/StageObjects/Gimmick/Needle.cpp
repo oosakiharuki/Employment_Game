@@ -8,6 +8,7 @@
 #include "Object3dCommon.h"
 #include "GLTFCommon.h"
 #include "TimeScale.h"
+#include "ShadowManager.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -31,6 +32,8 @@ void Needle::Update() {
 	Move();
 
 	AnimationRotate();
+
+	EngineLayer::ShadowManager::GetInstance().AddShadow(transform_.translate);
 
 	wt_.UpdateMatrix(transform_);
 	objectNeedle_->Update(wt_);

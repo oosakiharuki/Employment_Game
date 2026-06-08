@@ -51,6 +51,9 @@ void Boss::Update() {
 
 	ImGuiUpdate();
 
+	//影の配置
+	EngineLayer::ShadowManager::GetInstance().AddShadow(transform_.translate);
+
 	wt_.UpdateMatrix(transform_);
 	object_->SetAnimationTime(TimeScale::GetInstance().GetTimeScale());
 	object_->Update(wt_);

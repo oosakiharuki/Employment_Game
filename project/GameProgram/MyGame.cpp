@@ -20,6 +20,8 @@ void MyGame::Initialize() {
 	EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
 	//シーンの更新処理(変更処理)
 	EngineLayer::SceneManager::GetInstance().SceneUpdate();
+
+	EngineLayer::ShadowManager::GetInstance().Initialize();
 }
 
 void MyGame::Update() {
@@ -46,6 +48,8 @@ void MyGame::Update() {
 
 	//時間尺度の更新処理
 	TimeScale::GetInstance().Update();
+
+	EngineLayer::ShadowManager::GetInstance().Update();
 
 	//フェード更新
 	FadeScreen::GetInstance().Update();

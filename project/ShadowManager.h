@@ -14,8 +14,13 @@ struct ShadowData {
 	float decay;
 	float cosAngle;
 	float cosFalloffStart;
-	float padding[2];
-	int32_t isEnable;
+	float padding[17];
+}; // 60バイト
+
+constexpr uint32_t kMaxShadow = 30;
+
+struct ShadowFactory {		
+	ShadowData shadowData[kMaxShadow]; // 60 * kMaxShadow
 };
 
 /// <summary>
@@ -43,7 +48,7 @@ namespace EngineLayer {
 		/// </summary>
 		void Draw();
 	
-		void AddShadow(const Microsoft::WRL::ComPtr<ID3D12Resource>& resource);
+		void AddShadow(const Vector3& shadowPosition);
 
 		void Reset();
 
@@ -53,6 +58,10 @@ namespace EngineLayer {
 		friend struct std::default_delete<ShadowManager>;
 
 
-		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> resources_;
+		Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
+
+		ShadowFactory* shadowFactory_ = nullptr;
+
+		std::vector<ShadowData> shadowDatas_;
 	};
 }

@@ -44,10 +44,8 @@ void PlayerBullet::Update() {
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
 
-	//影更新
-	shadow_->SetScale(transform_.scale * kDivideByTwo_);//少し小さく(0.5倍)
-	shadow_->SetTranslate(transform_.translate);
-	shadow_->Update();
+	//影の更新
+	EngineLayer::ShadowManager::GetInstance().AddShadow(transform_.translate);
 
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate + bulletAABB_.min;

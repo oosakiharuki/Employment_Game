@@ -52,9 +52,7 @@ void EnemyBullet::Update() {
 	wt_.UpdateMatrix(transform_);
 
 	//影の更新
-	shadow_->SetScale(transform_.scale / kTwice_);
-	shadow_->SetTranslate(transform_.translate);
-	shadow_->Update();
+	EngineLayer::ShadowManager::GetInstance().AddShadow(transform_.translate);
 
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate + -kBulletSize_ * kDivideByTwo_;
