@@ -126,7 +126,6 @@ void Enemy_Bomb::Draw() {
 	//死んだら移さない
 	if (hp_ != 0 && !isPerformance_) {
 		object_->Draw();
-		shadow_->Draw();
 	}
 }
 

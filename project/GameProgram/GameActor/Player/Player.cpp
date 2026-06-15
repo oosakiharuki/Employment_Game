@@ -156,9 +156,6 @@ void Player::Update() {
 	//無敵時間
 	InfinityTimeUpdate();
 
-	//影の更新
-	ShadowUpdate();
-
 	//リアクション
 	ReactionsUpdate();
 
@@ -339,8 +336,8 @@ void Player::LifeUpdate() {
 		isPerformance_ = true;
 	}
 
-	//影の配置
-	EngineLayer::ShadowManager::GetInstance().AddShadow(transform_.translate);
+	//影の更新
+	ShadowUpdate();
 }
 
 
@@ -477,8 +474,6 @@ void Player::Draw() {
 	if (hp_ != 0 && !isPerformance_) {
 		//傘
 		umbrella_->Draw();
-		//影
-		shadow_->Draw();
 	}
 	
 	EngineLayer::Object3dCommon::GetInstance().Command();

@@ -3,6 +3,9 @@
 #include <numbers>
 #include "ImGuiManager.h"
 
+#include <algorithm>
+
+
 using namespace MyMath;
 
 /// <summary>
@@ -29,6 +32,7 @@ namespace EngineLayer {
 	}
 
 	void ShadowManager::Update() {
+		//vector配列をファクトリーの配列に
 		for (size_t i = 0; i < shadowDatas_.size(); ++i) {
 			shadowFactory_->shadowData[i] = shadowDatas_[i];
 		}
@@ -40,16 +44,16 @@ namespace EngineLayer {
 			resource_->GetGPUVirtualAddress());
 	}
 
-	void ShadowManager::AddShadow(const Vector3& shadowPosition) {
+	void ShadowManager::AddShadow(const Vector3& shadowPosition,const Vector3& shadowSize, float distance) {
 		ShadowData shadowData{};
 		shadowData.color = {1,1,1,1};
 		shadowData.position = shadowPosition;
-		shadowData.direction = Normalize({ 0.0f,-1.0f,0.0f });
-		shadowData.distance = 10.0f;
-		shadowData.decay = 0.1f;
+		shadowData.direction = Normalize(kDirection_);		
+		shadowData.distance = std::clamp(distance, 0.0f, kMaxDistance_) + kMinDistance_ * shadowSize.y;//長さ + 影が移せる最大限の長さ * Y軸の大きさ
+		shadowData.decay = kDecay_;
 		shadowData.intensity = 1.0f;
-		shadowData.cosAngle = std::cos(std::numbers::pi_v<float> / 6.0f);
-		shadowData.cosFalloffStart = std::cos(std::numbers::pi_v<float> / 6.0f);
+		shadowData.cosAngle = std::cos(std::numbers::pi_v<float> / kAngle_ * ((shadowSize.x + shadowSize.z) / 2.0f));//XZ軸で大きさの変動
+		shadowData.cosFalloffStart = std::cos(std::numbers::pi_v<float> / kAngle_ * ((shadowSize.x + shadowSize.z) / 2.0f));//XZ軸で大きさの変動
 
 		shadowDatas_.push_back(shadowData);
 	}

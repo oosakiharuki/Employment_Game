@@ -45,7 +45,7 @@ void PlayerBullet::Update() {
 	wt_.UpdateMatrix(transform_);
 
 	//影の更新
-	EngineLayer::ShadowManager::GetInstance().AddShadow(transform_.translate);
+	shadow_->Update(transform_);
 
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate + bulletAABB_.min;
@@ -55,7 +55,6 @@ void PlayerBullet::Update() {
 }
 
 void PlayerBullet::Draw() {
-	shadow_->Draw();//影の描画
 	//オブジェクト描画
 	object_->Draw();
 }

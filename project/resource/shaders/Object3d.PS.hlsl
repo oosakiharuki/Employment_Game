@@ -57,7 +57,7 @@ struct ShadowData
     float cosFalloffStart;
 };
 
-static const int32_t kMaxShadow = 30;
+static const int32_t kMaxShadow = 60;
 
 struct ShadowFactory
 {
@@ -196,9 +196,13 @@ PixelShaderOutput main(VertexShaderOutput input)
                 float32_t distanceSpot = length(gShadowFactory.shadow[i].position - input.worldPostion); //ライトとオブジェクトの距離
                 float32_t attenuationFactor = pow(saturate(-distanceSpot / gShadowFactory.shadow[i].distance + 1.0f), gShadowFactory.shadow[i].decay); //距離による減衰
         
-                float32_t3 diffuse = gMaterial.color.rgb * textureColor.rgb * cos * gShadowFactory.shadow[i].intensity * attenuationFactor * falloffFactorS;
+                float32_t3 diffuse = gMaterial.color.rgb * textureColor.rgb * gShadowFactory.shadow[i].intensity * attenuationFactor * falloffFactorS;
             
-                output.color.rgb -= diffuse; //減算して暗く
+                //壁であるならうつさない
+                if (input.normal.y > 0.25f)
+                {
+                    output.color.rgb -= diffuse; //減算して暗く
+                }
             }
         }
         

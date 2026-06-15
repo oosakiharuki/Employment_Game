@@ -86,8 +86,6 @@ void BaseEnemy::Update() {
 }
 
 void BaseEnemy::UpdateBehind() {
-	//影
-	ShadowUpdate();
 
 	wt_.UpdateMatrix(transform_);
 	object_->Update(wt_);
@@ -101,7 +99,7 @@ void BaseEnemy::UpdateBehind() {
 	if (hp_ == 0) return;
 
 	//影の配置
-	EngineLayer::ShadowManager::GetInstance().AddShadow(transform_.translate);
+	ShadowUpdate();
 
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate - colliderSize_;

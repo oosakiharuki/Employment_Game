@@ -33,14 +33,11 @@ void Needle::Update() {
 
 	AnimationRotate();
 
-	EngineLayer::ShadowManager::GetInstance().AddShadow(transform_.translate);
+	//影の更新
+	shadow_->Update(transform_);
 
 	wt_.UpdateMatrix(transform_);
 	objectNeedle_->Update(wt_);
-
-	shadow_->SetTranslate(transform_.translate);
-	shadow_->SetScale(transform_.scale);
-	shadow_->Update();
 
 	collisionAABB_.min = transform_.translate - colliderSize_;
 	collisionAABB_.max = transform_.translate + colliderSize_;
@@ -53,10 +50,8 @@ void Needle::Draw() {
 	EngineLayer::GLTFCommon::GetInstance().Command();
 
 	objectNeedle_->Draw();
-	
-	EngineLayer::Object3dCommon::GetInstance().Command();
 
-	shadow_->Draw();
+	EngineLayer::Object3dCommon::GetInstance().Command();
 }
 
 void Needle::SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, const Vector3& pointE) {
