@@ -51,17 +51,20 @@
     └── └── └── ├── ParticleEmitter.h
     └── └── └── ├── ParticleManager.cpp
     └── └── └── └── ParticleManager.h
-    └── └── └── pipeline/
-    └── └──     ├── Cubemap.cpp
-    └── └──     ├── Cubemap.h
-    └── └──     ├── DebugWireframes.cpp
-    └── └──     ├── DebugWireframes.h
-    └── └──     ├── GLTFCommon.cpp
-    └── └──     ├── GLTFCommon.h
-    └── └──     ├── Object3dCommon.cpp
-    └── └──     ├── Object3dCommon.h
-    └── └──     ├── SkinningCommon.cpp
-    └── └──     └── SkinningCommon.h
+    └── └── ├── pipeline/
+    └── └── └── ├── Cubemap.cpp
+    └── └── └── ├── Cubemap.h
+    └── └── └── ├── DebugWireframes.cpp
+    └── └── └── ├── DebugWireframes.h
+    └── └── └── ├── GLTFCommon.cpp
+    └── └── └── ├── GLTFCommon.h
+    └── └── └── ├── Object3dCommon.cpp
+    └── └── └── ├── Object3dCommon.h
+    └── └── └── ├── SkinningCommon.cpp
+    └── └── └── └── SkinningCommon.h
+    └── └── └── shadow/
+    └── └──     ├── ShadowManager.cpp
+    └── └──     └── ShadowManager.h
     └── ├── PostEffect/
     └── └── ├── BasePostEffect.cpp
     └── └── ├── BasePostEffect.h
@@ -288,8 +291,6 @@
     └──     ├── UIManager.h
     └──     ├── UseEveryOne.cpp
     └──     └── UseEveryOne.h
-    ├── ShadowManager.cpp
-    ├── ShadowManager.h
     ├── externals/
 ================================================================================
 
@@ -364,7 +365,7 @@ File Path: project/CG2_00_01.vcxproj
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\math\collision;$(ProjectDir)Engine\math\ease;$(ProjectDir)Engine\math\lerp;$(ProjectDir)Engine\math\matrix;$(ProjectDir)Engine\math\modelData;$(ProjectDir)Engine\math\vector;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\PostEffect\creates\screen\blur;$(ProjectDir)Engine\PostEffect\creates\screen\color;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Actor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Player\Weapon\Umbrella;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\Scene\win_lose;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\3d\shadow;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\math\collision;$(ProjectDir)Engine\math\ease;$(ProjectDir)Engine\math\lerp;$(ProjectDir)Engine\math\matrix;$(ProjectDir)Engine\math\modelData;$(ProjectDir)Engine\math\vector;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\PostEffect\creates\screen\blur;$(ProjectDir)Engine\PostEffect\creates\screen\color;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Actor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Player\Weapon\Umbrella;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\Scene\win_lose;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -390,7 +391,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\math\collision;$(ProjectDir)Engine\math\ease;$(ProjectDir)Engine\math\lerp;$(ProjectDir)Engine\math\matrix;$(ProjectDir)Engine\math\modelData;$(ProjectDir)Engine\math\vector;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\PostEffect\creates\screen\blur;$(ProjectDir)Engine\PostEffect\creates\screen\color;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Actor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Player\Weapon\Umbrella;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\Scene\win_lose;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\3d\shadow;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\math\collision;$(ProjectDir)Engine\math\ease;$(ProjectDir)Engine\math\lerp;$(ProjectDir)Engine\math\matrix;$(ProjectDir)Engine\math\modelData;$(ProjectDir)Engine\math\vector;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\PostEffect\creates\screen\blur;$(ProjectDir)Engine\PostEffect\creates\screen\color;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Actor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Player\Weapon\Umbrella;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\Scene\win_lose;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -526,7 +527,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\math\modelData\LengthMath.cpp" />
     <ClCompile Include="Engine\math\lerp\Lerp.cpp" />
     <ClCompile Include="Engine\math\matrix\MatrixMath.cpp" />
-    <ClCompile Include="ShadowManager.cpp" />
+    <ClCompile Include="Engine\3d\shadow\ShadowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\math\modelData\AnimationMath.h" />
@@ -651,7 +652,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\math\modelData\LengthMath.h" />
     <ClInclude Include="Engine\math\lerp\Lerp.h" />
     <ClInclude Include="Engine\math\matrix\MatrixMath.h" />
-    <ClInclude Include="ShadowManager.h" />
+    <ClInclude Include="Engine\3d\shadow\ShadowManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
@@ -1422,7 +1423,7 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClCompile Include="Engine\math\modelData\LengthMath.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ShadowManager.cpp">
+    <ClCompile Include="Engine\3d\shadow\ShadowManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1793,7 +1794,7 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClInclude Include="Engine\math\vector\Segment.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ShadowManager.h">
+    <ClInclude Include="Engine\3d\shadow\ShadowManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
@@ -5366,7 +5367,6 @@ namespace EngineLayer {
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource_->GetGPUVirtualAddress());
 
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(7, shadowResource_->GetGPUVirtualAddress());
 		ShadowManager::GetInstance().Draw();
 	}
 
@@ -5384,8 +5384,6 @@ namespace EngineLayer {
 		CreatePointLight();
 		//スポットライト
 		CreateSpotLight();
-
-		InitializeShadow();
 	}
 
 	void BaseObject::CreateDirectionalLight() {
@@ -5432,30 +5430,6 @@ namespace EngineLayer {
 		spotLightData_->cosFalloffStart = kCosFalloffStart;
 
 		spotLightData_->isEnable = true;
-	}
-
-	void BaseObject::InitializeShadow() {
-
-		shadowResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(ShadowData));
-		//書き込むためのアドレス
-		shadowResource_->Map(0, nullptr, reinterpret_cast<void**>(&shadowData_));
-
-		shadowData_->color = kDefaultColor_;
-		shadowData_->position = { 0.0f,3.0f,0.0f };
-		shadowData_->direction = Normalize({ 0.0f,-1.0f,0.0f });
-		shadowData_->distance = 10.0f;
-		shadowData_->decay = 0.1f;
-		shadowData_->intensity = 1.0f;
-		shadowData_->cosAngle = std::cos(std::numbers::pi_v<float> / 6.0f);
-		shadowData_->cosFalloffStart = std::cos(std::numbers::pi_v<float> / 6.0f);
-		
-		//ShadowManager::GetInstance().AddShadow(shadowResource_);
-	}
-
-	void BaseObject::ShadowPosition(const Vector3& position) {	
-		shadowData_->position = position;
-		shadowData_->intensity = 1.0f;
-		ShadowManager::GetInstance().AddShadow(shadowResource_);
 	}
 }
 
@@ -5524,14 +5498,6 @@ namespace EngineLayer {
 		/// </summary>
 		/// <param name="color">設定する色</param>
 		virtual void SetColor(const Vector4& color) = 0;
-
-		void InitializeShadow();
-
-		/// <summary>
-		/// 影の位置設定
-		/// </summary>
-		/// <param name="position">位置を設定</param>
-		void ShadowPosition(const Vector3& position);
 
 	protected:
 
@@ -5610,9 +5576,6 @@ namespace EngineLayer {
 		const float kSpotLightDecay_ = 2.0f;
 		const float kCosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
 		const float kCosFalloffStart = std::cos(std::numbers::pi_v<float> / 4.0f);
-
-		ShadowData* shadowData_ = nullptr;
-		Microsoft::WRL::ComPtr<ID3D12Resource> shadowResource_;
 	};
 }
 
@@ -9031,6 +8994,169 @@ namespace EngineLayer {
 		friend struct std::default_delete<SkinningCommon>;
 	};
 }
+
+============================================================
+File Path: project/Engine/3d/shadow/ShadowManager.cpp
+============================================================
+#include "ShadowManager.h"
+#include "DirectXCommon.h"
+#include <numbers>
+#include "ImGuiManager.h"
+
+#include <algorithm>
+
+
+using namespace MyMath;
+
+/// <summary>
+/// エンジン層
+/// </summary>
+namespace EngineLayer {
+
+	std::unique_ptr<ShadowManager> ShadowManager::sInstance_ = nullptr;
+
+	ShadowManager& ShadowManager::GetInstance() {
+		if (sInstance_ == nullptr) {
+			sInstance_ = std::make_unique<ShadowManager>();
+		}
+		return *sInstance_;
+	}
+	void ShadowManager::Finalize() {
+		sInstance_.reset();
+	}
+
+
+	void ShadowManager::Initialize() {
+		resource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(ShadowFactory));
+		resource_->Map(0,nullptr,reinterpret_cast<void**>(&shadowFactory_));
+	}
+
+	void ShadowManager::Update() {
+		//vector配列をファクトリーの配列に
+		for (size_t i = 0; i < shadowDatas_.size(); ++i) {
+			shadowFactory_->shadowData[i] = shadowDatas_[i];
+		}
+	}
+
+	void ShadowManager::Draw() {
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(
+			7,
+			resource_->GetGPUVirtualAddress());
+	}
+
+	void ShadowManager::AddShadow(const Vector3& shadowPosition,const Vector3& shadowSize, float distance) {
+		ShadowData shadowData{};
+		shadowData.color = {1,1,1,1};
+		shadowData.position = shadowPosition;
+		shadowData.direction = Normalize(kDirection_);		
+		shadowData.distance = std::clamp(distance, 0.0f, kMaxDistance_) + kMinDistance_ * shadowSize.y;//長さ + 影が移せる最大限の長さ * Y軸の大きさ
+		shadowData.decay = kDecay_;
+		shadowData.intensity = 1.0f;
+		shadowData.cosAngle = std::cos(std::numbers::pi_v<float> / kAngle_ * ((shadowSize.x + shadowSize.z) / 2.0f));//XZ軸で大きさの変動
+		shadowData.cosFalloffStart = std::cos(std::numbers::pi_v<float> / kAngle_ * ((shadowSize.x + shadowSize.z) / 2.0f));//XZ軸で大きさの変動
+
+		shadowDatas_.push_back(shadowData);
+	}
+
+	void ShadowManager::Reset() {
+		shadowDatas_.clear();
+		for (size_t i = 0; i < kMaxShadow; ++i) {
+			shadowFactory_->shadowData[i] = {};
+		}
+	}
+}
+
+============================================================
+File Path: project/Engine/3d/shadow/ShadowManager.h
+============================================================
+#pragma once
+#include "Lighting.h"
+#include <wrl.h>
+#include <d3d12.h>
+#include <vector>
+#include <memory>
+
+struct ShadowData {
+	Vector4 color;
+	Vector3 position;
+	float intensity;
+	Vector3 direction;
+	float distance;
+	float decay;
+	float cosAngle;
+	float cosFalloffStart;
+	float padding[17];
+}; // 60バイト
+
+constexpr uint32_t kMaxShadow = 60;
+
+struct ShadowFactory {		
+	ShadowData shadowData[kMaxShadow]; // 60 * kMaxShadow
+};
+
+/// <summary>
+/// エンジン層
+/// </summary>
+namespace EngineLayer {
+
+	class ShadowManager {
+	public:
+		/// <summary>
+		/// インスタンス生成
+		/// </summary>
+		/// <returns>インスタンスを生成する</returns>
+		static ShadowManager& GetInstance();
+		/// <summary>
+		/// 解放処理
+		/// </summary>
+		void Finalize();
+		/// <summary>
+		/// 初期化処理
+		/// </summary>
+		void Initialize();
+		/// <summary>
+		/// 更新処理
+		/// </summary>
+		void Update();
+		/// <summary>
+		/// 描画処理
+		/// </summary>
+		void Draw();
+		/// <summary>
+		/// 影(ライティング減算)の追加
+		/// </summary>
+		/// <param name="shadowPosition">影の始まる位置</param>
+		/// <param name="shadowSize">対象の大きさ</param>
+		/// <param name="distance">影を映し出す距離</param>
+		void AddShadow(const Vector3& shadowPosition, const Vector3& shadowSize,float distance);
+		/// <summary>
+		/// リセット
+		/// </summary>
+		void Reset();
+
+	private:
+
+		static std::unique_ptr<ShadowManager> sInstance_;
+		friend struct std::default_delete<ShadowManager>;
+
+
+		Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
+
+		ShadowFactory* shadowFactory_ = nullptr;
+		
+		//影データ
+		std::vector<ShadowData> shadowDatas_;
+
+		const Vector3 kDirection_ = { 0.0f,-1.0f,0.0f };//ベクトル向き
+		
+		const float kMaxDistance_ = 9.0f;//最高飛距離
+		const float kMinDistance_ = 1.0f;//最低でも必要な長さ
+
+		const float kDecay_ = 0.1f;//減衰度
+		const float kAngle_ = 12.0f;//角度
+	};
+}
+
 
 ============================================================
 File Path: project/Engine/PostEffect/BasePostEffect.cpp
@@ -16958,8 +17084,7 @@ void GameActor::Update() {
 }
 
 void GameActor::ShadowUpdate() {
-	shadow_->SetTranslate(transform_.translate);
-	shadow_->Update();
+	shadow_->Update(transform_);
 }
 
 void GameActor::HP_Initialize(uint32_t max) {
@@ -17748,7 +17873,6 @@ void Boss::Update() {
 	object_->Update(wt_);
 
 	//影更新
-	shadow_->SetScale(transform_.scale * kTwice_);//少し大きく(二倍)
 	ShadowUpdate();
 }
 
@@ -17761,7 +17885,6 @@ void Boss::Draw() {
 	for (auto& bullet : bullets_) {
 		bullet->Draw();
 	}
-	shadow_->Draw();//影の描画
 }
 
 void Boss::Active() {
@@ -18466,7 +18589,6 @@ void Enemy_Bomb::Draw() {
 	//死んだら移さない
 	if (hp_ != 0 && !isPerformance_) {
 		object_->Draw();
-		shadow_->Draw();
 	}
 }
 
@@ -19058,7 +19180,6 @@ void Enemy_Soldier::UpdateImGui() {
 void Enemy_Soldier::Draw() {
 	if (!isDeleteEnemy_ && !isPerformance_) {
 		object_->Draw();
-		shadow_->Draw();
 	}
 	fireCommand_->BulletDraw();
 }
@@ -19307,7 +19428,6 @@ void Enemy_Turret::Draw() {
 
 	if (!isDeleteEnemy_ && !isPerformance_) {
 		object_->Draw();
-		shadow_->Draw();//影
 	}
 		
 	fireCommand_->BulletDraw();//弾丸
@@ -19509,8 +19629,6 @@ void BaseEnemy::Update() {
 	//体力バースプライト更新
 	HpSpriteUpdate();
 
-	object_->ShadowPosition(transform_.translate);
-
 
 #ifdef USE_IMGUI
 	
@@ -19525,8 +19643,6 @@ void BaseEnemy::Update() {
 }
 
 void BaseEnemy::UpdateBehind() {
-	//影
-	ShadowUpdate();
 
 	wt_.UpdateMatrix(transform_);
 	object_->Update(wt_);
@@ -19538,6 +19654,9 @@ void BaseEnemy::UpdateBehind() {
 
 	//死んだときは当たり判定を取らない
 	if (hp_ == 0) return;
+
+	//影の配置
+	ShadowUpdate();
 
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate - colliderSize_;
@@ -20073,9 +20192,7 @@ void EnemyBullet::Update() {
 	wt_.UpdateMatrix(transform_);
 
 	//影の更新
-	shadow_->SetScale(transform_.scale / kTwice_);
-	shadow_->SetTranslate(transform_.translate);
-	shadow_->Update();
+	shadow_->Update(transform_);
 
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate + -kBulletSize_ * kDivideByTwo_;
@@ -20086,7 +20203,6 @@ void EnemyBullet::Update() {
 }
 
 void EnemyBullet::Draw() {
-	shadow_->Draw();//影の描画
 	//オブジェクト描画
 	object->Draw();
 }
@@ -21163,49 +21279,6 @@ void Player::Initialize() {
 
 	eventMin = -kMoveMax_;
 	eventMax = kMoveMax_;
-
-
-	//ライト初期値
-	const float kIntensity_ = 1.0f;
-	const float kPointLightDecay_ = 1.0f;
-	//スポットライト初期値
-	const Vector3 kSpotLightPosition_ = { 0.0f,10.25f,0.0f };
-	const float kSpotLightDistance_ = 70.0f;
-	const Vector3 kSpotLightDirection_ = { 0.0f,1.0f,0.0f };
-	const float kSpotLightDecay_ = 2.0f;
-	const float kCosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
-	const float kCosFalloffStart = std::cos(std::numbers::pi_v<float> / 4.0f);
-
-
-
-	//設定
-	light = std::make_unique<SpotLight>();
-	light->color = kDefaultColor_;
-	light->position = kSpotLightPosition_;
-	light->distance = kSpotLightDistance_;
-	light->direction = Normalize(kSpotLightDirection_);
-	light->intensity = kIntensity_;
-	light->decay = kPointLightDecay_;
-	light->cosAngle = kCosAngle;
-	light->cosFalloffStart = kCosFalloffStart;
-
-	light->isEnable = false;
-
-
-
-
-	////ディレクショナルライト初期値
-	//const Vector3 kDirectionalLightDirection_ = { 0.0f,-1.0f,0.0f };
-
-	////設定
-	//light2 = std::make_unique<DirectionalLight>();
-	//light2->color = kDefaultColor_;
-	//light2->intensity = kIntensity_;
-	//light2->isEnable = true;
-
-	//EngineLayer::ShadowManager::GetInstance().AddDirectionalLight(&*light2);
-
-
 }
 
 void Player::InitMainBody() {
@@ -21298,9 +21371,6 @@ void Player::Update() {
 
 	//無敵時間
 	InfinityTimeUpdate();
-
-	//影の更新
-	ShadowUpdate();
 
 	//リアクション
 	ReactionsUpdate();
@@ -21482,8 +21552,8 @@ void Player::LifeUpdate() {
 		isPerformance_ = true;
 	}
 
-
-	object_->ShadowPosition(transform_.translate);
+	//影の更新
+	ShadowUpdate();
 }
 
 
@@ -21620,8 +21690,6 @@ void Player::Draw() {
 	if (hp_ != 0 && !isPerformance_) {
 		//傘
 		umbrella_->Draw();
-		//影
-		shadow_->Draw();
 	}
 	
 	EngineLayer::Object3dCommon::GetInstance().Command();
@@ -22535,10 +22603,8 @@ void PlayerBullet::Update() {
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
 
-	//影更新
-	shadow_->SetScale(transform_.scale * kDivideByTwo_);//少し小さく(0.5倍)
-	shadow_->SetTranslate(transform_.translate);
-	shadow_->Update();
+	//影の更新
+	shadow_->Update(transform_);
 
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate + bulletAABB_.min;
@@ -22548,7 +22614,6 @@ void PlayerBullet::Update() {
 }
 
 void PlayerBullet::Draw() {
-	shadow_->Draw();//影の描画
 	//オブジェクト描画
 	object_->Draw();
 }
@@ -23755,48 +23820,25 @@ using namespace MyMath;
 Shadow::~Shadow() {}
 
 void Shadow::Initialize() {
-
-	object_ = std::make_unique<EngineLayer::Object_glTF>();
-	object_->Initialize();
-	object_->SetModelFile("shadow.gltf");
-	//色を黒に
-	object_->SetColor(kColor_);
-
-	wt_.Initialize();
-	//Transform更新処理
-	transform_ = wt_.UpdateTransform();
-
 	collisionType_ = CollisionTypes::TypeShadow;
 }
 
 
-void Shadow::Update() {
-
-#ifdef USE_IMGUI
-
-	ImGui::Begin("player_shadow");
-	ImGui::Text("worldTransform.translate : %f, %f, %f", &transform_.translate.x, &transform_.translate.y, &transform_.translate.z);
-	ImGui::End();
-
-#endif // USE_IMGUI
+void Shadow::Update(const Transform& transform) {
+	actorPosition_ = transform.translate;
 
 	transform_.translate = actorPosition_;
 	transform_.translate.y = minUnder_;
 
-	object_->Update(wt_);
-	wt_.UpdateMatrix(transform_);
-
 	collisionAABB_.min = actorPosition_ - Vector3{ kShadowWidth_, kShadowMinY_, kShadowWidth_ };
 	collisionAABB_.max = actorPosition_ + Vector3{ kShadowWidth_, 0.0f, kShadowWidth_ };
 	center_ = transform_.translate;
-
+	
+	//影の配置
+	EngineLayer::ShadowManager::GetInstance().AddShadow(transform.translate, transform.scale, std::abs(actorPosition_.y - transform_.translate.y));
+	
 	CollisionManager::GetInstance().FrameCollision(this);
 	minUnder_ = -kShadowMinY_;
-}
-
-void Shadow::Draw() {
-	//EngineLayer::GLTFCommon::GetInstance().Command();
-	//object_->Draw();
 }
 
 void Shadow::OnCollision(CollisionSource* collision) {
@@ -23834,22 +23876,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
-	/// <summary>
-	/// 描画処理
-	/// </summary>
-	void Draw();
-
-	/// <summary>
-	/// setter_座標位置の(Y軸はなし)
-	/// </summary>
-	/// <param name="position">代入する座標位置</param>
-	void SetTranslate(const Vector3& position) { actorPosition_ = position; }
-	/// <summary>
-	/// setter_サイズ
-	/// </summary>
-	/// <param name="scale">代入する大きさ</param>
-	void SetScale(const Vector3& scale) { transform_.scale = scale; }
+	void Update(const Transform& transform);
 
 private:
 	/// <summary>
@@ -23864,14 +23891,12 @@ private:
 	/// <returns>該当するタイプがあるなら true</returns>
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
-	std::unique_ptr<EngineLayer::Object_glTF> object_;
-	EngineLayer::WorldTransform wt_;
 	Transform transform_{};
 
 	//プレイヤーの真下最大値
 	const float kShadowMinY_ = 1000.0f;
-	//プレイヤー横幅
-	const float kShadowWidth_ = 0.1f;
+	//プレイヤー横幅(-にすることで端なら少し影が映る)
+	const float kShadowWidth_ = -0.0f;
 	//色
 	const Vector4 kColor_ = { 0,0,0,1 };
 
@@ -24904,6 +24929,8 @@ void MyGame::Initialize() {
 	EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
 	//シーンの更新処理(変更処理)
 	EngineLayer::SceneManager::GetInstance().SceneUpdate();
+
+	EngineLayer::ShadowManager::GetInstance().Initialize();
 }
 
 void MyGame::Update() {
@@ -24930,6 +24957,8 @@ void MyGame::Update() {
 
 	//時間尺度の更新処理
 	TimeScale::GetInstance().Update();
+
+	EngineLayer::ShadowManager::GetInstance().Update();
 
 	//フェード更新
 	FadeScreen::GetInstance().Update();
@@ -25831,7 +25860,6 @@ void TitleScene::ObjectLoading() {
 	playerShadow_ = std::make_unique<Shadow>();
 	playerShadow_->Initialize();
 	Vector3 shadowPos = transforms_["player_standby"].translate;//影位置
-	playerShadow_->SetTranslate(shadowPos);
 }
 
 void TitleScene::Update() {
@@ -25907,9 +25935,8 @@ void TitleScene::UpdateBehind() {
 	for (auto& visualActor : visualActors) {
 		visualActor->SetTransform(transforms_[visualActor->GetObjectName()]);
 		visualActor->Update();
+		playerShadow_->Update(transforms_[visualActor->GetObjectName()]);
 	}
-
-	playerShadow_->Update();
 
 	//パーティクル更新
 	for (auto& particle : sceneParticles_) {
@@ -25926,10 +25953,6 @@ void TitleScene::UpdateBehind() {
 }
 
 void TitleScene::Draw() {
-
-	EngineLayer::Object3dCommon::GetInstance().Command();
-
-	playerShadow_->Draw();
 
 	EngineLayer::GLTFCommon::GetInstance().Command();
 
@@ -27529,6 +27552,7 @@ File Path: project/GameProgram/StageObjects/Gimmick/Needle.cpp
 #include "Object3dCommon.h"
 #include "GLTFCommon.h"
 #include "TimeScale.h"
+#include "ShadowManager.h"
 
 using namespace MyMath;
 using namespace UseEveryOne;
@@ -27553,12 +27577,11 @@ void Needle::Update() {
 
 	AnimationRotate();
 
+	//影の更新
+	shadow_->Update(transform_);
+
 	wt_.UpdateMatrix(transform_);
 	objectNeedle_->Update(wt_);
-
-	shadow_->SetTranslate(transform_.translate);
-	shadow_->SetScale(transform_.scale);
-	shadow_->Update();
 
 	collisionAABB_.min = transform_.translate - colliderSize_;
 	collisionAABB_.max = transform_.translate + colliderSize_;
@@ -27571,10 +27594,8 @@ void Needle::Draw() {
 	EngineLayer::GLTFCommon::GetInstance().Command();
 
 	objectNeedle_->Draw();
-	
-	EngineLayer::Object3dCommon::GetInstance().Command();
 
-	shadow_->Draw();
+	EngineLayer::Object3dCommon::GetInstance().Command();
 }
 
 void Needle::SetTravelRoute(const Vector3& nowPoint, const Vector3& pointS, const Vector3& pointE) {
@@ -29836,121 +29857,5 @@ namespace UseEveryOne {
 	/// </summary>
 	/// <param name="value"></param>
 	float SecondDecimalPoint(float value);
-}
-
-
-============================================================
-File Path: project/ShadowManager.cpp
-============================================================
-#include "ShadowManager.h"
-#include "DirectXCommon.h"
-#include <numbers>
-
-
-using namespace MyMath;
-
-/// <summary>
-/// エンジン層
-/// </summary>
-namespace EngineLayer {
-
-	std::unique_ptr<ShadowManager> ShadowManager::sInstance_ = nullptr;
-
-	ShadowManager& ShadowManager::GetInstance() {
-		if (sInstance_ == nullptr) {
-			sInstance_ = std::make_unique<ShadowManager>();
-		}
-		return *sInstance_;
-	}
-	void ShadowManager::Finalize() {
-		sInstance_.reset();
-	}
-
-
-	void ShadowManager::Initialize() {
-		resources_.clear();
-	}
-
-	void ShadowManager::Update() {
-
-	}
-
-	void ShadowManager::Draw() {
-		for (auto& resource : resources_) {
-			DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(
-				7,
-				resource->GetGPUVirtualAddress());
-		}
-	}
-
-	void ShadowManager::AddShadow(const Microsoft::WRL::ComPtr<ID3D12Resource>& resource) {
-		resources_.push_back(resource);
-	}
-
-	void ShadowManager::Reset() {
-		resources_.clear();
-	}
-}
-
-============================================================
-File Path: project/ShadowManager.h
-============================================================
-#pragma once
-#include "Lighting.h"
-#include <wrl.h>
-#include <d3d12.h>
-#include <vector>
-#include <memory>
-
-struct ShadowData {
-	Vector4 color;
-	Vector3 position;
-	float intensity;
-	Vector3 direction;
-	float distance;
-	float decay;
-	float cosAngle;
-	float cosFalloffStart;
-	float padding[2];
-	int32_t isEnable;
-};
-
-/// <summary>
-/// エンジン層
-/// </summary>
-namespace EngineLayer {
-
-	class ShadowManager {
-	public:
-
-		static ShadowManager& GetInstance();
-
-		void Finalize();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		void Initialize();
-		/// <summary>
-		/// 
-		/// </summary>
-		void Update();
-		/// <summary>
-		/// 
-		/// </summary>
-		void Draw();
-	
-		void AddShadow(const Microsoft::WRL::ComPtr<ID3D12Resource>& resource);
-
-		void Reset();
-
-	private:
-
-		static std::unique_ptr<ShadowManager> sInstance_;
-		friend struct std::default_delete<ShadowManager>;
-
-
-		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> resources_;
-	};
 }
 
