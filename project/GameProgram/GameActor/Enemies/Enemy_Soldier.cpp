@@ -139,7 +139,6 @@ void Enemy_Soldier::UpdateImGui() {
 void Enemy_Soldier::Draw() {
 	if (!isDeleteEnemy_ && !isPerformance_) {
 		object_->Draw();
-		shadow_->Draw();
 	}
 	fireCommand_->BulletDraw();
 }

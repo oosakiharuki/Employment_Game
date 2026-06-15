@@ -61,14 +61,6 @@ namespace EngineLayer {
 		/// <param name="color">設定する色</param>
 		virtual void SetColor(const Vector4& color) = 0;
 
-		void InitializeShadow();
-
-		/// <summary>
-		/// 影の位置設定
-		/// </summary>
-		/// <param name="position">位置を設定</param>
-		void ShadowPosition(const Vector3& position);
-
 	protected:
 
 		/// <summary>
@@ -146,8 +138,5 @@ namespace EngineLayer {
 		const float kSpotLightDecay_ = 2.0f;
 		const float kCosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
 		const float kCosFalloffStart = std::cos(std::numbers::pi_v<float> / 4.0f);
-
-		ShadowData* shadowData_ = nullptr;
-		Microsoft::WRL::ComPtr<ID3D12Resource> shadowResource_;
 	};
 }

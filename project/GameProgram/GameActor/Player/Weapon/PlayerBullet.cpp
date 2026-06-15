@@ -44,10 +44,8 @@ void PlayerBullet::Update() {
 	object_->Update(wt_);
 	wt_.UpdateMatrix(transform_);
 
-	//影更新
-	shadow_->SetScale(transform_.scale * kDivideByTwo_);//少し小さく(0.5倍)
-	shadow_->SetTranslate(transform_.translate);
-	shadow_->Update();
+	//影の更新
+	shadow_->Update(transform_);
 
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate + bulletAABB_.min;
@@ -57,7 +55,6 @@ void PlayerBullet::Update() {
 }
 
 void PlayerBullet::Draw() {
-	shadow_->Draw();//影の描画
 	//オブジェクト描画
 	object_->Draw();
 }

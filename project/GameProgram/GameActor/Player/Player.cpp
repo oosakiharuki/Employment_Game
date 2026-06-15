@@ -63,49 +63,6 @@ void Player::Initialize() {
 
 	eventMin = -kMoveMax_;
 	eventMax = kMoveMax_;
-
-
-	//ライト初期値
-	const float kIntensity_ = 1.0f;
-	const float kPointLightDecay_ = 1.0f;
-	//スポットライト初期値
-	const Vector3 kSpotLightPosition_ = { 0.0f,10.25f,0.0f };
-	const float kSpotLightDistance_ = 70.0f;
-	const Vector3 kSpotLightDirection_ = { 0.0f,1.0f,0.0f };
-	const float kSpotLightDecay_ = 2.0f;
-	const float kCosAngle = std::cos(std::numbers::pi_v<float> / 3.0f);
-	const float kCosFalloffStart = std::cos(std::numbers::pi_v<float> / 4.0f);
-
-
-
-	//設定
-	light = std::make_unique<SpotLight>();
-	light->color = kDefaultColor_;
-	light->position = kSpotLightPosition_;
-	light->distance = kSpotLightDistance_;
-	light->direction = Normalize(kSpotLightDirection_);
-	light->intensity = kIntensity_;
-	light->decay = kPointLightDecay_;
-	light->cosAngle = kCosAngle;
-	light->cosFalloffStart = kCosFalloffStart;
-
-	light->isEnable = false;
-
-
-
-
-	////ディレクショナルライト初期値
-	//const Vector3 kDirectionalLightDirection_ = { 0.0f,-1.0f,0.0f };
-
-	////設定
-	//light2 = std::make_unique<DirectionalLight>();
-	//light2->color = kDefaultColor_;
-	//light2->intensity = kIntensity_;
-	//light2->isEnable = true;
-
-	//EngineLayer::ShadowManager::GetInstance().AddDirectionalLight(&*light2);
-
-
 }
 
 void Player::InitMainBody() {
@@ -198,9 +155,6 @@ void Player::Update() {
 
 	//無敵時間
 	InfinityTimeUpdate();
-
-	//影の更新
-	ShadowUpdate();
 
 	//リアクション
 	ReactionsUpdate();
@@ -382,8 +336,8 @@ void Player::LifeUpdate() {
 		isPerformance_ = true;
 	}
 
-
-	object_->ShadowPosition(transform_.translate);
+	//影の更新
+	ShadowUpdate();
 }
 
 
@@ -520,8 +474,6 @@ void Player::Draw() {
 	if (hp_ != 0 && !isPerformance_) {
 		//傘
 		umbrella_->Draw();
-		//影
-		shadow_->Draw();
 	}
 	
 	EngineLayer::Object3dCommon::GetInstance().Command();

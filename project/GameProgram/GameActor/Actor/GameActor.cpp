@@ -32,8 +32,7 @@ void GameActor::Update() {
 }
 
 void GameActor::ShadowUpdate() {
-	shadow_->SetTranslate(transform_.translate);
-	shadow_->Update();
+	shadow_->Update(transform_);
 }
 
 void GameActor::HP_Initialize(uint32_t max) {

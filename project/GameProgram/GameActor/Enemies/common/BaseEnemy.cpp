@@ -72,8 +72,6 @@ void BaseEnemy::Update() {
 	//体力バースプライト更新
 	HpSpriteUpdate();
 
-	object_->ShadowPosition(transform_.translate);
-
 
 #ifdef USE_IMGUI
 	
@@ -88,8 +86,6 @@ void BaseEnemy::Update() {
 }
 
 void BaseEnemy::UpdateBehind() {
-	//影
-	ShadowUpdate();
 
 	wt_.UpdateMatrix(transform_);
 	object_->Update(wt_);
@@ -101,6 +97,9 @@ void BaseEnemy::UpdateBehind() {
 
 	//死んだときは当たり判定を取らない
 	if (hp_ == 0) return;
+
+	//影の配置
+	ShadowUpdate();
 
 	//当たり判定設定
 	collisionAABB_.min = transform_.translate - colliderSize_;

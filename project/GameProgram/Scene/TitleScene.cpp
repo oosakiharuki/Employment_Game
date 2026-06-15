@@ -57,7 +57,6 @@ void TitleScene::ObjectLoading() {
 	playerShadow_ = std::make_unique<Shadow>();
 	playerShadow_->Initialize();
 	Vector3 shadowPos = transforms_["player_standby"].translate;//影位置
-	playerShadow_->SetTranslate(shadowPos);
 }
 
 void TitleScene::Update() {
@@ -133,9 +132,8 @@ void TitleScene::UpdateBehind() {
 	for (auto& visualActor : visualActors) {
 		visualActor->SetTransform(transforms_[visualActor->GetObjectName()]);
 		visualActor->Update();
+		playerShadow_->Update(transforms_[visualActor->GetObjectName()]);
 	}
-
-	playerShadow_->Update();
 
 	//パーティクル更新
 	for (auto& particle : sceneParticles_) {
@@ -152,10 +150,6 @@ void TitleScene::UpdateBehind() {
 }
 
 void TitleScene::Draw() {
-
-	EngineLayer::Object3dCommon::GetInstance().Command();
-
-	playerShadow_->Draw();
 
 	EngineLayer::GLTFCommon::GetInstance().Command();
 

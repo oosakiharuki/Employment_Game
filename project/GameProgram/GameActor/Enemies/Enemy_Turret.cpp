@@ -129,7 +129,6 @@ void Enemy_Turret::Draw() {
 
 	if (!isDeleteEnemy_ && !isPerformance_) {
 		object_->Draw();
-		shadow_->Draw();//影
 	}
 		
 	fireCommand_->BulletDraw();//弾丸

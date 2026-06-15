@@ -23,7 +23,6 @@ namespace EngineLayer {
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(5, pointLightResource_->GetGPUVirtualAddress());
 		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(6, spotLightResource_->GetGPUVirtualAddress());
 
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(7, shadowResource_->GetGPUVirtualAddress());
 		ShadowManager::GetInstance().Draw();
 	}
 
@@ -41,8 +40,6 @@ namespace EngineLayer {
 		CreatePointLight();
 		//スポットライト
 		CreateSpotLight();
-
-		InitializeShadow();
 	}
 
 	void BaseObject::CreateDirectionalLight() {
@@ -89,29 +86,5 @@ namespace EngineLayer {
 		spotLightData_->cosFalloffStart = kCosFalloffStart;
 
 		spotLightData_->isEnable = true;
-	}
-
-	void BaseObject::InitializeShadow() {
-
-		shadowResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(ShadowData));
-		//書き込むためのアドレス
-		shadowResource_->Map(0, nullptr, reinterpret_cast<void**>(&shadowData_));
-
-		shadowData_->color = kDefaultColor_;
-		shadowData_->position = { 0.0f,3.0f,0.0f };
-		shadowData_->direction = Normalize({ 0.0f,-1.0f,0.0f });
-		shadowData_->distance = 10.0f;
-		shadowData_->decay = 0.1f;
-		shadowData_->intensity = 1.0f;
-		shadowData_->cosAngle = std::cos(std::numbers::pi_v<float> / 6.0f);
-		shadowData_->cosFalloffStart = std::cos(std::numbers::pi_v<float> / 6.0f);
-		
-		//ShadowManager::GetInstance().AddShadow(shadowResource_);
-	}
-
-	void BaseObject::ShadowPosition(const Vector3& position) {	
-		shadowData_->position = position;
-		shadowData_->intensity = 1.0f;
-		ShadowManager::GetInstance().AddShadow(shadowResource_);
 	}
 }

@@ -56,7 +56,6 @@ void Boss::Update() {
 	object_->Update(wt_);
 
 	//影更新
-	shadow_->SetScale(transform_.scale * kTwice_);//少し大きく(二倍)
 	ShadowUpdate();
 }
 
@@ -69,7 +68,6 @@ void Boss::Draw() {
 	for (auto& bullet : bullets_) {
 		bullet->Draw();
 	}
-	shadow_->Draw();//影の描画
 }
 
 void Boss::Active() {

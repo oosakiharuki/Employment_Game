@@ -16,22 +16,7 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	void Update();
-	/// <summary>
-	/// 描画処理
-	/// </summary>
-	void Draw();
-
-	/// <summary>
-	/// setter_座標位置の(Y軸はなし)
-	/// </summary>
-	/// <param name="position">代入する座標位置</param>
-	void SetTranslate(const Vector3& position) { actorPosition_ = position; }
-	/// <summary>
-	/// setter_サイズ
-	/// </summary>
-	/// <param name="scale">代入する大きさ</param>
-	void SetScale(const Vector3& scale) { transform_.scale = scale; }
+	void Update(const Transform& transform);
 
 private:
 	/// <summary>
@@ -46,14 +31,12 @@ private:
 	/// <returns>該当するタイプがあるなら true</returns>
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
-	std::unique_ptr<EngineLayer::Object_glTF> object_;
-	EngineLayer::WorldTransform wt_;
 	Transform transform_{};
 
 	//プレイヤーの真下最大値
 	const float kShadowMinY_ = 1000.0f;
-	//プレイヤー横幅
-	const float kShadowWidth_ = 0.1f;
+	//プレイヤー横幅(-にすることで端なら少し影が映る)
+	const float kShadowWidth_ = -0.0f;
 	//色
 	const Vector4 kColor_ = { 0,0,0,1 };
 
