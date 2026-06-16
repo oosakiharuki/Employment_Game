@@ -27,7 +27,9 @@ struct ShadowFactory {
 /// エンジン層
 /// </summary>
 namespace EngineLayer {
-
+	/// <summary>
+	/// 影生成マネージャ
+	/// </summary>
 	class ShadowManager {
 	public:
 		/// <summary>
@@ -78,7 +80,7 @@ namespace EngineLayer {
 
 		const Vector3 kDirection_ = { 0.0f,-1.0f,0.0f };//ベクトル向き
 		
-		const float kMaxDistance_ = 9.0f;//最高飛距離
+		const float kMaxDistance_ = 10.0f;//最高飛距離
 		const float kMinDistance_ = 1.0f;//最低でも必要な長さ
 
 		const float kDecay_ = 0.1f;//減衰度

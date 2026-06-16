@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "DirectXCommon.h"
 #include "SrvManager.h"
+#include "RtvManager.h"
 
 #include "SpriteCommon.h"
 #include "Object3dCommon.h"

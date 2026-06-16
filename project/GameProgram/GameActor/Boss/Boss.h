@@ -226,4 +226,8 @@ private:
 
 	const Vector2 kHpSpriteSize_ = { 256,64 };
 	const float kSpriteRatio_ = 0.1f;
+
+	//影の長さ、大きさ
+	Vector3 shadowLength = { 1.0f, 18.0f ,1.0f };
+	const float kShadowDirection = 10.0f;
 };

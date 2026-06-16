@@ -17,6 +17,8 @@
 
 #include <thread>
 #include "SrvManager.h"
+#include "RtvManager.h"
+
 #include "ImGuiManager.h"
 
 #include "PostEffectManager.h"
@@ -261,24 +263,18 @@ namespace EngineLayer {
 	void DirectXCommon::DescriptorHeap() {
 #pragma region ディスクリプターヒープの生成
 
-		descriptorSizeSRV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-		descriptorSizeRTV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 		descriptorSizeDSV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
-
-
-		rtvDescriptorHeap_ = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 3, false);
-		srvDescriptorHeap_ = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, kMaxSRVCount_, true);
 		dsvDescriptorHeap_ = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
 
 #pragma endregion
 	}
 
-	Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> DirectXCommon::CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDesciptors, bool shaderVisible)
+	Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> DirectXCommon::CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible)
 	{
 		//ディスクリプターヒープの生成
 
 		descriptorHeapDesc_.Type = heapType;
-		descriptorHeapDesc_.NumDescriptors = numDesciptors;
+		descriptorHeapDesc_.NumDescriptors = numDescriptors;
 
 		descriptorHeapDesc_.Flags = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
@@ -288,29 +284,19 @@ namespace EngineLayer {
 	}
 
 	void DirectXCommon::RTV() {
-		//RTV
-		rtvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-		rtvDesc_.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+		//初期化処理
+		RtvManager::GetInstance().Initialize();
 
-		//
-		D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle_ = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+		//スワップチェーンのRTVを作成
+		for (uint32_t i = 0; i < kMaxResource_; ++i) {
+			RtvManager::GetInstance().CreateRTV(swapChainResources_[i]);
+		}
 
 		const Vector4 kRenderTargetClearValue{ 0.5f,0.5f,0.5f,1.0f };//赤色
 		renderTextureResource_ = CreateRenderTextureResource(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, kRenderTargetClearValue);
-
-		for (uint32_t i = 0; i < kMaxResource_; ++i) {
-			rtvHandles_[i] = rtvStartHandle_;
-			if (i > 0) {
-				rtvHandles_[i].ptr = rtvHandles_[i - 1].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-			}
-			device_->CreateRenderTargetView(swapChainResources_[i].Get(), &rtvDesc_, rtvHandles_[i]);
-		}
-
-		//renderTexture用のrtvHandle作成 (作る際DescriptorHeapを増やす)
-		rtvHandlesRT_ = rtvStartHandle_;
-		rtvHandlesRT_.ptr = rtvHandles_[1].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-
-		device_->CreateRenderTargetView(renderTextureResource_.Get(), &rtvDesc_, rtvHandlesRT_);
+		
+		//レンダーテクスチャのRTVを作成
+		RtvManager::GetInstance().CreateRTV(renderTextureResource_);
 	}
 
 	void DirectXCommon::DSV() {
@@ -542,7 +528,7 @@ namespace EngineLayer {
 		float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };
 
 		//共有描画処理
-		DrawCommon(rtvHandles_[backBufferIndex], clearColor);
+		DrawCommon(backBufferIndex, clearColor);
 
 		///PostEffect
 
@@ -653,11 +639,11 @@ namespace EngineLayer {
 		SetBarrier(renderTextureResource_.Get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 		//共有描画処理
-		DrawCommon(rtvHandlesRT_, clearValue_.Color);
+		DrawCommon(2, clearValue_.Color);
 
 		//DepthStencilView
 		dsvHandle_ = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-		commandList_->OMSetRenderTargets(1, &rtvHandlesRT_, false, &dsvHandle_);
+		commandList_->OMSetRenderTargets(1, &RtvManager::GetInstance().GetHandle(2), false, &dsvHandle_);
 		commandList_->ClearDepthStencilView(dsvHandle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	}
 
@@ -666,12 +652,12 @@ namespace EngineLayer {
 		SetBarrier(renderTextureResource_.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	}
 
-	void DirectXCommon::DrawCommon(D3D12_CPU_DESCRIPTOR_HANDLE handle, float color[]) {
+	void DirectXCommon::DrawCommon(uint32_t handleNum, float color[]) {
 		// 描画先のRTVの設定をする
-		commandList_->OMSetRenderTargets(1, &handle, false, nullptr);
+		commandList_->OMSetRenderTargets(1, &RtvManager::GetInstance().GetHandle(handleNum), false, nullptr);
 
 		//コマンド蓄積
-		commandList_->ClearRenderTargetView(handle, color, 0, nullptr);
+		commandList_->ClearRenderTargetView(RtvManager::GetInstance().GetHandle(handleNum), color, 0, nullptr);
 
 		//描画用のDescriptorHeap
 		SrvManager::GetInstance().PreDraw();

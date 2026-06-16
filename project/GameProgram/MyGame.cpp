@@ -17,7 +17,7 @@ void MyGame::Initialize() {
 	//ポーズ処理の初期化
 	PauseScreen::GetInstance().Initialize();
 	//最初のシーンの設定
-	EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
+	EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<TitleScene>());
 	//シーンの更新処理(変更処理)
 	EngineLayer::SceneManager::GetInstance().SceneUpdate();
 

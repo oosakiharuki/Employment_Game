@@ -147,16 +147,6 @@ namespace EngineLayer {
 		/// <returns>フェンス</returns>
 		HANDLE GetFenceEvent() const { return fenceEvent_; }
 		/// <summary>
-		/// getter_rtvDesc
-		/// </summary>
-		/// <returns>使用しているRenderTargetView</returns>
-		D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc() const { return rtvDesc_; }
-		/// <summary>
-		/// getter_デスクリプターヒープ
-		/// </summary>
-		/// <returns>でスクリプターヒープ</returns>
-		ID3D12DescriptorHeap* GetSrvDescriptorHeap() { return srvDescriptorHeap_.Get(); }
-		/// <summary>
 		/// スワップチェーンのリソースナンバー
 		/// </summary>
 		/// <returns>バッファカウント</returns>
@@ -248,21 +238,9 @@ namespace EngineLayer {
 		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_ = nullptr;
 		D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc_{};
 
-		uint32_t descriptorSizeSRV_;
-		uint32_t descriptorSizeRTV_;
+
 		uint32_t descriptorSizeDSV_;
-
-
-		Microsoft::WRL::ComPtr < ID3D12DescriptorHeap> rtvDescriptorHeap_;
-		Microsoft::WRL::ComPtr < ID3D12DescriptorHeap> srvDescriptorHeap_;
 		Microsoft::WRL::ComPtr < ID3D12DescriptorHeap> dsvDescriptorHeap_;
-
-
-		//RTV
-		D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
-
-		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[kMaxResource_];
-		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandlesRT_;
 
 		//ビューポート
 		D3D12_VIEWPORT viewport_;
@@ -307,9 +285,9 @@ namespace EngineLayer {
 		/// <summary>
 		/// 共有描画処理
 		/// </summary>
-		/// <param name="handle">CPUハンドル</param>
+		/// <param name="handleNum">CPUハンドルの番号</param>
 		/// <param name="color">クリアカラー</param>
-		void DrawCommon(D3D12_CPU_DESCRIPTOR_HANDLE handle, float color[]);
+		void DrawCommon(uint32_t handleNum, float color[]);
 
 		//Update
 

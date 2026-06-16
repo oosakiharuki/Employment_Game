@@ -228,6 +228,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\math\lerp\Lerp.cpp" />
     <ClCompile Include="Engine\math\matrix\MatrixMath.cpp" />
     <ClCompile Include="Engine\3d\shadow\ShadowManager.cpp" />
+    <ClCompile Include="Engine\base\RtvManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\math\modelData\AnimationMath.h" />
@@ -353,6 +354,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\math\lerp\Lerp.h" />
     <ClInclude Include="Engine\math\matrix\MatrixMath.h" />
     <ClInclude Include="Engine\3d\shadow\ShadowManager.h" />
+    <ClInclude Include="Engine\base\RtvManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
