@@ -56,7 +56,8 @@ void Boss::Update() {
 	object_->Update(wt_);
 
 	//影更新
-	ShadowUpdate();
+	EngineLayer::ShadowManager::GetInstance().AddShadow(transform_.translate, transform_.scale * shadowLength, kShadowDirection);
+
 }
 
 void Boss::Draw() {

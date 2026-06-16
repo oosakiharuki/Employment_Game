@@ -1,3 +1,9 @@
+/// ----------------------
+///
+/// 影生成マネージャ
+/// スポットライトの減衰
+/// 
+/// ----------------------
 #include "ShadowManager.h"
 #include "DirectXCommon.h"
 #include <numbers>

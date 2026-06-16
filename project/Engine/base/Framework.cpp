@@ -101,6 +101,7 @@ namespace EngineLayer {
 
 		DirectXCommon::GetInstance().Finalize();
 		SrvManager::GetInstance().Finalize();
+		RtvManager::GetInstance().Finalize();
 		SpriteCommon::GetInstance().Finalize();
 		Object3dCommon::GetInstance().Finalize();
 		GLTFCommon::GetInstance().Finalize();
