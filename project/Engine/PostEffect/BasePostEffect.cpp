@@ -47,7 +47,7 @@ namespace EngineLayer {
 	}
 
 	void BasePostEffect::CreateVertexShader() {
-		vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Fullscreen.VS.hlsl", L"vs_6_0");
+		vertexShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Fullscreen.VS.hlsl", L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 	}
 

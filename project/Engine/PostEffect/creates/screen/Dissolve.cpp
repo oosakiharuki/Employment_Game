@@ -32,7 +32,7 @@ namespace EngineLayer {
 	}
 
 	void Dissolve::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Dissolve.PS.hlsl", L"ps_6_0");//ココのみ変化させる
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Dissolve.PS.hlsl", L"ps_6_0");//ココのみ変化させる
 		assert(pixelShaderBlob != nullptr);
 	}
 

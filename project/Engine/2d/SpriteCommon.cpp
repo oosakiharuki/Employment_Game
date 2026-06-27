@@ -76,12 +76,12 @@ namespace EngineLayer {
 	}
 
 	void SpriteCommon::CreateVertexShader() {
-		vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Sprite.VS.hlsl", L"vs_6_0");
+		vertexShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Sprite.VS.hlsl", L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 	}
 
 	void SpriteCommon::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Sprite.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Sprite.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 

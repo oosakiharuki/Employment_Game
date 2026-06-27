@@ -24,7 +24,7 @@ namespace EngineLayer {
 	}
 
 	void GaussianFilter::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/GaussianFilter.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/GaussianFilter.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 

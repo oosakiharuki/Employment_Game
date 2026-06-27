@@ -18,6 +18,7 @@
 #include <thread>
 #include "SrvManager.h"
 #include "RtvManager.h"
+#include "ShaderManager.h"
 
 #include "ImGuiManager.h"
 
@@ -65,7 +66,9 @@ namespace EngineLayer {
 		Fence();
 		ViewPort();
 		Scissor();
-		DXC();
+
+		//DXC初期化
+		ShaderManager::GetInstance().Initialize();
 	}
 
 
@@ -339,71 +342,6 @@ namespace EngineLayer {
 
 #pragma region コンパイルシェーダー作成
 
-	//ComplierShader関数
-	Microsoft::WRL::ComPtr<IDxcBlob> DirectXCommon::CompileShader(const std::wstring& filePath, const wchar_t* profile)
-	{
-		//1.HLSLファイル
-		LoadHLSL(filePath, profile);
-
-		//3.警告エラー
-		CompileError();
-
-		//4.Compile結果
-		CompileSuccess(filePath, profile);
-
-		return shaderBlob;
-	}
-
-	void DirectXCommon::LoadHLSL(const std::wstring& filePath, const wchar_t* profile) {
-
-		log(ConvertString(std::format(L"Begin CompileShader,path:{},profile:{}\n", filePath, profile)));
-
-		Microsoft::WRL::ComPtr <IDxcBlobEncoding> shaderSource = nullptr;
-		HRESULT hr = dxcUtils_->LoadFile(filePath.c_str(), nullptr, &shaderSource);
-
-		assert(SUCCEEDED(hr));
-
-		DxcBuffer shaderSourceBuffer;
-		shaderSourceBuffer.Ptr = shaderSource->GetBufferPointer();
-		shaderSourceBuffer.Size = shaderSource->GetBufferSize();
-		shaderSourceBuffer.Encoding = DXC_CP_UTF8;
-
-		LPCWSTR arguments[] = {
-			filePath.c_str(),
-			L"-E",L"main",
-			L"-T",profile,
-			L"-Zi",L"-Qembed_debug",
-			L"-Od",
-			L"-Zpr",
-		};
-
-		hr = dxcCompiler_->Compile(
-			&shaderSourceBuffer,
-			arguments,
-			_countof(arguments),
-			*&includeHandler_,
-			IID_PPV_ARGS(&shaderResult));
-
-		assert(SUCCEEDED(hr));
-	}
-
-	void DirectXCommon::CompileError() {
-		Microsoft::WRL::ComPtr<IDxcBlobUtf8> shaderError = nullptr;
-		shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
-		if (shaderError != nullptr && shaderError->GetStringLength() != 0)
-		{
-			log(shaderError->GetStringPointer());
-			//警告エラーダメ絶対
-			assert(false);
-		}
-	}
-
-	void DirectXCommon::CompileSuccess(const std::wstring& filePath, const wchar_t* profile) {
-		HRESULT hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
-		assert(SUCCEEDED(hr));
-
-		log(ConvertString(std::format(L"Compile Succeeded,path:{},profile:{}\n", filePath, profile)));
-	}
 
 #pragma endregion
 
@@ -485,19 +423,6 @@ namespace EngineLayer {
 		barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;
 		commandList_->ResourceBarrier(1, &barrier);
 		return intermediateResource;
-	}
-
-	void DirectXCommon::DXC() {
-		//DXC
-		HRESULT hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_));
-		assert(SUCCEEDED(hr));
-
-		hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_));
-		assert(SUCCEEDED(hr));
-
-		hr = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
-		assert(SUCCEEDED(hr));
-
 	}
 
 	void DirectXCommon::SetBarrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES stateBefore,

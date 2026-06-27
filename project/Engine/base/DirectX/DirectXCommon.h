@@ -81,22 +81,11 @@ namespace EngineLayer {
 		/// </summary>
 		void Scissor();
 		/// <summary>
-		/// DXC作成
-		/// </summary>
-		void DXC();
-		/// <summary>
 		/// setter_WinApp
 		/// </summary>
 		/// <param name="winApp"></param>
 		void SetWinApp(WinApp* winApp) { winApp_ = winApp; }
 
-		/// <summary>
-		/// コンパイルシェーダ作成
-		/// </summary>
-		/// <param name="filePath">HLSLの名前</param> 
-		/// <param name="profile">vs_6_0 or ps_6_0</param> 
-		/// <returns>コンパイルシェーダ</returns>
-		Microsoft::WRL::ComPtr <IDxcBlob> CompileShader(const std::wstring& filePath, const wchar_t* profile);
 		/// <summary>
 		/// シェーダで使用するバッファ
 		/// </summary>
@@ -249,30 +238,6 @@ namespace EngineLayer {
 		D3D12_RECT scissorRect_{};
 
 
-		//DXC
-		Microsoft::WRL::ComPtr <IDxcUtils> dxcUtils_ = nullptr;
-		Microsoft::WRL::ComPtr <IDxcCompiler3> dxcCompiler_ = nullptr;
-		Microsoft::WRL::ComPtr <IDxcIncludeHandler> includeHandler_ = nullptr;
-
-		/// <summary>
-		/// HLSLを読み取る
-		/// </summary>
-		/// <param name="filePath">HLSLパス</param>
-		/// <param name="profile">プロファイル</param>
-		void LoadHLSL(const std::wstring& filePath, const wchar_t* profile);
-		/// <summary>
-		/// 警告エラー
-		/// </summary>
-		void CompileError();
-		/// <summary>
-		/// コンパイルが完了した
-		/// </summary>
-		/// <param name="filePath">HSLSパス</param>
-		/// <param name="profile">プロファイル</param>
-		void CompileSuccess(const std::wstring& filePath, const wchar_t* profile);
-
-		Microsoft::WRL::ComPtr<IDxcResult> shaderResult = nullptr;
-		Microsoft::WRL::ComPtr<IDxcBlob> shaderBlob = nullptr;
 
 		/// <summary>
 		/// バリア設定

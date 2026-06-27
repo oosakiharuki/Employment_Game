@@ -24,7 +24,7 @@ namespace EngineLayer {
 	}
 
 	void RadialBlur::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/RadialBlur.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/RadialBlur.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 

@@ -83,12 +83,12 @@ namespace EngineLayer {
 	}
 
 	void GLTFCommon::CreateVertexShader() {
-		vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
+		vertexShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 	}
 
 	void GLTFCommon::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d_glTF.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Object3d_glTF.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
