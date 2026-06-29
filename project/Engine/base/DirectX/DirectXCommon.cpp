@@ -59,8 +59,6 @@ namespace EngineLayer {
 		Device();
 		Command();
 		SwapChain();
-		ZBuffer();//?
-		DescriptorHeap();
 		RTV();
 		DSV();//深度ステンシルビュー
 		Fence();
@@ -228,50 +226,6 @@ namespace EngineLayer {
 #pragma endregion
 	}
 
-	void DirectXCommon::ZBuffer() {
-
-		D3D12_RESOURCE_DESC resourceDesc{};
-		resourceDesc.Width = WinApp::kClientWidth_;
-		resourceDesc.Height = WinApp::kClientHeight_;
-		resourceDesc.MipLevels = 1;
-		resourceDesc.DepthOrArraySize = 1;
-		resourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-		resourceDesc.SampleDesc.Count = 1;
-		resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;//二次元
-		resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;//DepthStencil
-
-		//利用するHeap
-		D3D12_HEAP_PROPERTIES heapProperties{};
-		heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;//VRAN上で作る
-
-
-		//深度値のクリア設定
-		D3D12_CLEAR_VALUE depthClearValue{};
-		depthClearValue.DepthStencil.Depth = 1.0f;
-		depthClearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-
-
-		//resourceの生成
-		HRESULT hr = device_->CreateCommittedResource(
-			&heapProperties,
-			D3D12_HEAP_FLAG_NONE,
-			&resourceDesc,
-			D3D12_RESOURCE_STATE_DEPTH_WRITE,
-			&depthClearValue,
-			IID_PPV_ARGS(&depthStencilResource_));
-		assert(SUCCEEDED(hr));
-
-	}
-
-	void DirectXCommon::DescriptorHeap() {
-#pragma region ディスクリプターヒープの生成
-
-		descriptorSizeDSV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
-		dsvDescriptorHeap_ = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
-
-#pragma endregion
-	}
-
 	Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> DirectXCommon::CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible)
 	{
 		//ディスクリプターヒープの生成
@@ -295,14 +249,21 @@ namespace EngineLayer {
 			RtvManager::GetInstance().CreateRTV(swapChainResources_[i]);
 		}
 
-		const Vector4 kRenderTargetClearValue{ 0.5f,0.5f,0.5f,1.0f };//赤色
-		renderTextureResource_ = CreateRenderTextureResource(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, kRenderTargetClearValue);
-		
+		renderTextureResource_ = D3D12ResourceManager::GetInstance().CreateRenderTextureResource(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, kRenderTargetClearValue);
+
 		//レンダーテクスチャのRTVを作成
 		RtvManager::GetInstance().CreateRTV(renderTextureResource_);
 	}
 
 	void DirectXCommon::DSV() {
+
+		//デスクリプターヒープ
+		descriptorSizeDSV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+		dsvDescriptorHeap_ = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
+
+		//深度ステンシルリソースの作成
+		depthStencilResource_ = D3D12ResourceManager::GetInstance().CreateDepthStencilResource();
+
 		//DSV生成
 		D3D12_DEPTH_STENCIL_VIEW_DESC dscDesc{};
 		dscDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -338,91 +299,6 @@ namespace EngineLayer {
 		scissorRect_.right = WinApp::kClientWidth_;
 		scissorRect_.top = 0;
 		scissorRect_.bottom = WinApp::kClientHeight_;
-	}
-
-#pragma region コンパイルシェーダー作成
-
-
-#pragma endregion
-
-	Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(size_t sizeInBytes) {
-		//VertexResource
-		//頂点シェーダを作る
-		D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-		uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-
-		D3D12_RESOURCE_DESC vertexResourceDesc{};
-
-		vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-		vertexResourceDesc.Width = sizeInBytes;
-
-		vertexResourceDesc.Height = 1;
-		vertexResourceDesc.DepthOrArraySize = 1;
-		vertexResourceDesc.MipLevels = 1;
-		vertexResourceDesc.SampleDesc.Count = 1;
-
-		vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-
-		//実際に頂点リソースを作る
-		Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource = nullptr;
-		HRESULT hr = device_->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
-		assert(SUCCEEDED(hr));
-
-		return vertexResource;
-	}
-
-	Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateTextureResource(const DirectX::TexMetadata& metadata) {
-
-		D3D12_RESOURCE_DESC resourceDesc{};
-		resourceDesc.Width = UINT(metadata.width);//幅
-		resourceDesc.Height = UINT(metadata.height);//高さ
-		resourceDesc.MipLevels = UINT16(metadata.mipLevels);//mipmapの数
-		resourceDesc.DepthOrArraySize = UINT(metadata.arraySize);//奥行き　Textureの配置数
-		resourceDesc.Format = metadata.format;//format
-		resourceDesc.SampleDesc.Count = 1;//サンプリングカウント(1固定)
-		resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION(metadata.dimension);// textureの次元数
-
-
-		//利用するHeapの設定
-		D3D12_HEAP_PROPERTIES heapProperties{};
-		heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
-
-		//Resourceの生成
-		Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
-		HRESULT hr = device_->CreateCommittedResource(
-			&heapProperties,
-			D3D12_HEAP_FLAG_NONE,
-			&resourceDesc,
-			D3D12_RESOURCE_STATE_COPY_DEST,
-			nullptr,
-			IID_PPV_ARGS(&resource)
-		);
-		assert(SUCCEEDED(hr));
-		return resource;
-
-	}
-
-	//戻り値を破棄してはならない
-	//UploadTextureData(…) ×  / ID3D12Resource* a = UploadTextureData(…) 〇
-	[[nodiscard]]
-	Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages) {
-		//中間リソース
-		std::vector<D3D12_SUBRESOURCE_DATA> subresources;
-		DirectX::PrepareUpload(device_.Get(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
-		uint64_t intermediateSize = GetRequiredIntermediateSize(texture.Get(), 0, UINT(subresources.size()));
-		Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = CreateBufferResource(intermediateSize).Get();
-		//データ転送
-		UpdateSubresources(commandList_.Get(), texture.Get(), intermediateResource.Get(), 0, 0, UINT(subresources.size()), subresources.data());
-
-		D3D12_RESOURCE_BARRIER barrier{};
-		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		barrier.Transition.pResource = texture.Get();//こいつ
-		barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-		barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;
-		commandList_->ResourceBarrier(1, &barrier);
-		return intermediateResource;
 	}
 
 	void DirectXCommon::SetBarrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES stateBefore,
@@ -492,6 +368,7 @@ namespace EngineLayer {
 		if (fence_->GetCompletedValue() != fenceValue_) {
 			fence_->SetEventOnCompletion(fenceValue_, fenceEvent_);
 			WaitForSingleObject(fenceEvent_, INFINITE);
+			CloseHandle(fenceEvent_);
 		}
 		// FPS
 		UpdateFixFPS();
@@ -515,59 +392,33 @@ namespace EngineLayer {
 		//syncまちの無駄時間軽減に使う
 		const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
 
-
+		//現在の時間を取得
 		std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-
+		//前回記録した時間を取得
 		std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
-
+		//1/60秒ではない場合
 		if (elapsed < kMinCheckTime) {
+			//1/60秒になるまでスリープを挟む
 			while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
+				//1マイクロ秒スリープ処理
 				std::this_thread::sleep_for(std::chrono::microseconds(1));
 			}
 		}
 		reference_ = std::chrono::steady_clock::now();
 	}
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateRenderTextureResource(DXGI_FORMAT format, const Vector4& clearColor) {
-
-		D3D12_RESOURCE_DESC resourceDesc{};
-		resourceDesc.Width = WinApp::kClientWidth_;
-		resourceDesc.Height = WinApp::kClientHeight_;
-		resourceDesc.MipLevels = 1;
-		resourceDesc.DepthOrArraySize = 1;
-		resourceDesc.Format = format;
-		resourceDesc.SampleDesc.Count = 1;
-		resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;//二次元
-		resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;//RenderTargetとして利用可能
-
-		D3D12_HEAP_PROPERTIES heapProperties{};
-		heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
-
-		//D3D12_CLEAR_VALUE clearValue;
-		clearValue_.Format = format;
-		clearValue_.Color[0] = clearColor.x;
-		clearValue_.Color[1] = clearColor.y;
-		clearValue_.Color[2] = clearColor.z;
-		clearValue_.Color[3] = clearColor.s;
-
-		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
-
-		//resourceの生成
-		device_->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE,
-			&resourceDesc, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, &clearValue_, IID_PPV_ARGS(&resource));
-
-		return resource;
-	}
-
 	void DirectXCommon::RenderTexturePreDraw() {
 		//レンダーターゲットのバリア変更
 		SetBarrier(renderTextureResource_.Get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
+		//クリアする色　
+		float clearColor[] = { kRenderTargetClearValue.x,kRenderTargetClearValue.y,kRenderTargetClearValue.z,kRenderTargetClearValue.s };
+
 		//共有描画処理
-		DrawCommon(2, clearValue_.Color);
+		DrawCommon(2, clearColor);
 
 		//DepthStencilView
-		dsvHandle_ = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+		D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle_ = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
 		commandList_->OMSetRenderTargets(1, &RtvManager::GetInstance().GetHandle(2), false, &dsvHandle_);
 		commandList_->ClearDepthStencilView(dsvHandle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	}
@@ -595,7 +446,6 @@ namespace EngineLayer {
 	}
 
 	void DirectXCommon::Finalize() {
-		CloseHandle(fenceEvent_);
 		sInstance_.reset();
 	}
 }

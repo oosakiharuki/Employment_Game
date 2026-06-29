@@ -21,7 +21,7 @@ using namespace MyMath;
 namespace EngineLayer {
 	void Object3d::Initialize() {
 		this->camera_ = Object3dCommon::GetInstance().GetDefaultCamera();
-		wvpResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
+		wvpResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
 		wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 
 

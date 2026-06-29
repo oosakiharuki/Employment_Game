@@ -38,7 +38,7 @@ namespace EngineLayer {
 
 	void Sprite::InitVertexResource() {
 		//Sprite
-		vertexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * 4);
+		vertexResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(VertexData) * 4);
 
 		//リソースの先頭アドレス
 		vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
@@ -58,7 +58,7 @@ namespace EngineLayer {
 	void Sprite::InitIndexData() {
 
 		//Index
-		indexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(uint32_t) * 6);
+		indexResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(uint32_t) * 6);
 
 		//リソースの先頭アドレス
 		indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
@@ -79,7 +79,7 @@ namespace EngineLayer {
 
 	void Sprite::InitMaterial() {
 		//spriteのリソース
-		materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
+		materialResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(Material));
 
 		//書き込むためのアドレス
 		materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
@@ -91,7 +91,7 @@ namespace EngineLayer {
 
 	void Sprite::InitTransformationMatrix() {
 		//座標変換行列	
-		transformationMatrixResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
+		transformationMatrixResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
 
 		transformationMatrixResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixData_));
 

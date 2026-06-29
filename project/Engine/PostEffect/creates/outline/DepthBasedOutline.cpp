@@ -79,7 +79,7 @@ namespace EngineLayer {
 
 		//Model用マテリアル
 		//マテリアル用のリソース
-		materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(DepthOutlineFunction));
+		materialResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(DepthOutlineFunction));
 		//書き込むためのアドレス
 		materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&depthOutlineFunction_));
 		//色の設定

@@ -18,7 +18,7 @@ namespace EngineLayer {
 		modelData_ = CreateBox();
 		modelData_.materialData.textureFilePath = textureFile;
 
-		vertexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+		vertexResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 
 		vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 		vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
@@ -29,7 +29,7 @@ namespace EngineLayer {
 
 		//Model用マテリアル
 		//マテリアル用のリソース
-		materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
+		materialResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(Material));
 		//書き込むためのアドレス
 		materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定
@@ -43,7 +43,7 @@ namespace EngineLayer {
 		modelData_.materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(modelData_.materialData.textureFilePath);
 
 		camera_ = cubeMap_->GetDefaultCamera();
-		wvpResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
+		wvpResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
 		wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 
 		wvpData_->World = MakeIdentity4x4();

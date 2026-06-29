@@ -46,8 +46,8 @@ namespace EngineLayer {
 		//filePath名義のテクスチャデータを設定
 		TextureData& textureData = textureDatas_[filePath];
 		textureData.metadata = metadata;
-		textureData.resource = DirectXCommon::GetInstance().CreateTextureResource(textureData.metadata);
-		Microsoft::WRL::ComPtr<ID3D12Resource> val = DirectXCommon::GetInstance().UploadTextureData(textureData.resource, mipImages);
+		textureData.resource = D3D12ResourceManager::GetInstance().CreateTextureResource(textureData.metadata);
+		Microsoft::WRL::ComPtr<ID3D12Resource> val = D3D12ResourceManager::GetInstance().UploadTextureData(textureData.resource, mipImages);
 		intermediateResources_.push_back(val);
 
 		//SRVの設定

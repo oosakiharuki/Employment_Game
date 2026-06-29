@@ -37,7 +37,7 @@ namespace EngineLayer {
 
 		std::vector<VertexData> vertexDatas = modelData.vertices;
 
-		vertexR = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * vertexDatas.size());
+		vertexR = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(VertexData) * vertexDatas.size());
 
 		vertexB.BufferLocation = vertexR->GetGPUVirtualAddress();
 		vertexB.SizeInBytes = UINT(sizeof(VertexData) * vertexDatas.size());
@@ -61,7 +61,7 @@ namespace EngineLayer {
 		//Model用マテリアル
 		//マテリアル用のリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
-		materialResource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
+		materialResource = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(Material));
 		//書き込むためのアドレス
 		materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定

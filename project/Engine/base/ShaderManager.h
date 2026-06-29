@@ -16,6 +16,10 @@ namespace EngineLayer {
 	class ShaderManager {
 	public:
 
+		/// <summary>
+		/// インスタンス生成
+		/// </summary>
+		/// <returns></returns>
 		static ShaderManager& GetInstance();
 
 		/// <summary>
@@ -31,13 +35,15 @@ namespace EngineLayer {
 		/// <returns>コンパイルシェーダ</returns>
 		Microsoft::WRL::ComPtr <IDxcBlob> CompileShader(const std::wstring& filePath, const wchar_t* profile);
 
-		class ConstructorKey {
+		/// <summary>
+		/// インスタンス解放キー
+		/// </summary>
+		class InstanceKey {
 		private:
-			ConstructorKey() = default;
+			InstanceKey() = default;
 			friend class ShaderManager;
 		};
-
-		explicit ShaderManager(ConstructorKey) {}
+		explicit ShaderManager(InstanceKey) {}
 
 	private:
 

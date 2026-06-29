@@ -16,7 +16,7 @@ namespace EngineLayer {
 
 	ShaderManager& ShaderManager::GetInstance() {
 		if (sInstance_ == nullptr) {
-			sInstance_ = std::make_unique<ShaderManager>(ConstructorKey());
+			sInstance_ = std::make_unique<ShaderManager>(InstanceKey());
 		}
 		return *sInstance_;
 	}
