@@ -46,7 +46,7 @@ namespace EngineLayer {
 
 		SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
-		GrayscaleResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(GrayFunction));
+		GrayscaleResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(GrayFunction));
 		GrayscaleResource_->Map(0, nullptr, reinterpret_cast<void**>(&grayFunction_));
 
 		grayFunction_->isSepia = false;

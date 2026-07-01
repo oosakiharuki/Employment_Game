@@ -277,6 +277,60 @@
     <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Player\Weapon\Umbrella">
       <UniqueIdentifier>{61c423b1-51a0-4bc8-8443-5ecdf500f27f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\math\collision">
+      <UniqueIdentifier>{337d8688-f26c-465b-bf35-1cc79ae53b5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\math\ease">
+      <UniqueIdentifier>{1cea31b7-e4c7-41e3-805d-2022158422c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\math\lerp">
+      <UniqueIdentifier>{71d4a4a7-e061-411f-92da-34b7338ca42c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\math\modelData">
+      <UniqueIdentifier>{67011ed9-73b2-4daa-803d-9c35c35fc252}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\math\vector">
+      <UniqueIdentifier>{80905786-61c3-4c26-8bf2-d04e330751a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\math\matrix">
+      <UniqueIdentifier>{b05224ba-4d2d-4ec4-b798-b0dc1858d4aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\base\Shader">
+      <UniqueIdentifier>{267cd51f-376f-4d54-a21b-0b7b6f9feee2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\base\Descriptor">
+      <UniqueIdentifier>{0ecb81a9-8b1a-498b-8927-c918bc25a1ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3d\shadow">
+      <UniqueIdentifier>{192b1587-6a8c-4b2d-a06f-1c55ca620f88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\3d\shadow">
+      <UniqueIdentifier>{c5cbe1d0-fe18-4d92-8868-f44e99af163d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\base\Descriptor">
+      <UniqueIdentifier>{022eb66d-ebe3-421e-9622-149f1d92a4c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\base\Shader">
+      <UniqueIdentifier>{a16a28b6-b9fd-4164-a639-93df40a23cc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\math\collision">
+      <UniqueIdentifier>{3e435aac-6a76-47a2-8f25-6aac8f06588f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\math\ease">
+      <UniqueIdentifier>{c7258eb9-a385-4be4-a771-3f3517a8f032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\math\lerp">
+      <UniqueIdentifier>{0f5e0878-e755-4d80-94e1-70ba8571fa6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\math\matrix">
+      <UniqueIdentifier>{ea5c54aa-43ee-4cc7-a5f0-64bde7a7ee3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\math\modelData">
+      <UniqueIdentifier>{9f9c6ad2-71de-45b0-afef-f8fe734d998e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\math\vector">
+      <UniqueIdentifier>{6e9f41b0-4b9c-4f05-abfb-426ce316c8a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\Sprite.cpp">
@@ -296,9 +350,6 @@
     </ClCompile>
     <ClCompile Include="Engine\math\MyMath.cpp">
       <Filter>ソース ファイル\Engine\math</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\SrvManager.cpp">
-      <Filter>ソース ファイル\Engine\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
       <Filter>ソース ファイル\Engine\2d</Filter>
@@ -380,9 +431,6 @@
     </ClCompile>
     <ClCompile Include="GameProgram\System\UIManager.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\Pipeline.cpp">
-      <Filter>ソース ファイル\Engine\base</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Boss\Boss.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Boss</Filter>
@@ -600,35 +648,41 @@
     <ClCompile Include="GameProgram\System\TimeScale.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\math\ease\Easing.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\math\matrix\MatrixMath.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\math\collision\CollisionMath.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\math\modelData\AnimationMath.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\math\lerp\Lerp.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Engine\math\collision</Filter>
     </ClCompile>
     <ClCompile Include="Engine\math\modelData\LengthMath.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Engine\math\modelData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\math\modelData\AnimationMath.cpp">
+      <Filter>ソース ファイル\Engine\math\modelData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\math\lerp\Lerp.cpp">
+      <Filter>ソース ファイル\Engine\math\lerp</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\math\ease\Easing.cpp">
+      <Filter>ソース ファイル\Engine\math\ease</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\math\matrix\MatrixMath.cpp">
+      <Filter>ソース ファイル\Engine\math\matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\DirectX\D3D12CreateResourceManager.cpp">
+      <Filter>ソース ファイル\Engine\base\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Shader\ShaderManager.cpp">
+      <Filter>ソース ファイル\Engine\base\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Descriptor\SrvManager.cpp">
+      <Filter>ソース ファイル\Engine\base\Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Descriptor\RtvManager.cpp">
+      <Filter>ソース ファイル\Engine\base\Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Shader\Pipeline.cpp">
+      <Filter>ソース ファイル\Engine\base\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\shadow\ShadowManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\RtvManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\ShaderManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\D3D12ResourceManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Engine\3d\shadow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -674,31 +728,13 @@
     <ClInclude Include="Engine\audio\Audio.h">
       <Filter>ヘッダー ファイル\Engine\audio</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\SrvManager.h">
-      <Filter>ヘッダー ファイル\Engine\base</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\base\WinApp.h">
       <Filter>ヘッダー ファイル\Engine\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\input\Input.h">
       <Filter>ヘッダー ファイル\Engine\input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\matrix\Matrix4x4.h">
-      <Filter>ヘッダー ファイル\Engine\math</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\math\MyMath.h">
-      <Filter>ヘッダー ファイル\Engine\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\vector\Transform.h">
-      <Filter>ヘッダー ファイル\Engine\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\vector\Vector2.h">
-      <Filter>ヘッダー ファイル\Engine\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\vector\Vector3.h">
-      <Filter>ヘッダー ファイル\Engine\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\vector\Vector4.h">
       <Filter>ヘッダー ファイル\Engine\math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\PostEffectManager.h">
@@ -748,9 +784,6 @@
     </ClInclude>
     <ClInclude Include="GameProgram\System\Reaction.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\Pipeline.h">
-      <Filter>ヘッダー ファイル\Engine\base</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Boss\Boss.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Boss</Filter>
@@ -965,50 +998,71 @@
     <ClInclude Include="GameProgram\System\TimeScale.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\ease\Easing.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\3d\shadow\ShadowManager.h">
+      <Filter>ヘッダー ファイル\Engine\3d\shadow</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\matrix\MatrixMath.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\base\Shader\Pipeline.h">
+      <Filter>ヘッダー ファイル\Engine\base\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\collision\CollisionMath.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\base\Shader\ShaderManager.h">
+      <Filter>ヘッダー ファイル\Engine\base\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Descriptor\RtvManager.h">
+      <Filter>ヘッダー ファイル\Engine\base\Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Descriptor\SrvManager.h">
+      <Filter>ヘッダー ファイル\Engine\base\Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\DirectX\D3D12CreateResourceManager.h">
+      <Filter>ヘッダー ファイル\Engine\base\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\vector\Vector4.h">
+      <Filter>ヘッダー ファイル\Engine\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\vector\Vector3.h">
+      <Filter>ヘッダー ファイル\Engine\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\vector\Vector2.h">
+      <Filter>ヘッダー ファイル\Engine\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\vector\Transform.h">
+      <Filter>ヘッダー ファイル\Engine\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\matrix\Matrix4x4.h">
+      <Filter>ヘッダー ファイル\Engine\math\matrix</Filter>
     </ClInclude>
     <ClInclude Include="Engine\math\collision\AABB.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\modelData\AnimationMath.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\vector\Quaternion.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Engine\math\collision</Filter>
     </ClInclude>
     <ClInclude Include="Engine\math\lerp\Lerp.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Engine\math\lerp</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\modelData\Lighting.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\modelData\ModelData.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\modelData\LengthMath.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\math\vector\Quaternion.h">
+      <Filter>ヘッダー ファイル\Engine\math\vector</Filter>
     </ClInclude>
     <ClInclude Include="Engine\math\vector\Segment.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Engine\math\vector</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\shadow\ShadowManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\math\modelData\AnimationMath.h">
+      <Filter>ヘッダー ファイル\Engine\math\modelData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\RtvManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\math\modelData\LengthMath.h">
+      <Filter>ヘッダー ファイル\Engine\math\modelData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\ShaderManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\math\modelData\Lighting.h">
+      <Filter>ヘッダー ファイル\Engine\math\modelData</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\D3D12ResourceManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\math\modelData\ModelData.h">
+      <Filter>ヘッダー ファイル\Engine\math\modelData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\collision\CollisionMath.h">
+      <Filter>ヘッダー ファイル\Engine\math\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\ease\Easing.h">
+      <Filter>ヘッダー ファイル\Engine\math\ease</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\matrix\MatrixMath.h">
+      <Filter>ヘッダー ファイル\Engine\math\matrix</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

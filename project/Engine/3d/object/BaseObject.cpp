@@ -27,7 +27,7 @@ namespace EngineLayer {
 	}
 
 	void BaseObject::InitCamera() {
-		cameraResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(CameraForGPU));
+		cameraResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(CameraForGPU));
 		cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraData_));
 
 		cameraData_->worldPosition = { 0,0,0 };
@@ -44,7 +44,7 @@ namespace EngineLayer {
 
 	void BaseObject::CreateDirectionalLight() {
 		//ライト用のリソース
-		directionalLightResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(DirectionalLight));
+		directionalLightResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(DirectionalLight));
 		//書き込むためのアドレス
 		directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
 		//色の設定
@@ -56,7 +56,7 @@ namespace EngineLayer {
 
 	void BaseObject::CreatePointLight() {
 		//ライト用のリソース
-		pointLightResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(PointLight));
+		pointLightResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(PointLight));
 		//書き込むためのアドレス
 		pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
 		//_
@@ -72,7 +72,7 @@ namespace EngineLayer {
 
 	void BaseObject::CreateSpotLight() {
 		//ライト用のリソース
-		spotLightResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(SpotLight));
+		spotLightResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(SpotLight));
 		//書き込むためのアドレス
 		spotLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&spotLightData_));
 		//設定

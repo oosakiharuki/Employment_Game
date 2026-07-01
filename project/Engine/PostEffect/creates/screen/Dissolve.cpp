@@ -69,7 +69,7 @@ namespace EngineLayer {
 		textureFileName_ = "resource/Sprite/noise0.png";
 		TextureManager::GetInstance().LoadTexture(textureFileName_);
 
-		dissolveResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(Threshold));
+		dissolveResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(Threshold));
 		dissolveResource_->Map(0, nullptr, reinterpret_cast<void**>(&threshold_));
 
 		threshold_->degree = 0.5f;

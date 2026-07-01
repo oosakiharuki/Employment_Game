@@ -249,7 +249,7 @@ namespace EngineLayer {
 			RtvManager::GetInstance().CreateRTV(swapChainResources_[i]);
 		}
 
-		renderTextureResource_ = D3D12ResourceManager::GetInstance().CreateRenderTextureResource(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, kRenderTargetClearValue);
+		renderTextureResource_ = D3D12CreateResourceManager::GetInstance().CreateRenderTextureResource(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, kRenderTargetClearValue);
 
 		//レンダーテクスチャのRTVを作成
 		RtvManager::GetInstance().CreateRTV(renderTextureResource_);
@@ -262,7 +262,7 @@ namespace EngineLayer {
 		dsvDescriptorHeap_ = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
 
 		//深度ステンシルリソースの作成
-		depthStencilResource_ = D3D12ResourceManager::GetInstance().CreateDepthStencilResource();
+		depthStencilResource_ = D3D12CreateResourceManager::GetInstance().CreateDepthStencilResource();
 
 		//DSV生成
 		D3D12_DEPTH_STENCIL_VIEW_DESC dscDesc{};
@@ -368,7 +368,6 @@ namespace EngineLayer {
 		if (fence_->GetCompletedValue() != fenceValue_) {
 			fence_->SetEventOnCompletion(fenceValue_, fenceEvent_);
 			WaitForSingleObject(fenceEvent_, INFINITE);
-			CloseHandle(fenceEvent_);
 		}
 		// FPS
 		UpdateFixFPS();
@@ -446,6 +445,7 @@ namespace EngineLayer {
 	}
 
 	void DirectXCommon::Finalize() {
+		CloseHandle(fenceEvent_);
 		sInstance_.reset();
 	}
 }

@@ -12,7 +12,7 @@
 #include <dxcapi.h>
 
 #include <chrono>
-#include "D3D12ResourceManager.h"
+#include "D3D12CreateResourceManager.h"
 
 /// <summary>
 /// エンジン層

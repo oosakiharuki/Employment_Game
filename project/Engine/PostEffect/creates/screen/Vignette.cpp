@@ -47,7 +47,7 @@ namespace EngineLayer {
 		SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
 
-		vignetteResource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(VignetteFunction));
+		vignetteResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(VignetteFunction));
 		vignetteResource_->Map(0, nullptr, reinterpret_cast<void**>(&vignetteFunction_));
 
 		vignetteFunction_->luminance = 16;

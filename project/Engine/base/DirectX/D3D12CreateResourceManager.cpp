@@ -1,4 +1,4 @@
-#include "D3D12ResourceManager.h"
+#include "D3D12CreateResourceManager.h"
 #include "DirectXCommon.h"
 #include "WinApp.h"
 #include <externals/DirectXTex/d3dx12.h>
@@ -8,16 +8,16 @@
 /// </summary>
 namespace EngineLayer {
 
-	std::unique_ptr<D3D12ResourceManager>  D3D12ResourceManager::sInstance_ = nullptr;
+	std::unique_ptr<D3D12CreateResourceManager>  D3D12CreateResourceManager::sInstance_ = nullptr;
 
-	D3D12ResourceManager& D3D12ResourceManager::GetInstance() {
+	D3D12CreateResourceManager& D3D12CreateResourceManager::GetInstance() {
 		if (sInstance_ == nullptr) {
-			sInstance_ = std::make_unique<D3D12ResourceManager>(InstanceKey());
+			sInstance_ = std::make_unique<D3D12CreateResourceManager>(InstanceKey());
 		}
 		return *sInstance_;
 	}
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12ResourceManager::CreateBufferResource(size_t sizeInBytes) {
+	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12CreateResourceManager::CreateBufferResource(size_t sizeInBytes) {
 		//VertexResource
 		//頂点シェーダを作る
 		D3D12_HEAP_PROPERTIES uploadHeapProperties{};
@@ -43,7 +43,7 @@ namespace EngineLayer {
 		return vertexResource;
 	}
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12ResourceManager::CreateTextureResource(const DirectX::TexMetadata& metadata) {
+	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12CreateResourceManager::CreateTextureResource(const DirectX::TexMetadata& metadata) {
 
 		D3D12_RESOURCE_DESC resourceDesc{};
 		resourceDesc.Width = UINT(metadata.width);//幅
@@ -74,7 +74,7 @@ namespace EngineLayer {
 
 	}
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12ResourceManager::CreateDepthStencilResource() {
+	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12CreateResourceManager::CreateDepthStencilResource() {
 
 		D3D12_RESOURCE_DESC resourceDesc{};
 		resourceDesc.Width = WinApp::kClientWidth_;
@@ -114,7 +114,7 @@ namespace EngineLayer {
 	//戻り値を破棄してはならない
 	//UploadTextureData(…) ×  / ID3D12Resource* a = UploadTextureData(…) 〇
 	[[nodiscard]]
-	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12ResourceManager::UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages) {
+	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12CreateResourceManager::UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages) {
 		//中間リソース
 		std::vector<D3D12_SUBRESOURCE_DATA> subResources;
 		DirectX::PrepareUpload(DirectXCommon::GetInstance().GetDevice(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subResources);
@@ -134,7 +134,7 @@ namespace EngineLayer {
 		return intermediateResource;
 	}
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12ResourceManager::CreateRenderTextureResource(DXGI_FORMAT format, const Vector4& clearColor) {
+	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12CreateResourceManager::CreateRenderTextureResource(DXGI_FORMAT format, const Vector4& clearColor) {
 
 		D3D12_RESOURCE_DESC resourceDesc{};
 		resourceDesc.Width = WinApp::kClientWidth_;

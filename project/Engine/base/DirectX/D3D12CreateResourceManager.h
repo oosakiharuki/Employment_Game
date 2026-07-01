@@ -9,13 +9,13 @@ namespace EngineLayer {
 	/// <summary>
 	/// DirectXのリソースマネージャー
 	/// </summary>
-	class D3D12ResourceManager {
+	class D3D12CreateResourceManager {
 	public:
 		/// <summary>
 		/// インスタンス生成
 		/// </summary>
 		/// <returns></returns>
-		static D3D12ResourceManager& GetInstance();
+		static D3D12CreateResourceManager& GetInstance();
 		/// <summary>
 		/// シェーダで使用するバッファ
 		/// </summary>
@@ -56,13 +56,13 @@ namespace EngineLayer {
 		class InstanceKey {
 		private:
 			InstanceKey() = default;
-			friend class D3D12ResourceManager;
+			friend class D3D12CreateResourceManager;
 		};
-		explicit D3D12ResourceManager(InstanceKey) {}
+		explicit D3D12CreateResourceManager(InstanceKey) {}
 
 	private:
 
-		static std::unique_ptr<D3D12ResourceManager> sInstance_;
+		static std::unique_ptr<D3D12CreateResourceManager> sInstance_;
 
 	};
 }

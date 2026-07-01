@@ -33,7 +33,7 @@ namespace EngineLayer {
 
 
 	void ShadowManager::Initialize() {
-		resource_ = D3D12ResourceManager::GetInstance().CreateBufferResource(sizeof(ShadowFactory));
+		resource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(ShadowFactory));
 		resource_->Map(0,nullptr,reinterpret_cast<void**>(&shadowFactory_));
 	}
 
