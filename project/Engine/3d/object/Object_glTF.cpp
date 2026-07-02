@@ -213,7 +213,7 @@ namespace EngineLayer {
 		for (auto& i : modelData_.Data) {
 			Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource;
 			TransformationMatrix* wvpData;
-			wvpResource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
+			wvpResource = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
 			wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
 
 

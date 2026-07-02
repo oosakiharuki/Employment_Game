@@ -55,7 +55,7 @@ namespace EngineLayer {
 
 		//テクスチャ読み込み
 		particleG.modelData.materialData.textureFilePath = textureFilePath;
-		particleG.resource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(ParticleForGPU) * particleG.kNumInstance);
+		particleG.resource = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(ParticleForGPU) * particleG.kNumInstance);
 
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 		srvDesc.Format = DXGI_FORMAT_UNKNOWN;

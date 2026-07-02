@@ -27,7 +27,7 @@ namespace EngineLayer {
 	}
 
 	void Grayscale::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Grayscale.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Grayscale.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -46,7 +46,7 @@ namespace EngineLayer {
 
 		SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
-		GrayscaleResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(GrayFunction));
+		GrayscaleResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(GrayFunction));
 		GrayscaleResource_->Map(0, nullptr, reinterpret_cast<void**>(&grayFunction_));
 
 		grayFunction_->isSepia = false;

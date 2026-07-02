@@ -1,5 +1,6 @@
 #pragma once
 #include "DirectXCommon.h"
+#include "ShaderManager.h"
 
 /// <summary>
 /// エンジン層

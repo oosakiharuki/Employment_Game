@@ -65,7 +65,7 @@ namespace EngineLayer {
 		D3D12_VERTEX_BUFFER_VIEW vertexB{};
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexR;
 
-		vertexR = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
+		vertexR = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
 
 		vertexB.BufferLocation = vertexR->GetGPUVirtualAddress();
 		vertexB.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
@@ -82,7 +82,7 @@ namespace EngineLayer {
 
 		//マテリアル用のリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
-		materialResource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
+		materialResource = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(Material));
 		//書き込むためのアドレス
 		materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定
@@ -111,7 +111,7 @@ namespace EngineLayer {
 		Microsoft::WRL::ComPtr<ID3D12Resource> indexR;
 		D3D12_INDEX_BUFFER_VIEW indexB{};
 
-		indexR = DirectXCommon::GetInstance().CreateBufferResource(sizeof(uint32_t) * modelData.indices.size());
+		indexR = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(uint32_t) * modelData.indices.size());
 
 		indexB.BufferLocation = indexR->GetGPUVirtualAddress();
 		indexB.SizeInBytes = UINT(sizeof(uint32_t) * modelData.indices.size());
@@ -379,7 +379,7 @@ namespace EngineLayer {
 
 		///t0
 		// paletteResource確保
-		skinCluster.paletteResource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(WellForGPU) * skeleton.joints.size());
+		skinCluster.paletteResource = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(WellForGPU) * skeleton.joints.size());
 		WellForGPU* mappedPalette = nullptr;
 		skinCluster.paletteResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedPalette));
 		skinCluster.mappedPalette = { mappedPalette,skeleton.joints.size() };//sponのサイズ設定
@@ -408,7 +408,7 @@ namespace EngineLayer {
 			all_vertex += uint32_t(v.vertices.size());
 		}
 
-		skinCluster.influenceResource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexInfluence) * all_vertex);
+		skinCluster.influenceResource = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(VertexInfluence) * all_vertex);
 		VertexInfluence* mappedInfluence = nullptr;
 		skinCluster.influenceResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedInfluence));
 		std::memset(mappedInfluence, 0, sizeof(VertexInfluence) * all_vertex);

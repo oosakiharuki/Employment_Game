@@ -21,7 +21,7 @@ namespace EngineLayer {
 		modelData_.materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(modelData_.materialData.textureFilePath);
 
 
-		vertexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+		vertexResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 
 		vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 		vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
@@ -32,7 +32,7 @@ namespace EngineLayer {
 
 		//Model用マテリアル
 		//マテリアル用のリソース
-		materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
+		materialResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(Material));
 		//書き込むためのアドレス
 		materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定
@@ -46,14 +46,14 @@ namespace EngineLayer {
 		modelData_.materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(modelData_.materialData.textureFilePath);
 
 		this->camera_ = debugWireframes_->GetDefaultCamera();
-		wvpResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
+		wvpResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
 		wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 
 		wvpData_->World = MakeIdentity4x4();
 		wvpData_->WVP = MakeIdentity4x4();
 
 		//Phong Reflection Model
-		cameraResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(CameraForGPU));
+		cameraResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(CameraForGPU));
 		cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraData_));
 
 		cameraData_->worldPosition = { 0,0,0 };

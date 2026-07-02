@@ -144,7 +144,7 @@ namespace EngineLayer {
 
 	void Particle::InitVertex() {
 
-		vertexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+		vertexResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 
 		vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 		vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
@@ -165,7 +165,7 @@ namespace EngineLayer {
 
 	void Particle::InitMaterial() {
 		//マテリアル用のリソース
-		materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
+		materialResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(Material));
 		//書き込むためのアドレス
 		materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定

@@ -11,11 +11,8 @@
 #include <array>
 #include <dxcapi.h>
 
-#include "externals/DirectXTex/DirectXTex.h"
 #include <chrono>
-
-
-#include "Vector4.h"
+#include "D3D12CreateResourceManager.h"
 
 /// <summary>
 /// エンジン層
@@ -35,87 +32,14 @@ namespace EngineLayer {
 		/// 初期化処理
 		/// </summary>
 		void Initialize();
-		/// <summary>
-		/// ドライブ作成
-		/// </summary>
-		void Device();
-		/// <summary>
-		/// コマンド作成
-		/// </summary>
-		void Command();
-		/// <summary>
-		/// スワップチェーン作成
-		/// </summary>
-		void SwapChain();
-		/// <summary>
-		/// 深度バッファ作成
-		/// </summary>
-		void ZBuffer();
-		/// <summary>
-		/// でスクリプターヒープ作成
-		/// </summary>
-		void DescriptorHeap();
 
 		Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> CreateDescriptorHeap(
 			D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDesciptors, bool shaderVisible);
-		/// <summary>
-		/// レンダーターゲットビューの作成
-		/// </summary>
-		void RTV();
-
-
-		/// <summary>
-		/// 深度ステンシルビュー作成
-		/// </summary>
-		void DSV();
-		/// <summary>
-		/// フェンス作成
-		/// </summary>
-		void Fence();
-		/// <summary>
-		/// ビューポート作成
-		/// </summary>
-		void ViewPort();
-		/// <summary>
-		/// シザー作成
-		/// </summary>
-		void Scissor();
-		/// <summary>
-		/// DXC作成
-		/// </summary>
-		void DXC();
 		/// <summary>
 		/// setter_WinApp
 		/// </summary>
 		/// <param name="winApp"></param>
 		void SetWinApp(WinApp* winApp) { winApp_ = winApp; }
-
-		/// <summary>
-		/// コンパイルシェーダ作成
-		/// </summary>
-		/// <param name="filePath">HLSLの名前</param> 
-		/// <param name="profile">vs_6_0 or ps_6_0</param> 
-		/// <returns>コンパイルシェーダ</returns>
-		Microsoft::WRL::ComPtr <IDxcBlob> CompileShader(const std::wstring& filePath, const wchar_t* profile);
-		/// <summary>
-		/// シェーダで使用するバッファ
-		/// </summary>
-		/// <param name="sizeInBytes">バイトサイズ</param>
-		/// <returns>出来上がった</returns>
-		Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
-		/// <summary>
-		/// シェーダで使用するバッファ(RenderTextureResourceで使用)
-		/// </summary>
-		/// <param name="metadata">メタデータ</param>
-		/// <returns>バッファ</returns>
-		Microsoft::WRL::ComPtr<ID3D12Resource> CreateTextureResource(const DirectX::TexMetadata& metadata);
-		/// <summary>
-		/// テクスチャデータ
-		/// </summary>
-		/// <param name="texture">テクスチャ名</param>
-		/// <param name="mipImages">ミップマップ</param>
-		/// <returns>テクスチャデータリソースを作成</returns>
-		Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages);
 
 		/// <summary>
 		/// 描画バリア開始
@@ -137,11 +61,6 @@ namespace EngineLayer {
 		/// <returns>現在のコマンドリスト</returns>
 		ID3D12GraphicsCommandList* GetCommandList() const { return commandList_.Get(); }
 		/// <summary>
-		/// getter_DSVのハンドル
-		/// </summary>
-		/// <returns>使用しているDepthStencilViewのハンドル</returns>
-		D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle() const { return dsvHandle_; }
-		/// <summary>
 		/// getter_fenceEvent
 		/// </summary>
 		/// <returns>フェンス</returns>
@@ -152,13 +71,6 @@ namespace EngineLayer {
 		/// <returns>バッファカウント</returns>
 		size_t GetSwapChainResourceNum() const { return swapChainDesc_.BufferCount; }
 
-		/// <summary>
-		/// RTVのリソース作成(device,width,heightは省略)
-		/// </summary>
-		/// <param name="format">フォーマット</param>
-		/// <param name="clearColor">clearした時の色</param>
-		/// <returns>出来上がったRTVのリソース</returns>
-		Microsoft::WRL::ComPtr<ID3D12Resource> CreateRenderTextureResource(DXGI_FORMAT format, const Vector4& clearColor);
 		/// <summary>
 		/// getter_RTVのリソース
 		/// </summary>
@@ -188,6 +100,10 @@ namespace EngineLayer {
 	private:
 
 		/// <summary>
+		/// デバイス初期化処理
+		/// </summary>
+		void Device();
+		/// <summary>
 		/// ファクトリー生成
 		/// </summary>
 		void Factory();
@@ -203,12 +119,69 @@ namespace EngineLayer {
 		/// エラー処理でストップ
 		/// </summary>
 		void ErrorStop();
+		/// <summary>
+		/// コマンド作成
+		/// </summary>
+		void Command();
+		/// <summary>
+		/// スワップチェーン作成
+		/// </summary>
+		void SwapChain();
+		/// <summary>
+		/// レンダーターゲットビューの作成
+		/// </summary>
+		void RTV();
+		/// <summary>
+		/// 深度ステンシルビュー作成
+		/// </summary>
+		void DSV();
+		/// <summary>
+		/// フェンス作成
+		/// </summary>
+		void Fence();
+		/// <summary>
+		/// ビューポート作成
+		/// </summary>
+		void ViewPort();
+		/// <summary>
+		/// シザー作成
+		/// </summary>
+		void Scissor();
+
+
+		/// <summary>
+		/// バリア設定
+		/// </summary>
+		/// <param name="resource">バリアを貼る対象のリソース</param>
+		/// <param name="stateBefore">前のリソースステート</param>
+		/// <param name="stateAfter">後のリソースステート</param>
+		void SetBarrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES stateBefore, D3D12_RESOURCE_STATES stateAfter);
+
+		/// <summary>
+		/// 共有描画処理
+		/// </summary>
+		/// <param name="handleNum">CPUハンドルの番号</param>
+		/// <param name="color">クリアカラー</param>
+		void DrawCommon(uint32_t handleNum, float color[]);
+
+		//Fix = 固定
+		
+		/// <summary>
+		/// FPS値の現在の時間
+		/// </summary>
+		void InitializeFixFPS();
+		/// <summary>
+		/// FPSの更新
+		/// </summary>
+		void UpdateFixFPS();
+
 
 		Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter = nullptr;
 
 		//デバイス
 		Microsoft::WRL::ComPtr<ID3D12Device> device_;
 		Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory_;
+
 
 		///コマンド-----------------
 
@@ -249,61 +222,13 @@ namespace EngineLayer {
 		D3D12_RECT scissorRect_{};
 
 
-		//DXC
-		Microsoft::WRL::ComPtr <IDxcUtils> dxcUtils_ = nullptr;
-		Microsoft::WRL::ComPtr <IDxcCompiler3> dxcCompiler_ = nullptr;
-		Microsoft::WRL::ComPtr <IDxcIncludeHandler> includeHandler_ = nullptr;
-
-		/// <summary>
-		/// HLSLを読み取る
-		/// </summary>
-		/// <param name="filePath">HLSLパス</param>
-		/// <param name="profile">プロファイル</param>
-		void LoadHLSL(const std::wstring& filePath, const wchar_t* profile);
-		/// <summary>
-		/// 警告エラー
-		/// </summary>
-		void CompileError();
-		/// <summary>
-		/// コンパイルが完了した
-		/// </summary>
-		/// <param name="filePath">HSLSパス</param>
-		/// <param name="profile">プロファイル</param>
-		void CompileSuccess(const std::wstring& filePath, const wchar_t* profile);
-
-		Microsoft::WRL::ComPtr<IDxcResult> shaderResult = nullptr;
-		Microsoft::WRL::ComPtr<IDxcBlob> shaderBlob = nullptr;
-
-		/// <summary>
-		/// バリア設定
-		/// </summary>
-		/// <param name="resource">バリアを貼る対象のリソース</param>
-		/// <param name="stateBefore">前のリソースステート</param>
-		/// <param name="stateAfter">後のリソースステート</param>
-		void SetBarrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES stateBefore, D3D12_RESOURCE_STATES stateAfter);
-
-		/// <summary>
-		/// 共有描画処理
-		/// </summary>
-		/// <param name="handleNum">CPUハンドルの番号</param>
-		/// <param name="color">クリアカラー</param>
-		void DrawCommon(uint32_t handleNum, float color[]);
-
-		//Update
-
-
 		Microsoft::WRL::ComPtr <ID3D12Fence> fence_ = nullptr;
 		uint64_t fenceValue_ = 0;
 		HANDLE fenceEvent_;
 
-		D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle_;
-
 		//TransitionBarrierの設定
 		D3D12_RESOURCE_BARRIER barrier_{};
 
-		//Fix = 固定
-		void InitializeFixFPS();
-		void UpdateFixFPS();
 		//逆行しないタイマー
 		std::chrono::steady_clock::time_point reference_;
 
@@ -315,6 +240,6 @@ namespace EngineLayer {
 		//書き込み可能なテクスチャ レンダーテクスチャ
 		Microsoft::WRL::ComPtr<ID3D12Resource> renderTextureResource_;
 
-		D3D12_CLEAR_VALUE clearValue_;
+		const Vector4 kRenderTargetClearValue{ 0.5f,0.5f,0.5f,1.0f };//赤色
 	};
 }

@@ -49,7 +49,7 @@ namespace EngineLayer {
 	}
 
 	void DepthBasedOutline::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/DepthBasedOutline.PS.hlsl", L"ps_6_0");//ココのみ変化させる
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/DepthBasedOutline.PS.hlsl", L"ps_6_0");//ココのみ変化させる
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -79,7 +79,7 @@ namespace EngineLayer {
 
 		//Model用マテリアル
 		//マテリアル用のリソース
-		materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(DepthOutlineFunction));
+		materialResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(DepthOutlineFunction));
 		//書き込むためのアドレス
 		materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&depthOutlineFunction_));
 		//色の設定

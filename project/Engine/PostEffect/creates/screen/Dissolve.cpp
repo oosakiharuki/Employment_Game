@@ -32,7 +32,7 @@ namespace EngineLayer {
 	}
 
 	void Dissolve::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Dissolve.PS.hlsl", L"ps_6_0");//ココのみ変化させる
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Dissolve.PS.hlsl", L"ps_6_0");//ココのみ変化させる
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -69,7 +69,7 @@ namespace EngineLayer {
 		textureFileName_ = "resource/Sprite/noise0.png";
 		TextureManager::GetInstance().LoadTexture(textureFileName_);
 
-		dissolveResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Threshold));
+		dissolveResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(Threshold));
 		dissolveResource_->Map(0, nullptr, reinterpret_cast<void**>(&threshold_));
 
 		threshold_->degree = 0.5f;
