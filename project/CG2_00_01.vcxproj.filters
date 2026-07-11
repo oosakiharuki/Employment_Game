@@ -100,9 +100,6 @@
     <Filter Include="ヘッダー ファイル\GameProgram\System">
       <UniqueIdentifier>{59884d0f-e430-47f8-be48-8ef35d8ea387}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GameProgram\Collsion">
-      <UniqueIdentifier>{a22a70f0-37ea-4c15-9a1e-03fee3d2eaa6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\GameProgram\StageObjects">
       <UniqueIdentifier>{e7200600-3803-4831-a1a7-5b8eee728d58}</UniqueIdentifier>
     </Filter>
@@ -331,6 +328,9 @@
     <Filter Include="ヘッダー ファイル\Engine\math\vector">
       <UniqueIdentifier>{6e9f41b0-4b9c-4f05-abfb-426ce316c8a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameProgram\Collision">
+      <UniqueIdentifier>{a22a70f0-37ea-4c15-9a1e-03fee3d2eaa6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\Sprite.cpp">
@@ -421,7 +421,7 @@
       <Filter>ソース ファイル\Engine\scene</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Collision\CollisionManager.cpp">
-      <Filter>ソース ファイル\GameProgram\Collsion</Filter>
+      <Filter>ソース ファイル\GameProgram\Collision</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\System\UseEveryOne.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
@@ -457,7 +457,7 @@
       <Filter>ソース ファイル\GameProgram\GameActor</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Collision\CollisionSource.cpp">
-      <Filter>ソース ファイル\GameProgram\Collsion</Filter>
+      <Filter>ソース ファイル\GameProgram\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\camera\Camera.cpp">
       <Filter>ソース ファイル\Engine\3d\camera</Filter>
@@ -526,7 +526,7 @@
       <Filter>ソース ファイル\Engine\PostEffect\creates</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Collision\CollisionUtility.cpp">
-      <Filter>ソース ファイル\GameProgram\Collsion</Filter>
+      <Filter>ソース ファイル\GameProgram\Collision</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\CameraControl\CameraControl.cpp">
       <Filter>ソース ファイル\GameProgram\CameraControl</Filter>
@@ -1149,6 +1149,8 @@
     <FxCompile Include="resource\shaders\Wireframe.PS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="resource\shaders\Shadow.PS.hlsl" />
+    <FxCompile Include="resource\shaders\Shadow.PS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
