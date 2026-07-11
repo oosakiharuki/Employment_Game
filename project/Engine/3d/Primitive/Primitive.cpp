@@ -408,29 +408,6 @@ namespace Primitive {
 			modelData.vertices.push_back(vertexData3);
 			modelData.vertices.push_back(vertexData2);
 			modelData.vertices.push_back(vertexData6);
-
-
-
-			//VertexData vertexData1, vertexData2, vertexData3;
-
-			//vertexData1.position = { -sin * kTopRadius,0.0f, cos * kTopRadius,1.0f };
-			//vertexData1.texcoord = { u,0.0f };
-			//vertexData1.normal = { -sin,0.0f,cos };
-
-			//vertexData2.position = {  0.0f,kHeight, 0.0f,1.0f };
-			//vertexData2.texcoord = { uNext,0.0f };
-			//vertexData2.normal = { -sinNext,0.0f,cosNext };
-
-			//vertexData3.position = { -sinNext * kBottomRadius,0.0f, cosNext * kBottomRadius,1.0f };
-			//vertexData3.texcoord = { u,1.0f };
-			//vertexData3.normal = { -sinNext,0.0f,cosNext };
-
-
-			//modelData.vertices.push_back(vertexData1);
-			//modelData.vertices.push_back(vertexData2);
-			//modelData.vertices.push_back(vertexData3);
-
-
 		}
 
 		return modelData;

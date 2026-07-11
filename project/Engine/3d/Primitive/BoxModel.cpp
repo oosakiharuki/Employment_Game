@@ -33,10 +33,10 @@ namespace EngineLayer {
 		//書き込むためのアドレス
 		materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定
-		materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		materialData_->color = color_;
 		materialData_->enableLighting = false;
 		materialData_->uvTransform = MakeIdentity4x4();
-		materialData_->shininess = 70;
+		materialData_->shininess = kShininess_;
 
 		//テクスチャ読み込み
 		TextureManager::GetInstance().LoadTexture(modelData_.materialData.textureFilePath);
@@ -62,7 +62,6 @@ namespace EngineLayer {
 		}
 
 		wvpData_->World = matWorld;
-		//wvpData->World = worldMatrix;
 		wvpData_->WVP = WorldViewProjectionMatrix;
 
 		materialData_->color = color_;

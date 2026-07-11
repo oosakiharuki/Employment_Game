@@ -36,10 +36,10 @@ namespace EngineLayer {
 		//書き込むためのアドレス
 		materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定
-		materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		materialData_->color = color_;
 		materialData_->enableLighting = false;
 		materialData_->uvTransform = MakeIdentity4x4();
-		materialData_->shininess = 70;
+		materialData_->shininess = kShininess_;
 
 		//テクスチャ読み込み
 		TextureManager::GetInstance().LoadTexture(modelData_.materialData.textureFilePath);
@@ -60,19 +60,18 @@ namespace EngineLayer {
 
 	}
 
-	void SphereModel::Update(const Matrix4x4& matworld) {
+	void SphereModel::Update(const Matrix4x4& matWorld) {
 
 		Matrix4x4 WorldViewProjectionMatrix;
 		if (camera_) {
 			Matrix4x4 projectionMatrix = camera_->GetViewProjectionMatrix();
-			WorldViewProjectionMatrix = matworld * projectionMatrix;
+			WorldViewProjectionMatrix = matWorld * projectionMatrix;
 		}
 		else {
-			WorldViewProjectionMatrix = matworld;
+			WorldViewProjectionMatrix = matWorld;
 		}
 
-		wvpData_->World = matworld;
-		//wvpData->World = worldMatrix;
+		wvpData_->World = matWorld;
 		wvpData_->WVP = WorldViewProjectionMatrix;
 
 		materialData_->color = color_;

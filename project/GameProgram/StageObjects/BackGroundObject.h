@@ -21,11 +21,9 @@ public:
 	void Draw();
 
 private:
-
+	//背景オブジェクト
 	std::unique_ptr<EngineLayer::Object_glTF> object_ = nullptr;
-	EngineLayer::WorldTransform wt_;
-	Transform transform_{};
-
+	//大きさ
 	const float kSize_ = 1.0f;
 };
 

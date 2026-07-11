@@ -65,10 +65,10 @@ namespace EngineLayer {
 		//書き込むためのアドレス
 		materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定
-		materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		materialData_->color = kInitColor_;
 		materialData_->enableLighting = true;
 		materialData_->uvTransform = modelData.materialData.uvTransform;
-		materialData_->shininess = 70;
+		materialData_->shininess = kShininess_;
 
 		//vector
 		materialResources_.push_back(materialResource);
@@ -136,7 +136,6 @@ namespace EngineLayer {
 				s >> textureFilename;
 
 				//テクスチャUVのトランスフォーム
-				//aiUVTransform uvTransform;
 				materialData.uvTransform = MakeIdentity4x4();//通常行列
 				//マッピング(位置)
 				if (textureFilename == "-o") {

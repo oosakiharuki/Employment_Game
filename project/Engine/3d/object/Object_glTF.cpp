@@ -59,7 +59,7 @@ namespace EngineLayer {
 			}
 		}
 
-		//directionalLightData_->direction = Normalize(directionalLightData_->direction);
+		directionalLightData_->direction = Normalize(directionalLightData_->direction);
 	}
 
 	void Object_glTF::Update() {
@@ -194,10 +194,11 @@ namespace EngineLayer {
 		model_->ResetMeshCount();
 
 #ifdef _DEBUG
+		//ワイヤーフレーム風描画
 		DebugWireframes::GetInstance().Command();
-
+		//骨組みの描画
 		for (auto it : debugSpheres_) {
-			//it->Draw();
+			it->Draw();
 		}
 
 		GLTFCommon::GetInstance().Command();

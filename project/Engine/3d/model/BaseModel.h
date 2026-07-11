@@ -69,5 +69,9 @@ namespace EngineLayer {
 		Material* materialData_ = nullptr;
 
 		MyMath::ModelDataMulti modelData_;
+
+		//マテリアルデータ初期値
+		const Vector4 kInitColor_ = { 1.0f,1.0f,1.0f,1.0f };
+		const float kShininess_ = 70.0f;
 	};
 }

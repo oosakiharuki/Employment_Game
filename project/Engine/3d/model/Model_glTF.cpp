@@ -91,12 +91,12 @@ namespace EngineLayer {
 			materialData_->color = modelData.materialData.materialColor;
 		}
 		else {
-			materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+			materialData_->color = kInitColor_;
 		}
 		materialData_->enableLighting = true;
 		materialData_->uvTransform = modelData.materialData.uvTransform;
 
-		materialData_->shininess = 70;
+		materialData_->shininess = kShininess_;
 		materialData_->environmentCoefficient = 0.0f;
 
 		materialResources_.push_back(materialResource);
@@ -127,7 +127,6 @@ namespace EngineLayer {
 
 	void Model_glTF::Draw() {
 		//objファイルに元々あったテクスチャ
-		//modelData_ = InitialData_;
 		vbvs_[0] = vertexBufferView_[multiMeshCount_];
 
 

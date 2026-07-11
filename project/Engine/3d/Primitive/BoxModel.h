@@ -59,5 +59,7 @@ namespace EngineLayer {
 		D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 
 		Vector4 color_ = { 1,1,1,1 };
+
+		const float kShininess_ = 70.0f;
 	};
 }
