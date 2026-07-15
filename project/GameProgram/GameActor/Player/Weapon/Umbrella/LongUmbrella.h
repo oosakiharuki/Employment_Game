@@ -36,8 +36,9 @@ private:
 	const float kBulletSpeed_ = 1.0f;//弾丸の前方向の速さ
 	const uint32_t kBulletPower_ = 6;//弾丸の攻撃力
 
-	const std::string& kChargeSoundName_ = "resource/Sound/playerChargeFire.mp3";
+	//SE
+	EngineLayer::SoundData chargeSound_;
 
-
+	//パーティクル名
 	const std::string& kChargeParticle_ = "longUmbrella_charge";
 };
