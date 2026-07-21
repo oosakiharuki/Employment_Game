@@ -104,8 +104,6 @@ void MyGame::Draw() {
 
 void MyGame::Finalize() {
 	FadeScreen::GetInstance().Finalize();
-	EngineLayer::Audio::GetInstance().Finalize();
-	EngineLayer::SceneManager::GetInstance().Finalize();
 	NextStageSave::GetInstance().Finalize();
 	CollisionManager::GetInstance().Finalize();
 	UIManager::GetInstance().Finalize();

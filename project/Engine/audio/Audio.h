@@ -43,7 +43,17 @@ namespace EngineLayer {
 		//バッファ
 		std::vector<BYTE> buffer;
 		//ソースボイス
-		IXAudio2SourceVoice* pSourceVoice = nullptr;
+		IXAudio2SourceVoice* pSourceVoice = nullptr;	
+
+		/// <summary>
+		/// SoundData解放処理
+		/// </summary>
+		~SoundData() {
+			//nullでないなら
+			if (pSourceVoice != nullptr) {
+				pSourceVoice->Stop(); //なり続けないように音源を止める
+			}
+		}
 	};
 	/// <summary>
 	/// サウンド
@@ -80,13 +90,6 @@ namespace EngineLayer {
 		void SoundPlayWave(SoundData& soundDataName, float volume, bool isLoop = false);
 
 		/// <summary>
-		/// 音声はすでに鳴っているか
-		/// </summary>
-		/// <param name="soundDataName"></param>
-		/// <returns></returns>
-		bool IsPlayingSound(SoundData& soundDataName);
-
-		/// <summary>
 		/// 音声を停止
 		/// </summary>
 		/// <param name="soundDataName">止めたい音声データ</param>
@@ -99,6 +102,13 @@ namespace EngineLayer {
 		void ControlVolume(SoundData& soundDataName, float volume);
 
 	private:
+
+		/// <summary>
+		/// 音声はすでに鳴っているか
+		/// </summary>
+		/// <param name="soundDataName"></param>
+		/// <returns></returns>
+		bool IsPlayingSound(SoundData& soundDataName);
 
 		/// <summary>
 		/// 音声ファイルを読み取る

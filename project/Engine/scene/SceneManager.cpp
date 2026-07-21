@@ -45,7 +45,7 @@ namespace EngineLayer {
 		// シーンを変更(現在のシーンが前回のシーンと同じでない)
 		if (NextSceneChangeFlag()) {
 			if (scene_) {
-				scene_->Finalize();
+				scene_->Finalize();			
 				scene_.reset();
 			}
 			scene_ = std::move(nextScene_);

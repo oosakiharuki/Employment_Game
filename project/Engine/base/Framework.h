@@ -19,6 +19,7 @@
 
 #include "PostEffectManager.h"
 
+#include "SceneManager.h"
 #include "Audio.h"
 
 #include"DebugWireframes.h"

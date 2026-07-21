@@ -119,7 +119,9 @@ namespace EngineLayer {
 
 	void Audio::SoundPlayWave(SoundData& soundData, float volume, bool isLoop) {
 
-		InitSourceVoice(soundData);
+		IsPlayingSound(soundData);
+
+		//InitSourceVoice(soundData);
 
 		XAUDIO2_VOICE_STATE state;
 		soundData.pSourceVoice->GetState(&state);
