@@ -110,10 +110,10 @@ void Player::SettingSpriteHp(uint32_t num) {
 }
 
 void Player::InitAudio() {
-	//ダメージSE
-	damageSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/damage.mp3");
-	//ジャンプSE
-	jumpSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/jump.mp3");
+	//ダメージ
+	EngineLayer::Audio::GetInstance().LoadWave(kHitSoundName_);
+	//ジャンプ
+	EngineLayer::Audio::GetInstance().LoadWave(kJumpSoundName_);
 }
 
 void Player::ActionUpdate() {
@@ -596,7 +596,7 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		particles_[particleDamage_]->SetTranslate(transform_.translate + Normalize(hitPoint));
 		particles_[particleDamage_]->SetParticleBorn(EngineLayer::ParticleBorn::MomentMode);
 		//ダメージのSE再生
-		EngineLayer::Audio::GetInstance().SoundPlayWave(damageSound_, kVolume_);
+		EngineLayer::Audio::GetInstance().SoundPlayWave(kHitSoundName_, kVolume_);
 		InfinityTime();
 		//ノックバック(時間の三分の一ぶんまで)
 
@@ -625,7 +625,7 @@ void Player::IsFall() {
 	//一発K.O
 	hp_ = 0;
 	//ダメージSE再生
-	EngineLayer::Audio::GetInstance().SoundPlayWave(damageSound_, kVolume_);
+	EngineLayer::Audio::GetInstance().SoundPlayWave(kHitSoundName_, kVolume_);
 }
 
 void Player::KnockBackPlayer(const Vector3& Power, float TimerMax) {
@@ -691,8 +691,8 @@ void  Player::ParticleJump() {
 	particles_[particleJump_]->SetTranslate(transform_.translate + TransformNormal(kParticleWalkPoint_, wt_.GetMatWorld()));
 	particles_[particleJump_]->SetParticleBorn(EngineLayer::ParticleBorn::MomentMode);
 	//SE
-	EngineLayer::Audio::GetInstance().StopWave(jumpSound_);
-	EngineLayer::Audio::GetInstance().SoundPlayWave(jumpSound_, kVolume_);
+	EngineLayer::Audio::GetInstance().StopWave(kJumpSoundName_);
+	EngineLayer::Audio::GetInstance().SoundPlayWave(kJumpSoundName_, kVolume_);
 }
 
 void  Player::ParticleBrink() {

@@ -22,7 +22,7 @@ void LongUmbrella::Initialize() {
 	umbrellaAABB_.min = -kAABBSize_ * kDivideByTwo_;
 	umbrellaAABB_.max = kAABBSize_ * kDivideByTwo_;
 
-	chargeSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/playerChargeFire.mp3");
+	EngineLayer::Audio::GetInstance().LoadWave(kChargeSoundName_);
 
 	particles_[kChargeParticle_] = EngineLayer::ParticleManager::GetInstance().InitParticle(kChargeParticle_);
 
@@ -51,8 +51,8 @@ void LongUmbrella::Fire() {
 	chargeTimer_ = std::clamp(chargeTimer_, 0.0f, kChargeMaxTime_ + kDeltaTime_);
 
 	if (chargeTimer_ >= kChargeMaxTime_ && chargeTimer_ < kChargeMaxTime_ + kDeltaTime_) {
-		EngineLayer::Audio::GetInstance().StopWave(chargeSound_);
-		EngineLayer::Audio::GetInstance().SoundPlayWave(chargeSound_, kVolume_);
+		EngineLayer::Audio::GetInstance().StopWave(kChargeSoundName_);
+		EngineLayer::Audio::GetInstance().SoundPlayWave(kChargeSoundName_, 0.3f);
 
 		particles_[kChargeParticle_]->SetColor({ 1.0f,1.0f,0.0f,1.0f });//黄色
 	}
@@ -100,8 +100,8 @@ void LongUmbrella::PowerFire() {
 
 	//チャージ時間の半減
 	if (chargeTimer_ >= kChargeMaxTime_ && chargeTimer_ < kChargeMaxTime_ + kDeltaTime_ * 3.0f) {
-		EngineLayer::Audio::GetInstance().StopWave(chargeSound_);
-		EngineLayer::Audio::GetInstance().SoundPlayWave(chargeSound_,kVolume_);
+		EngineLayer::Audio::GetInstance().StopWave(kChargeSoundName_);
+		EngineLayer::Audio::GetInstance().SoundPlayWave(kChargeSoundName_, 0.3f);
 		
 		particles_[kChargeParticle_]->SetColor({ 1.0f,1.0f,0.0f,1.0f });//黄色
 	}

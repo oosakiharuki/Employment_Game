@@ -180,11 +180,10 @@ private:
 	/// </summary>
 	void ParrySuccess();
 
-	//SE
-	EngineLayer::SoundData umbrellaOpenSound_; //傘を開く
-	EngineLayer::SoundData fireSound_;         //発砲攻撃
-	EngineLayer::SoundData parrySuccessSound_; //パリィに成功
-	EngineLayer::SoundData parrySound_;        //パリィで跳ね返す
+	const std::string kUmbrellaOpenSoundName_ = "resource/Sound/umbrellaOpen.mp3";//傘を開く
+	const std::string kFireSoundName_ = "resource/Sound/fire.mp3";//発砲攻撃
+	const std::string kParrySuccessSoundName_ = "resource/Sound/parry.mp3";//パリィに成功
+	const std::string kParrySoundName_ = "resource/Sound/bane.mp3";//パリィで跳ね返す
 
 	//傘より少し前に出す
 	const Vector3 kParryParticleFrontPoint_ { 0.0f,0.0f,2.0f };

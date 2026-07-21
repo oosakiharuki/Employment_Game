@@ -33,13 +33,13 @@ void BaseUmbrella::Initialize() {
 	particles_[kParticleParry_] = EngineLayer::ParticleManager::GetInstance().InitParticle(kParticleParry_);
 
 	//傘を開くSE
-	umbrellaOpenSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/umbrellaOpen.mp3");
+	EngineLayer::Audio::GetInstance().LoadWave(kUmbrellaOpenSoundName_);
 	//発砲攻撃
-	fireSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/fire.mp3");
+	EngineLayer::Audio::GetInstance().LoadWave(kFireSoundName_);
 	//パリィ成功
-	parrySuccessSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/parry.mp3");
+	EngineLayer::Audio::GetInstance().LoadWave(kParrySuccessSoundName_);
 	//パリィ
-	parrySound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/bane.mp3");
+	EngineLayer::Audio::GetInstance().LoadWave(kParrySoundName_);
 }
 
 void BaseUmbrella::Update() {
@@ -99,7 +99,7 @@ void BaseUmbrella::OnCollision(CollisionSource* collision) {
 			if (parryStart_) {
 				//ヒットストップ演出
 				TimeScale::GetInstance().SetTimeScale(0.0f, 0.25f);
-				EngineLayer::Audio::GetInstance().SoundPlayWave(parrySuccessSound_,0.3f);
+				EngineLayer::Audio::GetInstance().SoundPlayWave(kParrySuccessSoundName_,0.3f);
 			}
 			parryStart_ = false;
 
@@ -129,8 +129,8 @@ void BaseUmbrella::FireCommand() {
 		Fire();//発砲攻撃
 	}
 
-	EngineLayer::Audio::GetInstance().StopWave(fireSound_);
-	EngineLayer::Audio::GetInstance().SoundPlayWave(fireSound_, kVolume_);
+	EngineLayer::Audio::GetInstance().StopWave(kFireSoundName_);
+	EngineLayer::Audio::GetInstance().SoundPlayWave(kFireSoundName_, kVolume_);
 
 }
 
@@ -147,7 +147,7 @@ void BaseUmbrella::BornBullet(const Vector3& translate, const Vector3& velocity,
 
 void BaseUmbrella::OffShield() {
 	isShield_ = false;
-	EngineLayer::Audio::GetInstance().StopWave(umbrellaOpenSound_);
+	EngineLayer::Audio::GetInstance().StopWave(kUmbrellaOpenSoundName_);
 	parryStart_ = true;
 }
 
@@ -155,7 +155,7 @@ void BaseUmbrella::ShieldMode() {
 	//既に開いている場合はスキップ
 	if (!isShield_) {
 		isParry_ = true;
-		EngineLayer::Audio::GetInstance().SoundPlayWave(umbrellaOpenSound_, kVolume_ * kTwice_);
+		EngineLayer::Audio::GetInstance().SoundPlayWave(kUmbrellaOpenSoundName_, kVolume_ * kTwice_);
 	}
 	isShield_ = true;
 
@@ -185,8 +185,8 @@ void BaseUmbrella::ParryUpdate() {
 //パリィ成功
 void BaseUmbrella::ParrySuccess() {
 	//SE
-	EngineLayer::Audio::GetInstance().StopWave(parrySound_);//パリィが続くとき一度止めてから再生させるようにする
-	EngineLayer::Audio::GetInstance().SoundPlayWave(parrySound_, kVolume_);//SE再生:パリィ
+	EngineLayer::Audio::GetInstance().StopWave(kParrySoundName_);//パリィが続くとき一度止めてから再生させるようにする
+	EngineLayer::Audio::GetInstance().SoundPlayWave(kParrySoundName_, kVolume_);//SE再生:パリィ
 	//パリィエフェクトを出す座標
 	Vector3 translate = TransformNormal(kParryParticleFrontPoint_, wt_.GetMatWorld());
 	particles_[kParticleParry_]->SetTranslate(transform_.translate + translate);//生成場所を設定

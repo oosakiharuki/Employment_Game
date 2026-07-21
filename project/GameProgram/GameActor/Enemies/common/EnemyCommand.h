@@ -116,8 +116,6 @@ public:
 	/// <returns>パーティクル攻撃の名前部分を渡す</returns>
 	const std::string& GetParticleFireName() { return particleFire_; }
 
-	void DeleteAudio();
-
 private:
 	//弾丸リスト
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
@@ -139,8 +137,8 @@ private:
 	bool isFire_ = true;
 
 	//サウンドデータの名前
-	EngineLayer::SoundData fireSound_;
-	EngineLayer::SoundData fireBeforeSound_;
+	const std::string kFireSoundName_ = "resource/Sound/enemyFire.mp3";
+	const std::string kFireBeforeSoundName_ = "resource/Sound/enemyBeforeFire.mp3";
 
 	const float kVolume_ = 0.3f;
 };

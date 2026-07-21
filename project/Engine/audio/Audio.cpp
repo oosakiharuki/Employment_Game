@@ -47,21 +47,19 @@ namespace EngineLayer {
 		result_ = MFStartup(MF_VERSION, MFSTARTUP_NOSOCKET);
 		assert(SUCCEEDED(result_));
 	}
-	
-	const SoundData& Audio::LoadWave(const std::string& filename) {
-		SoundLoadFile(filename);
-		SoundData& soundData = soundDates_[filename];
 
-		return soundData;
+	void Audio::LoadWave(const std::string& filename) {
+		//すでにある場合読み取らない
+		if (soundDates_.contains(filename)) {
+			return;
+		}
+
+
+		SoundData& soundData = soundDates_[filename];
+		soundData = SoundLoadFile(filename);
 	}
 
-
-	void Audio::SoundLoadFile(const std::string& fileName) {
-
-		//すでにある場合読み取らない
-		if (soundDates_.contains(fileName)) return;
-		SoundData& soundData = soundDates_[fileName];
-
+	SoundData Audio::SoundLoadFile(const std::string& fileName) {
 		std::wstring filePathW = ConvertString(fileName);
 
 		Microsoft::WRL::ComPtr<IMFSourceReader> pReader;
@@ -85,7 +83,11 @@ namespace EngineLayer {
 		MFCreateWaveFormatExFromMFMediaType(pOutType.Get(), &waveFormat, nullptr);
 
 		//コンテナに格納する音声データ
+		SoundData soundData = {};
 		soundData.wfex = *waveFormat;
+
+		result_ = xAudio2_.Get()->CreateSourceVoice(&soundData.pSourceVoice, &soundData.wfex);
+		assert(SUCCEEDED(result_));
 
 		//生成したWaveフォーマット解放
 		CoTaskMemFree(waveFormat);
@@ -115,11 +117,13 @@ namespace EngineLayer {
 				pBuffer->Unlock();//ロック解除
 			}
 		}
+
+		return soundData;
 	}
 
-	void Audio::SoundPlayWave(SoundData& soundData, float volume, bool isLoop) {
+	void Audio::SoundPlayWave(const std::string& soundDataName, float volume, bool isLoop) {
 
-		InitSourceVoice(soundData);
+		SoundData& soundData = soundDates_[soundDataName];
 
 		XAUDIO2_VOICE_STATE state;
 		soundData.pSourceVoice->GetState(&state);
@@ -140,11 +144,11 @@ namespace EngineLayer {
 		result_ = soundData.pSourceVoice->SetVolume(volume);//音量調節
 		result_ = soundData.pSourceVoice->SubmitSourceBuffer(&buf);
 		result_ = soundData.pSourceVoice->Start();
+
 	}
 
-	bool Audio::IsPlayingSound(SoundData& soundData) {
-
-		InitSourceVoice(soundData);
+	bool Audio::IsPlayingSound(const std::string& soundDataName) {
+		SoundData& soundData = soundDates_[soundDataName];
 
 		XAUDIO2_VOICE_STATE state;
 		soundData.pSourceVoice->GetState(&state);
@@ -165,26 +169,16 @@ namespace EngineLayer {
 		}
 	}
 
-	void Audio::StopWave(SoundData& soundData) {
-
-		InitSourceVoice(soundData);
+	void Audio::StopWave(const std::string& soundDataName) {
+		SoundData& soundData = soundDates_[soundDataName];
 
 		result_ = soundData.pSourceVoice->Stop(); //音源を止める
 		result_ = soundData.pSourceVoice->FlushSourceBuffers(); //音源のリセット
 	}
 
-	void Audio::ControlVolume(SoundData& soundData, float volume) {
-
-		InitSourceVoice(soundData);
-
-		result_ = soundData.pSourceVoice->SetVolume(volume);//音量調節
+	void Audio::ControlVolume(const std::string& soundDataName, float volume) {
+		SoundData& soundData = soundDates_[soundDataName];
+		//音量調節
+		result_ = soundData.pSourceVoice->SetVolume(volume);
 	}
-
-	void Audio::InitSourceVoice(SoundData& soundData) {
-		if (soundData.pSourceVoice != nullptr) return;
-		//ソースボイスを作成
-		result_ = xAudio2_.Get()->CreateSourceVoice(&soundData.pSourceVoice, &soundData.wfex);
-		assert(SUCCEEDED(result_));
-	}
-
 }
