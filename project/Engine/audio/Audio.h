@@ -47,6 +47,7 @@ namespace EngineLayer {
 	};
 	/// <summary>
 	/// サウンド
+	/// SoundDataを使用してください
 	/// </summary>
 	class Audio {
 	public:
@@ -68,7 +69,7 @@ namespace EngineLayer {
 		/// </summary>
 		/// <param name="filename">waveファイル名</param>
 		/// <returns>ロードされたサウンドデータ</returns>
-		void LoadWave(const std::string& filename);
+		const SoundData& LoadWave(const std::string& filename);
 
 		/// <summary>
 		/// 音声を再生
@@ -76,39 +77,42 @@ namespace EngineLayer {
 		/// <param name="soundData">流したい音声データの名前</param>
 		/// <param name="volume">音量</param>
 		/// <param name="isLoop">ループするか</param>
-		void SoundPlayWave(const std::string& soundDataName, float volume, bool isLoop = false);
+		void SoundPlayWave(SoundData& soundDataName, float volume, bool isLoop = false);
 
 		/// <summary>
 		/// 音声はすでに鳴っているか
 		/// </summary>
 		/// <param name="soundDataName"></param>
 		/// <returns></returns>
-		bool IsPlayingSound(const std::string& soundDataName);
+		bool IsPlayingSound(SoundData& soundDataName);
 
 		/// <summary>
 		/// 音声を停止
 		/// </summary>
 		/// <param name="soundDataName">止めたい音声データ</param>
-		void StopWave(const std::string& soundDataName);
+		void StopWave(SoundData& soundDataName);
 		/// <summary>
 		/// 音声のボリューム
 		/// </summary>
 		/// <param name="soundDataName">変えたい音声データ</param>
 		/// <param name="volume">音量</param>
-		void ControlVolume(const std::string& soundDataName, float volume);
+		void ControlVolume(SoundData& soundDataName, float volume);
+
 	private:
 
 		/// <summary>
 		/// 音声ファイルを読み取る
 		/// </summary>
 		/// <param name="fileName">音声ファイル名</param>
-		SoundData SoundLoadFile(const std::string& fileName);
+		void SoundLoadFile(const std::string& fileName);
 
 		/// <summary>
 		/// 音声データの解放 delete
 		/// </summary>
 		/// <param name="soundData">サウンドデータ</param>
 		void SoundUnload();
+
+		void InitSourceVoice(SoundData& soundData);
 
 		//インスタンス
 		static std::unique_ptr<Audio> sInstance_;

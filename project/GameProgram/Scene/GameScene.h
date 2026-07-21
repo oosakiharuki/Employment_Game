@@ -66,7 +66,7 @@ private:
 	std::unique_ptr<Boss> boss_;
 
 	//BGM
-	const std::string kBGMSoundName_ = "resource/sound/title.mp3";
+	EngineLayer::SoundData BGMSound_;
 	float volume_ = 0.07f;//音量調節機能
 
 	/// <summary>

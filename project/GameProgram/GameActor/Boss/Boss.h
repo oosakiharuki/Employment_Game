@@ -206,9 +206,8 @@ private:
 	//標準スピード
 	const float kStandardMoveSpeed_ = 3.0f;
 
-
-	const std::string kFireSoundName_ = "resource/Sound/fire.mp3";
-	const std::string kFireBeforeSoundName_ = "resource/Sound/enemyBeforeFire.mp3";
+	EngineLayer::SoundData fireSound_;// "resource/Sound/fire.mp3"
+	EngineLayer::SoundData fireBeforeActionSound_;//"resource/Sound/enemyBeforeFire.mp3"
 
 	const float kVolume_ = 0.25f;
 
