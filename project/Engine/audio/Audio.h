@@ -87,7 +87,7 @@ namespace EngineLayer {
 		/// <param name="soundData">流したい音声データの名前</param>
 		/// <param name="volume">音量</param>
 		/// <param name="isLoop">ループするか</param>
-		void SoundPlayWave(SoundData& soundDataName, float volume, bool isLoop = false);
+		void SoundPlayWave(SoundData&, float volume, bool isLoop = false);
 
 		/// <summary>
 		/// 音声を停止
@@ -130,6 +130,9 @@ namespace EngineLayer {
 		friend struct std::default_delete<Audio>;
 
 		std::unordered_map<std::string, SoundData> soundDates_;
+
+		std::vector<std::string> soundNames_;
+
 
 		//audio
 		Microsoft::WRL::ComPtr<IXAudio2> xAudio2_;

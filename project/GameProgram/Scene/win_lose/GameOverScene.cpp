@@ -70,6 +70,7 @@ void GameOverScene::Update() {
 		transforms_[visualActor->GetObjectName()].rotate.y += kRotate_;
 		visualActor->SetTransform(transforms_[visualActor->GetObjectName()]);//座標更新
 		visualActor->Update();
+		visualActor->LightOn();//ライト処理オン
 	}
 }
 

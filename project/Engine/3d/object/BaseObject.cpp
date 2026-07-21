@@ -51,7 +51,7 @@ namespace EngineLayer {
 		directionalLightData_->color = kDefaultColor_;
 		directionalLightData_->direction = kDirectionalLightDirection_;
 		directionalLightData_->intensity = 0.0f;
-		directionalLightData_->isEnable = true;
+		directionalLightData_->isEnable = false;
 	}
 
 	void BaseObject::CreatePointLight() {
@@ -62,7 +62,7 @@ namespace EngineLayer {
 		//_
 		pointLightData_->color = kDefaultColor_;
 		pointLightData_->position = kPointLightPosition_;
-		pointLightData_->intensity = 0.0f;
+		pointLightData_->intensity = 1.0f;
 		pointLightData_->radius = kPointLightRadius_;
 		pointLightData_->decay = kPointLightDecay_;
 
@@ -80,11 +80,11 @@ namespace EngineLayer {
 		spotLightData_->position = kSpotLightPosition_;
 		spotLightData_->distance = kSpotLightDistance_;
 		spotLightData_->direction = Normalize(kSpotLightDirection_);
-		spotLightData_->intensity = 0.0f;
+		spotLightData_->intensity = 1.0f;
 		spotLightData_->decay = kPointLightDecay_;
 		spotLightData_->cosAngle = kCosAngle;
 		spotLightData_->cosFalloffStart = kCosFalloffStart;
 
-		spotLightData_->isEnable = true;
+		spotLightData_->isEnable = false;
 	}
 }

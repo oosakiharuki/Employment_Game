@@ -118,10 +118,8 @@ namespace EngineLayer {
 	}
 
 	void Audio::SoundPlayWave(SoundData& soundData, float volume, bool isLoop) {
-
+		//すでに鳴っているかチェック(重複チェック)
 		IsPlayingSound(soundData);
-
-		//InitSourceVoice(soundData);
 
 		XAUDIO2_VOICE_STATE state;
 		soundData.pSourceVoice->GetState(&state);

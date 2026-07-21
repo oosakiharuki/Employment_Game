@@ -205,11 +205,6 @@ namespace EngineLayer {
 #endif // _DEBUG
 	}
 
-	void Object_glTF::Draw(const std::string& textureData) {
-		//モデル 
-
-	}
-
 	void Object_glTF::CreateWVP() {
 		for (auto& i : modelData_.Data) {
 			Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource;

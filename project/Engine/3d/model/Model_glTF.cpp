@@ -22,8 +22,6 @@ namespace EngineLayer {
 		//.gltf
 		modelData_ = LoadModelFile(directoryPath, fileName);
 
-		InitialData_ = modelData_;
-
 		//vertex
 		for (auto& modelData : modelData_.Data) {
 
@@ -93,7 +91,7 @@ namespace EngineLayer {
 		else {
 			materialData_->color = kInitColor_;
 		}
-		materialData_->enableLighting = true;
+		materialData_->enableLighting = false;
 		materialData_->uvTransform = modelData.materialData.uvTransform;
 
 		materialData_->shininess = kShininess_;

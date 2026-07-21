@@ -72,10 +72,9 @@ void EnemyFireCommand::Fire(EnemyCanFireBullet& enemyCanFireBullet) {
 }
 
 void EnemyFireCommand::DeleteAudio() {
+	//SE強制ストップ
 	EngineLayer::Audio::GetInstance().StopWave(fireBeforeSound_);
-
 }
-
 
 void EnemyFireCommand::AddBullet(const Vector3& startPoint, const Vector3& velocity) {
 	std::unique_ptr<EnemyBullet> bullet = std::make_unique<EnemyBullet>();

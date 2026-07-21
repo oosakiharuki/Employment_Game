@@ -185,8 +185,6 @@ namespace EngineLayer {
 
 		std::vector<D3D12_INDEX_BUFFER_VIEW> indexBufferView_; //index
 
-		MyMath::ModelDataMulti InitialData_;
-
 		//アニメーション
 		std::vector<MyMath::Animation> animation_;
 		//スケルトン

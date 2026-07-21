@@ -132,8 +132,10 @@ void TitleScene::UpdateBehind() {
 	for (auto& visualActor : visualActors) {
 		visualActor->SetTransform(transforms_[visualActor->GetObjectName()]);
 		visualActor->Update();
-		playerShadow_->Update(transforms_[visualActor->GetObjectName()]);
 	}
+
+	//プレイヤーのみに影を追加
+	playerShadow_->Update(transforms_["player_standby"]);
 
 	//パーティクル更新
 	for (auto& particle : sceneParticles_) {
