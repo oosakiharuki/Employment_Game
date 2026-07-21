@@ -41,11 +41,6 @@ namespace EngineLayer {
 		/// </summary>
 		virtual void Draw() = 0;
 		/// <summary>
-		/// 描画処理(テクスチャの変更あり)
-		/// </summary>
-		/// <param name="textureData">変更したいテクスチャのファイルパス</param>
-		virtual void Draw(const std::string& textureData) = 0;
-		/// <summary>
 		/// モデルデータ
 		/// </summary>
 		/// <param name="filePath">モデル名</param>

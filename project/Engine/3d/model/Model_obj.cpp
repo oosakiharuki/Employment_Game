@@ -66,7 +66,7 @@ namespace EngineLayer {
 		materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定
 		materialData_->color = kInitColor_;
-		materialData_->enableLighting = true;
+		materialData_->enableLighting = false;
 		materialData_->uvTransform = modelData.materialData.uvTransform;
 		materialData_->shininess = kShininess_;
 

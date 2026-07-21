@@ -104,6 +104,8 @@ void Enemy_Turret::Dead() {
 	DeadReaction();
 	//弾丸の更新
 	fireCommand_->BulletUpdate();
+	//発射準備SEの停止
+	fireCommand_->DeleteAudio();
 }
 
 void Enemy_Turret::Performance() {}

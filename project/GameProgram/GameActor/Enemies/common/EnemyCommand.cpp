@@ -7,8 +7,8 @@ using namespace MyMath;
 using namespace UseEveryOne;
 
 void EnemyFireCommand::InitAudio() {
-	EngineLayer::Audio::GetInstance().LoadWave(kFireSoundName_);//発砲SE
-	EngineLayer::Audio::GetInstance().LoadWave(kFireBeforeSoundName_);//予備動作SE
+	fireSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/enemyFire.mp3");//発砲SE
+	fireBeforeSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/enemyBeforeFire.mp3");//予備動作SE
 }
 
 
@@ -45,9 +45,9 @@ void EnemyFireCommand::Fire(EnemyCanFireBullet& enemyCanFireBullet) {
 
 	if (coolTime_ >= kCoolTimeMax_) {
 		if (rapidFireTime_ == 0.0f && rapidCount_ == 0) {
-			EngineLayer::Audio::GetInstance().StopWave(kFireBeforeSoundName_);
-			EngineLayer::Audio::GetInstance().StopWave(kFireSoundName_);//音ズレが起きないよう
-			EngineLayer::Audio::GetInstance().SoundPlayWave(kFireSoundName_, kVolume_);
+			EngineLayer::Audio::GetInstance().StopWave(fireBeforeSound_);
+			EngineLayer::Audio::GetInstance().StopWave(fireSound_);//音ズレが起きないよう
+			EngineLayer::Audio::GetInstance().SoundPlayWave(fireSound_, kVolume_);
 		}
 
 		//連射で時間を開ける
@@ -66,11 +66,14 @@ void EnemyFireCommand::Fire(EnemyCanFireBullet& enemyCanFireBullet) {
 		}
 	}
 	else if (coolTime_ >= kCoolTimeMax_ * kDivideByTwo_ && coolTime_ < kCoolTimeMax_) {
-		//SEはすでに鳴っているか
-		if (!EngineLayer::Audio::GetInstance().IsPlayingSound(kFireBeforeSoundName_)) {
-			EngineLayer::Audio::GetInstance().SoundPlayWave(kFireBeforeSoundName_, kVolume_);
-		}
+		//発射準備前のSE
+		EngineLayer::Audio::GetInstance().SoundPlayWave(fireBeforeSound_, kVolume_);
 	}
+}
+
+void EnemyFireCommand::DeleteAudio() {
+	//SE強制ストップ
+	EngineLayer::Audio::GetInstance().StopWave(fireBeforeSound_);
 }
 
 void EnemyFireCommand::AddBullet(const Vector3& startPoint, const Vector3& velocity) {

@@ -110,6 +110,7 @@ namespace EngineLayer {
 		DebugWireframes::GetInstance().Finalize();
 		CubeMap::GetInstance().Finalize();
 		PostEffectManager::GetInstance().Finalize();
+		SceneManager::GetInstance().Finalize();
 		Audio::GetInstance().Finalize();
 	}
 

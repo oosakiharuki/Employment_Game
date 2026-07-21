@@ -95,14 +95,16 @@ PixelShaderOutput main(VertexShaderOutput input)
     float32_t4 textureColor = gTexture.Sample(gSampler, transformdUV.xy);
 
     PixelShaderOutput output;
+
+    // --- カメラ ---
+    float32_t3 toEye = normalize(gCamera.worldPosition - input.worldPostion);
+    
+    // --- オブジェクト初期 ---
+    output.color.rgb = (gMaterial.color.rgb * textureColor.rgb);
     
     if (gMaterial.enableLighting != 0)
     {   
-        // --- オブジェクト初期 ---
-        output.color.rgb = (gMaterial.color.rgb * textureColor.rgb);
-
-        // --- カメラ ---
-        float32_t3 toEye = normalize(gCamera.worldPosition - input.worldPostion);
+        output.color.rgb = float32_t3(0.0f, 0.0f, 0.0f);
         
         // --- 平行光源 ---
              
@@ -174,47 +176,48 @@ PixelShaderOutput main(VertexShaderOutput input)
         }
         // --- スポットライトend ---
 
-        // --- 影 ---
- 
-        for (int i = 0; i < kMaxShadow; ++i)
-        {
-            if (gShadowFactory.shadow[i].intensity != 0)
-            {
-                float NdotL = dot(normalize(input.normal), -gShadowFactory.shadow[i].direction);
-                float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
-            
-                float32_t3 halfVectorS = normalize(gShadowFactory.shadow[i].position + toEye);
-                float NdotHS = dot(normalize(input.normal), halfVectorS);
-                float specularPowS = pow(saturate(NdotHS), gMaterial.shininess); // saturate (u * r) s乗
-            
-                float32_t3 spotLightDirectionOnSurface = normalize(input.worldPostion - gShadowFactory.shadow[i].position);
-        
-                float32_t cosAngle = dot(spotLightDirectionOnSurface, gShadowFactory.shadow[i].direction);
-                float32_t falloffFactor = saturate((cosAngle - gShadowFactory.shadow[i].cosAngle) / (1.0f - gShadowFactory.shadow[i].cosAngle)); //フォールオフ              
-                float32_t falloffFactorS = saturate((cosAngle - gShadowFactory.shadow[i].cosAngle) / (gShadowFactory.shadow[i].cosFalloffStart - gShadowFactory.shadow[i].cosAngle));
-        
-                float32_t distanceSpot = length(gShadowFactory.shadow[i].position - input.worldPostion); //ライトとオブジェクトの距離
-                float32_t attenuationFactor = pow(saturate(-distanceSpot / gShadowFactory.shadow[i].distance + 1.0f), gShadowFactory.shadow[i].decay); //距離による減衰
-        
-                float32_t3 diffuse = gMaterial.color.rgb * textureColor.rgb * gShadowFactory.shadow[i].intensity * attenuationFactor * falloffFactorS;
-            
-                //壁であるならうつさない
-                if (input.normal.y > 0.25f)
-                {
-                    output.color.rgb -= diffuse; //減算して暗く
-                }
-            }
-        }
-        
-        // --- 影end ---
-        
-        output.color.a = gMaterial.color.a * textureColor.a;   
     }
     else
     {
         output.color = gMaterial.color * textureColor;
     }
 
+    // --- 影 ---
+    
+    for (int i = 0; i < kMaxShadow; ++i)
+    {
+        if (gShadowFactory.shadow[i].intensity != 0)
+        {   
+            float NdotL = dot(normalize(input.normal), -gShadowFactory.shadow[i].direction);
+            float cos = pow(NdotL * 0.5f + 0.5f, 2.0f);
+            
+            float32_t3 halfVectorS = normalize(gShadowFactory.shadow[i].position + toEye);
+            float NdotHS = dot(normalize(input.normal), halfVectorS);
+            float specularPowS = pow(saturate(NdotHS), gMaterial.shininess); // saturate (u * r) s乗
+            
+            float32_t3 spotLightDirectionOnSurface = normalize(input.worldPostion - gShadowFactory.shadow[i].position);
+        
+            float32_t cosAngle = dot(spotLightDirectionOnSurface, gShadowFactory.shadow[i].direction);
+            float32_t falloffFactor = saturate((cosAngle - gShadowFactory.shadow[i].cosAngle) / (1.0f - gShadowFactory.shadow[i].cosAngle)); //フォールオフ              
+            float32_t falloffFactorS = saturate((cosAngle - gShadowFactory.shadow[i].cosAngle) / (gShadowFactory.shadow[i].cosFalloffStart - gShadowFactory.shadow[i].cosAngle));
+        
+            float32_t distanceSpot = length(gShadowFactory.shadow[i].position - input.worldPostion); //ライトとオブジェクトの距離
+            float32_t attenuationFactor = pow(saturate(-distanceSpot / gShadowFactory.shadow[i].distance + 1.0f), gShadowFactory.shadow[i].decay); //距離による減衰
+        
+            float32_t3 diffuse = gMaterial.color.rgb * textureColor.rgb * gShadowFactory.shadow[i].intensity * attenuationFactor * falloffFactorS;
+            
+                //壁であるならうつさない
+            if (input.normal.y > 0.25f)
+            {
+                output.color.rgb -= diffuse; //減算して暗く
+            }
+        }            
+    }
+        
+    // --- 影end ---
+        
+    output.color.a = gMaterial.color.a * textureColor.a;   
+    
     if (textureColor.a <= 0.5)
     {
         discard;

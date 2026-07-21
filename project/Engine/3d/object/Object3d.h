@@ -34,7 +34,7 @@ namespace EngineLayer {
 		/// <summary>
 		/// 描画処理
 		/// </summary>
-		void Draw(const std::string& textureData) override;
+		void Draw(const std::string& textureData);
 		/// <summary>
 		/// setter_モデル
 		/// </summary>

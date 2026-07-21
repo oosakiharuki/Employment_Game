@@ -41,12 +41,6 @@ namespace EngineLayer {
 		/// </summary>	
 		void Draw() override;
 		/// <summary>
-		/// 描画処理
-		/// </summary>
-		/// <param name="textureData"></param> テクスチャ変更
-		void Draw(const std::string& textureData) override;
-
-		/// <summary>
 		/// setter_modelの選択
 		/// </summary>
 		/// <param name="filePath">ファイル名</param>

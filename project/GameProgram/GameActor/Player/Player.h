@@ -466,8 +466,8 @@ private:
 	  
 	// --- サウンド ---
 
-	const std::string kHitSoundName_ = "resource/Sound/damage.mp3";//ダメージを食らった
-	const std::string kJumpSoundName_ = "resource/Sound/jump.mp3";//ジャンプ
+	EngineLayer::SoundData damageSound_;
+	EngineLayer::SoundData jumpSound_;
 	const float kVolume_ = 0.3f;//ボリューム
 
 	// -----------------
