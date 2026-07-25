@@ -95,10 +95,10 @@ namespace EngineLayer {
 		Matrix4x4 worldMatrix_;
 		Matrix4x4 viewMatrix_;
 		Matrix4x4 projectionMatrix_;
-		float forY_;
+		float forY_ = 0.45f;//カメラの
 		float aspect_;
-		float nearClip_;
-		float farClip_;
+		float nearClip_ = 0.1f;//カメラの描画範囲(手前-z)
+		float farClip_ = 1000.0f;//カメラの描画範囲(奥 z)
 		Matrix4x4 viewProjectionMatrix_;
 	};
 }

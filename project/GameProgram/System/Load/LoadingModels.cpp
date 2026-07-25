@@ -19,6 +19,7 @@ void LoadingModels::LoadObjects() {
 
 
 void LoadingModels::LoadObj() {
+	EngineLayer::ModelManager::GetInstance().LoadModel("stage_select", ".obj");
 	//objの設定
 	//プレイヤー弾丸
 	EngineLayer::ModelManager::GetInstance().LoadModel("PlayerBullet", ".obj");
@@ -29,7 +30,7 @@ void LoadingModels::LoadObj() {
 	EngineLayer::ModelManager::GetInstance().LoadModel("stage_3", ".obj");
 	EngineLayer::ModelManager::GetInstance().LoadModel("stage_4", ".obj");
 	EngineLayer::ModelManager::GetInstance().LoadModel("stage_boss",".obj");
-	EngineLayer::ModelManager::GetInstance().LoadModel("stage_select", ".obj");
+	
 	//ステージオブジェクト
 	EngineLayer::ModelManager::GetInstance().LoadModel("checkpoint", ".obj");
 	EngineLayer::ModelManager::GetInstance().LoadModel("warpGate", ".obj");

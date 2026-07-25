@@ -36,19 +36,19 @@ namespace EngineLayer {
 		/// VertexResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		void InitVertexResource(ModelData modelData) override;
+		void InitVertexResource(const ModelData& modelData) override;
 
 		/// <summary>
 		/// MaterialResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		void InitMaterialResource(ModelData modelData) override;
+		void InitMaterialResource(ModelData& modelData) override;
 
 		/// <summary>
 		/// IndexResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		void InitIndexResource(ModelData modelData) override;
+		void InitIndexResource(const ModelData& modelData) override;
 
 		/// <summary>
 		/// テクスチャとマテリアルの作成
@@ -66,7 +66,5 @@ namespace EngineLayer {
 		/// <param name="objName">オブジェクト拡張子</param>
 		/// <returns>完成したモデルデータ(マルチマテリアル付き)</returns>
 		static MyMath::ModelDataMulti LoadObjFile(const std::string& directoryPath, const std::string& filename, const std::string& objName);
-
-		MyMath::ModelDataMulti InitialData_;
 	};
 }
