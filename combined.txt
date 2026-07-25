@@ -100,7 +100,14 @@
     └── └── ├── Audio.cpp
     └── └── └── Audio.h
     └── ├── base/
+    └── └── ├── Descriptor/
+    └── └── └── ├── RtvManager.cpp
+    └── └── └── ├── RtvManager.h
+    └── └── └── ├── SrvManager.cpp
+    └── └── └── └── SrvManager.h
     └── └── ├── DirectX/
+    └── └── └── ├── D3D12CreateResourceManager.cpp
+    └── └── └── ├── D3D12CreateResourceManager.h
     └── └── └── ├── D3DResourceLeakChecker.cpp
     └── └── └── ├── D3DResourceLeakChecker.h
     └── └── └── ├── DirectXCommon.cpp
@@ -112,10 +119,11 @@
     └── └── └── ├── Logger.h
     └── └── └── ├── StringUtility.cpp
     └── └── └── └── StringUtility.h
-    └── └── ├── Pipeline.cpp
-    └── └── ├── Pipeline.h
-    └── └── ├── SrvManager.cpp
-    └── └── ├── SrvManager.h
+    └── └── ├── Shader/
+    └── └── └── ├── Pipeline.cpp
+    └── └── └── ├── Pipeline.h
+    └── └── └── ├── ShaderManager.cpp
+    └── └── └── └── ShaderManager.h
     └── └── ├── WinApp.cpp
     └── └── └── WinApp.h
     └── ├── input/
@@ -365,7 +373,7 @@ File Path: project/CG2_00_01.vcxproj
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\3d\shadow;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\math\collision;$(ProjectDir)Engine\math\ease;$(ProjectDir)Engine\math\lerp;$(ProjectDir)Engine\math\matrix;$(ProjectDir)Engine\math\modelData;$(ProjectDir)Engine\math\vector;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\PostEffect\creates\screen\blur;$(ProjectDir)Engine\PostEffect\creates\screen\color;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Actor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Player\Weapon\Umbrella;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\Scene\win_lose;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\3d\shadow;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\Descriptor;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\base\Shader;$(ProjectDir)Engine\math;$(ProjectDir)Engine\math\collision;$(ProjectDir)Engine\math\ease;$(ProjectDir)Engine\math\lerp;$(ProjectDir)Engine\math\matrix;$(ProjectDir)Engine\math\modelData;$(ProjectDir)Engine\math\vector;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\PostEffect\creates\screen\blur;$(ProjectDir)Engine\PostEffect\creates\screen\color;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Actor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Player\Weapon\Umbrella;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\Scene\win_lose;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -391,7 +399,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\3d\shadow;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\math;$(ProjectDir)Engine\math\collision;$(ProjectDir)Engine\math\ease;$(ProjectDir)Engine\math\lerp;$(ProjectDir)Engine\math\matrix;$(ProjectDir)Engine\math\modelData;$(ProjectDir)Engine\math\vector;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\PostEffect\creates\screen\blur;$(ProjectDir)Engine\PostEffect\creates\screen\color;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Actor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Player\Weapon\Umbrella;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\Scene\win_lose;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)Engine\2d;$(ProjectDir)Engine\3d;$(ProjectDir)Engine\3d\camera;$(ProjectDir)Engine\3d\model;$(ProjectDir)Engine\3d\object;$(ProjectDir)Engine\3d\particle;$(ProjectDir)Engine\3d\pipeline;$(ProjectDir)Engine\3d\primitive;$(ProjectDir)Engine\3d\shadow;$(ProjectDir)Engine\base;$(ProjectDir)Engine\base\Descriptor;$(ProjectDir)Engine\base\DirectX;$(ProjectDir)Engine\base\Log;$(ProjectDir)Engine\base\Shader;$(ProjectDir)Engine\math;$(ProjectDir)Engine\math\collision;$(ProjectDir)Engine\math\ease;$(ProjectDir)Engine\math\lerp;$(ProjectDir)Engine\math\matrix;$(ProjectDir)Engine\math\modelData;$(ProjectDir)Engine\math\vector;$(ProjectDir)Engine\input;$(ProjectDir)Engine\audio;$(ProjectDir)Engine\PostEffect;$(ProjectDir)Engine\PostEffect\creates;$(ProjectDir)Engine\PostEffect\creates\filter;$(ProjectDir)Engine\PostEffect\creates\outline;$(ProjectDir)Engine\PostEffect\creates\screen;$(ProjectDir)Engine\PostEffect\creates\screen\blur;$(ProjectDir)Engine\PostEffect\creates\screen\color;$(ProjectDir)Engine\scene;$(ProjectDir)Engine;$(ProjectDir)externals\assimp\include;$(ProjectDir)GameProgram;$(ProjectDir)GameProgram\CameraControl;$(ProjectDir)GameProgram\Collision;$(ProjectDir)GameProgram\GameActor;$(ProjectDir)GameProgram\GameActor\Actor;$(ProjectDir)GameProgram\GameActor\Enemies;$(ProjectDir)GameProgram\GameActor\Enemies\common;$(ProjectDir)GameProgram\GameActor\Player;$(ProjectDir)GameProgram\GameActor\Player\Action;$(ProjectDir)GameProgram\GameActor\Player\Weapon;$(ProjectDir)GameProgram\GameActor\Player\Weapon\Umbrella;$(ProjectDir)GameProgram\GameActor\Boss;$(ProjectDir)GameProgram\LevelEditor;$(ProjectDir)GameProgram\Scene;$(ProjectDir)GameProgram\Scene\win_lose;$(ProjectDir)GameProgram\StageObjects;$(ProjectDir)GameProgram\StageObjects\Gimmick;$(ProjectDir)GameProgram\StageObjects\PlayerInterfere;$(ProjectDir)GameProgram\System;$(ProjectDir)GameProgram\System\Load;$(ProjectDir)GameProgram\System\Pause</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -407,6 +415,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\base\DirectX\D3D12CreateResourceManager.cpp" />
     <ClCompile Include="Engine\math\modelData\AnimationMath.cpp" />
     <ClCompile Include="Engine\math\collision\CollisionMath.cpp" />
     <ClCompile Include="Engine\math\ease\Easing.cpp" />
@@ -459,7 +468,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\audio\Audio.cpp" />
     <ClCompile Include="Engine\base\DirectX\D3DResourceLeakChecker.cpp" />
     <ClCompile Include="Engine\base\DirectX\DirectXCommon.cpp" />
-    <ClCompile Include="Engine\base\SrvManager.cpp" />
+    <ClCompile Include="Engine\base\Descriptor\SrvManager.cpp" />
     <ClCompile Include="Engine\base\Framework.cpp" />
     <ClCompile Include="GameProgram\LevelEditor\LevelEditor.cpp" />
     <ClCompile Include="Engine\PostEffect\creates\filter\BoxFilter.cpp" />
@@ -514,7 +523,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameProgram\System\Reaction.cpp" />
     <ClCompile Include="GameProgram\LevelEditor\SpitOutLevelEditor.cpp" />
     <ClCompile Include="GameProgram\System\UIManager.cpp" />
-    <ClCompile Include="Engine\base\Pipeline.cpp" />
+    <ClCompile Include="Engine\base\Shader\Pipeline.cpp" />
     <ClCompile Include="GameProgram\GameActor\VisualActor.cpp" />
     <ClCompile Include="GameProgram\System\Pause\PauseScreen.cpp" />
     <ClCompile Include="GameProgram\StageObjects\Guide.cpp" />
@@ -528,8 +537,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Engine\math\lerp\Lerp.cpp" />
     <ClCompile Include="Engine\math\matrix\MatrixMath.cpp" />
     <ClCompile Include="Engine\3d\shadow\ShadowManager.cpp" />
+    <ClCompile Include="Engine\base\Descriptor\RtvManager.cpp" />
+    <ClCompile Include="Engine\base\Shader\ShaderManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\base\DirectX\D3D12CreateResourceManager.h" />
     <ClInclude Include="Engine\math\modelData\AnimationMath.h" />
     <ClInclude Include="Engine\math\collision\CollisionMath.h" />
     <ClInclude Include="Engine\math\ease\Easing.h" />
@@ -587,7 +599,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\audio\Audio.h" />
     <ClInclude Include="Engine\base\DirectX\D3DResourceLeakChecker.h" />
     <ClInclude Include="Engine\base\DirectX\DirectXCommon.h" />
-    <ClInclude Include="Engine\base\SrvManager.h" />
+    <ClInclude Include="Engine\base\Descriptor\SrvManager.h" />
     <ClInclude Include="Engine\base\Framework.h" />
     <ClInclude Include="GameProgram\LevelEditor\LevelEditor.h" />
     <ClInclude Include="Engine\PostEffect\creates\filter\BoxFilter.h" />
@@ -639,7 +651,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameProgram\System\Reaction.h" />
     <ClInclude Include="GameProgram\LevelEditor\SpitOutLevelEditor.h" />
     <ClInclude Include="GameProgram\System\UIManager.h" />
-    <ClInclude Include="Engine\base\Pipeline.h" />
+    <ClInclude Include="Engine\base\Shader\Pipeline.h" />
     <ClInclude Include="GameProgram\GameActor\VisualActor.h" />
     <ClInclude Include="GameProgram\System\Pause\PauseScreen.h" />
     <ClInclude Include="GameProgram\StageObjects\Guide.h" />
@@ -653,6 +665,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\math\lerp\Lerp.h" />
     <ClInclude Include="Engine\math\matrix\MatrixMath.h" />
     <ClInclude Include="Engine\3d\shadow\ShadowManager.h" />
+    <ClInclude Include="Engine\base\Descriptor\RtvManager.h" />
+    <ClInclude Include="Engine\base\Shader\ShaderManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
@@ -905,9 +919,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     <Filter Include="ヘッダー ファイル\GameProgram\System">
       <UniqueIdentifier>{59884d0f-e430-47f8-be48-8ef35d8ea387}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GameProgram\Collsion">
-      <UniqueIdentifier>{a22a70f0-37ea-4c15-9a1e-03fee3d2eaa6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\GameProgram\StageObjects">
       <UniqueIdentifier>{e7200600-3803-4831-a1a7-5b8eee728d58}</UniqueIdentifier>
     </Filter>
@@ -1082,6 +1093,63 @@ File Path: project/CG2_00_01.vcxproj.filters
     <Filter Include="ヘッダー ファイル\GameProgram\GameActor\Player\Weapon\Umbrella">
       <UniqueIdentifier>{61c423b1-51a0-4bc8-8443-5ecdf500f27f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Engine\math\collision">
+      <UniqueIdentifier>{337d8688-f26c-465b-bf35-1cc79ae53b5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\math\ease">
+      <UniqueIdentifier>{1cea31b7-e4c7-41e3-805d-2022158422c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\math\lerp">
+      <UniqueIdentifier>{71d4a4a7-e061-411f-92da-34b7338ca42c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\math\modelData">
+      <UniqueIdentifier>{67011ed9-73b2-4daa-803d-9c35c35fc252}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\math\vector">
+      <UniqueIdentifier>{80905786-61c3-4c26-8bf2-d04e330751a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\math\matrix">
+      <UniqueIdentifier>{b05224ba-4d2d-4ec4-b798-b0dc1858d4aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\base\Shader">
+      <UniqueIdentifier>{267cd51f-376f-4d54-a21b-0b7b6f9feee2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\base\Descriptor">
+      <UniqueIdentifier>{0ecb81a9-8b1a-498b-8927-c918bc25a1ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Engine\3d\shadow">
+      <UniqueIdentifier>{192b1587-6a8c-4b2d-a06f-1c55ca620f88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\3d\shadow">
+      <UniqueIdentifier>{c5cbe1d0-fe18-4d92-8868-f44e99af163d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\base\Descriptor">
+      <UniqueIdentifier>{022eb66d-ebe3-421e-9622-149f1d92a4c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\base\Shader">
+      <UniqueIdentifier>{a16a28b6-b9fd-4164-a639-93df40a23cc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\math\collision">
+      <UniqueIdentifier>{3e435aac-6a76-47a2-8f25-6aac8f06588f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\math\ease">
+      <UniqueIdentifier>{c7258eb9-a385-4be4-a771-3f3517a8f032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\math\lerp">
+      <UniqueIdentifier>{0f5e0878-e755-4d80-94e1-70ba8571fa6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\math\matrix">
+      <UniqueIdentifier>{ea5c54aa-43ee-4cc7-a5f0-64bde7a7ee3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\math\modelData">
+      <UniqueIdentifier>{9f9c6ad2-71de-45b0-afef-f8fe734d998e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Engine\math\vector">
+      <UniqueIdentifier>{6e9f41b0-4b9c-4f05-abfb-426ce316c8a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameProgram\Collision">
+      <UniqueIdentifier>{a22a70f0-37ea-4c15-9a1e-03fee3d2eaa6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\2d\Sprite.cpp">
@@ -1101,9 +1169,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     </ClCompile>
     <ClCompile Include="Engine\math\MyMath.cpp">
       <Filter>ソース ファイル\Engine\math</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\SrvManager.cpp">
-      <Filter>ソース ファイル\Engine\base</Filter>
     </ClCompile>
     <ClCompile Include="Engine\2d\ImGuiManager.cpp">
       <Filter>ソース ファイル\Engine\2d</Filter>
@@ -1175,7 +1240,7 @@ File Path: project/CG2_00_01.vcxproj.filters
       <Filter>ソース ファイル\Engine\scene</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Collision\CollisionManager.cpp">
-      <Filter>ソース ファイル\GameProgram\Collsion</Filter>
+      <Filter>ソース ファイル\GameProgram\Collision</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\System\UseEveryOne.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
@@ -1185,9 +1250,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     </ClCompile>
     <ClCompile Include="GameProgram\System\UIManager.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\base\Pipeline.cpp">
-      <Filter>ソース ファイル\Engine\base</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\GameActor\Boss\Boss.cpp">
       <Filter>ソース ファイル\GameProgram\GameActor\Boss</Filter>
@@ -1214,7 +1276,7 @@ File Path: project/CG2_00_01.vcxproj.filters
       <Filter>ソース ファイル\GameProgram\GameActor</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Collision\CollisionSource.cpp">
-      <Filter>ソース ファイル\GameProgram\Collsion</Filter>
+      <Filter>ソース ファイル\GameProgram\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\camera\Camera.cpp">
       <Filter>ソース ファイル\Engine\3d\camera</Filter>
@@ -1283,7 +1345,7 @@ File Path: project/CG2_00_01.vcxproj.filters
       <Filter>ソース ファイル\Engine\PostEffect\creates</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\Collision\CollisionUtility.cpp">
-      <Filter>ソース ファイル\GameProgram\Collsion</Filter>
+      <Filter>ソース ファイル\GameProgram\Collision</Filter>
     </ClCompile>
     <ClCompile Include="GameProgram\CameraControl\CameraControl.cpp">
       <Filter>ソース ファイル\GameProgram\CameraControl</Filter>
@@ -1405,26 +1467,41 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClCompile Include="GameProgram\System\TimeScale.cpp">
       <Filter>ソース ファイル\GameProgram\System</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\math\ease\Easing.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\math\matrix\MatrixMath.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\math\collision\CollisionMath.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\math\modelData\AnimationMath.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\math\lerp\Lerp.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Engine\math\collision</Filter>
     </ClCompile>
     <ClCompile Include="Engine\math\modelData\LengthMath.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Engine\math\modelData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\math\modelData\AnimationMath.cpp">
+      <Filter>ソース ファイル\Engine\math\modelData</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\math\lerp\Lerp.cpp">
+      <Filter>ソース ファイル\Engine\math\lerp</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\math\ease\Easing.cpp">
+      <Filter>ソース ファイル\Engine\math\ease</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\math\matrix\MatrixMath.cpp">
+      <Filter>ソース ファイル\Engine\math\matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\DirectX\D3D12CreateResourceManager.cpp">
+      <Filter>ソース ファイル\Engine\base\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Shader\ShaderManager.cpp">
+      <Filter>ソース ファイル\Engine\base\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Descriptor\SrvManager.cpp">
+      <Filter>ソース ファイル\Engine\base\Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Descriptor\RtvManager.cpp">
+      <Filter>ソース ファイル\Engine\base\Descriptor</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\base\Shader\Pipeline.cpp">
+      <Filter>ソース ファイル\Engine\base\Shader</Filter>
     </ClCompile>
     <ClCompile Include="Engine\3d\shadow\ShadowManager.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Engine\3d\shadow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1470,31 +1547,13 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClInclude Include="Engine\audio\Audio.h">
       <Filter>ヘッダー ファイル\Engine\audio</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\base\SrvManager.h">
-      <Filter>ヘッダー ファイル\Engine\base</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\base\WinApp.h">
       <Filter>ヘッダー ファイル\Engine\base</Filter>
     </ClInclude>
     <ClInclude Include="Engine\input\Input.h">
       <Filter>ヘッダー ファイル\Engine\input</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\matrix\Matrix4x4.h">
-      <Filter>ヘッダー ファイル\Engine\math</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\math\MyMath.h">
-      <Filter>ヘッダー ファイル\Engine\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\vector\Transform.h">
-      <Filter>ヘッダー ファイル\Engine\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\vector\Vector2.h">
-      <Filter>ヘッダー ファイル\Engine\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\vector\Vector3.h">
-      <Filter>ヘッダー ファイル\Engine\math</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\vector\Vector4.h">
       <Filter>ヘッダー ファイル\Engine\math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\PostEffect\PostEffectManager.h">
@@ -1544,9 +1603,6 @@ File Path: project/CG2_00_01.vcxproj.filters
     </ClInclude>
     <ClInclude Include="GameProgram\System\Reaction.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\base\Pipeline.h">
-      <Filter>ヘッダー ファイル\Engine\base</Filter>
     </ClInclude>
     <ClInclude Include="GameProgram\GameActor\Boss\Boss.h">
       <Filter>ヘッダー ファイル\GameProgram\GameActor\Boss</Filter>
@@ -1761,41 +1817,71 @@ File Path: project/CG2_00_01.vcxproj.filters
     <ClInclude Include="GameProgram\System\TimeScale.h">
       <Filter>ヘッダー ファイル\GameProgram\System</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\ease\Easing.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\3d\shadow\ShadowManager.h">
+      <Filter>ヘッダー ファイル\Engine\3d\shadow</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\matrix\MatrixMath.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\base\Shader\Pipeline.h">
+      <Filter>ヘッダー ファイル\Engine\base\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\collision\CollisionMath.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\base\Shader\ShaderManager.h">
+      <Filter>ヘッダー ファイル\Engine\base\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Descriptor\RtvManager.h">
+      <Filter>ヘッダー ファイル\Engine\base\Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\Descriptor\SrvManager.h">
+      <Filter>ヘッダー ファイル\Engine\base\Descriptor</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\base\DirectX\D3D12CreateResourceManager.h">
+      <Filter>ヘッダー ファイル\Engine\base\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\vector\Vector4.h">
+      <Filter>ヘッダー ファイル\Engine\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\vector\Vector3.h">
+      <Filter>ヘッダー ファイル\Engine\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\vector\Vector2.h">
+      <Filter>ヘッダー ファイル\Engine\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\vector\Transform.h">
+      <Filter>ヘッダー ファイル\Engine\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\matrix\Matrix4x4.h">
+      <Filter>ヘッダー ファイル\Engine\math\matrix</Filter>
     </ClInclude>
     <ClInclude Include="Engine\math\collision\AABB.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\modelData\AnimationMath.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\vector\Quaternion.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Engine\math\collision</Filter>
     </ClInclude>
     <ClInclude Include="Engine\math\lerp\Lerp.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Engine\math\lerp</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\math\modelData\Lighting.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\modelData\ModelData.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\math\modelData\LengthMath.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\math\vector\Quaternion.h">
+      <Filter>ヘッダー ファイル\Engine\math\vector</Filter>
     </ClInclude>
     <ClInclude Include="Engine\math\vector\Segment.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\Engine\math\vector</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\3d\shadow\ShadowManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\math\modelData\AnimationMath.h">
+      <Filter>ヘッダー ファイル\Engine\math\modelData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\modelData\LengthMath.h">
+      <Filter>ヘッダー ファイル\Engine\math\modelData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\modelData\Lighting.h">
+      <Filter>ヘッダー ファイル\Engine\math\modelData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\modelData\ModelData.h">
+      <Filter>ヘッダー ファイル\Engine\math\modelData</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\collision\CollisionMath.h">
+      <Filter>ヘッダー ファイル\Engine\math\collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\ease\Easing.h">
+      <Filter>ヘッダー ファイル\Engine\math\ease</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\math\matrix\MatrixMath.h">
+      <Filter>ヘッダー ファイル\Engine\math\matrix</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1882,7 +1968,9 @@ File Path: project/CG2_00_01.vcxproj.filters
     <FxCompile Include="resource\shaders\Wireframe.PS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
-    <FxCompile Include="resource\shaders\Shadow.PS.hlsl" />
+    <FxCompile Include="resource\shaders\Shadow.PS.hlsl">
+      <Filter>リソース ファイル</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
 
@@ -2104,7 +2192,7 @@ namespace EngineLayer {
 
 	void Sprite::InitVertexResource() {
 		//Sprite
-		vertexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * 4);
+		vertexResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(VertexData) * 4);
 
 		//リソースの先頭アドレス
 		vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
@@ -2124,7 +2212,7 @@ namespace EngineLayer {
 	void Sprite::InitIndexData() {
 
 		//Index
-		indexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(uint32_t) * 6);
+		indexResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(uint32_t) * 6);
 
 		//リソースの先頭アドレス
 		indexBufferView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
@@ -2145,7 +2233,7 @@ namespace EngineLayer {
 
 	void Sprite::InitMaterial() {
 		//spriteのリソース
-		materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
+		materialResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(Material));
 
 		//書き込むためのアドレス
 		materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
@@ -2157,7 +2245,7 @@ namespace EngineLayer {
 
 	void Sprite::InitTransformationMatrix() {
 		//座標変換行列	
-		transformationMatrixResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
+		transformationMatrixResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
 
 		transformationMatrixResource_->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixData_));
 
@@ -2594,12 +2682,12 @@ namespace EngineLayer {
 	}
 
 	void SpriteCommon::CreateVertexShader() {
-		vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Sprite.VS.hlsl", L"vs_6_0");
+		vertexShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Sprite.VS.hlsl", L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 	}
 
 	void SpriteCommon::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Sprite.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Sprite.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -2745,8 +2833,8 @@ namespace EngineLayer {
 		//filePath名義のテクスチャデータを設定
 		TextureData& textureData = textureDatas_[filePath];
 		textureData.metadata = metadata;
-		textureData.resource = DirectXCommon::GetInstance().CreateTextureResource(textureData.metadata);
-		Microsoft::WRL::ComPtr<ID3D12Resource> val = DirectXCommon::GetInstance().UploadTextureData(textureData.resource, mipImages);
+		textureData.resource = D3D12CreateResourceManager::GetInstance().CreateTextureResource(textureData.metadata);
+		Microsoft::WRL::ComPtr<ID3D12Resource> val = D3D12CreateResourceManager::GetInstance().UploadTextureData(textureData.resource, mipImages);
 		intermediateResources_.push_back(val);
 
 		//SRVの設定
@@ -2962,7 +3050,7 @@ namespace EngineLayer {
 		modelData_ = CreateBox();
 		modelData_.materialData.textureFilePath = textureFile;
 
-		vertexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+		vertexResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 
 		vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 		vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
@@ -2973,21 +3061,21 @@ namespace EngineLayer {
 
 		//Model用マテリアル
 		//マテリアル用のリソース
-		materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
+		materialResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(Material));
 		//書き込むためのアドレス
 		materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定
-		materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		materialData_->color = color_;
 		materialData_->enableLighting = false;
 		materialData_->uvTransform = MakeIdentity4x4();
-		materialData_->shininess = 70;
+		materialData_->shininess = kShininess_;
 
 		//テクスチャ読み込み
 		TextureManager::GetInstance().LoadTexture(modelData_.materialData.textureFilePath);
 		modelData_.materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(modelData_.materialData.textureFilePath);
 
 		camera_ = cubeMap_->GetDefaultCamera();
-		wvpResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
+		wvpResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
 		wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 
 		wvpData_->World = MakeIdentity4x4();
@@ -3006,7 +3094,6 @@ namespace EngineLayer {
 		}
 
 		wvpData_->World = matWorld;
-		//wvpData->World = worldMatrix;
 		wvpData_->WVP = WorldViewProjectionMatrix;
 
 		materialData_->color = color_;
@@ -3086,6 +3173,8 @@ namespace EngineLayer {
 		D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 
 		Vector4 color_ = { 1,1,1,1 };
+
+		const float kShininess_ = 70.0f;
 	};
 }
 
@@ -3502,29 +3591,6 @@ namespace Primitive {
 			modelData.vertices.push_back(vertexData3);
 			modelData.vertices.push_back(vertexData2);
 			modelData.vertices.push_back(vertexData6);
-
-
-
-			//VertexData vertexData1, vertexData2, vertexData3;
-
-			//vertexData1.position = { -sin * kTopRadius,0.0f, cos * kTopRadius,1.0f };
-			//vertexData1.texcoord = { u,0.0f };
-			//vertexData1.normal = { -sin,0.0f,cos };
-
-			//vertexData2.position = {  0.0f,kHeight, 0.0f,1.0f };
-			//vertexData2.texcoord = { uNext,0.0f };
-			//vertexData2.normal = { -sinNext,0.0f,cosNext };
-
-			//vertexData3.position = { -sinNext * kBottomRadius,0.0f, cosNext * kBottomRadius,1.0f };
-			//vertexData3.texcoord = { u,1.0f };
-			//vertexData3.normal = { -sinNext,0.0f,cosNext };
-
-
-			//modelData.vertices.push_back(vertexData1);
-			//modelData.vertices.push_back(vertexData2);
-			//modelData.vertices.push_back(vertexData3);
-
-
 		}
 
 		return modelData;
@@ -3614,7 +3680,7 @@ namespace EngineLayer {
 		modelData_.materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(modelData_.materialData.textureFilePath);
 
 
-		vertexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+		vertexResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 
 		vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 		vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
@@ -3625,47 +3691,46 @@ namespace EngineLayer {
 
 		//Model用マテリアル
 		//マテリアル用のリソース
-		materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
+		materialResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(Material));
 		//書き込むためのアドレス
 		materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定
-		materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+		materialData_->color = color_;
 		materialData_->enableLighting = false;
 		materialData_->uvTransform = MakeIdentity4x4();
-		materialData_->shininess = 70;
+		materialData_->shininess = kShininess_;
 
 		//テクスチャ読み込み
 		TextureManager::GetInstance().LoadTexture(modelData_.materialData.textureFilePath);
 		modelData_.materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(modelData_.materialData.textureFilePath);
 
 		this->camera_ = debugWireframes_->GetDefaultCamera();
-		wvpResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
+		wvpResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
 		wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 
 		wvpData_->World = MakeIdentity4x4();
 		wvpData_->WVP = MakeIdentity4x4();
 
 		//Phong Reflection Model
-		cameraResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(CameraForGPU));
+		cameraResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(CameraForGPU));
 		cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraData_));
 
 		cameraData_->worldPosition = { 0,0,0 };
 
 	}
 
-	void SphereModel::Update(const Matrix4x4& matworld) {
+	void SphereModel::Update(const Matrix4x4& matWorld) {
 
 		Matrix4x4 WorldViewProjectionMatrix;
 		if (camera_) {
 			Matrix4x4 projectionMatrix = camera_->GetViewProjectionMatrix();
-			WorldViewProjectionMatrix = matworld * projectionMatrix;
+			WorldViewProjectionMatrix = matWorld * projectionMatrix;
 		}
 		else {
-			WorldViewProjectionMatrix = matworld;
+			WorldViewProjectionMatrix = matWorld;
 		}
 
-		wvpData_->World = matworld;
-		//wvpData->World = worldMatrix;
+		wvpData_->World = matWorld;
 		wvpData_->WVP = WorldViewProjectionMatrix;
 
 		materialData_->color = color_;
@@ -3706,7 +3771,7 @@ namespace EngineLayer {
 		/// 更新処理
 		/// </summary>
 		/// <param name="matWorld">ワールド行列を設定</param>
-		void Update(const Matrix4x4& matworld);
+		void Update(const Matrix4x4& matWorld);
 		/// <summary>
 		/// 描画処理
 		/// </summary>
@@ -3742,6 +3807,8 @@ namespace EngineLayer {
 		D3D12_VERTEX_BUFFER_VIEW vertexBufferView_;
 
 		Vector4 color_ = { 1,1,1,1 };
+
+		const float kShininess_ = 70.0f;
 	};
 }
 
@@ -3864,8 +3931,6 @@ File Path: project/Engine/3d/camera/Camera.cpp
 /// カメラ
 /// 
 /// ---------
-
-
 #include "Camera.h"
 #include "WinApp.h"
 using namespace MyMath;
@@ -3879,23 +3944,19 @@ namespace EngineLayer {
 		worldTransform_.Initialize();//ワールド座標更新
 		//Transform更新処理
 		transform_ = worldTransform_.UpdateTransform();
-
-		forY_ = 0.45f;//カメラの
 		aspect_ = float(WinApp::kClientWidth_) / float(WinApp::kClientHeight_);//アスペクト比(windowsの幅/高さ)
-		nearClip_ = 0.1f;//カメラの描画範囲(手前-z)
-		farClip_ = 1000.0f;//カメラの描画範囲(奥 z)
 		worldMatrix_ = MakeAffineMatrix(transform_.scale, transform_.rotate, transform_.translate);//ワールド座標行列
 		viewMatrix_ = Inverse(worldMatrix_);//ビュー行列
 		projectionMatrix_ = MakePerspectiveFovMatrix(forY_, aspect_, nearClip_, farClip_);//
 		viewProjectionMatrix_ = Multiply(viewMatrix_, projectionMatrix_);//ビュープロジェクション行列
 	}
+
 	void Camera::Update() {
 		worldTransform_.UpdateMatrix(transform_);
 		worldMatrix_ = worldTransform_.GetMatWorld();
 		viewMatrix_ = Inverse(worldMatrix_);
 		projectionMatrix_ = MakePerspectiveFovMatrix(forY_, aspect_, nearClip_, farClip_);
 		viewProjectionMatrix_ = Multiply(viewMatrix_, projectionMatrix_);
-
 	}
 }
 
@@ -3999,10 +4060,10 @@ namespace EngineLayer {
 		Matrix4x4 worldMatrix_;
 		Matrix4x4 viewMatrix_;
 		Matrix4x4 projectionMatrix_;
-		float forY_;
+		float forY_ = 0.45f;//カメラの
 		float aspect_;
-		float nearClip_;
-		float farClip_;
+		float nearClip_ = 0.1f;//カメラの描画範囲(手前-z)
+		float farClip_ = 1000.0f;//カメラの描画範囲(奥 z)
 		Matrix4x4 viewProjectionMatrix_;
 	};
 }
@@ -4088,19 +4149,19 @@ namespace EngineLayer {
 		/// VertexResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		virtual void InitVertexResource(ModelData modelData) = 0;
+		virtual void InitVertexResource(const ModelData& modelData) = 0;
 
 		/// <summary>
 		/// MaterialResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		virtual void InitMaterialResource(ModelData modelData) = 0;
+		virtual void InitMaterialResource(ModelData& modelData) = 0;
 
 		/// <summary>
 		/// IndexResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		virtual void InitIndexResource(ModelData modelData) = 0;
+		virtual void InitIndexResource(const ModelData& modelData) = 0;
 
 		/// <summary>
 		/// カメラ更新処理
@@ -4115,6 +4176,16 @@ namespace EngineLayer {
 		Material* materialData_ = nullptr;
 
 		MyMath::ModelDataMulti modelData_;
+
+
+		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource_; //index
+		std::vector<D3D12_INDEX_BUFFER_VIEW> indexBufferView_; //index
+
+		uint32_t* mappedIndex_ = nullptr;
+
+		//マテリアルデータ初期値
+		const Vector4 kInitColor_ = { 1.0f,1.0f,1.0f,1.0f };
+		const float kShininess_ = 70.0f;
 	};
 }
 
@@ -4283,8 +4354,6 @@ namespace EngineLayer {
 		//.gltf
 		modelData_ = LoadModelFile(directoryPath, fileName);
 
-		InitialData_ = modelData_;
-
 		//vertex
 		for (auto& modelData : modelData_.Data) {
 
@@ -4322,11 +4391,11 @@ namespace EngineLayer {
 		}
 	}
 
-	void Model_glTF::InitVertexResource(ModelData modelData) {
+	void Model_glTF::InitVertexResource(const ModelData& modelData) {
 		D3D12_VERTEX_BUFFER_VIEW vertexB{};
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexR;
 
-		vertexR = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
+		vertexR = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
 
 		vertexB.BufferLocation = vertexR->GetGPUVirtualAddress();
 		vertexB.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
@@ -4339,11 +4408,11 @@ namespace EngineLayer {
 		vertexBufferView_.push_back(vertexB);
 	}
 
-	void Model_glTF::InitMaterialResource(ModelData modelData) {
+	void Model_glTF::InitMaterialResource(ModelData& modelData) {
 
 		//マテリアル用のリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
-		materialResource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
+		materialResource = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(Material));
 		//書き込むためのアドレス
 		materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定
@@ -4352,12 +4421,12 @@ namespace EngineLayer {
 			materialData_->color = modelData.materialData.materialColor;
 		}
 		else {
-			materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
+			materialData_->color = kInitColor_;
 		}
-		materialData_->enableLighting = true;
+		materialData_->enableLighting = false;
 		materialData_->uvTransform = modelData.materialData.uvTransform;
 
-		materialData_->shininess = 70;
+		materialData_->shininess = kShininess_;
 		materialData_->environmentCoefficient = 0.0f;
 
 		materialResources_.push_back(materialResource);
@@ -4367,12 +4436,12 @@ namespace EngineLayer {
 		modelData.materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(modelData.materialData.textureFilePath);
 	}
 
-	void Model_glTF::InitIndexResource(ModelData modelData) {
+	void Model_glTF::InitIndexResource(const ModelData& modelData) {
 
 		Microsoft::WRL::ComPtr<ID3D12Resource> indexR;
 		D3D12_INDEX_BUFFER_VIEW indexB{};
 
-		indexR = DirectXCommon::GetInstance().CreateBufferResource(sizeof(uint32_t) * modelData.indices.size());
+		indexR = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(uint32_t) * modelData.indices.size());
 
 		indexB.BufferLocation = indexR->GetGPUVirtualAddress();
 		indexB.SizeInBytes = UINT(sizeof(uint32_t) * modelData.indices.size());
@@ -4388,7 +4457,6 @@ namespace EngineLayer {
 
 	void Model_glTF::Draw() {
 		//objファイルに元々あったテクスチャ
-		//modelData_ = InitialData_;
 		vbvs_[0] = vertexBufferView_[multiMeshCount_];
 
 
@@ -4640,7 +4708,7 @@ namespace EngineLayer {
 
 		///t0
 		// paletteResource確保
-		skinCluster.paletteResource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(WellForGPU) * skeleton.joints.size());
+		skinCluster.paletteResource = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(WellForGPU) * skeleton.joints.size());
 		WellForGPU* mappedPalette = nullptr;
 		skinCluster.paletteResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedPalette));
 		skinCluster.mappedPalette = { mappedPalette,skeleton.joints.size() };//sponのサイズ設定
@@ -4669,7 +4737,7 @@ namespace EngineLayer {
 			all_vertex += uint32_t(v.vertices.size());
 		}
 
-		skinCluster.influenceResource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexInfluence) * all_vertex);
+		skinCluster.influenceResource = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(VertexInfluence) * all_vertex);
 		VertexInfluence* mappedInfluence = nullptr;
 		skinCluster.influenceResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedInfluence));
 		std::memset(mappedInfluence, 0, sizeof(VertexInfluence) * all_vertex);
@@ -4875,19 +4943,19 @@ namespace EngineLayer {
 		/// VertexResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		void InitVertexResource(ModelData modelData) override;
+		void InitVertexResource(const ModelData& modelData) override;
 
 		/// <summary>
 		/// MaterialResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		void InitMaterialResource(ModelData modelData) override;
+		void InitMaterialResource(ModelData& modelData) override;
 
 		/// <summary>
 		/// MaterialResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		void InitIndexResource(ModelData modelData) override;
+		void InitIndexResource(const ModelData& modelData) override;
 
 		/// <summary>
 		/// ノードを読み込む
@@ -4929,14 +4997,6 @@ namespace EngineLayer {
 		/// <param name="joints">ジョイント</param>
 		/// <returns>生成したジョイント</returns>
 		int32_t CreateJoint(const MyMath::Node& node, const std::optional<int32_t>& parent, std::vector<MyMath::Joint>& joints);
-
-		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource_; //index
-
-		uint32_t* mappedIndex_ = nullptr;
-
-		std::vector<D3D12_INDEX_BUFFER_VIEW> indexBufferView_; //index
-
-		MyMath::ModelDataMulti InitialData_;
 
 		//アニメーション
 		std::vector<MyMath::Animation> animation_;
@@ -4980,26 +5040,25 @@ namespace EngineLayer {
 		// (resource) / (Object / モデルファイル) / (オブジェクト名.obj)
 		modelData_ = LoadObjFile(directoryPath, fileName, ".obj");
 
-		InitialData_ = modelData_;
-
-		int i = 0;
 		//全ての頂点数
 		for (auto& modelData : modelData_.Data) {
 
 			InitVertexResource(modelData);
 
+			InitIndexResource(modelData);
+
 			InitMaterialResource(modelData);
 		}
 	}
 
-	void Model_obj::InitVertexResource(ModelData modelData) {
+	void Model_obj::InitVertexResource(const ModelData& modelData) {
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexR;
 		D3D12_VERTEX_BUFFER_VIEW vertexB;
 
 
 		std::vector<VertexData> vertexDatas = modelData.vertices;
 
-		vertexR = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * vertexDatas.size());
+		vertexR = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(VertexData) * vertexDatas.size());
 
 		vertexB.BufferLocation = vertexR->GetGPUVirtualAddress();
 		vertexB.SizeInBytes = UINT(sizeof(VertexData) * vertexDatas.size());
@@ -5012,7 +5071,7 @@ namespace EngineLayer {
 		vertexBufferView_.push_back(vertexB);
 	}
 
-	void Model_obj::InitMaterialResource(ModelData modelData) {
+	void Model_obj::InitMaterialResource(ModelData& modelData) {
 
 		MaterialData materialData = modelData.materialData;
 
@@ -5023,26 +5082,38 @@ namespace EngineLayer {
 		//Model用マテリアル
 		//マテリアル用のリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
-		materialResource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
+		materialResource = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(Material));
 		//書き込むためのアドレス
 		materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定
-		materialData_->color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-		materialData_->enableLighting = true;
+		materialData_->color = kInitColor_;
+		materialData_->enableLighting = false;
 		materialData_->uvTransform = modelData.materialData.uvTransform;
-		materialData_->shininess = 70;
+		materialData_->shininess = kShininess_;
 
 		//vector
 		materialResources_.push_back(materialResource);
 	}
 
-	void Model_obj::InitIndexResource(ModelData modelData) {}
+	void Model_obj::InitIndexResource(const ModelData& modelData) {
+
+		Microsoft::WRL::ComPtr<ID3D12Resource> indexR;
+		D3D12_INDEX_BUFFER_VIEW indexB{};
+
+		indexR = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(uint32_t) * modelData.indices.size());
+
+		indexB.BufferLocation = indexR->GetGPUVirtualAddress();
+		indexB.SizeInBytes = UINT(sizeof(uint32_t) * modelData.indices.size());
+		indexB.Format = DXGI_FORMAT_R32_UINT;
+
+		indexR->Map(0, nullptr, reinterpret_cast<void**>(&mappedIndex_));
+		std::memcpy(mappedIndex_, modelData.indices.data(), sizeof(uint32_t) * modelData.indices.size());
+
+		indexResource_.push_back(indexR);
+		indexBufferView_.push_back(indexB);
+	}
 
 	void Model_obj::Draw() {
-
-		//元々のデータを読み取る
-		modelData_ = InitialData_;
-
 		int i = 0;
 		for (auto& multi : modelData_.Data) {
 			DirectXCommon::GetInstance().GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_[i]);
@@ -5098,7 +5169,6 @@ namespace EngineLayer {
 				s >> textureFilename;
 
 				//テクスチャUVのトランスフォーム
-				//aiUVTransform uvTransform;
 				materialData.uvTransform = MakeIdentity4x4();//通常行列
 				//マッピング(位置)
 				if (textureFilename == "-o") {
@@ -5160,6 +5230,10 @@ namespace EngineLayer {
 		std::vector<VertexData> iVertices;
 		bool firstMaterial = false;
 
+		std::vector<uint32_t> iIndexes;
+
+
+		//ナンバー
 		uint32_t vertexNum = 0;
 		uint32_t materialNum = 0;
 
@@ -5179,7 +5253,7 @@ namespace EngineLayer {
 				position.x *= -1.0f;
 				positions.push_back(position);
 			}
-			else if (identifier == "vt") {//texcord
+			else if (identifier == "vt") {//texcoord
 				Vector2 texcoord;
 				s >> texcoord.x >> texcoord.y;
 
@@ -5209,6 +5283,8 @@ namespace EngineLayer {
 						std::string index;
 						std::getline(v, index, '/'); //  "/"でインデックスを区切る
 						elementIndices[element] = std::stoi(index);
+						//頂点インデックス追加
+						iIndexes.push_back(elementIndices[element]);
 					}
 					Vector4 position = positions[elementIndices[0] - 1];
 					Vector2 texcoord = texcoords[elementIndices[1] - 1];
@@ -5227,8 +5303,10 @@ namespace EngineLayer {
 				//各マテリアルの頂点情報を取得
 				if (firstMaterial) {
 					iModelData.vertices = iVertices;//vectorで追加するmodelDataのvertexDataに導入
+					iModelData.indices = iIndexes;
 					vertexNum++;//カウントを進む
 					iVertices.clear();//データをリセット
+					iIndexes.clear();
 				}
 				else {
 					//最初の o はパス
@@ -5253,6 +5331,7 @@ namespace EngineLayer {
 		}
 
 		iModelData.vertices = iVertices;
+		iModelData.indices = iIndexes;
 
 		//最後のマテリアル頂点情報を取得
 		modelData.Data.push_back(iModelData);
@@ -5304,19 +5383,19 @@ namespace EngineLayer {
 		/// VertexResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		void InitVertexResource(ModelData modelData) override;
+		void InitVertexResource(const ModelData& modelData) override;
 
 		/// <summary>
 		/// MaterialResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		void InitMaterialResource(ModelData modelData) override;
+		void InitMaterialResource(ModelData& modelData) override;
 
 		/// <summary>
 		/// IndexResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		void InitIndexResource(ModelData modelData) override;
+		void InitIndexResource(const ModelData& modelData) override;
 
 		/// <summary>
 		/// テクスチャとマテリアルの作成
@@ -5334,8 +5413,6 @@ namespace EngineLayer {
 		/// <param name="objName">オブジェクト拡張子</param>
 		/// <returns>完成したモデルデータ(マルチマテリアル付き)</returns>
 		static MyMath::ModelDataMulti LoadObjFile(const std::string& directoryPath, const std::string& filename, const std::string& objName);
-
-		MyMath::ModelDataMulti InitialData_;
 	};
 }
 
@@ -5371,7 +5448,7 @@ namespace EngineLayer {
 	}
 
 	void BaseObject::InitCamera() {
-		cameraResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(CameraForGPU));
+		cameraResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(CameraForGPU));
 		cameraResource_->Map(0, nullptr, reinterpret_cast<void**>(&cameraData_));
 
 		cameraData_->worldPosition = { 0,0,0 };
@@ -5388,25 +5465,25 @@ namespace EngineLayer {
 
 	void BaseObject::CreateDirectionalLight() {
 		//ライト用のリソース
-		directionalLightResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(DirectionalLight));
+		directionalLightResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(DirectionalLight));
 		//書き込むためのアドレス
 		directionalLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData_));
 		//色の設定
 		directionalLightData_->color = kDefaultColor_;
 		directionalLightData_->direction = kDirectionalLightDirection_;
 		directionalLightData_->intensity = 0.0f;
-		directionalLightData_->isEnable = true;
+		directionalLightData_->isEnable = false;
 	}
 
 	void BaseObject::CreatePointLight() {
 		//ライト用のリソース
-		pointLightResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(PointLight));
+		pointLightResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(PointLight));
 		//書き込むためのアドレス
 		pointLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&pointLightData_));
 		//_
 		pointLightData_->color = kDefaultColor_;
 		pointLightData_->position = kPointLightPosition_;
-		pointLightData_->intensity = 0.0f;
+		pointLightData_->intensity = 1.0f;
 		pointLightData_->radius = kPointLightRadius_;
 		pointLightData_->decay = kPointLightDecay_;
 
@@ -5416,7 +5493,7 @@ namespace EngineLayer {
 
 	void BaseObject::CreateSpotLight() {
 		//ライト用のリソース
-		spotLightResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(SpotLight));
+		spotLightResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(SpotLight));
 		//書き込むためのアドレス
 		spotLightResource_->Map(0, nullptr, reinterpret_cast<void**>(&spotLightData_));
 		//設定
@@ -5424,12 +5501,12 @@ namespace EngineLayer {
 		spotLightData_->position = kSpotLightPosition_;
 		spotLightData_->distance = kSpotLightDistance_;
 		spotLightData_->direction = Normalize(kSpotLightDirection_);
-		spotLightData_->intensity = 0.0f;
+		spotLightData_->intensity = 1.0f;
 		spotLightData_->decay = kPointLightDecay_;
 		spotLightData_->cosAngle = kCosAngle;
 		spotLightData_->cosFalloffStart = kCosFalloffStart;
 
-		spotLightData_->isEnable = true;
+		spotLightData_->isEnable = false;
 	}
 }
 
@@ -5478,11 +5555,6 @@ namespace EngineLayer {
 		/// 描画処理
 		/// </summary>
 		virtual void Draw() = 0;
-		/// <summary>
-		/// 描画処理(テクスチャの変更あり)
-		/// </summary>
-		/// <param name="textureData">変更したいテクスチャのファイルパス</param>
-		virtual void Draw(const std::string& textureData) = 0;
 		/// <summary>
 		/// モデルデータ
 		/// </summary>
@@ -5605,7 +5677,7 @@ using namespace MyMath;
 namespace EngineLayer {
 	void Object3d::Initialize() {
 		this->camera_ = Object3dCommon::GetInstance().GetDefaultCamera();
-		wvpResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
+		wvpResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
 		wvpResource_->Map(0, nullptr, reinterpret_cast<void**>(&wvpData_));
 
 
@@ -5722,7 +5794,7 @@ namespace EngineLayer {
 		/// <summary>
 		/// 描画処理
 		/// </summary>
-		void Draw(const std::string& textureData) override;
+		void Draw(const std::string& textureData);
 		/// <summary>
 		/// setter_モデル
 		/// </summary>
@@ -5824,7 +5896,7 @@ namespace EngineLayer {
 			}
 		}
 
-		//directionalLightData_->direction = Normalize(directionalLightData_->direction);
+		directionalLightData_->direction = Normalize(directionalLightData_->direction);
 	}
 
 	void Object_glTF::Update() {
@@ -5959,26 +6031,22 @@ namespace EngineLayer {
 		model_->ResetMeshCount();
 
 #ifdef _DEBUG
+		//ワイヤーフレーム風描画
 		DebugWireframes::GetInstance().Command();
-
+		//骨組みの描画
 		for (auto it : debugSpheres_) {
-			//it->Draw();
+			it->Draw();
 		}
 
 		GLTFCommon::GetInstance().Command();
 #endif // _DEBUG
 	}
 
-	void Object_glTF::Draw(const std::string& textureData) {
-		//モデル 
-
-	}
-
 	void Object_glTF::CreateWVP() {
 		for (auto& i : modelData_.Data) {
 			Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource;
 			TransformationMatrix* wvpData;
-			wvpResource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
+			wvpResource = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(TransformationMatrix));
 			wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
 
 
@@ -6239,12 +6307,6 @@ namespace EngineLayer {
 		/// 描画処理
 		/// </summary>	
 		void Draw() override;
-		/// <summary>
-		/// 描画処理
-		/// </summary>
-		/// <param name="textureData"></param> テクスチャ変更
-		void Draw(const std::string& textureData) override;
-
 		/// <summary>
 		/// setter_modelの選択
 		/// </summary>
@@ -6519,7 +6581,7 @@ namespace EngineLayer {
 
 	void Particle::InitVertex() {
 
-		vertexResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
+		vertexResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(VertexData) * modelData_.vertices.size());
 
 		vertexBufferView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 		vertexBufferView_.SizeInBytes = UINT(sizeof(VertexData) * modelData_.vertices.size());
@@ -6540,7 +6602,7 @@ namespace EngineLayer {
 
 	void Particle::InitMaterial() {
 		//マテリアル用のリソース
-		materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Material));
+		materialResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(Material));
 		//書き込むためのアドレス
 		materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&materialData_));
 		//色の設定
@@ -6896,12 +6958,12 @@ namespace EngineLayer {
 
 	void ParticleCommon::CreateVertexShader() {
 		//shaderのコンパイラ
-		vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Particle.VS.hlsl", L"vs_6_0");
+		vertexShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Particle.VS.hlsl", L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 	}
 
 	void ParticleCommon::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Particle.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Particle.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -7202,7 +7264,7 @@ namespace EngineLayer {
 
 		//テクスチャ読み込み
 		particleG.modelData.materialData.textureFilePath = textureFilePath;
-		particleG.resource = DirectXCommon::GetInstance().CreateBufferResource(sizeof(ParticleForGPU) * particleG.kNumInstance);
+		particleG.resource = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(ParticleForGPU) * particleG.kNumInstance);
 
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 		srvDesc.Format = DXGI_FORMAT_UNKNOWN;
@@ -8089,12 +8151,12 @@ namespace EngineLayer {
 	}
 
 	void CubeMap::CreateVertexShader() {
-		vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Skybox.VS.hlsl", L"vs_6_0");
+		vertexShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Skybox.VS.hlsl", L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 	}
 
 	void CubeMap::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Skybox.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Skybox.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -8279,12 +8341,12 @@ namespace EngineLayer {
 	}
 
 	void DebugWireframes::CreateVertexShader() {
-		vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
+		vertexShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 	}
 
 	void DebugWireframes::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Wireframe.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Wireframe.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -8482,12 +8544,12 @@ namespace EngineLayer {
 	}
 
 	void GLTFCommon::CreateVertexShader() {
-		vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
+		vertexShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 	}
 
 	void GLTFCommon::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d_glTF.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Object3d_glTF.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -8680,12 +8742,12 @@ namespace EngineLayer {
 	}
 
 	void Object3dCommon::CreateVertexShader() {
-		vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
+		vertexShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 	}
 
 	void Object3dCommon::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Object3d.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -8880,12 +8942,12 @@ namespace EngineLayer {
 	}
 
 	void SkinningCommon::CreateVertexShader() {
-		vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
+		vertexShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Object3d.VS.hlsl", L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 	}
 
 	void SkinningCommon::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Object3d.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Object3d.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -8998,6 +9060,12 @@ namespace EngineLayer {
 ============================================================
 File Path: project/Engine/3d/shadow/ShadowManager.cpp
 ============================================================
+/// ----------------------
+///
+/// 影生成マネージャ
+/// スポットライトの減衰
+/// 
+/// ----------------------
 #include "ShadowManager.h"
 #include "DirectXCommon.h"
 #include <numbers>
@@ -9027,7 +9095,7 @@ namespace EngineLayer {
 
 
 	void ShadowManager::Initialize() {
-		resource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(ShadowFactory));
+		resource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(ShadowFactory));
 		resource_->Map(0,nullptr,reinterpret_cast<void**>(&shadowFactory_));
 	}
 
@@ -9098,7 +9166,9 @@ struct ShadowFactory {
 /// エンジン層
 /// </summary>
 namespace EngineLayer {
-
+	/// <summary>
+	/// 影生成マネージャ
+	/// </summary>
 	class ShadowManager {
 	public:
 		/// <summary>
@@ -9149,7 +9219,7 @@ namespace EngineLayer {
 
 		const Vector3 kDirection_ = { 0.0f,-1.0f,0.0f };//ベクトル向き
 		
-		const float kMaxDistance_ = 9.0f;//最高飛距離
+		const float kMaxDistance_ = 10.0f;//最高飛距離
 		const float kMinDistance_ = 1.0f;//最低でも必要な長さ
 
 		const float kDecay_ = 0.1f;//減衰度
@@ -9210,7 +9280,7 @@ namespace EngineLayer {
 	}
 
 	void BasePostEffect::CreateVertexShader() {
-		vertexShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Fullscreen.VS.hlsl", L"vs_6_0");
+		vertexShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Fullscreen.VS.hlsl", L"vs_6_0");
 		assert(vertexShaderBlob != nullptr);
 	}
 
@@ -9586,7 +9656,7 @@ namespace EngineLayer {
 	}
 
 	void Normal_Image::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/CopyImage.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/CopyImage.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -9689,7 +9759,7 @@ namespace EngineLayer {
 	}
 
 	void BoxFilter::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/BoxFilter.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/BoxFilter.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -9795,7 +9865,7 @@ namespace EngineLayer {
 	}
 
 	void GaussianFilter::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/GaussianFilter.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/GaussianFilter.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -9924,7 +9994,7 @@ namespace EngineLayer {
 	}
 
 	void DepthBasedOutline::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/DepthBasedOutline.PS.hlsl", L"ps_6_0");//ココのみ変化させる
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/DepthBasedOutline.PS.hlsl", L"ps_6_0");//ココのみ変化させる
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -9954,7 +10024,7 @@ namespace EngineLayer {
 
 		//Model用マテリアル
 		//マテリアル用のリソース
-		materialResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(DepthOutlineFunction));
+		materialResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(DepthOutlineFunction));
 		//書き込むためのアドレス
 		materialResource_->Map(0, nullptr, reinterpret_cast<void**>(&depthOutlineFunction_));
 		//色の設定
@@ -10069,7 +10139,7 @@ namespace EngineLayer {
 	}
 
 	void LuminanceBasedOutline::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/LuminanceBasedOutline.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/LuminanceBasedOutline.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -10183,7 +10253,7 @@ namespace EngineLayer {
 	}
 
 	void Dissolve::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Dissolve.PS.hlsl", L"ps_6_0");//ココのみ変化させる
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Dissolve.PS.hlsl", L"ps_6_0");//ココのみ変化させる
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -10220,7 +10290,7 @@ namespace EngineLayer {
 		textureFileName_ = "resource/Sprite/noise0.png";
 		TextureManager::GetInstance().LoadTexture(textureFileName_);
 
-		dissolveResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(Threshold));
+		dissolveResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(Threshold));
 		dissolveResource_->Map(0, nullptr, reinterpret_cast<void**>(&threshold_));
 
 		threshold_->degree = 0.5f;
@@ -10420,14 +10490,14 @@ namespace EngineLayer {
 
 		SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
-		RandomResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(RandomFunction));
+		RandomResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(RandomFunction));
 		RandomResource_->Map(0, nullptr, reinterpret_cast<void**>(&randomFunction_));
 
 		randomFunction_->randomTimer = 0.0f;
 	}
 
 	void Random::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Random.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Random.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -10533,7 +10603,7 @@ namespace EngineLayer {
 	}
 
 	void Vignette::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Vignette.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Vignette.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -10554,7 +10624,7 @@ namespace EngineLayer {
 		SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
 
-		vignetteResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(VignetteFunction));
+		vignetteResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(VignetteFunction));
 		vignetteResource_->Map(0, nullptr, reinterpret_cast<void**>(&vignetteFunction_));
 
 		vignetteFunction_->luminance = 16;
@@ -10677,7 +10747,7 @@ namespace EngineLayer {
 	}
 
 	void RadialBlur::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/RadialBlur.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/RadialBlur.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -10782,7 +10852,7 @@ namespace EngineLayer {
 	}
 
 	void Grayscale::CreatePixelShader() {
-		pixelShaderBlob = DirectXCommon::GetInstance().CompileShader(L"resource/shaders/Grayscale.PS.hlsl", L"ps_6_0");
+		pixelShaderBlob = ShaderManager::GetInstance().CompileShader(L"resource/shaders/Grayscale.PS.hlsl", L"ps_6_0");
 		assert(pixelShaderBlob != nullptr);
 	}
 
@@ -10801,7 +10871,7 @@ namespace EngineLayer {
 
 		SrvManager::GetInstance().CreateSRVForTexture2D(srvIndex_, DirectXCommon::GetInstance().GetRenderTexture(), DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, 1);
 
-		GrayscaleResource_ = DirectXCommon::GetInstance().CreateBufferResource(sizeof(GrayFunction));
+		GrayscaleResource_ = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(GrayFunction));
 		GrayscaleResource_->Map(0, nullptr, reinterpret_cast<void**>(&grayFunction_));
 
 		grayFunction_->isSepia = false;
@@ -10938,19 +11008,21 @@ namespace EngineLayer {
 		result_ = MFStartup(MF_VERSION, MFSTARTUP_NOSOCKET);
 		assert(SUCCEEDED(result_));
 	}
-
-	void Audio::LoadWave(const std::string& filename) {
-		//すでにある場合読み取らない
-		if (soundDates_.contains(filename)) {
-			return;
-		}
-
-
+	
+	const SoundData& Audio::LoadWave(const std::string& filename) {
+		SoundLoadFile(filename);
 		SoundData& soundData = soundDates_[filename];
-		soundData = SoundLoadFile(filename);
+
+		return soundData;
 	}
 
-	SoundData Audio::SoundLoadFile(const std::string& fileName) {
+
+	void Audio::SoundLoadFile(const std::string& fileName) {
+
+		//すでにある場合読み取らない
+		if (soundDates_.contains(fileName)) return;
+		SoundData& soundData = soundDates_[fileName];
+
 		std::wstring filePathW = ConvertString(fileName);
 
 		Microsoft::WRL::ComPtr<IMFSourceReader> pReader;
@@ -10974,11 +11046,7 @@ namespace EngineLayer {
 		MFCreateWaveFormatExFromMFMediaType(pOutType.Get(), &waveFormat, nullptr);
 
 		//コンテナに格納する音声データ
-		SoundData soundData = {};
 		soundData.wfex = *waveFormat;
-
-		result_ = xAudio2_.Get()->CreateSourceVoice(&soundData.pSourceVoice, &soundData.wfex);
-		assert(SUCCEEDED(result_));
 
 		//生成したWaveフォーマット解放
 		CoTaskMemFree(waveFormat);
@@ -11008,13 +11076,11 @@ namespace EngineLayer {
 				pBuffer->Unlock();//ロック解除
 			}
 		}
-
-		return soundData;
 	}
 
-	void Audio::SoundPlayWave(const std::string& soundDataName, float volume, bool isLoop) {
-
-		SoundData& soundData = soundDates_[soundDataName];
+	void Audio::SoundPlayWave(SoundData& soundData, float volume, bool isLoop) {
+		//すでに鳴っているかチェック(重複チェック)
+		IsPlayingSound(soundData);
 
 		XAUDIO2_VOICE_STATE state;
 		soundData.pSourceVoice->GetState(&state);
@@ -11035,11 +11101,11 @@ namespace EngineLayer {
 		result_ = soundData.pSourceVoice->SetVolume(volume);//音量調節
 		result_ = soundData.pSourceVoice->SubmitSourceBuffer(&buf);
 		result_ = soundData.pSourceVoice->Start();
-
 	}
 
-	bool Audio::IsPlayingSound(const std::string& soundDataName) {
-		SoundData& soundData = soundDates_[soundDataName];
+	bool Audio::IsPlayingSound(SoundData& soundData) {
+
+		InitSourceVoice(soundData);
 
 		XAUDIO2_VOICE_STATE state;
 		soundData.pSourceVoice->GetState(&state);
@@ -11060,18 +11126,28 @@ namespace EngineLayer {
 		}
 	}
 
-	void Audio::StopWave(const std::string& soundDataName) {
-		SoundData& soundData = soundDates_[soundDataName];
+	void Audio::StopWave(SoundData& soundData) {
+
+		InitSourceVoice(soundData);
 
 		result_ = soundData.pSourceVoice->Stop(); //音源を止める
 		result_ = soundData.pSourceVoice->FlushSourceBuffers(); //音源のリセット
 	}
 
-	void Audio::ControlVolume(const std::string& soundDataName, float volume) {
-		SoundData& soundData = soundDates_[soundDataName];
-		//音量調節
-		result_ = soundData.pSourceVoice->SetVolume(volume);
+	void Audio::ControlVolume(SoundData& soundData, float volume) {
+
+		InitSourceVoice(soundData);
+
+		result_ = soundData.pSourceVoice->SetVolume(volume);//音量調節
 	}
+
+	void Audio::InitSourceVoice(SoundData& soundData) {
+		if (soundData.pSourceVoice != nullptr) return;
+		//ソースボイスを作成
+		result_ = xAudio2_.Get()->CreateSourceVoice(&soundData.pSourceVoice, &soundData.wfex);
+		assert(SUCCEEDED(result_));
+	}
+
 }
 
 ============================================================
@@ -11122,10 +11198,21 @@ namespace EngineLayer {
 		//バッファ
 		std::vector<BYTE> buffer;
 		//ソースボイス
-		IXAudio2SourceVoice* pSourceVoice = nullptr;
+		IXAudio2SourceVoice* pSourceVoice = nullptr;	
+
+		/// <summary>
+		/// SoundData解放処理
+		/// </summary>
+		~SoundData() {
+			//nullでないなら
+			if (pSourceVoice != nullptr) {
+				pSourceVoice->Stop(); //なり続けないように音源を止める
+			}
+		}
 	};
 	/// <summary>
 	/// サウンド
+	/// SoundDataを使用してください
 	/// </summary>
 	class Audio {
 	public:
@@ -11147,7 +11234,7 @@ namespace EngineLayer {
 		/// </summary>
 		/// <param name="filename">waveファイル名</param>
 		/// <returns>ロードされたサウンドデータ</returns>
-		void LoadWave(const std::string& filename);
+		const SoundData& LoadWave(const std::string& filename);
 
 		/// <summary>
 		/// 音声を再生
@@ -11155,39 +11242,42 @@ namespace EngineLayer {
 		/// <param name="soundData">流したい音声データの名前</param>
 		/// <param name="volume">音量</param>
 		/// <param name="isLoop">ループするか</param>
-		void SoundPlayWave(const std::string& soundDataName, float volume, bool isLoop = false);
+		void SoundPlayWave(SoundData&, float volume, bool isLoop = false);
+
+		/// <summary>
+		/// 音声を停止
+		/// </summary>
+		/// <param name="soundDataName">止めたい音声データ</param>
+		void StopWave(SoundData& soundDataName);
+		/// <summary>
+		/// 音声のボリューム
+		/// </summary>
+		/// <param name="soundDataName">変えたい音声データ</param>
+		/// <param name="volume">音量</param>
+		void ControlVolume(SoundData& soundDataName, float volume);
+
+	private:
 
 		/// <summary>
 		/// 音声はすでに鳴っているか
 		/// </summary>
 		/// <param name="soundDataName"></param>
 		/// <returns></returns>
-		bool IsPlayingSound(const std::string& soundDataName);
-
-		/// <summary>
-		/// 音声を停止
-		/// </summary>
-		/// <param name="soundDataName">止めたい音声データ</param>
-		void StopWave(const std::string& soundDataName);
-		/// <summary>
-		/// 音声のボリューム
-		/// </summary>
-		/// <param name="soundDataName">変えたい音声データ</param>
-		/// <param name="volume">音量</param>
-		void ControlVolume(const std::string& soundDataName, float volume);
-	private:
+		bool IsPlayingSound(SoundData& soundDataName);
 
 		/// <summary>
 		/// 音声ファイルを読み取る
 		/// </summary>
 		/// <param name="fileName">音声ファイル名</param>
-		SoundData SoundLoadFile(const std::string& fileName);
+		void SoundLoadFile(const std::string& fileName);
 
 		/// <summary>
 		/// 音声データの解放 delete
 		/// </summary>
 		/// <param name="soundData">サウンドデータ</param>
 		void SoundUnload();
+
+		void InitSourceVoice(SoundData& soundData);
 
 		//インスタンス
 		static std::unique_ptr<Audio> sInstance_;
@@ -11196,12 +11286,541 @@ namespace EngineLayer {
 
 		std::unordered_map<std::string, SoundData> soundDates_;
 
+		std::vector<std::string> soundNames_;
+
+
 		//audio
 		Microsoft::WRL::ComPtr<IXAudio2> xAudio2_;
 
 		IXAudio2MasteringVoice* masterVoice_;
 
 		HRESULT result_;
+	};
+}
+
+============================================================
+File Path: project/Engine/base/Descriptor/RtvManager.cpp
+============================================================
+/// ------------------------------------
+///
+/// レンダーターゲットビューマネージャ
+/// 
+/// ------------------------------------
+#include "RtvManager.h"
+#include "DirectXCommon.h"
+
+namespace EngineLayer {
+	std::unique_ptr<RtvManager> RtvManager::sInstance_ = nullptr;
+
+	RtvManager& RtvManager::GetInstance() {
+		if (sInstance_ == nullptr) {
+			sInstance_ = std::make_unique<RtvManager>();
+		}
+		return *sInstance_;
+	}
+
+	void RtvManager::Initialize() {
+		descriptorSizeRTV_ = DirectXCommon::GetInstance().GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+		rtvDescriptorHeap_ = DirectXCommon::GetInstance().CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 3, false);
+	}
+
+	void RtvManager::Finalize() {
+		sInstance_.reset();
+	}
+
+	void RtvManager::CreateRTV(const Microsoft::WRL::ComPtr<ID3D12Resource>& resource) {
+		rtvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		rtvDesc_.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+
+		//CPUの最初の位置
+		D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+
+		rtvHandles_[useIndex_] = rtvStartHandle;
+		if (useIndex_ > 0) {
+			rtvHandles_[useIndex_].ptr = rtvHandles_[useIndex_ - 1].ptr + descriptorSizeRTV_;
+		}
+
+		DirectXCommon::GetInstance().GetDevice()->CreateRenderTargetView(resource.Get(),&rtvDesc_, rtvHandles_[useIndex_]);	
+		useIndex_++;//追加
+	}
+}
+
+
+============================================================
+File Path: project/Engine/base/Descriptor/RtvManager.h
+============================================================
+#pragma once
+#include "DirectXCommon.h"
+
+namespace EngineLayer {
+	/// <summary>
+	/// RTV マネージャ
+	/// </summary>
+	class RtvManager {
+	public:
+		/// <summary>
+		/// インスタンス生成
+		/// </summary>
+		/// <returns>インスタンス</returns>
+		static RtvManager& GetInstance();
+
+		/// <summary>
+		/// 初期化処理
+		/// </summary>
+		void Initialize();
+
+		/// <summary>
+		/// 解放処理
+		/// </summary>
+		void Finalize();
+
+		/// <summary>
+		/// RTVを作成
+		/// </summary>
+		void CreateRTV(const Microsoft::WRL::ComPtr<ID3D12Resource>& resource);
+
+		const D3D12_CPU_DESCRIPTOR_HANDLE& GetHandle(uint32_t number) { return rtvHandles_[number]; }
+
+		const D3D12_RENDER_TARGET_VIEW_DESC& GetDesc() { return rtvDesc_; }
+
+	private:
+
+		static std::unique_ptr<RtvManager> sInstance_;
+		friend struct std::default_delete<RtvManager>;
+
+		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap_;
+		uint32_t descriptorSizeRTV_;
+
+
+		//RTV
+		D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
+
+
+
+		std::array<D3D12_CPU_DESCRIPTOR_HANDLE, 3> rtvHandles_;
+		uint32_t useIndex_ = 0;
+	};
+}
+
+============================================================
+File Path: project/Engine/base/Descriptor/SrvManager.cpp
+============================================================
+/// -----------------------------------------------
+///
+/// シェーダーリソースビュー(SRV)を作成マネージャ
+/// 
+/// -----------------------------------------------
+#include "SrvManager.h"
+
+/// <summary>
+/// エンジン層
+/// </summary>
+namespace EngineLayer {
+	const uint32_t SrvManager::sMaxSRVCount_ = 512;
+
+	std::unique_ptr<SrvManager> SrvManager::sInstance_ = nullptr;
+
+	SrvManager& SrvManager::GetInstance() {
+		if (sInstance_ == nullptr) {
+			sInstance_ = std::make_unique<SrvManager>();
+		}
+		return *sInstance_;
+	}
+	void SrvManager::Finalize() {
+		sInstance_.reset();
+	}
+
+
+	void SrvManager::Initialize() {
+		descriptorHeap_ = DirectXCommon::GetInstance().CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, sMaxSRVCount_, true);
+		descriptorSize_ = DirectXCommon::GetInstance().GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	}
+	uint32_t SrvManager::Allocate() {
+		assert(Max());
+		//returnする番号
+		int index = useIndex_;
+		//次回のため番号を1進める [0] -> [1]
+		useIndex_++;
+		return index;
+	}
+
+	bool SrvManager::Max() {
+		if (sMaxSRVCount_ < useIndex_) {
+			return false;//上限に達して「いない」
+		}
+		else {
+			return true;
+		}
+		return false;
+	}
+
+	D3D12_CPU_DESCRIPTOR_HANDLE SrvManager::GetCPUDescriptorHandle(uint32_t index) {
+		D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+		handleCPU.ptr += (descriptorSize_ * index);
+		return handleCPU;
+	}
+
+	D3D12_GPU_DESCRIPTOR_HANDLE SrvManager::GetGPUDescriptorHandle(uint32_t index) {
+		D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap_->GetGPUDescriptorHandleForHeapStart();
+		handleGPU.ptr += (descriptorSize_ * index);
+		return handleGPU;
+	}
+
+	void SrvManager::CreateSRVForTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, DXGI_FORMAT Format, UINT MipLevels) {
+		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+		srvDesc.Format = Format;
+		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = MipLevels;
+		DirectXCommon::GetInstance().GetDevice()->CreateShaderResourceView(pResource, &srvDesc, GetCPUDescriptorHandle(srvIndex));
+	}
+
+	void SrvManager::CreateSRVForStructureBuffer(D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc, uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride) {
+		DirectXCommon::GetInstance().GetDevice()->CreateShaderResourceView(pResource, &srvDesc, GetCPUDescriptorHandle(srvIndex));
+	}
+
+	void SrvManager::PreDraw() {
+		ID3D12DescriptorHeap* descriptorHeaps[] = { descriptorHeap_.Get() };
+		DirectXCommon::GetInstance().GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
+	}
+}
+
+============================================================
+File Path: project/Engine/base/Descriptor/SrvManager.h
+============================================================
+#pragma once
+#include "DirectXCommon.h"
+
+/// <summary>
+/// エンジン層
+/// </summary>
+namespace EngineLayer {
+	/// <summary>
+	/// SRVマネージャ
+	/// </summary>
+	class SrvManager {
+	public:
+		/// <summary>
+		/// インスタンス生成
+		/// </summary>
+		/// <returns>インスタンス</returns>
+		static SrvManager& GetInstance();
+		/// <summary>
+		/// 解放処理
+		/// </summary>
+		void Finalize();
+		/// <summary>
+		/// 初期化処理
+		/// </summary>
+		void Initialize();
+		/// <summary>
+		/// カウント
+		/// </summary>
+		/// <returns>SRVの数</returns>
+		uint32_t Allocate();
+		/// <summary>
+		/// sMaxSRVCount以上でないか
+		/// </summary>
+		/// <returns>trueで上限に達した、falseで上限に達していない</returns>
+		bool Max();
+		/// <summary>
+		/// CPUデスクリプターハンドル追加
+		/// </summary>
+		/// <param name="index">SRVIndex</param>
+		/// <returns>CPUのデスクリプターハンドル</returns>
+		D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index);
+		/// <summary>
+		/// GPUデスクリプターハンドル追加
+		/// </summary>
+		/// <param name="index">SRVIndex</param>
+		/// <returns>GPUのデスクリプターハンドル</returns>
+		D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(uint32_t index);
+
+		/// <summary>
+		/// SRV_テクスチャ
+		/// </summary>
+		/// <param name="srvIndex">SRVの番号</param>
+		/// <param name="pResource">テクスチャのリソース</param>
+		/// <param name="Format">フォーマット</param>
+		/// <param name="MipLevels">ミットマップ</param>
+		void CreateSRVForTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, DXGI_FORMAT Format, UINT MipLevels);
+		/// <summary>
+		/// SRV_オブジェクト
+		/// </summary>
+		/// <param name="srvDesc"></param>
+		/// <param name="srvIndex">SRVの番号</param>
+		/// <param name="pResource">テクスチャのリソース</param>
+		/// <param name="numElements"></param>
+		/// <param name="structureByteStride"></param>
+		void CreateSRVForStructureBuffer(D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc, uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride);
+		/// <summary>
+		/// 描画コマンド
+		/// </summary>
+		void PreDraw();
+		/// <summary>
+		/// getter_デスクリプターハンドル
+		/// </summary>
+		/// <returns>デスクリプターハンドル</returns>
+		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDescriptorHeap() { return descriptorHeap_; }
+
+		//最大SRV数
+		static const uint32_t sMaxSRVCount_;
+
+	private:
+
+		//
+		uint32_t descriptorSize_;
+		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
+		uint32_t useIndex_ = 0;
+
+		//インスタンス
+		static std::unique_ptr<SrvManager> sInstance_;
+		//default_deleteを設定(解放処理を行える)
+		friend struct std::default_delete<SrvManager>;
+	};
+}
+
+============================================================
+File Path: project/Engine/base/DirectX/D3D12CreateResourceManager.cpp
+============================================================
+#include "D3D12CreateResourceManager.h"
+#include "DirectXCommon.h"
+#include "WinApp.h"
+#include <externals/DirectXTex/d3dx12.h>
+
+/// <summary>
+/// エンジン層
+/// </summary>
+namespace EngineLayer {
+
+	std::unique_ptr<D3D12CreateResourceManager>  D3D12CreateResourceManager::sInstance_ = nullptr;
+
+	D3D12CreateResourceManager& D3D12CreateResourceManager::GetInstance() {
+		if (sInstance_ == nullptr) {
+			sInstance_ = std::make_unique<D3D12CreateResourceManager>(InstanceKey());
+		}
+		return *sInstance_;
+	}
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12CreateResourceManager::CreateBufferResource(size_t sizeInBytes) {
+		//VertexResource
+		//頂点シェーダを作る
+		D3D12_HEAP_PROPERTIES uploadHeapProperties{};
+		uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
+
+		D3D12_RESOURCE_DESC vertexResourceDesc{};
+
+		vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+		vertexResourceDesc.Width = sizeInBytes;
+
+		vertexResourceDesc.Height = 1;
+		vertexResourceDesc.DepthOrArraySize = 1;
+		vertexResourceDesc.MipLevels = 1;
+		vertexResourceDesc.SampleDesc.Count = 1;
+
+		vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+
+		//実際に頂点リソースを作る
+		Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource = nullptr;
+		HRESULT hr = DirectXCommon::GetInstance().GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
+		assert(SUCCEEDED(hr));
+
+		return vertexResource;
+	}
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12CreateResourceManager::CreateTextureResource(const DirectX::TexMetadata& metadata) {
+
+		D3D12_RESOURCE_DESC resourceDesc{};
+		resourceDesc.Width = UINT(metadata.width);//幅
+		resourceDesc.Height = UINT(metadata.height);//高さ
+		resourceDesc.MipLevels = UINT16(metadata.mipLevels);//mipmapの数
+		resourceDesc.DepthOrArraySize = UINT(metadata.arraySize);//奥行き　Textureの配置数
+		resourceDesc.Format = metadata.format;//format
+		resourceDesc.SampleDesc.Count = 1;//サンプリングカウント(1固定)
+		resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION(metadata.dimension);// textureの次元数
+
+
+		//利用するHeapの設定
+		D3D12_HEAP_PROPERTIES heapProperties{};
+		heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
+
+		//Resourceの生成
+		Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
+		HRESULT hr = DirectXCommon::GetInstance().GetDevice()->CreateCommittedResource(
+			&heapProperties,
+			D3D12_HEAP_FLAG_NONE,
+			&resourceDesc,
+			D3D12_RESOURCE_STATE_COPY_DEST,
+			nullptr,
+			IID_PPV_ARGS(&resource)
+		);
+		assert(SUCCEEDED(hr));
+		return resource;
+
+	}
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12CreateResourceManager::CreateDepthStencilResource() {
+
+		D3D12_RESOURCE_DESC resourceDesc{};
+		resourceDesc.Width = WinApp::kClientWidth_;
+		resourceDesc.Height = WinApp::kClientHeight_;
+		resourceDesc.MipLevels = 1;
+		resourceDesc.DepthOrArraySize = 1;
+		resourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+		resourceDesc.SampleDesc.Count = 1;
+		resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;//二次元
+		resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;//DepthStencil
+
+		//利用するHeap
+		D3D12_HEAP_PROPERTIES heapProperties{};
+		heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;//VRAN上で作る
+
+
+		//深度値のクリア設定
+		D3D12_CLEAR_VALUE depthClearValue{};
+		depthClearValue.DepthStencil.Depth = 1.0f;
+		depthClearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+
+
+		//resourceの生成
+		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
+		HRESULT hr = DirectXCommon::GetInstance().GetDevice()->CreateCommittedResource(
+			&heapProperties,
+			D3D12_HEAP_FLAG_NONE,
+			&resourceDesc,
+			D3D12_RESOURCE_STATE_DEPTH_WRITE,
+			&depthClearValue,
+			IID_PPV_ARGS(&resource));
+		assert(SUCCEEDED(hr));
+
+		return resource;
+	}
+
+	//戻り値を破棄してはならない
+	//UploadTextureData(…) ×  / ID3D12Resource* a = UploadTextureData(…) 〇
+	[[nodiscard]]
+	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12CreateResourceManager::UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages) {
+		//中間リソース
+		std::vector<D3D12_SUBRESOURCE_DATA> subResources;
+		DirectX::PrepareUpload(DirectXCommon::GetInstance().GetDevice(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subResources);
+		uint64_t intermediateSize = GetRequiredIntermediateSize(texture.Get(), 0, UINT(subResources.size()));
+		Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = CreateBufferResource(intermediateSize).Get();
+		//データ転送
+		UpdateSubresources(DirectXCommon::GetInstance().GetCommandList(), texture.Get(), intermediateResource.Get(), 0, 0, UINT(subResources.size()), subResources.data());
+
+		D3D12_RESOURCE_BARRIER barrier{};
+		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+		barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+		barrier.Transition.pResource = texture.Get();//こいつ
+		barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+		barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;
+		DirectXCommon::GetInstance().GetCommandList()->ResourceBarrier(1, &barrier);
+		return intermediateResource;
+	}
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> D3D12CreateResourceManager::CreateRenderTextureResource(DXGI_FORMAT format, const Vector4& clearColor) {
+
+		D3D12_RESOURCE_DESC resourceDesc{};
+		resourceDesc.Width = WinApp::kClientWidth_;
+		resourceDesc.Height = WinApp::kClientHeight_;
+		resourceDesc.MipLevels = 1;
+		resourceDesc.DepthOrArraySize = 1;
+		resourceDesc.Format = format;
+		resourceDesc.SampleDesc.Count = 1;
+		resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;//二次元
+		resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;//RenderTargetとして利用可能
+
+		D3D12_HEAP_PROPERTIES heapProperties{};
+		heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
+
+		D3D12_CLEAR_VALUE clearValue;
+		clearValue.Format = format;
+		clearValue.Color[0] = clearColor.x;
+		clearValue.Color[1] = clearColor.y;
+		clearValue.Color[2] = clearColor.z;
+		clearValue.Color[3] = clearColor.s;
+
+		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
+
+		//resourceの生成
+		DirectXCommon::GetInstance().GetDevice()->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE,
+			&resourceDesc, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, &clearValue, IID_PPV_ARGS(&resource));
+
+		return resource;
+	}
+}
+
+
+============================================================
+File Path: project/Engine/base/DirectX/D3D12CreateResourceManager.h
+============================================================
+#pragma once
+#include "wrl.h"
+#include "d3d12.h"
+#include <externals/DirectXTex/DirectXTex.h>
+#include <Vector4.h>
+#include <memory>
+
+namespace EngineLayer {
+	/// <summary>
+	/// DirectXのリソースマネージャー
+	/// </summary>
+	class D3D12CreateResourceManager {
+	public:
+		/// <summary>
+		/// インスタンス生成
+		/// </summary>
+		/// <returns></returns>
+		static D3D12CreateResourceManager& GetInstance();
+		/// <summary>
+		/// シェーダで使用するバッファ
+		/// </summary>
+		/// <param name="sizeInBytes">バイトサイズ</param>
+		/// <returns>出来上がった</returns>
+		Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
+		/// <summary>
+		/// シェーダで使用するバッファ(RenderTextureResourceで使用)
+		/// </summary>
+		/// <param name="metadata">メタデータ</param>
+		/// <returns>バッファ</returns>
+		Microsoft::WRL::ComPtr<ID3D12Resource> CreateTextureResource(const DirectX::TexMetadata& metadata);
+		/// <summary>
+		/// テクスチャデータ
+		/// </summary>
+		/// <param name="texture">テクスチャ名</param>
+		/// <param name="mipImages">ミップマップ</param>
+		/// <returns>テクスチャデータリソースを作成</returns>
+		Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages);
+
+		/// <summary>
+		/// 深度ステンシルリソースを作成
+		/// </summary>
+		/// <returns></returns>
+		Microsoft::WRL::ComPtr<ID3D12Resource> CreateDepthStencilResource();
+
+		/// <summary>
+		/// RTVのリソース作成(device,width,heightは省略)
+		/// </summary>
+		/// <param name="format">フォーマット</param>
+		/// <param name="clearColor">clearした時の色</param>
+		/// <returns>出来上がったRTVのリソース</returns>
+		Microsoft::WRL::ComPtr<ID3D12Resource> CreateRenderTextureResource(DXGI_FORMAT format, const Vector4& clearColor);
+
+		/// <summary>
+		/// インスタンス解放キー
+		/// </summary>
+		class InstanceKey {
+		private:
+			InstanceKey() = default;
+			friend class D3D12CreateResourceManager;
+		};
+		explicit D3D12CreateResourceManager(InstanceKey) {}
+
+	private:
+
+		static std::unique_ptr<D3D12CreateResourceManager> sInstance_;
+
 	};
 }
 
@@ -11277,6 +11896,9 @@ File Path: project/Engine/base/DirectX/DirectXCommon.cpp
 
 #include <thread>
 #include "SrvManager.h"
+#include "RtvManager.h"
+#include "ShaderManager.h"
+
 #include "ImGuiManager.h"
 
 #include "PostEffectManager.h"
@@ -11316,14 +11938,14 @@ namespace EngineLayer {
 		Device();
 		Command();
 		SwapChain();
-		ZBuffer();//?
-		DescriptorHeap();
 		RTV();
 		DSV();//深度ステンシルビュー
 		Fence();
 		ViewPort();
 		Scissor();
-		DXC();
+
+		//DXC初期化
+		ShaderManager::GetInstance().Initialize();
 	}
 
 
@@ -11483,62 +12105,12 @@ namespace EngineLayer {
 #pragma endregion
 	}
 
-	void DirectXCommon::ZBuffer() {
-
-		D3D12_RESOURCE_DESC resourceDesc{};
-		resourceDesc.Width = WinApp::kClientWidth_;
-		resourceDesc.Height = WinApp::kClientHeight_;
-		resourceDesc.MipLevels = 1;
-		resourceDesc.DepthOrArraySize = 1;
-		resourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-		resourceDesc.SampleDesc.Count = 1;
-		resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;//二次元
-		resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;//DepthStencil
-
-		//利用するHeap
-		D3D12_HEAP_PROPERTIES heapProperties{};
-		heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;//VRAN上で作る
-
-
-		//深度値のクリア設定
-		D3D12_CLEAR_VALUE depthClearValue{};
-		depthClearValue.DepthStencil.Depth = 1.0f;
-		depthClearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-
-
-		//resourceの生成
-		HRESULT hr = device_->CreateCommittedResource(
-			&heapProperties,
-			D3D12_HEAP_FLAG_NONE,
-			&resourceDesc,
-			D3D12_RESOURCE_STATE_DEPTH_WRITE,
-			&depthClearValue,
-			IID_PPV_ARGS(&depthStencilResource_));
-		assert(SUCCEEDED(hr));
-
-	}
-
-	void DirectXCommon::DescriptorHeap() {
-#pragma region ディスクリプターヒープの生成
-
-		descriptorSizeSRV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-		descriptorSizeRTV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-		descriptorSizeDSV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
-
-
-		rtvDescriptorHeap_ = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 3, false);
-		srvDescriptorHeap_ = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, kMaxSRVCount_, true);
-		dsvDescriptorHeap_ = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
-
-#pragma endregion
-	}
-
-	Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> DirectXCommon::CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDesciptors, bool shaderVisible)
+	Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> DirectXCommon::CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible)
 	{
 		//ディスクリプターヒープの生成
 
 		descriptorHeapDesc_.Type = heapType;
-		descriptorHeapDesc_.NumDescriptors = numDesciptors;
+		descriptorHeapDesc_.NumDescriptors = numDescriptors;
 
 		descriptorHeapDesc_.Flags = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
@@ -11548,32 +12120,29 @@ namespace EngineLayer {
 	}
 
 	void DirectXCommon::RTV() {
-		//RTV
-		rtvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-		rtvDesc_.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+		//初期化処理
+		RtvManager::GetInstance().Initialize();
 
-		//
-		D3D12_CPU_DESCRIPTOR_HANDLE rtvStartHandle_ = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-
-		const Vector4 kRenderTargetClearValue{ 0.5f,0.5f,0.5f,1.0f };//赤色
-		renderTextureResource_ = CreateRenderTextureResource(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, kRenderTargetClearValue);
-
+		//スワップチェーンのRTVを作成
 		for (uint32_t i = 0; i < kMaxResource_; ++i) {
-			rtvHandles_[i] = rtvStartHandle_;
-			if (i > 0) {
-				rtvHandles_[i].ptr = rtvHandles_[i - 1].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-			}
-			device_->CreateRenderTargetView(swapChainResources_[i].Get(), &rtvDesc_, rtvHandles_[i]);
+			RtvManager::GetInstance().CreateRTV(swapChainResources_[i]);
 		}
 
-		//renderTexture用のrtvHandle作成 (作る際DescriptorHeapを増やす)
-		rtvHandlesRT_ = rtvStartHandle_;
-		rtvHandlesRT_.ptr = rtvHandles_[1].ptr + device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+		renderTextureResource_ = D3D12CreateResourceManager::GetInstance().CreateRenderTextureResource(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB, kRenderTargetClearValue);
 
-		device_->CreateRenderTargetView(renderTextureResource_.Get(), &rtvDesc_, rtvHandlesRT_);
+		//レンダーテクスチャのRTVを作成
+		RtvManager::GetInstance().CreateRTV(renderTextureResource_);
 	}
 
 	void DirectXCommon::DSV() {
+
+		//デスクリプターヒープ
+		descriptorSizeDSV_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+		dsvDescriptorHeap_ = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
+
+		//深度ステンシルリソースの作成
+		depthStencilResource_ = D3D12CreateResourceManager::GetInstance().CreateDepthStencilResource();
+
 		//DSV生成
 		D3D12_DEPTH_STENCIL_VIEW_DESC dscDesc{};
 		dscDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -11611,169 +12180,6 @@ namespace EngineLayer {
 		scissorRect_.bottom = WinApp::kClientHeight_;
 	}
 
-#pragma region コンパイルシェーダー作成
-
-	//ComplierShader関数
-	Microsoft::WRL::ComPtr<IDxcBlob> DirectXCommon::CompileShader(const std::wstring& filePath, const wchar_t* profile)
-	{
-		//1.HLSLファイル
-		LoadHLSL(filePath, profile);
-
-		//3.警告エラー
-		CompileError();
-
-		//4.Compile結果
-		CompileSuccess(filePath, profile);
-
-		return shaderBlob;
-	}
-
-	void DirectXCommon::LoadHLSL(const std::wstring& filePath, const wchar_t* profile) {
-
-		log(ConvertString(std::format(L"Begin CompileShader,path:{},profile:{}\n", filePath, profile)));
-
-		Microsoft::WRL::ComPtr <IDxcBlobEncoding> shaderSource = nullptr;
-		HRESULT hr = dxcUtils_->LoadFile(filePath.c_str(), nullptr, &shaderSource);
-
-		assert(SUCCEEDED(hr));
-
-		DxcBuffer shaderSourceBuffer;
-		shaderSourceBuffer.Ptr = shaderSource->GetBufferPointer();
-		shaderSourceBuffer.Size = shaderSource->GetBufferSize();
-		shaderSourceBuffer.Encoding = DXC_CP_UTF8;
-
-		LPCWSTR arguments[] = {
-			filePath.c_str(),
-			L"-E",L"main",
-			L"-T",profile,
-			L"-Zi",L"-Qembed_debug",
-			L"-Od",
-			L"-Zpr",
-		};
-
-		hr = dxcCompiler_->Compile(
-			&shaderSourceBuffer,
-			arguments,
-			_countof(arguments),
-			*&includeHandler_,
-			IID_PPV_ARGS(&shaderResult));
-
-		assert(SUCCEEDED(hr));
-	}
-
-	void DirectXCommon::CompileError() {
-		Microsoft::WRL::ComPtr<IDxcBlobUtf8> shaderError = nullptr;
-		shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
-		if (shaderError != nullptr && shaderError->GetStringLength() != 0)
-		{
-			log(shaderError->GetStringPointer());
-			//警告エラーダメ絶対
-			assert(false);
-		}
-	}
-
-	void DirectXCommon::CompileSuccess(const std::wstring& filePath, const wchar_t* profile) {
-		HRESULT hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
-		assert(SUCCEEDED(hr));
-
-		log(ConvertString(std::format(L"Compile Succeeded,path:{},profile:{}\n", filePath, profile)));
-	}
-
-#pragma endregion
-
-	Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(size_t sizeInBytes) {
-		//VertexResource
-		//頂点シェーダを作る
-		D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-		uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-
-		D3D12_RESOURCE_DESC vertexResourceDesc{};
-
-		vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-		vertexResourceDesc.Width = sizeInBytes;
-
-		vertexResourceDesc.Height = 1;
-		vertexResourceDesc.DepthOrArraySize = 1;
-		vertexResourceDesc.MipLevels = 1;
-		vertexResourceDesc.SampleDesc.Count = 1;
-
-		vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-
-		//実際に頂点リソースを作る
-		Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource = nullptr;
-		HRESULT hr = device_->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
-		assert(SUCCEEDED(hr));
-
-		return vertexResource;
-	}
-
-	Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateTextureResource(const DirectX::TexMetadata& metadata) {
-
-		D3D12_RESOURCE_DESC resourceDesc{};
-		resourceDesc.Width = UINT(metadata.width);//幅
-		resourceDesc.Height = UINT(metadata.height);//高さ
-		resourceDesc.MipLevels = UINT16(metadata.mipLevels);//mipmapの数
-		resourceDesc.DepthOrArraySize = UINT(metadata.arraySize);//奥行き　Textureの配置数
-		resourceDesc.Format = metadata.format;//format
-		resourceDesc.SampleDesc.Count = 1;//サンプリングカウント(1固定)
-		resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION(metadata.dimension);// textureの次元数
-
-
-		//利用するHeapの設定
-		D3D12_HEAP_PROPERTIES heapProperties{};
-		heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
-
-		//Resourceの生成
-		Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
-		HRESULT hr = device_->CreateCommittedResource(
-			&heapProperties,
-			D3D12_HEAP_FLAG_NONE,
-			&resourceDesc,
-			D3D12_RESOURCE_STATE_COPY_DEST,
-			nullptr,
-			IID_PPV_ARGS(&resource)
-		);
-		assert(SUCCEEDED(hr));
-		return resource;
-
-	}
-
-	//戻り値を破棄してはならない
-	//UploadTextureData(…) ×  / ID3D12Resource* a = UploadTextureData(…) 〇
-	[[nodiscard]]
-	Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages) {
-		//中間リソース
-		std::vector<D3D12_SUBRESOURCE_DATA> subresources;
-		DirectX::PrepareUpload(device_.Get(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
-		uint64_t intermediateSize = GetRequiredIntermediateSize(texture.Get(), 0, UINT(subresources.size()));
-		Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = CreateBufferResource(intermediateSize).Get();
-		//データ転送
-		UpdateSubresources(commandList_.Get(), texture.Get(), intermediateResource.Get(), 0, 0, UINT(subresources.size()), subresources.data());
-
-		D3D12_RESOURCE_BARRIER barrier{};
-		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		barrier.Transition.pResource = texture.Get();//こいつ
-		barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
-		barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;
-		commandList_->ResourceBarrier(1, &barrier);
-		return intermediateResource;
-	}
-
-	void DirectXCommon::DXC() {
-		//DXC
-		HRESULT hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_));
-		assert(SUCCEEDED(hr));
-
-		hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_));
-		assert(SUCCEEDED(hr));
-
-		hr = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
-		assert(SUCCEEDED(hr));
-
-	}
-
 	void DirectXCommon::SetBarrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES stateBefore,
 		D3D12_RESOURCE_STATES stateAfter) {
 		//今回のバリアはTransition
@@ -11802,7 +12208,7 @@ namespace EngineLayer {
 		float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };
 
 		//共有描画処理
-		DrawCommon(rtvHandles_[backBufferIndex], clearColor);
+		DrawCommon(backBufferIndex, clearColor);
 
 		///PostEffect
 
@@ -11864,60 +12270,34 @@ namespace EngineLayer {
 		//syncまちの無駄時間軽減に使う
 		const std::chrono::microseconds kMinCheckTime(uint64_t(1000000.0f / 65.0f));
 
-
+		//現在の時間を取得
 		std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-
+		//前回記録した時間を取得
 		std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - reference_);
-
+		//1/60秒ではない場合
 		if (elapsed < kMinCheckTime) {
+			//1/60秒になるまでスリープを挟む
 			while (std::chrono::steady_clock::now() - reference_ < kMinTime) {
+				//1マイクロ秒スリープ処理
 				std::this_thread::sleep_for(std::chrono::microseconds(1));
 			}
 		}
 		reference_ = std::chrono::steady_clock::now();
 	}
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateRenderTextureResource(DXGI_FORMAT format, const Vector4& clearColor) {
-
-		D3D12_RESOURCE_DESC resourceDesc{};
-		resourceDesc.Width = WinApp::kClientWidth_;
-		resourceDesc.Height = WinApp::kClientHeight_;
-		resourceDesc.MipLevels = 1;
-		resourceDesc.DepthOrArraySize = 1;
-		resourceDesc.Format = format;
-		resourceDesc.SampleDesc.Count = 1;
-		resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;//二次元
-		resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET;//RenderTargetとして利用可能
-
-		D3D12_HEAP_PROPERTIES heapProperties{};
-		heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;
-
-		//D3D12_CLEAR_VALUE clearValue;
-		clearValue_.Format = format;
-		clearValue_.Color[0] = clearColor.x;
-		clearValue_.Color[1] = clearColor.y;
-		clearValue_.Color[2] = clearColor.z;
-		clearValue_.Color[3] = clearColor.s;
-
-		Microsoft::WRL::ComPtr<ID3D12Resource> resource;
-
-		//resourceの生成
-		device_->CreateCommittedResource(&heapProperties, D3D12_HEAP_FLAG_NONE,
-			&resourceDesc, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, &clearValue_, IID_PPV_ARGS(&resource));
-
-		return resource;
-	}
-
 	void DirectXCommon::RenderTexturePreDraw() {
 		//レンダーターゲットのバリア変更
 		SetBarrier(renderTextureResource_.Get(), D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
+		//クリアする色　
+		float clearColor[] = { kRenderTargetClearValue.x,kRenderTargetClearValue.y,kRenderTargetClearValue.z,kRenderTargetClearValue.s };
+
 		//共有描画処理
-		DrawCommon(rtvHandlesRT_, clearValue_.Color);
+		DrawCommon(2, clearColor);
 
 		//DepthStencilView
-		dsvHandle_ = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-		commandList_->OMSetRenderTargets(1, &rtvHandlesRT_, false, &dsvHandle_);
+		D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle_ = dsvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
+		commandList_->OMSetRenderTargets(1, &RtvManager::GetInstance().GetHandle(2), false, &dsvHandle_);
 		commandList_->ClearDepthStencilView(dsvHandle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 	}
 
@@ -11926,12 +12306,12 @@ namespace EngineLayer {
 		SetBarrier(renderTextureResource_.Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
 	}
 
-	void DirectXCommon::DrawCommon(D3D12_CPU_DESCRIPTOR_HANDLE handle, float color[]) {
+	void DirectXCommon::DrawCommon(uint32_t handleNum, float color[]) {
 		// 描画先のRTVの設定をする
-		commandList_->OMSetRenderTargets(1, &handle, false, nullptr);
+		commandList_->OMSetRenderTargets(1, &RtvManager::GetInstance().GetHandle(handleNum), false, nullptr);
 
 		//コマンド蓄積
-		commandList_->ClearRenderTargetView(handle, color, 0, nullptr);
+		commandList_->ClearRenderTargetView(RtvManager::GetInstance().GetHandle(handleNum), color, 0, nullptr);
 
 		//描画用のDescriptorHeap
 		SrvManager::GetInstance().PreDraw();
@@ -11965,11 +12345,8 @@ File Path: project/Engine/base/DirectX/DirectXCommon.h
 #include <array>
 #include <dxcapi.h>
 
-#include "externals/DirectXTex/DirectXTex.h"
 #include <chrono>
-
-
-#include "Vector4.h"
+#include "D3D12CreateResourceManager.h"
 
 /// <summary>
 /// エンジン層
@@ -11989,87 +12366,14 @@ namespace EngineLayer {
 		/// 初期化処理
 		/// </summary>
 		void Initialize();
-		/// <summary>
-		/// ドライブ作成
-		/// </summary>
-		void Device();
-		/// <summary>
-		/// コマンド作成
-		/// </summary>
-		void Command();
-		/// <summary>
-		/// スワップチェーン作成
-		/// </summary>
-		void SwapChain();
-		/// <summary>
-		/// 深度バッファ作成
-		/// </summary>
-		void ZBuffer();
-		/// <summary>
-		/// でスクリプターヒープ作成
-		/// </summary>
-		void DescriptorHeap();
 
 		Microsoft::WRL::ComPtr <ID3D12DescriptorHeap> CreateDescriptorHeap(
 			D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDesciptors, bool shaderVisible);
-		/// <summary>
-		/// レンダーターゲットビューの作成
-		/// </summary>
-		void RTV();
-
-
-		/// <summary>
-		/// 深度ステンシルビュー作成
-		/// </summary>
-		void DSV();
-		/// <summary>
-		/// フェンス作成
-		/// </summary>
-		void Fence();
-		/// <summary>
-		/// ビューポート作成
-		/// </summary>
-		void ViewPort();
-		/// <summary>
-		/// シザー作成
-		/// </summary>
-		void Scissor();
-		/// <summary>
-		/// DXC作成
-		/// </summary>
-		void DXC();
 		/// <summary>
 		/// setter_WinApp
 		/// </summary>
 		/// <param name="winApp"></param>
 		void SetWinApp(WinApp* winApp) { winApp_ = winApp; }
-
-		/// <summary>
-		/// コンパイルシェーダ作成
-		/// </summary>
-		/// <param name="filePath">HLSLの名前</param> 
-		/// <param name="profile">vs_6_0 or ps_6_0</param> 
-		/// <returns>コンパイルシェーダ</returns>
-		Microsoft::WRL::ComPtr <IDxcBlob> CompileShader(const std::wstring& filePath, const wchar_t* profile);
-		/// <summary>
-		/// シェーダで使用するバッファ
-		/// </summary>
-		/// <param name="sizeInBytes">バイトサイズ</param>
-		/// <returns>出来上がった</returns>
-		Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
-		/// <summary>
-		/// シェーダで使用するバッファ(RenderTextureResourceで使用)
-		/// </summary>
-		/// <param name="metadata">メタデータ</param>
-		/// <returns>バッファ</returns>
-		Microsoft::WRL::ComPtr<ID3D12Resource> CreateTextureResource(const DirectX::TexMetadata& metadata);
-		/// <summary>
-		/// テクスチャデータ
-		/// </summary>
-		/// <param name="texture">テクスチャ名</param>
-		/// <param name="mipImages">ミップマップ</param>
-		/// <returns>テクスチャデータリソースを作成</returns>
-		Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages);
 
 		/// <summary>
 		/// 描画バリア開始
@@ -12091,38 +12395,16 @@ namespace EngineLayer {
 		/// <returns>現在のコマンドリスト</returns>
 		ID3D12GraphicsCommandList* GetCommandList() const { return commandList_.Get(); }
 		/// <summary>
-		/// getter_DSVのハンドル
-		/// </summary>
-		/// <returns>使用しているDepthStencilViewのハンドル</returns>
-		D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle() const { return dsvHandle_; }
-		/// <summary>
 		/// getter_fenceEvent
 		/// </summary>
 		/// <returns>フェンス</returns>
 		HANDLE GetFenceEvent() const { return fenceEvent_; }
-		/// <summary>
-		/// getter_rtvDesc
-		/// </summary>
-		/// <returns>使用しているRenderTargetView</returns>
-		D3D12_RENDER_TARGET_VIEW_DESC GetRtvDesc() const { return rtvDesc_; }
-		/// <summary>
-		/// getter_デスクリプターヒープ
-		/// </summary>
-		/// <returns>でスクリプターヒープ</returns>
-		ID3D12DescriptorHeap* GetSrvDescriptorHeap() { return srvDescriptorHeap_.Get(); }
 		/// <summary>
 		/// スワップチェーンのリソースナンバー
 		/// </summary>
 		/// <returns>バッファカウント</returns>
 		size_t GetSwapChainResourceNum() const { return swapChainDesc_.BufferCount; }
 
-		/// <summary>
-		/// RTVのリソース作成(device,width,heightは省略)
-		/// </summary>
-		/// <param name="format">フォーマット</param>
-		/// <param name="clearColor">clearした時の色</param>
-		/// <returns>出来上がったRTVのリソース</returns>
-		Microsoft::WRL::ComPtr<ID3D12Resource> CreateRenderTextureResource(DXGI_FORMAT format, const Vector4& clearColor);
 		/// <summary>
 		/// getter_RTVのリソース
 		/// </summary>
@@ -12152,6 +12434,10 @@ namespace EngineLayer {
 	private:
 
 		/// <summary>
+		/// デバイス初期化処理
+		/// </summary>
+		void Device();
+		/// <summary>
 		/// ファクトリー生成
 		/// </summary>
 		void Factory();
@@ -12167,12 +12453,69 @@ namespace EngineLayer {
 		/// エラー処理でストップ
 		/// </summary>
 		void ErrorStop();
+		/// <summary>
+		/// コマンド作成
+		/// </summary>
+		void Command();
+		/// <summary>
+		/// スワップチェーン作成
+		/// </summary>
+		void SwapChain();
+		/// <summary>
+		/// レンダーターゲットビューの作成
+		/// </summary>
+		void RTV();
+		/// <summary>
+		/// 深度ステンシルビュー作成
+		/// </summary>
+		void DSV();
+		/// <summary>
+		/// フェンス作成
+		/// </summary>
+		void Fence();
+		/// <summary>
+		/// ビューポート作成
+		/// </summary>
+		void ViewPort();
+		/// <summary>
+		/// シザー作成
+		/// </summary>
+		void Scissor();
+
+
+		/// <summary>
+		/// バリア設定
+		/// </summary>
+		/// <param name="resource">バリアを貼る対象のリソース</param>
+		/// <param name="stateBefore">前のリソースステート</param>
+		/// <param name="stateAfter">後のリソースステート</param>
+		void SetBarrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES stateBefore, D3D12_RESOURCE_STATES stateAfter);
+
+		/// <summary>
+		/// 共有描画処理
+		/// </summary>
+		/// <param name="handleNum">CPUハンドルの番号</param>
+		/// <param name="color">クリアカラー</param>
+		void DrawCommon(uint32_t handleNum, float color[]);
+
+		//Fix = 固定
+		
+		/// <summary>
+		/// FPS値の現在の時間
+		/// </summary>
+		void InitializeFixFPS();
+		/// <summary>
+		/// FPSの更新
+		/// </summary>
+		void UpdateFixFPS();
+
 
 		Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter = nullptr;
 
 		//デバイス
 		Microsoft::WRL::ComPtr<ID3D12Device> device_;
 		Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory_;
+
 
 		///コマンド-----------------
 
@@ -12202,21 +12545,9 @@ namespace EngineLayer {
 		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_ = nullptr;
 		D3D12_DESCRIPTOR_HEAP_DESC descriptorHeapDesc_{};
 
-		uint32_t descriptorSizeSRV_;
-		uint32_t descriptorSizeRTV_;
+
 		uint32_t descriptorSizeDSV_;
-
-
-		Microsoft::WRL::ComPtr < ID3D12DescriptorHeap> rtvDescriptorHeap_;
-		Microsoft::WRL::ComPtr < ID3D12DescriptorHeap> srvDescriptorHeap_;
 		Microsoft::WRL::ComPtr < ID3D12DescriptorHeap> dsvDescriptorHeap_;
-
-
-		//RTV
-		D3D12_RENDER_TARGET_VIEW_DESC rtvDesc_{};
-
-		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles_[kMaxResource_];
-		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandlesRT_;
 
 		//ビューポート
 		D3D12_VIEWPORT viewport_;
@@ -12225,61 +12556,13 @@ namespace EngineLayer {
 		D3D12_RECT scissorRect_{};
 
 
-		//DXC
-		Microsoft::WRL::ComPtr <IDxcUtils> dxcUtils_ = nullptr;
-		Microsoft::WRL::ComPtr <IDxcCompiler3> dxcCompiler_ = nullptr;
-		Microsoft::WRL::ComPtr <IDxcIncludeHandler> includeHandler_ = nullptr;
-
-		/// <summary>
-		/// HLSLを読み取る
-		/// </summary>
-		/// <param name="filePath">HLSLパス</param>
-		/// <param name="profile">プロファイル</param>
-		void LoadHLSL(const std::wstring& filePath, const wchar_t* profile);
-		/// <summary>
-		/// 警告エラー
-		/// </summary>
-		void CompileError();
-		/// <summary>
-		/// コンパイルが完了した
-		/// </summary>
-		/// <param name="filePath">HSLSパス</param>
-		/// <param name="profile">プロファイル</param>
-		void CompileSuccess(const std::wstring& filePath, const wchar_t* profile);
-
-		Microsoft::WRL::ComPtr<IDxcResult> shaderResult = nullptr;
-		Microsoft::WRL::ComPtr<IDxcBlob> shaderBlob = nullptr;
-
-		/// <summary>
-		/// バリア設定
-		/// </summary>
-		/// <param name="resource">バリアを貼る対象のリソース</param>
-		/// <param name="stateBefore">前のリソースステート</param>
-		/// <param name="stateAfter">後のリソースステート</param>
-		void SetBarrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES stateBefore, D3D12_RESOURCE_STATES stateAfter);
-
-		/// <summary>
-		/// 共有描画処理
-		/// </summary>
-		/// <param name="handle">CPUハンドル</param>
-		/// <param name="color">クリアカラー</param>
-		void DrawCommon(D3D12_CPU_DESCRIPTOR_HANDLE handle, float color[]);
-
-		//Update
-
-
 		Microsoft::WRL::ComPtr <ID3D12Fence> fence_ = nullptr;
 		uint64_t fenceValue_ = 0;
 		HANDLE fenceEvent_;
 
-		D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle_;
-
 		//TransitionBarrierの設定
 		D3D12_RESOURCE_BARRIER barrier_{};
 
-		//Fix = 固定
-		void InitializeFixFPS();
-		void UpdateFixFPS();
 		//逆行しないタイマー
 		std::chrono::steady_clock::time_point reference_;
 
@@ -12291,7 +12574,7 @@ namespace EngineLayer {
 		//書き込み可能なテクスチャ レンダーテクスチャ
 		Microsoft::WRL::ComPtr<ID3D12Resource> renderTextureResource_;
 
-		D3D12_CLEAR_VALUE clearValue_;
+		const Vector4 kRenderTargetClearValue{ 0.5f,0.5f,0.5f,1.0f };//赤色
 	};
 }
 
@@ -12401,6 +12684,7 @@ namespace EngineLayer {
 
 		DirectXCommon::GetInstance().Finalize();
 		SrvManager::GetInstance().Finalize();
+		RtvManager::GetInstance().Finalize();
 		SpriteCommon::GetInstance().Finalize();
 		Object3dCommon::GetInstance().Finalize();
 		GLTFCommon::GetInstance().Finalize();
@@ -12409,6 +12693,7 @@ namespace EngineLayer {
 		DebugWireframes::GetInstance().Finalize();
 		CubeMap::GetInstance().Finalize();
 		PostEffectManager::GetInstance().Finalize();
+		SceneManager::GetInstance().Finalize();
 		Audio::GetInstance().Finalize();
 	}
 
@@ -12444,6 +12729,7 @@ File Path: project/Engine/base/Framework.h
 #include "Input.h"
 #include "DirectXCommon.h"
 #include "SrvManager.h"
+#include "RtvManager.h"
 
 #include "SpriteCommon.h"
 #include "Object3dCommon.h"
@@ -12460,6 +12746,7 @@ File Path: project/Engine/base/Framework.h
 
 #include "PostEffectManager.h"
 
+#include "SceneManager.h"
 #include "Audio.h"
 
 #include"DebugWireframes.h"
@@ -12604,7 +12891,7 @@ namespace StringUtility {
 }
 
 ============================================================
-File Path: project/Engine/base/Pipeline.cpp
+File Path: project/Engine/base/Shader/Pipeline.cpp
 ============================================================
 /// ---------------------
 ///
@@ -12769,10 +13056,11 @@ namespace EngineLayer {
 }
 
 ============================================================
-File Path: project/Engine/base/Pipeline.h
+File Path: project/Engine/base/Shader/Pipeline.h
 ============================================================
 #pragma once
 #include "DirectXCommon.h"
+#include "ShaderManager.h"
 
 /// <summary>
 /// エンジン層
@@ -12944,180 +13232,199 @@ namespace EngineLayer {
 }
 
 ============================================================
-File Path: project/Engine/base/SrvManager.cpp
+File Path: project/Engine/base/Shader/ShaderManager.cpp
 ============================================================
-/// -----------------------------------------------
-///
-/// シェーダーリソースビュー(SRV)を作成マネージャ
-/// 
-/// -----------------------------------------------
-#include "SrvManager.h"
+#include "ShaderManager.h"
+#include "Logger.h"
+#include "StringUtility.h"
+#include <format>
+#include <cassert>
+
+using namespace Logger;
+using namespace StringUtility;
 
 /// <summary>
 /// エンジン層
 /// </summary>
 namespace EngineLayer {
-	const uint32_t SrvManager::sMaxSRVCount_ = 512;
 
-	std::unique_ptr<SrvManager> SrvManager::sInstance_ = nullptr;
+	std::unique_ptr<ShaderManager> ShaderManager::sInstance_ = nullptr;
 
-	SrvManager& SrvManager::GetInstance() {
+	ShaderManager& ShaderManager::GetInstance() {
 		if (sInstance_ == nullptr) {
-			sInstance_ = std::make_unique<SrvManager>();
+			sInstance_ = std::make_unique<ShaderManager>(InstanceKey());
 		}
 		return *sInstance_;
 	}
-	void SrvManager::Finalize() {
-		sInstance_.reset();
+
+	void ShaderManager::Initialize() {
+		//DXC初期化
+		HRESULT hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils_));
+		assert(SUCCEEDED(hr));
+
+		hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(&dxcCompiler_));
+		assert(SUCCEEDED(hr));
+
+		hr = dxcUtils_->CreateDefaultIncludeHandler(&includeHandler_);
+		assert(SUCCEEDED(hr));
+	}
+
+	
+	//ComplierShader関数
+	Microsoft::WRL::ComPtr<IDxcBlob> ShaderManager::CompileShader(const std::wstring& filePath, const wchar_t* profile)
+	{
+		//1.HLSLファイル
+		LoadHLSL(filePath, profile);
+
+		//3.警告エラー
+		CompileError();
+
+		//4.Compile結果
+		CompileSuccess(filePath, profile);
+
+		return shaderBlob;
+	}
+
+	void ShaderManager::LoadHLSL(const std::wstring& filePath, const wchar_t* profile) {
+		//ログ
+		log(ConvertString(std::format(L"Begin CompileShader path:{},profile{}\n", filePath, profile)));
+
+		Microsoft::WRL::ComPtr<IDxcBlobEncoding> shaderSource = nullptr;
+		HRESULT hr = dxcUtils_->LoadFile(filePath.c_str(),nullptr,&shaderSource);//hlslを読み取る
+
+		//ない場合エラー
+		assert(SUCCEEDED(hr));
+
+		//内容の設定
+		DxcBuffer shaderSourceBuffer;
+		shaderSourceBuffer.Ptr = shaderSource->GetBufferPointer();
+		shaderSourceBuffer.Size = shaderSource->GetBufferSize();
+		shaderSourceBuffer.Encoding = DXC_CP_UTF8;
+
+		LPCWSTR arguments[] = {
+			filePath.c_str(),        //コンパイル対象
+			L"-E",L"main",           //エントリーポイント
+			L"-T",profile,           //shaderProfile
+			L"-Zi",L"-Qembed_debug", //デバッグ用の情報を読み取る
+			L"-Od",                  //最適化なし
+			L"-Zpr",                 //メモリレイアウト
+		};
+
+		//コンパイルする
+		hr = dxcCompiler_->Compile(
+			&shaderSourceBuffer,
+			arguments,
+			_countof(arguments),
+			*&includeHandler_,
+			IID_PPV_ARGS(&shaderResult)
+		);
+
+		//dxcが起動できるか
+		assert(SUCCEEDED(hr));
 	}
 
 
-	void SrvManager::Initialize() {
-		descriptorHeap_ = DirectXCommon::GetInstance().CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, sMaxSRVCount_, true);
-		descriptorSize_ = DirectXCommon::GetInstance().GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	}
-	uint32_t SrvManager::Allocate() {
-		assert(Max());
-		//returnする番号
-		int index = useIndex_;
-		//次回のため番号を1進める [0] -> [1]
-		useIndex_++;
-		return index;
-	}
-
-	bool SrvManager::Max() {
-		if (sMaxSRVCount_ < useIndex_) {
-			return false;//上限に達して「いない」
+	void ShaderManager::CompileError() {
+		Microsoft::WRL::ComPtr<IDxcBlobUtf8> shaderError = nullptr;
+		shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
+		if (shaderError != nullptr && shaderError->GetStringLength() != 0)
+		{
+			log(shaderError->GetStringPointer());
+			//警告エラーダメ絶対
+			assert(false);
 		}
-		else {
-			return true;
-		}
-		return false;
 	}
 
-	D3D12_CPU_DESCRIPTOR_HANDLE SrvManager::GetCPUDescriptorHandle(uint32_t index) {
-		D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-		handleCPU.ptr += (descriptorSize_ * index);
-		return handleCPU;
+	void ShaderManager::CompileSuccess(const std::wstring& filePath, const wchar_t* profile) {
+		HRESULT hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
+		assert(SUCCEEDED(hr));
+		//成功ログ
+		log(ConvertString(std::format(L"Compile Succeeded,path:{},profile:{}\n", filePath, profile)));
 	}
 
-	D3D12_GPU_DESCRIPTOR_HANDLE SrvManager::GetGPUDescriptorHandle(uint32_t index) {
-		D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap_->GetGPUDescriptorHandleForHeapStart();
-		handleGPU.ptr += (descriptorSize_ * index);
-		return handleGPU;
-	}
-
-	void SrvManager::CreateSRVForTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, DXGI_FORMAT Format, UINT MipLevels) {
-		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
-		srvDesc.Format = Format;
-		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-		srvDesc.Texture2D.MipLevels = MipLevels;
-		DirectXCommon::GetInstance().GetDevice()->CreateShaderResourceView(pResource, &srvDesc, GetCPUDescriptorHandle(srvIndex));
-	}
-
-	void SrvManager::CreateSRVForStructureBuffer(D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc, uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride) {
-		DirectXCommon::GetInstance().GetDevice()->CreateShaderResourceView(pResource, &srvDesc, GetCPUDescriptorHandle(srvIndex));
-	}
-
-	void SrvManager::PreDraw() {
-		ID3D12DescriptorHeap* descriptorHeaps[] = { descriptorHeap_.Get() };
-		DirectXCommon::GetInstance().GetCommandList()->SetDescriptorHeaps(1, descriptorHeaps);
-	}
 }
 
 ============================================================
-File Path: project/Engine/base/SrvManager.h
+File Path: project/Engine/base/Shader/ShaderManager.h
 ============================================================
 #pragma once
-#include "DirectXCommon.h"
+#include "wrl.h"
+#include "d3d12.h"
+#include <dxcapi.h>
+#include <string>
+#include <memory>
 
 /// <summary>
 /// エンジン層
 /// </summary>
 namespace EngineLayer {
+
 	/// <summary>
-	/// SRVマネージャ
+	/// シェーダーマネージャ
 	/// </summary>
-	class SrvManager {
+	class ShaderManager {
 	public:
+
 		/// <summary>
 		/// インスタンス生成
 		/// </summary>
-		/// <returns>インスタンス</returns>
-		static SrvManager& GetInstance();
+		/// <returns></returns>
+		static ShaderManager& GetInstance();
+
 		/// <summary>
-		/// 解放処理
-		/// </summary>
-		void Finalize();
-		/// <summary>
-		/// 初期化処理
+		/// 初期化処理 (DXCの初期化)
 		/// </summary>
 		void Initialize();
-		/// <summary>
-		/// カウント
-		/// </summary>
-		/// <returns>SRVの数</returns>
-		uint32_t Allocate();
-		/// <summary>
-		/// sMaxSRVCount以上でないか
-		/// </summary>
-		/// <returns>trueで上限に達した、falseで上限に達していない</returns>
-		bool Max();
-		/// <summary>
-		/// CPUデスクリプターハンドル追加
-		/// </summary>
-		/// <param name="index">SRVIndex</param>
-		/// <returns>CPUのデスクリプターハンドル</returns>
-		D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(uint32_t index);
-		/// <summary>
-		/// GPUデスクリプターハンドル追加
-		/// </summary>
-		/// <param name="index">SRVIndex</param>
-		/// <returns>GPUのデスクリプターハンドル</returns>
-		D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(uint32_t index);
 
 		/// <summary>
-		/// SRV_テクスチャ
+		/// コンパイルシェーダ作成
 		/// </summary>
-		/// <param name="srvIndex">SRVの番号</param>
-		/// <param name="pResource">テクスチャのリソース</param>
-		/// <param name="Format">フォーマット</param>
-		/// <param name="MipLevels">ミットマップ</param>
-		void CreateSRVForTexture2D(uint32_t srvIndex, ID3D12Resource* pResource, DXGI_FORMAT Format, UINT MipLevels);
-		/// <summary>
-		/// SRV_オブジェクト
-		/// </summary>
-		/// <param name="srvDesc"></param>
-		/// <param name="srvIndex">SRVの番号</param>
-		/// <param name="pResource">テクスチャのリソース</param>
-		/// <param name="numElements"></param>
-		/// <param name="structureByteStride"></param>
-		void CreateSRVForStructureBuffer(D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc, uint32_t srvIndex, ID3D12Resource* pResource, UINT numElements, UINT structureByteStride);
-		/// <summary>
-		/// 描画コマンド
-		/// </summary>
-		void PreDraw();
-		/// <summary>
-		/// getter_デスクリプターハンドル
-		/// </summary>
-		/// <returns>デスクリプターハンドル</returns>
-		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> GetDescriptorHeap() { return descriptorHeap_; }
+		/// <param name="filePath">HLSLの名前</param> 
+		/// <param name="profile">vs_6_0 or ps_6_0</param> 
+		/// <returns>コンパイルシェーダ</returns>
+		Microsoft::WRL::ComPtr <IDxcBlob> CompileShader(const std::wstring& filePath, const wchar_t* profile);
 
-		//最大SRV数
-		static const uint32_t sMaxSRVCount_;
+		/// <summary>
+		/// インスタンス解放キー
+		/// </summary>
+		class InstanceKey {
+		private:
+			InstanceKey() = default;
+			friend class ShaderManager;
+		};
+		explicit ShaderManager(InstanceKey) {}
 
 	private:
 
-		//
-		uint32_t descriptorSize_;
-		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap_;
-		uint32_t useIndex_ = 0;
+		/// <summary>
+		/// HLSLを読み取る
+		/// </summary>
+		/// <param name="filePath">HLSLパス</param>
+		/// <param name="profile">プロファイル</param>
+		void LoadHLSL(const std::wstring& filePath, const wchar_t* profile);
+		/// <summary>
+		/// 警告エラー
+		/// </summary>
+		void CompileError();
+		/// <summary>
+		/// コンパイルが完了した
+		/// </summary>
+		/// <param name="filePath">HSLSパス</param>
+		/// <param name="profile">プロファイル</param>
+		void CompileSuccess(const std::wstring& filePath, const wchar_t* profile);
 
-		//インスタンス
-		static std::unique_ptr<SrvManager> sInstance_;
-		//default_deleteを設定(解放処理を行える)
-		friend struct std::default_delete<SrvManager>;
+		Microsoft::WRL::ComPtr<IDxcResult> shaderResult = nullptr;
+		Microsoft::WRL::ComPtr<IDxcBlob> shaderBlob = nullptr;
+
+		//DXC
+		Microsoft::WRL::ComPtr <IDxcUtils> dxcUtils_ = nullptr;
+		Microsoft::WRL::ComPtr <IDxcCompiler3> dxcCompiler_ = nullptr;
+		Microsoft::WRL::ComPtr <IDxcIncludeHandler> includeHandler_ = nullptr;
+
+
+
+
+		static std::unique_ptr<ShaderManager> sInstance_;
 	};
 }
 
@@ -15725,7 +16032,7 @@ namespace EngineLayer {
 		// シーンを変更(現在のシーンが前回のシーンと同じでない)
 		if (NextSceneChangeFlag()) {
 			if (scene_) {
-				scene_->Finalize();
+				scene_->Finalize();			
 				scene_.reset();
 			}
 			scene_ = std::move(nextScene_);
@@ -16313,7 +16620,7 @@ private:
 	//imGui
 	bool isFreeMode_ = false;
 
-	float movePower_ = 1.0f;
+	float movePower_ = 0.5f;
 
 	//Y座標は固定するフラグ
 	bool isCameraYFixed_ = false;
@@ -17850,8 +18157,8 @@ void Boss::Initialize() {
 	underBarSprite_->Initialize("bossHpBar.png");
 	underBarSprite_->SetSize(kHpSpriteSize_);
 
-	EngineLayer::Audio::GetInstance().LoadWave(kFireSoundName_);
-	EngineLayer::Audio::GetInstance().LoadWave(kFireBeforeSoundName_);
+	fireSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/fire.mp3");
+	fireBeforeActionSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/enemyBeforeFire.mp3");
 }
 
 void Boss::Update() {
@@ -17873,7 +18180,8 @@ void Boss::Update() {
 	object_->Update(wt_);
 
 	//影更新
-	ShadowUpdate();
+	EngineLayer::ShadowManager::GetInstance().AddShadow(transform_.translate, transform_.scale * shadowLength, kShadowDirection);
+
 }
 
 void Boss::Draw() {
@@ -17944,7 +18252,8 @@ void Boss::CommandMove() {
 	move_.diff.y = transform_.translate.y;
 
 	//偶数か奇数か
-	if (std::fmod(addCount_ + actionCount_, 2) == 0) {
+	int evenOrOdd = 2;
+	if (std::fmod(addCount_ + actionCount_, evenOrOdd) == 0) {
 		//右位置設定
 		SetMovePoint(moveCenter_ + kEdge_);
 
@@ -17964,7 +18273,7 @@ void Boss::CommandMove() {
 		return;
 	}
 
-	if (addCount_ == 3) {
+	if (addCount_ == kMoveCount_) {
 		//行動前モーションステートに変更
 		motionFinish_ = true;
 		addCount_ = 0;
@@ -17982,8 +18291,8 @@ void Boss::CommandFire(float kFrame, float bulletSpeed, uint32_t bulletMax) {
 
 	//撃ち始めSE(時間が半分くらいの時)
 	if (rapidFireTime_ == kRapidFireTimeMax_ * kDivideByTwo_) {
-		EngineLayer::Audio::GetInstance().StopWave(kFireSoundName_);//音ズレが起きないよう
-		EngineLayer::Audio::GetInstance().SoundPlayWave(kFireSoundName_, kVolume_);//発砲SE
+		EngineLayer::Audio::GetInstance().StopWave(fireSound_);//音ズレが起きないよう
+		EngineLayer::Audio::GetInstance().SoundPlayWave(fireSound_, kVolume_);//発砲SE
 	}
 
 	//連射で時間を開ける
@@ -18009,8 +18318,9 @@ void Boss::FireBullet() {
 
 	//弾丸速度
 	Vector3 velocity;
-	//一度だけ
-	if (rapidCount_ == 0 || transform_.translate.z >= 10.0f) {
+	//プレイヤー追尾弾を発射
+	//一度出した弾からまっすぐに飛ばす(奥側にいる場合は除外、常に追尾)
+	if (rapidCount_ == 0 || transform_.translate.z > 0.0f) {
 		//プレイヤーの座標
 		targetPosition_ = player_->GetWorldPosition();
 	}
@@ -18119,9 +18429,7 @@ void Boss::CommandFallPlayer() {
 void Boss::CommandBeforeActionMotion() {
 	
 	//SEはすでに鳴っているか
-	if (!EngineLayer::Audio::GetInstance().IsPlayingSound(kFireBeforeSoundName_)) {
-		EngineLayer::Audio::GetInstance().SoundPlayWave(kFireBeforeSoundName_, kVolume_);
-	}
+	EngineLayer::Audio::GetInstance().SoundPlayWave(fireBeforeActionSound_, kVolume_);
 
 	if (transform_.rotate.z >= kRotateOneLap_) {
 		//モーション終了
@@ -18139,7 +18447,7 @@ void Boss::CommandBeforeActionMotion() {
 
 	motionFinish_ = true;
 	moveCoolTimer_ = 0.0f;
-	EngineLayer::Audio::GetInstance().StopWave(kFireBeforeSoundName_);//予備音声を止める
+	EngineLayer::Audio::GetInstance().StopWave(fireBeforeActionSound_);//予備音声を止める
 }
 
 
@@ -18423,8 +18731,10 @@ private:
 
 	//真ん中座標、左右移動に使う
 	Vector3 moveCenter_{};
-
+	//プレイヤー(target)の位置
 	Vector3 targetPosition_;
+
+	const uint32_t kMoveCount_ = 1;//三回動いた場合に行動が変化する数値
 
 	//低空移動のパラメータ
 	const float kAroundRightX_ = 20.0f;//右端
@@ -18435,9 +18745,8 @@ private:
 	//標準スピード
 	const float kStandardMoveSpeed_ = 3.0f;
 
-
-	const std::string kFireSoundName_ = "resource/Sound/fire.mp3";
-	const std::string kFireBeforeSoundName_ = "resource/Sound/enemyBeforeFire.mp3";
+	EngineLayer::SoundData fireSound_;// "resource/Sound/fire.mp3"
+	EngineLayer::SoundData fireBeforeActionSound_;//"resource/Sound/enemyBeforeFire.mp3"
 
 	const float kVolume_ = 0.25f;
 
@@ -18455,6 +18764,10 @@ private:
 
 	const Vector2 kHpSpriteSize_ = { 256,64 };
 	const float kSpriteRatio_ = 0.1f;
+
+	//影の長さ、大きさ
+	Vector3 shadowLength = { 1.0f, 18.0f ,1.0f };
+	const float kShadowDirection = 10.0f;
 };
 
 
@@ -18601,10 +18914,10 @@ void Enemy_Bomb::TimeLimit() {
 
 	//向きを合わせる
 	if (distance_.x < 0) {
-		transform_.rotate.y = kDirectionRight_;//右向き
+		transform_.rotate.y = kDirectionRight_;//右向き 距離がマイナス
 	}
-	if (distance_.x >= 0) {
-		transform_.rotate.y = kDirectionLeft_;//左向き
+	else {
+		transform_.rotate.y = kDirectionLeft_;//左向き 距離がプラス方向
 	}
 
 	//リアクション
@@ -18624,12 +18937,14 @@ void Enemy_Bomb::TimeLimit() {
 
 void Enemy_Bomb::RedBlinking() {
 	//RGBの緑、青の変更(赤色にするため除外)
-	if (colorTimer_ >= colorTimeMax_ / 2) {
+	if (colorTimer_ >= colorTimeMax_ * kDivideByTwo_) {
+		//設定時間の半分以上
 		//色を足して元の色に
 		color_.y += kColorChangePower_ * TimeScale::GetInstance().GetTimeScaleFacto();//緑
 		color_.z += kColorChangePower_ * TimeScale::GetInstance().GetTimeScaleFacto();//青
 	}
 	else {
+		//設定時間の半分未満
 		//色を引いて赤に近づかせる
 		color_.y -= kColorChangePower_ * TimeScale::GetInstance().GetTimeScaleFacto();//緑
 		color_.z -= kColorChangePower_ * TimeScale::GetInstance().GetTimeScaleFacto();//青
@@ -19156,6 +19471,8 @@ void Enemy_Soldier::Dead() {
 	DeadReaction();
 	//弾丸の更新
 	fireCommand_->BulletUpdate();
+	//発射準備SEの停止
+	fireCommand_->DeleteAudio();
 }
 
 void Enemy_Soldier::Performance() {}
@@ -19403,6 +19720,8 @@ void Enemy_Turret::Dead() {
 	DeadReaction();
 	//弾丸の更新
 	fireCommand_->BulletUpdate();
+	//発射準備SEの停止
+	fireCommand_->DeleteAudio();
 }
 
 void Enemy_Turret::Performance() {}
@@ -20360,8 +20679,8 @@ using namespace MyMath;
 using namespace UseEveryOne;
 
 void EnemyFireCommand::InitAudio() {
-	EngineLayer::Audio::GetInstance().LoadWave(kFireSoundName_);//発砲SE
-	EngineLayer::Audio::GetInstance().LoadWave(kFireBeforeSoundName_);//予備動作SE
+	fireSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/enemyFire.mp3");//発砲SE
+	fireBeforeSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/enemyBeforeFire.mp3");//予備動作SE
 }
 
 
@@ -20398,9 +20717,9 @@ void EnemyFireCommand::Fire(EnemyCanFireBullet& enemyCanFireBullet) {
 
 	if (coolTime_ >= kCoolTimeMax_) {
 		if (rapidFireTime_ == 0.0f && rapidCount_ == 0) {
-			EngineLayer::Audio::GetInstance().StopWave(kFireBeforeSoundName_);
-			EngineLayer::Audio::GetInstance().StopWave(kFireSoundName_);//音ズレが起きないよう
-			EngineLayer::Audio::GetInstance().SoundPlayWave(kFireSoundName_, kVolume_);
+			EngineLayer::Audio::GetInstance().StopWave(fireBeforeSound_);
+			EngineLayer::Audio::GetInstance().StopWave(fireSound_);//音ズレが起きないよう
+			EngineLayer::Audio::GetInstance().SoundPlayWave(fireSound_, kVolume_);
 		}
 
 		//連射で時間を開ける
@@ -20419,11 +20738,14 @@ void EnemyFireCommand::Fire(EnemyCanFireBullet& enemyCanFireBullet) {
 		}
 	}
 	else if (coolTime_ >= kCoolTimeMax_ * kDivideByTwo_ && coolTime_ < kCoolTimeMax_) {
-		//SEはすでに鳴っているか
-		if (!EngineLayer::Audio::GetInstance().IsPlayingSound(kFireBeforeSoundName_)) {
-			EngineLayer::Audio::GetInstance().SoundPlayWave(kFireBeforeSoundName_, kVolume_);
-		}
+		//発射準備前のSE
+		EngineLayer::Audio::GetInstance().SoundPlayWave(fireBeforeSound_, kVolume_);
 	}
+}
+
+void EnemyFireCommand::DeleteAudio() {
+	//SE強制ストップ
+	EngineLayer::Audio::GetInstance().StopWave(fireBeforeSound_);
 }
 
 void EnemyFireCommand::AddBullet(const Vector3& startPoint, const Vector3& velocity) {
@@ -20556,6 +20878,8 @@ public:
 	/// <returns>パーティクル攻撃の名前部分を渡す</returns>
 	const std::string& GetParticleFireName() { return particleFire_; }
 
+	void DeleteAudio();
+
 private:
 	//弾丸リスト
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
@@ -20577,8 +20901,8 @@ private:
 	bool isFire_ = true;
 
 	//サウンドデータの名前
-	const std::string kFireSoundName_ = "resource/Sound/enemyFire.mp3";
-	const std::string kFireBeforeSoundName_ = "resource/Sound/enemyBeforeFire.mp3";
+	EngineLayer::SoundData fireSound_;
+	EngineLayer::SoundData fireBeforeSound_;
 
 	const float kVolume_ = 0.3f;
 };
@@ -21326,10 +21650,10 @@ void Player::SettingSpriteHp(uint32_t num) {
 }
 
 void Player::InitAudio() {
-	//ダメージ
-	EngineLayer::Audio::GetInstance().LoadWave(kHitSoundName_);
-	//ジャンプ
-	EngineLayer::Audio::GetInstance().LoadWave(kJumpSoundName_);
+	//ダメージSE
+	damageSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/damage.mp3");
+	//ジャンプSE
+	jumpSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/jump.mp3");
 }
 
 void Player::ActionUpdate() {
@@ -21812,7 +22136,7 @@ void Player::IsDamage(const Vector3& hitPoint) {
 		particles_[particleDamage_]->SetTranslate(transform_.translate + Normalize(hitPoint));
 		particles_[particleDamage_]->SetParticleBorn(EngineLayer::ParticleBorn::MomentMode);
 		//ダメージのSE再生
-		EngineLayer::Audio::GetInstance().SoundPlayWave(kHitSoundName_, kVolume_);
+		EngineLayer::Audio::GetInstance().SoundPlayWave(damageSound_, kVolume_);
 		InfinityTime();
 		//ノックバック(時間の三分の一ぶんまで)
 
@@ -21841,7 +22165,7 @@ void Player::IsFall() {
 	//一発K.O
 	hp_ = 0;
 	//ダメージSE再生
-	EngineLayer::Audio::GetInstance().SoundPlayWave(kHitSoundName_, kVolume_);
+	EngineLayer::Audio::GetInstance().SoundPlayWave(damageSound_, kVolume_);
 }
 
 void Player::KnockBackPlayer(const Vector3& Power, float TimerMax) {
@@ -21907,8 +22231,8 @@ void  Player::ParticleJump() {
 	particles_[particleJump_]->SetTranslate(transform_.translate + TransformNormal(kParticleWalkPoint_, wt_.GetMatWorld()));
 	particles_[particleJump_]->SetParticleBorn(EngineLayer::ParticleBorn::MomentMode);
 	//SE
-	EngineLayer::Audio::GetInstance().StopWave(kJumpSoundName_);
-	EngineLayer::Audio::GetInstance().SoundPlayWave(kJumpSoundName_, kVolume_);
+	EngineLayer::Audio::GetInstance().StopWave(jumpSound_);
+	EngineLayer::Audio::GetInstance().SoundPlayWave(jumpSound_, kVolume_);
 }
 
 void  Player::ParticleBrink() {
@@ -22455,8 +22779,8 @@ private:
 	  
 	// --- サウンド ---
 
-	const std::string kHitSoundName_ = "resource/Sound/damage.mp3";//ダメージを食らった
-	const std::string kJumpSoundName_ = "resource/Sound/jump.mp3";//ジャンプ
+	EngineLayer::SoundData damageSound_;
+	EngineLayer::SoundData jumpSound_;
 	const float kVolume_ = 0.3f;//ボリューム
 
 	// -----------------
@@ -22950,13 +23274,13 @@ void BaseUmbrella::Initialize() {
 	particles_[kParticleParry_] = EngineLayer::ParticleManager::GetInstance().InitParticle(kParticleParry_);
 
 	//傘を開くSE
-	EngineLayer::Audio::GetInstance().LoadWave(kUmbrellaOpenSoundName_);
+	umbrellaOpenSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/umbrellaOpen.mp3");
 	//発砲攻撃
-	EngineLayer::Audio::GetInstance().LoadWave(kFireSoundName_);
+	fireSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/fire.mp3");
 	//パリィ成功
-	EngineLayer::Audio::GetInstance().LoadWave(kParrySuccessSoundName_);
+	parrySuccessSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/parry.mp3");
 	//パリィ
-	EngineLayer::Audio::GetInstance().LoadWave(kParrySoundName_);
+	parrySound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/bane.mp3");
 }
 
 void BaseUmbrella::Update() {
@@ -23016,7 +23340,7 @@ void BaseUmbrella::OnCollision(CollisionSource* collision) {
 			if (parryStart_) {
 				//ヒットストップ演出
 				TimeScale::GetInstance().SetTimeScale(0.0f, 0.25f);
-				EngineLayer::Audio::GetInstance().SoundPlayWave(kParrySuccessSoundName_,0.3f);
+				EngineLayer::Audio::GetInstance().SoundPlayWave(parrySuccessSound_,0.3f);
 			}
 			parryStart_ = false;
 
@@ -23046,8 +23370,8 @@ void BaseUmbrella::FireCommand() {
 		Fire();//発砲攻撃
 	}
 
-	EngineLayer::Audio::GetInstance().StopWave(kFireSoundName_);
-	EngineLayer::Audio::GetInstance().SoundPlayWave(kFireSoundName_, kVolume_);
+	EngineLayer::Audio::GetInstance().StopWave(fireSound_);
+	EngineLayer::Audio::GetInstance().SoundPlayWave(fireSound_, kVolume_);
 
 }
 
@@ -23064,7 +23388,7 @@ void BaseUmbrella::BornBullet(const Vector3& translate, const Vector3& velocity,
 
 void BaseUmbrella::OffShield() {
 	isShield_ = false;
-	EngineLayer::Audio::GetInstance().StopWave(kUmbrellaOpenSoundName_);
+	EngineLayer::Audio::GetInstance().StopWave(umbrellaOpenSound_);
 	parryStart_ = true;
 }
 
@@ -23072,7 +23396,7 @@ void BaseUmbrella::ShieldMode() {
 	//既に開いている場合はスキップ
 	if (!isShield_) {
 		isParry_ = true;
-		EngineLayer::Audio::GetInstance().SoundPlayWave(kUmbrellaOpenSoundName_, kVolume_ * kTwice_);
+		EngineLayer::Audio::GetInstance().SoundPlayWave(umbrellaOpenSound_, kVolume_ * kTwice_);
 	}
 	isShield_ = true;
 
@@ -23102,8 +23426,8 @@ void BaseUmbrella::ParryUpdate() {
 //パリィ成功
 void BaseUmbrella::ParrySuccess() {
 	//SE
-	EngineLayer::Audio::GetInstance().StopWave(kParrySoundName_);//パリィが続くとき一度止めてから再生させるようにする
-	EngineLayer::Audio::GetInstance().SoundPlayWave(kParrySoundName_, kVolume_);//SE再生:パリィ
+	EngineLayer::Audio::GetInstance().StopWave(parrySound_);//パリィが続くとき一度止めてから再生させるようにする
+	EngineLayer::Audio::GetInstance().SoundPlayWave(parrySound_, kVolume_);//SE再生:パリィ
 	//パリィエフェクトを出す座標
 	Vector3 translate = TransformNormal(kParryParticleFrontPoint_, wt_.GetMatWorld());
 	particles_[kParticleParry_]->SetTranslate(transform_.translate + translate);//生成場所を設定
@@ -23296,10 +23620,11 @@ private:
 	/// </summary>
 	void ParrySuccess();
 
-	const std::string kUmbrellaOpenSoundName_ = "resource/Sound/umbrellaOpen.mp3";//傘を開く
-	const std::string kFireSoundName_ = "resource/Sound/fire.mp3";//発砲攻撃
-	const std::string kParrySuccessSoundName_ = "resource/Sound/parry.mp3";//パリィに成功
-	const std::string kParrySoundName_ = "resource/Sound/bane.mp3";//パリィで跳ね返す
+	//SE
+	EngineLayer::SoundData umbrellaOpenSound_; //傘を開く
+	EngineLayer::SoundData fireSound_;         //発砲攻撃
+	EngineLayer::SoundData parrySuccessSound_; //パリィに成功
+	EngineLayer::SoundData parrySound_;        //パリィで跳ね返す
 
 	//傘より少し前に出す
 	const Vector3 kParryParticleFrontPoint_ { 0.0f,0.0f,2.0f };
@@ -23492,7 +23817,7 @@ void LongUmbrella::Initialize() {
 	umbrellaAABB_.min = -kAABBSize_ * kDivideByTwo_;
 	umbrellaAABB_.max = kAABBSize_ * kDivideByTwo_;
 
-	EngineLayer::Audio::GetInstance().LoadWave(kChargeSoundName_);
+	chargeSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/Sound/playerChargeFire.mp3");
 
 	particles_[kChargeParticle_] = EngineLayer::ParticleManager::GetInstance().InitParticle(kChargeParticle_);
 
@@ -23521,8 +23846,8 @@ void LongUmbrella::Fire() {
 	chargeTimer_ = std::clamp(chargeTimer_, 0.0f, kChargeMaxTime_ + kDeltaTime_);
 
 	if (chargeTimer_ >= kChargeMaxTime_ && chargeTimer_ < kChargeMaxTime_ + kDeltaTime_) {
-		EngineLayer::Audio::GetInstance().StopWave(kChargeSoundName_);
-		EngineLayer::Audio::GetInstance().SoundPlayWave(kChargeSoundName_, 0.3f);
+		EngineLayer::Audio::GetInstance().StopWave(chargeSound_);
+		EngineLayer::Audio::GetInstance().SoundPlayWave(chargeSound_, kVolume_);
 
 		particles_[kChargeParticle_]->SetColor({ 1.0f,1.0f,0.0f,1.0f });//黄色
 	}
@@ -23570,8 +23895,8 @@ void LongUmbrella::PowerFire() {
 
 	//チャージ時間の半減
 	if (chargeTimer_ >= kChargeMaxTime_ && chargeTimer_ < kChargeMaxTime_ + kDeltaTime_ * 3.0f) {
-		EngineLayer::Audio::GetInstance().StopWave(kChargeSoundName_);
-		EngineLayer::Audio::GetInstance().SoundPlayWave(kChargeSoundName_, 0.3f);
+		EngineLayer::Audio::GetInstance().StopWave(chargeSound_);
+		EngineLayer::Audio::GetInstance().SoundPlayWave(chargeSound_,kVolume_);
 		
 		particles_[kChargeParticle_]->SetColor({ 1.0f,1.0f,0.0f,1.0f });//黄色
 	}
@@ -23654,9 +23979,10 @@ private:
 	const float kBulletSpeed_ = 1.0f;//弾丸の前方向の速さ
 	const uint32_t kBulletPower_ = 6;//弾丸の攻撃力
 
-	const std::string& kChargeSoundName_ = "resource/Sound/playerChargeFire.mp3";
+	//SE
+	EngineLayer::SoundData chargeSound_;
 
-
+	//パーティクル名
 	const std::string& kChargeParticle_ = "longUmbrella_charge";
 };
 
@@ -24926,7 +25252,7 @@ void MyGame::Initialize() {
 	//ポーズ処理の初期化
 	PauseScreen::GetInstance().Initialize();
 	//最初のシーンの設定
-	EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<SelectScene>());
+	EngineLayer::SceneManager::GetInstance().ChangeScene(std::make_unique<TitleScene>());
 	//シーンの更新処理(変更処理)
 	EngineLayer::SceneManager::GetInstance().SceneUpdate();
 
@@ -25013,8 +25339,6 @@ void MyGame::Draw() {
 
 void MyGame::Finalize() {
 	FadeScreen::GetInstance().Finalize();
-	EngineLayer::Audio::GetInstance().Finalize();
-	EngineLayer::SceneManager::GetInstance().Finalize();
 	NextStageSave::GetInstance().Finalize();
 	CollisionManager::GetInstance().Finalize();
 	UIManager::GetInstance().Finalize();
@@ -25090,10 +25414,10 @@ void GameScene::Initialize() {
 	LevelEditorObjectSetting();
 	
 	//BGM、SEの設定
-	EngineLayer::Audio::GetInstance().LoadWave(kBGMSoundName_);
+	BGMSound_ = EngineLayer::Audio::GetInstance().LoadWave("resource/sound/title.mp3");
 
 	//BGM再生(リピート)
-	EngineLayer::Audio::GetInstance().SoundPlayWave(kBGMSoundName_, volume_, true);
+	EngineLayer::Audio::GetInstance().SoundPlayWave(BGMSound_, volume_, true);
 
 	//スタート演出
 	WaterWarpExit();
@@ -25150,7 +25474,7 @@ void GameScene::Update() {
 
 #endif //  USE_IMGUI
 
-	EngineLayer::Audio::GetInstance().ControlVolume(kBGMSoundName_, volume_);
+	EngineLayer::Audio::GetInstance().ControlVolume(BGMSound_, volume_);
 }
 
 void GameScene::PlayerAliveUpdate() {
@@ -25410,7 +25734,7 @@ void GameScene::SceneUpdate() {
 	//次のシーンに移動するとき
 	if (EngineLayer::SceneManager::GetInstance().NextSceneChangeFlag()) {
 		//BGM停止
-		EngineLayer::Audio::GetInstance().StopWave(kBGMSoundName_);
+		EngineLayer::Audio::GetInstance().StopWave(BGMSound_);
 		//フェードを挟む(FadeIn)
 		FadeScreen::GetInstance().FadeStart(type_fadeIn);
 	}
@@ -25487,7 +25811,7 @@ private:
 	std::unique_ptr<Boss> boss_;
 
 	//BGM
-	const std::string kBGMSoundName_ = "resource/sound/title.mp3";
+	EngineLayer::SoundData BGMSound_;
 	float volume_ = 0.07f;//音量調節機能
 
 	/// <summary>
@@ -25935,8 +26259,10 @@ void TitleScene::UpdateBehind() {
 	for (auto& visualActor : visualActors) {
 		visualActor->SetTransform(transforms_[visualActor->GetObjectName()]);
 		visualActor->Update();
-		playerShadow_->Update(transforms_[visualActor->GetObjectName()]);
 	}
+
+	//プレイヤーのみに影を追加
+	playerShadow_->Update(transforms_["player_standby"]);
 
 	//パーティクル更新
 	for (auto& particle : sceneParticles_) {
@@ -26514,6 +26840,7 @@ void GameOverScene::Update() {
 		transforms_[visualActor->GetObjectName()].rotate.y += kRotate_;
 		visualActor->SetTransform(transforms_[visualActor->GetObjectName()]);//座標更新
 		visualActor->Update();
+		visualActor->LightOn();//ライト処理オン
 	}
 }
 
@@ -26635,19 +26962,14 @@ File Path: project/GameProgram/StageObjects/BackGroundObject.cpp
 #include "BackGroundObject.h"
 
 void BackGroundObject::Initialize() {
+	//オブジェクト初期化
 	object_ = std::make_unique<EngineLayer::Object_glTF>();
 	object_->Initialize();
 	object_->SetModelFile("backGroundObject.gltf");
-
-	wt_.Initialize();
-	transform_ = wt_.UpdateTransform();
-	transform_.translate.y = -10.0f;
-	transform_.translate.z += 100.0f;
-	wt_.UpdateMatrix(transform_);
 }
 
 void BackGroundObject::Update() {
-	object_->Update(wt_);
+	object_->Update();
 }
 
 void BackGroundObject::Draw() {
@@ -26681,11 +27003,9 @@ public:
 	void Draw();
 
 private:
-
+	//背景オブジェクト
 	std::unique_ptr<EngineLayer::Object_glTF> object_ = nullptr;
-	EngineLayer::WorldTransform wt_;
-	Transform transform_{};
-
+	//大きさ
 	const float kSize_ = 1.0f;
 };
 
@@ -28702,6 +29022,7 @@ void LoadingModels::LoadObjects() {
 
 
 void LoadingModels::LoadObj() {
+	EngineLayer::ModelManager::GetInstance().LoadModel("stage_select", ".obj");
 	//objの設定
 	//プレイヤー弾丸
 	EngineLayer::ModelManager::GetInstance().LoadModel("PlayerBullet", ".obj");
@@ -28712,7 +29033,7 @@ void LoadingModels::LoadObj() {
 	EngineLayer::ModelManager::GetInstance().LoadModel("stage_3", ".obj");
 	EngineLayer::ModelManager::GetInstance().LoadModel("stage_4", ".obj");
 	EngineLayer::ModelManager::GetInstance().LoadModel("stage_boss",".obj");
-	EngineLayer::ModelManager::GetInstance().LoadModel("stage_select", ".obj");
+	
 	//ステージオブジェクト
 	EngineLayer::ModelManager::GetInstance().LoadModel("checkpoint", ".obj");
 	EngineLayer::ModelManager::GetInstance().LoadModel("warpGate", ".obj");
