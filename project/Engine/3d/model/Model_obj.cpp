@@ -18,19 +18,18 @@ namespace EngineLayer {
 		// (resource) / (Object / モデルファイル) / (オブジェクト名.obj)
 		modelData_ = LoadObjFile(directoryPath, fileName, ".obj");
 
-		InitialData_ = modelData_;
-
-		int i = 0;
 		//全ての頂点数
 		for (auto& modelData : modelData_.Data) {
 
 			InitVertexResource(modelData);
 
+			InitIndexResource(modelData);
+
 			InitMaterialResource(modelData);
 		}
 	}
 
-	void Model_obj::InitVertexResource(ModelData modelData) {
+	void Model_obj::InitVertexResource(const ModelData& modelData) {
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexR;
 		D3D12_VERTEX_BUFFER_VIEW vertexB;
 
@@ -50,7 +49,7 @@ namespace EngineLayer {
 		vertexBufferView_.push_back(vertexB);
 	}
 
-	void Model_obj::InitMaterialResource(ModelData modelData) {
+	void Model_obj::InitMaterialResource(ModelData& modelData) {
 
 		MaterialData materialData = modelData.materialData;
 
@@ -74,13 +73,25 @@ namespace EngineLayer {
 		materialResources_.push_back(materialResource);
 	}
 
-	void Model_obj::InitIndexResource(ModelData modelData) {}
+	void Model_obj::InitIndexResource(const ModelData& modelData) {
+
+		Microsoft::WRL::ComPtr<ID3D12Resource> indexR;
+		D3D12_INDEX_BUFFER_VIEW indexB{};
+
+		indexR = D3D12CreateResourceManager::GetInstance().CreateBufferResource(sizeof(uint32_t) * modelData.indices.size());
+
+		indexB.BufferLocation = indexR->GetGPUVirtualAddress();
+		indexB.SizeInBytes = UINT(sizeof(uint32_t) * modelData.indices.size());
+		indexB.Format = DXGI_FORMAT_R32_UINT;
+
+		indexR->Map(0, nullptr, reinterpret_cast<void**>(&mappedIndex_));
+		std::memcpy(mappedIndex_, modelData.indices.data(), sizeof(uint32_t) * modelData.indices.size());
+
+		indexResource_.push_back(indexR);
+		indexBufferView_.push_back(indexB);
+	}
 
 	void Model_obj::Draw() {
-
-		//元々のデータを読み取る
-		modelData_ = InitialData_;
-
 		int i = 0;
 		for (auto& multi : modelData_.Data) {
 			DirectXCommon::GetInstance().GetCommandList()->IASetVertexBuffers(0, 1, &vertexBufferView_[i]);
@@ -197,6 +208,10 @@ namespace EngineLayer {
 		std::vector<VertexData> iVertices;
 		bool firstMaterial = false;
 
+		std::vector<uint32_t> iIndexes;
+
+
+		//ナンバー
 		uint32_t vertexNum = 0;
 		uint32_t materialNum = 0;
 
@@ -216,7 +231,7 @@ namespace EngineLayer {
 				position.x *= -1.0f;
 				positions.push_back(position);
 			}
-			else if (identifier == "vt") {//texcord
+			else if (identifier == "vt") {//texcoord
 				Vector2 texcoord;
 				s >> texcoord.x >> texcoord.y;
 
@@ -246,6 +261,8 @@ namespace EngineLayer {
 						std::string index;
 						std::getline(v, index, '/'); //  "/"でインデックスを区切る
 						elementIndices[element] = std::stoi(index);
+						//頂点インデックス追加
+						iIndexes.push_back(elementIndices[element]);
 					}
 					Vector4 position = positions[elementIndices[0] - 1];
 					Vector2 texcoord = texcoords[elementIndices[1] - 1];
@@ -264,8 +281,10 @@ namespace EngineLayer {
 				//各マテリアルの頂点情報を取得
 				if (firstMaterial) {
 					iModelData.vertices = iVertices;//vectorで追加するmodelDataのvertexDataに導入
+					iModelData.indices = iIndexes;
 					vertexNum++;//カウントを進む
 					iVertices.clear();//データをリセット
+					iIndexes.clear();
 				}
 				else {
 					//最初の o はパス
@@ -290,6 +309,7 @@ namespace EngineLayer {
 		}
 
 		iModelData.vertices = iVertices;
+		iModelData.indices = iIndexes;
 
 		//最後のマテリアル頂点情報を取得
 		modelData.Data.push_back(iModelData);

@@ -138,10 +138,10 @@ void Enemy_Bomb::TimeLimit() {
 
 	//向きを合わせる
 	if (distance_.x < 0) {
-		transform_.rotate.y = kDirectionRight_;//右向き
+		transform_.rotate.y = kDirectionRight_;//右向き 距離がマイナス
 	}
-	if (distance_.x >= 0) {
-		transform_.rotate.y = kDirectionLeft_;//左向き
+	else {
+		transform_.rotate.y = kDirectionLeft_;//左向き 距離がプラス方向
 	}
 
 	//リアクション
@@ -161,12 +161,14 @@ void Enemy_Bomb::TimeLimit() {
 
 void Enemy_Bomb::RedBlinking() {
 	//RGBの緑、青の変更(赤色にするため除外)
-	if (colorTimer_ >= colorTimeMax_ / 2) {
+	if (colorTimer_ >= colorTimeMax_ * kDivideByTwo_) {
+		//設定時間の半分以上
 		//色を足して元の色に
 		color_.y += kColorChangePower_ * TimeScale::GetInstance().GetTimeScaleFacto();//緑
 		color_.z += kColorChangePower_ * TimeScale::GetInstance().GetTimeScaleFacto();//青
 	}
 	else {
+		//設定時間の半分未満
 		//色を引いて赤に近づかせる
 		color_.y -= kColorChangePower_ * TimeScale::GetInstance().GetTimeScaleFacto();//緑
 		color_.z -= kColorChangePower_ * TimeScale::GetInstance().GetTimeScaleFacto();//青

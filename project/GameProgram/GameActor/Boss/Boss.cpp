@@ -128,7 +128,8 @@ void Boss::CommandMove() {
 	move_.diff.y = transform_.translate.y;
 
 	//偶数か奇数か
-	if (std::fmod(addCount_ + actionCount_, 2) == 0) {
+	int evenOrOdd = 2;
+	if (std::fmod(addCount_ + actionCount_, evenOrOdd) == 0) {
 		//右位置設定
 		SetMovePoint(moveCenter_ + kEdge_);
 
@@ -148,7 +149,7 @@ void Boss::CommandMove() {
 		return;
 	}
 
-	if (addCount_ == 3) {
+	if (addCount_ == kMoveCount_) {
 		//行動前モーションステートに変更
 		motionFinish_ = true;
 		addCount_ = 0;
@@ -193,8 +194,9 @@ void Boss::FireBullet() {
 
 	//弾丸速度
 	Vector3 velocity;
-	//一度だけ
-	if (rapidCount_ == 0 || transform_.translate.z >= 10.0f) {
+	//プレイヤー追尾弾を発射
+	//一度出した弾からまっすぐに飛ばす(奥側にいる場合は除外、常に追尾)
+	if (rapidCount_ == 0 || transform_.translate.z > 0.0f) {
 		//プレイヤーの座標
 		targetPosition_ = player_->GetWorldPosition();
 	}

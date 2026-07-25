@@ -194,8 +194,10 @@ private:
 
 	//真ん中座標、左右移動に使う
 	Vector3 moveCenter_{};
-
+	//プレイヤー(target)の位置
 	Vector3 targetPosition_;
+
+	const uint32_t kMoveCount_ = 1;//三回動いた場合に行動が変化する数値
 
 	//低空移動のパラメータ
 	const float kAroundRightX_ = 20.0f;//右端

@@ -59,7 +59,7 @@ namespace EngineLayer {
 		}
 	}
 
-	void Model_glTF::InitVertexResource(ModelData modelData) {
+	void Model_glTF::InitVertexResource(const ModelData& modelData) {
 		D3D12_VERTEX_BUFFER_VIEW vertexB{};
 		Microsoft::WRL::ComPtr<ID3D12Resource> vertexR;
 
@@ -76,7 +76,7 @@ namespace EngineLayer {
 		vertexBufferView_.push_back(vertexB);
 	}
 
-	void Model_glTF::InitMaterialResource(ModelData modelData) {
+	void Model_glTF::InitMaterialResource(ModelData& modelData) {
 
 		//マテリアル用のリソース
 		Microsoft::WRL::ComPtr<ID3D12Resource> materialResource;
@@ -104,7 +104,7 @@ namespace EngineLayer {
 		modelData.materialData.textureIndex = TextureManager::GetInstance().GetSrvIndex(modelData.materialData.textureFilePath);
 	}
 
-	void Model_glTF::InitIndexResource(ModelData modelData) {
+	void Model_glTF::InitIndexResource(const ModelData& modelData) {
 
 		Microsoft::WRL::ComPtr<ID3D12Resource> indexR;
 		D3D12_INDEX_BUFFER_VIEW indexB{};

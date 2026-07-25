@@ -124,19 +124,19 @@ namespace EngineLayer {
 		/// VertexResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		void InitVertexResource(ModelData modelData) override;
+		void InitVertexResource(const ModelData& modelData) override;
 
 		/// <summary>
 		/// MaterialResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		void InitMaterialResource(ModelData modelData) override;
+		void InitMaterialResource(ModelData& modelData) override;
 
 		/// <summary>
 		/// MaterialResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		void InitIndexResource(ModelData modelData) override;
+		void InitIndexResource(const ModelData& modelData) override;
 
 		/// <summary>
 		/// ノードを読み込む
@@ -178,12 +178,6 @@ namespace EngineLayer {
 		/// <param name="joints">ジョイント</param>
 		/// <returns>生成したジョイント</returns>
 		int32_t CreateJoint(const MyMath::Node& node, const std::optional<int32_t>& parent, std::vector<MyMath::Joint>& joints);
-
-		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource_; //index
-
-		uint32_t* mappedIndex_ = nullptr;
-
-		std::vector<D3D12_INDEX_BUFFER_VIEW> indexBufferView_; //index
 
 		//アニメーション
 		std::vector<MyMath::Animation> animation_;

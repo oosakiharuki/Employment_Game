@@ -42,19 +42,19 @@ namespace EngineLayer {
 		/// VertexResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		virtual void InitVertexResource(ModelData modelData) = 0;
+		virtual void InitVertexResource(const ModelData& modelData) = 0;
 
 		/// <summary>
 		/// MaterialResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		virtual void InitMaterialResource(ModelData modelData) = 0;
+		virtual void InitMaterialResource(ModelData& modelData) = 0;
 
 		/// <summary>
 		/// IndexResource作成(初期化)
 		/// </summary>
 		/// <param name="modelData">モデルデータ</param>
-		virtual void InitIndexResource(ModelData modelData) = 0;
+		virtual void InitIndexResource(const ModelData& modelData) = 0;
 
 		/// <summary>
 		/// カメラ更新処理
@@ -69,6 +69,12 @@ namespace EngineLayer {
 		Material* materialData_ = nullptr;
 
 		MyMath::ModelDataMulti modelData_;
+
+
+		std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> indexResource_; //index
+		std::vector<D3D12_INDEX_BUFFER_VIEW> indexBufferView_; //index
+
+		uint32_t* mappedIndex_ = nullptr;
 
 		//マテリアルデータ初期値
 		const Vector4 kInitColor_ = { 1.0f,1.0f,1.0f,1.0f };
