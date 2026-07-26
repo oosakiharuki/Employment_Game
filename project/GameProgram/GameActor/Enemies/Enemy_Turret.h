@@ -59,25 +59,25 @@ private:
 	//見える範囲のパーティクルパラメータ
 	const std::string& particleLaser_ = "tullet_laser";
 
-	static constexpr Vector3 kParticleFireSize_ = { 1.5f, 1.5f, 1.5f };
+	const Vector3 kParticleFireSize_ = { 1.5f, 1.5f, 1.5f };
 
 	//Hp
-	static constexpr uint32_t kHp_ = 6;
+	const uint32_t kHp_ = 6;
 
 	//攻撃パーティクルの場所
 	Vector3 particlePosition_{};
 
 	//見える範囲初期化
-	static constexpr Vector3 kEyeReach_ = { 20, 0.5f, 0.5f };
+	const Vector3 kEyeReach_ = { 20, 0.5f, 0.5f };
 
 	//最大弾丸数
-	static constexpr uint32_t kRapidCountMax_ = 6;
+	const uint32_t kRapidCountMax_ = 6;
 
 	//弾丸の出る初期位置設定で使う
-	static constexpr float kBulletTranslate_ = 1.5f;
+	const float kBulletTranslate_ = 1.5f;
 
 	//弾丸速度
-	static constexpr float kBulletSpeed_ = 0.5f;
+	const float kBulletSpeed_ = 0.5f;
 
 	//発砲攻撃
 	std::unique_ptr<EnemyFireCommand> fireCommand_ = nullptr;

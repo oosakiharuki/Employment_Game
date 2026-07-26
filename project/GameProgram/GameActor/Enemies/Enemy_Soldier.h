@@ -64,13 +64,13 @@ private:
 	Vector3 velocity_;
 
 	//Hp
-	static constexpr uint32_t kHp_ = 3;
+	const uint32_t kHp_ = 3;
 
 	//見える範囲初期化
-	static constexpr Vector3 kEyeReach_ = { 15, 10, 1 };
+	const Vector3 kEyeReach_ = { 15, 10, 1 };
 
 	//最大弾丸数
-	static constexpr uint32_t kRapidCountMax_ = 3;
+	const uint32_t kRapidCountMax_ = 3;
 
 	//発砲攻撃
 	std::unique_ptr<EnemyFireCommand> fireCommand_ = nullptr;

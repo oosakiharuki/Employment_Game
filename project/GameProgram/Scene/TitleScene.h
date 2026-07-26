@@ -97,11 +97,11 @@ private:
 	//決定したら弾を発射
 	bool isSelect_ = false;
 	float bulletTimer_ = 0.0f;
-	static constexpr float kBulletTimeMax_ = 1.0f;
+	const float kBulletTimeMax_ = 1.0f;
 
 	//時間
 	float titleFallingTimer_ = 0.0f;
-	static constexpr float kTitleFallingTimeMax_ = 1.0f;
+	const float kTitleFallingTimeMax_ = 1.0f;
 
 	//タイトルロゴが登場する移動
 	float logoPointStartY_ = -300.0f;//スタート
@@ -110,33 +110,33 @@ private:
 	Vector2 titlePos_ = { 430,logoPointStartY_ };
 
 	//通常プレイと同じ重力
-	static constexpr float kGravity_ = 0.05f;
+	const float kGravity_ = 0.05f;
 
 	//プレイヤー着地地点
-	static constexpr float kLandingPointY_ = -2.0f;
+	const float kLandingPointY_ = -2.0f;
 
 	//文字回転最大値
-	static constexpr float kRotateMaxSelectMoji_ = 180.0f;
+	const float kRotateMaxSelectMoji_ = 180.0f;
 	//文字回転速度
-	static constexpr float kRotating_ = 30.0f;
+	const float kRotating_ = 30.0f;
 
 	//選択後に飛ばされる強さ
-	static constexpr float kMoveSelectMoji_ = 0.5f;
+	const float kMoveSelectMoji_ = 0.5f;
 
-	static constexpr Vector3 kSelectMojiPosition_ = { 3.0f,-0.5f,0.0f };
-	static constexpr float kSelectEndPositionY_ = -2.5f;
+	const Vector3 kSelectMojiPosition_ = { 3.0f,-0.5f,0.0f };
+	const float kSelectEndPositionY_ = -2.5f;
 	
 	//傘
-	static constexpr float kArrowRange_ = -90.0f;
+	float const kArrowRange_ = -90.0f;
 
 	//場所
-	static constexpr float kUmbrellaArrowModePositionX_ = 0.0f;
+	const float kUmbrellaArrowModePositionX_ = 0.0f;
 	float arrowMoveX = 0.0f;
 
 	//影
-	static constexpr float kShadowPositionY_ = -3.79f;//(-3.8f + 0.01f)
+	const float kShadowPositionY_ = -3.79f;//(-3.8f + 0.01f)
 
-	static constexpr float kStickPower_ = 0.5f;//スティックの倒し具合
+	const float kStickPower_ = 0.5f;//スティックの倒し具合
 
 	std::unique_ptr<CameraControl> cameraControl_;
 	float cameraRotateX_ = -15.0f;

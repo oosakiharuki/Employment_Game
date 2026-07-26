@@ -85,12 +85,12 @@ private:
 
 	//消えるまでの処理
 	float deathTimer = 0.0f;
-	static constexpr float kEndTime = 2.0f;
+	const float kEndTime = 2.0f;
 	bool isDead_ = false;
 
 	//当たり判定
 	AABB bulletAABB;
-	static constexpr Vector3 kBulletSize_ = { 1.0f ,1.0f ,1.0f };
+	const Vector3 kBulletSize_ = { 1.0f ,1.0f ,1.0f };
 
 	//パリィされたら敵のほうにダメージになる
 	bool isParry = false;

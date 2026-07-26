@@ -62,6 +62,6 @@ private:
 
 
 	float interpolation_ = 0.0f;
-	static constexpr float kMoveFrame_ = 3.0f;
+	const float kMoveFrame_ = 3.0f;
 };
 

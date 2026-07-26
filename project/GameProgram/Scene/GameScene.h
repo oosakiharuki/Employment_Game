@@ -79,8 +79,8 @@ private:
 	std::unordered_map<std::string, std::unique_ptr<EngineLayer::Particle>> sceneParticles_;
 
 	//説明ガイドの初期座標と大きさ
-	static constexpr Vector2 kSpriteSize_ = { 200,100 };
-	static constexpr Vector2 kSpriteTranslate_ = { 300,20 };
+	const Vector2 kSpriteSize_ = { 200,100 };
+	const Vector2 kSpriteTranslate_ = { 300,20 };
 
 	//操作ガイド
 	std::vector<std::unique_ptr<Guide>> guides_;
@@ -91,9 +91,9 @@ private:
 	//スタート時のワープゲート(水たまりから飛び出る感じに)
 	std::unique_ptr<WarpGate> startWarp_;
 	//角度変更
-	static constexpr float kStartWarpGateRange_ = 90.0f;
+	const float kStartWarpGateRange_ = 90.0f;
 	//重ならないように影より上にする変数
-	static constexpr float kWarpGateUpThanShadow_ = 0.02f;
+	const float kWarpGateUpThanShadow_ = 0.02f;
 
 	/// <summary>
 	/// 水たまりのようなワープゲート出口
