@@ -62,39 +62,39 @@ private:
 	void DirectionPlayer();
 
 	//Hp
-	const uint32_t kHp_ = 1;
+	static constexpr uint32_t kHp_ = 1;
 	//見える範囲初期化
-	const Vector3 kEyeReach_ = { 15, 2, 1 };
+	static constexpr Vector3 kEyeReach_ = { 15, 2, 1 };
 
 	//プレイヤーとの距離感
 	Vector3 distance_;
-	const float kSpeed_ = -0.15f;
+	static constexpr float kSpeed_ = -0.1f;
 
 
 	//追尾開始
 	bool isHomingStart_ = false;
 
 	//爆発するまでのタイマー
-	const float kBombTimeMax_ = 5.0f;//max
+	static constexpr float kBombTimeMax_ = 5.0f;//max
 	float bombTimer_ = 0.0f;
 
 	//爆発範囲AABB
 	AABB bombAABB_;
-	const Vector3 kExplosionRange_ = { 5,5,5 };//大きさ
+	static constexpr Vector3 kExplosionRange_ = { 5.0f,5.0f,5.0f };//大きさ
 
 	//リアクション(拡大縮小)
 	Vector3 bombScale_ = { 0.05f, 0.05f, 0.05f };
-	const float kScaleMax_ = 0.2f;//スケール最大値
-	const float kOnTheVerge = 3.5f;//爆発寸前のタイマー
-	const float kScaleSpeedUp_ = 2.0f;
+	static constexpr float kScaleMax_ = 0.2f;//スケール最大値
+	static constexpr float kOnTheVerge = 3.5f;//爆発寸前のタイマー
+	static constexpr float kScaleSpeedUp_ = 2.0f;
 	//リアクション(色)
 	Vector4 color_ = { 1,1,1,1 };
 	float colorTimer_ = 0.0f;//時間
 	float colorTimeMax_ = 0.2f;//色変化の最大時間
-	const float kColorChangePower_ = 0.1f;//足し引きするパワー
+	static constexpr float kColorChangePower_ = 0.1f;//足し引きするパワー
 
 	float deadTimer_ = 0.0f;
-	const float kDeadTimeMax_ = 0.5f;//爆発する間の時間
+	static constexpr float kDeadTimeMax_ = 0.5f;//爆発する間の時間
 
 	/// <summary>
 	/// 爆発する

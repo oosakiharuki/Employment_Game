@@ -44,6 +44,6 @@ private:
 	bool isFinish_ = false;
 
 	float timer = 0.0f;
-	const float kAnimationTimeMax_ = 2.4f;
+	static constexpr float kAnimationTimeMax_ = 2.4f;
 };
 

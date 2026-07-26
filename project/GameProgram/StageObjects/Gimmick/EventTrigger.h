@@ -110,9 +110,18 @@ public:
 	/// <returns></returns>イベント終了フラグ
 	bool EventEnd() { return isEventEnd_; }
 
-
+	/// <summary>
+	/// イベントカメラに変更
+	/// </summary>
+	/// <param name="cameraControl">カメラをコントロールしているクラス</param>
+	/// <param name="levelEditor">レベルエディタからカメラデータを読み取る</param>
 	void ChangeCamera(CameraControl& cameraControl, LevelEditor& levelEditor);
 
+	/// <summary>
+	/// メインカメラに戻す
+	/// </summary>
+	/// <param name="cameraControl">カメラをコントロールしているクラス</param>
+	/// <param name="levelEditor">レベルエディタからカメラデータを読み取る</param>
 	void ReturnCamera(CameraControl& cameraControl, LevelEditor& levelEditor);
 
 private:
@@ -171,18 +180,18 @@ private:
 	//パーティクル
 	std::list<std::unique_ptr<EngineLayer::Particle>> summon_particles_;
 	//召喚タイマー
-	const float kSummonMaxTime_ = 1.25f;
+	static constexpr float kSummonMaxTime_ = 1.25f;
 	float summonTimer_ = kSummonMaxTime_;
 
 	//敵を配置する変数
 	std::list<EnemyPopData> enemyPopDatas_;
 
 	//動ける範囲
-	const float kMoveX = 3.0f;
+	static constexpr float kMoveX = 3.0f;
 
 	//向き(左右)
-	const float kDirectionRight_ = 90.0f;
-	const float kDirectionLeft_ = -90.0f;
+	static constexpr float kDirectionRight_ = 90.0f;
+	static constexpr float kDirectionLeft_ = -90.0f;
 
 	//召喚するとき
 	std::unordered_map<std::string, std::unique_ptr<EngineLayer::Particle>> particles_;

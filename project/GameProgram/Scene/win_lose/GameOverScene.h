@@ -56,14 +56,14 @@ private:
 	std::vector<std::unique_ptr<VisualActor>> visualActors;
 	std::unordered_map<std::string, Transform> transforms_;//各々の変更用
 	//回る速度
-	const float kRotate_ = 0.5f;
+	static constexpr float kRotate_ = 0.5f;
 
 	//スプライト
 	std::unique_ptr<EngineLayer::Sprite> sprite_;//ゲームオーバーの文字
 	std::unique_ptr<EngineLayer::Sprite> spriteSpace_;//Spaceでもどるの文字
 
 	//スプライトの設定
-	const Vector2 kSpritePositionGameOver_ = { 100.0f,100.0f };//[ゲームオーバー]文字の座標
-	const Vector2 kSpritePositionButton_ = { 800.0f,10.0f };//[ボタンで戻る]文字の座標
-	const Vector2 kSpriteSizeButton_ = { 256.0f, 64.0f };//[ボタンで戻る]文字のサイズ
+	static constexpr Vector2 kSpritePositionGameOver_ = { 100.0f,100.0f };//[ゲームオーバー]文字の座標
+	static constexpr Vector2 kSpritePositionButton_ = { 800.0f,10.0f };//[ボタンで戻る]文字の座標
+	static constexpr Vector2 kSpriteSizeButton_ = { 256.0f, 64.0f };//[ボタンで戻る]文字のサイズ
 };
