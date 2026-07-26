@@ -143,19 +143,19 @@ protected:
 	//ゲームに移さないフラグ
 	bool isDeleteEnemy_ = false;
 	//倒された時の回転リアクション
-	static constexpr float kDeadRotation_ = 4.0f;
+	const float kDeadRotation_ = 4.0f;
 
 
 	//パーティクル
 	//ダメージを食らったとき
 	const std::string& particleDamage_ = "enemy_damage";
 
-	static constexpr float kMarkMaxTime_ = 1.0f;
+	const float kMarkMaxTime_ = 1.0f;
 	float markTimer_ = 0.0f;
 
 	//見つかけたリアクションのパラメータ
 	bool isFoundReaction_ = false;
-	static constexpr float kFoundReactionMaxTime_ = kMarkMaxTime_ / 5.0f;//リアクションで伸び縮みする時間
+	const float kFoundReactionMaxTime_ = kMarkMaxTime_ / 5.0f;//リアクションで伸び縮みする時間
 	Vector3 preTranslate_;//リアクション前の座標
 	float foundTimer_ = 0.0f;//見つけるモーションの時間
 
@@ -174,19 +174,19 @@ private:
 	EngineLayer::WorldTransform wtMark_;
 	Transform transformMark_{};
 
-	static constexpr float kMarkPositionY_ = 2.0f;
+	const float kMarkPositionY_ = 2.0f;
 
-	static constexpr float kFoundMotionMaxTime_ = kMarkMaxTime_ / 5.0f;
+	const float kFoundMotionMaxTime_ = kMarkMaxTime_ / 5.0f;
 
 	//体力スプライト
 	std::unique_ptr<EngineLayer::Sprite> hpSprite_;
 	std::unique_ptr<EngineLayer::Sprite> underBarSprite_;
 	//パラメータ
-	static constexpr Vector2 kSpriteWindowsPosition_ = { 0.7f,0.85f };
-	static constexpr Vector2 kHpSpriteSize_ = { 256,64 };
-	static constexpr float kSpriteRatio_ = 0.1f;
+	const Vector2 kSpriteWindowsPosition_ = { 0.7f,0.85f };
+	const Vector2 kHpSpriteSize_ = { 256,64 };
+	const float kSpriteRatio_ = 0.1f;
 
-	static constexpr float kMaxHpSpriteTimer_ = 1.5f;
+	const float kMaxHpSpriteTimer_ = 1.5f;
 	float hpSpriteTimer_ = kMaxHpSpriteTimer_;
 
 	/// <summary>

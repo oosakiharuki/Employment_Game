@@ -76,7 +76,7 @@ private:
 	float smallingTimer_ = 0.0f;
 
 	float largeTimer_ = 0.0f;
-	static constexpr Vector3 kLargeMax_ = { 1.5f, 1.5f, 1.5f };
+	const Vector3 kLargeMax_ = { 1.5f, 1.5f, 1.5f };
 
 	bool largeFlag_ = true;
 
@@ -85,10 +85,10 @@ private:
 
 	Vector3 position_;
 
-	static constexpr float kLittleUp_ = 0.01f;
+	const float kLittleUp_ = 0.01f;
 
 	//ワープの動き(回転)
-	static constexpr float kDefaultRotateWarp_ = 1.0f; //一定値
+	const float kDefaultRotateWarp_ = 1.0f; //一定値
 	float rotateWarp_ = kDefaultRotateWarp_;//回転する値
 };
 

@@ -87,9 +87,9 @@ private:
 	//Dissolve(ポストエフェクト)で溶け具合の変数
 	float degree_ = 0.0f;
 	//edgeサイズ
-	static constexpr float kEdgeSize = 0.01f;
+	const float kEdgeSize = 0.01f;
 	//解け具合最大値
-	static constexpr float kDegreeMax = 1.0f;
+	const float kDegreeMax = 1.0f;
 
 
 	//使用するポストエフェクト

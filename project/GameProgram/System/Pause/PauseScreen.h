@@ -125,13 +125,13 @@ private:
 	Vector2 moveSelectGuide_;
 	Vector2 moveSelectSceneChange_;
 	//項目を移動する(始点)
-	static constexpr Vector2 kSelectReturnStartPosition_ = { -320,160 };
-	static constexpr Vector2 kSelectGuideStartPosition_ = { -320,368 };
-	static constexpr Vector2 kSelectSceneChangeStartPosition_ = { -320,576 };
+	const Vector2 kSelectReturnStartPosition_ = { -320,160 };
+	const Vector2 kSelectGuideStartPosition_ = { -320,368 };
+	const Vector2 kSelectSceneChangeStartPosition_ = { -320,576 };
 	//項目を移動する(終点)
-	static constexpr Vector2 kSelectReturnEndPosition_ = { 64,160 };
-	static constexpr Vector2 kSelectGuideEndPosition_ = { 120,368 };
-	static constexpr Vector2 kSelectSceneChangeEndPosition_ = { 176,576 };
+	const Vector2 kSelectReturnEndPosition_ = { 64,160 };
+	const Vector2 kSelectGuideEndPosition_ = { 120,368 };
+	const Vector2 kSelectSceneChangeEndPosition_ = { 176,576 };
 	//EaseOutで使用
 	float interpolation_ = 0.0f;
 

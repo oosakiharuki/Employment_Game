@@ -61,29 +61,29 @@ private:
 	std::vector<std::unique_ptr<VisualActor>> visualActors;
 	std::unordered_map<std::string, Transform> transforms_;//各々の変更用
 	//プレイヤーを前に向かす
-	static constexpr float kPlayerFrontRange_ = 180.0f;
+	const float kPlayerFrontRange_ = 180.0f;
 
 	//スプライト描画
 	std::unique_ptr<EngineLayer::Sprite> sprite_;//ゲームクリアの文字
 	std::unique_ptr<EngineLayer::Sprite> spriteSpace_;//Spaceでもどるの文字
 
 	//スプライト
-	static constexpr Vector2 kSpritePositionGameClear_ = { 100, 100 };//[ゲームクリア]文字の座標
-	static constexpr Vector2 kSpritePositionButton_ = { 800,10 };//[ボタンで戻る]文字の座標
-	static constexpr Vector2 kSpriteSizeButton_ = { 256,64 };//[ボタンで戻る]文字のサイズ
+	const Vector2 kSpritePositionGameClear_ = { 100, 100 };//[ゲームクリア]文字の座標
+	const Vector2 kSpritePositionButton_ = { 800,10 };//[ボタンで戻る]文字の座標
+	const Vector2 kSpriteSizeButton_ = { 256,64 };//[ボタンで戻る]文字のサイズ
 
 	//パーティクル
 	std::unordered_map<std::string, std::unique_ptr<EngineLayer::Particle>> sceneParticles_;
 
 	//紙吹雪のパーティクルたち
-	static constexpr uint32_t kParticleMaxNum_ = 3;
+	const uint32_t kParticleMaxNum_ = 3;
 	
 	const std::string& particleFanfare_ = "clear_fanfare";
 
 	std::vector<std::unique_ptr<EngineLayer::Particle>> particleFanfares_;
 
 	//紙吹雪パーティクルたちの座標をずらす
-	static constexpr float kFanfareX_ = 3.0f;
+	const float kFanfareX_ = 3.0f;
 	//紙吹雪パーティクルの座標
 	Vector3 fanfareTranslate_ = { -kFanfareX_,2,0 };
 };

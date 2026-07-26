@@ -32,7 +32,7 @@ private:
 	bool TypeCheckUp(const CollisionTypes& collisionType) override;
 
 	//最大値
-	static constexpr uint32_t kMaxCharge_ = 12;
+	const uint32_t kMaxCharge_ = 12;
 
 	const std::string kCharge_ = "charge_Energy";
 };
