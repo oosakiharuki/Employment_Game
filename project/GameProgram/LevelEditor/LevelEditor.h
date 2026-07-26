@@ -191,5 +191,5 @@ private:
 	std::unique_ptr<LevelData> levelData_;
 
 	//Blenderのカメラは0度だと真下を向くため補正
-	const float kAdjustRange_ = 90.0f;
+	static constexpr float kAdjustRange_ = 90.0f;
 };

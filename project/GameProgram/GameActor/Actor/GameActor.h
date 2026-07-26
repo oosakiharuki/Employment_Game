@@ -147,11 +147,11 @@ protected:
 	uint32_t hp_;//現在の体力
 
 	//向き(左右)
-	const float kDirectionRight_ = 90.0f;
-	const float kDirectionLeft_ = -90.0f;
+	static constexpr float kDirectionRight_ = 90.0f;
+	static constexpr float kDirectionLeft_ = -90.0f;
 
 	//最大角度(360度)
-	const float kMaxAngle = 360.0f;
+	static constexpr float kMaxAngle = 360.0f;
 
 	//演出中フラグ
 	bool isPerformance_ = false;
@@ -166,7 +166,7 @@ protected:
 	float scaleTimer_ = 0.0f;
 	//足して大きくする値
 	Vector3 damageScale_ = { 0.1f, 0.1f, 0.1f };
-	const float kDamageMaxTime_ = 0.3f;
+	static constexpr float kDamageMaxTime_ = 0.3f;
 
 	//パーティクルのコンテナ
 	std::unordered_map<std::string, std::unique_ptr<EngineLayer::Particle>> particles_;

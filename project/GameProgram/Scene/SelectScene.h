@@ -63,8 +63,8 @@ private:
 	//プレイヤー
 	std::unique_ptr<Player> player_ = nullptr;
 
-	const uint32_t kResetHp_ = 4;    //元の体力
-	const uint32_t kResetRemain_ = 3;//元の残機
+	static constexpr uint32_t kResetHp_ = 4;    //元の体力
+	static constexpr uint32_t kResetRemain_ = 3;//元の残機
 
 	//ステージオブジェクトたち
 	std::list<std::unique_ptr<IStageObject>> stageObjects_;
@@ -78,10 +78,10 @@ private:
 	std::string stageFileName_;
 
 	//説明ガイドの初期座標と大きさ
-	const Vector2 kSpriteSize_ = { 128,64 };
+	static constexpr Vector2 kSpriteSize_ = { 128,64 };
 
-	const Vector2 kSpriteTranslateMove_ = { 300,20 };
-	const Vector2 kSpriteTranslateKeyE_ = { 600,20 };
+	static constexpr Vector2 kSpriteTranslateMove_ = { 300,20 };
+	static constexpr Vector2 kSpriteTranslateKeyE_ = { 600,20 };
 
 	//操作ガイド
 	std::vector<std::unique_ptr<Guide>> guides_;

@@ -24,6 +24,6 @@ private:
 	//背景オブジェクト
 	std::unique_ptr<EngineLayer::Object_glTF> object_ = nullptr;
 	//大きさ
-	const float kSize_ = 1.0f;
+	static constexpr float kSize_ = 1.0f;
 };
 

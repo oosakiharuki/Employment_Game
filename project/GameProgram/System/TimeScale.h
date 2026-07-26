@@ -56,14 +56,10 @@ private:
 	//default_deleteを設定(解放処理を行える)
 	friend struct std::default_delete<TimeScale>;
 
-	const float kDefaultValue_ = 1.0f / 60.0f;//基準値
+	static constexpr float kDefaultValue_ = 1.0f / 60.0f;//基準値
 
 	float timeScale_ = kDefaultValue_; //時間尺度(タイマースケール)
 
-	//スロー状態
-	//float slowTime_ = 0.0f;
-	//const float kSlowTimeMax_ = 2.0f;	
-	
 	//元の時間に戻す時間
 	float returnTimer_ = 0.0f;
 	float TimeMax_ = 0.0f;

@@ -42,7 +42,7 @@ protected:
 	Vector3 speed_ = { 0,0,0 };
 	//移動
 	Vector3 move_ = { 0,0,0 };
-	const float kMoveX_ = 0.03f;
+	static constexpr float kMoveX_ = 0.03f;
 };
 
 /// <summary>
@@ -124,10 +124,10 @@ private:
 
 	//クールタイム
 	float coolTime_ = 0.0f;
-	const float kCoolTimeMax_ = 2.0f;
+	static constexpr float kCoolTimeMax_ = 2.0f;
 	//弾丸の出す間の時間
 	float rapidFireTime_ = 0.0f;
-	const float kRapidFireTimeMax_ = 0.1f;
+	static constexpr float kRapidFireTimeMax_ = 0.1f;
 	//発射カウント
 	uint32_t rapidCount_ = 0;
 	//最大弾丸数
@@ -142,5 +142,5 @@ private:
 	EngineLayer::SoundData fireSound_;
 	EngineLayer::SoundData fireBeforeSound_;
 
-	const float kVolume_ = 0.3f;
+	static constexpr float kVolume_ = 0.3f;
 };

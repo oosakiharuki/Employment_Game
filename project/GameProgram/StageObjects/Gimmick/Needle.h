@@ -51,10 +51,10 @@ private:
 	Vector3 endPoint_ = { 0,0,0 };
 
 	float timer_ = 0.0f;
-	const float moveMaxTime_ = 5.0f;//遅くする
+	static constexpr float moveMaxTime_ = 5.0f;//遅くする
 
 	float animationTimer_ = 0.0f;
-	const float kAnimationTimeSpeed_ = 2.0f;
+	static constexpr float kAnimationTimeSpeed_ = 2.0f;
 
 
 	std::unique_ptr<Shadow> shadow_;

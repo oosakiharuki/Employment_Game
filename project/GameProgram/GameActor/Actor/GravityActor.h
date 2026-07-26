@@ -33,8 +33,8 @@ protected:
 	bool isGround_ = false;
 	//重力
 	float gravity_ = 0.0f;
-	const float kGravityPower_ = 0.01f;//重力の質量
-	const float kGravityMax_ = -1.0f;//最大重力
+	static constexpr float kGravityPower_ = 0.01f;//重力の質量
+	static constexpr float kGravityMax_ = -1.0f;//最大重力
 
 };
 
