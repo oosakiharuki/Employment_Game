@@ -7,6 +7,7 @@
 #include "ParticleEmitter.h"
 #include "Primitive.h"
 #include "Camera.h"
+#include <json.hpp>
 
 /// <summary>
 /// エンジン層
@@ -156,8 +157,12 @@ namespace EngineLayer {
 
 		//パーティクルコンテナ
 		std::unordered_map<std::string, std::unique_ptr<Particle>> particles_;
-
+		//パーティクルパラメータコンテナ
 		std::unordered_map<std::string, ParticleParameters> particleParameters_;
+		
+		//名前リスト
+		std::vector<std::string> selectName_;
+		int selectCount_ = 0;
 
 		EngineLayer::Camera* camera = nullptr;
 		static const uint32_t kNumMaxInstance = 100;
@@ -167,6 +172,13 @@ namespace EngineLayer {
 
 		//パラメータ名選択用
 		std::string imGuiName = "";
+
+		//デバッグで変更する文字列
+		char objectName[1024 * 160] = "";
+		char textureFileName[1024 * 160] = "";
+
+		//パーティクルパラメータ追加フラグ
+		bool isAddParticle_ = false;
 
 		/// <summary>
 		/// パーティクルの動き
@@ -207,10 +219,61 @@ namespace EngineLayer {
 		/// <returns></returns>
 		double DecimalPointCut(float value);
 
+		/// <summary>
+		/// ランダム範囲のデータを代入する
+		/// </summary>
+		/// <param name="dist">代入したいランダム範囲データ</param>
+		/// <param name="object">jsonから読み取った値</param>
+		void AssignDist(RandomDist& dist,const nlohmann::json& object);
 
-		//デバッグで変更する文字列
-		char objectName[1024 * 160] = "";
-		char textureFileName[1024 * 160] = "";
+		/// <summary>
+		/// ランダム範囲のデータをjsonに保存する
+		/// </summary>
+		/// <param name="dist">ランダム範囲データ</param>
+		/// <param name="object">jsonデータを保存項目</param>
+		void JsonSaveDist(const RandomDist& dist, nlohmann::json& object);
+
+		/// <summary>
+		/// ランダム範囲のデータを代入する(Transform型)
+		/// </summary>
+		/// <param name="dist">代入したいランダム範囲データ</param>
+		/// <param name="object">jsonから読み取った値</param>
+		void AssignDistTF(RandomDistTF& dist, const nlohmann::json& object);
+		
+		/// <summary>
+		/// ランダム範囲のデータをjsonに保存する(Transform型)
+		/// </summary>
+		/// <param name="dist">ランダム範囲データ</param>
+		/// <param name="object">jsonデータを保存項目</param>
+		void JsonSaveDistTF(const RandomDistTF& dist, nlohmann::json& object);
+
+		/// <summary>
+		/// Vector3型のデータを代入する
+		/// </summary>
+		/// <param name="vector">代入したいVector3型のデータ(元サイズなど)</param>
+		/// <param name="object">jsonから読み取った値</param>
+		void AssignVector3(Vector3& vector,const nlohmann::json& object);
+		
+		/// <summary>
+		/// Vector3型のデータをjsonに保存する(Transform型)
+		/// </summary>
+		/// <param name="vector">Vector3型のデータ</param>
+		/// <param name="object">jsonデータを保存項目</param>
+		void JsonSaveVector3(const Vector3& vector, nlohmann::json& object);
+
+		/// <summary>
+		/// Transform型のデータを代入する
+		/// </summary>
+		/// <param name="transform">代入したいTransform型のデータ(座標、回転、スケール)</param>
+		/// <param name="object">jsonから読み取った値</param>
+		void AssignTransform(Transform& transform, const nlohmann::json& object);
+
+		/// <summary>
+		/// Transform型のデータをjsonに保存する
+		/// </summary>
+		/// <param name="transform">Transform型のデータ</param>
+		/// <param name="object">jsonデータを保存項目</param>
+		void JsonSaveTransform(const Transform& transform, nlohmann::json& object);
 
 	};
 }

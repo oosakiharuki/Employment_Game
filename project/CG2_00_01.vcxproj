@@ -242,6 +242,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Engine\math\modelData\ModelData.h" />
     <ClInclude Include="Engine\math\vector\Quaternion.h" />
     <ClInclude Include="Engine\math\vector\Segment.h" />
+    <ClInclude Include="GameProgram\BeheviorTree.h" />
     <ClInclude Include="GameProgram\GameActor\Enemies\Enemy_Rusher.h" />
     <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\BaseUmbrella.h" />
     <ClInclude Include="GameProgram\GameActor\Player\Weapon\Umbrella\FoldingUmbrella.h" />

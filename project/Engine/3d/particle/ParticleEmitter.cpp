@@ -27,13 +27,13 @@ namespace EngineLayer {
 
 	ParticleData ParticleEmitter::MakeNewParticle(std::mt19937& randomEngine, const Emitter& emitter) {
 		//random
-		std::uniform_real_distribution<float> distTransformT(emitter.particleData.distTransformT.distMin, emitter.particleData.distTransformT.distMax);
-		std::uniform_real_distribution<float> distTransformR(emitter.particleData.distTransformR.distMin, emitter.particleData.distTransformR.distMax);
-		std::uniform_real_distribution<float> distTransformS(emitter.particleData.distTransformS.distMin, emitter.particleData.distTransformS.distMax);
+		std::uniform_real_distribution<float> distTransformT(emitter.particleData.randomDistTransform.translate.distMin, emitter.particleData.randomDistTransform.translate.distMax);
+		std::uniform_real_distribution<float> distTransformR(emitter.particleData.randomDistTransform.rotate.distMin, emitter.particleData.randomDistTransform.rotate.distMax);
+		std::uniform_real_distribution<float> distTransformS(emitter.particleData.randomDistTransform.scale.distMin, emitter.particleData.randomDistTransform.scale.distMax);
 
-		std::uniform_real_distribution<float> distVelocityT(emitter.particleData.distVelocityT.distMin, emitter.particleData.distVelocityT.distMax);
-		std::uniform_real_distribution<float> distVelocityR(emitter.particleData.distVelocityR.distMin, emitter.particleData.distVelocityR.distMax);
-		std::uniform_real_distribution<float> distVelocityS(emitter.particleData.distVelocityS.distMin, emitter.particleData.distVelocityS.distMax);
+		std::uniform_real_distribution<float> distVelocityT(emitter.particleData.randomDistVelocity.translate.distMin, emitter.particleData.randomDistVelocity.translate.distMax);
+		std::uniform_real_distribution<float> distVelocityR(emitter.particleData.randomDistVelocity.rotate.distMin, emitter.particleData.randomDistVelocity.rotate.distMax);
+		std::uniform_real_distribution<float> distVelocityS(emitter.particleData.randomDistVelocity.scale.distMin, emitter.particleData.randomDistVelocity.scale.distMax);
 
 		std::uniform_real_distribution<float> distColor(emitter.particleData.distColor.distMin, emitter.particleData.distColor.distMax);//色用
 		std::uniform_real_distribution<float> distLifeTime(emitter.particleData.distLifeTime.distMin, emitter.particleData.distLifeTime.distMax);//生存時間用

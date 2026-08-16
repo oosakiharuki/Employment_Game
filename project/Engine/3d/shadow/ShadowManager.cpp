@@ -45,9 +45,8 @@ namespace EngineLayer {
 	}
 
 	void ShadowManager::Draw() {
-		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(
-			7,
-			resource_->GetGPUVirtualAddress());
+		//b5で設定
+		DirectXCommon::GetInstance().GetCommandList()->SetGraphicsRootConstantBufferView(7, resource_->GetGPUVirtualAddress());
 	}
 
 	void ShadowManager::AddShadow(const Vector3& shadowPosition,const Vector3& shadowSize, float distance) {
