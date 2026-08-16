@@ -1064,9 +1064,6 @@
     <ClInclude Include="Engine\math\matrix\MatrixMath.h">
       <Filter>ヘッダー ファイル\Engine\math\matrix</Filter>
     </ClInclude>
-    <ClInclude Include="GameProgram\BeheviorTree.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resource\shaders\Particle.hlsli">
