@@ -68,7 +68,7 @@ private:
 
 	//プレイヤーとの距離感
 	Vector3 distance_;
-	const float kSpeed_ = -0.15f;
+	const float kSpeed_ = -0.1f;
 
 
 	//追尾開始

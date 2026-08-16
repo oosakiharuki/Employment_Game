@@ -22,6 +22,12 @@ namespace EngineLayer {
 		float distMax = 0.0f;
 	};
 
+	struct RandomDistTF {		
+		RandomDist scale;
+		RandomDist rotate;
+		RandomDist translate;
+	};
+
 	/// <summary>
 	/// パーティクルのパラメータ
 	/// </summary>
@@ -32,13 +38,8 @@ namespace EngineLayer {
 		float lifeTime;             //生存時間
 		float currentTime;          //生存用タイマー
 
-		RandomDist distTransformT;
-		RandomDist distTransformR;
-		RandomDist distTransformS;
-
-		RandomDist distVelocityT;
-		RandomDist distVelocityR;
-		RandomDist distVelocityS;
+		RandomDistTF randomDistTransform;
+		RandomDistTF randomDistVelocity;
 
 		RandomDist distColor;
 		RandomDist distLifeTime;

@@ -10,7 +10,6 @@
 
 #include "Camera.h"
 
-#include <json.hpp>
 #include <fstream>
 
 #define _USE_MATH_DEFINES
@@ -311,8 +310,14 @@ namespace EngineLayer {
 		//正しいレベルデータファイルなのか
 		assert(name.compare("Particle") == 0);
 
+		selectName_.clear();
+		particleParameters_.clear();
+
 		for (nlohmann::json& object : deserialized["particles"]) {
 			assert(object.contains("particleName"));
+
+			//名前を追加
+			selectName_.push_back(object["particleName"]);
 
 			//使用するパーティクルを選ぶ
 			ParticleParameters& particle = particleParameters_[object["particleName"]];
@@ -327,27 +332,12 @@ namespace EngineLayer {
 			particle.count = parameter["count"]; //生成数を設定
 			particle.frequency = parameter["frequency"]; //頻度 / 生存時間を設定
 
-			Vector3 basicSize;
-			basicSize.x = parameter["basicSize"][0];
-			basicSize.y = parameter["basicSize"][1];
-			basicSize.z = parameter["basicSize"][2];
-
-			particle.basicSize = basicSize;//基本サイズを設定
+			AssignVector3(particle.basicSize, parameter["basicSize"]);//基本サイズを設定
 
 			nlohmann::json emit = object["emit"];
 			ParticleData particleData;
 
-			particleData.velocityTransform.translate.x = emit["velocity"]["translate"][0];
-			particleData.velocityTransform.translate.y = emit["velocity"]["translate"][1];
-			particleData.velocityTransform.translate.z = emit["velocity"]["translate"][2];
-
-			particleData.velocityTransform.rotate.x = emit["velocity"]["rotate"][0];
-			particleData.velocityTransform.rotate.y = emit["velocity"]["rotate"][1];
-			particleData.velocityTransform.rotate.z = emit["velocity"]["rotate"][2];
-
-			particleData.velocityTransform.scale.x = emit["velocity"]["scale"][0];
-			particleData.velocityTransform.scale.y = emit["velocity"]["scale"][1];
-			particleData.velocityTransform.scale.z = emit["velocity"]["scale"][2];
+			AssignTransform(particleData.velocityTransform, emit["velocity"]);
 
 			particleData.color.x = emit["color"][0];
 			particleData.color.y = emit["color"][1];
@@ -360,34 +350,13 @@ namespace EngineLayer {
 			particle.particleData = particleData;
 
 			nlohmann::json dist = object["dist"];
-			particle.particleData.distTransformT.distMin = dist["transform"]["translate"][0];
-			particle.particleData.distTransformT.distMax = dist["transform"]["translate"][1];
 
-			particle.particleData.distTransformR.distMin = dist["transform"]["rotate"][0];
-			particle.particleData.distTransformR.distMax = dist["transform"]["rotate"][1];
+			AssignDistTF(particle.particleData.randomDistTransform, dist["transform"]);
+			AssignDistTF(particle.particleData.randomDistVelocity, dist["velocity"]);
 
-			particle.particleData.distTransformS.distMin = dist["transform"]["scale"][0];
-			particle.particleData.distTransformS.distMax = dist["transform"]["scale"][1];
-
-
-			particle.particleData.distVelocityT.distMin = dist["velocity"]["translate"][0];
-			particle.particleData.distVelocityT.distMax = dist["velocity"]["translate"][1];
-
-			particle.particleData.distVelocityR.distMin = dist["velocity"]["rotate"][0];
-			particle.particleData.distVelocityR.distMax = dist["velocity"]["rotate"][1];
-
-			particle.particleData.distVelocityS.distMin = dist["velocity"]["scale"][0];
-			particle.particleData.distVelocityS.distMax = dist["velocity"]["scale"][1];
-
-
-			particle.particleData.distColor.distMin = dist["color"][0];
-			particle.particleData.distColor.distMax = dist["color"][1];
-
-			particle.particleData.distLifeTime.distMin = dist["lifeTime"][0];
-			particle.particleData.distLifeTime.distMax = dist["lifeTime"][1];
-
-			particle.particleData.distCurrentTime.distMin = dist["currentTime"][0];
-			particle.particleData.distCurrentTime.distMax = dist["currentTime"][1];
+			AssignDist(particle.particleData.distColor, dist["color"]);
+			AssignDist(particle.particleData.distLifeTime, dist["lifeTime"]);
+			AssignDist(particle.particleData.distCurrentTime, dist["currentTime"]);
 		}
 	}
 
@@ -423,11 +392,47 @@ namespace EngineLayer {
 
 		ImGui::Begin("ParticleParameter");
 
-		ImGui::InputText("ParameterName", imGuiName.data(), size_t(50));
+		if (ImGui::BeginCombo("パーティクル一覧", selectName_[selectCount_].c_str())) {
+			for (int n = 0; n < selectName_.size(); n++) {
+				bool is_selected = (selectCount_ == n);
+				if (ImGui::Selectable(selectName_[n].c_str(), is_selected)) {
+					selectCount_ = n;
+				}
+				// キーボード操作などでフォーカスを合わせる
+				if (is_selected) {
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
+		}
 
-		if (ImGui::Button("newParticle")) {
-			//新しいのを追加
-			ParticleParameters& particle = particleParameters_[imGuiName.c_str()];
+
+		if (ImGui::Button("新しくパーティクルを作る")) {
+			isAddParticle_ = true;
+			imGuiName = "";//空に
+		}
+		
+		if (isAddParticle_) {
+			size_t sizeCount = 50;
+			
+			ImGui::InputText("名前", imGuiName.data(), sizeCount);
+			if (size_t(imGuiName.data()) == sizeCount) {
+				imGuiName.erase(sizeCount);
+			}
+
+			if (ImGui::Button("決定")) {
+				//追加
+				ParticleParameters& parameter = particleParameters_[imGuiName.c_str()];//パラメータ追加
+				selectName_.push_back(imGuiName);//名前追加
+				isAddParticle_ = false;
+			}
+			else if (ImGui::Button("追加キャンセル")) {
+				isAddParticle_ = false;
+			}
+		}		
+		else {
+			//既存の名前
+			imGuiName = selectName_[selectCount_];
 		}
 
 		ParticleParameters changeParameter;
@@ -440,61 +445,66 @@ namespace EngineLayer {
 				//名前追加
 				parameter.second.name = imGuiName.c_str();
 
-				ImGui::InputInt("count", &nowCount);
+				ImGui::InputInt("パーティクル発生数", &nowCount);
 
-				//ファイル名がないのならば
-				if (parameter.second.textureFile == "") {
-					ImGui::InputText("textureFile", textureFileName, IM_ARRAYSIZE(textureFileName));
-					if (ImGui::Button("テクスチャ変更決定")) {
-						parameter.second.textureFile = textureFileName;//入力したファイル名になる
+				if (ImGui::TreeNode("描画モデル / テクスチャ")) {
+					//ファイル名がないのならば
+					if (parameter.second.textureFile == "") {
+						ImGui::InputText("textureFile", textureFileName, IM_ARRAYSIZE(textureFileName));
+						if (ImGui::Button("テクスチャ変更決定")) {
+							parameter.second.textureFile = textureFileName;//入力したファイル名になる
+						}
 					}
-				}
-				else {//ファイル名を変更したいとき
-					if (ImGui::Button("ChangeTextureFile")) {
-						parameter.second.textureFile = "";
+					else {//ファイル名を変更したいとき
+						if (ImGui::Button("テクスチャを変更する")) {
+							parameter.second.textureFile = "";
+						}
+						ImGui::Text("%s", parameter.second.textureFile.c_str());//ファイル名
 					}
-					ImGui::Text("%s", parameter.second.textureFile.c_str());//ファイル名
-				}
 
-				//オブジェクトタイプがないのならば
-				if (parameter.second.objectName == "") {
-					ImGui::InputText("objectName", objectName, IM_ARRAYSIZE(objectName));
-					if (ImGui::Button("オブジェクトタイプ変更決定")) {
-						parameter.second.objectName = objectName;//入力したオブジェクトタイプになる
+					//オブジェクトタイプがないのならば
+					if (parameter.second.objectName == "") {
+						ImGui::InputText("objectName", objectName, IM_ARRAYSIZE(objectName));
+						if (ImGui::Button("オブジェクトタイプ変更決定")) {
+							parameter.second.objectName = objectName;//入力したオブジェクトタイプになる
+						}
 					}
-				}
-				else {//オブジェクトタイプを変更したいとき
-					if (ImGui::Button("ChangeObjectName")) {
-						parameter.second.objectName = "";
+					else {//オブジェクトタイプを変更したいとき
+						if (ImGui::Button("オブジェクトタイプを変更する")) {
+							parameter.second.objectName = "";
+						}
+						ImGui::Text("%s", parameter.second.objectName.c_str());//オブジェクトタイプ
 					}
-					ImGui::Text("%s", parameter.second.objectName.c_str());//オブジェクトタイプ
+
+					ImGui::TreePop();
 				}
+			
 
-				ImGui::InputFloat("frequency", &parameter.second.frequency);
-				ImGui::InputFloat3("basicSize", &parameter.second.basicSize.x);
+				ImGui::InputFloat("発生頻度", &parameter.second.frequency);
+				ImGui::InputFloat3("基本サイズ", &parameter.second.basicSize.x);
 
-				ImGui::InputFloat3("emit_velocity_translate", &parameter.second.particleData.velocityTransform.translate.x);
-				ImGui::InputFloat3("emit_velocity_rotate", &parameter.second.particleData.velocityTransform.rotate.x);
-				ImGui::InputFloat3("emit_velocity_scale", &parameter.second.particleData.velocityTransform.scale.x);
+				ImGui::InputFloat3("移動速度", &parameter.second.particleData.velocityTransform.translate.x);
+				ImGui::InputFloat3("回転速度", &parameter.second.particleData.velocityTransform.rotate.x);
+				ImGui::InputFloat3("拡大縮小", &parameter.second.particleData.velocityTransform.scale.x);
 
-				ImGui::InputFloat4("emit_color", &parameter.second.particleData.color.x);
+				ImGui::InputFloat4("色", &parameter.second.particleData.color.x);
 
-				ImGui::InputFloat("emit_lifeTime", &parameter.second.particleData.lifeTime);
+				ImGui::InputFloat("生存時間", &parameter.second.particleData.lifeTime);
 
-				ImGui::InputFloat("emit_currentTime", &parameter.second.particleData.currentTime);
+				ImGui::InputFloat("現在時間", &parameter.second.particleData.currentTime);
 
-
-				ImGui::InputFloat2("DistTransllate", &parameter.second.particleData.distTransformT.distMin);
-				ImGui::InputFloat2("DistTransformR", &parameter.second.particleData.distTransformR.distMin);
-				ImGui::InputFloat2("DistTransformS", &parameter.second.particleData.distTransformS.distMin);
-				ImGui::InputFloat2("DistVelocityT", &parameter.second.particleData.distVelocityT.distMin);
-				ImGui::InputFloat2("DistVelocityR", &parameter.second.particleData.distVelocityR.distMin);
-				ImGui::InputFloat2("DistVelocityS", &parameter.second.particleData.distVelocityS.distMin);
-				ImGui::InputFloat2("DistColor", &parameter.second.particleData.distColor.distMin);
-				ImGui::InputFloat2("DistLifeTime", &parameter.second.particleData.distLifeTime.distMin);
-				ImGui::InputFloat2("DistCurrentTime", &parameter.second.particleData.distCurrentTime.distMin);
-
-
+				if (ImGui::TreeNode("ランダム追加")) {
+					ImGui::InputFloat2("座標位置範囲", &parameter.second.particleData.randomDistTransform.translate.distMin);
+					ImGui::InputFloat2("回転", &parameter.second.particleData.randomDistTransform.rotate.distMin);
+					ImGui::InputFloat2("サイズ", &parameter.second.particleData.randomDistTransform.scale.distMin);
+					ImGui::InputFloat2("移動速度", &parameter.second.particleData.randomDistVelocity.translate.distMin);
+					ImGui::InputFloat2("回転速度", &parameter.second.particleData.randomDistVelocity.rotate.distMin);
+					ImGui::InputFloat2("拡縮", &parameter.second.particleData.randomDistVelocity.scale.distMin);
+					ImGui::InputFloat2("カラー", &parameter.second.particleData.distColor.distMin);
+					ImGui::InputFloat2("描画時間", &parameter.second.particleData.distLifeTime.distMin);
+					ImGui::InputFloat2("現在時刻の追加", &parameter.second.particleData.distCurrentTime.distMin);
+					ImGui::TreePop();
+				}
 
 				parameter.second.count = nowCount;
 				changeParameter = parameter.second;//変更した値を挿入
@@ -511,7 +521,7 @@ namespace EngineLayer {
 
 			uint32_t i = 0;
 			for (auto& parameter : particleParameters_) {
-				//imGuiNameで選択したパラメータを変更した値を上書き保存
+				//選択したパラメータを変更した値を上書き保存(変えてないならparticleParameters_内のデータからまた読み込む)
 				if (changeParameter.name == parameter.second.name) {
 					jsonFile["particles"][i]["particleName"] = changeParameter.name;
 					jsonFile["particles"][i]["textureFile"] = changeParameter.textureFile;
@@ -519,23 +529,10 @@ namespace EngineLayer {
 					jsonFile["particles"][i]["parameter"]["count"] = changeParameter.count;
 
 					jsonFile["particles"][i]["parameter"]["frequency"] = DecimalPointCut(changeParameter.frequency);
-					jsonFile["particles"][i]["parameter"]["basicSize"][0] = DecimalPointCut(changeParameter.basicSize.x);
-					jsonFile["particles"][i]["parameter"]["basicSize"][1] = DecimalPointCut(changeParameter.basicSize.y);
-					jsonFile["particles"][i]["parameter"]["basicSize"][2] = DecimalPointCut(changeParameter.basicSize.z);
 
+					JsonSaveVector3(changeParameter.basicSize, jsonFile["particles"][i]["parameter"]["basicSize"]);
 
-					jsonFile["particles"][i]["emit"]["velocity"]["translate"][0] = DecimalPointCut(changeParameter.particleData.velocityTransform.translate.x);
-					jsonFile["particles"][i]["emit"]["velocity"]["translate"][1] = DecimalPointCut(changeParameter.particleData.velocityTransform.translate.y);
-					jsonFile["particles"][i]["emit"]["velocity"]["translate"][2] = DecimalPointCut(changeParameter.particleData.velocityTransform.translate.z);
-
-					jsonFile["particles"][i]["emit"]["velocity"]["rotate"][0] = DecimalPointCut(changeParameter.particleData.velocityTransform.rotate.x);
-					jsonFile["particles"][i]["emit"]["velocity"]["rotate"][1] = DecimalPointCut(changeParameter.particleData.velocityTransform.rotate.y);
-					jsonFile["particles"][i]["emit"]["velocity"]["rotate"][2] = DecimalPointCut(changeParameter.particleData.velocityTransform.rotate.z);
-
-					jsonFile["particles"][i]["emit"]["velocity"]["scale"][0] = DecimalPointCut(changeParameter.particleData.velocityTransform.scale.x);
-					jsonFile["particles"][i]["emit"]["velocity"]["scale"][1] = DecimalPointCut(changeParameter.particleData.velocityTransform.scale.y);
-					jsonFile["particles"][i]["emit"]["velocity"]["scale"][2] = DecimalPointCut(changeParameter.particleData.velocityTransform.scale.z);
-
+					JsonSaveTransform(changeParameter.particleData.velocityTransform, jsonFile["particles"][i]["emit"]["velocity"]);
 
 					jsonFile["particles"][i]["emit"]["color"][0] = int(changeParameter.particleData.color.x);
 					jsonFile["particles"][i]["emit"]["color"][1] = int(changeParameter.particleData.color.y);
@@ -546,32 +543,12 @@ namespace EngineLayer {
 					jsonFile["particles"][i]["emit"]["lifeTime"] = changeParameter.particleData.lifeTime;
 					jsonFile["particles"][i]["emit"]["currentTime"] = changeParameter.particleData.currentTime;
 
+					JsonSaveDistTF(changeParameter.particleData.randomDistTransform, jsonFile["particles"][i]["dist"]["transform"]);
+					JsonSaveDistTF(changeParameter.particleData.randomDistVelocity, jsonFile["particles"][i]["dist"]["velocity"]);
 
-					jsonFile["particles"][i]["dist"]["transform"]["translate"][0] = DecimalPointCut(changeParameter.particleData.distTransformT.distMin);
-					jsonFile["particles"][i]["dist"]["transform"]["translate"][1] = DecimalPointCut(changeParameter.particleData.distTransformT.distMax);
-					jsonFile["particles"][i]["dist"]["transform"]["rotate"][0] = DecimalPointCut(changeParameter.particleData.distTransformR.distMin);
-					jsonFile["particles"][i]["dist"]["transform"]["rotate"][1] = DecimalPointCut(changeParameter.particleData.distTransformR.distMax);
-					jsonFile["particles"][i]["dist"]["transform"]["scale"][0] = DecimalPointCut(changeParameter.particleData.distTransformS.distMin);
-					jsonFile["particles"][i]["dist"]["transform"]["scale"][1] = DecimalPointCut(changeParameter.particleData.distTransformS.distMax);
-
-					jsonFile["particles"][i]["dist"]["velocity"]["translate"][0] = DecimalPointCut(changeParameter.particleData.distVelocityT.distMin);
-					jsonFile["particles"][i]["dist"]["velocity"]["translate"][1] = DecimalPointCut(changeParameter.particleData.distVelocityT.distMax);
-					jsonFile["particles"][i]["dist"]["velocity"]["rotate"][0] = DecimalPointCut(changeParameter.particleData.distVelocityR.distMin);
-					jsonFile["particles"][i]["dist"]["velocity"]["rotate"][1] = DecimalPointCut(changeParameter.particleData.distVelocityR.distMax);
-					jsonFile["particles"][i]["dist"]["velocity"]["scale"][0] = DecimalPointCut(changeParameter.particleData.distVelocityS.distMin);
-					jsonFile["particles"][i]["dist"]["velocity"]["scale"][1] = DecimalPointCut(changeParameter.particleData.distVelocityS.distMax);
-
-
-					jsonFile["particles"][i]["dist"]["color"][0] = DecimalPointCut(changeParameter.particleData.distColor.distMin);
-					jsonFile["particles"][i]["dist"]["color"][1] = DecimalPointCut(changeParameter.particleData.distColor.distMax);
-
-					jsonFile["particles"][i]["dist"]["lifeTime"][0] = DecimalPointCut(changeParameter.particleData.distLifeTime.distMin);
-					jsonFile["particles"][i]["dist"]["lifeTime"][1] = DecimalPointCut(changeParameter.particleData.distLifeTime.distMax);
-
-					jsonFile["particles"][i]["dist"]["currentTime"][0] = DecimalPointCut(changeParameter.particleData.distCurrentTime.distMin);
-					jsonFile["particles"][i]["dist"]["currentTime"][1] = DecimalPointCut(changeParameter.particleData.distCurrentTime.distMax);
-
-
+					JsonSaveDist(changeParameter.particleData.distColor, jsonFile["particles"][i]["dist"]["color"]);
+					JsonSaveDist(changeParameter.particleData.distLifeTime, jsonFile["particles"][i]["dist"]["lifeTime"]);
+					JsonSaveDist(changeParameter.particleData.distCurrentTime, jsonFile["particles"][i]["dist"]["currentTime"]);
 				}
 				else {
 					jsonFile["particles"][i]["particleName"] = parameter.second.name;
@@ -580,22 +557,10 @@ namespace EngineLayer {
 					jsonFile["particles"][i]["parameter"]["count"] = parameter.second.count;
 
 					jsonFile["particles"][i]["parameter"]["frequency"] = DecimalPointCut(parameter.second.frequency);
-					jsonFile["particles"][i]["parameter"]["basicSize"][0] = DecimalPointCut(parameter.second.basicSize.x);
-					jsonFile["particles"][i]["parameter"]["basicSize"][1] = DecimalPointCut(parameter.second.basicSize.y);
-					jsonFile["particles"][i]["parameter"]["basicSize"][2] = DecimalPointCut(parameter.second.basicSize.z);
 
+					JsonSaveVector3(parameter.second.basicSize, jsonFile["particles"][i]["parameter"]["basicSize"]);
 
-					jsonFile["particles"][i]["emit"]["velocity"]["translate"][0] = DecimalPointCut(parameter.second.particleData.velocityTransform.translate.x);
-					jsonFile["particles"][i]["emit"]["velocity"]["translate"][1] = DecimalPointCut(parameter.second.particleData.velocityTransform.translate.y);
-					jsonFile["particles"][i]["emit"]["velocity"]["translate"][2] = DecimalPointCut(parameter.second.particleData.velocityTransform.translate.z);
-
-					jsonFile["particles"][i]["emit"]["velocity"]["rotate"][0] = DecimalPointCut(parameter.second.particleData.velocityTransform.rotate.x);
-					jsonFile["particles"][i]["emit"]["velocity"]["rotate"][1] = DecimalPointCut(parameter.second.particleData.velocityTransform.rotate.y);
-					jsonFile["particles"][i]["emit"]["velocity"]["rotate"][2] = DecimalPointCut(parameter.second.particleData.velocityTransform.rotate.z);
-
-					jsonFile["particles"][i]["emit"]["velocity"]["scale"][0] = DecimalPointCut(parameter.second.particleData.velocityTransform.scale.x);
-					jsonFile["particles"][i]["emit"]["velocity"]["scale"][1] = DecimalPointCut(parameter.second.particleData.velocityTransform.scale.y);
-					jsonFile["particles"][i]["emit"]["velocity"]["scale"][2] = DecimalPointCut(parameter.second.particleData.velocityTransform.scale.z);
+					JsonSaveTransform(parameter.second.particleData.velocityTransform, jsonFile["particles"][i]["emit"]["velocity"]);
 
 
 					jsonFile["particles"][i]["emit"]["color"][0] = int(parameter.second.particleData.color.x);
@@ -607,31 +572,14 @@ namespace EngineLayer {
 					jsonFile["particles"][i]["emit"]["lifeTime"] = parameter.second.particleData.lifeTime;
 					jsonFile["particles"][i]["emit"]["currentTime"] = parameter.second.particleData.currentTime;
 
+					JsonSaveDistTF(parameter.second.particleData.randomDistTransform, jsonFile["particles"][i]["dist"]["transform"]);
+					JsonSaveDistTF(parameter.second.particleData.randomDistVelocity, jsonFile["particles"][i]["dist"]["velocity"]);
 
-					jsonFile["particles"][i]["dist"]["transform"]["translate"][0] = DecimalPointCut(parameter.second.particleData.distTransformT.distMin);
-					jsonFile["particles"][i]["dist"]["transform"]["translate"][1] = DecimalPointCut(parameter.second.particleData.distTransformT.distMax);
-					jsonFile["particles"][i]["dist"]["transform"]["rotate"][0] = DecimalPointCut(parameter.second.particleData.distTransformR.distMin);
-					jsonFile["particles"][i]["dist"]["transform"]["rotate"][1] = DecimalPointCut(parameter.second.particleData.distTransformR.distMax);
-					jsonFile["particles"][i]["dist"]["transform"]["scale"][0] = DecimalPointCut(parameter.second.particleData.distTransformS.distMin);
-					jsonFile["particles"][i]["dist"]["transform"]["scale"][1] = DecimalPointCut(parameter.second.particleData.distTransformS.distMax);
+					JsonSaveDist(parameter.second.particleData.distColor, jsonFile["particles"][i]["dist"]["color"]);
 
-					jsonFile["particles"][i]["dist"]["velocity"]["translate"][0] = DecimalPointCut(parameter.second.particleData.distVelocityT.distMin);
-					jsonFile["particles"][i]["dist"]["velocity"]["translate"][1] = DecimalPointCut(parameter.second.particleData.distVelocityT.distMax);
-					jsonFile["particles"][i]["dist"]["velocity"]["rotate"][0] = DecimalPointCut(parameter.second.particleData.distVelocityR.distMin);
-					jsonFile["particles"][i]["dist"]["velocity"]["rotate"][1] = DecimalPointCut(parameter.second.particleData.distVelocityR.distMax);
-					jsonFile["particles"][i]["dist"]["velocity"]["scale"][0] = DecimalPointCut(parameter.second.particleData.distVelocityS.distMin);
-					jsonFile["particles"][i]["dist"]["velocity"]["scale"][1] = DecimalPointCut(parameter.second.particleData.distVelocityS.distMax);
+					JsonSaveDist(parameter.second.particleData.distLifeTime, jsonFile["particles"][i]["dist"]["lifeTime"]);
 
-
-					jsonFile["particles"][i]["dist"]["color"][0] = DecimalPointCut(parameter.second.particleData.distColor.distMin);
-					jsonFile["particles"][i]["dist"]["color"][1] = DecimalPointCut(parameter.second.particleData.distColor.distMax);
-
-					jsonFile["particles"][i]["dist"]["lifeTime"][0] = DecimalPointCut(parameter.second.particleData.distLifeTime.distMin);
-					jsonFile["particles"][i]["dist"]["lifeTime"][1] = DecimalPointCut(parameter.second.particleData.distLifeTime.distMax);
-
-					jsonFile["particles"][i]["dist"]["currentTime"][0] = DecimalPointCut(parameter.second.particleData.distCurrentTime.distMin);
-					jsonFile["particles"][i]["dist"]["currentTime"][1] = DecimalPointCut(parameter.second.particleData.distCurrentTime.distMax);
-
+					JsonSaveDist(parameter.second.particleData.distCurrentTime, jsonFile["particles"][i]["dist"]["currentTime"]);
 				}
 				i++;
 			}
@@ -642,6 +590,10 @@ namespace EngineLayer {
 				file << jsonFile.dump(4);
 				file.close();
 			}
+
+			selectName_.clear();
+
+			InitializeParameter();
 		}
 
 		ImGui::End();
@@ -654,4 +606,52 @@ namespace EngineLayer {
 		float answer = std::round(value * 1000.0f);
 		return answer / 1000.0f;
 	}
+
+
+	void ParticleManager::AssignDist(RandomDist& dist, const nlohmann::json& object) {
+		dist.distMin = object[0];
+		dist.distMax = object[1];
+	}
+
+	void ParticleManager::JsonSaveDist(const RandomDist& dist, nlohmann::json& object) {
+		object[0] = DecimalPointCut(dist.distMax);
+		object[1] = DecimalPointCut(dist.distMin);
+	}
+
+	void ParticleManager::AssignDistTF(RandomDistTF& dist, const nlohmann::json& object) {
+		AssignDist(dist.translate, object["translate"]);
+		AssignDist(dist.rotate, object["rotate"]);
+		AssignDist(dist.scale, object["scale"]);
+	}
+
+	void ParticleManager::JsonSaveDistTF(const RandomDistTF& dist, nlohmann::json& object) {
+		JsonSaveDist(dist.translate, object["translate"]);
+		JsonSaveDist(dist.rotate, object["rotate"]);
+		JsonSaveDist(dist.scale, object["scale"]);
+	}
+
+	void ParticleManager::AssignVector3(Vector3& vector, const nlohmann::json& object) {
+		vector.x = object[0];
+		vector.y = object[1];
+		vector.z = object[2];
+	}
+
+	void ParticleManager::JsonSaveVector3(const Vector3& vector, nlohmann::json& object) {
+		object[0] = DecimalPointCut(vector.x);
+		object[1] = DecimalPointCut(vector.y);
+		object[2] = DecimalPointCut(vector.z);
+	}
+
+	void ParticleManager::AssignTransform(Transform& transform, const nlohmann::json& object) {
+		AssignVector3(transform.translate, object["translate"]);
+		AssignVector3(transform.rotate, object["rotate"]);
+		AssignVector3(transform.scale, object["scale"]);
+	}
+
+	void ParticleManager::JsonSaveTransform(const Transform& transform, nlohmann::json& object) {
+		JsonSaveVector3(transform.translate, object["translate"]);
+		JsonSaveVector3(transform.rotate, object["rotate"]);
+		JsonSaveVector3(transform.scale, object["scale"]);
+	}
+
 }
